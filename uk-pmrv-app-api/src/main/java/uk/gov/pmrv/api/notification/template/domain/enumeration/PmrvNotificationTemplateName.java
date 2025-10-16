@@ -57,6 +57,9 @@ public enum PmrvNotificationTemplateName {
     REGISTRY_INTEGRATION_RESPONSE_ERROR_INFO_TEMPLATE("Registry integration email template consume registry error info template"),
     REGISTRY_INTEGRATION_MISSING_REGISTRY_ID("Registry integration email template missing registry id error"),
     REGISTRY_INTEGRATION_MISSING_GHGE_HSE_FLAG("Registry integration email template missing ghge - hse flag error"),
+    REGISTRY_INTEGRATION_OPERATOR_ID_FORDWAY_ACTION_TEMPLATE("Registry integration set operator id error fordway"),
+    REGISTRY_INTEGRATION_OPERATOR_ID_REGULATOR_ACTION_TEMPLATE("Registry integration set operator id error regulator"),
+    REGISTRY_INTEGRATION_OPERATOR_ID_REGULATOR_INFO_TEMPLATE("Registry integration set operator id error information regulator"),
 
     BDR_COMPLETED("BDR completed")
     ;

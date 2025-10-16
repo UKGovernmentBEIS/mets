@@ -13,7 +13,12 @@
           {{ inspectionPayload().installationInspection?.followUpActionsRequired ? 'Yes' : 'No' }}
         </dd>
         <dd govukSummaryListRowActions *ngIf="isEditable()">
-          <a govukLink [routerLink]="['../', 'follow-up-actions-guard-question']">Change</a>
+          <a
+            govukLink
+            hidden-text="the decision about follow-up actions for the operator"
+            [routerLink]="['../', 'follow-up-actions-guard-question']">
+            Change
+          </a>
         </dd>
       </div>
 
@@ -28,7 +33,7 @@
           {{ inspectionPayload().installationInspection?.followUpActionsOmissionJustification }}
         </dd>
         <dd govukSummaryListRowActions *ngIf="isEditable()">
-          <a govukLink [routerLink]="['../', 'follow-up-actions-guard-question']">Change</a>
+          <a govukLink hidden-text="justification" [routerLink]="['../', 'follow-up-actions-guard-question']">Change</a>
         </dd>
       </div>
     </dl>
@@ -41,7 +46,7 @@
             <app-summary-download-files [files]="files()"></app-summary-download-files>
           </dd>
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+            <a govukLink hidden-text="uploaded files" [routerLink]="['..']" [state]="{ changing: true }">Change</a>
           </dd>
         </div>
       </dl>

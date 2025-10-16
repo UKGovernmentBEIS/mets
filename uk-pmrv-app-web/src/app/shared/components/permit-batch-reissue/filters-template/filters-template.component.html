@@ -32,6 +32,19 @@
       <a govukLink [routerLink]="['..', 'filters']">Change</a>
     </dd>
   </div>
+
+  <div govukSummaryListRow *ngIf="allocationStatuses.length > 0">
+    <dt govukSummaryListRowKey>Allocation status</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let allocationStatus of allocationStatuses">
+        <div>{{ allocationStatus | i18nSelect: allocationStatusLabelMap }}</div>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'filters']">Change</a>
+    </dd>
+  </div>
+
   <div govukSummaryListRow *ngIf="filters.numberOfEmitters !== null">
     <dt govukSummaryListRowKey>Total emitters selected</dt>
     <dd govukSummaryListRowValue>

@@ -60,6 +60,10 @@ const routes: Routes = [
             loadChildren: () => import('./vir/vir.routes').then((r) => r.VIR_ROUTES),
           },
           {
+            path: 'registry',
+            loadChildren: () => import('./registry/registry.routes').then((r) => r.REGISTRY_ACTION_ROUTES),
+          },
+          {
             path: '',
             component: RequestActionPageComponent,
           },

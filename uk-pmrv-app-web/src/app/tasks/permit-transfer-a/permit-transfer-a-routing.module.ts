@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { PendingRequestGuard } from '@core/guards/pending-request.guard';
 
 import { WizardStepGuard } from './core/guards/wizard-step.guard';
+import { codeBacklinkResolver } from './core/permit-transfer-a-task-statuses';
+import { TransferAActivityLevelReportComponent } from './submit/activity-level-report/activity-level-report.component';
 import { TransferAAemReportComponent } from './submit/aem-report/aem-report.component';
 import { TransferACodeComponent } from './submit/code/code.component';
 import { TransferADateComponent } from './submit/date/date.component';
@@ -58,8 +60,16 @@ const routes: Routes = [
         canDeactivate: [PendingRequestGuard],
       },
       {
+        path: 'activity-level-report',
+        data: { pageTitle: 'Activity level report', backlink: '../aem-report' },
+        component: TransferAActivityLevelReportComponent,
+        canActivate: [WizardStepGuard],
+        canDeactivate: [PendingRequestGuard],
+      },
+      {
         path: 'code',
-        data: { pageTitle: 'Transfer code', backlink: '../aem-report' },
+        data: { pageTitle: 'Transfer code', backlink: '../activity-level-report' },
+        resolve: { backlink: codeBacklinkResolver },
         component: TransferACodeComponent,
         canActivate: [WizardStepGuard],
         canDeactivate: [PendingRequestGuard],

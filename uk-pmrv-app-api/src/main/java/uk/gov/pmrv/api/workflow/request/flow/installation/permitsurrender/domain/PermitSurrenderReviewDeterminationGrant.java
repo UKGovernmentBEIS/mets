@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +25,8 @@ import java.time.LocalDate;
     message = "permitsurrender.reviewdetermination.grant.report")
 @SpELExpression(expression = "{T(java.lang.Boolean).TRUE.equals(#allowancesSurrenderRequired) == (#allowancesSurrenderDate != null)}", 
     message = "permitsurrender.reviewdetermination.grant.allowancessurrender")
+@SpELExpression(expression = "{T(java.lang.Boolean).TRUE.equals(#alrRequired) == (#alrReportDate != null)}",
+    message = "permitsurrender.reviewdetermination.grant.alr_required")
 public class PermitSurrenderReviewDeterminationGrant extends PermitSurrenderReviewDetermination {
     
     @PastOrPresent
@@ -36,9 +39,19 @@ public class PermitSurrenderReviewDeterminationGrant extends PermitSurrenderRevi
     @NotNull
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean reportRequired;
-    
+
     @FutureOrPresent
     private LocalDate reportDate;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean alrRequired;
+
+    @FutureOrPresent
+    private LocalDate alrReportDate;
+
+    //injected for validation reasons
+    @JsonIgnore
+    private Long accountId;
     
     @NotNull
     @JsonInclude(JsonInclude.Include.NON_NULL)

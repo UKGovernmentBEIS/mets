@@ -51,6 +51,12 @@ export class SubmitContainerComponent {
     .getPayload()
     .pipe(map((payload) => payload?.permitOriginatedData?.permitType === 'GHGE'));
 
+  showAlr$ = this.aerService.getPayload().pipe(
+    map((payload) => {
+      return !payload?.isPostALRSectionRemoval;
+    }),
+  );
+
   isTaskTypeAmendsSubmit = this.aerService.requestTaskType === 'AER_APPLICATION_AMENDS_SUBMIT';
 
   reviewGroupsForAmend$ = this.aerService.reviewGroupsForAmend$;

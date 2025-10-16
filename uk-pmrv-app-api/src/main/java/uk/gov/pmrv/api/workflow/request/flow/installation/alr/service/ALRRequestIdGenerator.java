@@ -11,13 +11,14 @@ import java.util.List;
 @Service
 public class ALRRequestIdGenerator implements RequestIdGenerator {
 
+    static private final String FINAL_LABEL = "FINAL";
+
     @Override
     public String generate(RequestParams params) {
         Long accountId = params.getAccountId();
         ALRRequestMetaData metaData = (ALRRequestMetaData) params.getRequestMetadata();
-        int year = metaData.getYear().getValue();
 
-        return String.format("%s%05d-%d", getPrefix(), accountId, year);
+        return String.format("%s%05d-%s", getPrefix(), accountId, Boolean.TRUE.equals(metaData.getIsFinal()) ? FINAL_LABEL : String.valueOf(metaData.getYear()));
     }
 
     @Override

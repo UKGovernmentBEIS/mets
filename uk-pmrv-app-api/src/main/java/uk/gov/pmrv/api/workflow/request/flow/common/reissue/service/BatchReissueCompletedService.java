@@ -43,4 +43,5 @@ public class BatchReissueCompletedService {
 				RequestActionType.BATCH_REISSUE_COMPLETED,
 				requestMetadata.getSubmitterId());
 	}
+
 }

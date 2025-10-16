@@ -154,6 +154,7 @@ class AerApplicationSubmitInitializerTest {
                 .aer(Aer.builder().build())
                 .permitOriginatedData(PermitOriginatedData.builder().permitType(PermitType.GHGE).build())
                 .monitoringPlanVersions(List.of(MonitoringPlanVersion.builder().build()))
+                .isPostALRSectionRemoval(true)
                 .build())
             .metadata(AerRequestMetadata.builder().year(reportingYear).build()).build();
 
@@ -165,6 +166,7 @@ class AerApplicationSubmitInitializerTest {
             .permitOriginatedData(((AerRequestPayload) request.getPayload()).getPermitOriginatedData())
             .monitoringPlanVersions(((AerRequestPayload) request.getPayload()).getMonitoringPlanVersions())
             .reportingYear(reportingYear)
+            .isPostALRSectionRemoval(true)
             .build();
 
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(accountId)).thenReturn(installationOperatorDetails);

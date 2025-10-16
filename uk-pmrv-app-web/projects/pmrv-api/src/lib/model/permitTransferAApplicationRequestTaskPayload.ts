@@ -17,6 +17,7 @@ export interface PermitTransferAApplicationRequestTaskPayload extends RequestTas
   transferDate: string;
   payer: 'TRANSFERER' | 'RECEIVER';
   aerLiable: 'TRANSFERER' | 'RECEIVER';
+  alrLiable?: 'TRANSFERER' | 'RECEIVER';
   transferCode: string;
   sectionCompleted?: boolean;
   transferAttachments?: { [key: string]: string };

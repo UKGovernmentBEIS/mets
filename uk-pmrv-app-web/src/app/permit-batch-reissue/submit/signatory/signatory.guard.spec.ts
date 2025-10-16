@@ -46,9 +46,9 @@ describe('SignatoryGuard', () => {
   it('should activate when previous step completed', async () => {
     store.setState({
       ...initialState,
-      accountStatuses: ['AWAITING_REVOCATION'],
-      emitterTypes: ['GHGE'],
-      installationCategories: ['A_LOW_EMITTER'],
+      changesDetails: {
+        changes: ['change item 1'],
+      },
     });
 
     await expect(

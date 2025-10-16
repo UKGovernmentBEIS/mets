@@ -4,12 +4,15 @@
     <app-page-heading>
       @if (
         (vm.requestTaskType === 'ALR_APPLICATION_SUBMIT' && !vm.verificationPerformed) ||
-        (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && vm.regulatorVerificationRequired)
+        (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' &&
+          vm.regulatorVerificationRequired &&
+          !vm.verificationPerformed)
       ) {
         Send report for verification
       } @else if (
         (vm.requestTaskType === 'ALR_APPLICATION_SUBMIT' && vm.verificationPerformed) ||
-        (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && !vm.regulatorVerificationRequired)
+        (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' &&
+          (!vm.regulatorVerificationRequired || vm.verificationPerformed))
       ) {
         Send to regulator
       } @else {
@@ -19,7 +22,9 @@
     <div
       *ngIf="
         (vm.requestTaskType === 'ALR_APPLICATION_SUBMIT' && !vm.verificationPerformed) ||
-        (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && vm.regulatorVerificationRequired)
+        (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' &&
+          vm.regulatorVerificationRequired &&
+          !vm.verificationPerformed)
       "
       class="govuk-heading-m">
       Current verifier
@@ -27,14 +32,24 @@
     </div>
 
     @if (
-      (['ALR_APPLICATION_VERIFICATION_SUBMIT', 'ALR_APPLICATION_SUBMIT'].includes(vm.requestTaskType) &&
+      ([
+        'ALR_APPLICATION_VERIFICATION_SUBMIT',
+        'ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT',
+        'ALR_APPLICATION_SUBMIT',
+      ].includes(vm.requestTaskType) &&
         !vm.verificationPerformed) ||
-      (['ALR_APPLICATION_AMENDS_SUBMIT'].includes(vm.requestTaskType) && vm.regulatorVerificationRequired)
+      (['ALR_APPLICATION_AMENDS_SUBMIT'].includes(vm.requestTaskType) &&
+        vm.regulatorVerificationRequired &&
+        !vm.verificationPerformed)
     ) {
       <p
         class="govuk-body"
         *ngIf="
-          ['ALR_APPLICATION_SUBMIT', 'ALR_APPLICATION_AMENDS_SUBMIT'].includes(vm.requestTaskType)
+          [
+            'ALR_APPLICATION_SUBMIT',
+            'ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT',
+            'ALR_APPLICATION_AMENDS_SUBMIT',
+          ].includes(vm.requestTaskType)
             ? 'in your report'
             : 'you have provided in this verification report' as v
         ">
@@ -67,10 +82,13 @@
     <app-confirmation-shared
       [title]="
         (vm.requestTaskType === 'ALR_APPLICATION_SUBMIT' && !vm.verificationPerformed) ||
-        (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && vm.regulatorVerificationRequired)
+        (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' &&
+          vm.regulatorVerificationRequired &&
+          !vm.verificationPerformed)
           ? 'Sent to verifier for review'
           : (vm.requestTaskType === 'ALR_APPLICATION_SUBMIT' && vm.verificationPerformed) ||
-              (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && !vm.regulatorVerificationRequired)
+              (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' &&
+                (!vm.regulatorVerificationRequired || vm.verificationPerformed))
             ? 'Sent to regulator for review'
             : 'Verification report sent to operator'
       "

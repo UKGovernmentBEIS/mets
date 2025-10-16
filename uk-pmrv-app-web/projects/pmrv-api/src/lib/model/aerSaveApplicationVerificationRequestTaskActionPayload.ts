@@ -39,6 +39,7 @@ export interface AerSaveApplicationVerificationRequestTaskActionPayload extends 
   recommendedImprovements: RecommendedImprovements;
   uncorrectedNonConformities: UncorrectedNonConformities;
   uncorrectedNonCompliances: UncorrectedNonCompliances;
+  isPostALRSectionRemoval?: boolean;
   activityLevelReport?: ActivityLevelReport;
   verificationSectionsCompleted?: { [key: string]: Array<boolean> };
 }

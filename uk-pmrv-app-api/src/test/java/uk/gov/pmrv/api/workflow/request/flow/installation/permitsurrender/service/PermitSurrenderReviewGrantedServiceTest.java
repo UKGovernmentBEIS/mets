@@ -129,7 +129,7 @@ class PermitSurrenderReviewGrantedServiceTest {
     }
 
     @Test
-    void constructAerVariables() {
+    void constructAerAndAlrVariables() {
         final String requestId = "1";
         LocalDate reportLocalDate = LocalDate.now();
         Date reportDate = DateUtils.atEndOfDay(reportLocalDate);
@@ -140,9 +140,12 @@ class PermitSurrenderReviewGrantedServiceTest {
                         .type(PermitSurrenderReviewDeterminationType.GRANTED)
                         .reportRequired(true)
                         .reportDate(reportLocalDate)
+                        .alrRequired(true)
+                        .alrReportDate(reportLocalDate)
                         .build())
                 .build();
         Request request = Request.builder()
+                .accountId(1L)
                 .id(requestId)
                 .payload(requestPayload)
                 .build();
@@ -150,12 +153,16 @@ class PermitSurrenderReviewGrantedServiceTest {
         when(requestService.findRequestById(requestId)).thenReturn(request);
 
         // Invoke
-        Map<String, Object> result = service.constructAerVariables(requestId);
+        Map<String, Object> result = service.constructAerAndAlrVariables(requestId);
 
         // Verify
         assertThat(result).isEqualTo(Map.of(
                 BpmnProcessConstants.AER_REQUIRED, true,
-                BpmnProcessConstants.AER_EXPIRATION_DATE, reportDate
+                BpmnProcessConstants.AER_EXPIRATION_DATE, reportDate,
+                BpmnProcessConstants.ALR_REQUIRED, true,
+                BpmnProcessConstants.ALR_EXPIRATION_DATE, reportDate,
+                BpmnProcessConstants.ALR_FINAL, true,
+                BpmnProcessConstants.ACCOUNT_ID, 1L
         ));
         verify(requestService).findRequestById(requestId);
     }

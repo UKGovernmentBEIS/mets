@@ -39,6 +39,7 @@ public class HSETICreateActionHandlerTest {
 
         HSETIRequestPayload hsetiRequestPayload = HSETIRequestPayload.builder()
                 .payloadType(RequestPayloadType.HSE_TI_REQUEST_PAYLOAD)
+                .operatorAssignee(userId)
                 .hseti(HSETI.builder()
                         .allocationPeriod(HSETIAllocationPeriod.PERIOD_2021_2025)
                         .build()
@@ -76,6 +77,7 @@ public class HSETICreateActionHandlerTest {
 
         String actual = hsetiCreateActionHandler.process(accountId, actionPayload, user);
 
+        verify(startProcessRequestService, times(1)).startProcess(requestParams);
         Assertions.assertEquals(requestId, actual);
     }
 

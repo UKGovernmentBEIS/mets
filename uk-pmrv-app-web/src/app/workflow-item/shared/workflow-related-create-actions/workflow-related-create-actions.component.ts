@@ -100,6 +100,8 @@ export class WorkflowRelatedCreateActionsComponent implements OnInit {
   onClick(requestCreateActionType: RequestCreateActionProcessDTO['requestCreateActionType']): void {
     if (requestCreateActionType === 'AER') {
       this.router.navigate(['aer-reinitialize'], { relativeTo: this.route });
+    } else if (requestCreateActionType === 'ALR') {
+      this.router.navigate(['alr-mark-as-not-required'], { relativeTo: this.route });
     } else {
       combineLatest([this.requestId$, this.accountId$])
         .pipe(

@@ -25,6 +25,10 @@ import java.util.Set;
 		expression = "{((#emitterTypes.contains('GHGE') || #emitterTypes.contains('WASTE')) && #installationCategories != null && #installationCategories.size() > 0) || ((!(#emitterTypes.contains('GHGE') || #emitterTypes.contains('WASTE'))) && (#installationCategories == null || #installationCategories.isEmpty()))}",
 		message = "permit.reissue.batch.create.emitterTypeAndInstallationCategory"
 )
+@SpELExpression(
+		expression = "{((#emitterTypes.contains('WASTE') && #emitterTypes.size() == 1) == (!#freeAllocation  && !#nonFreeAllocation)) || !(#emitterTypes.contains('WASTE') && #emitterTypes.size() == 1)}",
+		message = "permit.reissue.batch.create.emitterTypeAndAllocationStatuses"
+)
 @SpELExpression(expression = "{#installationCategories == null || !#installationCategories.contains('N_A')}", 
 	message = "permit.reissue.batch.create.installationCategory.notAvailable")
 public class PermitBatchReissueFilters extends BatchReissueFilters {
@@ -38,5 +42,8 @@ public class PermitBatchReissueFilters extends BatchReissueFilters {
 	private Set<EmitterType> emitterTypes = new HashSet<>();
 	
 	private Set<InstallationCategory> installationCategories;
-	
+
+	private boolean freeAllocation;
+
+	private boolean nonFreeAllocation;
 }

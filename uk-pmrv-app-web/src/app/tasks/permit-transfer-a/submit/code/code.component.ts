@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -37,6 +38,11 @@ import { codeFormProvider } from './code-form.provider';
   providers: [codeFormProvider],
 })
 export class TransferACodeComponent {
+  private readonly isAlrVisible = toSignal(this.permitTransferAService.isAlrVisible$);
+  private readonly payload: Signal<PermitTransferAApplicationRequestTaskPayload> = toSignal(
+    this.permitTransferAService.getPayload(),
+  );
+
   hideSubmit$ = this.permitTransferAService.isEditable$.pipe(map((isEditable) => !isEditable));
 
   constructor(
@@ -51,8 +57,12 @@ export class TransferACodeComponent {
     if (!this.form.dirty) {
       this.router.navigate(['..', 'summary'], { relativeTo: this.route });
     } else {
+      const isAlrVisible = this.isAlrVisible();
+      const payload = this.payload();
+
       this.permitTransferAService
         .sendDataForPost({
+          alrLiable: isAlrVisible ? payload.alrLiable : undefined,
           transferCode: this.form.value.transferCode,
         } as Partial<PermitTransferAApplicationRequestTaskPayload>)
         .pipe(this.pendingRequest.trackRequest())

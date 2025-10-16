@@ -34,6 +34,9 @@ public class AerValidatorService {
 
         // Validate Verification report data
         if (!ObjectUtils.isEmpty(aerContainer.getVerificationReport())) {
+            if (aerContainer.getVerificationReport().getVerificationData() != null) {
+                aerContainer.getVerificationReport().getVerificationData().setIsPostALRSectionRemoval(aerContainer.getIsPostALRSectionRemoval());
+            }
             validateVerificationReport(aerContainer.getVerificationReport(), aerContainer.getPermitOriginatedData());
         }
     }

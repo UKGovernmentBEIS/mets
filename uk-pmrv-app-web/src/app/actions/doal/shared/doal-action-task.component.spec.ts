@@ -69,7 +69,7 @@ describe('ActionTaskComponent', () => {
 
     expect(links).toHaveLength(2);
     expect(links[0].textContent.trim()).toEqual('Change');
-    expect(links[1].textContent.trim()).toEqual('Return to: Activity level determination accepted as approved');
+    expect(links[1].textContent.trim()).toEqual('Return to: Activity level determination approved');
   });
 
   it('should display all internal titles', () => {

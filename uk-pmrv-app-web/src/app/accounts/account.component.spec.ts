@@ -140,7 +140,7 @@ describe('AccountComponent', () => {
 
       it('should have a WASTE notification when the role type is an OPERATOR', () => {
         expect(page.notification?.textContent.trim()).toEqual(
-          'Important The METS service supports the UK ETS and refers to the legislation for and requirements of the scheme. During the Waste Activities Voluntary Scheme for Greenhouse Gas Emissions, waste operators may use METS but legislative references, certain terminology and certain data requests are not relevant to them. Contact your regulator for further information on how to participate.',
+          'Important The METS service supports the UK ETS and refers to the legislation for and requirements of the scheme. During the voluntary MRV-only period, waste operators may use METS but legislative references, certain terminology and certain data requests are not relevant to them. Contact your regulator for further information on how to participate.',
         );
       });
 

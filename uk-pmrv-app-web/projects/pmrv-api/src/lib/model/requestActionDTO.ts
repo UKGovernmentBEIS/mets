@@ -23,6 +23,7 @@ import { ALRApplicationAcceptedRequestActionPayload } from './aLRApplicationAcce
 import { ALRApplicationAcceptedWithCorrectionsRequestActionPayload } from './aLRApplicationAcceptedWithCorrectionsRequestActionPayload';
 import { ALRApplicationAmendsSubmittedRequestActionPayload } from './aLRApplicationAmendsSubmittedRequestActionPayload';
 import { ALRApplicationClosedRequestActionPayload } from './aLRApplicationClosedRequestActionPayload';
+import { AlrApplicationMarkNotRequiredRequestActionPayload } from './alrApplicationMarkNotRequiredRequestActionPayload';
 import { ALRApplicationProceededToAuthorityRequestActionPayload } from './aLRApplicationProceededToAuthorityRequestActionPayload';
 import { ALRApplicationRejectedRequestActionPayload } from './aLRApplicationRejectedRequestActionPayload';
 import { ALRApplicationSubmittedRequestActionPayload } from './aLRApplicationSubmittedRequestActionPayload';
@@ -67,6 +68,7 @@ import { EmpIssuanceCorsiaApplicationApprovedRequestActionPayload } from './empI
 import { EmpIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayload } from './empIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayload';
 import { EmpIssuanceCorsiaApplicationReturnedForAmendsRequestActionPayload } from './empIssuanceCorsiaApplicationReturnedForAmendsRequestActionPayload';
 import { EmpIssuanceCorsiaApplicationSubmittedRequestActionPayload } from './empIssuanceCorsiaApplicationSubmittedRequestActionPayload';
+import { EmpIssuanceRegistryIntegrationRequestActionPayload } from './empIssuanceRegistryIntegrationRequestActionPayload';
 import { EmpIssuanceUkEtsApplicationAmendsSubmittedRequestActionPayload } from './empIssuanceUkEtsApplicationAmendsSubmittedRequestActionPayload';
 import { EmpIssuanceUkEtsApplicationApprovedRequestActionPayload } from './empIssuanceUkEtsApplicationApprovedRequestActionPayload';
 import { EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload } from './empIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload';
@@ -117,6 +119,7 @@ import { PermitIssuanceApplicationGrantedRequestActionPayload } from './permitIs
 import { PermitIssuanceApplicationRejectedRequestActionPayload } from './permitIssuanceApplicationRejectedRequestActionPayload';
 import { PermitIssuanceApplicationReturnedForAmendsRequestActionPayload } from './permitIssuanceApplicationReturnedForAmendsRequestActionPayload';
 import { PermitIssuanceApplicationSubmittedRequestActionPayload } from './permitIssuanceApplicationSubmittedRequestActionPayload';
+import { PermitIssuanceRegistryIntegrationRequestActionPayload } from './permitIssuanceRegistryIntegrationRequestActionPayload';
 import { PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload } from './permitNotificationApplicationReviewCompletedDecisionRequestActionPayload';
 import { PermitNotificationApplicationReviewSubmittedDecisionRequestActionPayload } from './permitNotificationApplicationReviewSubmittedDecisionRequestActionPayload';
 import { PermitNotificationApplicationSubmittedRequestActionPayload } from './permitNotificationApplicationSubmittedRequestActionPayload';
@@ -171,6 +174,7 @@ export interface RequestActionDTO {
     | 'PERMIT_ISSUANCE_APPLICATION_PEER_REVIEWER_REJECTED'
     | 'PERMIT_ISSUANCE_RECALLED_FROM_AMENDS'
     | 'PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMITTED'
+    | 'PERMIT_ISSUANCE_ACCOUNT_CREATED_SENT_TO_REGISTRY'
     | 'PERMIT_SURRENDER_APPLICATION_SUBMITTED'
     | 'PERMIT_SURRENDER_APPLICATION_GRANTED'
     | 'PERMIT_SURRENDER_APPLICATION_REJECTED'
@@ -364,6 +368,7 @@ export interface RequestActionDTO {
     | 'ALR_APPLICATION_ACCEPTED'
     | 'ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS'
     | 'ALR_APPLICATION_REJECTED'
+    | 'ALR_APPLICATION_MARK_NOT_REQUIRED'
     | 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPONDED'
     | 'INSTALLATION_AUDIT_OPERATOR_RESPONDED'
     | 'HSE_TI_APPLICATION_CANCELLED'
@@ -387,6 +392,7 @@ export interface RequestActionDTO {
     | 'EMP_ISSUANCE_UKETS_APPLICATION_RETURNED_FOR_AMENDS'
     | 'EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMITTED'
     | 'EMP_ISSUANCE_UKETS_RECALLED_FROM_AMENDS'
+    | 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY'
     | 'EMP_VARIATION_UKETS_APPLICATION_SUBMITTED'
     | 'EMP_VARIATION_APPLICATION_CANCELLED'
     | 'EMP_VARIATION_UKETS_APPLICATION_APPROVED'
@@ -488,6 +494,7 @@ export interface RequestActionDTO {
     | AirApplicationRespondedToRegulatorCommentsRequestActionPayload
     | AirApplicationReviewedRequestActionPayload
     | AirApplicationSubmittedRequestActionPayload
+    | AlrApplicationMarkNotRequiredRequestActionPayload
     | AviationAccountClosureSubmittedRequestActionPayload
     | AviationAerCorsia3YearPeriodOffsettingApplicationSubmittedRequestActionPayload
     | AviationAerCorsiaAnnualOffsettingApplicationSubmittedRequestActionPayload
@@ -526,6 +533,7 @@ export interface RequestActionDTO {
     | EmpIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayload
     | EmpIssuanceCorsiaApplicationReturnedForAmendsRequestActionPayload
     | EmpIssuanceCorsiaApplicationSubmittedRequestActionPayload
+    | EmpIssuanceRegistryIntegrationRequestActionPayload
     | EmpIssuanceUkEtsApplicationAmendsSubmittedRequestActionPayload
     | EmpIssuanceUkEtsApplicationApprovedRequestActionPayload
     | EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload
@@ -576,6 +584,7 @@ export interface RequestActionDTO {
     | PermitIssuanceApplicationRejectedRequestActionPayload
     | PermitIssuanceApplicationReturnedForAmendsRequestActionPayload
     | PermitIssuanceApplicationSubmittedRequestActionPayload
+    | PermitIssuanceRegistryIntegrationRequestActionPayload
     | PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload
     | PermitNotificationApplicationReviewSubmittedDecisionRequestActionPayload
     | PermitNotificationApplicationSubmittedRequestActionPayload

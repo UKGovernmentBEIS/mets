@@ -151,6 +151,9 @@ public class RequestAerSubmitService {
         AerRequestPayload aerRequestPayload = (AerRequestPayload) request.getPayload();
         AerApplicationVerificationSubmitRequestTaskPayload taskPayload = (AerApplicationVerificationSubmitRequestTaskPayload) requestTask.getPayload();
 
+        if (taskPayload.getVerificationReport().getVerificationData() != null) {
+            taskPayload.getVerificationReport().getVerificationData().setIsPostALRSectionRemoval(taskPayload.getIsPostALRSectionRemoval());
+        }
         aerValidatorService.validateVerificationReport(taskPayload.getVerificationReport(), taskPayload.getPermitOriginatedData());
 
         aerRequestPayload.setVerificationReport(taskPayload.getVerificationReport());

@@ -47,8 +47,9 @@ describe('SignatoryGuard', () => {
   it('should activate when previous step completed', async () => {
     store.setState({
       ...initialState,
-      reportingStatuses: ['EXEMPT_COMMERCIAL'],
-      emissionTradingSchemes: ['UK_ETS_AVIATION'],
+      changesDetails: {
+        changes: ['change item 1'],
+      },
     });
 
     await expect(

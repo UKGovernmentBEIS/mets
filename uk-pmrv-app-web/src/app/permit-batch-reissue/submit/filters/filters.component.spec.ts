@@ -33,6 +33,10 @@ describe('FiltersComponent', () => {
       return this.queryAll<HTMLInputElement>('input[type="checkbox"][name="installationCategories"]');
     }
 
+    get allocationStatuses() {
+      return this.queryAll<HTMLInputElement>('input[type="checkbox"][name="allocationStatuses"]');
+    }
+
     get errorSummary() {
       return this.query<HTMLDivElement>('.govuk-error-summary');
     }
@@ -81,14 +85,14 @@ describe('FiltersComponent', () => {
       const navigateSpy = jest.spyOn(router, 'navigate');
       expect(page.accountStatusesCheckboxes.length).toEqual(3);
       expect(page.emitterTypesCheckboxes.length).toEqual(2);
-      expect(page.installationCategories.length).toEqual(4);
+      expect(page.installationCategories.length).toEqual(0);
       expect(page.errorSummary).toBeFalsy();
 
       page.submitButton.click();
       fixture.detectChanges();
 
       expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummaryList).toEqual(['Select a status', 'Select a permit type', 'Select a category']);
+      expect(page.errorSummaryList).toEqual(['Select a status', 'Select a permit type']);
 
       page.accountStatusesCheckboxes[0].click(); // LIVE
 
@@ -106,11 +110,14 @@ describe('FiltersComponent', () => {
       fixture.detectChanges();
 
       expect(navigateSpy).toHaveBeenCalledTimes(1);
-      expect(navigateSpy).toHaveBeenCalledWith(['..', 'signatory'], { relativeTo: route });
+      expect(navigateSpy).toHaveBeenCalledWith(['..', 'changes-summary'], { relativeTo: route });
       expect(store.getState()).toEqual({
         accountStatuses: ['LIVE'],
         emitterTypes: ['HSE', 'GHGE'],
         installationCategories: ['A'],
+        changesDetails: undefined,
+        freeAllocation: false,
+        nonFreeAllocation: false,
         signatory: undefined,
       });
     });
@@ -128,11 +135,14 @@ describe('FiltersComponent', () => {
       fixture.detectChanges();
 
       expect(navigateSpy).toHaveBeenCalledTimes(1);
-      expect(navigateSpy).toHaveBeenCalledWith(['..', 'signatory'], { relativeTo: route });
+      expect(navigateSpy).toHaveBeenCalledWith(['..', 'changes-summary'], { relativeTo: route });
       expect(store.getState()).toEqual({
         accountStatuses: ['LIVE'],
         emitterTypes: ['HSE'],
         installationCategories: null,
+        changesDetails: undefined,
+        freeAllocation: false,
+        nonFreeAllocation: false,
         signatory: undefined,
       });
     });
@@ -156,6 +166,8 @@ describe('FiltersComponent', () => {
       expect(page.accountStatusesCheckboxes[1].checked).toBeTruthy();
       expect(page.emitterTypesCheckboxes[1].checked).toBeTruthy();
       expect(page.installationCategories[0].checked).toBeTruthy();
+      expect(page.allocationStatuses[0].checked).toBeFalsy();
+      expect(page.allocationStatuses[1].checked).toBeFalsy();
     });
   });
 });

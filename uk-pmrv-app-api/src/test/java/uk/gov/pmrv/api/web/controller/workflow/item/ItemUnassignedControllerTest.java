@@ -29,6 +29,7 @@ import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
+import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemOrderBy;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemUnassignedRegulatorService;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemUnassignedService;
@@ -105,7 +106,7 @@ class ItemUnassignedControllerTest {
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().totalItems(1L).build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(itemUnassignedRegulatorService.getUnassignedItems(appUser, accountType, PAGING))
+        when(itemUnassignedRegulatorService.getUnassignedItems(appUser, accountType, PAGING, ItemOrderBy.NEWEST_FIRST , null, null))
                 .thenReturn(itemDTOResponse);
         when(itemUnassignedRegulatorService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
 
@@ -115,7 +116,7 @@ class ItemUnassignedControllerTest {
                 .andExpect(status().isOk());
 
         verify(itemUnassignedRegulatorService, times(1))
-                .getUnassignedItems(appUser, accountType, PAGING);
+                .getUnassignedItems(appUser, accountType, PAGING, ItemOrderBy.NEWEST_FIRST, null, null);
     }
 
     @Test
@@ -133,7 +134,7 @@ class ItemUnassignedControllerTest {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
 
-        verify(itemUnassignedRegulatorService, never()).getUnassignedItems(any(), any(), any(PagingRequest.class));
+        verify(itemUnassignedRegulatorService, never()).getUnassignedItems(any(), any(), any(PagingRequest.class), any(), any(), any());
     }
 
     private AppUser buildMockAppUser(String roleType) {

@@ -6,12 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.common.config.RegistryConfig;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
 import uk.gov.pmrv.api.permit.domain.PermitType;
-import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
@@ -36,6 +36,7 @@ public class PermitIssuanceOfficialNoticeService {
     private final DocumentFileGeneratorService documentFileGeneratorService;
     private final OfficialNoticeSendService officialNoticeSendService;
     private final RegistryConfig registryConfig;
+    private final PermitIssuanceRegistryEventPublisherService permitIssuanceRegistryEventPublisherService;
 
     @Transactional
     public CompletableFuture<FileInfoDTO> generateGrantedOfficialNotice(final String requestId) {
@@ -117,7 +118,9 @@ public class PermitIssuanceOfficialNoticeService {
             requestPayload.getPermitDocument() != null ?
             List.of(requestPayload.getOfficialNotice(), requestPayload.getPermitDocument()) :
             List.of(requestPayload.getOfficialNotice());
-        
+
+        permitIssuanceRegistryEventPublisherService.publishRegistryEvent(requestPayload,requestId,request.getAccountId());
+
 		officialNoticeSendService.sendOfficialNotice(attachments, request,
 				decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification()),
 				List.of(registryConfig.getEmail()));
@@ -163,4 +166,6 @@ public class PermitIssuanceOfficialNoticeService {
 						.toRecipientEmail(accountPrimaryContact.getEmail())
 						.ccRecipientsEmails(ccRecipientsEmails).build());
 	}
+
+
 }

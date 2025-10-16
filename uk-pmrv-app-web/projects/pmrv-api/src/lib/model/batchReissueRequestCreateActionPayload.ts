@@ -13,5 +13,6 @@ import { RequestCreateActionPayload } from './requestCreateActionPayload';
 
 export interface BatchReissueRequestCreateActionPayload extends RequestCreateActionPayload {
   filters?: object;
+  changesDetails?: object;
   signatory: string;
 }

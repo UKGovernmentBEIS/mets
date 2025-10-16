@@ -41,6 +41,9 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('PERMIT_ISSUANCE_APPLICATION_SUBMITTED')).toEqual('New permit submitted');
     expect(pipe.transform('PERMIT_ISSUANCE_PEER_REVIEW_REQUESTED')).toEqual('Peer review requested');
     expect(pipe.transform('PERMIT_ISSUANCE_RECALLED_FROM_AMENDS')).toEqual('Permit application recalled');
+    expect(pipe.transform('PERMIT_ISSUANCE_ACCOUNT_CREATED_SENT_TO_REGISTRY')).toEqual(
+      'Information sent to registry by system',
+    );
 
     expect(pipe.transform('PERMIT_SURRENDER_APPLICATION_CANCELLED')).toEqual('Surrender request cancelled');
     expect(pipe.transform('PERMIT_SURRENDER_APPLICATION_PEER_REVIEWER_ACCEPTED')).toEqual(
@@ -191,11 +194,11 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('DOAL_APPLICATION_PEER_REVIEW_REQUESTED')).toEqual('Peer review requested');
     expect(pipe.transform('DOAL_APPLICATION_PEER_REVIEWER_ACCEPTED')).toEqual('Peer review agreement submitted');
     expect(pipe.transform('DOAL_APPLICATION_PEER_REVIEWER_REJECTED')).toEqual('Peer review disagreement submitted');
-    expect(pipe.transform('DOAL_APPLICATION_ACCEPTED')).toEqual('Activity level determination accepted as approved');
+    expect(pipe.transform('DOAL_APPLICATION_ACCEPTED')).toEqual('Activity level determination approved');
     expect(pipe.transform('DOAL_APPLICATION_ACCEPTED_WITH_CORRECTIONS')).toEqual(
-      'Activity level determination accepted as approved with corrections',
+      'Activity level determination approved with corrections',
     );
-    expect(pipe.transform('DOAL_APPLICATION_REJECTED')).toEqual('Activity level determination  not approved');
+    expect(pipe.transform('DOAL_APPLICATION_REJECTED')).toEqual('Activity level determination not approved');
     expect(pipe.transform('DOAL_APPLICATION_CANCELLED')).toEqual('Activity level determination cancelled');
 
     expect(pipe.transform('BATCH_REISSUE_SUBMITTED')).toEqual('Batch variation submitted');
@@ -522,11 +525,12 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('ALR_APPLICATION_PEER_REVIEW_REQUESTED')).toEqual('Peer review requested');
     expect(pipe.transform('ALR_APPLICATION_PEER_REVIEW_ACCEPTED')).toEqual('Peer review agreement submitted');
     expect(pipe.transform('ALR_APPLICATION_PEER_REVIEW_REJECTED')).toEqual('Peer review disagreement submitted');
-    expect(pipe.transform('ALR_APPLICATION_ACCEPTED')).toEqual('Activity level determination accepted as approved');
+    expect(pipe.transform('ALR_APPLICATION_ACCEPTED')).toEqual('Activity level determination approved');
     expect(pipe.transform('ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS')).toEqual(
-      'Activity level determination accepted as approved with corrections',
+      'Activity level determination approved with corrections',
     );
-    expect(pipe.transform('ALR_APPLICATION_REJECTED')).toEqual('Activity level determination accepted as not approved');
+    expect(pipe.transform('ALR_APPLICATION_REJECTED')).toEqual('Activity level determination not approved');
+    expect(pipe.transform('ALR_APPLICATION_MARK_NOT_REQUIRED')).toEqual('Marked as not required');
 
     expect(pipe.transform('HSE_TI_APPLICATION_CANCELLED')).toEqual('HSE target increase application cancelled');
     expect(pipe.transform('HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS')).toEqual(

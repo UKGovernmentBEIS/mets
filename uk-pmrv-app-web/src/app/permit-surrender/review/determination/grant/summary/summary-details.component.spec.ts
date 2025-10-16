@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { ActivatedRouteStub, BasePage } from '../../../../../../testing';
 import { SharedModule } from '../../../../../shared/shared.module';
@@ -54,7 +53,7 @@ describe('SummaryDetailsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SummaryDetailsComponent, TestComponent],
-      imports: [RouterTestingModule, SharedPermitSurrenderModule, SharedModule],
+      imports: [SharedPermitSurrenderModule, SharedModule],
       providers: [{ provide: ActivatedRoute, useValue: route }],
     }).compileComponents();
   });
@@ -83,7 +82,7 @@ describe('SummaryDetailsComponent', () => {
       ['Supporting note', 'reason'],
       ['Date regulated activities ended', '13 Dec 2012'],
       ['Effective date of notice', '13 Dec 2030'],
-      ['Surrender report', 'No'],
+      ['Surrender annual emmisions report', 'No'],
       ['Surrender of allowances', 'No'],
     ]);
 

@@ -2663,6 +2663,7 @@ paths:
     post:
       tags:
         - digitized-mmp-migration-upload-file-controller
+      summary: Upload MMP file to temporary storage to be used for MMP migration
       operationId: uploadMmp
       requestBody:
         content:
@@ -2691,6 +2692,12 @@ paths:
             '*/*':
               schema:
                 type: string
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                type: string
   /v1.0/mets/requests/mark-as-not-required/{id}:
     post:
       tags:
@@ -2709,6 +2716,32 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AerMarkNotRequiredDetails'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1.0/mets/requests/alr/mark-as-not-required/{id}:
+    post:
+      tags:
+        - Requests
+      summary: Mark as not required the given request and terminate Alr workflow
+      operationId: markAsNotRequiredAlr
+      parameters:
+        - name: id
+          in: path
+          description: The request id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlrMarkNotRequiredDetails'
         required: true
       responses:
         '200':
@@ -2906,6 +2939,47 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LegalEntityDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/installation/accounts/{id}/commencement-date:
+    post:
+      tags:
+        - Installation account update
+      summary: Update the commencement date of the account
+      operationId: updateCommencementDate
+      parameters:
+        - name: id
+          in: path
+          description: The account id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateCommencementDateDTO'
         required: true
       responses:
         '200':
@@ -5044,6 +5118,67 @@ paths:
             minimum: 1
             type: integer
             format: int32
+        - name: orderBy
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - NEWEST_FIRST
+              - NEAREST_DUE_DATE
+            default: NEWEST_FIRST
+        - name: requestType
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - INSTALLATION_ACCOUNT_OPENING
+              - SYSTEM_MESSAGE_NOTIFICATION
+              - PERMIT_ISSUANCE
+              - PERMIT_SURRENDER
+              - PERMIT_REVOCATION
+              - PERMIT_TRANSFER_A
+              - PERMIT_TRANSFER_B
+              - PERMIT_VARIATION
+              - PERMIT_NOTIFICATION
+              - PERMIT_BATCH_REISSUE
+              - PERMIT_REISSUE
+              - NON_COMPLIANCE
+              - NER
+              - DOAL
+              - AER
+              - VIR
+              - AIR
+              - DRE
+              - WITHHOLDING_OF_ALLOWANCES
+              - RETURN_OF_ALLOWANCES
+              - INSTALLATION_ONSITE_INSPECTION
+              - INSTALLATION_AUDIT
+              - HSE_TI
+              - BDR
+              - PERMANENT_CESSATION
+              - ALR
+              - AVIATION_ACCOUNT_CLOSURE
+              - AVIATION_NON_COMPLIANCE
+              - EMP_BATCH_REISSUE
+              - EMP_REISSUE
+              - AVIATION_VIR
+              - EMP_ISSUANCE_UKETS
+              - EMP_VARIATION_UKETS
+              - AVIATION_AER_UKETS
+              - AVIATION_DRE_UKETS
+              - EMP_ISSUANCE_CORSIA
+              - EMP_VARIATION_CORSIA
+              - AVIATION_AER_CORSIA
+              - AVIATION_DOE_CORSIA
+              - AVIATION_AER_CORSIA_ANNUAL_OFFSETTING
+              - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING
+        - name: accountSearchTerm
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -5097,6 +5232,67 @@ paths:
             minimum: 1
             type: integer
             format: int32
+        - name: orderBy
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - NEWEST_FIRST
+              - NEAREST_DUE_DATE
+            default: NEWEST_FIRST
+        - name: requestType
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - INSTALLATION_ACCOUNT_OPENING
+              - SYSTEM_MESSAGE_NOTIFICATION
+              - PERMIT_ISSUANCE
+              - PERMIT_SURRENDER
+              - PERMIT_REVOCATION
+              - PERMIT_TRANSFER_A
+              - PERMIT_TRANSFER_B
+              - PERMIT_VARIATION
+              - PERMIT_NOTIFICATION
+              - PERMIT_BATCH_REISSUE
+              - PERMIT_REISSUE
+              - NON_COMPLIANCE
+              - NER
+              - DOAL
+              - AER
+              - VIR
+              - AIR
+              - DRE
+              - WITHHOLDING_OF_ALLOWANCES
+              - RETURN_OF_ALLOWANCES
+              - INSTALLATION_ONSITE_INSPECTION
+              - INSTALLATION_AUDIT
+              - HSE_TI
+              - BDR
+              - PERMANENT_CESSATION
+              - ALR
+              - AVIATION_ACCOUNT_CLOSURE
+              - AVIATION_NON_COMPLIANCE
+              - EMP_BATCH_REISSUE
+              - EMP_REISSUE
+              - AVIATION_VIR
+              - EMP_ISSUANCE_UKETS
+              - EMP_VARIATION_UKETS
+              - AVIATION_AER_UKETS
+              - AVIATION_DRE_UKETS
+              - EMP_ISSUANCE_CORSIA
+              - EMP_VARIATION_CORSIA
+              - AVIATION_AER_CORSIA
+              - AVIATION_DOE_CORSIA
+              - AVIATION_AER_CORSIA_ANNUAL_OFFSETTING
+              - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING
+        - name: accountSearchTerm
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -5142,6 +5338,67 @@ paths:
             minimum: 1
             type: integer
             format: int32
+        - name: orderBy
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - NEWEST_FIRST
+              - NEAREST_DUE_DATE
+            default: NEWEST_FIRST
+        - name: requestType
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - INSTALLATION_ACCOUNT_OPENING
+              - SYSTEM_MESSAGE_NOTIFICATION
+              - PERMIT_ISSUANCE
+              - PERMIT_SURRENDER
+              - PERMIT_REVOCATION
+              - PERMIT_TRANSFER_A
+              - PERMIT_TRANSFER_B
+              - PERMIT_VARIATION
+              - PERMIT_NOTIFICATION
+              - PERMIT_BATCH_REISSUE
+              - PERMIT_REISSUE
+              - NON_COMPLIANCE
+              - NER
+              - DOAL
+              - AER
+              - VIR
+              - AIR
+              - DRE
+              - WITHHOLDING_OF_ALLOWANCES
+              - RETURN_OF_ALLOWANCES
+              - INSTALLATION_ONSITE_INSPECTION
+              - INSTALLATION_AUDIT
+              - HSE_TI
+              - BDR
+              - PERMANENT_CESSATION
+              - ALR
+              - AVIATION_ACCOUNT_CLOSURE
+              - AVIATION_NON_COMPLIANCE
+              - EMP_BATCH_REISSUE
+              - EMP_REISSUE
+              - AVIATION_VIR
+              - EMP_ISSUANCE_UKETS
+              - EMP_VARIATION_UKETS
+              - AVIATION_AER_UKETS
+              - AVIATION_DRE_UKETS
+              - EMP_ISSUANCE_CORSIA
+              - EMP_VARIATION_CORSIA
+              - AVIATION_AER_CORSIA
+              - AVIATION_DOE_CORSIA
+              - AVIATION_AER_CORSIA_ANNUAL_OFFSETTING
+              - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING
+        - name: accountSearchTerm
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -6026,6 +6283,77 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/requests/request-types:
+    get:
+      tags:
+        - Requests
+      summary: >-
+        Retrieves request types based on user role and service (INSTALLATION,
+        AVIATION)
+      operationId: getRequestTypesByUserRolesAndService
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  enum:
+                    - INSTALLATION_ACCOUNT_OPENING
+                    - SYSTEM_MESSAGE_NOTIFICATION
+                    - PERMIT_ISSUANCE
+                    - PERMIT_SURRENDER
+                    - PERMIT_REVOCATION
+                    - PERMIT_TRANSFER_A
+                    - PERMIT_TRANSFER_B
+                    - PERMIT_VARIATION
+                    - PERMIT_NOTIFICATION
+                    - PERMIT_BATCH_REISSUE
+                    - PERMIT_REISSUE
+                    - NON_COMPLIANCE
+                    - NER
+                    - DOAL
+                    - AER
+                    - VIR
+                    - AIR
+                    - DRE
+                    - WITHHOLDING_OF_ALLOWANCES
+                    - RETURN_OF_ALLOWANCES
+                    - INSTALLATION_ONSITE_INSPECTION
+                    - INSTALLATION_AUDIT
+                    - HSE_TI
+                    - BDR
+                    - PERMANENT_CESSATION
+                    - ALR
+                    - AVIATION_ACCOUNT_CLOSURE
+                    - AVIATION_NON_COMPLIANCE
+                    - EMP_BATCH_REISSUE
+                    - EMP_REISSUE
+                    - AVIATION_VIR
+                    - EMP_ISSUANCE_UKETS
+                    - EMP_VARIATION_UKETS
+                    - AVIATION_AER_UKETS
+                    - AVIATION_DRE_UKETS
+                    - EMP_ISSUANCE_CORSIA
+                    - EMP_VARIATION_CORSIA
+                    - AVIATION_AER_CORSIA
+                    - AVIATION_DOE_CORSIA
+                    - AVIATION_AER_CORSIA_ANNUAL_OFFSETTING
+                    - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /v1.0/requests/available-workflows/reporting/aer/{aerRequestId}:
     get:
       tags:
@@ -6783,6 +7111,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/mets/requests/alr/access-to-mark-as-not-required/{id}:
+    get:
+      tags:
+        - Requests
+      summary: Check if the user has access to mark as not required for an alr workflow
+      operationId: hasAccessMarkAsNotRequiredAlr
+      parameters:
+        - name: id
+          in: path
+          description: The request id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
   /v1.0/mets/requests/access-to-mark-as-not-required/{id}:
     get:
       tags:
@@ -9578,6 +9926,7 @@ components:
         file:
           type: string
           format: uuid
+      deprecated: true
     AdditionalDocuments:
       type: object
       properties:
@@ -10033,6 +10382,8 @@ components:
               $ref: '#/components/schemas/UncorrectedNonConformities'
             uncorrectedNonCompliances:
               $ref: '#/components/schemas/UncorrectedNonCompliances'
+            isPostALRSectionRemoval:
+              type: boolean
             activityLevelReport:
               $ref: '#/components/schemas/ActivityLevelReport'
             verificationSectionsCompleted:
@@ -21872,6 +22223,11 @@ components:
         annualEmissionsReportDate:
           type: string
           format: date
+        alrRequired:
+          type: boolean
+        alrReportDate:
+          type: string
+          format: date
         surrenderRequired:
           type: boolean
         surrenderDate:
@@ -22030,6 +22386,11 @@ components:
         reportDate:
           type: string
           format: date
+        alrRequired:
+          type: boolean
+        alrReportDate:
+          type: string
+          format: date
         allowancesSurrenderRequired:
           type: boolean
         allowancesSurrenderDate:
@@ -22131,6 +22492,11 @@ components:
               enum:
                 - TRANSFERER
                 - RECEIVER
+            alrLiable:
+              type: string
+              enum:
+                - TRANSFERER
+                - RECEIVER
             transferCode:
               maxLength: 9
               minLength: 9
@@ -22214,6 +22580,11 @@ components:
             - TRANSFERER
             - RECEIVER
         aerLiable:
+          type: string
+          enum:
+            - TRANSFERER
+            - RECEIVER
+        alrLiable:
           type: string
           enum:
             - TRANSFERER
@@ -26423,6 +26794,8 @@ components:
           properties:
             requestId:
               type: string
+    BatchReissueChangesDetails:
+      type: object
     BatchReissueFilters:
       type: object
     BatchReissueRequestCreateActionPayload:
@@ -26435,6 +26808,8 @@ components:
           properties:
             filters:
               $ref: '#/components/schemas/BatchReissueFilters'
+            changesDetails:
+              $ref: '#/components/schemas/BatchReissueChangesDetails'
             signatory:
               type: string
     DoalRequestCreateActionPayload:
@@ -26714,6 +27089,7 @@ components:
       description: The search criteria
     ALRRequestMetaData:
       required:
+        - isFinal
         - year
       type: object
       allOf:
@@ -26723,6 +27099,8 @@ components:
             year:
               type: integer
               format: int16
+            isFinal:
+              type: boolean
     AerInitiatorRequest:
       required:
         - type
@@ -27195,6 +27573,52 @@ components:
               type: string
             signatory:
               type: string
+            batchRequestType:
+              type: string
+              enum:
+                - INSTALLATION_ACCOUNT_OPENING
+                - SYSTEM_MESSAGE_NOTIFICATION
+                - PERMIT_ISSUANCE
+                - PERMIT_SURRENDER
+                - PERMIT_REVOCATION
+                - PERMIT_TRANSFER_A
+                - PERMIT_TRANSFER_B
+                - PERMIT_VARIATION
+                - PERMIT_NOTIFICATION
+                - PERMIT_BATCH_REISSUE
+                - PERMIT_REISSUE
+                - NON_COMPLIANCE
+                - NER
+                - DOAL
+                - AER
+                - VIR
+                - AIR
+                - DRE
+                - WITHHOLDING_OF_ALLOWANCES
+                - RETURN_OF_ALLOWANCES
+                - INSTALLATION_ONSITE_INSPECTION
+                - INSTALLATION_AUDIT
+                - HSE_TI
+                - BDR
+                - PERMANENT_CESSATION
+                - ALR
+                - AVIATION_ACCOUNT_CLOSURE
+                - AVIATION_NON_COMPLIANCE
+                - EMP_BATCH_REISSUE
+                - EMP_REISSUE
+                - AVIATION_VIR
+                - EMP_ISSUANCE_UKETS
+                - EMP_VARIATION_UKETS
+                - AVIATION_AER_UKETS
+                - AVIATION_DRE_UKETS
+                - EMP_ISSUANCE_CORSIA
+                - EMP_VARIATION_CORSIA
+                - AVIATION_AER_CORSIA
+                - AVIATION_DOE_CORSIA
+                - AVIATION_AER_CORSIA_ANNUAL_OFFSETTING
+                - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING
+            changesDetails:
+              $ref: '#/components/schemas/BatchReissueChangesDetails'
     RequestDetailsDTO:
       type: object
       properties:
@@ -27821,6 +28245,13 @@ components:
       properties:
         reason:
           type: string
+    AlrMarkNotRequiredDetails:
+      required:
+        - reason
+      type: object
+      properties:
+        reason:
+          type: string
     AccountUpdateSopIdDTO:
       type: object
       properties:
@@ -27859,6 +28290,15 @@ components:
           minLength: 0
           type: string
       description: The installation name
+    AccountUpdateCommencementDateDTO:
+      required:
+        - commencementDate
+      type: object
+      properties:
+        commencementDate:
+          type: string
+          format: date
+      description: The commencement date
     PreviewDocumentRequest:
       required:
         - decisionNotification
@@ -29437,6 +29877,8 @@ components:
               type: object
               additionalProperties:
                 type: string
+            isPostALRSectionRemoval:
+              type: boolean
             verificationPerformed:
               type: boolean
             verificationBodyId:
@@ -29495,6 +29937,8 @@ components:
               type: object
               additionalProperties:
                 type: string
+            isPostALRSectionRemoval:
+              type: boolean
             verificationReport:
               $ref: '#/components/schemas/AerVerificationReport'
             verificationAttachments:
@@ -29556,6 +30000,8 @@ components:
               type: object
               additionalProperties:
                 type: string
+            isPostALRSectionRemoval:
+              type: boolean
             verificationPerformed:
               type: boolean
             verificationBodyId:
@@ -29602,6 +30048,8 @@ components:
               type: object
               additionalProperties:
                 type: string
+            isPostALRSectionRemoval:
+              type: boolean
             verificationReport:
               $ref: '#/components/schemas/AerVerificationReport'
             verificationAttachments:
@@ -29656,6 +30104,8 @@ components:
           $ref: '#/components/schemas/UncorrectedNonConformities'
         uncorrectedNonCompliances:
           $ref: '#/components/schemas/UncorrectedNonCompliances'
+        isPostALRSectionRemoval:
+          type: boolean
         activityLevelReport:
           $ref: '#/components/schemas/ActivityLevelReport'
     AirApplicationRespondToRegulatorCommentsRequestTaskPayload:
@@ -32904,6 +33354,11 @@ components:
               enum:
                 - TRANSFERER
                 - RECEIVER
+            alrLiable:
+              type: string
+              enum:
+                - TRANSFERER
+                - RECEIVER
             transferCode:
               maxLength: 9
               minLength: 9
@@ -35311,6 +35766,7 @@ components:
             - PERMIT_ISSUANCE_APPLICATION_PEER_REVIEWER_REJECTED
             - PERMIT_ISSUANCE_RECALLED_FROM_AMENDS
             - PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMITTED
+            - PERMIT_ISSUANCE_ACCOUNT_CREATED_SENT_TO_REGISTRY
             - PERMIT_SURRENDER_APPLICATION_SUBMITTED
             - PERMIT_SURRENDER_APPLICATION_GRANTED
             - PERMIT_SURRENDER_APPLICATION_REJECTED
@@ -35504,6 +35960,7 @@ components:
             - ALR_APPLICATION_ACCEPTED
             - ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS
             - ALR_APPLICATION_REJECTED
+            - ALR_APPLICATION_MARK_NOT_REQUIRED
             - INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPONDED
             - INSTALLATION_AUDIT_OPERATOR_RESPONDED
             - HSE_TI_APPLICATION_CANCELLED
@@ -35527,6 +35984,7 @@ components:
             - EMP_ISSUANCE_UKETS_APPLICATION_RETURNED_FOR_AMENDS
             - EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMITTED
             - EMP_ISSUANCE_UKETS_RECALLED_FROM_AMENDS
+            - EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY
             - EMP_VARIATION_UKETS_APPLICATION_SUBMITTED
             - EMP_VARIATION_APPLICATION_CANCELLED
             - EMP_VARIATION_UKETS_APPLICATION_APPROVED
@@ -36223,6 +36681,16 @@ components:
               type: object
               additionalProperties:
                 type: boolean
+    AlrApplicationMarkNotRequiredRequestActionPayload:
+      required:
+        - markNotRequiredDetails
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            markNotRequiredDetails:
+              $ref: '#/components/schemas/AlrMarkNotRequiredDetails'
     AviationAccountClosureSubmittedRequestActionPayload:
       type: object
       allOf:
@@ -36906,6 +37374,8 @@ components:
               type: string
             filters:
               $ref: '#/components/schemas/BatchReissueFilters'
+            changesDetails:
+              $ref: '#/components/schemas/BatchReissueChangesDetails'
             signatory:
               type: string
             signatoryName:
@@ -36929,9 +37399,23 @@ components:
               type: string
             filters:
               $ref: '#/components/schemas/BatchReissueFilters'
+            changesDetails:
+              $ref: '#/components/schemas/BatchReissueChangesDetails'
             signatory:
               type: string
             signatoryName:
+              type: string
+    BusinessOrganisationDetails:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PermitIssuanceOrganizationDetails'
+        - type: object
+          properties:
+            registeredAddress:
+              $ref: '#/components/schemas/AddressDTO'
+            companyRegistrationNumber:
+              type: string
+            justification:
               type: string
     DoalApplicationAcceptedRequestActionPayload:
       required:
@@ -37200,6 +37684,96 @@ components:
               type: object
               additionalProperties:
                 type: string
+    EmpIssuanceIndividualCompanyDetails:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/EmpIssuanceOrganisationDetails'
+        - type: object
+          properties:
+            fullName:
+              type: string
+            address:
+              oneOf:
+                - $ref: '#/components/schemas/LocationDTO'
+                - $ref: '#/components/schemas/LocationOffShoreDTO'
+                - $ref: '#/components/schemas/LocationOnShoreDTO'
+                - $ref: '#/components/schemas/LocationOnShoreStateDTO'
+    EmpIssuanceLimitedCompanyDetails:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/EmpIssuanceOrganisationDetails'
+        - type: object
+          properties:
+            companyRegistrationNumber:
+              type: string
+            registeredAddress:
+              oneOf:
+                - $ref: '#/components/schemas/LocationDTO'
+                - $ref: '#/components/schemas/LocationOffShoreDTO'
+                - $ref: '#/components/schemas/LocationOnShoreDTO'
+                - $ref: '#/components/schemas/LocationOnShoreStateDTO'
+    EmpIssuanceOperatorDetails:
+      type: object
+      properties:
+        emitterId:
+          type: string
+        emissionsPlanId:
+          type: string
+        operatorName:
+          type: string
+        firstKnownAviationActivity:
+          type: string
+          format: date
+        regulator:
+          type: string
+          enum:
+            - ENGLAND
+            - NORTHERN_IRELAND
+            - OPRED
+            - SCOTLAND
+            - WALES
+    EmpIssuanceOrganisationDetails:
+      type: object
+      properties:
+        organisationLegalStatus:
+          type: string
+          enum:
+            - LIMITED_COMPANY
+            - INDIVIDUAL
+            - PARTNERSHIP
+      discriminator:
+        propertyName: organisationLegalStatus
+        mapping:
+          LIMITED_COMPANY: '#/components/schemas/EmpIssuanceLimitedCompanyDetails'
+          INDIVIDUAL: '#/components/schemas/EmpIssuanceIndividualCompanyDetails'
+          PARTNERSHIP: '#/components/schemas/EmpIssuancePartnershipDetails'
+    EmpIssuancePartnershipDetails:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/EmpIssuanceOrganisationDetails'
+        - type: object
+          properties:
+            partnershipName:
+              type: string
+            mainOfficeAddress:
+              oneOf:
+                - $ref: '#/components/schemas/LocationDTO'
+                - $ref: '#/components/schemas/LocationOffShoreDTO'
+                - $ref: '#/components/schemas/LocationOnShoreDTO'
+                - $ref: '#/components/schemas/LocationOnShoreStateDTO'
+    EmpIssuanceRegistryIntegrationRequestActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            operatorDetails:
+              $ref: '#/components/schemas/EmpIssuanceOperatorDetails'
+            organisationDetails:
+              oneOf:
+                - $ref: '#/components/schemas/EmpIssuanceIndividualCompanyDetails'
+                - $ref: '#/components/schemas/EmpIssuanceLimitedCompanyDetails'
+                - $ref: '#/components/schemas/EmpIssuancePartnershipDetails'
     EmpIssuanceUkEtsApplicationAmendsSubmittedRequestActionPayload:
       required:
         - emissionsMonitoringPlan
@@ -37814,6 +38388,14 @@ components:
               type: object
               additionalProperties:
                 type: string
+    IndividualOrganisationDetails:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PermitIssuanceOrganizationDetails'
+        - type: object
+          properties:
+            operatorAddress:
+              $ref: '#/components/schemas/AddressDTO'
     InstallationAccountOpeningApplicationSubmittedRequestActionPayload:
       required:
         - accountType
@@ -38574,6 +39156,28 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             cessationOfficialNotice:
               $ref: '#/components/schemas/FileInfoDTO'
+    PermitIssuanceActivePermit:
+      type: object
+      properties:
+        emitterId:
+          type: string
+        permitId:
+          type: string
+        installationName:
+          type: string
+        operatorName:
+          type: string
+        regulator:
+          type: string
+          enum:
+            - ENGLAND
+            - NORTHERN_IRELAND
+            - OPRED
+            - SCOTLAND
+            - WALES
+        regulatedActivitiesStartDate:
+          type: string
+          format: date
     PermitIssuanceApplicationDeemedWithdrawnRequestActionPayload:
       required:
         - decisionNotification
@@ -38714,6 +39318,33 @@ components:
                 type: array
                 items:
                   type: boolean
+    PermitIssuanceOrganizationDetails:
+      type: object
+      properties:
+        organisationLegalStatus:
+          type: string
+          enum:
+            - LIMITED_COMPANY
+            - PARTNERSHIP
+            - SOLE_TRADER
+            - OTHER
+      discriminator:
+        propertyName: organisationLegalStatus
+        mapping:
+          SOLE_TRADER: '#/components/schemas/IndividualOrganisationDetails'
+          LIMITED_COMPANY: '#/components/schemas/BusinessOrganisationDetails'
+          PARTNERSHIP: '#/components/schemas/BusinessOrganisationDetails'
+          OTHER: '#/components/schemas/BusinessOrganisationDetails'
+    PermitIssuanceRegistryIntegrationRequestActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            activePermit:
+              $ref: '#/components/schemas/PermitIssuanceActivePermit'
+            organizationDetails:
+              $ref: '#/components/schemas/PermitIssuanceOrganizationDetails'
     PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload:
       required:
         - officialNotice
@@ -39072,6 +39703,11 @@ components:
                 - TRANSFERER
                 - RECEIVER
             aerLiable:
+              type: string
+              enum:
+                - TRANSFERER
+                - RECEIVER
+            alrLiable:
               type: string
               enum:
                 - TRANSFERER
@@ -39449,6 +40085,8 @@ components:
         - $ref: '#/components/schemas/RequestActionPayload'
         - type: object
           properties:
+            changesDetails:
+              $ref: '#/components/schemas/BatchReissueChangesDetails'
             submitter:
               type: string
             signatory:
@@ -39482,6 +40120,7 @@ components:
             - PERMIT_ISSUANCE_APPLICATION_PEER_REVIEWER_REJECTED
             - PERMIT_ISSUANCE_RECALLED_FROM_AMENDS
             - PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMITTED
+            - PERMIT_ISSUANCE_ACCOUNT_CREATED_SENT_TO_REGISTRY
             - PERMIT_SURRENDER_APPLICATION_SUBMITTED
             - PERMIT_SURRENDER_APPLICATION_GRANTED
             - PERMIT_SURRENDER_APPLICATION_REJECTED
@@ -39675,6 +40314,7 @@ components:
             - ALR_APPLICATION_ACCEPTED
             - ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS
             - ALR_APPLICATION_REJECTED
+            - ALR_APPLICATION_MARK_NOT_REQUIRED
             - INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPONDED
             - INSTALLATION_AUDIT_OPERATOR_RESPONDED
             - HSE_TI_APPLICATION_CANCELLED
@@ -39698,6 +40338,7 @@ components:
             - EMP_ISSUANCE_UKETS_APPLICATION_RETURNED_FOR_AMENDS
             - EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMITTED
             - EMP_ISSUANCE_UKETS_RECALLED_FROM_AMENDS
+            - EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY
             - EMP_VARIATION_UKETS_APPLICATION_SUBMITTED
             - EMP_VARIATION_APPLICATION_CANCELLED
             - EMP_VARIATION_UKETS_APPLICATION_APPROVED
@@ -39819,6 +40460,8 @@ components:
             - $ref: '#/components/schemas/AirApplicationReviewedRequestActionPayload'
             - $ref: '#/components/schemas/AirApplicationSubmittedRequestActionPayload'
             - $ref: >-
+                #/components/schemas/AlrApplicationMarkNotRequiredRequestActionPayload
+            - $ref: >-
                 #/components/schemas/AviationAccountClosureSubmittedRequestActionPayload
             - $ref: >-
                 #/components/schemas/AviationAerCorsia3YearPeriodOffsettingApplicationSubmittedRequestActionPayload
@@ -39886,6 +40529,8 @@ components:
                 #/components/schemas/EmpIssuanceCorsiaApplicationReturnedForAmendsRequestActionPayload
             - $ref: >-
                 #/components/schemas/EmpIssuanceCorsiaApplicationSubmittedRequestActionPayload
+            - $ref: >-
+                #/components/schemas/EmpIssuanceRegistryIntegrationRequestActionPayload
             - $ref: >-
                 #/components/schemas/EmpIssuanceUkEtsApplicationAmendsSubmittedRequestActionPayload
             - $ref: >-
@@ -39979,6 +40624,8 @@ components:
                 #/components/schemas/PermitIssuanceApplicationReturnedForAmendsRequestActionPayload
             - $ref: >-
                 #/components/schemas/PermitIssuanceApplicationSubmittedRequestActionPayload
+            - $ref: >-
+                #/components/schemas/PermitIssuanceRegistryIntegrationRequestActionPayload
             - $ref: >-
                 #/components/schemas/PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload
             - $ref: >-
@@ -40120,6 +40767,7 @@ components:
             - PERMIT_ISSUANCE_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD
             - PERMIT_ISSUANCE_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD
             - PERMIT_ISSUANCE_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
+            - PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD
             - PERMIT_SURRENDER_APPLICATION_SUBMITTED_PAYLOAD
             - PERMIT_SURRENDER_APPLICATION_GRANTED_PAYLOAD
             - PERMIT_SURRENDER_APPLICATION_REJECTED_PAYLOAD
@@ -40246,12 +40894,14 @@ components:
             - ALR_APPLICATION_ACCEPTED_PAYLOAD
             - ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS_PAYLOAD
             - ALR_APPLICATION_REJECTED_PAYLOAD
+            - ALR_APPLICATION_MARK_NOT_REQUIRED_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_APPROVED_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD
             - EMP_ISSUANCE_UKETS_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD
+            - EMP_ISSUANCE_UKETS_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD
             - EMP_VARIATION_UKETS_APPLICATION_SUBMITTED_PAYLOAD
             - EMP_VARIATION_UKETS_APPLICATION_APPROVED_PAYLOAD
             - EMP_VARIATION_UKETS_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD
@@ -40330,6 +40980,8 @@ components:
             #/components/schemas/PermitIssuanceApplicationReturnedForAmendsRequestActionPayload
           PERMIT_ISSUANCE_APPLICATION_SUBMITTED_PAYLOAD: >-
             #/components/schemas/PermitIssuanceApplicationSubmittedRequestActionPayload
+          PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD: >-
+            #/components/schemas/PermitIssuanceRegistryIntegrationRequestActionPayload
           PERMIT_SURRENDER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
           PERMIT_SURRENDER_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD: >-
             #/components/schemas/PermitSurrenderApplicationDeemedWithdrawnRequestActionPayload
@@ -40509,6 +41161,8 @@ components:
           ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS_PAYLOAD: >-
             #/components/schemas/ALRApplicationAcceptedWithCorrectionsRequestActionPayload
           ALR_APPLICATION_REJECTED_PAYLOAD: '#/components/schemas/ALRApplicationRejectedRequestActionPayload'
+          ALR_APPLICATION_MARK_NOT_REQUIRED_PAYLOAD: >-
+            #/components/schemas/AlrApplicationMarkNotRequiredRequestActionPayload
           HSE_TI_APPLICATION_SUBMITTED_PAYLOAD: '#/components/schemas/HSETIApplicationSubmittedRequestActionPayload'
           HSE_TI_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
           HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD: >-
@@ -40541,6 +41195,8 @@ components:
             #/components/schemas/EmpVariationUkEtsApplicationReturnedForAmendsRequestActionPayload
           EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD: >-
             #/components/schemas/EmpVariationUkEtsApplicationAmendsSubmittedRequestActionPayload
+          EMP_ISSUANCE_UKETS_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD: >-
+            #/components/schemas/EmpIssuanceRegistryIntegrationRequestActionPayload
           EMP_BATCH_REISSUE_SUBMITTED_PAYLOAD: '#/components/schemas/BatchReissueSubmittedRequestActionPayload'
           EMP_BATCH_REISSUE_COMPLETED_PAYLOAD: '#/components/schemas/BatchReissueCompletedRequestActionPayload'
           EMP_REISSUE_COMPLETED_PAYLOAD: '#/components/schemas/ReissueCompletedRequestActionPayload'
@@ -41159,6 +41815,8 @@ components:
           maxLength: 255
           minLength: 0
           type: string
+        emitterId:
+          type: string
         emissionTradingScheme:
           type: string
           enum:
@@ -41477,6 +42135,8 @@ components:
         name:
           maxLength: 255
           minLength: 0
+          type: string
+        emitterId:
           type: string
         emissionTradingScheme:
           type: string

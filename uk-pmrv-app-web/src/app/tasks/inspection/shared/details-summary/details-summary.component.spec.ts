@@ -69,7 +69,7 @@ describe('DetailsSummaryComponent', () => {
   it('should show summary details', () => {
     expect(page.header).toBeTruthy();
     expect(page.summaryValues).toEqual([
-      ['Names of officers', '1. newreg2 User 2. newreg3 User'],
+      ['Names of officers', '1. newreg2 User  2. newreg3 User'],
       ['Additional information', 'additionalInformation 1'],
     ]);
   });

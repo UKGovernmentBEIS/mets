@@ -38,6 +38,11 @@ describe('TimelineItemLinkPipe', () => {
     ]);
   });
 
+  it('should return link for registry information', () => {
+    requestAction.type = 'PERMIT_ISSUANCE_ACCOUNT_CREATED_SENT_TO_REGISTRY';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'registry', 'information-sent']);
+  });
+
   it('should return link for peer review submission', () => {
     requestAction.type = 'PERMIT_ISSUANCE_APPLICATION_PEER_REVIEWER_ACCEPTED';
     expect(pipe.transform(requestAction)).toEqual([
@@ -1167,6 +1172,9 @@ describe('TimelineItemLinkPipe', () => {
 
     requestAction.type = 'ALR_APPLICATION_REJECTED';
     expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'completed']);
+
+    requestAction.type = 'ALR_APPLICATION_MARK_NOT_REQUIRED';
+    expect(pipe.transform(requestAction, true, true, 'REGULATOR')).toEqual(['./actions', 1, 'alr', 'not-required']);
   });
 
   it('should return links for HSE', () => {

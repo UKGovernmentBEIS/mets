@@ -46,6 +46,9 @@ describe('SubmittedComponent', () => {
         creationDate: currentDate,
         payload: {
           payloadType: 'EMP_BATCH_REISSUE_SUBMITTED_PAYLOAD',
+          changesDetails: {
+            changes: ['change 1', 'change 2', 'change 3'],
+          },
           submitter: 'Submitter1',
           filters: {
             emissionTradingSchemes: ['UK_ETS_AVIATION'],
@@ -79,6 +82,7 @@ describe('SubmittedComponent', () => {
   it('should show filters', () => {
     expect(page.values).toEqual([
       ['Created by', 'Submitter1'],
+      ['Items added to the variation schedule', 'change 1change 2change 3'],
       ['Signatory', 'Signatory name'],
       ['Batch variation report', 'In progress'],
       ['Reporting status', 'Exempt (commercial)Required to report'],

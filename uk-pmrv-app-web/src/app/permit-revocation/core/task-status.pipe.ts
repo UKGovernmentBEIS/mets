@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { map, Observable } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 
 import { TaskItemStatus } from '../../shared/task-list/task-list.interface';
 import { PermitRevocationStore } from '../store/permit-revocation-store';
@@ -13,11 +13,11 @@ export class TaskStatusPipe implements PipeTransform {
   constructor(private readonly store: PermitRevocationStore) {}
 
   transform(key: string): Observable<TaskItemStatus> {
-    return this.store.pipe(
-      map((state) => {
+    return combineLatest([this.store, this.store.isFinalAlrVisible$]).pipe(
+      map(([state, isFinalAlrVisible]) => {
         switch (key) {
           case 'REVOCATION_APPLY':
-            return resolveApplyStatus(state);
+            return resolveApplyStatus(state, isFinalAlrVisible);
           case 'REVOCATION_WITHDRAW':
             return resolveWithDrawStatus(state);
         }

@@ -16,6 +16,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.NotifyOperatorForDeci
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.ReviewOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.common.validation.DecisionNotificationUsersValidator;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderApplicationReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderReviewDeterminationGrant;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.PermitSurrenderReviewDeterminationHandlerService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.RequestPermitSurrenderReviewService;
 
@@ -42,6 +43,9 @@ public class PermitSurrenderReviewNotifyOperatorActionHandler
                 .getPayload();
 
         // validate
+        if (reviewTaskPayload.getReviewDetermination() instanceof PermitSurrenderReviewDeterminationGrant grantPayload) {
+            grantPayload.setAccountId(requestTask.getRequest().getAccountId());
+        }
         reviewDeterminationHandlerService.validateReview(reviewTaskPayload.getReviewDecision(),
                 reviewTaskPayload.getReviewDetermination());
         if (!decisionNotificationUsersValidator.areUsersValid(requestTask, payload.getDecisionNotification(),

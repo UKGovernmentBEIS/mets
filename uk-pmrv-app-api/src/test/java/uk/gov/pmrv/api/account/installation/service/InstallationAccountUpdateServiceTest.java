@@ -16,6 +16,7 @@ import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
+import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateFaStatusDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
@@ -27,6 +28,7 @@ import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
 import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -356,6 +358,23 @@ class InstallationAccountUpdateServiceTest {
         service.updateFaStatus(accountId, updateFreeAllocationStatusDTO);
 
         assertThat(account.isFaStatus()).isEqualTo(updateFreeAllocationStatusDTO.getFaStatus());
+        verify(installationAccountQueryService, times(1)).getAccountById(accountId);
+    }
+
+    @Test
+    void updateCommencementDate() {
+        Long accountId = 1L;
+        AccountUpdateCommencementDateDTO updateCommencementDateDTO = AccountUpdateCommencementDateDTO
+                .builder()
+                .commencementDate(LocalDate.now())
+                .build();
+        InstallationAccount account = InstallationAccount.builder().id(accountId).commencementDate(LocalDate.now()).build();
+
+        when(installationAccountQueryService.getAccountById(accountId)).thenReturn(account);
+
+        service.updateCommencementDate(accountId, updateCommencementDateDTO);
+
+        assertThat(account.getCommencementDate()).isEqualTo(updateCommencementDateDTO.getCommencementDate());
         verify(installationAccountQueryService, times(1)).getAccountById(accountId);
     }
 }

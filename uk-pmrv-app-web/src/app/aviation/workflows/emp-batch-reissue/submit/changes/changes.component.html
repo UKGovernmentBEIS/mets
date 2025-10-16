@@ -1,0 +1,45 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <app-wizard-step
+      (formSubmit)="onSubmit()"
+      [formGroup]="form"
+      heading="List changes to include in the variation schedule"
+      caption="Start a batch variation"
+      submitText="Continue"
+      [showBackLink]="true">
+      <div class="govuk-hint">The operator will see these in the official notice.</div>
+      <div formArrayName="changes">
+        <fieldset *ngFor="let change of changesFormArray.controls; index as i" govukFieldset id="changes-{{ i }}">
+          <button
+            (click)="changesFormArray.removeAt(i)"
+            *ngIf="changesFormArray.length > 1"
+            appAddAnother
+            govukSecondaryButton
+            type="button"
+            #removeButton>
+            Remove
+          </button>
+
+          <div
+            [ngClass]="{
+              'govuk-form-group--error':
+                form?.errors?.atLeastOneRequired && this.wizardStepComponent?.isSummaryDisplayedSubject | async,
+            }">
+            <legend govukLegend>Item {{ i + 1 }}</legend>
+            <div
+              *ngIf="form?.errors?.atLeastOneRequired && this.wizardStepComponent?.isSummaryDisplayedSubject | async"
+              [ngClass]="{
+                'govuk-error-message':
+                  form?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async,
+              }">
+              {{ form?.errors?.atLeastOneRequired }}
+            </div>
+            <div govuk-textarea [maxLength]="10000" [formControlName]="i"></div>
+          </div>
+        </fieldset>
+      </div>
+
+      <button (click)="addAnotherItem()" govukSecondaryButton type="button">Add another item</button>
+    </app-wizard-step>
+  </div>
+</div>

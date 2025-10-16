@@ -48,6 +48,8 @@ public class ReissueCreateRequestService {
 						.signatory(batchRequestPayload.getSignatory())
 						.submitterId(batchRequestMetadata.getSubmitterId())
 						.submitter(batchRequestMetadata.getSubmitter())
+						.batchRequestType(batchRequest.getType())
+						.changesDetails(batchRequestPayload.getChangesDetails())
 						.build())
 				.processVars(Map.of(
 						BpmnProcessConstants.BATCH_REQUEST_BUSINESS_KEY, batchRequestBusinessKey,

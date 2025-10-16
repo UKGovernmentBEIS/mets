@@ -53,6 +53,21 @@ class RequestRepositoryIT extends AbstractContainerBaseTest {
     }
 
     @Test
+    void findByAccountIdAndType() {
+        Long accountId = 1L;
+        Request request1 = createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.PERMIT_REISSUE, RequestStatus.COMPLETED, LocalDateTime.now());
+        Request request2 = createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.PERMIT_REISSUE, RequestStatus.IN_PROGRESS, null);
+        createRequest(3L, CompetentAuthorityEnum.ENGLAND, RequestType.PERMIT_REISSUE, RequestStatus.IN_PROGRESS, null);
+        createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.PERMIT_ISSUANCE, RequestStatus.IN_PROGRESS, null);
+
+        flushAndClear();
+
+        List<Request> result = requestRepository.findByAccountIdAndType(accountId, RequestType.PERMIT_REISSUE);
+
+        assertThat(result).containsExactlyInAnyOrder(request1, request2);
+    }
+
+    @Test
     void findAllByAccountId() {
         Long accountId1 = 1L;
         Long accountId2 = 2L;

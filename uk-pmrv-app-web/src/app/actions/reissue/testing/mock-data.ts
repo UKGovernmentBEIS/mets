@@ -13,6 +13,10 @@ export const mockCompletedActionState: CommonActionsState = {
     submitter: 'submitter1',
     payload: {
       payloadType: 'PERMIT_REISSUE_COMPLETED_PAYLOAD',
+      changesDetails: {
+        changes: ['change1', 'change2'],
+        changesSummary: 'summary of changes',
+      },
       signatory: 'b12938d1-2eee-4e4e-928e-cff5d66f320b',
       signatoryName: 'signName',
       submitter: 'submitter1',

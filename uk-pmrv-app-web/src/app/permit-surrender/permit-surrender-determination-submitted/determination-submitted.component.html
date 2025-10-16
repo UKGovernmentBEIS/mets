@@ -4,9 +4,7 @@
       headerText="Surrender request {{
         type === 'GRANTED' ? 'approved' : type === 'REJECTED' ? 'reject' : 'deemed withdrawn'
       }}"
-      [timelineCreationDate]="creationDate$ | async"
-    >
-    </app-request-action-heading>
+      [timelineCreationDate]="creationDate$ | async"></app-request-action-heading>
   </ng-container>
 
   <h2 app-summary-header class="govuk-heading-m">Decision details</h2>
@@ -16,9 +14,9 @@
       <dt govukSummaryListRowKey>Decision</dt>
       <dd govukSummaryListRowValue>
         <ng-container [ngSwitch]="store.reviewDetermination.type">
-          <ng-container *ngSwitchCase="'GRANTED'"> Grant </ng-container>
-          <ng-container *ngSwitchCase="'REJECTED'"> Reject </ng-container>
-          <ng-container *ngSwitchCase="'DEEMED_WITHDRAWN'"> Deem withdrawn </ng-container>
+          <ng-container *ngSwitchCase="'GRANTED'">Grant</ng-container>
+          <ng-container *ngSwitchCase="'REJECTED'">Reject</ng-container>
+          <ng-container *ngSwitchCase="'DEEMED_WITHDRAWN'">Deem withdrawn</ng-container>
         </ng-container>
       </dd>
     </div>
@@ -47,12 +45,20 @@
         <dt govukSummaryListRowKey>Effective date of notice</dt>
         <dd govukSummaryListRowValue>{{ reviewDeterminationGrant.noticeDate | govukDate }}</dd>
       </div>
+
       <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Surrender report</dt>
+        <dt govukSummaryListRowKey>Surrender annual emmisions report</dt>
         <dd govukSummaryListRowValue>
           {{ reviewDeterminationGrant.reportRequired ? (reviewDeterminationGrant.reportDate | govukDate) : 'No' }}
         </dd>
       </div>
+
+      <ng-container *ngIf="reviewDeterminationGrant.alrRequired">
+        <dt govukSummaryListRowKey>Surrender activity level report</dt>
+        <dd govukSummaryListRowValue>
+          {{ reviewDeterminationGrant.alrRequired ? (reviewDeterminationGrant.alrReportDate | govukDate) : 'No' }}
+        </dd>
+      </ng-container>
 
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Surrender of allowances</dt>
@@ -86,7 +92,7 @@
             <ng-container *ngIf="reviewDeterminationReject.shouldFeeBeRefundedToOperator; else noRefund">
               Yes
             </ng-container>
-            <ng-template #noRefund> No </ng-template>
+            <ng-template #noRefund>No</ng-template>
           </ng-container>
         </dd>
       </div>
@@ -130,12 +136,12 @@
             store.requestActionId,
             'file-download',
             'document',
-            officialNotice.uuid
+            officialNotice.uuid,
           ]"
           govukLink
-          target="_blank"
-          >{{ officialNotice.name }}</a
-        >
+          target="_blank">
+          {{ officialNotice.name }}
+        </a>
       </dd>
     </div>
   </dl>

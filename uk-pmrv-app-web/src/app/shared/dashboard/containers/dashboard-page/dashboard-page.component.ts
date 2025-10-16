@@ -8,13 +8,16 @@ import { AccountType, AuthStore, selectCurrentDomain, selectUserRoleType, UserSt
 
 import { GovukTableColumn } from 'govuk-components';
 
-import { ItemDTO } from 'pmrv-api';
+import { ItemDTO, RequestsService } from 'pmrv-api';
 
 import { WorkflowItemsService } from '../../services';
 import {
   DashboardStore,
+  selectAccountSearchTerm,
   selectActiveTab,
+  selectFilterBy,
   selectItems,
+  selectOrderBy,
   selectPage,
   selectPageSize,
   selectTotal,
@@ -30,6 +33,10 @@ interface ViewModel {
   total: number;
   page: number;
   pageSize: number;
+  order: 'NEWEST_FIRST' | 'NEAREST_DUE_DATE';
+  filterWorkflow: string;
+  filterRequestTypes: string[];
+  accountSearchTerm: string;
 }
 
 const DEFAULT_TABLE_COLUMNS: GovukTableColumn<ItemDTO>[] = [
@@ -39,12 +46,12 @@ const DEFAULT_TABLE_COLUMNS: GovukTableColumn<ItemDTO>[] = [
 ];
 
 const AVIATION_EXTRA_COLUMNS: GovukTableColumn<ItemDTO>[] = [
-  { field: 'permitReferenceId', header: 'Emissions plan ID', isSortable: false },
+  { field: 'requestId', header: 'Workflow ID', isSortable: false },
   { field: 'accountName', header: `Aviation operator`, isSortable: false },
 ];
 
 const INSTALLATION_EXTRA_COLUMNS: GovukTableColumn<ItemDTO>[] = [
-  { field: 'permitReferenceId', header: 'Permit ID', isSortable: false },
+  { field: 'requestId', header: 'Workflow ID', isSortable: false },
   { field: 'accountName', header: `Installation`, isSortable: false },
   { field: 'leName', header: 'Operator', isSortable: false },
 ];
@@ -88,18 +95,43 @@ export class DashboardPageComponent implements OnInit {
     this.store.pipe(selectTotal),
     this.store.pipe(selectPage),
     this.store.pipe(selectPageSize),
+    this.store.pipe(selectOrderBy),
+    this.store.pipe(selectFilterBy),
+    this.requestsService.getRequestTypesByUserRolesAndService(),
+    this.store.pipe(selectAccountSearchTerm),
   ]).pipe(
-    map(([domain, role, activeTab, items, total, page, pageSize]) => ({
-      domain,
-      role,
-      activeTab,
-      tableColumns: getTableColumns(domain, activeTab),
-      items,
-      total,
-      page,
-      pageSize,
-    })),
+    map(
+      ([
+        domain,
+        role,
+        activeTab,
+        items,
+        total,
+        page,
+        pageSize,
+        order,
+        filterWorkflow,
+        filterRequestTypes,
+        accountSearchTerm,
+      ]) => ({
+        domain,
+        role,
+        activeTab,
+        tableColumns: getTableColumns(domain, activeTab),
+        items,
+        total,
+        page,
+        pageSize,
+        order,
+        filterWorkflow,
+        filterRequestTypes: filterRequestTypes.sort(),
+        accountSearchTerm,
+      }),
+    ),
   );
+
+  currPage: number;
+  currPageSize: number;
 
   constructor(
     private readonly service: WorkflowItemsService,
@@ -108,6 +140,7 @@ export class DashboardPageComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly destroy$: DestroySubject,
+    private readonly requestsService: RequestsService,
   ) {}
 
   ngOnInit(): void {
@@ -124,18 +157,51 @@ export class DashboardPageComponent implements OnInit {
 
     this.vm$
       .pipe(
-        map((vm) => ({ activeTab: vm.activeTab, page: vm.page, pageSize: vm.pageSize })),
+        map((vm) => ({
+          activeTab: vm.activeTab,
+          page: vm.page,
+          pageSize: vm.pageSize,
+          order: vm.order,
+          filterWorkflow: vm.filterWorkflow,
+          accountSearchTerm: vm.accountSearchTerm,
+        })),
         distinctUntilChanged((prev, curr) => {
-          return prev.activeTab === curr.activeTab && prev.page === curr.page && prev.pageSize === curr.pageSize;
+          this.currPage = curr.page;
+          this.currPageSize = curr.pageSize;
+          return (
+            prev.activeTab === curr.activeTab &&
+            prev.page === curr.page &&
+            prev.pageSize === curr.pageSize &&
+            prev.order === curr.order &&
+            prev.filterWorkflow === curr.filterWorkflow &&
+            prev.accountSearchTerm === curr.accountSearchTerm
+          );
         }),
-        switchMap(({ activeTab, page, pageSize }) => {
-          return this.service.getItems(activeTab, page, pageSize);
+        switchMap(({ activeTab, page, pageSize, order, filterWorkflow, accountSearchTerm }) => {
+          return combineLatest([
+            this.service.getItems(activeTab, page, pageSize, order, filterWorkflow, accountSearchTerm),
+            this.route.fragment,
+          ]);
         }),
         takeUntil(this.destroy$),
       )
-      .subscribe(({ items, totalItems }) => {
+      .subscribe(([{ items, totalItems }, routeFragment]) => {
         this.store.setItems(items);
         this.store.setTotal(totalItems);
+
+        const totalPages = Math.ceil(totalItems / this.currPageSize);
+        if (this.currPage > totalPages) {
+          this.currPage = 1;
+          this.store.setPage(1);
+
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { page: this.currPage },
+            queryParamsHandling: 'merge',
+            fragment: routeFragment,
+            state: { scrollSkip: true },
+          });
+        }
       });
   }
 
@@ -152,5 +218,17 @@ export class DashboardPageComponent implements OnInit {
 
   changePage(page: number) {
     this.store.setPage(page);
+  }
+
+  changeOrder(event) {
+    this.store.setOrderBy(event);
+  }
+
+  changeFilter(event) {
+    this.store.setFilterBy(event);
+  }
+
+  changeSearch(event) {
+    this.store.setSearchBy(event ?? '');
   }
 }

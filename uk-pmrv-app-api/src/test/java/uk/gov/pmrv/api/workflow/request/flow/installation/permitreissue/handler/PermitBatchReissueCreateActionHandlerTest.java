@@ -22,6 +22,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstan
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.BatchReissueRequestCreateActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.BatchReissueRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueChangesDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueFilters;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitReissueAccountDetails;
@@ -59,6 +60,11 @@ class PermitBatchReissueCreateActionHandlerTest {
     void process() {
     	Long accountId = null;
     	CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+		PermitBatchReissueChangesDetails changesDetails = PermitBatchReissueChangesDetails
+				.builder()
+				.changesSummary("summary")
+				.changes(List.of("change1", "change2"))
+				.build();
     	PermitBatchReissueFilters filters = PermitBatchReissueFilters.builder()
 				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
 				.installationCategories(Set.of(InstallationCategory.A))
@@ -67,6 +73,7 @@ class PermitBatchReissueCreateActionHandlerTest {
     	BatchReissueRequestCreateActionPayload payload = BatchReissueRequestCreateActionPayload.builder()
     			.payloadType(RequestCreateActionPayloadType.PERMIT_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD)
     			.filters(filters)
+				.changesDetails(changesDetails)
     			.signatory("signatory")
     			.build();
     	
@@ -88,6 +95,7 @@ class PermitBatchReissueCreateActionHandlerTest {
                 .requestPayload(BatchReissueRequestPayload.builder()
             	        .payloadType(RequestPayloadType.PERMIT_BATCH_REISSUE_REQUEST_PAYLOAD)
 	            		.filters(filters)
+						.changesDetails(changesDetails)
 	            		.signatory(payload.getSignatory())
             	        .build())
                 .requestMetadata(PermitBatchReissueRequestMetadata.builder()

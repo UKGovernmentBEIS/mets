@@ -45,14 +45,14 @@ export class TransferAAemReportComponent {
 
   onSubmit() {
     if (!this.form.dirty) {
-      this.router.navigate(['..', 'code'], { relativeTo: this.route });
+      this.router.navigate(['..', 'activity-level-report'], { relativeTo: this.route });
     } else {
       this.permitTransferAService
         .sendDataForPost({
           aerLiable: this.form.value.aerLiable,
         } as Partial<PermitTransferAApplicationRequestTaskPayload>)
         .pipe(this.pendingRequest.trackRequest())
-        .subscribe(() => this.router.navigate(['..', 'code'], { relativeTo: this.route }));
+        .subscribe(() => this.router.navigate(['..', 'activity-level-report'], { relativeTo: this.route }));
     }
   }
 }

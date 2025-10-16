@@ -6,9 +6,9 @@ const isSameOrBefore = (date1, date2) => isBefore(date1, date2) || isEqual(date1
 
 const isSameOrAfter = (date1, date2) => isEqual(date1, date2) || isAfter(date1, date2);
 
-export const resolveApplyStatus = (state: PermitRevocationState): TaskItemStatus => {
+export const resolveApplyStatus = (state: PermitRevocationState, isFinalAlrVisible: boolean): TaskItemStatus => {
   const permitRevocation = state.permitRevocation;
-  return !notInNeedsForReview(state)
+  return !notInNeedsForReview(state, isFinalAlrVisible)
     ? 'needs review'
     : state.sectionsCompleted?.REVOCATION_APPLY
       ? 'complete'
@@ -24,12 +24,13 @@ export const resolveWithDrawStatus = (state: PermitRevocationState): TaskItemSta
 // Check if the effective date of the permit revocation notice is at least 28days after today
 // Also checks if fee date is after effective date and returns a boolean
 // and if stopped date, annual emissions report date, surrender date are valid
-export const notInNeedsForReview = (state: PermitRevocationState): boolean => {
+export const notInNeedsForReview = (state: PermitRevocationState, isFinalAlrVisible: boolean): boolean => {
   const effectiveDate = state?.permitRevocation?.effectiveDate;
   const feeDate = state?.permitRevocation?.feeDate;
   const stoppedDate = state?.permitRevocation?.stoppedDate;
   const annualEmissionsReportDate = state?.permitRevocation?.annualEmissionsReportDate;
   const surrenderDate = state?.permitRevocation?.surrenderDate;
+  const alrReportDate = state?.permitRevocation?.alrReportDate;
 
   const effectiveDateMax = format(endOfDay(addDays(new Date(), 28)), 'yyyy-MM-dd');
 
@@ -42,7 +43,8 @@ export const notInNeedsForReview = (state: PermitRevocationState): boolean => {
         : true) &&
     isStoppedDateValid(stoppedDate) &&
     isAnnualEmissionsReportDateValid(annualEmissionsReportDate) &&
-    isSurrenderDateValid(surrenderDate)
+    isSurrenderDateValid(surrenderDate) &&
+    (isFinalAlrVisible ? isAlrReportDateValid(alrReportDate) : true)
   );
 };
 
@@ -54,6 +56,12 @@ const isAnnualEmissionsReportDateValid = (annualEmissionsReportDate: string) => 
   const todayMin = startOfDay(new Date());
 
   return annualEmissionsReportDate ? isSameOrAfter(new Date(annualEmissionsReportDate), todayMin) : true;
+};
+
+const isAlrReportDateValid = (alrReportDate: string) => {
+  const todayMin = startOfDay(new Date());
+
+  return alrReportDate ? isSameOrAfter(new Date(alrReportDate), todayMin) : true;
 };
 
 const isSurrenderDateValid = (surrenderDate) => {

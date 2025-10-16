@@ -4,20 +4,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.springframework.test.util.ReflectionTestUtils;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusHistory;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountCreationDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.domain.LocationOnShoreState;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
 import uk.gov.pmrv.api.common.domain.AddressState;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
 import java.time.LocalDate;
@@ -151,7 +151,7 @@ class AviationAccountMapperTest {
             .commencementDate(commencementDate)
             .competentAuthority(competentAuthority)
             .status(AviationAccountStatus.NEW)
-            .accountType(AccountType.AVIATION)
+            .accountType(AccountType.AVIATION).emitterId(emitterId)
             .reportingStatus(AviationAccountReportingStatus.EXEMPT_COMMERCIAL)
             .reportingStatusReason(reportingStatusEntry2.getReason())
             .location(LocationOnShoreStateDTO.builder().type(LocationType.ONSHORE_STATE).line1("line1").state("state").build())
@@ -200,6 +200,7 @@ class AviationAccountMapperTest {
             .competentAuthority(competentAuthority)
             .status(AviationAccountStatus.NEW)
             .accountType(AccountType.AVIATION)
+            .emitterId(emitterId)
             .reportingStatus(AviationAccountReportingStatus.EXEMPT_COMMERCIAL)
             .build();
 

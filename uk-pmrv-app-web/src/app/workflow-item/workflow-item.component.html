@@ -2,8 +2,7 @@
   <div
     [class]="
       (validRequestCreateActionsTypes$ | async)?.length > 0 ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'
-    "
-  >
+    ">
     <app-page-heading size="xl" [caption]="requestInfo.id">
       {{ title$ | async }} {{ workflowDetailsTypesMap[requestInfo.requestType] }}
 
@@ -16,8 +15,7 @@
       <app-related-tasks
         *ngIf="relatedTasks.length > 0"
         [items]="relatedTasks"
-        heading="Tasks to complete"
-      ></app-related-tasks>
+        heading="Tasks to complete"></app-related-tasks>
     </ng-container>
 
     <govuk-tabs (selectedTab)="selectedTab($event)">
@@ -29,8 +27,7 @@
               [action]="action"
               [link]="action | timelineItemLink: true : isAviation : roleType"
               [state]="navigationState"
-              [year]="title$ | async"
-            ></app-timeline-item>
+              [year]="title$ | async"></app-timeline-item>
 
             <p class="govuk-body" *ngIf="actions?.length === 0">No timeline events</p>
           </app-timeline>
@@ -45,12 +42,10 @@
 
   <div
     class="govuk-grid-column-one-third"
-    *ngIf="(accountId$ | async) !== null && (validRequestCreateActionsTypes$ | async)?.length > 0"
-  >
+    *ngIf="(accountId$ | async) !== null && (validRequestCreateActionsTypes$ | async)?.length > 0">
     <app-workflow-related-create-actions
       [accountId$]="accountId$"
       [requestId$]="requestId$"
-      [requestCreateActionsTypes$]="validRequestCreateActionsTypes$"
-    ></app-workflow-related-create-actions>
+      [requestCreateActionsTypes$]="validRequestCreateActionsTypes$"></app-workflow-related-create-actions>
   </div>
 </div>

@@ -8,10 +8,10 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, FormControl, ValidationErrors } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { catchError, filter, map, Observable, of, Subscription, switchMap, take } from 'rxjs';
+import { catchError, filter, map, of, Subscription, switchMap, take } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
 import { CsvDataWizardStepComponent } from '@aviation/shared/components/aer/csv-data-wizard-step/csv-data-wizard-step.component';
@@ -27,8 +27,8 @@ import {
   maxFileSizeValidator,
 } from '@aviation/shared/validators';
 import { PendingRequestService } from '@core/guards/pending-request.service';
-import { BackLinkService } from '@shared/back-link/back-link.service';
 import { SharedModule } from '@shared/shared.module';
+import { csvRowValidator } from '@shared/utils/validators';
 import Papa from 'papaparse';
 
 import {
@@ -45,7 +45,6 @@ import { AggregatedConsumptionFlightDataFormProvider } from '../aggregated-consu
 @Component({
   selector: 'app-aggregated-consumption-flight-data-page',
   templateUrl: './aggregated-consumption-flight-data-page.component.html',
-  styles: [],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
@@ -69,6 +68,7 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
   exampleTableData: any;
   errorList = [];
   isCorsia$ = this.store.pipe(aerQuery.selectIsCorsia);
+
   private subscription: Subscription;
   private statusSubscription: Subscription;
 
@@ -76,7 +76,6 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
     @Inject(TASK_FORM_PROVIDER) private formProvider: AggregatedConsumptionFlightDataFormProvider,
     private store: RequestTaskStore,
     private pendingRequestService: PendingRequestService,
-    private backLinkService: BackLinkService,
     private router: Router,
     private route: ActivatedRoute,
     private cd: ChangeDetectorRef,
@@ -92,16 +91,15 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
       emptyFileValidator('Empty file uploaded'),
     ],
     [
-      this.csvRowValidator(
+      csvRowValidator(
         'Each row must have 5 comma separated values, labelled ‘aerodrome of departure’, ' +
           '‘aerodrome of arrival’, ‘fuel used’, ‘fuel consumption’, ‘number of flights',
+        5,
       ),
     ],
   );
 
   ngOnInit(): void {
-    this.backLinkService.show();
-
     const aggregatedEmissionDataControl = this.form.get('aggregatedEmissionDataDetails');
     let aggregatedEmissionDataDetails = null;
     if (aggregatedEmissionDataControl && aggregatedEmissionDataControl.value) {
@@ -147,7 +145,6 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
     if (this.statusSubscription) {
       this.statusSubscription.unsubscribe();
     }
-    this.backLinkService.hide();
   }
 
   onFileSelect(event: any) {
@@ -237,55 +234,6 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
           this.cd.detectChanges();
         }, 500);
       });
-  }
-
-  csvRowValidator(message: string): AsyncValidatorFn {
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return new Observable((observer) => {
-        const file = control.value;
-
-        if (file instanceof File) {
-          const reader = new FileReader();
-
-          reader.onload = (e: any) => {
-            const fileContent = e.target.result;
-            const rows = fileContent.split('\n');
-
-            if (rows[rows.length - 1].trim() === '') {
-              rows.pop();
-            }
-
-            for (const row of rows) {
-              if (row.trim() === '') {
-                //empty line
-                continue;
-              }
-
-              const values = row.split(',');
-
-              if (values.length !== 5) {
-                observer.next({ invalidRowFormat: { message } });
-                observer.complete();
-                return;
-              }
-            }
-
-            observer.next(null);
-            observer.complete();
-          };
-
-          reader.onerror = () => {
-            observer.next({ readError: { message: 'Error reading the file.' } });
-            observer.complete();
-          };
-
-          reader.readAsText(file);
-        } else {
-          observer.next(null);
-          observer.complete();
-        }
-      });
-    };
   }
 
   private processControlStatus(): void {

@@ -18,3 +18,8 @@ export const accountCategoryLabelMap: Partial<Record<InstallationAccountDTO['ins
   B: 'B',
   C: 'C',
 };
+
+export const allocationStatusLabelMap: Partial<Record<'FREE_ALLOCATION' | 'NONFREE_ALLOCATION', string>> = {
+  FREE_ALLOCATION: 'Free allocation',
+  NONFREE_ALLOCATION: 'Non-free allocation',
+};

@@ -30,10 +30,12 @@ import { NotifyOperatorGuard } from './notify-operator/notify-operator.guard';
 import { PeerReviewGuard } from './peer-review/peer-review.guard';
 import { ConfirmAnswersComponent } from './permit-revocation-apply/confirm-answers/confirm-answers.component';
 import { FeeComponent } from './permit-revocation-apply/fee/fee.component';
+import { RevocationFinalAlrComponent } from './permit-revocation-apply/final-alr/final-alr.component';
 import { NoticeComponent } from './permit-revocation-apply/notice/notice.component';
 import { ReportComponent } from './permit-revocation-apply/report/report.component';
 import { SummaryContainerComponent } from './permit-revocation-apply/summary';
 import { SurrenderAllowancesComponent } from './permit-revocation-apply/surrender-allowances/surrender-allowances.component';
+import { revocationAllowancesBacklinkResolver } from './permit-revocation-apply/utils/revocation.util';
 import { PermitRevocationSubmittedComponent } from './permit-revocation-submitted/permit-revocation-submitted.component';
 import { WithdrawReasonGuard } from './wait-for-appeal-reason/guard/withdraw-reason.guard';
 import { WithdrawSummaryContainerComponent } from './wait-for-appeal-reason/summary';
@@ -163,12 +165,23 @@ const taskRoutes: Routes = [
         component: ReportComponent,
       },
       {
+        path: 'final-alr',
+        data: {
+          pageTitle: 'Permit revocation request task - Final ALR',
+          keys: ['alrReportDate', 'alrRequired'],
+          backlink: '../report',
+        },
+        component: RevocationFinalAlrComponent,
+        canActivate: [WizardStepsGuard],
+        canDeactivate: [PendingRequestGuard],
+      },
+      {
         path: 'surrender-allowances',
         data: {
           pageTitle: 'Is a surrender of allowances required?',
           keys: ['surrenderDate', 'surrenderRequired'],
-          backlink: '../report',
         },
+        resolve: { backlink: revocationAllowancesBacklinkResolver },
         canActivate: [WizardStepsGuard],
         canDeactivate: [PendingRequestGuard],
         component: SurrenderAllowancesComponent,
@@ -188,7 +201,15 @@ const taskRoutes: Routes = [
         path: 'answers',
         data: {
           pageTitle: 'Check your answers',
-          keys: ['stoppedDate', 'feeDate', 'effectiveDate', 'annualEmissionsReportDate', 'surrenderDate'],
+          keys: [
+            'stoppedDate',
+            'feeDate',
+            'effectiveDate',
+            'annualEmissionsReportDate',
+            'surrenderDate',
+            'alrReportDate',
+            'alrRequired',
+          ],
           skipValidators: true,
         },
         canActivate: [ConfirmSubmitGuard],
@@ -199,7 +220,15 @@ const taskRoutes: Routes = [
         path: 'summary',
         data: {
           pageTitle: 'Permit revocation',
-          keys: ['stoppedDate', 'feeDate', 'effectiveDate', 'annualEmissionsReportDate', 'surrenderDate'],
+          keys: [
+            'stoppedDate',
+            'feeDate',
+            'effectiveDate',
+            'annualEmissionsReportDate',
+            'surrenderDate',
+            'alrReportDate',
+            'alrRequired',
+          ],
           skipValidators: true,
           breadcrumb: 'Summary',
         },

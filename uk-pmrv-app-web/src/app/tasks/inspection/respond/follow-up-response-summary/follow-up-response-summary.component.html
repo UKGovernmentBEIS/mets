@@ -14,7 +14,7 @@
       <dt govukSummaryListRowKey>Completed action?</dt>
       <dd govukSummaryListRowValue>{{ vm.followupActionsResponses.completed ? 'Yes' : 'No' }}</dd>
       <dd govukSummaryListRowActions *ngIf="vm.isEditable">
-        <a govukLink [routerLink]="['./', 'follow-up-action']">Change</a>
+        <a govukLink hidden-text="completed action" [routerLink]="['./', 'follow-up-action']">Change</a>
       </dd>
     </div>
     <div govukSummaryListRow>
@@ -27,14 +27,14 @@
       </dt>
       <dd govukSummaryListRowValue class="pre-wrap">{{ vm.followupActionsResponses.explanation }}</dd>
       <dd govukSummaryListRowActions *ngIf="vm.isEditable">
-        <a govukLink [routerLink]="['./', 'follow-up-action']">Change</a>
+        <a govukLink hidden-text="follow-up action explanation" [routerLink]="['./', 'follow-up-action']">Change</a>
       </dd>
     </div>
     <div govukSummaryListRow *ngIf="vm.followupActionsResponses.completionDate">
       <dt govukSummaryListRowKey>Date action was completed</dt>
       <dd govukSummaryListRowValue>{{ vm.followupActionsResponses.completionDate | govukDate }}</dd>
       <dd govukSummaryListRowActions *ngIf="vm.isEditable">
-        <a govukLink [routerLink]="['./', 'follow-up-action']">Change</a>
+        <a govukLink hidden-text="date action was completed" [routerLink]="['./', 'follow-up-action']">Change</a>
       </dd>
     </div>
     <div govukSummaryListRow *ngIf="vm.responseAttachments.length > 0">
@@ -43,7 +43,7 @@
         <app-summary-download-files [files]="vm.responseAttachments"></app-summary-download-files>
       </dd>
       <dd govukSummaryListRowActions *ngIf="vm.isEditable">
-        <a govukLink [routerLink]="['./', 'follow-up-action']">Change</a>
+        <a govukLink hidden-text="uploaded files" [routerLink]="['./', 'follow-up-action']">Change</a>
       </dd>
     </div>
   </dl>

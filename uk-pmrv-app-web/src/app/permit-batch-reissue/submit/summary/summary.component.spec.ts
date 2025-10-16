@@ -84,6 +84,7 @@ describe('SummaryComponent', () => {
       ...initialState,
       ...mockSubmitCompletedState,
       installationCategories: ['A_LOW_EMITTER', 'B'],
+      changesDetails: { changesSummary: 'summary of changes', changes: ['first change', 'second change'] },
     });
   });
 
@@ -97,6 +98,8 @@ describe('SummaryComponent', () => {
 
   it('should display values', () => {
     expect(page.values.map((val) => val.textContent.trim())).toEqual([
+      'summary of changes',
+      'first changesecond change',
       'fn3 ln3',
       'Awaiting revocation',
       'GHGE',
@@ -116,10 +119,16 @@ describe('SummaryComponent', () => {
         requestCreateActionType: 'PERMIT_BATCH_REISSUE',
         requestCreateActionPayload: {
           payloadType: 'PERMIT_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
+          changesDetails: {
+            changes: ['first change', 'second change'],
+            changesSummary: 'summary of changes',
+          },
           filters: {
             accountStatuses: mockSubmitCompletedState.accountStatuses,
             emitterTypes: mockSubmitCompletedState.emitterTypes,
             installationCategories: ['A_LOW_EMITTER', 'B'],
+            freeAllocation: false,
+            nonFreeAllocation: false,
           },
           signatory: mockSubmitCompletedState.signatory,
         },
@@ -144,10 +153,16 @@ describe('SummaryComponent', () => {
         requestCreateActionType: 'PERMIT_BATCH_REISSUE',
         requestCreateActionPayload: {
           payloadType: 'PERMIT_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
+          changesDetails: {
+            changes: ['first change', 'second change'],
+            changesSummary: 'summary of changes',
+          },
           filters: {
             accountStatuses: mockSubmitCompletedState.accountStatuses,
             emitterTypes: mockSubmitCompletedState.emitterTypes,
             installationCategories: ['A_LOW_EMITTER', 'B'],
+            freeAllocation: false,
+            nonFreeAllocation: false,
           },
           signatory: mockSubmitCompletedState.signatory,
         },
@@ -172,10 +187,16 @@ describe('SummaryComponent', () => {
         requestCreateActionType: 'PERMIT_BATCH_REISSUE',
         requestCreateActionPayload: {
           payloadType: 'PERMIT_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
+          changesDetails: {
+            changes: ['first change', 'second change'],
+            changesSummary: 'summary of changes',
+          },
           filters: {
             accountStatuses: mockSubmitCompletedState.accountStatuses,
             emitterTypes: mockSubmitCompletedState.emitterTypes,
             installationCategories: ['A_LOW_EMITTER', 'B'],
+            freeAllocation: false,
+            nonFreeAllocation: false,
           },
           signatory: mockSubmitCompletedState.signatory,
         },

@@ -49,7 +49,7 @@
           <dd govukSummaryListRowValue>{{ account.name }}</dd>
           <dd govukSummaryListRowActions>
             <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-              <a govukLink routerLink="edit/name">Change</a>
+              <a govukLink hidden-text="installation name" routerLink="edit/name">Change</a>
             </ng-container>
           </dd>
         </div>
@@ -58,7 +58,16 @@
           <dd govukSummaryListRowValue>{{ account.siteName }}</dd>
           <dd govukSummaryListRowActions>
             <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-              <a govukLink routerLink="edit/site-name">Change</a>
+              <a govukLink hidden-text="site name" routerLink="edit/site-name">Change</a>
+            </ng-container>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Start date of regulated activities</dt>
+          <dd govukSummaryListRowValue>{{ account.commencementDate | govukDate }}</dd>
+          <dd govukSummaryListRowActions>
+            <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
+              <a govukLink hidden-text="commencement date" routerLink="edit/commencement-date">Change</a>
             </ng-container>
           </dd>
         </div>
@@ -67,7 +76,7 @@
           <dd govukSummaryListRowValue>{{ account.registryId }}</dd>
           <dd govukSummaryListRowActions>
             <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-              <a govukLink routerLink="edit/registry-id">Change</a>
+              <a govukLink hidden-text="UK ETS Registry ID" routerLink="edit/registry-id">Change</a>
             </ng-container>
           </dd>
         </div>
@@ -76,7 +85,7 @@
           <dd govukSummaryListRowValue>{{ account.sopId }}</dd>
           <dd govukSummaryListRowActions>
             <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-              <a govukLink routerLink="edit/sop-id">Change</a>
+              <a govukLink hidden-text="SOP ID" routerLink="edit/sop-id">Change</a>
             </ng-container>
           </dd>
         </div>
@@ -134,7 +143,7 @@
 
           <dd govukSummaryListRowActions>
             <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-              <a govukLink routerLink="edit/address">Change</a>
+              <a govukLink hidden-text="address" routerLink="edit/address">Change</a>
             </ng-container>
           </dd>
         </div>
@@ -143,7 +152,7 @@
           <dd govukSummaryListRowValue>{{ account.faStatus ? 'Yes' : 'No' }}</dd>
           <dd govukSummaryListRowActions>
             <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-              <a govukLink routerLink="edit/fa-status">Change</a>
+              <a govukLink hidden-text="received free allocation status" routerLink="edit/fa-status">Change</a>
             </ng-container>
           </dd>
         </div>
@@ -184,7 +193,7 @@
             </dd>
             <dd govukSummaryListRowActions>
               <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-                <a govukLink routerLink="edit/legal-entity">Change</a>
+                <a govukLink hidden-text="company registration number" routerLink="edit/legal-entity">Change</a>
               </ng-container>
             </dd>
             <dd
@@ -201,7 +210,7 @@
             <dd govukSummaryListRowValue>{{ account.legalEntity.name }}</dd>
             <dd govukSummaryListRowActions>
               <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-                <a govukLink routerLink="edit/legal-entity">Change</a>
+                <a govukLink hidden-text="operator's name" routerLink="edit/legal-entity">Change</a>
               </ng-container>
             </dd>
             <dd
@@ -216,7 +225,7 @@
             <dd govukSummaryListRowValue>{{ account.legalEntity.type | legalEntityType }}</dd>
             <dd govukSummaryListRowActions>
               <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-                <a govukLink routerLink="edit/legal-entity">Change</a>
+                <a govukLink hidden-text="legal status" routerLink="edit/legal-entity">Change</a>
               </ng-container>
             </dd>
             <dd
@@ -242,7 +251,7 @@
             </dd>
             <dd govukSummaryListRowActions>
               <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-                <a govukLink routerLink="edit/legal-entity">Change</a>
+                <a govukLink hidden-text="operator's address" routerLink="edit/legal-entity">Change</a>
               </ng-container>
             </dd>
             <dd
@@ -266,7 +275,7 @@
               <dd govukSummaryListRowValue>{{ hc.name }}</dd>
               <dd govukSummaryListRowActions>
                 <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-                  <a govukLink routerLink="edit/legal-entity">Change</a>
+                  <a govukLink hidden-text="holding company name" routerLink="edit/legal-entity">Change</a>
                 </ng-container>
               </dd>
               <dd govukSummaryListRowValue></dd>
@@ -276,7 +285,9 @@
               <dd govukSummaryListRowValue>{{ hc.registrationNumber }}</dd>
               <dd govukSummaryListRowActions>
                 <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-                  <a govukLink routerLink="edit/legal-entity">Change</a>
+                  <a govukLink hidden-text="holding company registration number" routerLink="edit/legal-entity">
+                    Change
+                  </a>
                 </ng-container>
               </dd>
               <dd
@@ -296,7 +307,7 @@
               </dd>
               <dd govukSummaryListRowActions>
                 <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-                  <a govukLink routerLink="edit/legal-entity">Change</a>
+                  <a govukLink hidden-text="holding company address" routerLink="edit/legal-entity">Change</a>
                 </ng-container>
               </dd>
               <dd
@@ -311,7 +322,12 @@
               <dd govukSummaryListRowValue>No</dd>
               <dd govukSummaryListRowActions>
                 <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
-                  <a govukLink routerLink="edit/legal-entity">Change</a>
+                  <a
+                    govukLink
+                    hidden-text="if this organisation belong to a holding company"
+                    routerLink="edit/legal-entity">
+                    Change
+                  </a>
                 </ng-container>
               </dd>
               <dd

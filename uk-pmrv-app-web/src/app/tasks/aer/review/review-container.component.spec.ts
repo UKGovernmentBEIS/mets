@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -9,7 +9,6 @@ import { mockReview } from '@tasks/aer/review/testing/mock-review';
 import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { AerModule } from '../aer.module';
 
@@ -30,8 +29,8 @@ describe('ReviewContainerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [KeycloakService],
-      imports: [SharedModule, RouterTestingModule, TaskSharedModule, AerModule],
+      imports: [SharedModule, TaskSharedModule, AerModule],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -142,6 +141,65 @@ describe('ReviewContainerComponent', () => {
         'Calculation of perfluorocarbons (PFC) emissions',
         'Emissions summary',
         'Additional information',
+      ]);
+    });
+  });
+
+  describe('for review with verification report and non hidden ALR', () => {
+    beforeEach(() => {
+      store = TestBed.inject(CommonTasksStore);
+      jest.spyOn(store, 'storeInitialized$', 'get').mockReturnValue(of(true));
+      jest.spyOn(store, 'requestMetadata$', 'get').mockReturnValue(
+        of({
+          type: 'AER',
+          year: '2022',
+        }),
+      );
+      jest.spyOn(store, 'requestTaskItem$', 'get').mockReturnValue(
+        of({
+          requestTask: {
+            id: 1,
+            type: 'AER_APPLICATION_REVIEW',
+            payload: { ...mockReview, permitOriginatedData: { permitType: 'GHGE', isPostALRSectionRemoval: null } },
+          },
+          allowedRequestTaskActions: [],
+        }),
+      );
+    });
+    beforeEach(createComponent);
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should render the content', () => {
+      expect(page.heading).toEqual('Review 2022 emissions report');
+      expect(page.sections.map((el) => el.textContent.trim())).toEqual([
+        'Installation details',
+        'Fuels and equipment inventory',
+        'Calculation of CO2 emissions',
+        'Measurement of CO2 emissions',
+        'Inherent CO2 emissions',
+        'Fallback approach emissions',
+        'Calculation of perfluorocarbons (PFC) emissions',
+        'Emissions summary',
+        'Activity level report',
+        'Additional information',
+
+        'Verifier details',
+        'Opinion statement',
+        'Compliance with ETS rules',
+        'Compliance with monitoring and reporting principles',
+        'Verification report of the activity level report',
+        'Overall decision',
+
+        'Uncorrected misstatements',
+        'Uncorrected non-conformities',
+        'Uncorrected non-compliances',
+        'Recommended improvements',
+        'Methodologies to close data gaps',
+        'Materiality level and reference documents',
+        'Summary of conditions, changes, clarifications and variations',
       ]);
     });
   });

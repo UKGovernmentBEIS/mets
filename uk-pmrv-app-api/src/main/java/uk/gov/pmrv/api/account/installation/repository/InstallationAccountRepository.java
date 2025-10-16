@@ -60,4 +60,25 @@ public interface InstallationAccountRepository extends AccountBaseRepository<Ins
 	Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> findAllByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(
 			CompetentAuthorityEnum competentAuthority, Set<InstallationAccountStatus> statuses,
 			Set<EmitterType> emitterTypes, Set<InstallationCategory> installationCategories);
+
+    /**
+     * @param competentAuthority must not be null
+     * @param statuses Must not be null. If empty, no filtering is applied on the field
+     * @param emitterTypes Must not be null. if empty, no filtering is applied on the field
+     * @param installationCategories categories (applies for GHGE emitter types only). Must not be null. If empty, no filtering is applied on the field
+	 * @param faStatus free allocation status. Filters by whether installation account's faStatus is true or false
+     */
+	@Transactional(readOnly = true)
+	@Query(value = "select ai.id as accountId, a.name as accountName, ale.name as legalEntityName "
+			+ "from account_installation ai "
+			+ "join account a on a.id = ai.id "
+			+ "join account_legal_entity ale on ale.id = a.legal_entity_id "
+			+ "where a.competent_authority = :#{#competentAuthority.name()} "
+			+ "and (:#{#statuses.size() == 0} = true or ai.status in :#{#statuses.![name()]}) "
+			+ "and (:#{#emitterTypes.size() == 0} = true or ai.emitter_type in :#{#emitterTypes.![name()]}) "
+			+ "and (:#{#installationCategories.size() == 0} = true or ai.emitter_type = 'HSE' or ai.installation_category in :#{#installationCategories.![name()]}) "
+            + "and  ai.fa_status = :#{#faStatus}", nativeQuery = true)
+	Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> findAllByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(
+			CompetentAuthorityEnum competentAuthority, Set<InstallationAccountStatus> statuses,
+			Set<EmitterType> emitterTypes, Set<InstallationCategory> installationCategories, boolean faStatus);
 }

@@ -37,8 +37,8 @@ public class ALROfficialNoticeService {
         final Request request = requestService.findRequestById(requestId);
         setOfficialNoticeAndRecipients(request,
                 DocumentTemplateGenerationContextActionType.ALR_SUBMITTED,
-                DocumentTemplateType.DOAL_SUBMITTED,     //TODO: change DocumentTemplateType when alr template arrives
-                "Activity_level_determination_preliminary_allocation_letter.pdf");    //TODO: change filename when alr template arrives
+                DocumentTemplateType.ALR_SUBMITTED,
+                "Activity_level_report_preliminary_allocation_letter.pdf");
 
     }
 
@@ -48,15 +48,15 @@ public class ALROfficialNoticeService {
 
         if(payload.getAuthorityReviewOutcome().getAuthorityResponse().getType().equals(DoalAuthorityResponseType.INVALID)) {
             setOfficialNoticeAndRecipients(request,
-                    DocumentTemplateGenerationContextActionType.ALR_SUBMITTED, //TODO: change DocumentTemplateGenerationContextActionType when alr template arrives
-                    DocumentTemplateType.DOAL_SUBMITTED,//TODO: change DocumentTemplateType when alr template arrives
-                    "Activity_level_determination_not_approved_by_Authority_notice.pdf"); //TODO: change filename when alr template arrives
+                    DocumentTemplateGenerationContextActionType.ALR_REJECTED,
+                    DocumentTemplateType.ALR_REJECTED,
+                    "Activity_level_report_not_approved_by_Authority_notice.pdf");
         }
         else {
             setOfficialNoticeAndRecipients(request,
-                    DocumentTemplateGenerationContextActionType.ALR_SUBMITTED, //TODO: change DocumentTemplateGenerationContextActionType when alr template arrives
-                    DocumentTemplateType.DOAL_SUBMITTED, //TODO: change DocumentTemplateType when alr template arrives
-                    "Activity_level_determination_approved_by_Authority_notice.pdf"); //TODO: change filename when alr template arrives
+                    DocumentTemplateGenerationContextActionType.ALR_ACCEPTED,
+                    DocumentTemplateType.ALR_ACCEPTED,
+                    "Activity_level_report_approved_by_Authority_notice.pdf");
         }
     }
 

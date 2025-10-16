@@ -16,5 +16,6 @@ export interface PermitTransferDetails {
   transferDate: string;
   payer: 'TRANSFERER' | 'RECEIVER';
   aerLiable: 'TRANSFERER' | 'RECEIVER';
+  alrLiable?: 'TRANSFERER' | 'RECEIVER';
   transferCode: string;
 }

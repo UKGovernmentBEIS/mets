@@ -70,9 +70,9 @@ class PermitVariationRequestQueryServiceTest {
 		List<PermitVariationRequestInfo> results = cut.findPermitVariationRequests(accountId);
 		assertThat(results).containsExactlyInAnyOrder(
 				PermitVariationRequestInfo.builder().endDate(request1EndDate).submissionDate(request1EndDate)
-						.id("request1").metadata(permitVariationRequestMetadata1).build(),
+						.id("request1").changeType("AEM Variation").metadata(permitVariationRequestMetadata1).build(),
 				PermitVariationRequestInfo.builder().endDate(request2EndDate).submissionDate(request2EndDate)
-						.id("request2").metadata(permitVariationRequestMetadata2).build());
+						.id("request2").changeType("AEM Variation").metadata(permitVariationRequestMetadata2).build());
 		verify(requestRepository, times(1)).findByAccountIdAndTypeAndStatus(accountId,
 				RequestType.PERMIT_VARIATION, RequestStatus.APPROVED, Sort.by(Sort.Direction.ASC, "creationDate"));
     }
@@ -113,9 +113,9 @@ class PermitVariationRequestQueryServiceTest {
 		List<PermitVariationRequestInfo> results = cut.findApprovedPermitVariationRequests(accountId);
 		assertThat(results).containsExactly(
 				PermitVariationRequestInfo.builder().endDate(requestEndDateCurrent).submissionDate(requestEndDateCurrent)
-						.id("request1").metadata(permitVariationRequestMetadata1).build(),
+						.id("request1").changeType("AEM Variation").metadata(permitVariationRequestMetadata1).build(),
 				PermitVariationRequestInfo.builder().endDate(requestEndDateCurrent).submissionDate(requestEndDateCurrent)
-						.id("request2").metadata(permitVariationRequestMetadata2).build());
+						.id("request2").changeType("AEM Variation").metadata(permitVariationRequestMetadata2).build());
 		verify(requestRepository, times(1)).findByAccountIdAndTypeAndStatusOrderByEndDateDesc(accountId,
 				RequestType.PERMIT_VARIATION, RequestStatus.APPROVED);
 	}

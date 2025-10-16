@@ -262,7 +262,27 @@
 
         <rollback>
             <sql>
-                DELETE FROM TABLE aviation_rpt_countries WHERE YEAR = 2024;
+                DELETE FROM aviation_rpt_countries WHERE YEAR = 2024;
+            </sql>
+        </rollback>
+
+    </changeSet>
+
+    <changeSet id="0_2_0_POPULATE_AVIATION_RPT_COUNTRIES_TABLE_2025" author="dridakisc@unisystems.gr">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT count(*) FROM aviation_rpt_countries WHERE YEAR = 2025;</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO aviation_rpt_countries (id, year, is_chapter_3, state, country)
+            SELECT nextval('aviation_rpt_countries_seq'), 2025, is_chapter_3, state, country FROM aviation_rpt_countries WHERE year = 2024;
+
+            UPDATE aviation_rpt_countries
+            SET is_chapter_3 = true WHERE year = 2025 AND state IN ('Comoros','Mauritania','Saint Lucia');
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM aviation_rpt_countries WHERE YEAR = 2025;
             </sql>
         </rollback>
 

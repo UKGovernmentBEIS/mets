@@ -14,6 +14,8 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.validation.ALRCreationValidationService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferAApplicationRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferViolation;
 
@@ -27,6 +29,7 @@ public class PermitTransferAValidatorService {
     private final PermitTransferAttachmentsValidator attachmentsValidator;
     private final RequestRepository requestRepository;
     private final InstallationAccountQueryService installationAccountQueryService;
+    private final ALRCreationValidationService alrCreationValidationService;
 
 
     public void validateTaskPayload(@NotNull @Valid final PermitTransferAApplicationRequestTaskPayload taskPayload) {
@@ -58,6 +61,15 @@ public class PermitTransferAValidatorService {
                 ErrorCode.FORM_VALIDATION,
                 PermitTransferViolation.INVALID_TRANSFER_CODE.getMessage()
             );
+        }
+
+        //check if account is eligible for ALR
+        RequestCreateValidationResult alrValidationResult = alrCreationValidationService.validateAccountEmitterTypeAndFreeAllocations(requestTask.getRequest().getAccountId());
+        boolean hasALR = alrValidationResult.isValid();
+        boolean hasALRproperties = taskPayload.getPermitTransferDetails().getAlrLiable() != null;
+
+        if((hasALR && !hasALRproperties) || (!hasALR && hasALRproperties)) {
+            throw new BusinessException(ErrorCode.FORM_VALIDATION);
         }
         
         // validate that there is not another TRANSFER_B request for receiving account

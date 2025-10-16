@@ -25,6 +25,7 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocation;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
@@ -72,6 +73,7 @@ class PermitRevocationRequestPeerReviewActionHandlerTest {
         final PermitRevocationApplicationSubmitRequestTaskPayload requestTaskPayload =
             PermitRevocationApplicationSubmitRequestTaskPayload.builder()
                 .payloadType(RequestTaskPayloadType.PERMIT_REVOCATION_APPLICATION_SUBMIT_PAYLOAD)
+                .permitRevocation(PermitRevocation.builder().build())
                 .build();
         final RequestTask requestTask = RequestTask.builder()
             .id(requestTaskId)

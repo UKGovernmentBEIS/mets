@@ -1,9 +1,7 @@
 <app-base-action-container-component
   [header]="'Batch variation submitted'"
   [customContentTemplate]="customContentTemplate"
-  [expectedActionType]="['BATCH_REISSUE_SUBMITTED']"
->
-</app-base-action-container-component>
+  [expectedActionType]="['BATCH_REISSUE_SUBMITTED']"></app-base-action-container-component>
 
 <ng-template #customContentTemplate>
   <p class="govuk-heading-m">Batch variation details</p>
@@ -13,6 +11,27 @@
         <dt govukSummaryListRowKey>Created by</dt>
         <dd govukSummaryListRowValue>
           {{ (payload$ | async).submitter }}
+        </dd>
+      </div>
+      <div govukSummaryListRow *ngIf="(payload$ | async)?.changesDetails?.['changesSummary'] as changesSummary">
+        <dt govukSummaryListRowKey>Summary</dt>
+        <dd govukSummaryListRowValue>
+          {{ changesSummary }}
+        </dd>
+      </div>
+      <div
+        govukSummaryListRow
+        *ngIf="(payload$ | async)?.changesDetails?.['changes'] as changes"
+        [hidden]="!changes?.length">
+        <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
+        <dd govukSummaryListRowValue>
+          <ol class="govuk-list govuk-list--number">
+            @for (change of changes; track $index) {
+              @if (change) {
+                <li>{{ change }}</li>
+              }
+            }
+          </ol>
         </dd>
       </div>
       <div govukSummaryListRow>
@@ -32,6 +51,5 @@
   <p class="govuk-heading-m">Selected emitters</p>
   <app-permit-batch-reissue-filters-template
     [filters]="filters$ | async"
-    [editable]="false"
-  ></app-permit-batch-reissue-filters-template>
+    [editable]="false"></app-permit-batch-reissue-filters-template>
 </ng-template>

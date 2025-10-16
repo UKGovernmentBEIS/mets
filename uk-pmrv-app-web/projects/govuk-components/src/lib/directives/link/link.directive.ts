@@ -19,6 +19,8 @@ import { filter, Subscription } from 'rxjs';
 export class LinkDirective implements OnDestroy, OnInit {
   // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('govukLink') navLinkType: 'header' | 'footer' | 'meta' | 'breadcrumb' | 'notification' | '' = '';
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  @Input('hidden-text') hiddenText: string = '';
 
   private isActive = false;
   private subscription: Subscription;
@@ -54,17 +56,27 @@ export class LinkDirective implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    const element: HTMLElement = this.elementRef.nativeElement;
+
     if (this.navLinkType) {
       this.subscription = this.router.events
         .pipe(filter((s) => s instanceof NavigationEnd))
         .subscribe(() => this.update());
 
-      const element: HTMLElement = this.elementRef.nativeElement;
       const parentNode = element.parentNode;
       this.liElement = this.renderer.createElement('li');
       this.renderer.addClass(this.liElement, this.getLiClassName());
       this.renderer.insertBefore(parentNode, this.liElement, element);
       this.renderer.appendChild(this.liElement, element);
+    }
+
+    if (this.hiddenText) {
+      const span = this.renderer.createElement('span');
+      this.renderer.addClass(span, 'govuk-visually-hidden');
+
+      const text = this.renderer.createText(` ${this.hiddenText}`);
+      this.renderer.appendChild(span, text);
+      this.renderer.appendChild(element, span);
     }
   }
 

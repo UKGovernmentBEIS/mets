@@ -38,7 +38,8 @@ export function getAvailableSections(
     'INHERENT_CO2',
     'FALLBACK',
   ];
-  if (payload?.permitOriginatedData?.permitType === 'GHGE') {
+
+  if (payload?.permitOriginatedData?.permitType === 'GHGE' && !payload?.isPostALRSectionRemoval) {
     sections.push('activityLevelReport');
   }
 
@@ -152,10 +153,9 @@ function getAvailableVerificationSubmitSections(
     'materialityLevel',
     'summaryOfConditions',
   ];
-  if (payload?.permitOriginatedData?.permitType === 'GHGE') {
+  if (payload?.permitOriginatedData?.permitType === 'GHGE' && !payload?.isPostALRSectionRemoval) {
     sections.push('activityLevelReport');
   }
-
   return sections;
 }
 
@@ -197,7 +197,7 @@ function getAerDataSections(
     ) as AerSaveReviewGroupDecisionRequestTaskActionPayload['group'][]),
   ];
 
-  if (payload?.permitOriginatedData?.permitType === 'GHGE') {
+  if (payload?.permitOriginatedData?.permitType === 'GHGE' && !payload?.isPostALRSectionRemoval) {
     sections.push('ACTIVITY_LEVEL_REPORT');
   }
 

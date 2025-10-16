@@ -149,6 +149,7 @@ class InstallationAccountRepositoryIT extends AbstractContainerBaseTest {
         assertThat(result).containsExactlyInAnyOrder(accountId1, accountId4);
     }
 
+
     @Test
     void findAllByCAAndStatusesAndInstallationCategoriesAndEmitterTypes() {
     	CompetentAuthorityEnum caEngland = CompetentAuthorityEnum.ENGLAND;
@@ -236,12 +237,109 @@ class InstallationAccountRepositoryIT extends AbstractContainerBaseTest {
 		assertThat(result).extracting(InstallationAccountIdAndNameAndLegalEntityNameDTO::getAccountId)
 				.containsExactly(accountId4);
     }
+
+    @Test
+    void findAllByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus_faStatusTrue() {
+        CompetentAuthorityEnum caEngland = CompetentAuthorityEnum.ENGLAND;
+
+
+        createAccount(1L, "account1", InstallationAccountStatus.LIVE,
+        		caEngland, 1L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName1", LegalEntityStatus.ACTIVE, InstallationCategory.A, EmitterType.GHGE, true);
+        createAccount(2L, "account2", InstallationAccountStatus.LIVE,
+        		caEngland, 2L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName2", LegalEntityStatus.ACTIVE, InstallationCategory.A, EmitterType.GHGE, false);
+        createAccount(3L, "account3", InstallationAccountStatus.LIVE,
+        		caEngland, 1L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName3", LegalEntityStatus.ACTIVE, InstallationCategory.A, EmitterType.GHGE, false);
+        createAccount(4L, "account4", InstallationAccountStatus.LIVE,
+        		caEngland, 1L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName4", LegalEntityStatus.ACTIVE, InstallationCategory.A, EmitterType.HSE, true);
+        createAccount(5L, "account5", InstallationAccountStatus.LIVE,
+        		CompetentAuthorityEnum.ENGLAND, 1L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName5", LegalEntityStatus.ACTIVE, InstallationCategory.A, EmitterType.GHGE, false);
+
+        flushAndClear();
+
+		Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> result = repository
+				.findAllByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(
+						caEngland,
+						Set.of(InstallationAccountStatus.LIVE),
+						Set.of(EmitterType.GHGE, EmitterType.HSE),
+						Set.of(InstallationCategory.A),
+                        true);
+
+		assertThat(result).extracting(InstallationAccountIdAndNameAndLegalEntityNameDTO::getAccountId)
+				.containsExactly(1L, 4L);
+    }
+
+    @Test
+    void findAllByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus_faStatusFalse() {
+        CompetentAuthorityEnum caEngland = CompetentAuthorityEnum.ENGLAND;
+
+        createAccount(1L, "account1", InstallationAccountStatus.LIVE,
+        		caEngland, 1L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName1", LegalEntityStatus.ACTIVE, InstallationCategory.A, EmitterType.GHGE, true);
+        createAccount(2L, "account2", InstallationAccountStatus.LIVE,
+        		caEngland, 2L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName2", LegalEntityStatus.ACTIVE, InstallationCategory.A, EmitterType.GHGE, false);
+        createAccount(3L, "account3", InstallationAccountStatus.LIVE,
+        		caEngland, 1L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName3", LegalEntityStatus.ACTIVE, InstallationCategory.A, EmitterType.GHGE, false);
+        createAccount(4L, "account4", InstallationAccountStatus.LIVE,
+        		caEngland, 1L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName4", LegalEntityStatus.ACTIVE, InstallationCategory.A, EmitterType.HSE, true);
+        createAccount(5L, "account5", InstallationAccountStatus.LIVE,
+        		CompetentAuthorityEnum.ENGLAND, 1L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName5", LegalEntityStatus.ACTIVE, InstallationCategory.A, EmitterType.GHGE, false);
+
+        flushAndClear();
+
+		Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> result = repository
+				.findAllByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(
+						caEngland,
+						Set.of(InstallationAccountStatus.LIVE),
+						Set.of(EmitterType.GHGE, EmitterType.HSE),
+						Set.of(InstallationCategory.A),
+                        false);
+
+		assertThat(result).extracting(InstallationAccountIdAndNameAndLegalEntityNameDTO::getAccountId)
+				.containsExactly(2L, 3L, 5L);
+    }
     
 	private InstallationAccount createAccount(Long id, String accountName, InstallationAccountStatus accountStatus,
 			CompetentAuthorityEnum ca, Long verificationBodyId, EmissionTradingScheme ets, String leName,
 			LegalEntityStatus leStatus) {
 		return createAccount(id, accountName, accountStatus, ca, verificationBodyId, ets, leName, leStatus, null, null);
 	}
+
+    private InstallationAccount createAccount(Long id, String accountName, InstallationAccountStatus accountStatus,
+			CompetentAuthorityEnum ca, Long verificationBodyId, EmissionTradingScheme ets, String leName,
+			LegalEntityStatus leStatus, InstallationCategory installationCategory, EmitterType emitterType, boolean faStatus) {
+
+       InstallationAccount account = InstallationAccount.builder()
+            .id(id)
+            .legalEntity(createLegalEntity(leName, leStatus))
+            .accountType(AccountType.INSTALLATION)
+            .emitterType(emitterType)
+            .applicationType(ApplicationType.NEW_PERMIT)
+            .commencementDate(LocalDate.now())
+            .competentAuthority(ca)
+            .verificationBodyId(verificationBodyId)
+            .status(accountStatus)
+            .faStatus(faStatus)
+            .installationCategory(installationCategory)
+            .location(
+                LocationOnShore.builder()
+                    .gridReference("grid")
+                    .address(
+                        Address.builder()
+                            .city("city")
+                            .country("GR")
+                            .line1("line")
+                            .postcode("postcode")
+                            .build())
+                    .build())
+            .name(accountName)
+            .siteName(accountName)
+            .emissionTradingScheme(ets)
+            .emitterId("EM" + String.format("%05d", id))
+            .build();
+
+        entityManager.persist(account);
+        return account;
+    }
+
 
 	private InstallationAccount createAccount(Long id, String accountName, InstallationAccountStatus accountStatus,
 			CompetentAuthorityEnum ca, Long verificationBodyId, EmissionTradingScheme ets, String leName,

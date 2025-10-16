@@ -66,10 +66,34 @@ public class AerRequestPayload extends RequestPayload implements RequestPayloadV
 
     private AerSkipReviewDecision skipReviewDecision;
 
+    private Boolean isPostALRSectionRemoval;
+
     public void clearRegulatorData() {
         this.reviewGroupDecisions.clear();
         this.reviewAttachments.clear();
         this.reviewSectionsCompleted.clear();
+    }
+
+    public void clearALRData() {
+        if (this.getAer() != null && this.getAer().getActivityLevelReport() != null) {
+            UUID alrFileUUID = this.getAer().getActivityLevelReport().getFile();
+            this.getAer().setActivityLevelReport(null);
+            this.getAerAttachments().remove(alrFileUUID);
+            this.getVerificationAttachments().remove(alrFileUUID);
+            this.getReviewAttachments().remove(alrFileUUID);
+            this.getAerSectionsCompleted().remove("activityLevelReport");
+            this.getVerificationSectionsCompleted().remove("activityLevelReport");
+            this.getReviewSectionsCompleted().remove("activityLevelReport");
+            this.getReviewGroupDecisions().remove(AerReviewGroup.ACTIVITY_LEVEL_REPORT);
+
+            if (this.getVerifiedAer() != null && this.getVerifiedAer().getActivityLevelReport() != null) {
+                this.getVerifiedAer().setActivityLevelReport(null);
+            }
+
+            if (this.getVerificationData() != null) {
+                this.getVerificationData().setActivityLevelReport(null);
+            }
+        }
     }
     
     @JsonIgnore

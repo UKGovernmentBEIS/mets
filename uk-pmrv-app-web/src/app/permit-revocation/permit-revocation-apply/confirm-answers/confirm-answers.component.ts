@@ -51,6 +51,10 @@ export class ConfirmAnswersComponent implements OnInit {
           if (state.permitRevocation?.surrenderDate) {
             this.form.addValidators(genericMinDateValidator('surrenderDate'));
           }
+
+          if (state.permitRevocation?.alrReportDate) {
+            this.form.addValidators(genericMinDateValidator('alrReportDate'));
+          }
         }),
       )
       .subscribe();

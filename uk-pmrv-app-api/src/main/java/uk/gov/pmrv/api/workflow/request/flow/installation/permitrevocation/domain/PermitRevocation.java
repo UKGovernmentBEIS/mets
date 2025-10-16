@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDate;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -24,6 +25,8 @@ import uk.gov.netz.api.common.validation.SpELExpression;
     message = "permitrevocation.effective.date.too.soon")
 @SpELExpression(expression = "{T(java.lang.Boolean).TRUE.equals(#annualEmissionsReportRequired) == (#annualEmissionsReportDate != null)}",
     message = "permitrevocation.incompatible.report.required.with.report.date")
+@SpELExpression(expression = "{T(java.lang.Boolean).TRUE.equals(#alrRequired) == (#alrReportDate != null)}",
+        message = "permitrevocation.incompatible.alr.required.with.alr.date")
 @SpELExpression(expression = "{T(java.lang.Boolean).TRUE.equals(#surrenderRequired) == (#surrenderDate != null)}",
     message = "permitrevocation.incompatible.surrender.required.with.surrender.date")
 @SpELExpression(expression = "{T(java.lang.Boolean).TRUE.equals(#feeCharged) == (#feeDate != null)}",
@@ -55,6 +58,16 @@ public class PermitRevocation {
 
     @FutureOrPresent
     private LocalDate annualEmissionsReportDate;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean alrRequired;
+
+    @FutureOrPresent
+    private LocalDate alrReportDate;
+
+    //injected for validation reasons
+    @JsonIgnore
+    private Long accountId;
 
     @NotNull
     @JsonInclude(JsonInclude.Include.NON_NULL)

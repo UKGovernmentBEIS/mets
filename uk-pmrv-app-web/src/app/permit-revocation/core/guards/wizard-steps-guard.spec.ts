@@ -3,17 +3,21 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, UrlSegment, UrlTree } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, Observable, of } from 'rxjs';
 
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
 import { mockTaskState } from '@permit-revocation/testing/mock-state';
+import { mockClass, MockType } from '@testing';
 
+import { InstallationAccountViewService } from 'pmrv-api';
+
+import { mockedAccountPermit } from '../../../accounts/testing/mock-data';
 import { WizardStepsGuard } from './wizard-steps-guard';
-
 describe('Wizard Steps Guard', () => {
   let router: Router;
   let guard: WizardStepsGuard;
   let store: PermitRevocationStore;
+  let accountViewService: MockType<InstallationAccountViewService>;
 
   const activatedRouteSnapshot = new ActivatedRouteSnapshot();
   activatedRouteSnapshot.url = [new UrlSegment('summary', null)];
@@ -21,8 +25,12 @@ describe('Wizard Steps Guard', () => {
   activatedRouteSnapshot.data = { statusKey: 'REVOCATION_APPLY', keys: ['reason'] };
 
   beforeEach(() => {
+    accountViewService = mockClass(InstallationAccountViewService);
+    accountViewService.getInstallationAccountById.mockReturnValueOnce(of(mockedAccountPermit));
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule],
+      providers: [{ provide: InstallationAccountViewService, useValue: accountViewService }],
     });
     guard = TestBed.inject(WizardStepsGuard);
     router = TestBed.inject(Router);
@@ -88,6 +96,8 @@ describe('Wizard Steps Guard', () => {
         annualEmissionsReportRequired: true,
         annualEmissionsReportDate: '2022-04-14',
         feeCharged: false,
+        alrRequired: true,
+        alrReportDate: '2022-04-14',
       },
       sectionsCompleted: {
         REVOCATION_APPLY: false,
@@ -120,6 +130,8 @@ describe('Wizard Steps Guard', () => {
         annualEmissionsReportRequired: true,
         annualEmissionsReportDate: '2022-04-14',
         feeCharged: false,
+        alrRequired: true,
+        alrReportDate: '2022-04-14',
       },
       sectionsCompleted: {
         REVOCATION_APPLY: false,

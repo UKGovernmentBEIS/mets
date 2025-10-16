@@ -55,8 +55,10 @@ public class AerViolation {
         INVALID_EMISSION_POINT("Referenced Emission point is not defined in report emission points"),
         ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_HSE("Activity level report task is not applicable for HSE permit type"),
         ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_GHGE("Activity Level Report Task and GHGE permit type are not mutually valid"),
+        ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE("Activity Level Report task is not applicable part of the AER"),
         VERIFICATION_ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_HSE("Verification Activity level report task is not applicable for HSE permit type"),
         VERIFICATION_ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_GHGE("Verification Activity Level Report Task and GHGE permit type are not mutually valid"),
+        VERIFICATION_ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE("Verification Activity Level Report task is not applicable part of the AER"),
         ;
 
         private final String message;

@@ -55,6 +55,8 @@ describe('SubmittedComponent', () => {
   it('should display values', () => {
     expect(page.values.map((val) => val.textContent.trim())).toEqual([
       'submitter1',
+      'summary of changes',
+      'change1change2',
       'signName',
       'In progress',
       'Live',

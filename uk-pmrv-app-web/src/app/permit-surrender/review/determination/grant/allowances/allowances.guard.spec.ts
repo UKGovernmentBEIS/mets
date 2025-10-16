@@ -1,6 +1,6 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, Router, UrlSegment, UrlTree } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRouteSnapshot, provideRouter, Router, UrlSegment, UrlTree } from '@angular/router';
 
 import { firstValueFrom, Observable } from 'rxjs';
 
@@ -24,8 +24,7 @@ describe('AllowancesGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [{ provide: TasksService, useValue: tasksService }],
+      providers: [provideHttpClient(), provideRouter([]), { provide: TasksService, useValue: tasksService }],
     });
     guard = TestBed.inject(AllowancesGuard);
     router = TestBed.inject(Router);
@@ -37,7 +36,7 @@ describe('AllowancesGuard', () => {
     expect(guard).toBeTruthy();
   });
 
-  it('should redirect to answers when status is not completed and wizard completed', async () => {
+  it('should redirect to answers when status is not completed and wizard completed', () => {
     store.setState({
       ...mockTaskState,
       reviewDeterminationCompleted: false,
@@ -48,18 +47,17 @@ describe('AllowancesGuard', () => {
         noticeDate: '2012-12-13',
         reportRequired: true,
         reportDate: '2012-12-13',
+        alrRequired: false,
         allowancesSurrenderRequired: false,
       } as PermitSurrenderReviewDeterminationGrant,
     });
 
-    await expect(
-      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<boolean | UrlTree>),
-    ).resolves.toEqual(
+    expect(firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<boolean | UrlTree>)).resolves.toEqual(
       router.parseUrl(`/permit-surrender/${mockTaskState.requestTaskId}/review/determination/grant/answers`),
     );
   });
 
-  it('should return true when wizard and status are not completed and previous steps are filled', async () => {
+  it('should return true when wizard and status are not completed and previous steps are filled', () => {
     store.setState({
       ...mockTaskState,
       reviewDeterminationCompleted: false,
@@ -69,11 +67,12 @@ describe('AllowancesGuard', () => {
         stopDate: '2012-12-13',
         noticeDate: '2012-12-13',
         reportRequired: false,
+        alrRequired: false,
       } as any,
     });
 
-    await expect(
-      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>),
-    ).resolves.toEqual(true);
+    expect(firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>)).resolves.toEqual(
+      true,
+    );
   });
 });

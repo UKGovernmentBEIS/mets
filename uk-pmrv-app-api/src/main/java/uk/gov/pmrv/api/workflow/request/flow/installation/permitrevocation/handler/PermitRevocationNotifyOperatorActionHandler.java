@@ -52,10 +52,12 @@ public class PermitRevocationNotifyOperatorActionHandler
         final PermitRevocationApplicationSubmitRequestTaskPayload taskPayload =
             (PermitRevocationApplicationSubmitRequestTaskPayload) requestTask.getPayload();
 
+        PermitRevocation permitRevocation = taskPayload.getPermitRevocation();
+        permitRevocation.setAccountId(requestTask.getRequest().getAccountId());
+
         validator.validateNotifyUsers(requestTask, permitDecisionNotification, appUser);
         validator.validateSubmitRequestTaskPayload(taskPayload);
 
-        final PermitRevocation permitRevocation = taskPayload.getPermitRevocation();
 
         // fill request payload
         final Request request = requestTask.getRequest();
@@ -85,7 +87,7 @@ public class PermitRevocationNotifyOperatorActionHandler
         taskVariables.put(BpmnProcessConstants.REVOCATION_OUTCOME, PermitRevocationOutcome.NOTIFY_OPERATOR);
 
         final LocalDate effectiveLocalDate = permitRevocation.getEffectiveDate();
-		taskVariables.put(BpmnProcessConstants.REVOCATION_EFFECTIVE_DATE, DateUtils.atEndOfDay(effectiveLocalDate));
+        taskVariables.put(BpmnProcessConstants.REVOCATION_EFFECTIVE_DATE, DateUtils.atEndOfDay(effectiveLocalDate));
         
         final LocalDate reminderEffectiveLocalDate = effectiveLocalDate.minus(28, DAYS);
 		taskVariables.put(BpmnProcessConstants.REVOCATION_REMINDER_EFFECTIVE_DATE,

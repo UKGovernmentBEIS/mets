@@ -30,6 +30,8 @@ export const mockActionSubmittedPayload: Pick<PermitRevocationState, 'payloadAct
     annualEmissionsReportDate: '2022-04-22',
     surrenderRequired: false,
     feeCharged: false,
+    alrRequired: true,
+    alrReportDate: '2022-04-22',
   },
 };
 

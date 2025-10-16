@@ -48,6 +48,7 @@ public class PermitBatchReissueCreateActionHandler implements RequestCACreateAct
 	            		.payloadType(RequestPayloadType.PERMIT_BATCH_REISSUE_REQUEST_PAYLOAD)
 	            		.filters(filters)
 	            		.signatory(payload.getSignatory())
+						.changesDetails(payload.getChangesDetails())
 	            		.build())
 	            .requestMetadata(PermitBatchReissueRequestMetadata.builder()
 	            		.accountsReports(PERMIT_REISSUE_MAPPER.toPermitReissueAccountsReports(accountsDetails))

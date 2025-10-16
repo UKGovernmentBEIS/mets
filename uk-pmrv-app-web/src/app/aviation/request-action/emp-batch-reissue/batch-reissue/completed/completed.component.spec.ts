@@ -51,6 +51,9 @@ describe('CompletedComponent', () => {
         creationDate: currentDate,
         payload: {
           payloadType: 'EMP_BATCH_REISSUE_COMPLETED_PAYLOAD',
+          changesDetails: {
+            changes: ['change 1', 'change 2', 'change 3'],
+          },
           submitter: 'Submitter1',
           filters: {
             emissionTradingSchemes: ['UK_ETS_AVIATION'],
@@ -90,6 +93,7 @@ describe('CompletedComponent', () => {
     expect(page.values).toEqual([
       ['Created by', 'Submitter1'],
       ['Date created', `${new GovukDatePipe().transform(currentDate)}`],
+      ['Items added to the variation schedule', 'change 1change 2change 3'],
       ['Signatory', 'Signatory name'],
       ['Batch variation report', 'BRA0026-E.csv'],
       ['Reporting status', 'Exempt (commercial)Required to report'],

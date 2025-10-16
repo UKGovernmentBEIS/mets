@@ -1,8 +1,7 @@
 <app-request-action-heading
   *ngIf="vm$ | async as vm"
   [headerText]="vm.pageHeader"
-  [timelineCreationDate]="vm.timelineCreationDate"
->
+  [timelineCreationDate]="vm.timelineCreationDate">
   <p class="govuk-heading-m">Batch variation details</p>
   <dl govuk-summary-list>
     <ng-container>
@@ -10,6 +9,18 @@
         <dt govukSummaryListRowKey>Created by</dt>
         <dd govukSummaryListRowValue>
           {{ vm.payload.submitter }}
+        </dd>
+      </div>
+      <div govukSummaryListRow *ngIf="vm.payload?.changesDetails?.['changes'] as changes" [hidden]="!changes?.length">
+        <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
+        <dd govukSummaryListRowValue>
+          <ol class="govuk-list govuk-list--number">
+            @for (change of changes; track $index) {
+              @if (change) {
+                <li>{{ change }}</li>
+              }
+            }
+          </ol>
         </dd>
       </div>
       <div govukSummaryListRow>
@@ -28,6 +39,5 @@
   <p class="govuk-heading-m">Selected emitters</p>
   <app-emp-batch-reissue-filters-template
     [filters]="vm.filters"
-    [editable]="false"
-  ></app-emp-batch-reissue-filters-template>
+    [editable]="false"></app-emp-batch-reissue-filters-template>
 </app-request-action-heading>

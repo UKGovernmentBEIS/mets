@@ -28,6 +28,7 @@ import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
+import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemOrderBy;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemAssignedToMeOperatorService;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemAssignedToMeRegulatorService;
@@ -105,7 +106,7 @@ class ItemAssignedToMeControllerTest {
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(itemAssignedToMeOperatorService
-                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build())).thenReturn(itemDTOResponse);
+                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(),ItemOrderBy.NEWEST_FIRST, null, null)).thenReturn(itemDTOResponse);
         when(itemAssignedToMeOperatorService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -114,9 +115,9 @@ class ItemAssignedToMeControllerTest {
                 .andExpect(status().isOk());
 
         verify(itemAssignedToMeOperatorService, times(1))
-                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(),ItemOrderBy.NEWEST_FIRST, null, null);
         verify(itemAssignedToMeRegulatorService, never())
-                .getItemsAssignedToMe(any(), any(), any(PagingRequest.class));
+                .getItemsAssignedToMe(any(), any(), any(PagingRequest.class), any(), any(), any());
     }
 
     @Test
@@ -126,7 +127,7 @@ class ItemAssignedToMeControllerTest {
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(itemAssignedToMeRegulatorService.getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build()))
+        when(itemAssignedToMeRegulatorService.getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(),ItemOrderBy.NEWEST_FIRST, null, null))
                 .thenReturn(itemDTOResponse);
         when(itemAssignedToMeOperatorService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
         when(itemAssignedToMeRegulatorService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
@@ -137,9 +138,9 @@ class ItemAssignedToMeControllerTest {
                 .andExpect(status().isOk());
 
         verify(itemAssignedToMeOperatorService, never())
-                .getItemsAssignedToMe(any(), any(), any(PagingRequest.class));
+                .getItemsAssignedToMe(any(), any(), any(PagingRequest.class), any(), any(), any());
         verify(itemAssignedToMeRegulatorService, times(1))
-                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(),ItemOrderBy.NEWEST_FIRST, null, null);
     }
 
     @Test
@@ -157,8 +158,8 @@ class ItemAssignedToMeControllerTest {
             .andExpect(status().isForbidden());
 
         verify(itemAssignedToMeOperatorService, never())
-            .getItemsAssignedToMe(any(), any(), any(PagingRequest.class));
+            .getItemsAssignedToMe(any(), any(), any(PagingRequest.class),any(), any(), any());
         verify(itemAssignedToMeRegulatorService, never())
-            .getItemsAssignedToMe(any(), any(), any(PagingRequest.class));
+            .getItemsAssignedToMe(any(), any(), any(PagingRequest.class),any(), any(), any());
     }
 }

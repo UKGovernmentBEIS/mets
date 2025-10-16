@@ -13,16 +13,11 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.PreviewDocumentAbstractHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRAuthorityResponseSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.enums.DoalDeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.service.notification.InstallationPreviewOfficialNoticeService;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.*;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.ArticleReasonGroupType;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.ArticleReasonItemType;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalAuthorityResponseType;
 
-import java.time.LocalDate;
-import java.time.Year;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+
 
 @Service
 public class ALRRejectedOfficialLetterPreviewHandler extends PreviewDocumentAbstractHandler {
@@ -51,9 +46,9 @@ public class ALRRejectedOfficialLetterPreviewHandler extends PreviewDocumentAbst
         templateParams.getParams().putAll(params);
 
         return documentFileGeneratorService.generateFileDocument(
-                DocumentTemplateType.DOAL_REJECTED, //TODO: Change when alr template arrives
+                DocumentTemplateType.ALR_REJECTED,
                 templateParams,
-                "Activity_level_determination_approved_by_Authority_notice.pdf");
+                "Activity_level_report_approved_by_Authority_notice.pdf");
     }
 
     @Override
@@ -67,32 +62,10 @@ public class ALRRejectedOfficialLetterPreviewHandler extends PreviewDocumentAbst
     }
 
     private Map<String, Object> constructParams(ALRAuthorityResponseSubmitRequestTaskPayload taskPayload, ALRRequestPayload requestPayload) {
-        //TODO: Change when alr template arrives ~ use DUMMY data until then
-
-        return Map.of(
-                "reportingYear", Year.now(),
-                "doal", Doal.builder().activityLevelChangeInformation(ActivityLevelChangeInformation.builder()
-                                .preliminaryAllocations((new TreeSet<>()))
-                                .activityLevels(new ArrayList<>())
-                                .areConservativeEstimates(false)
-                                .build())
-                        .operatorActivityLevelReport(OperatorActivityLevelReport.builder().areActivityLevelsEstimated(false)
-                                .comment("dummy comment").build())
-                        .verificationReportOfTheActivityLevelReport(VerificationReportOfTheActivityLevelReport.builder()
-                                .comment("dummy comment").build())
-                        .additionalDocuments(DoalAdditionalDocuments.builder().exist(false).build())
-                        .determination(DoalProceedToAuthorityDetermination.builder()
-                                .needsOfficialNotice(false)
-                                .hasWithholdingOfAllowances(false)
-                                .type(DoalDeterminationType.PROCEED_TO_AUTHORITY)
-                                .reason("reason")
-                                .articleReasonGroupType(ArticleReasonGroupType.ARTICLE_6A_REASONS)
-                                .articleReasonItems(Set.of(ArticleReasonItemType.ALLOCATION_ADJUSTMENT_UNDER_ARTICLE_5))
-                                .build())
-                        .build(),
-                "authorityResponse", DoalRejectAuthorityResponse.builder().type(DoalAuthorityResponseType.INVALID)
-                        .authorityRespondDate(LocalDate.now())
-                        .decisionNotice("decistion notice")
-                        .build());
+     return Map.of(
+                "reportingYear", requestPayload.getReportingYear(),
+                "alr", requestPayload.getRegulatorReviewOutcome(),
+                "authorityResponse", taskPayload.getAuthorityReviewOutcome().getAuthorityResponse()
+        );
     }
 }

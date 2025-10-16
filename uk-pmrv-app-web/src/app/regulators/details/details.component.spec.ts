@@ -221,6 +221,7 @@ describe('RegulatorDetailsComponent', () => {
       expect(component.form.get('permissions.PEER_REVIEW_AVIATION_DOE_CORSIA').value).toEqual('NONE');
       expect(component.form.get('permissions.SUBMIT_ALR_REVIEW').value).toEqual('NONE');
       expect(component.form.get('permissions.PEER_REVIEW_ALR').value).toEqual('NONE');
+      expect(component.form.get('permissions.MARK_NOT_REQUIRED_ALR').value).toEqual('NONE');
       expect(component.form.get('permissions.SUBMIT_HSE_TI_REVIEW').value).toEqual('NONE');
       expect(component.form.get('permissions.PEER_REVIEW_HSE_TI').value).toEqual('NONE');
       expect(component.form.get('user.email').disabled).toBeTruthy();
@@ -397,6 +398,7 @@ describe('RegulatorDetailsComponent', () => {
       expect(element.querySelector('#check-PEER_REVIEW_AVIATION_DOE_CORSIA-NONE')).toBeTruthy();
       expect(element.querySelector('#check-SUBMIT_ALR_REVIEW-NONE')).toBeTruthy();
       expect(element.querySelector('#check-PEER_REVIEW_ALR-NONE')).toBeTruthy();
+      expect(element.querySelector('#check-MARK_NOT_REQUIRED_ALR-NONE')).toBeTruthy();
       expect(element.querySelector('#check-SUBMIT_HSE_TI_REVIEW-NONE')).toBeTruthy();
       expect(element.querySelector('#check-PEER_REVIEW_HSE_TI-NONE')).toBeTruthy();
     });
@@ -470,6 +472,7 @@ describe('RegulatorDetailsComponent', () => {
       expect(component.form.get('permissions.PEER_REVIEW_AVIATION_DOE_CORSIA').value).toEqual('NONE');
       expect(component.form.get('permissions.SUBMIT_ALR_REVIEW').value).toEqual('NONE');
       expect(component.form.get('permissions.PEER_REVIEW_ALR').value).toEqual('NONE');
+      expect(component.form.get('permissions.MARK_NOT_REQUIRED_ALR').value).toEqual('NONE');
       expect(component.form.get('permissions.SUBMIT_HSE_TI_REVIEW').value).toEqual('NONE');
       expect(component.form.get('permissions.PEER_REVIEW_HSE_TI').value).toEqual('NONE');
 
@@ -576,6 +579,7 @@ describe('RegulatorDetailsComponent', () => {
       expect(component.form.get('permissions.PEER_REVIEW_AVIATION_DOE_CORSIA').value).toEqual('NONE');
       expect(component.form.get('permissions.SUBMIT_ALR_REVIEW').value).toEqual('NONE');
       expect(component.form.get('permissions.PEER_REVIEW_ALR').value).toEqual('NONE');
+      expect(component.form.get('permissions.MARK_NOT_REQUIRED_ALR').value).toEqual('NONE');
       expect(component.form.get('permissions.SUBMIT_HSE_TI_REVIEW').value).toEqual('NONE');
       expect(component.form.get('permissions.PEER_REVIEW_HSE_TI').value).toEqual('NONE');
 
@@ -653,6 +657,7 @@ describe('RegulatorDetailsComponent', () => {
       expect(component.form.get('permissions.PEER_REVIEW_AVIATION_DOE_CORSIA').value).toEqual('NONE');
       expect(component.form.get('permissions.SUBMIT_ALR_REVIEW').value).toEqual('NONE');
       expect(component.form.get('permissions.PEER_REVIEW_ALR').value).toEqual('NONE');
+      expect(component.form.get('permissions.MARK_NOT_REQUIRED_ALR').value).toEqual('NONE');
       expect(component.form.get('permissions.SUBMIT_HSE_TI_REVIEW').value).toEqual('NONE');
       expect(component.form.get('permissions.PEER_REVIEW_HSE_TI').value).toEqual('NONE');
 

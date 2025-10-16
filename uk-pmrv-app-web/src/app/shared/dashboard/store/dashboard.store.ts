@@ -27,4 +27,16 @@ export class DashboardStore extends Store<DashboardState> {
   setPage(page: number) {
     this.setState({ ...this.getState(), paging: { ...this.getState().paging, page } });
   }
+
+  setOrderBy(order: 'NEWEST_FIRST' | 'NEAREST_DUE_DATE') {
+    this.setState({ ...this.getState(), order });
+  }
+
+  setFilterBy(filter: string) {
+    this.setState({ ...this.getState(), filter });
+  }
+
+  setSearchBy(accountSearchTerm: string) {
+    this.setState({ ...this.getState(), accountSearchTerm });
+  }
 }

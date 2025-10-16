@@ -46,7 +46,7 @@ describe('SubmittedComponent', () => {
   });
 
   it('should show task details', () => {
-    expect(page.heading).toEqual('Activity level determination accepted as approved with corrections');
+    expect(page.heading).toEqual('Activity level determination approved with corrections');
     expect(page.tasksContents.map((el) => el.textContent.trim())).toEqual([
       'Enter details',
       'Provide the date application was submitted to UK authorities',

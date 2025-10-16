@@ -16,17 +16,20 @@ export const stepStatus = (step: number, permitRevocation: PermitRevocation): bo
       return step5(permitRevocation);
     case 6:
       return step6(permitRevocation);
+    case 7:
+      return step7(permitRevocation);
   }
 };
 
-export const completed = (permitRevocation: PermitRevocation): boolean => {
+export const completed = (permitRevocation: PermitRevocation, isFinalAlrVisible: boolean): boolean => {
   return (
     step1(permitRevocation) &&
     step2(permitRevocation) &&
     step3(permitRevocation) &&
     step4(permitRevocation) &&
-    step5(permitRevocation) &&
-    step6(permitRevocation)
+    (isFinalAlrVisible ? step5(permitRevocation) : true) &&
+    step6(permitRevocation) &&
+    step7(permitRevocation)
   );
 };
 
@@ -36,7 +39,11 @@ const step2 = (permitRevocation: PermitRevocation): boolean =>
 const step3 = (permitRevocation: PermitRevocation): boolean => !!permitRevocation?.effectiveDate;
 const step4 = (permitRevocation: PermitRevocation): boolean =>
   permitRevocation?.annualEmissionsReportRequired === false || permitRevocation?.annualEmissionsReportDate != undefined;
-const step5 = (permitRevocation: PermitRevocation): boolean =>
-  permitRevocation?.surrenderRequired === false || permitRevocation?.surrenderDate != undefined;
+const step5 = (permitRevocation: PermitRevocation): boolean => {
+  return permitRevocation?.alrRequired === false || permitRevocation?.alrReportDate != undefined;
+};
+
 const step6 = (permitRevocation: PermitRevocation): boolean =>
+  permitRevocation?.surrenderRequired === false || permitRevocation?.surrenderDate != undefined;
+const step7 = (permitRevocation: PermitRevocation): boolean =>
   permitRevocation?.feeCharged === false || permitRevocation?.feeDate != undefined;

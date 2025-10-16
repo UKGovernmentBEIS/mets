@@ -15,6 +15,7 @@ import { AnswersComponent as PeerReviewDecisionAnswersComponent } from '../../sh
 import { AnswersGuard as PeerReviewDecisionAnswersGuard } from '../../shared/components/peer-review-decision/answers/answers.guard';
 import { ConfirmationComponent as PeerReviewDecisionConfirmationComponent } from '../../shared/components/peer-review-decision/confirmation/confirmation.component';
 import { PermitSurrenderRoute } from '../core/permit-surrender-route.interface';
+import { allowancesBacklinkResolver } from './core/review';
 import { DecisionComponent } from './decision/decision.component';
 import { AnswersComponent as AnswersDeemWithdrawComponent } from './determination/deem-withdraw/answers/answers.component';
 import { AnswersGuard as AnswersDeemWithdrawGuard } from './determination/deem-withdraw/answers/answers.guard';
@@ -25,6 +26,8 @@ import { AllowancesComponent } from './determination/grant/allowances/allowances
 import { AllowancesGuard } from './determination/grant/allowances/allowances.guard';
 import { AnswersComponent as AnswersGrantComponent } from './determination/grant/answers/answers.component';
 import { AnswersGuard as AnswersGrantGuard } from './determination/grant/answers/answers.guard';
+import { SurrenderFinalAlrComponent } from './determination/grant/final-alr/final-alr.component';
+import { FinalAlrGuard } from './determination/grant/final-alr/final-alr.guard';
 import { NoticeDateComponent } from './determination/grant/notice-date/notice-date.component';
 import { NoticeDateGuard } from './determination/grant/notice-date/notice-date.guard';
 import { ReportComponent } from './determination/grant/report/report.component';
@@ -84,36 +87,49 @@ const routes: PermitSurrenderRoute[] = [
             data: { pageTitle: 'Surrender permit determination - Grant' },
             children: [
               {
+                path: '',
+                redirectTo: 'reason',
+                pathMatch: 'full',
+              },
+              {
                 path: 'reason',
-                data: { pageTitle: 'Surrender permit request task - Notes' },
+                data: { pageTitle: 'Surrender permit request task - Notes', backlink: '../../' },
                 component: ReasonComponent,
                 canActivate: [ReasonGuard],
                 canDeactivate: [PendingRequestGuard],
               },
               {
                 path: 'stop-date',
-                data: { pageTitle: 'Surrender permit request task - Stop date' },
+                data: { pageTitle: 'Surrender permit request task - Stop date', backlink: '../reason' },
                 component: StopDateComponent,
                 canActivate: [StopDateGuard],
                 canDeactivate: [PendingRequestGuard],
               },
               {
                 path: 'notice-date',
-                data: { pageTitle: 'Surrender permit request task - Notice date' },
+                data: { pageTitle: 'Surrender permit request task - Notice date', backlink: '../stop-date' },
                 component: NoticeDateComponent,
                 canActivate: [NoticeDateGuard],
                 canDeactivate: [PendingRequestGuard],
               },
               {
                 path: 'report',
-                data: { pageTitle: 'Surrender permit request task - Report' },
+                data: { pageTitle: 'Surrender permit request task - Report', backlink: '../notice-date' },
                 component: ReportComponent,
                 canActivate: [ReportGuard],
                 canDeactivate: [PendingRequestGuard],
               },
               {
+                path: 'final-alr',
+                data: { pageTitle: 'Surrender permit request task - Final ALR', backlink: '../report' },
+                component: SurrenderFinalAlrComponent,
+                canActivate: [FinalAlrGuard],
+                canDeactivate: [PendingRequestGuard],
+              },
+              {
                 path: 'allowances',
                 data: { pageTitle: 'Surrender permit request task - Allowances' },
+                resolve: { backlink: allowancesBacklinkResolver },
                 component: AllowancesComponent,
                 canActivate: [AllowancesGuard],
                 canDeactivate: [PendingRequestGuard],

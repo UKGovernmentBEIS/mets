@@ -29,9 +29,17 @@ export class VerificationSubmitContainerComponent {
         }[],
     ),
   );
+
   isGHGE$: Observable<boolean> = this.aerService
     .getPayload()
     .pipe(map((payload) => payload?.permitOriginatedData?.permitType === 'GHGE'));
+
+  showAlr$ = this.aerService.getPayload().pipe(
+    map((payload) => {
+      return !payload?.isPostALRSectionRemoval;
+    }),
+  );
+
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
   readonly daysRemaining$ = this.aerService.daysRemaining$;
 

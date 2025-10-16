@@ -115,7 +115,9 @@ describe('MmpSubInstallationsComponent', () => {
 
     it('should display the table', () => {
       expect(page.tables.length).toEqual(1);
-      expect(page.rows).toEqual([['[Primary] Aluminium', 'Exposed', 'Remove', 'in progress']]);
+      expect(page.rows).toEqual([
+        ['[Primary] Aluminium', 'Exposed', 'Remove  [Primary] Aluminium sub-installation', 'in progress'],
+      ]);
     });
   });
 
@@ -154,7 +156,14 @@ describe('MmpSubInstallationsComponent', () => {
 
     it('should display the table', () => {
       expect(page.tables.length).toEqual(1);
-      expect(page.rows).toEqual([['Heat benchmark exposed to carbon leakage', 'Exposed', 'Remove', 'in progress']]);
+      expect(page.rows).toEqual([
+        [
+          'Heat benchmark exposed to carbon leakage',
+          'Exposed',
+          'Remove  heat benchmark exposed to carbon leakage sub-installation',
+          'in progress',
+        ],
+      ]);
     });
   });
 });

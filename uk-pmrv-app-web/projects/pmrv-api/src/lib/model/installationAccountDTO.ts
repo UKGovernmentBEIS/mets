@@ -19,6 +19,7 @@ export interface InstallationAccountDTO {
   id?: number;
   accountType: 'INSTALLATION' | 'AVIATION';
   name: string;
+  emitterId?: string;
   emissionTradingScheme: 'UK_ETS_INSTALLATIONS' | 'EU_ETS_INSTALLATIONS' | 'UK_ETS_AVIATION' | 'CORSIA';
   competentAuthority: 'ENGLAND' | 'NORTHERN_IRELAND' | 'OPRED' | 'SCOTLAND' | 'WALES';
   commencementDate: string;

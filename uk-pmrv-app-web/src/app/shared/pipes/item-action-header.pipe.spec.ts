@@ -459,21 +459,21 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'DOAL_APPLICATION_ACCEPTED',
       }),
-    ).toEqual('Activity level determination accepted as approved by John Bolt');
+    ).toEqual('Activity level determination approved by John Bolt');
 
     expect(
       pipe.transform({
         ...baseRequestAction,
         type: 'DOAL_APPLICATION_ACCEPTED_WITH_CORRECTIONS',
       }),
-    ).toEqual('Activity level determination accepted as approved with corrections by John Bolt');
+    ).toEqual('Activity level determination approved with corrections by John Bolt');
 
     expect(
       pipe.transform({
         ...baseRequestAction,
         type: 'DOAL_APPLICATION_REJECTED',
       }),
-    ).toEqual('Activity level determination  not approved by John Bolt');
+    ).toEqual('Activity level determination not approved by John Bolt');
 
     expect(
       pipe.transform({
@@ -1511,21 +1511,28 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'ALR_APPLICATION_ACCEPTED',
       }),
-    ).toEqual('Activity level determination accepted as approved by John Bolt');
+    ).toEqual('Activity level determination approved by John Bolt');
 
     expect(
       pipe.transform({
         ...baseRequestAction,
         type: 'ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS',
       }),
-    ).toEqual('Activity level determination accepted as approved with corrections by John Bolt');
+    ).toEqual('Activity level determination approved with corrections by John Bolt');
 
     expect(
       pipe.transform({
         ...baseRequestAction,
         type: 'ALR_APPLICATION_REJECTED',
       }),
-    ).toEqual('Activity level determination accepted as not approved by John Bolt');
+    ).toEqual('Activity level determination not approved by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_MARK_NOT_REQUIRED',
+      }),
+    ).toEqual('Marked as not required by John Bolt');
   });
 
   it('should return HSE', () => {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { distinctUntilChanged, map, Observable, tap } from 'rxjs';
+import { distinctUntilChanged, map, Observable, switchMap, tap } from 'rxjs';
 
 import { Store } from '@core/store/store';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
@@ -9,6 +9,7 @@ import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
 
 import {
+  InstallationAccountViewService,
   PermitSaveCessationRequestTaskActionPayload,
   PermitSurrender,
   PermitSurrenderApplicationSubmitRequestTaskPayload,
@@ -27,6 +28,7 @@ export class PermitSurrenderStore extends Store<PermitSurrenderState> {
   constructor(
     private readonly tasksService: TasksService,
     private readonly businessErrorService: BusinessErrorService,
+    private readonly installationAccountViewService: InstallationAccountViewService,
   ) {
     super(initialState);
   }
@@ -58,6 +60,19 @@ export class PermitSurrenderStore extends Store<PermitSurrenderState> {
   get reviewDetermination$() {
     return this.pipe(map((state) => state.reviewDetermination));
   }
+
+  get accountId$() {
+    return this.pipe(map((state) => state.accountId));
+  }
+
+  private readonly installationAccount$ = this.accountId$.pipe(
+    switchMap((accountId) => this.installationAccountViewService.getInstallationAccountById(accountId)),
+    map((result) => result.account),
+  );
+
+  isFinalAlrVisible$ = this.installationAccount$.pipe(
+    map((account) => account.faStatus && account.emitterType === 'GHGE'),
+  );
 
   getDownloadUrlFiles(files: string[]): { downloadUrl: string; fileName: string }[] {
     const url = this.createBaseFileDownloadUrl();

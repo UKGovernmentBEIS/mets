@@ -118,6 +118,7 @@ public enum MetsErrorCode implements NetzErrorCode {
     INTEGRATION_REGISTRY_EMISSIONS_AVIATION_REPORTING_PERIOD_TO_NOT_FOUND("INTREGEMISSIONSAVUKETS1005", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send emissions to ETS Registry because no configuration for the aer.aviation.reporting-period.to property has been found"),
     INTEGRATION_REGISTRY_EMISSIONS_AVIATION_AER_NOT_FOUND("INTREGEMISSIONSAVUKETS1006", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send emissions to ETS Registry because no aer request has been found"),
     INTEGRATION_REGISTRY_EMISSIONS_KAFKA_QUEUE_CONNECTION_ISSUE("INTREGEMISSIONSINSTAVUKETS1007", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send emissions to ETS Registry because kafka message queue is not available"),
+    INTEGRATION_REGISTRY_ACCOUNT_CREATE_KAFKA_QUEUE_CONNECTION_ISSUE("INTREGACCOUNTCREATEUKETS1000", HttpStatus.INTERNAL_SERVER_ERROR,"Cannot send created account to ETS Registry because kafka message queue is not available")
     ;
 
     /** The error code. */

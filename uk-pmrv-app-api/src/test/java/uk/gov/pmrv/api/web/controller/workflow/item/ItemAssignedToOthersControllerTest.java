@@ -28,6 +28,7 @@ import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
+import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemOrderBy;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemAssignedToOthersOperatorService;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemAssignedToOthersRegulatorService;
@@ -104,7 +105,7 @@ class ItemAssignedToOthersControllerTest {
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().totalItems(1L).build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(itemAssignedToOthersOperatorService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build()))
+        when(itemAssignedToOthersOperatorService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null))
                 .thenReturn(itemDTOResponse);
         when(itemAssignedToOthersOperatorService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
 
@@ -114,9 +115,9 @@ class ItemAssignedToOthersControllerTest {
             .andExpect(status().isOk());
 
         verify(itemAssignedToOthersOperatorService, times(1))
-                .getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+                .getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
         verify(itemAssignedToOthersRegulatorService, never())
-                .getItemsAssignedToOthers(any(), any(), any(PagingRequest.class));
+                .getItemsAssignedToOthers(any(), any(), any(PagingRequest.class), any(), any(), any());
     }
 
     @Test
@@ -126,7 +127,7 @@ class ItemAssignedToOthersControllerTest {
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().totalItems(1L).build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(itemAssignedToOthersRegulatorService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build()))
+        when(itemAssignedToOthersRegulatorService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null))
                 .thenReturn(itemDTOResponse);
         when(itemAssignedToOthersOperatorService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
         when(itemAssignedToOthersRegulatorService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
@@ -137,9 +138,9 @@ class ItemAssignedToOthersControllerTest {
                 .andExpect(status().isOk());
 
         verify(itemAssignedToOthersOperatorService, never())
-                .getItemsAssignedToOthers(any(), any(), any(PagingRequest.class));
+                .getItemsAssignedToOthers(any(), any(), any(PagingRequest.class), any(), any(), any());
         verify(itemAssignedToOthersRegulatorService, times(1))
-                .getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+                .getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
     }
 
     @Test
@@ -157,8 +158,8 @@ class ItemAssignedToOthersControllerTest {
             .andExpect(status().isForbidden());
 
         verify(itemAssignedToOthersOperatorService, never())
-            .getItemsAssignedToOthers(any(), any(), any(PagingRequest.class));
+            .getItemsAssignedToOthers(any(), any(), any(PagingRequest.class), any(), any(), any());
         verify(itemAssignedToOthersRegulatorService, never())
-            .getItemsAssignedToOthers(any(), any(), any(PagingRequest.class));
+            .getItemsAssignedToOthers(any(), any(), any(PagingRequest.class), any(), any(), any());
     }
 }

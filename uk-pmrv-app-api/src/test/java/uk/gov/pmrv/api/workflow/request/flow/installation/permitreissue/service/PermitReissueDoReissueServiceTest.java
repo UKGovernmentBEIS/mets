@@ -2,6 +2,8 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.service
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -15,6 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.pmrv.api.permit.domain.PermitContainer;
+import uk.gov.pmrv.api.permit.domain.dto.PermitEntityDto;
+import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.permit.service.PermitService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
@@ -48,7 +53,10 @@ class PermitReissueDoReissueServiceTest {
 	
 	@Mock
 	private ReissueOfficialNoticeService reissueOfficialNoticeService;
-	
+
+	@Mock
+	private PermitQueryService permitQueryService;
+
 	@Test
 	void doReissue() {
 		String requestId = "1";
@@ -57,7 +65,12 @@ class PermitReissueDoReissueServiceTest {
 				.type(RequestType.PERMIT_REISSUE)
 				.accountId(accountId)
 				.build();
-		
+
+
+		PermitContainer permitContainer = PermitContainer.builder().build();
+		PermitEntityDto permitDTO = PermitEntityDto.builder().permitContainer(permitContainer).build();
+
+		when(permitQueryService.getPermitByAccountId(accountId)).thenReturn(permitDTO);
 		when(requestService.findRequestById(requestId)).thenReturn(request);
 		when(permitReissueAccountValidationService.isAccountApplicableToReissue(request)).thenReturn(true);
 		
@@ -72,6 +85,8 @@ class PermitReissueDoReissueServiceTest {
 		verify(permitReissueGenerateDocumentsService, times(1)).generateDocuments(request);
 		verify(reissueAddCompletedRequestActionService, times(1)).add(requestId);
 		verify(reissueOfficialNoticeService, times(1)).sendOfficialNotice(request);
+		verify(permitQueryService,times(1)).getPermitByAccountId(accountId);
+		verify(permitService, times(1)).updatePermit(any(),anyLong());
 	}
 	
 	@Test
@@ -92,7 +107,7 @@ class PermitReissueDoReissueServiceTest {
 		
 		verify(requestService, times(1)).findRequestById(requestId);
 		verify(permitReissueAccountValidationService, times(1)).isAccountApplicableToReissue(request);
-		verifyNoInteractions(permitService, permitReissueGenerateDocumentsService,
+		verifyNoInteractions(permitService, permitQueryService, permitReissueGenerateDocumentsService,
 				reissueAddCompletedRequestActionService, reissueOfficialNoticeService, reissueUpdatePayloadConsolidationNumberService);
 	}
 	

@@ -139,6 +139,10 @@ const addValidators = (key: string): MessageValidatorFn[] => {
       return [feeDateMinValidator()];
     case 'feeDetails':
       return [GovukValidators.required('Explain why payment is required')];
+    case 'alrRequired':
+      return [GovukValidators.required('Select yes or no')];
+    case 'alrReportDate':
+      return [genericMinDateValidator('alrReportDate')];
     default:
       return null;
   }

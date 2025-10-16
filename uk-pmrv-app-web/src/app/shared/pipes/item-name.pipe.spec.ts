@@ -609,6 +609,42 @@ describe('ItemNamePipe', () => {
     );
     expect(pipe.transform('ALR_APPLICATION_PEER_REVIEW', 2022)).toEqual('Peer review 2022 activity level report');
 
+    expect(pipe.transform('ALR_APPLICATION_SUBMIT', 2022, true)).toEqual('Complete final year activity level report');
+    expect(pipe.transform('ALR_WAIT_FOR_VERIFICATION', 2022, true)).toEqual(
+      'Final year activity level report sent to verifier',
+    );
+    expect(pipe.transform('ALR_AMEND_WAIT_FOR_VERIFICATION', 2022, true)).toEqual(
+      'Final year activity level report sent to verifier',
+    );
+    expect(pipe.transform('ALR_APPLICATION_VERIFICATION_SUBMIT', 2022, true)).toEqual(
+      'Verify final year activity level report',
+    );
+    expect(pipe.transform('ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT', 2022, true)).toEqual(
+      'Verify final year activity level report',
+    );
+    expect(pipe.transform('ALR_WAIT_FOR_REGULATOR_REVIEW', 2022, true)).toEqual(
+      'Final year activity level report sent to regulator',
+    );
+    expect(pipe.transform('ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT', 2022, true)).toEqual(
+      'Review final year activity level report',
+    );
+    expect(pipe.transform('ALR_WAIT_FOR_AMENDS')).toEqual('Activity level report returned to operator');
+    expect(pipe.transform('ALR_WAIT_FOR_AUTHORITY_REVIEW')).toEqual(
+      'Activity level report review completed by your Regulator',
+    );
+    expect(pipe.transform('ALR_AUTHORITY_RESPONSE_SUBMIT')).toEqual(
+      'Provide UK ETS Authority response for activity level change',
+    );
+    expect(pipe.transform('ALR_APPLICATION_AMENDS_SUBMIT', 2022, true)).toEqual(
+      'Amend final year activity level report',
+    );
+    expect(pipe.transform('ALR_WAIT_FOR_PEER_REVIEW', 2022, true)).toEqual(
+      'Final year activity level report sent to peer reviewer',
+    );
+    expect(pipe.transform('ALR_APPLICATION_PEER_REVIEW', 2022, true)).toEqual(
+      'Peer review final year activity level report',
+    );
+
     expect(pipe.transform('HSE_TI_APPLICATION_SUBMIT', '2021_2025')).toEqual(
       'Complete 2021-2025 HSE target increase application',
     );

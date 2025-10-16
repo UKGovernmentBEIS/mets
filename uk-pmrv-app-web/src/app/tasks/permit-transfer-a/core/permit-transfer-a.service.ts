@@ -1,21 +1,45 @@
 import { Injectable } from '@angular/core';
 
-import { first, Observable, of, switchMap, tap } from 'rxjs';
+import { first, map, Observable, of, switchMap, tap } from 'rxjs';
 
+import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
 import { TasksHelperService } from '@tasks/shared/services/tasks-helper.service';
 import { CommonTasksState } from '@tasks/store/common-tasks.state';
+import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 import {
+  InstallationAccountViewService,
   PermitTransferAApplicationRequestTaskPayload,
   RequestTaskActionPayload,
   RequestTaskActionProcessDTO,
+  TasksService,
 } from 'pmrv-api';
 
 @Injectable({ providedIn: 'root' })
 export class PermitTransferAService extends TasksHelperService {
+  constructor(
+    protected readonly store: CommonTasksStore,
+    protected readonly tasksService: TasksService,
+    protected readonly businessErrorService: BusinessErrorService,
+    private readonly installationAccountViewService: InstallationAccountViewService,
+  ) {
+    super(store, tasksService, businessErrorService);
+  }
+
+  get accountId$() {
+    return this.store.pipe(map((state) => state.requestTaskItem.requestInfo.accountId));
+  }
+
+  private readonly installationAccount$ = this.accountId$.pipe(
+    switchMap((accountId) => this.installationAccountViewService.getInstallationAccountById(accountId)),
+    map((result) => result.account),
+  );
+
+  isAlrVisible$ = this.installationAccount$.pipe(map((account) => account.faStatus && account.emitterType === 'GHGE'));
+
   get requestId(): Observable<string> {
     return of(this.store.requestId);
   }

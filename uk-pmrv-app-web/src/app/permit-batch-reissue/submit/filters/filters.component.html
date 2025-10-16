@@ -4,9 +4,9 @@
       (formSubmit)="onSubmit()"
       [formGroup]="form"
       heading="Choose an emitter group"
+      caption="Start a batch variation"
       submitText="Continue"
-      [showBackLink]="true"
-    >
+      [showBackLink]="true">
       <div class="govuk-hint">
         Select at least one from each section. Emitters that meet the selected criteria will be included in the batch
         variation.
@@ -19,8 +19,7 @@
             <govuk-checkbox
               *ngFor="let option of accountStatusLabelMap | keyvalue: originalOrder"
               [value]="option.key"
-              [label]="option.value"
-            ></govuk-checkbox>
+              [label]="option.value"></govuk-checkbox>
           </div>
         </div>
         <div class="govuk-grid-column-full">
@@ -29,8 +28,7 @@
             <govuk-checkbox
               *ngFor="let option of accountTypeLabelMap | keyvalue: originalOrder"
               [value]="option.key"
-              [label]="option.value"
-            ></govuk-checkbox>
+              [label]="option.value"></govuk-checkbox>
           </div>
         </div>
         <div class="govuk-grid-column-full" *ngIf="displayInstallationCategories">
@@ -39,8 +37,15 @@
             <govuk-checkbox
               *ngFor="let option of accountCategoryLabelMap | keyvalue: originalOrder"
               [value]="option.key"
-              [label]="option.value"
-            ></govuk-checkbox>
+              [label]="option.value"></govuk-checkbox>
+          </div>
+        </div>
+
+        <div class="govuk-grid-column-full" *ngIf="displayAllocationStatuses">
+          <div class="govuk-heading-m">Allocation status (optional)</div>
+          <div formControlName="allocationStatuses" govuk-checkboxes>
+            <govuk-checkbox [value]="'FREE_ALLOCATION'" [label]="'Free allocation'"></govuk-checkbox>
+            <govuk-checkbox [value]="'NONFREE_ALLOCATION'" [label]="'Non-free allocation'"></govuk-checkbox>
           </div>
         </div>
       </div>

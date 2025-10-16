@@ -11,8 +11,11 @@ import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
 import uk.gov.pmrv.api.workflow.request.flow.common.validation.DecisionNotificationUsersValidator;
 import uk.gov.pmrv.api.workflow.request.flow.common.validation.PeerReviewerTaskAssignmentValidator;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.validation.ALRCreationValidationService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocation;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationWaitForAppealRequestTaskPayload;
 
@@ -23,10 +26,18 @@ public class PermitRevocationValidator {
 
     private final DecisionNotificationUsersValidator decisionNotificationUsersValidator;
     private final PeerReviewerTaskAssignmentValidator peerReviewerTaskAssignmentValidator;
+    private final ALRCreationValidationService alrCreationValidationService;
 
-    public void validateSubmitRequestTaskPayload(@NotNull @Valid @SuppressWarnings("unused")
+    public void validateSubmitRequestTaskPayload(@NotNull @Valid
                                                  final PermitRevocationApplicationSubmitRequestTaskPayload taskPayload) {
-        // default validation
+        final PermitRevocation permitRevocation = taskPayload.getPermitRevocation();
+        RequestCreateValidationResult alrValidationResult = alrCreationValidationService.validateAccountEmitterTypeAndFreeAllocations(permitRevocation.getAccountId());
+        boolean hasALR = alrValidationResult.isValid();
+        boolean hasALRproperties = permitRevocation.getAlrRequired() != null || permitRevocation.getAlrReportDate() != null;
+
+        if((hasALR && !hasALRproperties) || (!hasALR && hasALRproperties)) {
+            throw new BusinessException(ErrorCode.FORM_VALIDATION);
+        }
     }
 
     public void validateWaitForAppealRequestTaskPayload(@NotNull @Valid @SuppressWarnings("unused")

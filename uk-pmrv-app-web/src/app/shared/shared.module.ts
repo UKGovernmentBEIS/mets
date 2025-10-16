@@ -164,6 +164,7 @@ import { TransferDetailsTemplateComponent } from './components/transferred-co2/t
 import { WaSummaryTemplateComponent } from './components/withholding-of-allowances/wa-summary-template/wa-summary-template.component';
 import { WaWithdrawSummaryTemplateComponent } from './components/withholding-of-allowances/wa-withdraw-summary-template/wa-withdraw-summary-template.component';
 import { DashboardPageComponent, DashboardStore, ItemTypePipe, WorkflowItemsListComponent } from './dashboard';
+import { DashboardFiltersComponent } from './dashboard/components/filters/filters.component';
 import { AsyncValidationFieldDirective } from './directives/async-validation-field.directive';
 import { CountriesDirective } from './directives/countries.directive';
 import { UsersTableDirective } from './directives/users-table.directive';
@@ -270,6 +271,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     ConfirmationSharedComponent,
     ConvertLinksDirective,
     CountriesDirective,
+    DashboardFiltersComponent,
     DashboardPageComponent,
     DataGapsGroupComponent,
     DateSubmittedSummaryTemplateComponent,
@@ -462,6 +464,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     ConfirmationSharedComponent,
     ConvertLinksDirective,
     CountriesDirective,
+    DashboardFiltersComponent,
     DashboardPageComponent,
     DataGapsGroupComponent,
     DateSubmittedSummaryTemplateComponent,

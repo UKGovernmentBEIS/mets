@@ -9,6 +9,9 @@ export interface DashboardState {
   items: ItemDTO[];
   total: number;
   paging: Paging;
+  order: 'NEWEST_FIRST' | 'NEAREST_DUE_DATE';
+  filter: string;
+  accountSearchTerm: string;
 }
 
 export const initialState: DashboardState = {
@@ -19,4 +22,7 @@ export const initialState: DashboardState = {
     page: 1,
     pageSize: 10,
   },
+  order: 'NEWEST_FIRST',
+  filter: '',
+  accountSearchTerm: '',
 };

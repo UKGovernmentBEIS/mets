@@ -58,38 +58,10 @@ export function submitVerificationWizardComplete(payload: ALRApplicationVerifica
   );
 }
 
-export const taskListTitle = (requestTaskType: RequestTaskDTO['type'], year: number) => {
+export const taskListTitle = (requestTaskType: RequestTaskDTO['type'], year: number, isFinal: boolean) => {
   const itemNamePipe = new ItemNamePipe();
 
-  switch (requestTaskType) {
-    case 'ALR_APPLICATION_SUBMIT':
-      return `Complete ${year} activity level report`;
-    case 'ALR_WAIT_FOR_VERIFICATION':
-    case 'ALR_AMEND_WAIT_FOR_VERIFICATION':
-      return 'Activity level report sent to verifier';
-    case 'ALR_APPLICATION_VERIFICATION_SUBMIT':
-    case 'ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT':
-      return `Verify ${year} activity level report`;
-    case 'ALR_WAIT_FOR_REGULATOR_REVIEW':
-      return `${year} activity level report sent to regulator`;
-    case 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
-      return ` Review ${year} activity level report`;
-    case 'ALR_WAIT_FOR_AMENDS':
-      return 'Activity level report returned to operator';
-    case 'ALR_WAIT_FOR_AUTHORITY_REVIEW':
-      return 'Activity level report review completed by your Regulator';
-    case 'ALR_APPLICATION_AMENDS_SUBMIT':
-      return `Amend ${year} activity level report`;
-    case 'ALR_WAIT_FOR_PEER_REVIEW':
-      return `${year} activity level report sent to peer reviewer`;
-    case 'ALR_APPLICATION_PEER_REVIEW':
-      return `Peer review ${year} activity level report`;
-    case 'ALR_AUTHORITY_RESPONSE_SUBMIT':
-      return 'Provide UK ETS Authority response for activity level change';
-
-    default:
-      itemNamePipe.transform(requestTaskType, year);
-  }
+  return itemNamePipe.transform(requestTaskType, year, isFinal);
 };
 
 export function activityComplete(payload: ALRApplicationSubmitRequestTaskPayload): boolean {

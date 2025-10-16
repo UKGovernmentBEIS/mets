@@ -162,6 +162,7 @@ class PermitVariationMapperTest {
     			.submissionDate(submissionDate)
     			.endDate(endDate)
     			.metadata(metadata)
+				.changeType("AEM Variation")
     			.build());
     }
     
@@ -188,6 +189,7 @@ class PermitVariationMapperTest {
     			.submissionDate(submissionDate)
     			.endDate(endDate2)
     			.metadata(metadata)
+				.changeType("AEM Variation")
     			.build());
     }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
-import { map, Observable } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 
 import { notInNeedsForReview } from '@permit-revocation/core/section-status';
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
@@ -21,10 +21,10 @@ export class PeerReviewGuard {
     const requestTaskActionType: RequestTaskActionProcessDTO['requestTaskActionType'] =
       route.data?.requestTaskActionType;
 
-    return this.store.pipe(
+    return combineLatest([this.store, this.store.isFinalAlrVisible$]).pipe(
       map(
-        (state) =>
-          (!notInNeedsForReview(state) &&
+        ([state, isFinalAlrVisible]) =>
+          (!notInNeedsForReview(state, isFinalAlrVisible) &&
             this.router.parseUrl(`/permit-revocation/${route.paramMap.get('taskId')}/invalid-data`)) ||
           ((!state.allowedRequestTaskActions.includes(requestTaskActionType) ||
             !state?.sectionsCompleted.REVOCATION_APPLY) &&

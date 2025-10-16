@@ -17,6 +17,7 @@ import { Observable } from 'rxjs';
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
 import { AerMarkNotRequiredDetails } from '../model/aerMarkNotRequiredDetails';
+import { AlrMarkNotRequiredDetails } from '../model/alrMarkNotRequiredDetails';
 import { BatchReissuesResponseDTO } from '../model/batchReissuesResponseDTO';
 import { RequestCreateActionProcessDTO } from '../model/requestCreateActionProcessDTO';
 import { RequestCreateActionProcessResponseDTO } from '../model/requestCreateActionProcessResponseDTO';
@@ -480,6 +481,64 @@ export class RequestsService {
   }
 
   /**
+   * Retrieves request types based on user role and service (INSTALLATION, AVIATION)
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getRequestTypesByUserRolesAndService(): Observable<Array<string>>;
+  public getRequestTypesByUserRolesAndService(
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<Array<string>>>;
+  public getRequestTypesByUserRolesAndService(
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<Array<string>>>;
+  public getRequestTypesByUserRolesAndService(
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<Array<string>>;
+  public getRequestTypesByUserRolesAndService(
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.get<Array<string>>(`${this.configuration.basePath}/v1.0/requests/request-types`, {
+      responseType: <any>responseType_,
+      withCredentials: this.configuration.withCredentials,
+      headers: headers,
+      observe: observe,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
    * Check if the user has access to mark as not required
    * @param id The request id
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -539,6 +598,76 @@ export class RequestsService {
 
     return this.httpClient.get<boolean>(
       `${this.configuration.basePath}/v1.0/mets/requests/access-to-mark-as-not-required/${encodeURIComponent(String(id))}`,
+      {
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Check if the user has access to mark as not required for an alr workflow
+   * @param id The request id
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public hasAccessMarkAsNotRequiredAlr(id: string): Observable<boolean>;
+  public hasAccessMarkAsNotRequiredAlr(
+    id: string,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<HttpResponse<boolean>>;
+  public hasAccessMarkAsNotRequiredAlr(
+    id: string,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<HttpEvent<boolean>>;
+  public hasAccessMarkAsNotRequiredAlr(
+    id: string,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<boolean>;
+  public hasAccessMarkAsNotRequiredAlr(
+    id: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling hasAccessMarkAsNotRequiredAlr.');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['*/*'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.get<boolean>(
+      `${this.configuration.basePath}/v1.0/mets/requests/alr/access-to-mark-as-not-required/${encodeURIComponent(String(id))}`,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
@@ -627,6 +756,94 @@ export class RequestsService {
     return this.httpClient.post<string>(
       `${this.configuration.basePath}/v1.0/mets/requests/mark-as-not-required/${encodeURIComponent(String(id))}`,
       aerMarkNotRequiredDetails,
+      {
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Mark as not required the given request and terminate Alr workflow
+   * @param id The request id
+   * @param alrMarkNotRequiredDetails
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public markAsNotRequiredAlr(id: string, alrMarkNotRequiredDetails: AlrMarkNotRequiredDetails): Observable<string>;
+  public markAsNotRequiredAlr(
+    id: string,
+    alrMarkNotRequiredDetails: AlrMarkNotRequiredDetails,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<HttpResponse<string>>;
+  public markAsNotRequiredAlr(
+    id: string,
+    alrMarkNotRequiredDetails: AlrMarkNotRequiredDetails,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<HttpEvent<string>>;
+  public markAsNotRequiredAlr(
+    id: string,
+    alrMarkNotRequiredDetails: AlrMarkNotRequiredDetails,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<string>;
+  public markAsNotRequiredAlr(
+    id: string,
+    alrMarkNotRequiredDetails: AlrMarkNotRequiredDetails,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling markAsNotRequiredAlr.');
+    }
+    if (alrMarkNotRequiredDetails === null || alrMarkNotRequiredDetails === undefined) {
+      throw new Error(
+        'Required parameter alrMarkNotRequiredDetails was null or undefined when calling markAsNotRequiredAlr.',
+      );
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['*/*'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      headers = headers.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.post<string>(
+      `${this.configuration.basePath}/v1.0/mets/requests/alr/mark-as-not-required/${encodeURIComponent(String(id))}`,
+      alrMarkNotRequiredDetails,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import jakarta.validation.constraints.AssertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -101,10 +100,14 @@ class EmpPreviewHandlerTest {
                 RequestTaskType.EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW,
                 RequestTaskType.EMP_VARIATION_UKETS_APPLICATION_REVIEW,
                 RequestTaskType.EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT,
+                RequestTaskType.EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_PEER_REVIEW,
                 RequestTaskType.EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW,
                 RequestTaskType.EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEW,
                 RequestTaskType.EMP_VARIATION_CORSIA_APPLICATION_REVIEW,
-                RequestTaskType.EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT
+                RequestTaskType.EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT,
+                RequestTaskType.EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_PEER_REVIEW,
+                RequestTaskType.EMP_VARIATION_UKETS_APPLICATION_PEER_REVIEW,
+                RequestTaskType.EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEW
         ),handler.getTaskTypes());
     }
 }

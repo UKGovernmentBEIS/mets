@@ -31,7 +31,7 @@ export class ReportComponent implements PendingRequest {
 
   onContinue(): void {
     if (!this.form.dirty) {
-      this.router.navigate(['../allowances'], { relativeTo: this.route });
+      this.router.navigate(['../final-alr'], { relativeTo: this.route });
     } else {
       const reportRequired: boolean = this.form.value.reportRequired;
       this.store
@@ -49,7 +49,7 @@ export class ReportComponent implements PendingRequest {
           ),
           this.pendingRequest.trackRequest(),
         )
-        .subscribe(() => this.router.navigate(['../allowances'], { relativeTo: this.route }));
+        .subscribe(() => this.router.navigate(['../final-alr'], { relativeTo: this.route }));
     }
   }
 }

@@ -39,10 +39,10 @@ export class AlrAuthorityTaskListComponent {
   vm: Signal<ViewModel> = computed(() => {
     const payload = this.payload();
     const requestTaskType = this.requestTaskType();
-    const requestMetadata = this.requestMetadata();
+    const requestMetadata = this.requestMetadata() as ALRRequestMetaData;
 
     return {
-      pageTitle: taskListTitle(requestTaskType, (requestMetadata as ALRRequestMetaData)?.year),
+      pageTitle: taskListTitle(requestTaskType, requestMetadata?.year, requestMetadata?.isFinal),
       requestTaskType,
       daysRemaining: this.daysRemaining(),
       redirectApplicationSubmittedLink: 'application-submitted',

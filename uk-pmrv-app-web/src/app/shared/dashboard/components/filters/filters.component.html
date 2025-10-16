@@ -1,0 +1,67 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-third">
+    <label for="searchBy" class="govuk-label">Search by account ID or name</label>
+    <div class="gem-c-search__item-wrapper">
+      <div class="js-search-input-wrapper" [formGroup]="form">
+        <div class="gem-c-search__item gem-c-search__submit-wrapper">
+          <!-- eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -->
+          <div
+            id="searchFilter"
+            formControlName="search"
+            govuk-text-input
+            [inputType]="'search'"
+            (keydown.enter)="searchBy()"></div>
+        </div>
+      </div>
+      <button
+        govukButton
+        class="gem-c-search__submit"
+        type="button"
+        enterkeyhint="search"
+        focusable="false"
+        (click)="searchBy()">
+        <svg
+          class="gem-c-search__icon"
+          width="27"
+          height="27"
+          viewBox="0 0 27 27"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false">
+          <circle cx="12.0161" cy="11.0161" r="8.51613" stroke="currentColor" stroke-width="3"></circle>
+          <line x1="17.8668" y1="17.3587" x2="26.4475" y2="25.9393" stroke="currentColor" stroke-width="3"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <label for="filterBy" class="govuk-label">Filter by workflow</label>
+    <select
+      id="filterBy"
+      class="govuk-select govuk-grid-column-full"
+      [ngModel]="filter"
+      (ngModelChange)="onFilterByChange($event)">
+      <option [value]="''">All workflows</option>
+      <option [value]="filterRequestType" *ngFor="let filterRequestType of sortedRequestTypes">
+        {{
+          workflowDetailsTypesMap?.[filterRequestType]
+            ? workflowDetailsTypesMap?.[filterRequestType]
+            : filterRequestType
+        }}
+      </option>
+    </select>
+  </div>
+
+  <div class="govuk-grid-column-one-third">
+    <label for="orderBy" class="govuk-label">Sort by</label>
+    <select
+      id="orderBy"
+      class="govuk-select govuk-grid-column-full"
+      [ngModel]="order"
+      (ngModelChange)="onOrderByChange($event)">
+      <option [value]="'NEWEST_FIRST'">Newest first</option>
+      <option [value]="'NEAREST_DUE_DATE'">Days remaining</option>
+    </select>
+  </div>
+</div>

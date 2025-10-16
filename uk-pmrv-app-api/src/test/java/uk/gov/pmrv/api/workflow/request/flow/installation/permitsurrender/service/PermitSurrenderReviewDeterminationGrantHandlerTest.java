@@ -2,18 +2,22 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.servi
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecisionDetails;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.validation.ALRCreationValidationService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrender;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderReviewDecision;
@@ -27,6 +31,9 @@ class PermitSurrenderReviewDeterminationGrantHandlerTest {
 
     @InjectMocks
     private PermitSurrenderReviewDeterminationGrantHandler handler;
+
+    @Mock
+    private ALRCreationValidationService alrCreationValidationService;
 
     @Test
     void getType() {
@@ -116,7 +123,12 @@ class PermitSurrenderReviewDeterminationGrantHandlerTest {
         PermitSurrenderReviewDeterminationGrant reviewDetermination = PermitSurrenderReviewDeterminationGrant.builder()
             .type(PermitSurrenderReviewDeterminationType.GRANTED)
             .stopDate(LocalDate.now().minusDays(1))
+            .accountId(1L)
+            .alrRequired(Boolean.TRUE)
+            .alrReportDate(LocalDate.now().minusDays(1))
             .build();
+
+        when(alrCreationValidationService.validateAccountEmitterTypeAndFreeAllocations(1L)).thenReturn(RequestCreateValidationResult.builder().valid(true).build());
 
         handler.validateReview(reviewDecision, reviewDetermination);
     }
@@ -128,7 +140,12 @@ class PermitSurrenderReviewDeterminationGrantHandlerTest {
         PermitSurrenderReviewDeterminationGrant reviewDetermination = PermitSurrenderReviewDeterminationGrant.builder()
             .type(PermitSurrenderReviewDeterminationType.GRANTED)
             .stopDate(LocalDate.now().minusDays(1))
+            .accountId(1L)
+            .alrRequired(Boolean.TRUE)
+            .alrReportDate(LocalDate.now().minusDays(1))
             .build();
+
+        when(alrCreationValidationService.validateAccountEmitterTypeAndFreeAllocations(1L)).thenReturn(RequestCreateValidationResult.builder().valid(false).build());
 
         BusinessException be = assertThrows(BusinessException.class,
             () -> handler.validateReview(reviewDecision, reviewDetermination));

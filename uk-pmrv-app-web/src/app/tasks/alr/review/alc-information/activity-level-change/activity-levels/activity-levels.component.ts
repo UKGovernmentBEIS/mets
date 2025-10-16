@@ -14,7 +14,6 @@ import {
 } from 'pmrv-api';
 
 interface ViewModel {
-  year: number;
   historicalActivityLevels: Array<HistoricalActivityLevel>;
   activityLevels: Array<ALRActivityLevel>;
   isEditable: boolean;
@@ -33,11 +32,10 @@ export class AlrActivityLevelsComponent {
   private readonly payload = this.alrService.payload as Signal<ALRApplicationRegulatorReviewSubmitRequestTaskPayload>;
 
   vm: Signal<ViewModel> = computed(() => {
-    const year = this.requestMetadata().year;
     const isEditable = this.isEditable();
     const { historicalActivityLevels = [], activityLevels = [] } = this.payload().regulatorReviewOutcome || {};
 
-    return { year, historicalActivityLevels, activityLevels, isEditable };
+    return { historicalActivityLevels, activityLevels, isEditable };
   });
 
   constructor(

@@ -22,6 +22,9 @@
             </div>
           </div>
           <div class="govuk-grid-column-full">
+            <p class="govuk-visually-hidden" role="status" aria-atomic="true">
+              {{ vm.accounts?.length }} results returned.
+            </p>
             <ng-container *ngIf="vm.accounts?.length; else noResults">
               <app-accounts-list
                 [accounts]="vm.accounts"

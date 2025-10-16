@@ -140,10 +140,12 @@ import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_HSE_
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_HSE_TI_APPLICATION_PEER_REVIEW_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_HSE_TI_APPLICATION_PEER_REVIEW_EXECUTE_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_ALR_APPLICATION_MARK_NOT_REQUIRED_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.AVIATION_ACCOUNT_CLOSURE;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.AVIATION_AER_3YEAR_PERIOD_OFFSETTING;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.AVIATION_AER_ANNUAL_OFFSETTING;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_AER;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_ALR;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_AER_ANNUAL_OFFSETTING;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_DOE_CORSIA;
@@ -664,6 +666,11 @@ public class PmrvRegulatorPermissionsAdapter extends AbstarctRegulatorPermission
                 new RegulatorPermissionGroupLevel(PEER_REVIEW_ALR, EXECUTE),
                 List.of(PERM_ALR_APPLICATION_PEER_REVIEW_VIEW_TASK,
                         PERM_ALR_APPLICATION_PEER_REVIEW_EXECUTE_TASK));
+        permissionGroupLevelsConfig
+                .put(new RegulatorPermissionGroupLevel(MARK_NOT_REQUIRED_ALR, NONE), List.of());
+        permissionGroupLevelsConfig
+                .put(new RegulatorPermissionGroupLevel(MARK_NOT_REQUIRED_ALR, EXECUTE),
+                        List.of(PERM_ALR_APPLICATION_MARK_NOT_REQUIRED_EXECUTE_TASK));
 
 
         // REVIEW_EMP_APPLICATION

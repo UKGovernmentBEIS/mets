@@ -35,6 +35,9 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'Peer review requested';
       case 'PERMIT_ISSUANCE_RECALLED_FROM_AMENDS':
         return 'Permit application recalled';
+      case 'PERMIT_ISSUANCE_ACCOUNT_CREATED_SENT_TO_REGISTRY':
+      case 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY':
+        return 'Information sent to registry by system';
 
       case 'PERMIT_SURRENDER_APPLICATION_CANCELLED':
         return 'Surrender request cancelled';
@@ -167,11 +170,11 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'DOAL_APPLICATION_PEER_REVIEWER_REJECTED':
         return 'Peer review disagreement submitted';
       case 'DOAL_APPLICATION_ACCEPTED':
-        return 'Activity level determination accepted as approved';
+        return 'Activity level determination approved';
       case 'DOAL_APPLICATION_ACCEPTED_WITH_CORRECTIONS':
-        return 'Activity level determination accepted as approved with corrections';
+        return 'Activity level determination approved with corrections';
       case 'DOAL_APPLICATION_REJECTED':
-        return 'Activity level determination  not approved';
+        return 'Activity level determination not approved';
       case 'DOAL_APPLICATION_CANCELLED':
         return 'Activity level determination cancelled';
 
@@ -572,11 +575,13 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'ALR_APPLICATION_PEER_REVIEW_REJECTED':
         return 'Peer review disagreement submitted';
       case 'ALR_APPLICATION_ACCEPTED':
-        return 'Activity level determination accepted as approved';
+        return 'Activity level determination approved';
       case 'ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS':
-        return 'Activity level determination accepted as approved with corrections';
+        return 'Activity level determination approved with corrections';
       case 'ALR_APPLICATION_REJECTED':
-        return 'Activity level determination accepted as not approved';
+        return 'Activity level determination not approved';
+      case 'ALR_APPLICATION_MARK_NOT_REQUIRED':
+        return 'Marked as not required';
 
       case 'HSE_TI_APPLICATION_SENT_TO_REGULATOR':
         return 'HSE target increase application submitted to regulator';

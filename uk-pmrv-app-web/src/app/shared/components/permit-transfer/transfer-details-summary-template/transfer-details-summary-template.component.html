@@ -12,7 +12,7 @@
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Files added</dt>
     <dd govukSummaryListRowValue *ngIf="files.length > 0; else noFiles">
-      <app-summary-download-files [files]="files"> </app-summary-download-files>
+      <app-summary-download-files [files]="files"></app-summary-download-files>
     </dd>
     <ng-template #noFiles>
       <dd govukSummaryListRowValue>
@@ -53,6 +53,20 @@
       <a *ngIf="allowChange" govukLink [routerLink]="['..', 'aem-report']" [state]="{ changing: true }">Change</a>
     </dd>
   </div>
+
+  <ng-container *ngIf="payload.alrLiable">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Who is completing the activity level report?</dt>
+      <dd govukSummaryListRowValue>
+        <span>{{ payload.alrLiable | transferParty }}</span>
+      </dd>
+      <dd govukSummaryListRowActions>
+        <a *ngIf="allowChange" govukLink [routerLink]="['..', 'activity-level-report']" [state]="{ changing: true }">
+          Change
+        </a>
+      </dd>
+    </div>
+  </ng-container>
 
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Transfer code</dt>

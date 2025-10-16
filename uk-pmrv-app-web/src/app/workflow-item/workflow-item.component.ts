@@ -46,7 +46,12 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
-  readonly title$ = this.requestInfo$.pipe(map((requestInfo) => (requestInfo.requestMetadata as any)?.year ?? ''));
+  readonly title$ = this.requestInfo$.pipe(
+    map((requestInfo) =>
+      (requestInfo.requestMetadata as any)?.isFinal ? 'Final year' : ((requestInfo.requestMetadata as any)?.year ?? ''),
+    ),
+  );
+  readonly requestType$ = this.requestInfo$.pipe(map((requestInfo) => requestInfo?.requestType));
 
   readonly relatedTasks$ = this.requestId$.pipe(
     switchMap((requestId) => this.requestItemsService.getItemsByRequest(requestId)),
@@ -62,8 +67,8 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
 
   userRoleType$ = this.authStore.pipe(selectUserRoleType);
 
-  validRequestCreateActionsTypes$ = combineLatest([this.requestInfo$, this.userRoleType$]).pipe(
-    switchMap(([requestInfo, roleType]) => {
+  validRequestCreateActionsTypes$ = combineLatest([this.requestInfo$, this.userRoleType$, this.requestId$]).pipe(
+    switchMap(([requestInfo, roleType, requestId]) => {
       if (
         roleType === 'REGULATOR' &&
         ['AER', 'AVIATION_AER_CORSIA', 'AVIATION_AER_UKETS'].includes(requestInfo.requestType)
@@ -75,6 +80,16 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
         requestInfo.requestStatus === 'COMPLETED'
       ) {
         return of({ BDR: { valid: true } });
+      } else if (
+        roleType === 'REGULATOR' &&
+        ['ALR'].includes(requestInfo.requestType) &&
+        requestInfo.requestStatus === 'IN_PROGRESS'
+      ) {
+        return this.requestsService.hasAccessMarkAsNotRequiredAlr(requestId).pipe(
+          switchMap((hasAccess) => {
+            return hasAccess ? of({ ALR: { valid: true } }) : of({});
+          }),
+        );
       } else {
         return of({});
       }

@@ -1,16 +1,15 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { AerCorsiaStoreDelegate } from '@aviation/request-task/store/delegates/aer-corsia/aer-corsia-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { PendingRequestService } from '@core/guards/pending-request.service';
-import { BackLinkService } from '@shared/back-link/back-link.service';
 import { mockClass } from '@testing';
 
 import { AviationAerCorsiaApplicationSubmitRequestTaskPayload } from 'pmrv-api';
@@ -25,12 +24,13 @@ describe('AggregatedConsumptionFlightDataPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, FormsModule, ReactiveFormsModule, HttpClientTestingModule],
+      imports: [FormsModule, ReactiveFormsModule],
       providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        provideRouter([]),
         { provide: TASK_FORM_PROVIDER, useClass: AggregatedConsumptionFlightDataFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
         { provide: PendingRequestService, useValue: mockClass(PendingRequestService) },
-        { provide: BackLinkService, useValue: mockClass(BackLinkService) },
         { provide: ChangeDetectorRef, useValue: {} },
       ],
     }).compileComponents();

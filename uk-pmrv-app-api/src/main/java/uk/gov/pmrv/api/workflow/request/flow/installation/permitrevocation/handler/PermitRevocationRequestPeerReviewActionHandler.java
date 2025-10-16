@@ -13,6 +13,7 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocation;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.service.RequestPermitRevocationService;
@@ -43,7 +44,10 @@ public class PermitRevocationRequestPeerReviewActionHandler implements
         final PermitRevocationApplicationSubmitRequestTaskPayload payload =
             (PermitRevocationApplicationSubmitRequestTaskPayload) requestTask.getPayload();
         final String peerReviewer = actionPayload.getPeerReviewer();
-        
+
+        PermitRevocation permitRevocation = payload.getPermitRevocation();
+        permitRevocation.setAccountId(requestTask.getRequest().getAccountId());
+
         validator.validateSubmitRequestTaskPayload(payload);
         validator.validatePeerReviewer(peerReviewer, appUser);
 

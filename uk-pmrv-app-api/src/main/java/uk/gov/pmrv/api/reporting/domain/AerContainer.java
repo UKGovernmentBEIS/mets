@@ -46,6 +46,8 @@ public class AerContainer {
     @Valid
     private AerVerificationReport verificationReport;
 
+    private Boolean isPostALRSectionRemoval;
+
     @Builder.Default
     private Map<UUID, String> aerAttachments = new HashMap<>();
 }

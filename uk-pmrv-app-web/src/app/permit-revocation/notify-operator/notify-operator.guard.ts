@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
-import { map } from 'rxjs';
+import { combineLatest, map } from 'rxjs';
 
 import { notInNeedsForReview } from '@permit-revocation/core/section-status';
 import { PermitRevocationState } from '@permit-revocation/store/permit-revocation.state';
@@ -22,10 +22,10 @@ export class NotifyOperatorGuard {
     const requestTaskActionType: RequestTaskActionProcessDTO['requestTaskActionType'] =
       route.data?.requestTaskActionType;
 
-    return this.store.pipe(
+    return combineLatest([this.store, this.store.isFinalAlrVisible$]).pipe(
       map(
-        (state) =>
-          (!notInNeedsForReview(state) &&
+        ([state, isFinalAlrVisible]) =>
+          (!notInNeedsForReview(state, isFinalAlrVisible) &&
             this.router.parseUrl(`/permit-revocation/${route.paramMap.get('taskId')}/invalid-data`)) ||
           ((!state.allowedRequestTaskActions.includes(requestTaskActionType) ||
             !this.sectionStatus(state, requestTaskActionType)) &&

@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, switchMap } from 'rxjs';
+import { combineLatest, first, map, switchMap, take } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import {
@@ -21,6 +22,8 @@ import { PermitRevocationStore } from '@permit-revocation/store/permit-revocatio
 export class ReportComponent {
   readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
 
+  isFinalAlrVisible = toSignal(this.store.isFinalAlrVisible$);
+
   constructor(
     @Inject(PERMIT_REVOCATION_TASK_FORM) readonly form: UntypedFormGroup,
     readonly store: PermitRevocationStore,
@@ -30,9 +33,14 @@ export class ReportComponent {
   ) {}
 
   onContinue() {
-    const navigate = () => this.router.navigate(['..', 'surrender-allowances'], { relativeTo: this.route });
+    const navigate = (isFinalAlrVisible: boolean) =>
+      isFinalAlrVisible
+        ? this.router.navigate(['..', 'final-alr'], { relativeTo: this.route })
+        : this.router.navigate(['..', 'surrender-allowances'], { relativeTo: this.route });
+
     if (!this.form.dirty) {
-      navigate();
+      const isFinalAlrVisible = this.isFinalAlrVisible();
+      navigate(isFinalAlrVisible);
     } else {
       const annualEmissionsReportRequired = this.form.value.annualEmissionsReportRequired;
       const annualEmissionsReportDate = annualEmissionsReportRequired
@@ -57,7 +65,11 @@ export class ReportComponent {
           }),
           this.pendingRequest.trackRequest(),
         )
-        .subscribe(() => navigate());
+        .pipe(
+          switchMap(() => this.store.isFinalAlrVisible$),
+          take(1),
+        )
+        .subscribe((isFinalAlrVisible) => navigate(isFinalAlrVisible));
     }
   }
 }

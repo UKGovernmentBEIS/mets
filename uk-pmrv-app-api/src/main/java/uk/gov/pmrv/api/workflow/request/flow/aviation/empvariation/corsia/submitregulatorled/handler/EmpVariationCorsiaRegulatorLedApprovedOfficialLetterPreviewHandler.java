@@ -80,7 +80,8 @@ public class EmpVariationCorsiaRegulatorLedApprovedOfficialLetterPreviewHandler 
 
     @Override
     protected List<RequestTaskType> getTaskTypes() {
-        return List.of(RequestTaskType.EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT);
+        return List.of(RequestTaskType.EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT,
+                RequestTaskType.EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_PEER_REVIEW);
     }
     
     private Map<String, Object> constructParams(final EmpVariationCorsiaApplicationSubmitRegulatorLedRequestTaskPayload taskPayload,

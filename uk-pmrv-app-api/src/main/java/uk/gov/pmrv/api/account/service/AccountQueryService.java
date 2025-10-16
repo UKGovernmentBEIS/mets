@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.authorization.rules.services.authorityinfo.providers.AccountAuthorityInfoProvider;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.Location;
 import uk.gov.pmrv.api.account.domain.dto.AccountInfoDTO;
@@ -12,7 +13,6 @@ import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.transform.AccountMapper;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Optional;
@@ -112,5 +112,13 @@ public class AccountQueryService implements AccountAuthorityInfoProvider {
     public Account findAccountByRegistryId(Integer registryId) {
         return accountRepository.findAccountByRegistryId(registryId)
                 .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
+    }
+
+    public Optional<Account> getAccountByEmitterId(String emitterId) {
+        return accountRepository.findAccountByEmitterId(emitterId);
+    }
+
+    public Optional<Account> getAccountByRegistryId(Integer registryId) {
+        return accountRepository.findAccountByRegistryId(registryId);
     }
 }

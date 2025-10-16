@@ -7,7 +7,7 @@ import { SharedModule } from '@shared/shared.module';
 import { ALR_TASK_FORM, AlrService } from '@tasks/alr/core';
 import { AlrTaskSharedModule } from '@tasks/alr/shared/alr-task-shared.module';
 
-import { ALRApplicationRegulatorReviewSubmitRequestTaskPayload, ALRRequestMetaData } from 'pmrv-api';
+import { ALRApplicationRegulatorReviewSubmitRequestTaskPayload } from 'pmrv-api';
 
 import { alrActivityLevelFormProvider } from './activity-level-form.provider';
 
@@ -19,7 +19,7 @@ import { alrActivityLevelFormProvider } from './activity-level-form.provider';
     <app-alr-task-common
       [breadcrumb]="true"
       heading="Add new activity level change"
-      caption="{{ requestMetadata().year }} New activity level changes"
+      caption="New activity level changes"
       returnLinkTitle="Information about this activity level change">
       <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" submitText="Continue" [hideSubmit]="!isEditable()">
         <app-activity-level-template-form></app-activity-level-template-form>
@@ -33,7 +33,6 @@ export class AlrActivityLevelComponent {
   private readonly index = this.route.snapshot.paramMap.get('index');
   private readonly createMode = this.index === null;
 
-  requestMetadata = this.alrService.requestMetadata as Signal<ALRRequestMetaData>;
   isEditable = this.alrService.isEditable;
   payload = this.alrService.payload as Signal<ALRApplicationRegulatorReviewSubmitRequestTaskPayload>;
 

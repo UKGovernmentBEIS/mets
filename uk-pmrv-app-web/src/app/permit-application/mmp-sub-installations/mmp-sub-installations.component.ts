@@ -7,11 +7,12 @@ import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
 import { PermitApplicationState } from '@permit-application/store/permit-application.state';
 import { PermitApplicationStore } from '@permit-application/store/permit-application.store';
+import { SubInstallationTypePipe } from '@shared/pipes/sub-installation-type.pipe';
 import { statusMap } from '@shared/task-list/task-item/status.map';
 
 import { GovukTableColumn } from 'govuk-components';
 
-import { RequestInfoDTO } from 'pmrv-api';
+import { RequestInfoDTO, SubInstallation } from 'pmrv-api';
 
 import { isFallbackApproach, isProductBenchmark } from './mmp-sub-installations-status';
 
@@ -57,4 +58,11 @@ export class MmpSubInstallationsComponent implements PendingRequest {
     readonly pendingRequest: PendingRequestService,
     private readonly route: ActivatedRoute,
   ) {}
+
+  hiddenTextOnRemove(type: SubInstallation['subInstallationType']): string {
+    const subInstallationPipe = new SubInstallationTypePipe();
+    const typeFormatted = subInstallationPipe.transform(type);
+    const lowerCaseFirstLetterType = typeFormatted.charAt(0).toLowerCase() + typeFormatted.slice(1);
+    return `${lowerCaseFirstLetterType} sub-installation`;
+  }
 }

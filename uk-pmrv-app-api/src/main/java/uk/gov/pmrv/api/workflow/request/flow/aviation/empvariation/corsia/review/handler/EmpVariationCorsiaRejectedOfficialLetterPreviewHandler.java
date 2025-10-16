@@ -59,7 +59,8 @@ public class EmpVariationCorsiaRejectedOfficialLetterPreviewHandler extends Prev
 
     @Override
     protected List<RequestTaskType> getTaskTypes() {
-        return List.of(RequestTaskType.EMP_VARIATION_CORSIA_APPLICATION_REVIEW);
+        return List.of(RequestTaskType.EMP_VARIATION_CORSIA_APPLICATION_REVIEW,
+                RequestTaskType.EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEW);
     }
     
     private Map<String, Object> constructParams(final EmpVariationCorsiaApplicationReviewRequestTaskPayload taskPayload) {

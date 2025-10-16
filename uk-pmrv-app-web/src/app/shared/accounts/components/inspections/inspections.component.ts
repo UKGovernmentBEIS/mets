@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
-import { combineLatest, distinctUntilChanged, map, Observable, shareReplay } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, shareReplay } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AuthStore } from '@core/store/auth';
@@ -37,6 +37,7 @@ export class InspectionsComponent extends BaseComponent implements OnInit {
 
   currentPageData$: Observable<Inspections[]>;
   data$: Observable<Inspections[]>;
+  totalDataAmount$ = new BehaviorSubject<number>(0);
 
   inspectionsTypesMap: Record<string, string[]>;
   inspectionsTypesTagsMap = inspectionsTypesTagsMap;
@@ -61,6 +62,7 @@ export class InspectionsComponent extends BaseComponent implements OnInit {
 
     this.data$ = this.getRequestDetails().pipe(
       map((results) => {
+        this.totalDataAmount$.next(results.total ?? 0);
         const totalData = this.buildTotalData(results.requestDetails);
 
         this.totalDataNumber$.next(totalData.length);

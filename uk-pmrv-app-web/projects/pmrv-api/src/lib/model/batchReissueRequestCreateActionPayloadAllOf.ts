@@ -12,5 +12,6 @@
 
 export interface BatchReissueRequestCreateActionPayloadAllOf {
   filters?: object;
+  changesDetails?: object;
   signatory?: string;
 }

@@ -67,8 +67,11 @@ import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
+import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueChangesDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestInfo;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestMetadata;
 
@@ -76,6 +79,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +99,9 @@ class DocumentTemplatePermitParamsProviderTest {
 
     @Mock
     private InstallationDocumentTemplateCommonParamsProvider commonParamsProvider;
+
+    @Mock
+    private RequestQueryService requestQueryService;
 
     @Test
     void constructTemplateParams() throws IOException {
@@ -317,8 +324,10 @@ class DocumentTemplatePermitParamsProviderTest {
             PermitIssuanceRequestMetadata.builder().rfiResponseDates(rfiResponseDates).build();
 		final List<PermitVariationRequestInfo> variationRequestInfoList = List.of(
 				PermitVariationRequestInfo.builder()
+                     .submissionDate(submissionDate)
 					.metadata(PermitVariationRequestMetadata.builder().rfiResponseDates(rfiResponseDates).build()).build(),
 				PermitVariationRequestInfo.builder()
+                     .submissionDate(submissionDate)
 					.metadata(PermitVariationRequestMetadata.builder().rfiResponseDates(rfiResponseDates).build()).build());
         final DocumentTemplatePermitParamsSourceData sourceParams = DocumentTemplatePermitParamsSourceData.builder()
             .request(request)
@@ -422,7 +431,65 @@ class DocumentTemplatePermitParamsProviderTest {
                 .build()
         ));
 
+        LocalDateTime sd = LocalDateTime.now();
+        Request pr1 = Request
+                .builder()
+                .type(RequestType.PERMIT_REISSUE)
+                .submissionDate(sd.minusMonths(10))
+                .id("PR1")
+                .metadata(ReissueRequestMetadata
+                        .builder()
+                        .changesDetails(PermitBatchReissueChangesDetails
+                                        .builder()
+                                        .changesSummary("Summary 1")
+                                        .build())
+                        .build())
+                .build();
+
+        Request pr2 = Request
+                .builder()
+                .type(RequestType.PERMIT_REISSUE)
+                .submissionDate(sd)
+                .id("PR2")
+                .metadata(ReissueRequestMetadata
+                        .builder()
+                        .changesDetails(PermitBatchReissueChangesDetails
+                                        .builder()
+                                        .changesSummary("Summary 2")
+                                        .build())
+                        .build())
+                .build();
+
+        List<PermitVariationRequestInfo> reissueRequestsInfoList = new ArrayList<>();
+        reissueRequestsInfoList.add(PermitVariationRequestInfo
+                .builder()
+                .id("PR1")
+                .changeType("Batch Variation")
+                .submissionDate(sd.minusMonths(10))
+                .metadata(PermitVariationRequestMetadata
+                        .builder()
+                        .logChanges("Summary 1")
+                        .build())
+                .build());
+
+        reissueRequestsInfoList.add(PermitVariationRequestInfo
+                .builder()
+                .id("PR2")
+                .changeType("Batch Variation")
+                .submissionDate(sd)
+                .metadata(PermitVariationRequestMetadata
+                        .builder()
+                        .logChanges("Summary 2")
+                        .build())
+                .build());
+
+        List<PermitVariationRequestInfo> allRequestsInfoList = new ArrayList<>();
+
+        allRequestsInfoList.addAll(variationRequestInfoList);
+        allRequestsInfoList.addAll(reissueRequestsInfoList);
+
         when(commonParamsProvider.constructCommonTemplateParams(request, signatory)).thenReturn(commonTemplateParams);
+        when(requestQueryService.findRequestsByAccountIdAndType(accountId, RequestType.PERMIT_REISSUE)).thenReturn(List.of(pr1, pr2));
 
         //invoke
         TemplateParams result = provider.constructTemplateParams(sourceParams);
@@ -432,7 +499,7 @@ class DocumentTemplatePermitParamsProviderTest {
                 "permitContainer", permitContainer,
                 "consolidationNumber", 6,
                 "issuanceMetadata", issuanceMetadata,
-                "variationRequestInfoList", variationRequestInfoList,
+                "variationRequestInfoList", allRequestsInfoList,
                 "referenceSources", referenceSources,
                 "analysisMethods", analysisMethods,
                 "transfers", List.of(transfer)

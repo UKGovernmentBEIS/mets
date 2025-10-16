@@ -45,22 +45,29 @@ describe('WorkflowItemsService', () => {
   });
 
   it('should call assigned-to-me service method with appropriate account type', async () => {
-    await firstValueFrom(service.getItems('assigned-to-me', 1, 10));
-    expect(itemsAssignedToMeService.getAssignedItems).toHaveBeenCalledWith('AVIATION', 0, 10);
+    await firstValueFrom(service.getItems('assigned-to-me', 1, 10, 'NEWEST_FIRST', '', ''));
+    expect(itemsAssignedToMeService.getAssignedItems).toHaveBeenCalledWith('AVIATION', 0, 10, 'NEWEST_FIRST', '', '');
     expect(itemsAssignedToOthersService.getAssignedToOthersItems).not.toHaveBeenCalled();
     expect(unassignedItemsService.getUnassignedItems).not.toHaveBeenCalled();
   });
 
   it('should call assigned-to-others service method with appropriate account type', async () => {
-    await firstValueFrom(service.getItems('assigned-to-others', 1, 10));
-    expect(itemsAssignedToOthersService.getAssignedToOthersItems).toHaveBeenCalledWith('AVIATION', 0, 10);
+    await firstValueFrom(service.getItems('assigned-to-others', 1, 10, 'NEWEST_FIRST', '', ''));
+    expect(itemsAssignedToOthersService.getAssignedToOthersItems).toHaveBeenCalledWith(
+      'AVIATION',
+      0,
+      10,
+      'NEWEST_FIRST',
+      '',
+      '',
+    );
     expect(itemsAssignedToMeService.getAssignedItems).not.toHaveBeenCalled();
     expect(unassignedItemsService.getUnassignedItems).not.toHaveBeenCalled();
   });
 
   it('should call unassigned service method with appropriate account type', async () => {
-    await firstValueFrom(service.getItems('unassigned', 1, 10));
-    expect(unassignedItemsService.getUnassignedItems).toHaveBeenCalledWith('AVIATION', 0, 10);
+    await firstValueFrom(service.getItems('unassigned', 1, 10, 'NEWEST_FIRST', '', ''));
+    expect(unassignedItemsService.getUnassignedItems).toHaveBeenCalledWith('AVIATION', 0, 10, 'NEWEST_FIRST', '', '');
     expect(itemsAssignedToMeService.getAssignedItems).not.toHaveBeenCalled();
     expect(itemsAssignedToOthersService.getAssignedToOthersItems).not.toHaveBeenCalled();
   });

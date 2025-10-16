@@ -4,6 +4,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.BatchReissueRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueChangesDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueRequestMetadata;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,10 +44,16 @@ class ReissueCreateRequestServiceTest {
 		Long accountId = 1L;
 		String batchRequestId = "batchRequestId";
 		String batchRequestBusinessKey = "batchRequestBusinessKey";
+		PermitBatchReissueChangesDetails changesDetails = PermitBatchReissueChangesDetails
+				.builder()
+				.changes(List.of("change 1", "change 2"))
+				.changesSummary("Summary")
+				.build();
 		
 		BatchReissueRequestPayload batchRequestPayload = BatchReissueRequestPayload.builder()
 				.payloadType(RequestPayloadType.PERMIT_BATCH_REISSUE_REQUEST_PAYLOAD)
 				.signatory("signatory")
+				.changesDetails(changesDetails)
 				.build();
 		
 		PermitBatchReissueRequestMetadata batchRequestMetadata = PermitBatchReissueRequestMetadata.builder()
@@ -76,6 +84,8 @@ class ReissueCreateRequestServiceTest {
 						.signatory(batchRequestPayload.getSignatory())
 						.submitterId(batchRequestMetadata.getSubmitterId())
 						.submitter(batchRequestMetadata.getSubmitter())
+						.changesDetails(changesDetails)
+						.batchRequestType(RequestType.PERMIT_BATCH_REISSUE)
 						.build())
 				.processVars(Map.of(
 						BpmnProcessConstants.BATCH_REQUEST_BUSINESS_KEY, batchRequestBusinessKey,

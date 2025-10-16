@@ -143,6 +143,10 @@ const routes: Routes = [
         path: 'hseti',
         loadChildren: () => import('./hseti/hseti.routes').then((r) => r.HSETI_ACTION_ROUTES),
       },
+      {
+        path: 'registry',
+        loadChildren: () => import('./registry/registry.routes').then((r) => r.REGISTRY_ACTION_ROUTES),
+      },
     ],
   },
 ];

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.BatchReissueRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueRequestPayload;
@@ -31,11 +32,15 @@ public class ReissueAddCompletedRequestActionService {
 		final Request request = requestService.findRequestById(requestId);
 		final ReissueRequestPayload requestPayload = (ReissueRequestPayload) request.getPayload();
 		final ReissueRequestMetadata requestMetadata = (ReissueRequestMetadata) request.getMetadata();
+		final Request batchReissueRequest = requestService.findRequestById(requestMetadata.getBatchRequestId());
+		final BatchReissueRequestPayload batchReissueRequestPayload = (BatchReissueRequestPayload) batchReissueRequest.getPayload();
 		final String signatoryName = requestActionUserInfoResolver.getUserFullName(requestMetadata.getSignatory());
 
 		final ReissueCompletedRequestActionPayload actionPayload = REISSUE_MAPPER.toCompletedActionPayload(
 				requestPayload, requestMetadata, signatoryName, accountTypeBatchReissueRequestTypeMapper
 						.accountTypeReissueCompletedRequestActionPayloadType(request.getType().getAccountType()));
+
+		actionPayload.setChangesDetails(batchReissueRequestPayload.getChangesDetails());
 
 		requestService.addActionToRequest(request, 
 				actionPayload, 

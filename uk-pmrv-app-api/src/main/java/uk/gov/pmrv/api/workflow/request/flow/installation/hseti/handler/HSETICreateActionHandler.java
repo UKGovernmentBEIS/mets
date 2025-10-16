@@ -40,6 +40,7 @@ public class HSETICreateActionHandler implements RequestAccountCreateActionHandl
                 .accountId(accountId)
                 .requestPayload(HSETIRequestPayload.builder()
                         .payloadType(RequestPayloadType.HSE_TI_REQUEST_PAYLOAD)
+                        .operatorAssignee(appUser.getUserId())
                         .hseti(HSETI.builder()
                                 .allocationPeriod(payload.getAllocationPeriod())
                                 .build())

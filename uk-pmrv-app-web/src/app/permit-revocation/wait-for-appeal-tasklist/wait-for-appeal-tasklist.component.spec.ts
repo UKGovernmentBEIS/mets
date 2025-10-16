@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 
 import { of } from 'rxjs';
 
 import { AuthService } from '@core/services/auth.service';
 import { CessationModule } from '@permit-revocation/cessation/cessation.module';
-import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
+import { ActivatedRouteStub, BasePage, mockClass, MockType } from '@testing';
 
-import { RequestActionsService } from 'pmrv-api';
+import { InstallationAccountViewService, RequestActionsService } from 'pmrv-api';
 
+import { mockedAccountPermit } from '../../accounts/testing/mock-data';
 import { PermitRevocationModule } from '../permit-revocation.module';
 import { PermitRevocationStore } from '../store/permit-revocation-store';
 import { mockTaskState } from '../testing/mock-state';
@@ -20,6 +20,7 @@ describe('Wait For Appeal Component', () => {
   let fixture: ComponentFixture<WaitForAppealTasklistComponent>;
   let store: PermitRevocationStore;
   let page: Page;
+  let accountViewService: MockType<InstallationAccountViewService>;
 
   const requestActionsService = mockClass(RequestActionsService);
   requestActionsService.getRequestActionsByRequestId.mockReturnValue(
@@ -62,13 +63,17 @@ describe('Wait For Appeal Component', () => {
 
   beforeEach(async () => {
     route = new ActivatedRouteStub({ taskId: mockTaskState.requestTaskId }, null, null, null, null);
+    accountViewService = mockClass(InstallationAccountViewService);
+    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountPermit));
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, PermitRevocationModule, CessationModule],
+      imports: [PermitRevocationModule, CessationModule],
       providers: [
+        provideRouter([]),
         { provide: AuthService, useValue: authService },
         { provide: ActivatedRoute, useValue: route },
         { provide: RequestActionsService, useValue: requestActionsService },
+        { provide: InstallationAccountViewService, useValue: accountViewService },
       ],
     }).compileComponents();
   });

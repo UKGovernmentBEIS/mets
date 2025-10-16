@@ -31,6 +31,7 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.review.
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.review.domain.EmpIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.review.domain.EmpIssuanceCorsiaApplicationReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.submit.domain.EmpIssuanceCorsiaApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceUkEtsApplicationAmendsSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceUkEtsApplicationApprovedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload;
@@ -77,22 +78,23 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerVerifica
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationRespondedToRegulatorCommentsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationReviewedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AlrApplicationMarkNotRequiredRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAcceptedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAcceptedWithCorrectionsRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAmendsSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationClosedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationProceededToAuthorityRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationRejectedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationVerificationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRRegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRVerificationReturnedToOperatorRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationProceededToAuthorityRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationClosedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAmendsSubmittedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAcceptedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAcceptedWithCorrectionsRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationRejectedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationAmendsSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRRegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRVerificationReturnedToOperatorRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationAcceptedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationAcceptedWithCorrectionsRequestActionPayload;
@@ -116,6 +118,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationGrantedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationRejectedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationReturnedForAmendsRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.submit.domain.PermitIssuanceApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationReviewSubmittedDecisionRequestActionPayload;
@@ -171,6 +174,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PermitIssuanceApplicationRejectedRequestActionPayload.class, value = "PERMIT_ISSUANCE_APPLICATION_REJECTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitIssuanceApplicationReturnedForAmendsRequestActionPayload.class, value = "PERMIT_ISSUANCE_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitIssuanceApplicationSubmittedRequestActionPayload.class, value = "PERMIT_ISSUANCE_APPLICATION_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = PermitIssuanceRegistryIntegrationRequestActionPayload.class, value = "PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "PERMIT_SURRENDER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitSurrenderApplicationDeemedWithdrawnRequestActionPayload.class, value = "PERMIT_SURRENDER_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD"),
@@ -310,6 +314,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = ALRApplicationAcceptedRequestActionPayload.class, value = "ALR_APPLICATION_ACCEPTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = ALRApplicationAcceptedWithCorrectionsRequestActionPayload.class, value = "ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS_PAYLOAD"),
                 @DiscriminatorMapping(schema = ALRApplicationRejectedRequestActionPayload.class, value = "ALR_APPLICATION_REJECTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = AlrApplicationMarkNotRequiredRequestActionPayload.class, value = "ALR_APPLICATION_MARK_NOT_REQUIRED_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = HSETIApplicationSubmittedRequestActionPayload.class, value = "HSE_TI_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "HSE_TI_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
@@ -333,7 +338,9 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "EMP_VARIATION_UKETS_PEER_REVIEW_DECISION_REGULATOR_LED_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = EmpVariationUkEtsApplicationReturnedForAmendsRequestActionPayload.class, value = "EMP_VARIATION_UKETS_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
                 @DiscriminatorMapping(schema = EmpVariationUkEtsApplicationAmendsSubmittedRequestActionPayload.class, value = "EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),
-                
+                @DiscriminatorMapping(schema = EmpIssuanceRegistryIntegrationRequestActionPayload.class, value = "EMP_ISSUANCE_UKETS_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD"),
+
+
                 @DiscriminatorMapping(schema = BatchReissueSubmittedRequestActionPayload.class, value = "EMP_BATCH_REISSUE_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = BatchReissueCompletedRequestActionPayload.class, value = "EMP_BATCH_REISSUE_COMPLETED_PAYLOAD"),
                 @DiscriminatorMapping(schema = ReissueCompletedRequestActionPayload.class, value = "EMP_REISSUE_COMPLETED_PAYLOAD"),
@@ -400,6 +407,8 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = PermitIssuanceApplicationRejectedRequestActionPayload.class, name = "PERMIT_ISSUANCE_APPLICATION_REJECTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitIssuanceApplicationReturnedForAmendsRequestActionPayload.class, name = "PERMIT_ISSUANCE_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitIssuanceApplicationSubmittedRequestActionPayload.class, name = "PERMIT_ISSUANCE_APPLICATION_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = PermitIssuanceRegistryIntegrationRequestActionPayload.class, name = "PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD"),
+
 
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "PERMIT_SURRENDER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitSurrenderApplicationDeemedWithdrawnRequestActionPayload.class, name = "PERMIT_SURRENDER_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD"),
@@ -441,7 +450,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = PermitIssuanceApplicationRejectedRequestActionPayload.class, name = "PERMIT_TRANSFER_B_APPLICATION_REJECTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "PERMIT_TRANSFER_B_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitIssuanceApplicationReturnedForAmendsRequestActionPayload.class, name = "PERMIT_TRANSFER_B_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
-        
+
         @JsonSubTypes.Type(value = BatchReissueSubmittedRequestActionPayload.class, name = "PERMIT_BATCH_REISSUE_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = BatchReissueCompletedRequestActionPayload.class, name = "PERMIT_BATCH_REISSUE_COMPLETED_PAYLOAD"),
         @JsonSubTypes.Type(value = ReissueCompletedRequestActionPayload.class, name = "PERMIT_REISSUE_COMPLETED_PAYLOAD"),
@@ -539,7 +548,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = ALRApplicationAcceptedRequestActionPayload.class, name = "ALR_APPLICATION_ACCEPTED_PAYLOAD"),
         @JsonSubTypes.Type(value = ALRApplicationAcceptedWithCorrectionsRequestActionPayload.class, name = "ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS_PAYLOAD"),
         @JsonSubTypes.Type(value = ALRApplicationRejectedRequestActionPayload.class, name = "ALR_APPLICATION_REJECTED_PAYLOAD"),
-
+        @JsonSubTypes.Type(value = AlrApplicationMarkNotRequiredRequestActionPayload.class, name = "ALR_APPLICATION_MARK_NOT_REQUIRED_PAYLOAD"),
 
         @JsonSubTypes.Type(value = HSETIApplicationSubmittedRequestActionPayload.class, name = "HSE_TI_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = HSETIRegulatorReviewReturnedForAmendsRequestActionPayload.class, name = "HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD"),
@@ -552,6 +561,8 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "EMP_ISSUANCE_UKETS_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationReturnedForAmendsRequestActionPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
         @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationAmendsSubmittedRequestActionPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = EmpIssuanceRegistryIntegrationRequestActionPayload.class, name = "EMP_ISSUANCE_UKETS_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD"),
+
 
         @JsonSubTypes.Type(value = EmpVariationUkEtsApplicationSubmittedRequestActionPayload.class, name = "EMP_VARIATION_UKETS_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = EmpVariationUkEtsApplicationApprovedRequestActionPayload.class, name = "EMP_VARIATION_UKETS_APPLICATION_APPROVED_PAYLOAD"),

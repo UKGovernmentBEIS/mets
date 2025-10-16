@@ -62,6 +62,8 @@ describe('SummaryComponent', () => {
         annualEmissionsReportRequired: true,
         annualEmissionsReportDate: '2022-04-14',
         feeCharged: false,
+        alrRequired: true,
+        alrReportDate: '2022-04-14',
       },
       sectionsCompleted: { REVOCATION_APPLY: true },
     });
@@ -79,6 +81,7 @@ describe('SummaryComponent', () => {
       ['Have the regulated activities at the installation stopped?', '14 Apr 2022'],
       ['Effective date of notice', '16 May 2022'],
       ['Annual emissions of monitoring revocation report required', 'Required by 14 Apr 2022'],
+      ['Activity level report required', 'Required by 14 Apr 2022'],
       ['Surrender of allowances required', 'No'],
       ['Operator fee required', 'No'],
     ]);

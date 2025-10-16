@@ -6,7 +6,13 @@ export const mockSubmitCompletedState: PermitBatchReissueState = {
   accountStatuses: ['AWAITING_REVOCATION'],
   emitterTypes: ['GHGE'],
   installationCategories: ['A_LOW_EMITTER'],
+  freeAllocation: false,
+  nonFreeAllocation: false,
   signatory: '3reg',
+  changesDetails: {
+    changes: ['change 1', 'change 2'],
+    changesSummary: 'summary of changes',
+  },
 };
 
 export const regulators: RegulatorUsersAuthoritiesInfoDTO = {

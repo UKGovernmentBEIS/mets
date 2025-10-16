@@ -1,11 +1,13 @@
 package uk.gov.pmrv.api.permit.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivities;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -27,5 +29,8 @@ public class PermitDetailsDTO {
 	
 	@With
 	private FileInfoDTO fileDocument;
+
+	@JsonIgnore
+	private RegulatedActivities regulatedActivities;
 	
 }

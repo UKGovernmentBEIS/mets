@@ -14,6 +14,7 @@ import { RequestActionPayload } from './requestActionPayload';
 export interface BatchReissueSubmittedRequestActionPayload extends RequestActionPayload {
   submitter: string;
   filters?: object;
+  changesDetails?: object;
   signatory: string;
   signatoryName: string;
 }

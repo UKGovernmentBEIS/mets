@@ -21,8 +21,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.alr.validation.ALRCrea
 
 import java.time.Year;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +34,10 @@ public class ALRCreationService {
     private final StartProcessRequestService startProcessRequestService;
 
     @Transactional
-    public Request createALR(Long accountId) {
+    public Request createALR(Long accountId, boolean isFinal,  Optional<Date> alrExpirationDateOpt) {
+
+        Date expirationDate = alrExpirationDateOpt.orElseGet(alrDueDateService::generateDueDate);
+
         Year alrYear = dateService.getYear();
 
         // Validate if ALR is allowed
@@ -43,13 +46,13 @@ public class ALRCreationService {
             throw new BusinessException(MetsErrorCode.ALR_CREATION_NOT_ALLOWED, validationResult);
         }
 
-        return createALRForYear(accountId, alrYear, alrDueDateService.generateDueDate());
+        return createALRForYear(accountId, alrYear, expirationDate, isFinal);
     }
 
     @Transactional
-    public Request createALRForYear(Long accountId, Year alrYear, Date expirationDate) {
+    public Request createALRForYear(Long accountId, Year alrYear, Date expirationDate, boolean isFinal) {
         // Validate if ALR is allowed
-        RequestCreateValidationResult yearValidationYearResult = alrCreationValidatorService.validateYear(accountId, alrYear);
+        RequestCreateValidationResult yearValidationYearResult = alrCreationValidatorService.validateYear(accountId, alrYear, isFinal);
         if(!yearValidationYearResult.isValid()) {
             throw new BusinessException(MetsErrorCode.ALR_CREATION_NOT_ALLOWED, yearValidationYearResult);
         }
@@ -60,23 +63,24 @@ public class ALRCreationService {
         }
 
         // Create and start workflow
-        Map<String, Object> processVars = new HashMap<>();
-        processVars.put(BpmnProcessConstants.ALR_EXPIRATION_DATE, expirationDate);
-        return createALR(accountId, alrYear, processVars);
+        Map<String, Object> processVars = Map.of(BpmnProcessConstants.ALR_EXPIRATION_DATE, expirationDate);
+        return createALR(accountId, alrYear, processVars, isFinal);
     }
 
-    private Request createALR(Long accountId, Year alrYear, Map<String, Object> processVars) {
+    private Request createALR(Long accountId, Year alrYear, Map<String, Object> processVars, boolean isFinal) {
 
         RequestParams requestParams = RequestParams.builder()
                 .type(RequestType.ALR)
                 .accountId(accountId)
                 .requestPayload(ALRRequestPayload.builder()
                         .payloadType(RequestPayloadType.ALR_REQUEST_PAYLOAD)
+                        .reportingYear(alrYear)
                         .alr(ALR.builder().build())
                         .build())
                 .requestMetadata(ALRRequestMetaData.builder()
                         .type(RequestMetadataType.ALR)
                         .year(alrYear)
+                        .isFinal(isFinal)
                         .build())
                 .processVars(processVars)
                 .build();

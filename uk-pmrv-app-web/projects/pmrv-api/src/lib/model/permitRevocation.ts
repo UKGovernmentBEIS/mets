@@ -17,6 +17,8 @@ export interface PermitRevocation {
   effectiveDate: string;
   annualEmissionsReportRequired: boolean;
   annualEmissionsReportDate?: string;
+  alrRequired?: boolean;
+  alrReportDate?: string;
   surrenderRequired: boolean;
   surrenderDate?: string;
   feeCharged: boolean;

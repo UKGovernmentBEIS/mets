@@ -23,9 +23,16 @@ export class WorkflowItemsService {
     @Inject(ACCOUNT_TYPE) private readonly accountType: AccountType,
   ) {}
 
-  getItems(type: WorkflowItemsAssignmentType, page: number, pageSize: number): Observable<ItemDTOResponse> {
+  getItems(
+    type: WorkflowItemsAssignmentType,
+    page: number,
+    pageSize: number,
+    orderBy: 'NEWEST_FIRST' | 'NEAREST_DUE_DATE',
+    filterWorkflow?: string,
+    accountSearchTerm?: string,
+  ): Observable<ItemDTOResponse> {
     const serviceMethod = this.getServiceMethod(type);
-    return serviceMethod(this.accountType, page - 1, pageSize);
+    return serviceMethod(this.accountType, page - 1, pageSize, orderBy, filterWorkflow, accountSearchTerm);
   }
 
   private getServiceMethod(type: WorkflowItemsAssignmentType) {

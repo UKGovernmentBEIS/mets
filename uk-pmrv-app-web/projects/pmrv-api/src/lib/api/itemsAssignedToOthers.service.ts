@@ -86,6 +86,9 @@ export class ItemsAssignedToOthersService {
    * @param accountType The account type
    * @param page The page number starting from zero
    * @param size The page size
+   * @param orderBy
+   * @param requestType
+   * @param accountSearchTerm
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
@@ -93,11 +96,99 @@ export class ItemsAssignedToOthersService {
     accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
+    orderBy: 'NEWEST_FIRST' | 'NEAREST_DUE_DATE',
+    requestType?:
+      | 'INSTALLATION_ACCOUNT_OPENING'
+      | 'SYSTEM_MESSAGE_NOTIFICATION'
+      | 'PERMIT_ISSUANCE'
+      | 'PERMIT_SURRENDER'
+      | 'PERMIT_REVOCATION'
+      | 'PERMIT_TRANSFER_A'
+      | 'PERMIT_TRANSFER_B'
+      | 'PERMIT_VARIATION'
+      | 'PERMIT_NOTIFICATION'
+      | 'PERMIT_BATCH_REISSUE'
+      | 'PERMIT_REISSUE'
+      | 'NON_COMPLIANCE'
+      | 'NER'
+      | 'DOAL'
+      | 'AER'
+      | 'VIR'
+      | 'AIR'
+      | 'DRE'
+      | 'WITHHOLDING_OF_ALLOWANCES'
+      | 'RETURN_OF_ALLOWANCES'
+      | 'INSTALLATION_ONSITE_INSPECTION'
+      | 'INSTALLATION_AUDIT'
+      | 'HSE_TI'
+      | 'BDR'
+      | 'PERMANENT_CESSATION'
+      | 'ALR'
+      | 'AVIATION_ACCOUNT_CLOSURE'
+      | 'AVIATION_NON_COMPLIANCE'
+      | 'EMP_BATCH_REISSUE'
+      | 'EMP_REISSUE'
+      | 'AVIATION_VIR'
+      | 'EMP_ISSUANCE_UKETS'
+      | 'EMP_VARIATION_UKETS'
+      | 'AVIATION_AER_UKETS'
+      | 'AVIATION_DRE_UKETS'
+      | 'EMP_ISSUANCE_CORSIA'
+      | 'EMP_VARIATION_CORSIA'
+      | 'AVIATION_AER_CORSIA'
+      | 'AVIATION_DOE_CORSIA'
+      | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'
+      | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING',
+    accountSearchTerm?: string,
   ): Observable<ItemDTOResponse>;
   public getAssignedToOthersItems(
     accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
+    orderBy: 'NEWEST_FIRST' | 'NEAREST_DUE_DATE',
+    requestType:
+      | 'INSTALLATION_ACCOUNT_OPENING'
+      | 'SYSTEM_MESSAGE_NOTIFICATION'
+      | 'PERMIT_ISSUANCE'
+      | 'PERMIT_SURRENDER'
+      | 'PERMIT_REVOCATION'
+      | 'PERMIT_TRANSFER_A'
+      | 'PERMIT_TRANSFER_B'
+      | 'PERMIT_VARIATION'
+      | 'PERMIT_NOTIFICATION'
+      | 'PERMIT_BATCH_REISSUE'
+      | 'PERMIT_REISSUE'
+      | 'NON_COMPLIANCE'
+      | 'NER'
+      | 'DOAL'
+      | 'AER'
+      | 'VIR'
+      | 'AIR'
+      | 'DRE'
+      | 'WITHHOLDING_OF_ALLOWANCES'
+      | 'RETURN_OF_ALLOWANCES'
+      | 'INSTALLATION_ONSITE_INSPECTION'
+      | 'INSTALLATION_AUDIT'
+      | 'HSE_TI'
+      | 'BDR'
+      | 'PERMANENT_CESSATION'
+      | 'ALR'
+      | 'AVIATION_ACCOUNT_CLOSURE'
+      | 'AVIATION_NON_COMPLIANCE'
+      | 'EMP_BATCH_REISSUE'
+      | 'EMP_REISSUE'
+      | 'AVIATION_VIR'
+      | 'EMP_ISSUANCE_UKETS'
+      | 'EMP_VARIATION_UKETS'
+      | 'AVIATION_AER_UKETS'
+      | 'AVIATION_DRE_UKETS'
+      | 'EMP_ISSUANCE_CORSIA'
+      | 'EMP_VARIATION_CORSIA'
+      | 'AVIATION_AER_CORSIA'
+      | 'AVIATION_DOE_CORSIA'
+      | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'
+      | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING',
+    accountSearchTerm: string,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
@@ -106,6 +197,50 @@ export class ItemsAssignedToOthersService {
     accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
+    orderBy: 'NEWEST_FIRST' | 'NEAREST_DUE_DATE',
+    requestType:
+      | 'INSTALLATION_ACCOUNT_OPENING'
+      | 'SYSTEM_MESSAGE_NOTIFICATION'
+      | 'PERMIT_ISSUANCE'
+      | 'PERMIT_SURRENDER'
+      | 'PERMIT_REVOCATION'
+      | 'PERMIT_TRANSFER_A'
+      | 'PERMIT_TRANSFER_B'
+      | 'PERMIT_VARIATION'
+      | 'PERMIT_NOTIFICATION'
+      | 'PERMIT_BATCH_REISSUE'
+      | 'PERMIT_REISSUE'
+      | 'NON_COMPLIANCE'
+      | 'NER'
+      | 'DOAL'
+      | 'AER'
+      | 'VIR'
+      | 'AIR'
+      | 'DRE'
+      | 'WITHHOLDING_OF_ALLOWANCES'
+      | 'RETURN_OF_ALLOWANCES'
+      | 'INSTALLATION_ONSITE_INSPECTION'
+      | 'INSTALLATION_AUDIT'
+      | 'HSE_TI'
+      | 'BDR'
+      | 'PERMANENT_CESSATION'
+      | 'ALR'
+      | 'AVIATION_ACCOUNT_CLOSURE'
+      | 'AVIATION_NON_COMPLIANCE'
+      | 'EMP_BATCH_REISSUE'
+      | 'EMP_REISSUE'
+      | 'AVIATION_VIR'
+      | 'EMP_ISSUANCE_UKETS'
+      | 'EMP_VARIATION_UKETS'
+      | 'AVIATION_AER_UKETS'
+      | 'AVIATION_DRE_UKETS'
+      | 'EMP_ISSUANCE_CORSIA'
+      | 'EMP_VARIATION_CORSIA'
+      | 'AVIATION_AER_CORSIA'
+      | 'AVIATION_DOE_CORSIA'
+      | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'
+      | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING',
+    accountSearchTerm: string,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
@@ -114,6 +249,50 @@ export class ItemsAssignedToOthersService {
     accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
+    orderBy: 'NEWEST_FIRST' | 'NEAREST_DUE_DATE',
+    requestType:
+      | 'INSTALLATION_ACCOUNT_OPENING'
+      | 'SYSTEM_MESSAGE_NOTIFICATION'
+      | 'PERMIT_ISSUANCE'
+      | 'PERMIT_SURRENDER'
+      | 'PERMIT_REVOCATION'
+      | 'PERMIT_TRANSFER_A'
+      | 'PERMIT_TRANSFER_B'
+      | 'PERMIT_VARIATION'
+      | 'PERMIT_NOTIFICATION'
+      | 'PERMIT_BATCH_REISSUE'
+      | 'PERMIT_REISSUE'
+      | 'NON_COMPLIANCE'
+      | 'NER'
+      | 'DOAL'
+      | 'AER'
+      | 'VIR'
+      | 'AIR'
+      | 'DRE'
+      | 'WITHHOLDING_OF_ALLOWANCES'
+      | 'RETURN_OF_ALLOWANCES'
+      | 'INSTALLATION_ONSITE_INSPECTION'
+      | 'INSTALLATION_AUDIT'
+      | 'HSE_TI'
+      | 'BDR'
+      | 'PERMANENT_CESSATION'
+      | 'ALR'
+      | 'AVIATION_ACCOUNT_CLOSURE'
+      | 'AVIATION_NON_COMPLIANCE'
+      | 'EMP_BATCH_REISSUE'
+      | 'EMP_REISSUE'
+      | 'AVIATION_VIR'
+      | 'EMP_ISSUANCE_UKETS'
+      | 'EMP_VARIATION_UKETS'
+      | 'AVIATION_AER_UKETS'
+      | 'AVIATION_DRE_UKETS'
+      | 'EMP_ISSUANCE_CORSIA'
+      | 'EMP_VARIATION_CORSIA'
+      | 'AVIATION_AER_CORSIA'
+      | 'AVIATION_DOE_CORSIA'
+      | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'
+      | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING',
+    accountSearchTerm: string,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
@@ -122,6 +301,50 @@ export class ItemsAssignedToOthersService {
     accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
+    orderBy: 'NEWEST_FIRST' | 'NEAREST_DUE_DATE',
+    requestType?:
+      | 'INSTALLATION_ACCOUNT_OPENING'
+      | 'SYSTEM_MESSAGE_NOTIFICATION'
+      | 'PERMIT_ISSUANCE'
+      | 'PERMIT_SURRENDER'
+      | 'PERMIT_REVOCATION'
+      | 'PERMIT_TRANSFER_A'
+      | 'PERMIT_TRANSFER_B'
+      | 'PERMIT_VARIATION'
+      | 'PERMIT_NOTIFICATION'
+      | 'PERMIT_BATCH_REISSUE'
+      | 'PERMIT_REISSUE'
+      | 'NON_COMPLIANCE'
+      | 'NER'
+      | 'DOAL'
+      | 'AER'
+      | 'VIR'
+      | 'AIR'
+      | 'DRE'
+      | 'WITHHOLDING_OF_ALLOWANCES'
+      | 'RETURN_OF_ALLOWANCES'
+      | 'INSTALLATION_ONSITE_INSPECTION'
+      | 'INSTALLATION_AUDIT'
+      | 'HSE_TI'
+      | 'BDR'
+      | 'PERMANENT_CESSATION'
+      | 'ALR'
+      | 'AVIATION_ACCOUNT_CLOSURE'
+      | 'AVIATION_NON_COMPLIANCE'
+      | 'EMP_BATCH_REISSUE'
+      | 'EMP_REISSUE'
+      | 'AVIATION_VIR'
+      | 'EMP_ISSUANCE_UKETS'
+      | 'EMP_VARIATION_UKETS'
+      | 'AVIATION_AER_UKETS'
+      | 'AVIATION_DRE_UKETS'
+      | 'EMP_ISSUANCE_CORSIA'
+      | 'EMP_VARIATION_CORSIA'
+      | 'AVIATION_AER_CORSIA'
+      | 'AVIATION_DOE_CORSIA'
+      | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'
+      | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING',
+    accountSearchTerm?: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
@@ -135,6 +358,9 @@ export class ItemsAssignedToOthersService {
     if (size === null || size === undefined) {
       throw new Error('Required parameter size was null or undefined when calling getAssignedToOthersItems.');
     }
+    if (orderBy === null || orderBy === undefined) {
+      throw new Error('Required parameter orderBy was null or undefined when calling getAssignedToOthersItems.');
+    }
 
     let queryParameters = new HttpParams({ encoder: this.encoder });
     if (page !== undefined && page !== null) {
@@ -142,6 +368,15 @@ export class ItemsAssignedToOthersService {
     }
     if (size !== undefined && size !== null) {
       queryParameters = this.addToHttpParams(queryParameters, <any>size, 'size');
+    }
+    if (orderBy !== undefined && orderBy !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>orderBy, 'orderBy');
+    }
+    if (requestType !== undefined && requestType !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>requestType, 'requestType');
+    }
+    if (accountSearchTerm !== undefined && accountSearchTerm !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>accountSearchTerm, 'accountSearchTerm');
     }
 
     let headers = this.defaultHeaders;

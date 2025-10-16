@@ -1,8 +1,7 @@
 <app-request-action-heading
   *ngIf="vm$ | async as vm"
   [headerText]="vm.pageHeader"
-  [timelineCreationDate]="vm.timelineCreationDate"
->
+  [timelineCreationDate]="vm.timelineCreationDate">
   <p class="govuk-heading-m">Batch variation details</p>
   <dl govuk-summary-list>
     <ng-container>
@@ -16,6 +15,18 @@
         <dt govukSummaryListRowKey>Date created</dt>
         <dd govukSummaryListRowValue>
           {{ vm.timelineCreationDate | govukDate }}
+        </dd>
+      </div>
+      <div govukSummaryListRow *ngIf="vm.payload?.changesDetails?.['changes'] as changes" [hidden]="!changes?.length">
+        <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
+        <dd govukSummaryListRowValue>
+          <ol class="govuk-list govuk-list--number">
+            @for (change of changes; track $index) {
+              @if (change) {
+                <li>{{ change }}</li>
+              }
+            }
+          </ol>
         </dd>
       </div>
       <div govukSummaryListRow>
@@ -35,12 +46,12 @@
               vm.requestActionId,
               'file-download',
               'document',
-              vm.payload.officialNotice.uuid
+              vm.payload.officialNotice.uuid,
             ]"
             govukLink
-            target="_blank"
-            >{{ vm.payload.officialNotice.name }}</a
-          >
+            target="_blank">
+            {{ vm.payload.officialNotice.name }}
+          </a>
           <br />
           <a
             [routerLink]="[
@@ -49,12 +60,12 @@
               vm.requestActionId,
               'file-download',
               'document',
-              vm.payload.document.uuid
+              vm.payload.document.uuid,
             ]"
             govukLink
-            target="_blank"
-            >{{ vm.payload.document.name }}</a
-          >
+            target="_blank">
+            {{ vm.payload.document.name }}
+          </a>
         </dd>
       </div>
     </ng-container>

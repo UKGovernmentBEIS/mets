@@ -39,7 +39,7 @@ public class ALRValidationService {
 
     private final AllowanceAllocationValidator allowanceAllocationValidator;
 
-    private final String ALR_FILE_NAME_PATTERN = "^ALR\\d{5}-\\d{4}-v\\d+-(uploaded by (Operator|Regulator))-(.{1,10})\\.(?i)(doc|docx|xls|xlsx|ppt|pptx|vsd|vsdx|jpg|jpeg|pdf|png|tif|txt|dib|bmp|csv)$";
+    private final String ALR_FILE_NAME_PATTERN = "^ALR\\d{5}-(\\d{4}|FINAL)-v\\d+-(uploaded by (Operator|Regulator))-(.{1,10})\\.(?i)(doc|docx|xls|xlsx|ppt|pptx|vsd|vsdx|jpg|jpeg|pdf|png|tif|txt|dib|bmp|csv)$";
     private final Pattern PATTERN = Pattern.compile(ALR_FILE_NAME_PATTERN);
 
     public void validateALR(@Valid @NotNull ALR alr) {}

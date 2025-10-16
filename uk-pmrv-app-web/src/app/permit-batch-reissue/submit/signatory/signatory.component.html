@@ -4,16 +4,15 @@
       (formSubmit)="onSubmit()"
       [formGroup]="form"
       heading="Whose name and signature should appear on the notice?"
+      caption="Start a batch variation"
       submitText="Continue"
-      [showBackLink]="true"
-    >
+      [showBackLink]="true">
       <div
         class="govuk-body"
         [options]="regulators$ | async"
         formControlName="signatory"
         govuk-select
-        widthClass="govuk-!-width-two-thirds"
-      ></div>
+        widthClass="govuk-!-width-two-thirds"></div>
     </app-wizard-step>
   </div>
 </div>

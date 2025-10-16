@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { filter, map, Observable, of, switchMap, takeUntil, withLatestFrom } from 'rxjs';
+import { combineLatest, filter, map, Observable, of, switchMap, takeUntil, withLatestFrom } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { notInNeedsForReview } from '@permit-revocation/core/section-status';
@@ -77,11 +77,15 @@ export class PermitRevocationTasklistComponent implements OnInit {
     })),
   );
 
-  readonly isDeterminationCompleted$: Observable<boolean> = this.store.pipe(
+  readonly isDeterminationCompleted$: Observable<boolean> = combineLatest([
+    this.store,
+    this.store.isFinalAlrVisible$,
+  ]).pipe(
     map(
-      (state) =>
+      ([state, isFinalAlrVisible]) =>
         state?.sectionsCompleted?.REVOCATION_APPLY &&
-        (state?.requestTaskType === 'PERMIT_REVOCATION_APPLICATION_PEER_REVIEW' || notInNeedsForReview(state)),
+        (state?.requestTaskType === 'PERMIT_REVOCATION_APPLICATION_PEER_REVIEW' ||
+          notInNeedsForReview(state, isFinalAlrVisible)),
     ),
   );
 

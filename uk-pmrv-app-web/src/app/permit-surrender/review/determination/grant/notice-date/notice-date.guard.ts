@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
-import { map, Observable } from 'rxjs';
+import { combineLatest, first, map, Observable } from 'rxjs';
 
 import { PermitSurrenderReviewDeterminationGrant } from 'pmrv-api';
 
@@ -20,16 +20,18 @@ export class NoticeDateGuard {
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return (
       this.router.getCurrentNavigation().extras?.state?.changing ||
-      this.store.pipe(
-        map((storeState) => {
+      combineLatest([this.store.pipe(), this.store.isFinalAlrVisible$]).pipe(
+        first(),
+        map(([storeState, isFinalAlrVisible]) => {
           const taskId = route.paramMap.get('taskId');
           const wizardBaseUrl = `/permit-surrender/${taskId}/review/determination`;
           const wizardBaseGrantUrl = `${wizardBaseUrl}/grant`;
-
           const determination = storeState.reviewDetermination as PermitSurrenderReviewDeterminationGrant;
+
           return (
             (storeState.reviewDeterminationCompleted && this.router.parseUrl(wizardBaseGrantUrl.concat('/summary'))) ||
-            (isWizardComplete(determination) && this.router.parseUrl(`${wizardBaseGrantUrl}/answers`)) ||
+            (isWizardComplete(determination, isFinalAlrVisible) &&
+              this.router.parseUrl(`${wizardBaseGrantUrl}/answers`)) ||
             ((determination?.type !== 'GRANTED' || !determination?.stopDate) && this.router.parseUrl(wizardBaseUrl)) ||
             true
           );

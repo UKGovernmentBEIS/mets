@@ -20,13 +20,24 @@ public class AerVerificationActivityLevelReportValidator implements AerVerificat
                                         PermitOriginatedData permitOriginatedData) {
         List<AerViolation> violations = new ArrayList<>();
         //TODO: waste
-        if (isActivityLevelReportNotApplicableForHSE(verificationReport, permitOriginatedData)) {
-            violations.add(new AerViolation(AerVerificationReport.class.getSimpleName(),
-                AerViolation.AerViolationMessage.VERIFICATION_ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_HSE));
+
+        Boolean postALR = verificationReport.getVerificationData().getIsPostALRSectionRemoval();
+        if (postALR == null || !postALR) {
+            if (isActivityLevelReportNotApplicableForHSE(verificationReport, permitOriginatedData)) {
+                violations.add(new AerViolation(AerVerificationReport.class.getSimpleName(),
+                        AerViolation.AerViolationMessage.VERIFICATION_ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_HSE));
+            }
+            if (isActivityLevelReportNotApplicableForGHGE(verificationReport, permitOriginatedData)) {
+                violations.add(new AerViolation(AerVerificationReport.class.getSimpleName(),
+                        AerViolation.AerViolationMessage.VERIFICATION_ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_GHGE));
+            }
         }
-        if (isActivityLevelReportNotApplicableForGHGE(verificationReport, permitOriginatedData)) {
-            violations.add(new AerViolation(AerVerificationReport.class.getSimpleName(),
-                AerViolation.AerViolationMessage.VERIFICATION_ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_GHGE));
+
+        else {
+            if (verificationReport.getVerificationData().getActivityLevelReport() != null) {
+                violations.add(new AerViolation(AerVerificationReport.class.getSimpleName(),
+                        AerViolation.AerViolationMessage.VERIFICATION_ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE));
+            }
         }
         return AerValidationResult.builder()
             .valid(violations.isEmpty())
@@ -37,13 +48,13 @@ public class AerVerificationActivityLevelReportValidator implements AerVerificat
     private boolean isActivityLevelReportNotApplicableForHSE(AerVerificationReport verificationReport,
                                                              PermitOriginatedData permitOriginatedData) {
         return permitOriginatedData.getPermitType() == PermitType.HSE
-            && verificationReport.getVerificationData().getActivityLevelReport() != null;
+                && verificationReport.getVerificationData().getActivityLevelReport() != null;
     }
 
     private boolean isActivityLevelReportNotApplicableForGHGE(AerVerificationReport verificationReport,
                                                               PermitOriginatedData permitOriginatedData) {
         return permitOriginatedData.getPermitType() == PermitType.GHGE
-            && verificationReport.getVerificationData().getActivityLevelReport() == null;
+                && verificationReport.getVerificationData().getActivityLevelReport() == null;
     }
 }
 

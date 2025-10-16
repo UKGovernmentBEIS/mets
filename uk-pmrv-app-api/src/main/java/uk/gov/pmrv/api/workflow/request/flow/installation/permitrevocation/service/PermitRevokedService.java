@@ -29,7 +29,7 @@ public class PermitRevokedService {
         installationAccountStatusService.handlePermitRevoked(accountId);
     }
 
-    public Map<String, Object> constructAerVariables(String requestId) {
+    public Map<String, Object> constructAerAndAlrVariables(String requestId) {
         Map<String, Object> variables = new HashMap<>();
 
         Request request = requestService.findRequestById(requestId);
@@ -42,6 +42,16 @@ public class PermitRevokedService {
             variables.put(BpmnProcessConstants.AER_EXPIRATION_DATE,
                     DateUtils.atEndOfDay(revocation.getAnnualEmissionsReportDate()));
         }
+
+        variables.put(BpmnProcessConstants.ALR_REQUIRED, revocation.getAlrRequired());
+
+        if(Boolean.TRUE.equals(revocation.getAlrRequired())) {
+            variables.put(BpmnProcessConstants.ALR_FINAL, Boolean.TRUE);
+            variables.put(BpmnProcessConstants.ACCOUNT_ID, request.getAccountId());
+            variables.put(BpmnProcessConstants.ALR_EXPIRATION_DATE,
+                    DateUtils.atEndOfDay(revocation.getAlrReportDate()));
+        }
+
 
         return variables;
     }

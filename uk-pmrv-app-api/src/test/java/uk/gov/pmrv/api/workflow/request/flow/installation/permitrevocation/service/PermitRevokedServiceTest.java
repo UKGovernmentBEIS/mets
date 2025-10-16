@@ -53,7 +53,7 @@ class PermitRevokedServiceTest {
     }
 
     @Test
-    void constructAerVariables() {
+    void constructAerAndAlrVariables() {
         final String requestId = "1";
         LocalDate reportLocalDate = LocalDate.now();
         Date reportDate = DateUtils.atEndOfDay(reportLocalDate);
@@ -63,22 +63,29 @@ class PermitRevokedServiceTest {
                 .permitRevocation(PermitRevocation.builder()
                         .annualEmissionsReportRequired(true)
                         .annualEmissionsReportDate(reportLocalDate)
+                        .alrRequired(true)
+                        .alrReportDate(reportLocalDate)
                         .build())
                 .build();
         Request request = Request.builder()
                 .id(requestId)
+                .accountId(1L)
                 .payload(requestPayload)
                 .build();
 
         when(requestService.findRequestById(requestId)).thenReturn(request);
 
         // Invoke
-        Map<String, Object> result = service.constructAerVariables(requestId);
+        Map<String, Object> result = service.constructAerAndAlrVariables(requestId);
 
         // Verify
         assertThat(result).isEqualTo(Map.of(
                 BpmnProcessConstants.AER_REQUIRED, true,
-                BpmnProcessConstants.AER_EXPIRATION_DATE, reportDate
+                BpmnProcessConstants.AER_EXPIRATION_DATE, reportDate,
+                BpmnProcessConstants.ALR_EXPIRATION_DATE, reportDate,
+                BpmnProcessConstants.ALR_REQUIRED, true,
+                BpmnProcessConstants.ALR_FINAL, true,
+                BpmnProcessConstants.ACCOUNT_ID, 1L
         ));
         verify(requestService).findRequestById(requestId);
     }

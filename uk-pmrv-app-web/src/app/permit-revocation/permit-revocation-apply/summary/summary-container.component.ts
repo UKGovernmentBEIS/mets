@@ -64,6 +64,9 @@ export class SummaryContainerComponent extends BaseSuccessComponent implements O
           if (state.permitRevocation?.surrenderDate) {
             this.form.addValidators(genericMinDateValidator('surrenderDate'));
           }
+          if (state.permitRevocation?.alrReportDate) {
+            this.form.addValidators(genericMinDateValidator('alrReportDate'));
+          }
         }),
       )
       .subscribe(() => this.form.updateValueAndValidity());

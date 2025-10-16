@@ -4,7 +4,9 @@
   </div>
   <h3 *ngIf="extraTitle" class="govuk-heading-s govuk-grid-column-three-quarters">{{ extraTitle }}</h3>
   <div class="govuk-grid-column-one-quarter">
-    <a govukLink routerLink="" (click)="onRemoveFollowUpItem(index)" *ngIf="isEditable"> Remove </a>
+    <a govukLink hidden-text="follow-up action" routerLink="" (click)="onRemoveFollowUpItem(index)" *ngIf="isEditable">
+      Remove
+    </a>
   </div>
 </div>
 <dl govuk-summary-list [hasBorders]="true">
@@ -14,14 +16,14 @@
       {{ $any(followUpAction).followUpActionType | followUpActionType }}
     </dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink [routerLink]="['../', index, 'add-follow-up-action']">Change</a>
+      <a govukLink hidden-text="action type" [routerLink]="['../', index, 'add-follow-up-action']">Change</a>
     </dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Explanation</dt>
     <dd govukSummaryListRowValue class="pre-wrap">{{ followUpAction.explanation }}</dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink [routerLink]="['../', index, 'add-follow-up-action']">Change</a>
+      <a govukLink hidden-text="explanation" [routerLink]="['../', index, 'add-follow-up-action']">Change</a>
     </dd>
   </div>
   <div govukSummaryListRow *ngIf="$any(followUpAction)?.followUpActionAttachments?.length > 0">
@@ -30,7 +32,7 @@
       <app-summary-download-files [files]="files"></app-summary-download-files>
     </dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink [routerLink]="['../', index, 'add-follow-up-action']">Change</a>
+      <a govukLink hidden-text="uploaded files" [routerLink]="['../', index, 'add-follow-up-action']">Change</a>
     </dd>
   </div>
 </dl>

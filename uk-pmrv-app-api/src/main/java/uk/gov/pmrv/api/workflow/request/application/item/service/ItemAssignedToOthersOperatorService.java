@@ -9,10 +9,12 @@ import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.workflow.request.application.authorization.OperatorAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
+import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemOrderBy;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
 import uk.gov.pmrv.api.workflow.request.application.item.repository.ItemOperatorRepository;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +28,12 @@ public class ItemAssignedToOthersOperatorService implements ItemAssignedToOthers
     private final OperatorAuthorityResourceAdapter operatorAuthorityResourceAdapter;
 
     @Override
-    public ItemDTOResponse getItemsAssignedToOthers(AppUser appUser, AccountType accountType, PagingRequest paging) {
+    public ItemDTOResponse getItemsAssignedToOthers(AppUser appUser,
+                                                    AccountType accountType,
+                                                    PagingRequest paging,
+                                                    ItemOrderBy orderBy,
+                                                    RequestType requestType,
+                                                    String accountSearchTerm) {
         Map<Long, Set<RequestTaskType>> userScopedRequestTaskTypes = operatorAuthorityResourceAdapter
             .getUserScopedRequestTaskTypesByAccountType(appUser, accountType);
 
@@ -38,7 +45,10 @@ public class ItemAssignedToOthersOperatorService implements ItemAssignedToOthers
             appUser.getUserId(),
             ItemAssignmentType.OTHERS,
             userScopedRequestTaskTypes,
-            paging);
+            paging,
+            orderBy,
+            requestType,
+            accountSearchTerm);
 
         return itemResponseService.toItemDTOResponse(itemPage, accountType, appUser);
     }

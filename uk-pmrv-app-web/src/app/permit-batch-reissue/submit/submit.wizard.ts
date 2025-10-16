@@ -1,7 +1,12 @@
 import { PermitBatchReissueState } from './store/permit-batch-reissue.state';
 
 export function isWizardCompleted(batchReissueState: PermitBatchReissueState) {
-  return isFiltersWizardStepCompleted(batchReissueState) && isSignatoryWizardStepCompleted(batchReissueState);
+  return (
+    isFiltersWizardStepCompleted(batchReissueState) &&
+    isSignatoryWizardStepCompleted(batchReissueState) &&
+    isChangesSummaryWizardStepCompleted(batchReissueState) &&
+    isChangesWizardStepCompleted(batchReissueState)
+  );
 }
 
 export function isFiltersWizardStepCompleted(batchReissueState: PermitBatchReissueState) {
@@ -19,4 +24,12 @@ export function isFiltersWizardStepCompleted(batchReissueState: PermitBatchReiss
 
 export function isSignatoryWizardStepCompleted(batchReissueState: PermitBatchReissueState) {
   return batchReissueState !== undefined && !!batchReissueState.signatory;
+}
+
+export function isChangesSummaryWizardStepCompleted(batchReissueState: PermitBatchReissueState) {
+  return batchReissueState !== undefined && !!batchReissueState.changesDetails?.['changesSummary'];
+}
+
+export function isChangesWizardStepCompleted(batchReissueState: PermitBatchReissueState) {
+  return batchReissueState !== undefined && !!batchReissueState.changesDetails?.['changes']?.length;
 }

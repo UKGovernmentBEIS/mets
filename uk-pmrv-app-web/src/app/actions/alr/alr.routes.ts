@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+import { PendingRequestGuard } from '@core/guards/pending-request.guard';
 import { RecallSharedComponent } from '@shared/components/recall/recall.component';
 
 import {
@@ -17,6 +18,7 @@ import {
   AlrReturnedToOperatorComponent,
   AlrSubmittedComponent,
 } from '.';
+import { AlrMarkedAsNotRequiredDetailsComponent } from './marked-as-not-required/marked-as-not-required.component';
 
 export const ALR_ACTION_ROUTES: Routes = [
   {
@@ -115,5 +117,14 @@ export const ALR_ACTION_ROUTES: Routes = [
         ],
       },
     ],
+  },
+  {
+    path: 'not-required',
+    data: {
+      pageTitle: 'Marked as not required',
+      breadcrumb: 'Marked as not required',
+    },
+    component: AlrMarkedAsNotRequiredDetailsComponent,
+    canDeactivate: [PendingRequestGuard],
   },
 ];

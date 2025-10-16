@@ -203,6 +203,7 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.AVIATION_AER_3YEAR_PERIOD_OFFSETTING, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_AER, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_ALR, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_BDR, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_BDR_REVIEW, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_PERMANENT_CESSATION, RegulatorPermissionLevel.NONE);
@@ -280,6 +281,7 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.AVIATION_AER_3YEAR_PERIOD_OFFSETTING, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_AER, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_ALR, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_BDR, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_BDR_REVIEW, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_PERMANENT_CESSATION, RegulatorPermissionLevel.NONE);
@@ -378,6 +380,7 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.AVIATION_AER_3YEAR_PERIOD_OFFSETTING, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_AER, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_ALR, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_BDR, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_BDR_REVIEW, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_PERMANENT_CESSATION, RegulatorPermissionLevel.NONE);
@@ -449,6 +452,7 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.AVIATION_AER_3YEAR_PERIOD_OFFSETTING, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_AER, List.of(RegulatorPermissionLevel.NONE, EXECUTE));
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_ALR, List.of(RegulatorPermissionLevel.NONE, EXECUTE));
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_BDR, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_BDR_REVIEW, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_PERMANENT_CESSATION, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));

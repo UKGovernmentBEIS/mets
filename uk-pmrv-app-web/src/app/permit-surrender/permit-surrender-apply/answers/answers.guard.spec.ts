@@ -1,6 +1,6 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlSegment, UrlTree } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { firstValueFrom, Observable } from 'rxjs';
 
@@ -28,8 +28,7 @@ describe('AnswersGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [{ provide: TasksService, useValue: tasksService }],
+      providers: [provideHttpClient(), { provide: TasksService, useValue: tasksService }],
     });
     guard = TestBed.inject(AnswersGuard);
     router = TestBed.inject(Router);

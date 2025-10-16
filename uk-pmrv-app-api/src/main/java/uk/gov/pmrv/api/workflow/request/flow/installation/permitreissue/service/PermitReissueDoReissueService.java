@@ -6,13 +6,18 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.pmrv.api.permit.domain.PermitContainer;
+import uk.gov.pmrv.api.permit.domain.dto.PermitEntityDto;
+import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.permit.service.PermitService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.service.ReissueAddCompletedRequestActionService;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.service.ReissueOfficialNoticeService;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +26,7 @@ public class PermitReissueDoReissueService {
 	private final RequestService requestService;
 	private final PermitReissueAccountValidationService permitReissueAccountValidationService;
 	private final PermitService permitService;
+	private final PermitQueryService permitQueryService;
 	private final PermitReissueUpdatePayloadConsolidationNumberService reissueUpdatePayloadConsolidationNumberService;
 	private final PermitReissueGenerateDocumentsService permitReissueGenerateDocumentsService;
 	private final ReissueAddCompletedRequestActionService reissueAddCompletedRequestActionService;
@@ -37,8 +43,16 @@ public class PermitReissueDoReissueService {
 		}
 		
 		request.setSubmissionDate(LocalDateTime.now());
-		
+
+
+		PermitEntityDto permitEntityDto = permitQueryService.getPermitByAccountId(accountId);
+		final LocalDate newActivationDate = LocalDate.now(ZoneId.systemDefault());
+
+		PermitContainer permitContainer = permitEntityDto.getPermitContainer();
+		permitContainer.setActivationDate(newActivationDate);
+
 		permitService.incrementPermitConsolidationNumber(accountId);
+		permitService.updatePermit(permitContainer, accountId);
 		
 		reissueUpdatePayloadConsolidationNumberService.updateRequestPayloadConsolidationNumber(request);
 		

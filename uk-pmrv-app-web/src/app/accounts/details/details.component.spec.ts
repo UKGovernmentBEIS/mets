@@ -116,6 +116,7 @@ describe('DetailsComponent', () => {
 
         'accountName',
         'siteName',
+        '8 Sept 1978',
         '222',
         '111',
         'GHGE',
@@ -171,6 +172,7 @@ describe('DetailsComponent', () => {
       expect(page.accountDetails.map((dd) => dd.textContent.trim())).toEqual([
         'accountName',
         'siteName',
+        '8 Sept 1978',
         '222',
         '111',
         'GHGE',
@@ -232,6 +234,7 @@ describe('DetailsComponent', () => {
 
         'accountName',
         'siteName',
+        '8 Sept 1978',
         '222',
         '111',
         'GHGE',
@@ -254,7 +257,9 @@ describe('DetailsComponent', () => {
     });
 
     it('should render the edit links', () => {
-      expect(Array.from(page.actions).filter((action) => action.textContent.trim() === 'Change').length).toEqual(13);
+      expect(Array.from(page.actions).filter((action) => action.textContent.trim().includes('Change')).length).toEqual(
+        14,
+      );
     });
 
     it('should render the companies house details', () => {
@@ -268,6 +273,7 @@ describe('DetailsComponent', () => {
 
         'accountName',
         'siteName',
+        '8 Sept 1978',
         '222',
         '111',
         'GHGE',
@@ -323,6 +329,7 @@ describe('DetailsComponent', () => {
       expect(page.accountDetails.map((dd) => dd.textContent.trim())).toEqual([
         'accountName',
         'siteName',
+        '8 Sept 1978',
         '222',
         '111',
         'GHGE',
@@ -378,6 +385,7 @@ describe('DetailsComponent', () => {
       expect(page.accountDetails.map((dd) => dd.textContent.trim())).toEqual([
         'accountName',
         'siteName',
+        '8 Sept 1978',
         '222',
         '111',
         'GHGE',

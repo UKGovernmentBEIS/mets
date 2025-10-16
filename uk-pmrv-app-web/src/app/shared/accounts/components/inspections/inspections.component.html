@@ -10,8 +10,7 @@
               <govuk-checkbox
                 *ngFor="let type of inspectionsTypesMap | keyvalue: originalOrder"
                 [value]="type.value"
-                [label]="type.key"
-              ></govuk-checkbox>
+                [label]="type.key"></govuk-checkbox>
             </div>
           </div>
           <div class="govuk-grid-column-full">
@@ -20,14 +19,16 @@
               <govuk-checkbox
                 *ngFor="let type of inspectionsStatusesMap | keyvalue: originalOrder"
                 [value]="type.key"
-                [label]="type.value"
-              ></govuk-checkbox>
+                [label]="type.value"></govuk-checkbox>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="govuk-grid-column-three-quarters" *ngIf="currentPageData$ | async as inspections">
+      <p class="govuk-visually-hidden" role="status" aria-atomic="true">
+        {{ totalDataAmount$ | async }} results returned.
+      </p>
       <ng-container *ngFor="let inspection of inspections">
         <div class="govuk-!-margin-bottom-9">
           <ul class="govuk-list">
@@ -55,8 +56,7 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                   <span
-                    class="search-results-list_item_status govuk-tag govuk-tag--{{ details.requestStatus | tagColor }}"
-                  >
+                    class="search-results-list_item_status govuk-tag govuk-tag--{{ details.requestStatus | tagColor }}">
                     <strong>{{ details.requestStatus | i18nSelect: inspectionsStatusesTagMap }}</strong>
                   </span>
                 </div>
@@ -70,8 +70,7 @@
         *ngIf="(totalDataNumber$ | async) > 0 && showPagination$ | async"
         [count]="totalDataNumber$ | async"
         (currentPageChange)="page$.next($event)"
-        [pageSize]="itemsPerPage"
-      ></app-pagination>
+        [pageSize]="itemsPerPage"></app-pagination>
     </div>
   </div>
 </form>

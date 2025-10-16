@@ -16,6 +16,7 @@ export const requestCreateActionTypeLabelMap: Partial<
   AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING: 'Calculate 3-year period offsetting requirements',
   BDR: 'Reopen BDR workflow',
   AVIATION_DOE_CORSIA: 'Initiate estimation of emissions',
+  ALR: 'Mark workflow as not required',
 };
 
 export function createRequestCreateActionProcessDTO(

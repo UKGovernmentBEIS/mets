@@ -104,7 +104,7 @@ export class AlrSendReportComponent {
 
     if (
       (requestTaskType === 'ALR_APPLICATION_SUBMIT' && !verificationPerformed) ||
-      (requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && regulatorVerificationRequired)
+      (requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && regulatorVerificationRequired && !verificationPerformed)
     ) {
       this.alrService.requestAccountId$
         .pipe(
@@ -161,7 +161,7 @@ export class AlrSendReportComponent {
         .subscribe(() => this.isSubmitted.set(true));
     } else if (
       (requestTaskType === 'ALR_APPLICATION_SUBMIT' && verificationPerformed) ||
-      (requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && !regulatorVerificationRequired)
+      (requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && (!regulatorVerificationRequired || verificationPerformed))
     ) {
       this.store.requestTaskType$
         .pipe(

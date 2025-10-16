@@ -8,8 +8,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.service.ALRCreationService;
+
+import java.util.Optional;
 
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
@@ -32,10 +35,12 @@ public class InitiateALRHandlerTest {
         Long accountId = 1L;
 
         when(execution.getVariable("accountId")).thenReturn(accountId);
+        when(execution.getVariable(BpmnProcessConstants.ALR_EXPIRATION_DATE)).thenReturn(null);
+        when(execution.getVariable(BpmnProcessConstants.ALR_FINAL)).thenReturn(Boolean.FALSE);
 
         handler.execute(execution);
 
-        verify(alrCreationService, timeout(1000).times(1)).createALR(accountId);
+        verify(alrCreationService, timeout(1000).times(1)).createALR(accountId, false, Optional.empty());
     }
 
     @Test
@@ -43,13 +48,15 @@ public class InitiateALRHandlerTest {
         Long accountId = 1L;
 
         when(execution.getVariable("accountId")).thenReturn(accountId);
-        when(alrCreationService.createALR(accountId))
+        when(execution.getVariable(BpmnProcessConstants.ALR_EXPIRATION_DATE)).thenReturn(null);
+        when(execution.getVariable(BpmnProcessConstants.ALR_FINAL)).thenReturn(Boolean.FALSE);
+        when(alrCreationService.createALR(accountId, false, Optional.empty()))
                 .thenThrow(new BusinessException(
                         MetsErrorCode.ALR_CREATION_NOT_ALLOWED,
                         RequestCreateValidationResult.builder().valid(false).build()));
 
         handler.execute(execution);
 
-        verify(alrCreationService, timeout(1000).times(1)).createALR(accountId);
+        verify(alrCreationService, timeout(1000).times(1)).createALR(accountId, false, Optional.empty());
     }
 }

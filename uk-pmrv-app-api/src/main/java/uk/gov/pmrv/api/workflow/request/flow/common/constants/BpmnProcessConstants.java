@@ -162,6 +162,9 @@ public class BpmnProcessConstants {
     public static final String ALR_DETERMINATION = "alrDetermination";
     public static final String ALR_SEND_NOTICE = "alrSendNotice";
     public static final String ALR_AUTHORITY_RESPONSE = "alrAuthorityResponse";
+    public static final String ALR_MARK_NOT_REQUIRED = "alrMarkNotRequired";
+    public static final String ALR_REQUIRED = "alrRequired";
+    public static final String ALR_FINAL = "alrIsFinal";
 
 
     //HSETI

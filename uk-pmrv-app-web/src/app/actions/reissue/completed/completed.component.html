@@ -1,9 +1,7 @@
 <app-base-action-container-component
   [header]="'Batch variation completed'"
   [customContentTemplate]="customContentTemplate"
-  [expectedActionType]="['REISSUE_COMPLETED']"
->
-</app-base-action-container-component>
+  [expectedActionType]="['REISSUE_COMPLETED']"></app-base-action-container-component>
 
 <ng-template #customContentTemplate>
   <p class="govuk-heading-m">Batch variation details</p>
@@ -21,6 +19,27 @@
           {{ (action$ | async).creationDate | govukDate }}
         </dd>
       </div>
+      <div govukSummaryListRow *ngIf="(payload$ | async)?.changesDetails?.['changesSummary'] as changesSummary">
+        <dt govukSummaryListRowKey>Summary</dt>
+        <dd govukSummaryListRowValue>
+          {{ changesSummary }}
+        </dd>
+      </div>
+      <div
+        govukSummaryListRow
+        *ngIf="(payload$ | async)?.changesDetails?.['changes'] as changes"
+        [hidden]="!changes?.length">
+        <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
+        <dd govukSummaryListRowValue>
+          <ol class="govuk-list govuk-list--number">
+            @for (change of changes; track $index) {
+              @if (change) {
+                <li>{{ change }}</li>
+              }
+            }
+          </ol>
+        </dd>
+      </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Signatory</dt>
         <dd govukSummaryListRowValue>
@@ -36,12 +55,12 @@
               (action$ | async).id,
               'file-download',
               'document',
-              (payload$ | async).officialNotice.uuid
+              (payload$ | async).officialNotice.uuid,
             ]"
             govukLink
-            target="_blank"
-            >{{ (payload$ | async).officialNotice.name }}</a
-          >
+            target="_blank">
+            {{ (payload$ | async).officialNotice.name }}
+          </a>
           <br />
           <a
             [routerLink]="[
@@ -49,12 +68,12 @@
               (action$ | async).id,
               'file-download',
               'document',
-              (payload$ | async).document.uuid
+              (payload$ | async).document.uuid,
             ]"
             govukLink
-            target="_blank"
-            >{{ (payload$ | async).document.name }}</a
-          >
+            target="_blank">
+            {{ (payload$ | async).document.name }}
+          </a>
         </dd>
       </div>
     </ng-container>

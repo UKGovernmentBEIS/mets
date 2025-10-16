@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, switchMap } from 'rxjs';
 
 import { startOfDay } from 'date-fns';
+
+import { PermitSurrenderReviewDeterminationGrant } from 'pmrv-api';
 
 import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
 import { PendingRequest } from '../../../../../core/interfaces/pending-request.interface';
@@ -20,6 +23,7 @@ import { allowancesFormProvider } from './allowances-form.provider';
 })
 export class AllowancesComponent implements PendingRequest {
   today = startOfDay(new Date());
+  isFinalAlrVisible = toSignal(this.store.isFinalAlrVisible$);
 
   constructor(
     @Inject(PERMIT_SURRENDER_TASK_FORM) readonly form: UntypedFormGroup,
@@ -34,6 +38,8 @@ export class AllowancesComponent implements PendingRequest {
       this.router.navigate(['../answers'], { relativeTo: this.route });
     } else {
       const allowancesSurrenderRequired: boolean = this.form.value.allowancesSurrenderRequired;
+      const isFinalAlrVisible = this.isFinalAlrVisible();
+
       this.store
         .pipe(
           first(),
@@ -41,6 +47,12 @@ export class AllowancesComponent implements PendingRequest {
             this.store.postReviewDetermination(
               {
                 ...state.reviewDetermination,
+                alrRequired: isFinalAlrVisible
+                  ? (state.reviewDetermination as PermitSurrenderReviewDeterminationGrant).alrRequired
+                  : undefined,
+                alrReportDate: isFinalAlrVisible
+                  ? (state.reviewDetermination as PermitSurrenderReviewDeterminationGrant).alrReportDate
+                  : undefined,
                 allowancesSurrenderRequired,
                 allowancesSurrenderDate: allowancesSurrenderRequired ? this.form.value.allowancesSurrenderDate : null,
               },

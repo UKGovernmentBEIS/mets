@@ -1,6 +1,8 @@
 package uk.gov.pmrv.api.migration.permit.digitizedMmp;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +17,7 @@ import uk.gov.pmrv.api.migration.permit.digitizedMmp.repository.MmpFilesMigratio
 
 import java.io.IOException;
 import java.util.Optional;
+import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 
 @RestController
 @RequestMapping(path = "/v1.0/migration-mmp")
@@ -24,6 +27,9 @@ public class DigitizedMmpMigrationUploadFileController {
     private final MmpFilesMigrationRepository mmpFilesMigrationRepository;
 
     @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "Upload MMP file to temporary storage to be used for MMP migration")
+    @ApiResponse(responseCode = "200", description = SwaggerApiInfo.OK)
+    @ApiResponse(responseCode = "400", description = SwaggerApiInfo.BAD_REQUEST)
     public ResponseEntity<String> uploadMmp(@RequestPart("id") @Parameter String id, @RequestPart("type") @Parameter MmpFileType fileType,
                                             @RequestPart("file") @Parameter MultipartFile file) {
         Long accountId = -1l;

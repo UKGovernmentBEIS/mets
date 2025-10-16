@@ -19,3 +19,12 @@ export const selectPageSize: OperatorFunction<DashboardState, number> = pipe(
   selectPaging,
   map((state) => state.pageSize),
 );
+export const selectOrderBy: OperatorFunction<DashboardState, 'NEWEST_FIRST' | 'NEAREST_DUE_DATE'> = pipe(
+  map((state) => state.order),
+);
+
+export const selectFilterBy: OperatorFunction<DashboardState, string> = pipe(map((state) => state.filter));
+
+export const selectAccountSearchTerm: OperatorFunction<DashboardState, string> = pipe(
+  map((state) => state.accountSearchTerm),
+);

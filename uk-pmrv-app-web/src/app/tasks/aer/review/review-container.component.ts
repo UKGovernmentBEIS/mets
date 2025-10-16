@@ -66,6 +66,12 @@ export class ReviewContainerComponent {
     .getPayload()
     .pipe(map((payload) => payload?.permitOriginatedData?.permitType === 'GHGE'));
 
+  showAlr$ = this.aerService.getPayload().pipe(
+    map((payload) => {
+      return !payload?.isPostALRSectionRemoval;
+    }),
+  );
+
   readonly allowCompleteReview$: Observable<boolean> = combineLatest([this.aerService.getPayload(), this.store]).pipe(
     map(([payload, state]) => {
       return (

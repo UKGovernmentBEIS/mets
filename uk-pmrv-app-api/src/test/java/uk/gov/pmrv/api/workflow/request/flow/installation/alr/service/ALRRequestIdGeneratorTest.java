@@ -26,12 +26,29 @@ public class ALRRequestIdGeneratorTest {
                 .requestMetadata(ALRRequestMetaData.builder()
                         .type(RequestMetadataType.ALR)
                         .year(Year.of(2025))
+                        .isFinal(false)
                         .build())
                 .build();
 
         String requestId = alrRequestIdGenerator.generate(params);
 
         Assertions.assertEquals("ALR00012-2025", requestId);
+    }
+
+    @Test
+    void generate_final() {
+        RequestParams params = RequestParams.builder()
+                .accountId(12L)
+                .requestMetadata(ALRRequestMetaData.builder()
+                        .type(RequestMetadataType.ALR)
+                        .year(Year.of(2025))
+                        .isFinal(true)
+                        .build())
+                .build();
+
+        String requestId = alrRequestIdGenerator.generate(params);
+
+        Assertions.assertEquals("ALR00012-FINAL", requestId);
     }
 
     @Test

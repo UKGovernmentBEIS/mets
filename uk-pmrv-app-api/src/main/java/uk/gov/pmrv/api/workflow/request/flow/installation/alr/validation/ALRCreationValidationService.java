@@ -31,12 +31,12 @@ public class ALRCreationValidationService {
     private final InstallationAccountQueryService installationAccountQueryService;
 
     @Transactional
-    public RequestCreateValidationResult validateYear(Long accountId, Year year) {
+    public RequestCreateValidationResult validateYear(Long accountId, Year year, boolean isFinal) {
         RequestCreateValidationResult validationResult = RequestCreateValidationResult.builder().valid(true).build();
 
         RequestParams params = RequestParams.builder()
                 .accountId(accountId)
-                .requestMetadata(ALRRequestMetaData.builder().type(RequestMetadataType.ALR).year(year).build())
+                .requestMetadata(ALRRequestMetaData.builder().type(RequestMetadataType.ALR).year(year).isFinal(isFinal).build())
                 .build();
 
         String requestId = alrRequestIdGenerator.generate(params);
@@ -52,7 +52,7 @@ public class ALRCreationValidationService {
 
     @Transactional
     public RequestCreateValidationResult validateAccountStatus(Long accountId) {
-        Set<AccountStatus> applicableAccountStatuses = Set.of(InstallationAccountStatus.LIVE);
+        Set<AccountStatus> applicableAccountStatuses = Set.of(InstallationAccountStatus.LIVE, InstallationAccountStatus.AWAITING_SURRENDER, InstallationAccountStatus.AWAITING_REVOCATION);
         return requestCreateValidatorService.validate(accountId, applicableAccountStatuses, Set.of());
     }
 

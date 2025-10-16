@@ -3,9 +3,16 @@
 
   <p class="govuk-body">
     We're experiencing temporary difficulties in syncing data. Please try again later or contact the
-    <a href="mailto:METS@energysecurity.gov.uk" govukLink class="govuk-!-font-weight-bold">
-      UK ETS reporting helpdesk
-    </a>
+    <a href="mailto:METS@energysecurity.gov.uk" govukLink class="govuk-!-font-weight-bold">UK ETS reporting helpdesk</a>
+    for assistance.
+  </p>
+} @else if (errorCode === genericServiceErrorCode.INTREGACCOUNTCREATEUKETS1000) {
+  <app-page-heading size="xl">Sorry, the service could not send information to registry</app-page-heading>
+  <p class="govuk-body">We're experiencing temporary difficulties in syncing data,</p>
+  <p class="govuk-body">Try again later.</p>
+  <p class="govuk-body">
+    Contact
+    <a href="mailto:METS@energysecurity.gov.uk" govukLink class="govuk-!-font-weight-bold">UK ETS reporting helpdesk</a>
     for assistance.
   </p>
 } @else {

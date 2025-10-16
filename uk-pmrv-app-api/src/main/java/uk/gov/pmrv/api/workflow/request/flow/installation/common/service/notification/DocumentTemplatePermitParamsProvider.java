@@ -25,8 +25,14 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.Measure
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.MeasurementOfN2OMonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStream;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
+import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueChangesDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestInfo;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestInfoSubmissionDateComparator;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestMetadata;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +46,7 @@ import java.util.stream.Collectors;
 public class DocumentTemplatePermitParamsProvider {
 
     private final InstallationDocumentTemplateCommonParamsProvider commonParamsProvider;
+    private final RequestQueryService requestQueryService;
 
     public TemplateParams constructTemplateParams(final DocumentTemplatePermitParamsSourceData sourceData) {
 
@@ -47,10 +54,29 @@ public class DocumentTemplatePermitParamsProvider {
         final String signatory = sourceData.getSignatory();
         final TemplateParams templateParams = commonParamsProvider.constructCommonTemplateParams(request, signatory);
 
+        final List<Request> reissueRequests = requestQueryService
+                .findRequestsByAccountIdAndType(request.getAccountId(), RequestType.PERMIT_REISSUE);
+
         final PermitContainer permitContainer = sourceData.getPermitContainer();
         final int consolidationNumber = sourceData.getConsolidationNumber();
         final PermitIssuanceRequestMetadata issuanceMetadata = sourceData.getIssuanceRequestMetadata();
+        List<PermitVariationRequestInfo> allPermitChangesRequestInfoList = new ArrayList<>();
         final List<PermitVariationRequestInfo> variationRequestInfoList = sourceData.getVariationRequestInfoList();
+        final List<PermitVariationRequestInfo> reissueRequestsInfoList = reissueRequests.stream().map(r-> PermitVariationRequestInfo
+                .builder()
+                .id(r.getId())
+                .changeType("Batch Variation")
+                .submissionDate(r.getSubmissionDate())
+                .metadata(PermitVariationRequestMetadata
+                        .builder()
+                        .logChanges(((PermitBatchReissueChangesDetails) (((ReissueRequestMetadata) r.getMetadata()).getChangesDetails())).getChangesSummary())
+                        .build())
+                .build()).toList();
+
+        allPermitChangesRequestInfoList.addAll(variationRequestInfoList);
+        allPermitChangesRequestInfoList.addAll(reissueRequestsInfoList);
+
+        allPermitChangesRequestInfoList.sort(new PermitVariationRequestInfoSubmissionDateComparator());
 
         final Map<String, List<ReferenceSource>> referenceSources =
             this.constructReferenceSources(permitContainer.getPermit());
@@ -65,7 +91,7 @@ public class DocumentTemplatePermitParamsProvider {
         return templateParams.withParams(Map.of(
                 "permitContainer", permitContainer,
                 "issuanceMetadata", issuanceMetadata,
-                "variationRequestInfoList", variationRequestInfoList,
+                "variationRequestInfoList", allPermitChangesRequestInfoList,
                 "consolidationNumber", consolidationNumber,
                 "referenceSources", referenceSources,
                 "analysisMethods", analysisMethods,

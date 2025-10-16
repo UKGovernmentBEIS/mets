@@ -51,6 +51,9 @@ describe('CompletedComponent', () => {
         creationDate: currentDate,
         payload: {
           payloadType: 'EMP_REISSUE_COMPLETED_PAYLOAD',
+          changesDetails: {
+            changes: ['change 1', 'change 2', 'change 3'],
+          },
           submitter: 'Submitter1',
           signatory: 'ef8828e1-c5a2-4b5b-b4c4-5fc9d4f7b4f3',
           signatoryName: 'Signatory name',
@@ -89,8 +92,9 @@ describe('CompletedComponent', () => {
     expect(page.values).toEqual([
       ['Created by', 'Submitter1'],
       ['Date created', `${new GovukDatePipe().transform(currentDate)}`],
+      ['Items added to the variation schedule', 'change 1change 2change 3'],
       ['Signatory', 'Signatory name'],
-      ['Documents', 'Batch_variation_notice_UK_ETS.pdfUK-E-AV-00061 v15.pdf'],
+      ['Documents', 'Batch_variation_notice_UK_ETS.pdf  UK-E-AV-00061 v15.pdf'],
     ]);
   });
 });

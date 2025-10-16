@@ -81,6 +81,7 @@ export class SummaryComponent {
                   emissionTradingSchemes: state.emissionTradingSchemes,
                 },
                 signatory: state.signatory,
+                changesDetails: state.changesDetails,
               } as BatchReissueRequestCreateActionPayload,
             },
             competentAuthority,

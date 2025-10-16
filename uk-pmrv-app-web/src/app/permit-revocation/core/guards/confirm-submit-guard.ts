@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
-import { map, Observable } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 
 import { Wizard } from '@permit-revocation/factory';
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
@@ -14,15 +14,15 @@ export class ConfirmSubmitGuard {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
-    return this.store.pipe(
-      map((store) => {
+    return combineLatest([this.store, this.store.isFinalAlrVisible$]).pipe(
+      map(([store, isFinalAlrVisible]) => {
         const sectionStatusCompleted = store.sectionsCompleted?.[route.data.statusKey];
         return (
           (sectionStatusCompleted &&
             this.router.parseUrl(`/permit-revocation/${route.params['taskId']}/apply/summary`)) ||
-          (!Wizard.completed(store.permitRevocation) &&
+          (!Wizard.completed(store.permitRevocation, isFinalAlrVisible) &&
             this.router.parseUrl(`/permit-revocation/${route.params['taskId']}`)) ||
-          Wizard.completed(store.permitRevocation)
+          Wizard.completed(store.permitRevocation, isFinalAlrVisible)
         );
       }),
     );

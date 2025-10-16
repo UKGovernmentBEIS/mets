@@ -30,6 +30,9 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'PERMIT_ISSUANCE_PEER_REVIEW_REQUESTED':
       case 'PERMIT_ISSUANCE_RECALLED_FROM_AMENDS':
         return null;
+      case 'PERMIT_ISSUANCE_ACCOUNT_CREATED_SENT_TO_REGISTRY':
+      case 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY':
+        return [routerLooks + 'actions', value.id, 'registry', 'information-sent'];
       case 'PERMIT_SURRENDER_APPLICATION_CANCELLED':
         return null;
       case 'PERMIT_SURRENDER_APPLICATION_PEER_REVIEWER_ACCEPTED':
@@ -542,6 +545,8 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS':
       case 'ALR_APPLICATION_REJECTED':
         return [routerLooks + 'actions', value.id, 'alr', 'completed'];
+      case 'ALR_APPLICATION_MARK_NOT_REQUIRED':
+        return roleType === 'REGULATOR' ? [routerLooks + 'actions', value.id, 'alr', 'not-required'] : null;
 
       case 'HSE_TI_APPLICATION_SENT_TO_REGULATOR':
       case 'HSE_TI_APPROVED':

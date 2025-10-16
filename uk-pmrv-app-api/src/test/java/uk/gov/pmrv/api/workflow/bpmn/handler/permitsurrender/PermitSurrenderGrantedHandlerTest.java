@@ -37,11 +37,14 @@ class PermitSurrenderGrantedHandlerTest {
         Map<String, Object> variables = new HashMap<>(){{
             put(BpmnProcessConstants.AER_REQUIRED, true);
             put(BpmnProcessConstants.AER_EXPIRATION_DATE, reportDate);
+            put(BpmnProcessConstants.ALR_REQUIRED, true);
+            put(BpmnProcessConstants.ALR_EXPIRATION_DATE, reportDate);
+            put(BpmnProcessConstants.ALR_FINAL, Boolean.TRUE);
         }};
 
         when(execution.getVariable(BpmnProcessConstants.REQUEST_ID)).thenReturn(requestId);
         when(service.resolveNoticeReminderDate(requestId)).thenReturn(noticeReminderDate);
-        when(service.constructAerVariables(requestId)).thenReturn(variables);
+        when(service.constructAerAndAlrVariables(requestId)).thenReturn(variables);
 
         handler.execute(execution);
         
@@ -50,5 +53,8 @@ class PermitSurrenderGrantedHandlerTest {
         verify(execution, times(1)).setVariable(BpmnProcessConstants.SURRENDER_REMINDER_NOTICE_DATE, noticeReminderDate);
         verify(execution, times(1)).setVariable(BpmnProcessConstants.AER_REQUIRED, true);
         verify(execution, times(1)).setVariable(BpmnProcessConstants.AER_EXPIRATION_DATE, reportDate);
+        verify(execution, times(1)).setVariable(BpmnProcessConstants.ALR_REQUIRED, true);
+        verify(execution, times(1)).setVariable(BpmnProcessConstants.ALR_EXPIRATION_DATE, reportDate);
+        verify(execution, times(1)).setVariable(BpmnProcessConstants.ALR_FINAL, Boolean.TRUE);
     }
 }

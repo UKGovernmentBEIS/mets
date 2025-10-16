@@ -1,6 +1,6 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, Router, UrlSegment, UrlTree } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRouteSnapshot, provideRouter, Router, UrlSegment, UrlTree } from '@angular/router';
 
 import { firstValueFrom, Observable } from 'rxjs';
 
@@ -24,8 +24,7 @@ describe('AnswersGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [{ provide: TasksService, useValue: tasksService }],
+      providers: [provideHttpClient(), provideRouter([]), { provide: TasksService, useValue: tasksService }],
     });
     guard = TestBed.inject(AnswersGuard);
     router = TestBed.inject(Router);
@@ -37,20 +36,18 @@ describe('AnswersGuard', () => {
     expect(guard).toBeTruthy();
   });
 
-  it('should redirect to summary when status is completed', async () => {
+  it('should redirect to summary when status is completed', () => {
     store.setState({
       ...mockTaskState,
       reviewDeterminationCompleted: true,
     });
 
-    await expect(
-      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<boolean | UrlTree>),
-    ).resolves.toEqual(
+    expect(firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<boolean | UrlTree>)).resolves.toEqual(
       router.parseUrl(`/permit-surrender/${mockTaskState.requestTaskId}/review/determination/grant/summary`),
     );
   });
 
-  it('should redirect to first step when type is missing', async () => {
+  it('should redirect to first step when type is missing', () => {
     store.setState({
       ...mockTaskState,
       reviewDeterminationCompleted: false,
@@ -59,12 +56,12 @@ describe('AnswersGuard', () => {
       } as any,
     });
 
-    await expect(
-      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<boolean | UrlTree>),
-    ).resolves.toEqual(router.parseUrl(`/permit-surrender/${mockTaskState.requestTaskId}/review/determination`));
+    expect(firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<boolean | UrlTree>)).resolves.toEqual(
+      router.parseUrl(`/permit-surrender/${mockTaskState.requestTaskId}/review/determination`),
+    );
   });
 
-  it('should return true when wizard and status are not completed and all steps are filled', async () => {
+  it('should return true when wizard and status are not completed and all steps are filled', () => {
     store.setState({
       ...mockTaskState,
       reviewDeterminationCompleted: false,
@@ -78,8 +75,8 @@ describe('AnswersGuard', () => {
       } as any,
     });
 
-    await expect(
-      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>),
-    ).resolves.toEqual(true);
+    expect(firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>)).resolves.toEqual(
+      true,
+    );
   });
 });

@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 public class PermitVariationRequestInfo {
 
-	private String id; //request id
+	private String id;
+	private String changeType;
 	private LocalDateTime submissionDate; //request submission date
 	private LocalDateTime endDate; //request end date
 	private PermitVariationRequestMetadata metadata;

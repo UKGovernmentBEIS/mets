@@ -37,6 +37,7 @@ export function getPreviewDocumentsInfoEmp(
       }
       break;
     case 'EMP_ISSUANCE_CORSIA_NOTIFY_OPERATOR_FOR_DECISION':
+    case 'EMP_ISSUANCE_CORSIA_SAVE_REVIEW_DETERMINATION':
       switch (determinationStatus) {
         case 'approved':
           return [buildPreviewInfo('EMP_ISSUANCE_CORSIA_GRANTED'), buildPreviewInfo('EMP_CORSIA')];
@@ -45,6 +46,7 @@ export function getPreviewDocumentsInfoEmp(
       }
       break;
     case 'EMP_VARIATION_UKETS_NOTIFY_OPERATOR_FOR_DECISION':
+    case 'EMP_VARIATION_UKETS_REVIEW_SUBMIT_PEER_REVIEW_DECISION':
       switch (determinationStatus) {
         case 'approved':
           return [buildPreviewInfo('EMP_VARIATION_UKETS_ACCEPTED'), buildPreviewInfo('EMP_UKETS')];
@@ -55,8 +57,10 @@ export function getPreviewDocumentsInfoEmp(
       }
       break;
     case 'EMP_VARIATION_UKETS_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED':
+    case 'EMP_VARIATION_UKETS_REVIEW_SUBMIT_PEER_REVIEW_DECISION_REGULATOR_LED':
       return [buildPreviewInfo('EMP_VARIATION_UKETS_REGULATOR_LED_APPROVED'), buildPreviewInfo('EMP_UKETS')];
     case 'EMP_VARIATION_CORSIA_NOTIFY_OPERATOR_FOR_DECISION':
+    case 'EMP_VARIATION_CORSIA_REVIEW_SUBMIT_PEER_REVIEW_DECISION':
       switch (determinationStatus) {
         case 'approved':
           return [buildPreviewInfo('EMP_VARIATION_CORSIA_ACCEPTED'), buildPreviewInfo('EMP_CORSIA')];
@@ -67,6 +71,7 @@ export function getPreviewDocumentsInfoEmp(
       }
       break;
     case 'EMP_VARIATION_CORSIA_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED':
+    case 'EMP_VARIATION_CORSIA_REVIEW_SUBMIT_PEER_REVIEW_DECISION_REGULATOR_LED':
       return [buildPreviewInfo('EMP_VARIATION_CORSIA_REGULATOR_LED_APPROVED'), buildPreviewInfo('EMP_CORSIA')];
   }
 }

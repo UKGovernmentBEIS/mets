@@ -51,6 +51,8 @@ public abstract class AerApplicationRequestTaskPayload extends RequestTaskPayloa
     @Builder.Default
     private Map<UUID, String> aerAttachments = new HashMap<>();
 
+    private Boolean isPostALRSectionRemoval;
+
     @Override
     public Map<UUID, String> getAttachments() {
         return getAerAttachments();

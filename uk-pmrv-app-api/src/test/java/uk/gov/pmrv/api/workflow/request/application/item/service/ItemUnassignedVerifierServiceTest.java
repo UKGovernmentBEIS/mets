@@ -14,6 +14,7 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.application.authorization.VerifierAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
+import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemOrderBy;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTO;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
@@ -70,13 +71,13 @@ class ItemUnassignedVerifierServiceTest {
         // Mock
         when(verifierAuthorityResourceService.getUserScopedRequestTaskTypesByAccountType(appUser, accountType))
                 .thenReturn(scopedRequestTaskTypes);
-        when(itemRepository.findItems(appUser.getUserId(), ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build()))
+        when(itemRepository.findItems(appUser.getUserId(), ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null))
                 .thenReturn(expectedItemPage);
         when(itemResponseService.toItemDTOResponse(expectedItemPage, accountType, appUser))
                 .thenReturn(expectedItemDTOResponse);
 
         // Invoke
-        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
 
         // Assert
         assertThat(actualResponse).isEqualTo(expectedItemDTOResponse);
@@ -97,14 +98,14 @@ class ItemUnassignedVerifierServiceTest {
                 .thenReturn(scopedRequestTaskTypes);
 
         // Invoke
-        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
 
         // Assert
         assertThat(actualResponse).isEqualTo(ItemDTOResponse.emptyItemDTOResponse());
 
         verify(verifierAuthorityResourceService, times(1))
             .getUserScopedRequestTaskTypesByAccountType(appUser, accountType);
-        verify(itemRepository, never()).findItems(anyString(), Mockito.any(), anyMap(), any(PagingRequest.class));
+        verify(itemRepository, never()).findItems(anyString(), Mockito.any(), anyMap(), any(PagingRequest.class), any(), any(), any());
         verify(itemResponseService, never()).toItemDTOResponse(any(), any(), any());
     }
 
@@ -122,13 +123,13 @@ class ItemUnassignedVerifierServiceTest {
         // Mock
         when(verifierAuthorityResourceService.getUserScopedRequestTaskTypesByAccountType(appUser, accountType))
                 .thenReturn(scopedRequestTaskTypes);
-        when(itemRepository.findItems(appUser.getUserId(), ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build()))
+        when(itemRepository.findItems(appUser.getUserId(), ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null))
                 .thenReturn(itemPage);
         when(itemResponseService.toItemDTOResponse(itemPage, accountType, appUser))
                 .thenReturn(expectedItemDTOResponse);
 
         // Invoke
-        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
 
         // Assert
         assertThat(actualResponse).isEqualTo(expectedItemDTOResponse);

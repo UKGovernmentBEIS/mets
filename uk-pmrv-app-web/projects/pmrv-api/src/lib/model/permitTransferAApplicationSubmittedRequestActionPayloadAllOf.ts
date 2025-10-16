@@ -16,6 +16,7 @@ export interface PermitTransferAApplicationSubmittedRequestActionPayloadAllOf {
   transferDate?: string;
   payer?: 'TRANSFERER' | 'RECEIVER';
   aerLiable?: 'TRANSFERER' | 'RECEIVER';
+  alrLiable?: 'TRANSFERER' | 'RECEIVER';
   transferCode?: string;
   transferAttachments?: { [key: string]: string };
 }

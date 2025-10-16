@@ -31,7 +31,7 @@ import { isInstallationInspectionFollowUpSubmitCompleted, responseDeadlineValid 
               <div *ngIf="errors()?.invalidDate" class="error">{{ errors()?.invalidDate }}</div>
             </dd>
             <dd govukSummaryListRowActions *ngIf="isEditable()">
-              <a govukLink [routerLink]="['../', 'response-deadline']">Change</a>
+              <a govukLink hidden-text="response deadline" [routerLink]="['../', 'response-deadline']">Change</a>
             </dd>
           </div>
         </dl>

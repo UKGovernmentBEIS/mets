@@ -4,7 +4,7 @@ import { ItemDTO } from 'pmrv-api';
 
 @Pipe({ name: 'itemName' })
 export class ItemNamePipe implements PipeTransform {
-  transform(value: ItemDTO['taskType'], year?: string | number): string {
+  transform(value: ItemDTO['taskType'], year?: string | number, isFinal?: boolean): string {
     switch (value) {
       // common
       case 'PERMIT_ISSUANCE_WAIT_FOR_RDE_RESPONSE':
@@ -542,17 +542,17 @@ export class ItemNamePipe implements PipeTransform {
 
       //ALR
       case 'ALR_APPLICATION_SUBMIT':
-        return `Complete ${year} activity level report`;
+        return `Complete ${isFinal || year.toString() === 'FINAL' ? 'final year' : year} activity level report`;
       case 'ALR_WAIT_FOR_VERIFICATION':
       case 'ALR_AMEND_WAIT_FOR_VERIFICATION':
-        return `${year} activity level report sent to verifier`;
+        return `${isFinal || year.toString() === 'FINAL' ? 'Final year' : year} activity level report sent to verifier`;
       case 'ALR_APPLICATION_VERIFICATION_SUBMIT':
       case 'ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT':
-        return `Verify ${year} activity level report`;
+        return `Verify ${isFinal || year.toString() === 'FINAL' ? 'final year' : year} activity level report`;
       case 'ALR_WAIT_FOR_REGULATOR_REVIEW':
-        return `${year} activity level report sent to regulator`;
+        return `${isFinal || year.toString() === 'FINAL' ? 'Final year' : year} activity level report sent to regulator`;
       case 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
-        return `Review ${year} activity level report`;
+        return `Review ${isFinal || year.toString() === 'FINAL' ? 'final year' : year} activity level report`;
       case 'ALR_WAIT_FOR_AMENDS':
         return 'Activity level report returned to operator';
       case 'ALR_WAIT_FOR_AUTHORITY_REVIEW':
@@ -560,11 +560,11 @@ export class ItemNamePipe implements PipeTransform {
       case 'ALR_AUTHORITY_RESPONSE_SUBMIT':
         return 'Provide UK ETS Authority response for activity level change';
       case 'ALR_APPLICATION_AMENDS_SUBMIT':
-        return `Amend ${year} activity level report`;
+        return `Amend ${isFinal || year.toString() === 'FINAL' ? 'final year' : year} activity level report`;
       case 'ALR_WAIT_FOR_PEER_REVIEW':
-        return `${year} activity level report sent to peer reviewer`;
+        return `${isFinal || year.toString() === 'FINAL' ? 'Final year' : year} activity level report sent to peer reviewer`;
       case 'ALR_APPLICATION_PEER_REVIEW':
-        return `Peer review ${year} activity level report`;
+        return `Peer review ${isFinal || year.toString() === 'FINAL' ? 'final year' : year} activity level report`;
 
       // HSE_TI
       case 'HSE_TI_APPLICATION_SUBMIT':

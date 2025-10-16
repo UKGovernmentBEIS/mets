@@ -133,6 +133,161 @@ class PermitBatchReissueFiltersTest {
 
 
 	@Test
+	void wasteOnlyEmitterTypeAndFreeAllocationIsTrue_shouldBeInvalid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.WASTE))
+				.installationCategories(Set.of(InstallationCategory.A))
+				.freeAllocation(true)
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).hasSize(1);
+		assertThat(violations.iterator().next().getMessage()).isEqualTo("{permit.reissue.batch.create.emitterTypeAndAllocationStatuses}");
+	}
+
+	@Test
+	void wasteIsNotTheOnlyEmitterTypeAndFreeAllocationIsTrue_shouldValid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.WASTE, EmitterType.GHGE))
+				.installationCategories(Set.of(InstallationCategory.A))
+				.freeAllocation(true)
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).isEmpty();
+	}
+
+	@Test
+	void wasteIsNotTheOnlyEmitterTypeAndNonFreeAllocationIsTrue_shouldValid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.WASTE, EmitterType.GHGE))
+				.installationCategories(Set.of(InstallationCategory.A))
+				.nonFreeAllocation(true)
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).isEmpty();
+	}
+
+	@Test
+	void wasteIsNotTheOnlyEmitterTypeAndBothNonFreeAllocationAndFreeAllocationAreTrue_shouldValid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.WASTE, EmitterType.GHGE))
+				.installationCategories(Set.of(InstallationCategory.A))
+				.nonFreeAllocation(true)
+				.freeAllocation(true)
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).isEmpty();
+	}
+
+
+	@Test
+	void wasteIsNotTheOnlyEmitterTypeAndBothNonFreeAllocationAndFreeAllocationAreFalse_shouldValid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.WASTE, EmitterType.GHGE))
+				.installationCategories(Set.of(InstallationCategory.A))
+				.nonFreeAllocation(false)
+				.freeAllocation(false)
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).isEmpty();
+	}
+
+
+	@Test
+	void wasteIsNotIncludedInEmitterTypesAndBothNonFreeAllocationAndFreeAllocationAreFalse_shouldValid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.GHGE))
+				.installationCategories(Set.of(InstallationCategory.A))
+				.nonFreeAllocation(false)
+				.freeAllocation(false)
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).isEmpty();
+	}
+
+	@Test
+	void wasteIsNotIncludedInEmitterTypesAndBothNonFreeAllocationAndFreeAllocationAreTrue_shouldValid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.GHGE))
+				.installationCategories(Set.of(InstallationCategory.A))
+				.nonFreeAllocation(true)
+				.freeAllocation(true)
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).isEmpty();
+	}
+
+	@Test
+	void wasteIsNotIncludedInEmitterTypesAndNonFreeAllocationIsTrue_shouldValid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.GHGE))
+				.installationCategories(Set.of(InstallationCategory.A))
+				.nonFreeAllocation(true)
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).isEmpty();
+	}
+
+	@Test
+	void wasteIsNotIncludedInEmitterTypesAndFreeAllocationIsTrue_shouldValid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.GHGE))
+				.installationCategories(Set.of(InstallationCategory.A))
+				.freeAllocation(true)
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).isEmpty();
+	}
+
+	@Test
+	void wasteOnlyEmitterTypeAndNonFreeAllocationIsTrue_shouldBeInvalid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.WASTE))
+				.installationCategories(Set.of(InstallationCategory.A))
+				.nonFreeAllocation(true)
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).hasSize(1);
+		assertThat(violations.iterator().next().getMessage()).isEqualTo("{permit.reissue.batch.create.emitterTypeAndAllocationStatuses}");
+	}
+
+	@Test
+	void wasteOnlyEmitterTypeAndBothNonFreeAllocationAndFreeAllocationAreTrue_shouldBeInvalid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.WASTE))
+				.installationCategories(Set.of(InstallationCategory.A))
+				.nonFreeAllocation(true)
+				.freeAllocation(true)
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).hasSize(1);
+		assertThat(violations.iterator().next().getMessage()).isEqualTo("{permit.reissue.batch.create.emitterTypeAndAllocationStatuses}");
+	}
+
+	@Test
+	void wasteOnlyEmitterTypeAndBothNonFreeAllocationAndFreeAllocationAreFalse_shouldBeValid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.WASTE))
+				.installationCategories(Set.of(InstallationCategory.A))
+				.nonFreeAllocation(false)
+				.freeAllocation(false)
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).isEmpty();
+	}
+
+	@Test
 	void validNonGHGEWithoutInstallations() {
 		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
 				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))

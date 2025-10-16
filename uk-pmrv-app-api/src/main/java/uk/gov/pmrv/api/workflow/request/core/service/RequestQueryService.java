@@ -38,6 +38,11 @@ public class RequestQueryService {
         return requestRepository.findByAccountIdAndStatusAndTypeNotNotification(accountId, RequestStatus.IN_PROGRESS);
     }
 
+    @Transactional(readOnly = true)
+    public List<Request> findRequestsByAccountIdAndType(Long accountId, RequestType type){
+        return requestRepository.findByAccountIdAndType(accountId, type);
+    }
+
     public boolean existsRequestById(String requestId){
         return requestRepository.existsById(requestId);
     }

@@ -10,6 +10,7 @@ import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 
+import java.time.Year;
 import java.util.HashMap;
 import java.util.EnumMap;
 import java.util.List;
@@ -23,6 +24,8 @@ import java.util.UUID;
 public class ALRRequestPayload extends RequestPayload {
 
     private ALR alr;
+
+    private Year reportingYear;
 
     private DecisionNotification decisionNotification;
 

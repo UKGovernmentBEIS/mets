@@ -2,6 +2,7 @@ package uk.gov.pmrv.api.web.controller.workflow;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.security.Authorized;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestCreateActionProcessDTO;
@@ -28,11 +31,18 @@ import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestCreateActionProce
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsSearchResults;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestSearchCriteria;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestTypeToRoleMapperService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestCreateActionResourceTypeDelegator;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.NOT_FOUND;
+import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
 
 @Validated
 @RestController
@@ -40,8 +50,10 @@ import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.NOT_FOUND;
 @Tag(name = "Requests")
 @RequiredArgsConstructor
 public class RequestController {
+
     private final RequestCreateActionResourceTypeDelegator requestCreateActionResourceTypeDelegator;
     private final RequestQueryService requestQueryService;
+    private final List<RequestTypeToRoleMapperService> requestTypeMapperServices;
 
     @PostMapping
     @SuppressWarnings("unchecked")
@@ -81,5 +93,22 @@ public class RequestController {
     public ResponseEntity<RequestDetailsSearchResults> getRequestDetailsByResource(
             @RequestBody @Valid @Parameter(description = "The search criteria", required = true) RequestSearchCriteria criteria){
         return new ResponseEntity<>(requestQueryService.findRequestDetailsBySearchCriteria(criteria), HttpStatus.OK);
+    }
+
+
+     @GetMapping("/request-types")
+     @Operation(summary = "Retrieves request types based on user role and service (INSTALLATION, AVIATION)")
+     @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = RequestType.class)))})
+     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+     @AuthorizedRole(roleType = {RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER, RoleTypeConstants.OPERATOR})
+     public ResponseEntity<Set<RequestType>> getRequestTypesByUserRolesAndService(@Parameter(hidden = true) AppUser user) {
+
+        Optional<RequestTypeToRoleMapperService> requestTypeMapperService = requestTypeMapperServices.stream()
+                .filter(service -> user.getRoleType().equals(service.getRoleType()))
+                .findFirst();
+
+        return requestTypeMapperService.map(service -> new ResponseEntity<>(service.getRequestTypes(user), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(Set.of(), HttpStatus.OK));
     }
 }

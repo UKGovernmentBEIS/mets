@@ -15,3 +15,7 @@ export function isFiltersWizardStepCompleted(batchReissueState: EmpBatchReissueS
 export function isSignatoryWizardStepCompleted(batchReissueState: EmpBatchReissueState) {
   return batchReissueState !== undefined && !!batchReissueState.signatory;
 }
+
+export function isChangesWizardStepCompleted(batchReissueState: EmpBatchReissueState) {
+  return batchReissueState !== undefined && !!batchReissueState.changesDetails?.['changes']?.length;
+}

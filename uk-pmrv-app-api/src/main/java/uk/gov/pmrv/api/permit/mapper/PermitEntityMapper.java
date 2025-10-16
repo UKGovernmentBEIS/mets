@@ -79,6 +79,7 @@ public interface PermitEntityMapper {
 
     @Mapping(target = "activationDate", source = "permitEntity.permitContainer.activationDate")
     @Mapping(target = "permitAttachments", source = "permitEntity.permitContainer.permitAttachments")
+	@Mapping(target = "regulatedActivities", source = "permitEntity.permitContainer.permit.regulatedActivities")
     PermitDetailsDTO toPermitDetailsDTO(PermitEntity permitEntity, FileInfoDTO fileDocument);
 
     default Map<MonitoringApproachType, PermitMonitoringApproachSection> cloneApproaches(Map<MonitoringApproachType,

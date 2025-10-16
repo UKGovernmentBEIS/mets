@@ -1,7 +1,6 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { firstValueFrom, Observable } from 'rxjs';
 
@@ -27,7 +26,6 @@ describe('WizardStepGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
       providers: [KeycloakService, HttpClient, HttpHandler],
     });
     guard = TestBed.inject(WizardStepGuard);
@@ -41,20 +39,20 @@ describe('WizardStepGuard', () => {
     expect(guard).toBeTruthy();
   });
 
-  it('should navigate to next step', async () => {
+  it('should navigate to next step', () => {
     store.setState({ ...mockStateBuild({ transferCode: undefined }) });
 
-    await expect(
+    expect(
       firstValueFrom(
         guard.canActivate(activatedRouteSnapshot, routerStateSnapshot('date')) as Observable<true | UrlTree>,
       ),
     ).resolves.toEqual(true);
   });
 
-  it('should return to first page when wizard is not completed', async () => {
+  it('should return to first page when wizard is not completed', () => {
     store.setState({ ...mockStateBuild({ transferCode: undefined }) });
 
-    await expect(
+    expect(
       firstValueFrom(
         guard.canActivate(activatedRouteSnapshot, routerStateSnapshot('summary')) as Observable<true | UrlTree>,
       ),
@@ -63,8 +61,8 @@ describe('WizardStepGuard', () => {
     );
   });
 
-  it('should return to summary page when section is completed', async () => {
-    await expect(
+  it('should return to summary page when section is completed', () => {
+    expect(
       firstValueFrom(guard.canActivate(activatedRouteSnapshot, routerStateSnapshot()) as Observable<true | UrlTree>),
     ).resolves.toEqual(
       router.parseUrl(`/tasks/${activatedRouteSnapshot.params.taskId}/permit-transfer-a/submit/summary`),

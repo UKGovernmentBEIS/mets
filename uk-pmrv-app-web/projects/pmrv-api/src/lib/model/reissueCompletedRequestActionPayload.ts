@@ -13,6 +13,7 @@ import { FileInfoDTO } from './fileInfoDTO';
 import { RequestActionPayload } from './requestActionPayload';
 
 export interface ReissueCompletedRequestActionPayload extends RequestActionPayload {
+  changesDetails?: object;
   submitter: string;
   signatory: string;
   signatoryName: string;

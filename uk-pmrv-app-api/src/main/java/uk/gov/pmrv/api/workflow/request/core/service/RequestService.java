@@ -54,6 +54,18 @@ public class RequestService {
     }
 
     @Transactional
+    public void addSystemActionToRequest(Request request, @Valid RequestActionPayload payload,
+                                   RequestActionType actionType) {
+
+        request.addRequestAction(
+                RequestAction.builder()
+                        .payload(payload)
+                        .type(actionType)
+                        .submitter("system")
+                        .build());
+    }
+
+    @Transactional
     public void updateRequestStatus(String requestId, RequestStatus status) {
         Request request = findRequestById(requestId);
 

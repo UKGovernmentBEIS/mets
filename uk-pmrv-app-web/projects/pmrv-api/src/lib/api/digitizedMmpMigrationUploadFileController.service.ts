@@ -95,6 +95,7 @@ export class DigitizedMmpMigrationUploadFileControllerService {
   }
 
   /**
+   * Upload MMP file to temporary storage to be used for MMP migration
    * @param id
    * @param type
    * @param file

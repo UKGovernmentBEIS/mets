@@ -13,4 +13,5 @@ import { RequestMetadata } from './requestMetadata';
 
 export interface ALRRequestMetaData extends RequestMetadata {
   year: number;
+  isFinal: boolean;
 }

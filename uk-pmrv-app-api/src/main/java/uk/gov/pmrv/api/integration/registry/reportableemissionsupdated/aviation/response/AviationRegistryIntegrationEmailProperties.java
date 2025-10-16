@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,7 +12,8 @@ import java.util.Map;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "aviation.registry.integration.error.handle")
-@ConditionalOnProperty(name = "registry.integration.emissions.updated.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnExpression("'${registry.integration.emissions.updated.enabled:false}' == 'true' or " +
+                "'${registry.integration.set.operator.id.enabled:false}' == 'true'")
 public class AviationRegistryIntegrationEmailProperties {
 
     @NotNull

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, RouterLink } from '@angular/router';
 
 import { ItemTypePipe } from '@shared/dashboard';
 import { DaysRemainingPipe } from '@shared/pipes/days-remaining.pipe';
@@ -34,7 +34,7 @@ describe('WorkflowItemsListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterLink],
       declarations: [
         TestParentComponent,
         WorkflowItemsListComponent,
@@ -45,6 +45,7 @@ describe('WorkflowItemsListComponent', () => {
         DaysRemainingPipe,
         TableComponent,
       ],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestParentComponent);
@@ -59,10 +60,10 @@ describe('WorkflowItemsListComponent', () => {
   it('should show data in table', () => {
     const cells = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('td'));
     expect(cells.map((cell) => cell.textContent.trim())).toEqual([
-      ...['Apply for a permit', 'TEST_FN TEST_LN', '22', 'PERM_REF_ID_1', 'ACCOUNT_1', 'LE_1'],
-      ...['Peer review permit surrender', 'TEST_FN TEST_LN', '12', 'PERM_REF_ID_2', 'ACCOUNT_2', 'LE_2'],
-      ...['Review installation account application', 'TEST_FN TEST_LN', '10', 'PERM_REF_ID_3', 'ACCOUNT_3', 'LE_3'],
-      ...['Permit application sent to regulator', 'TEST_FN TEST_LN', '16', 'PERM_REF_ID_4', 'ACCOUNT_4', 'LE_4'],
+      ...['Apply for a permit', 'TEST_FN TEST_LN', '22', 'REQUEST_ID_1', 'ACCOUNT_1', 'LE_1'],
+      ...['Peer review permit surrender', 'TEST_FN TEST_LN', '12', 'REQUEST_ID_2', 'ACCOUNT_2', 'LE_2'],
+      ...['Review installation account application', 'TEST_FN TEST_LN', '10', 'REQUEST_ID_3', 'ACCOUNT_3', 'LE_3'],
+      ...['Permit application sent to regulator', 'TEST_FN TEST_LN', '16', 'REQUEST_ID_4', 'ACCOUNT_4', 'LE_4'],
     ]);
   });
 });

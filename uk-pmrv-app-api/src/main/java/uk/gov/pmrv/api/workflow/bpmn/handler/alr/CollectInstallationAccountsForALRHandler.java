@@ -8,6 +8,7 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
+import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class CollectInstallationAccountsForALRHandler implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         execution.setVariable("accounts", getInstallationAccounts(execution));
+        execution.setVariable(BpmnProcessConstants.ALR_FINAL, Boolean.FALSE);
     }
 
     private List<Long> getInstallationAccounts(DelegateExecution execution) {

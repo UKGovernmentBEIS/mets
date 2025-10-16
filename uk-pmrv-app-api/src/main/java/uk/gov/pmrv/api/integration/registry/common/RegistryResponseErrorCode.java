@@ -4,7 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum RegistryResponseErrorCode {
-
+    ERROR_0200("ERROR_0200", "Internal Server Error"),
+    ERROR_0201("ERROR_0201", "Data validation error"),
+    ERROR_0202("ERROR_0202", "Emitter ID does not exist in METS"),
+    ERROR_0203("ERROR_0203", "Emitter ID is already associated with an Operator ID"),
+    ERROR_0204("ERROR_0204", "Operator ID already associated with another live account"),
+    ERROR_0205("ERROR_0205", "Emitter ID is associated with an invalid type of account"),
     ERROR_0803("ERROR_0803", "Operator ID does not exist in Registry."),
     ERROR_0805("ERROR_0805", "The Operator ID is associated with an Account with status Closed."),
     ERROR_0806("ERROR_0806", "The Operator ID is associated with an Account with status Transfer Pending."),

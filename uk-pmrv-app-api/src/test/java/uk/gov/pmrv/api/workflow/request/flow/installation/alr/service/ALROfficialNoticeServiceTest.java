@@ -20,7 +20,10 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateOfficialNoticeParamsProvider;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAuthorityReviewOutcome;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRGrantAuthorityResponse;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalAuthorityResponseType;
 
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +88,7 @@ public class ALROfficialNoticeServiceTest {
                 .build();
         final TemplateParams templateParams = TemplateParams.builder().build();
         final FileInfoDTO officialNotice = FileInfoDTO.builder()
-                .name("Activity_level_determination_preliminary_allocation_letter.pdf")
+                .name("Activity_level_report_preliminary_allocation_letter.pdf")
                 .uuid(UUID.randomUUID().toString())
                 .build();
 
@@ -96,8 +99,8 @@ public class ALROfficialNoticeServiceTest {
                 .thenReturn(ccRecipientsEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(paramsSourceData))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateAndSaveFileDocument(DocumentTemplateType.DOAL_SUBMITTED,
-                templateParams, "Activity_level_determination_preliminary_allocation_letter.pdf")).thenReturn(officialNotice);
+        when(documentFileGeneratorService.generateAndSaveFileDocument(DocumentTemplateType.ALR_SUBMITTED,
+                templateParams, "Activity_level_report_preliminary_allocation_letter.pdf")).thenReturn(officialNotice);
 
         // Invoke
         service.generateAndSaveProceededToAuthorityOfficialNotice(requestId);
@@ -113,7 +116,7 @@ public class ALROfficialNoticeServiceTest {
         verify(documentTemplateOfficialNoticeParamsProvider, times(1))
                 .constructTemplateParams(paramsSourceData);
         verify(documentFileGeneratorService, times(1))
-                .generateAndSaveFileDocument(DocumentTemplateType.DOAL_SUBMITTED, templateParams, "Activity_level_determination_preliminary_allocation_letter.pdf");
+                .generateAndSaveFileDocument(DocumentTemplateType.ALR_SUBMITTED, templateParams, "Activity_level_report_preliminary_allocation_letter.pdf");
     }
 
     @Test
@@ -152,5 +155,123 @@ public class ALROfficialNoticeServiceTest {
                 .sendOfficialNotice(List.of(officialNotice), request, ccRecipientsEmails);
     }
 
-    //TODO: add generateAndSaveAuthorityResponseOfficialNotice tests when alr template arrives
+    @Test
+    void generateAndSaveAuthorityResponseOfficialNotice_rejected() {
+        final String requestId = "AEM-002";
+        final String signatory = "Signatory";
+        final DecisionNotification decisionNotification = DecisionNotification.builder()
+                .operators(Set.of("op1"))
+                .signatory(signatory)
+                .build();
+        final ALRRequestPayload payload = ALRRequestPayload.builder()
+                .payloadType(RequestPayloadType.ALR_REQUEST_PAYLOAD)
+                .decisionNotification(decisionNotification)
+                .authorityReviewOutcome(
+                        ALRApplicationAuthorityReviewOutcome.builder()
+                                .authorityResponse(ALRGrantAuthorityResponse.builder()
+                                        .type(DoalAuthorityResponseType.INVALID)
+                                        .build())
+                                .build()
+                )
+                .build();
+        final Request request = Request.builder()
+                .id(requestId)
+                .payload(payload)
+                .build();
+
+        final UserInfoDTO accountPrimaryContact = UserInfoDTO.builder()
+                .firstName("fn").lastName("ln").email("primary@email").userId("op1").build();
+        final List<String> ccRecipientsEmails = List.of("operator1@email");
+        final DocumentTemplateParamsSourceData paramsSourceData = DocumentTemplateParamsSourceData.builder()
+                .contextActionType(DocumentTemplateGenerationContextActionType.ALR_REJECTED)
+                .request(request)
+                .signatory(signatory)
+                .accountPrimaryContact(accountPrimaryContact)
+                .toRecipientEmail(accountPrimaryContact.getEmail())
+                .ccRecipientsEmails(ccRecipientsEmails)
+                .build();
+        final TemplateParams templateParams = TemplateParams.builder().build();
+        final FileInfoDTO officialNotice = FileInfoDTO.builder()
+                .name("Activity_level_report_not_approved_by_Authority_notice.pdf")
+                .uuid(UUID.randomUUID().toString())
+                .build();
+
+        when(requestService.findRequestById(requestId)).thenReturn(request);
+        when(requestAccountContactQueryService.getRequestAccountPrimaryContact(request))
+                .thenReturn(Optional.of(accountPrimaryContact));
+        when(decisionNotificationUsersService.findUserEmails(decisionNotification))
+                .thenReturn(ccRecipientsEmails);
+        when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(paramsSourceData))
+                .thenReturn(templateParams);
+        when(documentFileGeneratorService.generateAndSaveFileDocument(DocumentTemplateType.ALR_REJECTED,
+                templateParams, "Activity_level_report_not_approved_by_Authority_notice.pdf")).thenReturn(officialNotice);
+
+        // Invoke
+        service.generateAndSaveAuthorityResponseOfficialNotice(requestId);
+
+        // Verify
+        assertThat(payload.getOfficialNotice()).isEqualTo(officialNotice);
+        verify(documentFileGeneratorService).generateAndSaveFileDocument(
+                DocumentTemplateType.ALR_REJECTED, templateParams, "Activity_level_report_not_approved_by_Authority_notice.pdf");
+    }
+
+    @Test
+    void generateAndSaveAuthorityResponseOfficialNotice_accepted() {
+        final String requestId = "AEM-003";
+        final String signatory = "Signatory";
+        final DecisionNotification decisionNotification = DecisionNotification.builder()
+                .operators(Set.of("op1"))
+                .signatory(signatory)
+                .build();
+        final ALRRequestPayload payload = ALRRequestPayload.builder()
+                .payloadType(RequestPayloadType.ALR_REQUEST_PAYLOAD)
+                .decisionNotification(decisionNotification)
+                .authorityReviewOutcome(
+                        ALRApplicationAuthorityReviewOutcome.builder()
+                                .authorityResponse(ALRGrantAuthorityResponse.builder()
+                                        .type(DoalAuthorityResponseType.VALID)
+                                        .build())
+                                .build()
+                )
+                .build();
+        final Request request = Request.builder()
+                .id(requestId)
+                .payload(payload)
+                .build();
+
+        final UserInfoDTO accountPrimaryContact = UserInfoDTO.builder()
+                .firstName("fn").lastName("ln").email("primary@email").userId("op1").build();
+        final List<String> ccRecipientsEmails = List.of("operator1@email");
+        final DocumentTemplateParamsSourceData paramsSourceData = DocumentTemplateParamsSourceData.builder()
+                .contextActionType(DocumentTemplateGenerationContextActionType.ALR_ACCEPTED)
+                .request(request)
+                .signatory(signatory)
+                .accountPrimaryContact(accountPrimaryContact)
+                .toRecipientEmail(accountPrimaryContact.getEmail())
+                .ccRecipientsEmails(ccRecipientsEmails)
+                .build();
+        final TemplateParams templateParams = TemplateParams.builder().build();
+        final FileInfoDTO officialNotice = FileInfoDTO.builder()
+                .name("Activity_level_report_approved_by_Authority_notice.pdf")
+                .uuid(UUID.randomUUID().toString())
+                .build();
+
+        when(requestService.findRequestById(requestId)).thenReturn(request);
+        when(requestAccountContactQueryService.getRequestAccountPrimaryContact(request))
+                .thenReturn(Optional.of(accountPrimaryContact));
+        when(decisionNotificationUsersService.findUserEmails(decisionNotification))
+                .thenReturn(ccRecipientsEmails);
+        when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(paramsSourceData))
+                .thenReturn(templateParams);
+        when(documentFileGeneratorService.generateAndSaveFileDocument(DocumentTemplateType.ALR_ACCEPTED,
+                templateParams, "Activity_level_report_approved_by_Authority_notice.pdf")).thenReturn(officialNotice);
+
+        // Invoke
+        service.generateAndSaveAuthorityResponseOfficialNotice(requestId);
+
+        // Verify
+        assertThat(payload.getOfficialNotice()).isEqualTo(officialNotice);
+        verify(documentFileGeneratorService).generateAndSaveFileDocument(
+                DocumentTemplateType.ALR_ACCEPTED, templateParams, "Activity_level_report_approved_by_Authority_notice.pdf");
+    }
 }

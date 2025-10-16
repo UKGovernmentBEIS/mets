@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -10,9 +9,10 @@ import { PermitRevocationStore } from '@permit-revocation/store/permit-revocatio
 import { GovukDatePipe } from '@shared/pipes/govuk-date.pipe';
 import { format, subDays } from 'date-fns';
 
-import { TasksService } from 'pmrv-api';
+import { InstallationAccountViewService, TasksService } from 'pmrv-api';
 
-import { ActivatedRouteStub, BasePage, MockType } from '../../../../testing';
+import { ActivatedRouteStub, BasePage, mockClass, MockType } from '../../../../testing';
+import { mockedAccountPermit } from '../../../accounts/testing/mock-data';
 import { mockTaskState } from '../../testing/mock-state';
 import { ReportComponent } from './report.component';
 
@@ -22,6 +22,7 @@ describe('Report Component', () => {
   let store: PermitRevocationStore;
   let page: Page;
   let router: Router;
+  let accountViewService: MockType<InstallationAccountViewService>;
 
   const tasksService: MockType<TasksService> = {
     processRequestTaskAction: jest.fn().mockReturnValue(of(null)),
@@ -100,18 +101,21 @@ describe('Report Component', () => {
   };
 
   beforeEach(async () => {
+    accountViewService = mockClass(InstallationAccountViewService);
+    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountPermit));
+
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, PermitRevocationModule, CessationModule],
+      imports: [PermitRevocationModule, CessationModule],
       providers: [
+        provideRouter([]),
         { provide: TasksService, useValue: tasksService },
         { provide: ActivatedRoute, useValue: route },
+        { provide: InstallationAccountViewService, useValue: accountViewService },
       ],
     }).compileComponents();
     store = TestBed.inject(PermitRevocationStore);
     router = TestBed.inject(Router);
   });
-
-  afterEach(() => jest.clearAllMocks());
 
   beforeEach(() => {
     store.setState({
@@ -126,12 +130,16 @@ describe('Report Component', () => {
         surrenderRequired: null,
         feeCharged: null,
         annualEmissionsReportRequired: null,
+        alrRequired: null,
+        alrReportDate: null,
       },
       sectionsCompleted: {},
     });
   });
 
   beforeEach(createComponent);
+
+  afterEach(() => jest.clearAllMocks());
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -158,7 +166,7 @@ describe('Report Component', () => {
 
     expect(page.errorSummary).toBeFalsy();
     expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
-    expect(navigateSpy).toHaveBeenCalledWith(['..', 'surrender-allowances'], { relativeTo: route });
+    expect(navigateSpy).toHaveBeenCalledWith(['..', 'final-alr'], { relativeTo: route });
   });
 
   it('should validate form when a user selects option "Yes" without completing all the required fields', () => {
@@ -218,6 +226,6 @@ describe('Report Component', () => {
     expect(page.errorSummary).toBeFalsy();
 
     expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
-    expect(navigateSpy).toHaveBeenCalledWith(['..', 'surrender-allowances'], { relativeTo: route });
+    expect(navigateSpy).toHaveBeenCalledWith(['..', 'final-alr'], { relativeTo: route });
   });
 });

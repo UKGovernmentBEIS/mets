@@ -14,6 +14,7 @@ import {
   ItemDTOResponse,
   ItemsAssignedToMeService,
   ItemsAssignedToOthersService,
+  RequestsService,
   UnassignedItemsService,
 } from 'pmrv-api';
 
@@ -40,6 +41,10 @@ class Page extends BasePage<DashboardPageComponent> {
   get unassignedTab() {
     return this.query<HTMLDivElement>('#unassigned');
   }
+
+  get filters() {
+    return this.query<HTMLElement>('app-dashboard-filters');
+  }
 }
 
 describe('DashboardPageComponent', () => {
@@ -50,6 +55,7 @@ describe('DashboardPageComponent', () => {
   let itemsAssignedToMeService: Partial<jest.Mocked<ItemsAssignedToMeService>>;
   let itemsAssignedToOthersService: Partial<jest.Mocked<ItemsAssignedToOthersService>>;
   let unassignedItemsService: Partial<jest.Mocked<UnassignedItemsService>>;
+  let mockRequestsService: Partial<jest.Mocked<RequestsService>>;
 
   const mockTasks: ItemDTOResponse = {
     items: [
@@ -115,6 +121,10 @@ describe('DashboardPageComponent', () => {
   };
 
   beforeEach(async () => {
+    mockRequestsService = {
+      getRequestTypesByUserRolesAndService: jest.fn().mockReturnValue(of(['INSTALLATION_ACCOUNT_OPENING'])),
+    };
+
     itemsAssignedToMeService = {
       getAssignedItems: jest.fn().mockReturnValue(of(mockTasks)),
     };
@@ -135,6 +145,7 @@ describe('DashboardPageComponent', () => {
         { provide: ItemsAssignedToMeService, useValue: itemsAssignedToMeService },
         { provide: ItemsAssignedToOthersService, useValue: itemsAssignedToOthersService },
         { provide: UnassignedItemsService, useValue: unassignedItemsService },
+        { provide: RequestsService, useValue: mockRequestsService },
       ],
       declarations: [DashboardPageComponent],
     }).compileComponents();
@@ -169,9 +180,13 @@ describe('DashboardPageComponent', () => {
       'Review installation account application',
     ]);
     expect(cells.map((cell) => cell.textContent.trim())).toEqual([
-      ...['Review installation account application New', '', '11', 'Monster inc', 'Pixar'],
-      ...['Review installation account application', '13', '22', 'Ali G records', 'Netflix'],
+      ...['Review installation account application New', '', '1', 'Monster inc', 'Pixar'],
+      ...['Review installation account application', '13', '3', 'Ali G records', 'Netflix'],
     ]);
+  });
+
+  it('should render filters', () => {
+    expect(page.filters).toBeTruthy();
   });
 
   it('should render assigned to others table rows', () => {
@@ -185,7 +200,7 @@ describe('DashboardPageComponent', () => {
     expect(anchors.map((anchor) => anchor.href)).toEqual([expect.stringContaining('/installation-account/4')]);
     expect(anchors.map((anchor) => anchor.textContent.trim())).toEqual(['Review installation account application']);
     expect(cells.map((cell) => cell.textContent.trim())).toEqual([
-      ...['Review installation account application', 'Sasha Baron Cohen', '13', '22', 'Ali G records', 'Netflix'],
+      ...['Review installation account application', 'Sasha Baron Cohen', '13', '3', 'Ali G records', 'Netflix'],
     ]);
   });
 
@@ -218,7 +233,7 @@ describe('DashboardPageComponent', () => {
       expect(anchors.map((anchor) => anchor.href)).toEqual([expect.stringContaining('/installation-account/19')]);
       expect(anchors.map((anchor) => anchor.textContent.trim())).toEqual(['Review installation account application']);
       expect(cells.map((cell) => cell.textContent.trim())).toEqual([
-        ...['Review installation account application', '', '33', 'Vans F', 'Vans'],
+        ...['Review installation account application', '', '40', 'Vans F', 'Vans'],
       ]);
     });
   });

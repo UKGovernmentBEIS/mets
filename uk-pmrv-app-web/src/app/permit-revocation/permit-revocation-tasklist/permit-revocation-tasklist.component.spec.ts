@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Route } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Route } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -9,8 +8,9 @@ import { CessationModule } from '@permit-revocation/cessation/cessation.module';
 import { ActivatedRouteStub, BasePage, mockClass, MockType } from '@testing';
 import { addDays, format } from 'date-fns';
 
-import { AssigneeUserInfoDTO, TasksAssignmentService } from 'pmrv-api';
+import { AssigneeUserInfoDTO, InstallationAccountViewService, TasksAssignmentService } from 'pmrv-api';
 
+import { mockedAccountPermit } from '../../accounts/testing/mock-data';
 import { PermitRevocationModule } from '../permit-revocation.module';
 import { PermitRevocationStore } from '../store/permit-revocation-store';
 import { mockTaskState } from '../testing/mock-state';
@@ -21,7 +21,7 @@ describe('PermitRevocationTaskListComponent', () => {
   let fixture: ComponentFixture<PermitRevocationTasklistComponent>;
   let store: PermitRevocationStore;
   let page: Page;
-
+  let accountViewService: MockType<InstallationAccountViewService>;
   let tasksAssignmentService: MockType<TasksAssignmentService>;
   let route: ActivatedRouteStub;
   const authService = mockClass(AuthService);
@@ -96,12 +96,16 @@ describe('PermitRevocationTaskListComponent', () => {
     tasksAssignmentService = {
       getCandidateAssigneesByTaskId: jest.fn().mockReturnValue(of(candidateAssignees)),
     };
+    accountViewService = mockClass(InstallationAccountViewService);
+    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountPermit));
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, PermitRevocationModule, CessationModule],
+      imports: [PermitRevocationModule, CessationModule],
       providers: [
+        provideRouter([]),
         { provide: TasksAssignmentService, useValue: tasksAssignmentService },
         { provide: ActivatedRoute, useValue: route },
         { provide: AuthService, useValue: authService },
+        { provide: InstallationAccountViewService, useValue: accountViewService },
       ],
     }).compileComponents();
   });
@@ -153,6 +157,8 @@ describe('PermitRevocationTaskListComponent', () => {
         feeCharged: true,
         effectiveDate: after28Days.toISOString(),
         feeDate: after29Days.toISOString(),
+        alrRequired: true,
+        alrReportDate: today,
       },
     });
     createComponent();

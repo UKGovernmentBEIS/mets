@@ -63,12 +63,14 @@ export class SummaryComponent {
     const surrenderLabel = permitRevocationMapper['surrenderDate'].label;
     const feeLabel = permitRevocationMapper['feeDate'].label;
     const effectiveLabel = permitRevocationMapper['effectiveDate'].label;
+    const alrRequiredLabel = permitRevocationMapper['alrReportDate'].label;
 
     const stop = { key: null, value: [] };
     const emissions = { key: null, value: [] };
     const surrender = { key: null, value: [] };
     const fee = { key: null, value: [] };
     const effective = { key: null, value: [] };
+    const alrRequired = { key: null, value: [] };
 
     for (const [prop, val] of Object.entries(permitRevocation)) {
       if (permitRevocationMapper[prop].label.trim() === stopLabel.trim()) {
@@ -86,6 +88,9 @@ export class SummaryComponent {
       } else if (permitRevocationMapper[prop].label.trim() === effectiveLabel.trim()) {
         effective.key = prop;
         effective.value = [...effective.value, val];
+      } else if (permitRevocationMapper[prop].label.trim() === alrRequiredLabel.trim()) {
+        alrRequired.key = prop;
+        alrRequired.value = [...alrRequired.value, val];
       } else {
         summaryList = [...summaryList, { key: prop, value: val }];
       }
@@ -105,6 +110,9 @@ export class SummaryComponent {
     }
     if (!some(effective, isEmpty)) {
       summaryList.push(effective);
+    }
+    if (!some(alrRequired, isEmpty)) {
+      summaryList.push(alrRequired);
     }
 
     return summaryList.sort((a, b) => permitRevocationMapper[a.key].step - permitRevocationMapper[b.key].step);

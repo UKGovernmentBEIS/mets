@@ -3914,4 +3914,948 @@ The regulator will contact you if necessary.'
            <param name="fileDocumentName" value="HSE_TI_NRW.docx" />
        </customChange>
     </changeSet>
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_ACCEPTED_EA" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Approval of Allocation (with corrections)_EA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_ACCEPTED',
+                       'ALR Approval of Allocation',
+                       'ENGLAND',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'Notice of ALR Approval of Allocation (with corrections)_EA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Approval of Allocation' and competent_authority = 'ENGLAND')
+                   );
+        </sql>
+        <rollback>
+
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Approval of Allocation' and competent_authority = 'ENGLAND');
+
+            delete from notification_document_template
+            where name = 'ALR Approval of Allocation' and competent_authority = 'ENGLAND';
+
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'Notice of ALR Approval of Allocation (with corrections)_EA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_REJECTED_EA" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Rejection of Allocation_EA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_REJECTED',
+                       'ALR Rejection of Allocation',
+                       'ENGLAND',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'Notice of ALR Rejection of Allocation_EA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Rejection of Allocation' and competent_authority = 'ENGLAND')
+                   );
+        </sql>
+        <rollback>
+
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Rejection of Allocation' and competent_authority = 'ENGLAND');
+
+            delete from notification_document_template
+            where name = 'ALR Rejection of Allocation' and competent_authority = 'ENGLAND';
+
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'Notice of ALR Rejection of Allocation_EA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_ACCEPTED_SEPA" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Approval of Allocation (with corrections)_SEPA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id, type, name, competent_authority, account_type, workflow, last_updated_date, file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_ACCEPTED',
+                       'ALR Approval of Allocation',
+                       'SCOTLAND',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'Notice of ALR Approval of Allocation (with corrections)_SEPA.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Approval of Allocation' and competent_authority = 'SCOTLAND'));
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Approval of Allocation' and competent_authority = 'SCOTLAND');
+
+            delete from notification_document_template
+            where name = 'ALR Approval of Allocation' and competent_authority = 'SCOTLAND';
+
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'Notice of ALR Approval of Allocation (with corrections)_SEPA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_REJECTED_SEPA" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Rejection of Allocation_SEPA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id, type, name, competent_authority, account_type, workflow, last_updated_date, file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_REJECTED',
+                       'ALR Rejection of Allocation',
+                       'SCOTLAND',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'Notice of ALR Rejection of Allocation_SEPA.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Rejection of Allocation' and competent_authority = 'SCOTLAND'));
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Rejection of Allocation' and competent_authority = 'SCOTLAND');
+
+            delete from notification_document_template
+            where name = 'ALR Rejection of Allocation' and competent_authority = 'SCOTLAND';
+
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'Notice of ALR Rejection of Allocation_SEPA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_ACCEPTED_NI" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Approval of Allocation (with corrections)_NI.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id, type, name, competent_authority, account_type, workflow, last_updated_date, file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_ACCEPTED',
+                       'ALR Approval of Allocation',
+                       'NORTHERN_IRELAND',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'Notice of ALR Approval of Allocation (with corrections)_NI.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Approval of Allocation' and competent_authority = 'NORTHERN_IRELAND'));
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Approval of Allocation' and competent_authority = 'NORTHERN_IRELAND');
+
+            delete from notification_document_template
+            where name = 'ALR Approval of Allocation' and competent_authority = 'NORTHERN_IRELAND';
+
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'Notice of ALR Approval of Allocation (with corrections)_NI.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_REJECTED_NI" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Rejection of Allocation_NI.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id, type, name, competent_authority, account_type, workflow, last_updated_date, file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_REJECTED',
+                       'ALR Rejection of Allocation',
+                       'NORTHERN_IRELAND',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'Notice of ALR Rejection of Allocation_NI.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Rejection of Allocation' and competent_authority = 'NORTHERN_IRELAND'));
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Rejection of Allocation' and competent_authority = 'NORTHERN_IRELAND');
+
+            delete from notification_document_template
+            where name = 'ALR Rejection of Allocation' and competent_authority = 'NORTHERN_IRELAND';
+
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'Notice of ALR Rejection of Allocation_NI.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_ACCEPTED_NRW" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Approval of Allocation (with corrections)_NRW.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id, type, name, competent_authority, account_type, workflow, last_updated_date, file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_ACCEPTED',
+                       'ALR Approval of Allocation',
+                       'WALES',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'Notice of ALR Approval of Allocation (with corrections)_NRW.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Approval of Allocation' and competent_authority = 'WALES'));
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Approval of Allocation' and competent_authority = 'WALES');
+
+            delete from notification_document_template
+            where name = 'ALR Approval of Allocation' and competent_authority = 'WALES';
+
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'Notice of ALR Approval of Allocation (with corrections)_NRW.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_REJECTED_NRW" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Rejection of Allocation_NRW.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id, type, name, competent_authority, account_type, workflow, last_updated_date, file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_REJECTED',
+                       'ALR Rejection of Allocation',
+                       'WALES',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'Notice of ALR Rejection of Allocation_NRW.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Rejection of Allocation' and competent_authority = 'WALES'));
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Rejection of Allocation' and competent_authority = 'WALES');
+
+            delete from notification_document_template
+            where name = 'ALR Rejection of Allocation' and competent_authority = 'WALES';
+
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'Notice of ALR Rejection of Allocation_NRW.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_ACCEPTED_OPRED" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Approval of Allocation (with corrections)_OPRED.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id, type, name, competent_authority, account_type, workflow, last_updated_date, file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_ACCEPTED',
+                       'ALR Approval of Allocation',
+                       'OPRED',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'Notice of ALR Approval of Allocation (with corrections)_OPRED.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'OPRED' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Approval of Allocation' and competent_authority = 'OPRED'));
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'OPRED' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Approval of Allocation' and competent_authority = 'OPRED');
+
+            delete from notification_document_template
+            where name = 'ALR Approval of Allocation' and competent_authority = 'OPRED';
+
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'Notice of ALR Approval of Allocation (with corrections)_OPRED.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_REJECTED_OPRED" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Rejection of Allocation_OPRED.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+            id, type, name, competent_authority, account_type, workflow, last_updated_date, file_document_template_id)
+            values (
+            nextval('notification_document_template_seq'),
+            'ALR_REJECTED',
+            'ALR Rejection of Allocation',
+            'OPRED',
+            'INSTALLATION',
+            'ALR',
+            CURRENT_TIMESTAMP,
+            (select id from file_document_template where file_name = 'Notice of ALR Rejection of Allocation_OPRED.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+            (select id from notification_template where name = 'Generic email template' and competent_authority = 'OPRED' and account_type = 'INSTALLATION'),
+            (select id from notification_document_template where name = 'ALR Rejection of Allocation' and competent_authority = 'OPRED'));
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'OPRED' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Rejection of Allocation' and competent_authority = 'OPRED');
+
+            delete from notification_document_template
+            where name = 'ALR Rejection of Allocation' and competent_authority = 'OPRED';
+
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'Notice of ALR Rejection of Allocation_OPRED.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_update_doal_templates_content_accept_reject" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="type" value="DOAL_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Approval of Allocation (with corrections) Article 34H &amp; 6a Final v01.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="type" value="DOAL_REJECTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Rejection of Allocation Article 34H &amp; 6a Final v01.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="type" value="DOAL_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Approval of Allocation (with corrections) Article 34H &amp; 6a Final v01.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="type" value="DOAL_REJECTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Rejection of Allocation Article 34H &amp; 6a Final v01.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="type" value="DOAL_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Approval of Allocation (with corrections) Article 34H &amp; 6a Final v01.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="type" value="DOAL_REJECTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Rejection of Allocation Article 34H &amp; 6a Final v01.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="type" value="DOAL_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Approval of Allocation (with corrections) Article 34H &amp; 6a Final v01.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="type" value="DOAL_REJECTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Rejection of Allocation Article 34H &amp; 6a Final v01.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="type" value="DOAL_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Approval of Allocation (with corrections) Article 34H &amp; 6a Final v01.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="type" value="DOAL_REJECTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Rejection of Allocation Article 34H &amp; 6a Final v01.docx" />
+        </customChange>
+    </changeSet>
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_preliminary_allocation_EA" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="ALR Preliminary Allocation Letter Final v01_EA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_SUBMITTED',
+                       'ALR Preliminary Allocation letter',
+                       'ENGLAND',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'ALR Preliminary Allocation Letter Final v01_EA.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Preliminary Allocation letter' and competent_authority = 'ENGLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Preliminary Allocation letter' and competent_authority = 'ENGLAND');
+            delete from notification_document_template
+            where name = 'ALR Preliminary Allocation letter' and competent_authority = 'ENGLAND';
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'ALR Preliminary Allocation Letter Final v01_EA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_preliminary_allocation_SEPA" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="ALR Preliminary Allocation Letter Final v01_SEPA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_SUBMITTED',
+                       'ALR Preliminary Allocation letter',
+                       'SCOTLAND',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'ALR Preliminary Allocation Letter Final v01_SEPA.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Preliminary Allocation letter' and competent_authority = 'SCOTLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Preliminary Allocation letter' and competent_authority = 'SCOTLAND');
+            delete from notification_document_template
+            where name = 'ALR Preliminary Allocation letter' and competent_authority = 'SCOTLAND';
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'ALR Preliminary Allocation Letter Final v01_SEPA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_preliminary_allocation_NI" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="ALR Preliminary Allocation Letter Final v01_NI.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_SUBMITTED',
+                       'ALR Preliminary Allocation letter',
+                       'NORTHERN_IRELAND',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'ALR Preliminary Allocation Letter Final v01_NI.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Preliminary Allocation letter' and competent_authority = 'NORTHERN_IRELAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Preliminary Allocation letter' and competent_authority = 'NORTHERN_IRELAND');
+            delete from notification_document_template
+            where name = 'ALR Preliminary Allocation letter' and competent_authority = 'NORTHERN_IRELAND';
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'ALR Preliminary Allocation Letter Final v01_NI.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_preliminary_allocation_NRW" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="ALR Preliminary Allocation Letter Final v01_NRW.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_SUBMITTED',
+                       'ALR Preliminary Allocation letter',
+                       'WALES',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'ALR Preliminary Allocation Letter Final v01_NRW.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Preliminary Allocation letter' and competent_authority = 'WALES')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Preliminary Allocation letter' and competent_authority = 'WALES');
+            delete from notification_document_template
+            where name = 'ALR Preliminary Allocation letter' and competent_authority = 'WALES';
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'ALR Preliminary Allocation Letter Final v01_NRW.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_alr_official_notice_templates_preliminary_allocation_OPRED" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="ALR Preliminary Allocation Letter Final v01_OPRED.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'ALR_SUBMITTED',
+                       'ALR Preliminary Allocation letter',
+                       'OPRED',
+                       'INSTALLATION',
+                       'ALR',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'ALR Preliminary Allocation Letter Final v01_OPRED.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'OPRED' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'ALR Preliminary Allocation letter' and competent_authority = 'OPRED')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'OPRED' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'ALR Preliminary Allocation letter' and competent_authority = 'OPRED');
+            delete from notification_document_template
+            where name = 'ALR Preliminary Allocation letter' and competent_authority = 'OPRED';
+            delete from file_document_template
+            where id IN (select id FROM file_document_template where file_name = 'ALR Preliminary Allocation Letter Final v01_OPRED.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_set_operator_id_error_fordway" author="mitzelose@unisystems.gr">
+        <sql>
+            <![CDATA[
+            WITH
+                constants (name, subject, text_content) AS (
+                    VALUES (
+                               'Registry integration set operator id error fordway',
+                               'ACTION REQUIRED - Error with integration point ''Registry/Operator ID''',
+                               $$Dear Fordway,
+
+The integration point 'Registry/Operator ID' has failed with error(s):
+
+<#list errors as code,description>
+- **${code?replace("ERROR_", "")}** - **${description}**
+</#list>
+
+for Operator: ${operatorName!""} with Emitter ID: ${emitterId!""}
+
+Actions: Please contact the development team for root cause investigation
+
+Source system identifier: ${sourceSystem}
+
+Message ID (correlation ID): ${correlationId}
+
+Payload: Operator ID: ${registryId!""}, Emitter Id: ${emitterId!""}, Competent Authority: ${competentAuthorityName!""}
+
+Thank you.$$
+                )
+            ),
+            templates_to_create (ca_name, account_type) AS (
+                VALUES
+                    ('ENGLAND',        'AVIATION'),
+                    ('SCOTLAND',       'AVIATION'),
+                    ('WALES',          'AVIATION'),
+                    ('NORTHERN_IRELAND', 'AVIATION'),
+                    ('OPRED',          'AVIATION'),
+                    ('ENGLAND',        'INSTALLATION'),
+                    ('SCOTLAND',       'INSTALLATION'),
+                    ('WALES',          'INSTALLATION'),
+                    ('NORTHERN_IRELAND', 'INSTALLATION'),
+                    ('OPRED',          'INSTALLATION')
+            )
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            SELECT
+                nextval('notification_template_seq'),
+                c.name,
+                c.subject,
+                t.ca_name,
+                null,
+                t.account_type,
+                null,
+                null,
+                false,
+                CURRENT_TIMESTAMP,
+                c.text_content
+            FROM
+                constants c
+            CROSS JOIN
+                templates_to_create t;
+            ]]>
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template
+                WHERE name = 'Registry integration set operator id error fordway'
+                AND competent_authority IN (
+                'ENGLAND',
+                'SCOTLAND',
+                'WALES',
+                'NORTHERN_IRELAND',
+                'OPRED'
+                )
+                AND account_type IN ('AVIATION', 'INSTALLATION');
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_kafka_set_operator_id_error_regulator" author="mitzelose@unisystems.gr">
+        <sql>
+            <![CDATA[
+            WITH
+                constants (name, subject, text_content) AS (
+                    VALUES (
+                               'Registry integration set operator id error regulator',
+                               'ACTION REQUIRED - Error with integration point ''Registry/Operator ID'' for Operator: ${operatorName!""} with Emitter ID: ${emitterId!""}',
+                               $$Dear Regulator,
+
+The integration point 'Registry/Operator ID' has failed with error(s):
+
+<#list errors as code,description>
+- **${code?replace("ERROR_", "")}** - **${description}**
+</#list>
+
+for Operator: ${operatorName!""} with Emitter ID: ${emitterId!""} and Registry/Operator ID: ${registryId!""}
+
+Please review the affected fields:
+Emitter ID and Registry/Operator ID
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+
+Message ID (correlation ID): ${correlationId}
+
+Payload: Operator ID: ${registryId!""}, Emitter Id: ${emitterId!""}, Competent Authority: ${competentAuthorityName!""}
+
+Thank you.$$
+                           )
+                ),
+                templates_to_create (ca_name, account_type) AS (
+                    VALUES
+                        ('ENGLAND',        'AVIATION'),
+                        ('SCOTLAND',       'AVIATION'),
+                        ('WALES',          'AVIATION'),
+                        ('NORTHERN_IRELAND', 'AVIATION'),
+                        ('OPRED',          'AVIATION'),
+                        ('ENGLAND',        'INSTALLATION'),
+                        ('SCOTLAND',       'INSTALLATION'),
+                        ('WALES',          'INSTALLATION'),
+                        ('NORTHERN_IRELAND', 'INSTALLATION'),
+                        ('OPRED',          'INSTALLATION')
+                )
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            SELECT
+                nextval('notification_template_seq'),
+                c.name,
+                c.subject,
+                t.ca_name,
+                null,
+                t.account_type,
+                null,
+                null,
+                false,
+                CURRENT_TIMESTAMP,
+                c.text_content
+            FROM
+                constants c
+                    CROSS JOIN
+                templates_to_create t;
+            ]]>
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template
+                WHERE name = 'Registry integration set operator id error regulator'
+                AND competent_authority IN (
+                'ENGLAND',
+                'SCOTLAND',
+                'WALES',
+                'NORTHERN_IRELAND',
+                'OPRED'
+                )
+                AND account_type IN ('AVIATION', 'INSTALLATION');
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_kafka_set_operator_id_error_information_regulator" author="mitzelose@unisystems.gr">
+        <sql>
+            <![CDATA[
+            WITH
+                constants (name, subject, text_content) AS (
+                    VALUES (
+                               'Registry integration set operator id error information regulator',
+                               'INFORMATION ONLY - Error with integration point ''Set Registry/Operator ID'' for Emitter ID: <Emitter ID>',
+                               $$Dear Regulator,
+
+The integration point 'Set Registry/Operator ID' has failed with error(s):
+
+<#list errors as code,description>
+- **${code?replace("ERROR_", "")}** - **${description}**
+</#list>
+
+for Emitter ID: ${emitterId!""}
+
+Please review the affected fields:
+Emitter ID and Registry/Operator ID
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+
+Message ID (correlation ID): ${correlationId}
+
+Payload: Operator ID: ${registryId!""}, Emitter Id: ${emitterId!""}, Competent Authority: ${competentAuthorityName!""}
+
+Thank you.$$
+                           )
+                ),
+                templates_to_create (ca_name, account_type) AS (
+                    VALUES
+                        ('ENGLAND',        'AVIATION'),
+                        ('SCOTLAND',       'AVIATION'),
+                        ('WALES',          'AVIATION'),
+                        ('NORTHERN_IRELAND', 'AVIATION'),
+                        ('OPRED',          'AVIATION'),
+                        ('ENGLAND',        'INSTALLATION'),
+                        ('SCOTLAND',       'INSTALLATION'),
+                        ('WALES',          'INSTALLATION'),
+                        ('NORTHERN_IRELAND', 'INSTALLATION'),
+                        ('OPRED',          'INSTALLATION')
+                )
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            SELECT
+                nextval('notification_template_seq'),
+                c.name,
+                c.subject,
+                t.ca_name,
+                null,
+                t.account_type,
+                null,
+                null,
+                false,
+                CURRENT_TIMESTAMP,
+                c.text_content
+            FROM
+                constants c
+                    CROSS JOIN
+                templates_to_create t;
+            ]]>
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template
+                WHERE name = 'Registry integration set operator id error information regulator'
+                AND competent_authority IN (
+                'ENGLAND',
+                'SCOTLAND',
+                'WALES',
+                'NORTHERN_IRELAND',
+                'OPRED'
+                )
+                AND account_type IN ('AVIATION', 'INSTALLATION');
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

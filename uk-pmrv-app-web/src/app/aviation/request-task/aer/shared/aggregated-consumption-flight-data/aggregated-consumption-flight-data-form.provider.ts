@@ -148,7 +148,8 @@ export class AggregatedConsumptionFlightDataFormProvider
         multipleFuelTypes: {
           rows,
           columns: this.mapFieldsToColumnNames(invalidColumns),
-          message: 'You cannot enter the same aerodrome pair and fuel type',
+          message:
+            'The fuel type has been duplicated for the same aerodrome pair. Enter a single fuel type for each aerodrome pair.',
         },
       };
     }
@@ -224,7 +225,7 @@ export class AggregatedConsumptionFlightDataFormProvider
     return null;
   }
 
-  validateNumericValues(control: FormControl): ValidationErrors | null {
+  validateFuelConsumptionValues(control: FormControl): ValidationErrors | null {
     const data = control.value;
 
     if (!Array.isArray(data)) {
@@ -238,7 +239,7 @@ export class AggregatedConsumptionFlightDataFormProvider
       const entry = data[i];
 
       if (entry) {
-        const fuelConsumption = parseFloat(entry.fuelConsumption);
+        const fuelConsumption = entry.fuelConsumption;
         const decimalPlaces = (fuelConsumption.toString().split('.')[1] || '').length;
 
         if (isNaN(fuelConsumption) || fuelConsumption <= 0 || decimalPlaces > 3) {
@@ -247,7 +248,36 @@ export class AggregatedConsumptionFlightDataFormProvider
             rowIndex: i + 1,
           });
         }
+      }
+    }
 
+    if (rows.length > 0) {
+      return {
+        invalidFuelConsumptionValue: {
+          rows,
+          columns: this.mapFieldsToColumnNames([...invalidColumnsSet]),
+          message: 'Enter fuel consumption to 3 decimal places',
+        },
+      };
+    }
+
+    return null;
+  }
+
+  validateFlightsNumberValues(control: FormControl): ValidationErrors | null {
+    const data = control.value;
+
+    if (!Array.isArray(data)) {
+      return null;
+    }
+
+    const rows = [];
+    const invalidColumnsSet = new Set<string>();
+
+    for (let i = 0; i < data.length; i++) {
+      const entry = data[i];
+
+      if (entry) {
         const flightsNumber = entry.flightsNumber;
 
         if (!Number.isInteger(flightsNumber) || flightsNumber <= 0) {
@@ -261,7 +291,7 @@ export class AggregatedConsumptionFlightDataFormProvider
 
     if (rows.length > 0) {
       return {
-        invalidNumericValue: {
+        invalidFlightsNumberValue: {
           rows,
           columns: this.mapFieldsToColumnNames([...invalidColumnsSet]),
           message: 'Enter a number',
@@ -277,7 +307,8 @@ export class AggregatedConsumptionFlightDataFormProvider
       const uniqueFuelTypePerAerodromePairValidatorResult = this.uniqueFuelTypePerAerodromePairValidator(control);
       const fuleTypeValidatorResult = this.validateFuelType(control, getFuelTypeValues());
       const fromAndToAerodromesAreDifferentValidatorResult = this.validateFromAndToAerodromesAreDifferent(control);
-      const numericValuesValidatorResult = this.validateNumericValues(control);
+      const fuelConsumptionValuesValidatorResult = this.validateFuelConsumptionValues(control);
+      const flightsNumberValuesValidatorResult = this.validateFlightsNumberValues(control);
 
       const data = control.value;
 
@@ -298,7 +329,8 @@ export class AggregatedConsumptionFlightDataFormProvider
         of(uniqueFuelTypePerAerodromePairValidatorResult),
         of(fuleTypeValidatorResult),
         of(fromAndToAerodromesAreDifferentValidatorResult),
-        of(numericValuesValidatorResult),
+        of(fuelConsumptionValuesValidatorResult),
+        of(flightsNumberValuesValidatorResult),
         airportsFrom,
         airportsTo,
       ]).pipe(
@@ -307,7 +339,8 @@ export class AggregatedConsumptionFlightDataFormProvider
             uniqueFuelTypePerAerodromePairValidatorResult,
             fuleTypeValidatorResult,
             fromAndToAerodromesAreDifferentValidatorResult,
-            numericValuesValidatorResult,
+            fuelConsumptionValuesValidatorResult,
+            flightsNumberValuesValidatorResult,
             airportsFrom,
             airportsTo,
           ]) => {
@@ -325,8 +358,12 @@ export class AggregatedConsumptionFlightDataFormProvider
               errors = { ...errors, ...fromAndToAerodromesAreDifferentValidatorResult };
             }
 
-            if (numericValuesValidatorResult) {
-              errors = { ...errors, ...numericValuesValidatorResult };
+            if (fuelConsumptionValuesValidatorResult) {
+              errors = { ...errors, ...fuelConsumptionValuesValidatorResult };
+            }
+
+            if (flightsNumberValuesValidatorResult) {
+              errors = { ...errors, ...flightsNumberValuesValidatorResult };
             }
 
             const validIcaoCodesFrom = airportsFrom.map((airport) => airport.icao);
@@ -396,11 +433,17 @@ export class AggregatedConsumptionFlightDataFormProvider
               };
             }
 
-            if (notUkEtsDepartureAerodromeCodeRows.length > 0) {
-              errors['notUkEtsDepartureAerodromeCode'] = {
-                rows: notUkEtsDepartureAerodromeCodeRows,
-                columns: this.mapFieldsToColumnNames(['airportFrom']),
-                message: 'Aerodrome of departure codes must be within the scope of UK ETS',
+            if (notUkEtsDepartureAerodromeCodeRows.length > 0 || notUkEtsArrivalAerodromeCodeRows.length > 0) {
+              const departureColumns = notUkEtsDepartureAerodromeCodeRows.length > 0 ? ['airportFrom'] : [];
+              const arrivalColumns = notUkEtsArrivalAerodromeCodeRows.length > 0 ? ['airportTo'] : [];
+              const rows = [...notUkEtsDepartureAerodromeCodeRows, ...notUkEtsArrivalAerodromeCodeRows];
+
+              errors['notUkEtsAerodromeCode'] = {
+                rows: Array.from(new Set(rows.map((a) => a.rowIndex))).map((rowIndex) => {
+                  return rows.find((a) => a.rowIndex === rowIndex);
+                }),
+                columns: this.mapFieldsToColumnNames([...departureColumns, ...arrivalColumns]),
+                message: 'Route outside the scope of UK ETS',
               };
             }
 
@@ -409,14 +452,6 @@ export class AggregatedConsumptionFlightDataFormProvider
                 rows: invalidArrivalAerodromeCodeRows,
                 columns: this.mapFieldsToColumnNames(['airportTo']),
                 message: 'One or more aerodrome of arrival ICAO codes are invalid',
-              };
-            }
-
-            if (notUkEtsArrivalAerodromeCodeRows.length > 0) {
-              errors['notUkEtsArrivalAerodromeCode'] = {
-                rows: notUkEtsArrivalAerodromeCodeRows,
-                columns: this.mapFieldsToColumnNames(['airportTo']),
-                message: 'Aerodrome of arrival codes must be within the scope of UK ETS',
               };
             }
 
@@ -440,7 +475,8 @@ export class AggregatedConsumptionFlightDataFormProvider
       const uniqueFuelTypePerAerodromePairValidatorResult = this.uniqueFuelTypePerAerodromePairValidator(control);
       const fuelTypeValidatorResult = this.validateFuelType(control, getFuelTypeValues(true));
       const fromAndToAerodromesAreDifferentValidatorResult = this.validateFromAndToAerodromesAreDifferent(control);
-      const numericValuesValidatorResult = this.validateNumericValues(control);
+      const fuelConsumptionValuesValidatorResult = this.validateFuelConsumptionValues(control);
+      const flightsNumberValuesValidatorResult = this.validateFlightsNumberValues(control);
 
       const data = control.value;
 
@@ -461,7 +497,8 @@ export class AggregatedConsumptionFlightDataFormProvider
         of(uniqueFuelTypePerAerodromePairValidatorResult),
         of(fuelTypeValidatorResult),
         of(fromAndToAerodromesAreDifferentValidatorResult),
-        of(numericValuesValidatorResult),
+        of(fuelConsumptionValuesValidatorResult),
+        of(flightsNumberValuesValidatorResult),
         airportsFrom,
         airportsTo,
       ]).pipe(
@@ -470,7 +507,8 @@ export class AggregatedConsumptionFlightDataFormProvider
             uniqueFuelTypePerAerodromePairValidatorResult,
             fuelTypeValidatorResult,
             fromAndToAerodromesAreDifferentValidatorResult,
-            numericValuesValidatorResult,
+            fuelConsumptionValuesValidatorResult,
+            flightsNumberValuesValidatorResult,
             airportsFrom,
             airportsTo,
           ]) => {
@@ -488,8 +526,12 @@ export class AggregatedConsumptionFlightDataFormProvider
               errors = { ...errors, ...fromAndToAerodromesAreDifferentValidatorResult };
             }
 
-            if (numericValuesValidatorResult) {
-              errors = { ...errors, ...numericValuesValidatorResult };
+            if (fuelConsumptionValuesValidatorResult) {
+              errors = { ...errors, ...fuelConsumptionValuesValidatorResult };
+            }
+
+            if (flightsNumberValuesValidatorResult) {
+              errors = { ...errors, ...flightsNumberValuesValidatorResult };
             }
 
             const validIcaoCodesFrom = airportsFrom.map((airport) => airport.icao);
@@ -549,7 +591,7 @@ export class AggregatedConsumptionFlightDataFormProvider
     };
   }
 
-  private mapFieldsToColumnNames(fields) {
+  private mapFieldsToColumnNames(fields: Array<string>) {
     const fieldColumnMap = {
       airportFrom: 'A',
       airportTo: 'B',
@@ -557,6 +599,6 @@ export class AggregatedConsumptionFlightDataFormProvider
       fuelConsumption: 'D',
       flightsNumber: 'E',
     };
-    return fields.map((field) => fieldColumnMap[field]);
+    return [...new Set(fields)].map((field) => fieldColumnMap[field]);
   }
 }

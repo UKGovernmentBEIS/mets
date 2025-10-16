@@ -14,6 +14,7 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.application.authorization.OperatorAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
+import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemOrderBy;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTO;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
@@ -70,11 +71,11 @@ class ItemAssignedToOthersOperatorServiceTest {
         doReturn(scopedRequestTaskTypes)
             .when(operatorAuthorityResourceAdapter).getUserScopedRequestTaskTypesByAccountType(appUser, accountType);
         doReturn(expectedItemPage).when(itemOperatorRepository).findItems(appUser.getUserId(), ItemAssignmentType.OTHERS,
-            scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+            scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
         doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, appUser);
 
         // Invoke
-        ItemDTOResponse actualItemDTOResponse = itemService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+        ItemDTOResponse actualItemDTOResponse = itemService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
 
         // Assert
         assertEquals(expectedItemDTOResponse, actualItemDTOResponse);
@@ -92,7 +93,7 @@ class ItemAssignedToOthersOperatorServiceTest {
             .when(operatorAuthorityResourceAdapter).getUserScopedRequestTaskTypesByAccountType(appUser, accountType);
 
         // Invoke
-        ItemDTOResponse actualItemDTOResponse = itemService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+        ItemDTOResponse actualItemDTOResponse = itemService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
 
         // Assert
         assertEquals(ItemDTOResponse.emptyItemDTOResponse(), actualItemDTOResponse);

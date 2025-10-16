@@ -24,6 +24,6 @@ public class PermitSurrenderGrantedHandler implements JavaDelegate {
         execution.setVariable(BpmnProcessConstants.SURRENDER_REMINDER_NOTICE_DATE, noticeReminderDate);
 
         // Add variables for triggering AER
-        service.constructAerVariables(requestId).forEach(execution::setVariable);
+        service.constructAerAndAlrVariables(requestId).forEach(execution::setVariable);
     }
 }

@@ -52,9 +52,9 @@ public class ALRProceededToAuthorityOfficialLetterPreviewHandler extends Preview
         templateParams.getParams().putAll(params);
 
         return documentFileGeneratorService.generateFileDocument(
-                DocumentTemplateType.DOAL_SUBMITTED,
+                DocumentTemplateType.ALR_SUBMITTED,
                 templateParams,
-                "Activity_level_determination_preliminary_allocation_letter.pdf");
+                "Activity_level_report_preliminary_allocation_letter.pdf");
     }
 
     @Override

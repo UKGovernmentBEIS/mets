@@ -7,13 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactVbInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Optional;
@@ -103,5 +103,9 @@ public interface AccountRepository extends JpaRepository<Account, Long>, Account
     @Transactional(readOnly = true)
     @Query("SELECT a FROM Account a WHERE a.registryId = :registryId")
     Optional<Account> findAccountByRegistryId(@Param("registryId") Integer registryId);
+
+    @Transactional(readOnly = true)
+    @Query("SELECT a FROM Account a WHERE a.emitterId= :emitterId")
+    Optional<Account> findAccountByEmitterId(@Param("emitterId") String emitterId);
 
 }

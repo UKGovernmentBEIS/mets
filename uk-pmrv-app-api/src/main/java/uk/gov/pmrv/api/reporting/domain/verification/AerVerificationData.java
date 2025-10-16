@@ -69,6 +69,13 @@ public class AerVerificationData {
     @Valid
     private UncorrectedNonCompliances uncorrectedNonCompliances;
 
+    private Boolean isPostALRSectionRemoval;
+
+    /**
+     * @deprecated This property is only kept for backward compatibility with older AER applications.
+     *             Do not use in new implementations.
+     */
+    @Deprecated
     @Valid
     private ActivityLevelReport activityLevelReport;
 }

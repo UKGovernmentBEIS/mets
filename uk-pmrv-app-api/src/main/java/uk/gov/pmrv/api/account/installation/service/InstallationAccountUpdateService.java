@@ -11,6 +11,7 @@ import uk.gov.pmrv.api.account.domain.Location;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationDTO;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
+import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateFaStatusDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.TransferCodeStatus;
@@ -23,6 +24,7 @@ import uk.gov.pmrv.api.account.transform.LocationMapper;
 import uk.gov.pmrv.api.common.domain.transform.AddressMapper;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -153,5 +155,11 @@ public class InstallationAccountUpdateService {
         AccountUpdateFaStatusDTO accountUpdateFaStatusDTO) {
         InstallationAccount account = installationAccountQueryService.getAccountById(accountId);
         account.setFaStatus(accountUpdateFaStatusDTO.getFaStatus());
+    }
+
+    @Transactional
+    public void updateCommencementDate(Long accountId, AccountUpdateCommencementDateDTO commencementDateDTO) {
+        InstallationAccount account = installationAccountQueryService.getAccountById(accountId);
+        account.setCommencementDate(commencementDateDTO.getCommencementDate());
     }
 }

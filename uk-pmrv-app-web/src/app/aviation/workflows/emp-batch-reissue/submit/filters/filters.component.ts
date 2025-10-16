@@ -52,6 +52,6 @@ export class FiltersComponent implements OnInit {
     if (this.form.dirty) {
       this.store.patchState(this.form.value);
     }
-    this.router.navigate(['..', 'signatory'], { relativeTo: this.route });
+    this.router.navigate(['..', 'changes'], { relativeTo: this.route });
   }
 }

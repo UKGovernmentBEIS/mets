@@ -70,7 +70,7 @@ public class PermitSurrenderReviewGrantedService {
 				((PermitSurrenderReviewDeterminationGrant) requestPayload.getReviewDetermination()).getNoticeDate().minus(28, DAYS));
     }
 
-    public Map<String, Object> constructAerVariables(String requestId) {
+    public Map<String, Object> constructAerAndAlrVariables(String requestId) {
         Map<String, Object> variables = new HashMap<>();
 
         Request request = requestService.findRequestById(requestId);
@@ -83,6 +83,15 @@ public class PermitSurrenderReviewGrantedService {
         if(Boolean.TRUE.equals(reviewDeterminationGrant.getReportRequired())){
             variables.put(BpmnProcessConstants.AER_EXPIRATION_DATE,
                     DateUtils.atEndOfDay(reviewDeterminationGrant.getReportDate()));
+        }
+
+        variables.put(BpmnProcessConstants.ALR_REQUIRED, reviewDeterminationGrant.getAlrRequired());
+
+        if(Boolean.TRUE.equals(reviewDeterminationGrant.getAlrRequired())) {
+            variables.put(BpmnProcessConstants.ALR_FINAL, Boolean.TRUE);
+            variables.put(BpmnProcessConstants.ACCOUNT_ID, request.getAccountId());
+            variables.put(BpmnProcessConstants.ALR_EXPIRATION_DATE,
+                    DateUtils.atEndOfDay(reviewDeterminationGrant.getAlrReportDate()));
         }
 
         return variables;

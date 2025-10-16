@@ -15,6 +15,7 @@ import { RequestActionPayload } from './requestActionPayload';
 export interface BatchReissueCompletedRequestActionPayload extends RequestActionPayload {
   submitter: string;
   filters?: object;
+  changesDetails?: object;
   signatory: string;
   signatoryName: string;
   numberOfAccounts: number;

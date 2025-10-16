@@ -71,7 +71,7 @@ describe('InternalServerErrorComponent', () => {
 
       expect(element.querySelector('h1').textContent).toEqual('Registry application data synchronisation error');
       expect(paragraphContents).toEqual([
-        "We're experiencing temporary difficulties in syncing data. Please try again later or contact the  UK ETS reporting helpdesk  for assistance.",
+        "We're experiencing temporary difficulties in syncing data. Please try again later or contact the UK ETS reporting helpdesk for assistance.",
       ]);
       expect(element.querySelector('a').href).toEqual('mailto:METS@energysecurity.gov.uk');
     });

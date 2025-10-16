@@ -1,6 +1,8 @@
 package uk.gov.pmrv.api.web.controller.account.installation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.hibernate.validator.HibernateValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,11 +40,7 @@ import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateFaStatusDTO;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateInstallationNameDTO;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateRegistryIdDTO;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateSiteNameDTO;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateSopIdDTO;
+import uk.gov.pmrv.api.account.installation.domain.dto.*;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountUpdateService;
 import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
@@ -53,6 +51,7 @@ import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.controller.utils.TestConstrainValidatorFactory;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.Mockito.doThrow;
@@ -88,6 +87,10 @@ class InstallationAccountUpdateControllerTest {
 
     @Mock
     private CountryService countryService;
+
+    private final ObjectMapper mapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     @BeforeEach
     public void setUp() {
@@ -412,6 +415,57 @@ class InstallationAccountUpdateControllerTest {
 
         verify(installationAccountUpdateService, never())
             .updateFaStatus(Mockito.anyLong(), Mockito.any(AccountUpdateFaStatusDTO.class));
+    }
+
+    @Test
+    void updateCommencementDate() throws Exception {
+        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService);
+        setupRoleBasedAuthentication(controller);
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
+        Long accountId = 1L;
+        AccountUpdateCommencementDateDTO updateCommencementDateDTO = AccountUpdateCommencementDateDTO
+                .builder()
+                .commencementDate(LocalDate.now())
+                .build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post(CONTROLLER_PATH + "/" + accountId + "/commencement-date")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(updateCommencementDateDTO)))
+                .andExpect(status().isNoContent());
+
+        verify(installationAccountUpdateService, times(1))
+                .updateCommencementDate(accountId, updateCommencementDateDTO);
+    }
+
+    @Test
+    void updateCommencementDate_forbidden() throws Exception {
+        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService);
+        setupRoleBasedAuthentication(controller);
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER).build();
+        long accountId = 1L;
+        AccountUpdateCommencementDateDTO updateCommencementDateDTO = AccountUpdateCommencementDateDTO
+                .builder()
+                .commencementDate(LocalDate.now())
+                .build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
+                .when(roleAuthorizationService)
+                .evaluate(user, new String[]{RoleTypeConstants.REGULATOR});
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post(CONTROLLER_PATH + "/" + accountId + "/commencement-date")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(updateCommencementDateDTO)))
+                .andExpect(status().isForbidden());
+
+        verify(installationAccountUpdateService, never())
+                .updateCommencementDate(Mockito.anyLong(), Mockito.any(AccountUpdateCommencementDateDTO.class));
     }
 
     private LocalValidatorFactoryBean mockValidatorFactoryBean() {

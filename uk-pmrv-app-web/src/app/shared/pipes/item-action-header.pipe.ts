@@ -343,6 +343,7 @@ export class ItemActionHeaderPipe implements PipeTransform {
       case 'ALR_APPLICATION_ACCEPTED':
       case 'ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS':
       case 'ALR_APPLICATION_REJECTED':
+      case 'ALR_APPLICATION_MARK_NOT_REQUIRED':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
       case 'HSE_TI_APPLICATION_SENT_TO_REGULATOR':

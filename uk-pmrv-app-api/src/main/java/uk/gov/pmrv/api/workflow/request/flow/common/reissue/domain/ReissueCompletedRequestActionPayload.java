@@ -5,6 +5,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -14,6 +17,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueChangesDetails;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueChangesDetails;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -21,6 +26,14 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 @AllArgsConstructor
 @SuperBuilder
 public class ReissueCompletedRequestActionPayload extends RequestActionPayload {
+
+    @Valid
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "payloadType", visible = true)
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value = PermitBatchReissueChangesDetails.class, name = "PERMIT_REISSUE_COMPLETED_PAYLOAD"),
+        @JsonSubTypes.Type(value = EmpBatchReissueChangesDetails.class, name = "EMP_REISSUE_COMPLETED_PAYLOAD")
+    })
+	private BatchReissueChangesDetails changesDetails;
 
 	@NotBlank
 	private String submitter; //full name

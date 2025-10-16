@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +24,10 @@ import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
+import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemOrderBy;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemAssignedToOthersService;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,15 +60,21 @@ public class ItemAssignedToOthersController {
             @NotNull(message = "{parameter.page.typeMismatch}") Integer page,
             @RequestParam("size") @Parameter(name = "size", description = "The page size")
             @Min(value = 1, message = "{parameter.pageSize.typeMismatch}")
-            @NotNull(message = "{parameter.pageSize.typeMismatch}") Integer pageSize) {
+            @NotNull(message = "{parameter.pageSize.typeMismatch}") Integer pageSize,
+            @RequestParam(name="orderBy", defaultValue = "NEWEST_FIRST")
+            @NotNull ItemOrderBy orderBy,
+            @RequestParam(name="requestType", required = false)
+            @Nullable RequestType requestType,
+            @RequestParam(name="accountSearchTerm", required = false)
+            @Nullable String accountSearchTerm) {
 
         Optional<ItemAssignedToOthersService> itemService = services.stream()
                 .filter(itemAssignedToOthersService -> itemAssignedToOthersService.getRoleType().equals(user.getRoleType()))
                 .findFirst();
 
         return itemService.map(itemAssignedToOthersService ->
-		new ResponseEntity<>(itemAssignedToOthersService.getItemsAssignedToOthers(user, accountType,
-				PagingRequest.builder().pageNumber(page).pageSize(pageSize).build()), HttpStatus.OK))
+		new ResponseEntity<>(itemAssignedToOthersService .getItemsAssignedToOthers(user, accountType,
+				PagingRequest.builder().pageNumber(page).pageSize(pageSize).build(), orderBy, requestType, accountSearchTerm), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(ItemDTOResponse.emptyItemDTOResponse(), HttpStatus.OK));
     }
 }

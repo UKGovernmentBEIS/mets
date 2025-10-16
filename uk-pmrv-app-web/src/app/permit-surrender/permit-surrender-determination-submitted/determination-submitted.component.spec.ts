@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { AuthService } from '@core/services/auth.service';
 import { AuthStore } from '@core/store/auth';
@@ -36,8 +36,8 @@ describe('DeterminationSubmittedComponent', () => {
       loadUserState: jest.fn(),
     };
     await TestBed.configureTestingModule({
-      imports: [PermitSurrenderModule, RouterTestingModule],
-      providers: [{ provide: AuthService, useValue: authService }],
+      imports: [PermitSurrenderModule],
+      providers: [provideRouter([]), { provide: AuthService, useValue: authService }],
     }).compileComponents();
 
     authStore = TestBed.inject(AuthStore);

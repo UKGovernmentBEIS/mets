@@ -35,6 +35,7 @@ class BatchReissueCompletedServiceTest {
 	
 	@Mock
 	private RequestActionUserInfoResolver requestActionUserInfoResolver;
+
 	
 	@Test
 	void addAction() {
@@ -74,4 +75,5 @@ class BatchReissueCompletedServiceTest {
 				.build(),
 				RequestActionType.BATCH_REISSUE_COMPLETED, "submitterId");
 	}
+
 }

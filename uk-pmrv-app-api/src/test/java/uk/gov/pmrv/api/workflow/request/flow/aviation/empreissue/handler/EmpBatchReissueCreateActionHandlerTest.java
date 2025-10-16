@@ -17,6 +17,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateAct
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueChangesDetails;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueFilters;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpReissueAccountDetails;
@@ -58,6 +59,7 @@ class EmpBatchReissueCreateActionHandlerTest {
     void process() {
     	Long accountId = null;
     	CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+		EmpBatchReissueChangesDetails changes = EmpBatchReissueChangesDetails.builder().changes(List.of("change1", "change2")).build();
     	EmpBatchReissueFilters filters = EmpBatchReissueFilters.builder()
 				.emissionTradingSchemes(Set.of(EmissionTradingScheme.UK_ETS_AVIATION))
 				.reportingStatuses(Set.of(AviationAccountReportingStatus.REQUIRED_TO_REPORT))
@@ -65,6 +67,7 @@ class EmpBatchReissueCreateActionHandlerTest {
     	BatchReissueRequestCreateActionPayload payload = BatchReissueRequestCreateActionPayload.builder()
     			.payloadType(RequestCreateActionPayloadType.EMP_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD)
     			.filters(filters)
+				.changesDetails(changes)
     			.signatory("signatory")
     			.build();
     	
@@ -87,6 +90,7 @@ class EmpBatchReissueCreateActionHandlerTest {
             	        .payloadType(RequestPayloadType.EMP_BATCH_REISSUE_REQUEST_PAYLOAD)
 	            		.filters(filters)
 	            		.signatory(payload.getSignatory())
+						.changesDetails(changes)
             	        .build())
                 .requestMetadata(EmpBatchReissueRequestMetadata.builder()
                 		.accountsReports(Map.of(

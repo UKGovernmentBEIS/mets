@@ -36,6 +36,8 @@ public class PermitTransferDetails {
     @NotNull
     private TransferParty aerLiable;
 
+    private TransferParty alrLiable;
+
     @NotNull
     @Size(min = 9, max = 9)
     private String transferCode;

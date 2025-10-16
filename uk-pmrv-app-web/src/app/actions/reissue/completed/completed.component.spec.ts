@@ -56,8 +56,10 @@ describe('CompletedComponent', () => {
     expect(page.values.map((val) => val.textContent.trim())).toEqual([
       'submitter1',
       '8 Jun 2023',
+      'summary of changes',
+      'change1change2',
       'signName',
-      'Batch_variation_notice.pdfUK-E-IN-00048 v6.pdf',
+      'Batch_variation_notice.pdf  UK-E-IN-00048 v6.pdf',
     ]);
   });
 });

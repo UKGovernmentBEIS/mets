@@ -48,6 +48,7 @@ public class EmpBatchReissueCreateActionHandler implements RequestCACreateAction
 	            		.payloadType(RequestPayloadType.EMP_BATCH_REISSUE_REQUEST_PAYLOAD)
 	            		.filters(filters)
 	            		.signatory(payload.getSignatory())
+						.changesDetails(payload.getChangesDetails())
 	            		.build())
 	            .requestMetadata(EmpBatchReissueRequestMetadata.builder()
 	            		.accountsReports(EMP_REISSUE_MAPPER.toEmpReissueAccountsReports(accountsDetails))

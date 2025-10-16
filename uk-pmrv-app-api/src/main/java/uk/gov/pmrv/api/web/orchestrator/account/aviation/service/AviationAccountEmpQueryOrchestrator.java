@@ -27,12 +27,13 @@ public class AviationAccountEmpQueryOrchestrator {
     public AviationAccountEmpDTO getAviationAccountWithEMP(Long accountId, AppUser appUser) {
         final AviationAccountDTO aviationAccountDTO = aviationAccountQueryService.getAviationAccountDTOByIdAndUser(accountId, appUser);
         final Optional<EmpDetailsDTO> empDetailsDTO = empQueryService.getEmissionsMonitoringPlanDetailsDTOByAccountId(accountId);
+        return buildAviationAccountEmpDTO(aviationAccountDTO, empDetailsDTO.orElse(null));
+    }
 
-        return AviationAccountEmpDTO.builder()
-                .aviationAccount(aviationAccountDTO)
-                .emp(empDetailsDTO.orElse(null))
-                .build();
-
+    public AviationAccountEmpDTO getAviationAccountWithEMP(Long accountId) {
+        final AviationAccountDTO aviationAccountDTO = aviationAccountQueryService.getAviationAccountDTOById(accountId);
+        final Optional<EmpDetailsDTO> empDetailsDTO = empQueryService.getEmissionsMonitoringPlanDetailsDTOByAccountId(accountId);
+        return buildAviationAccountEmpDTO(aviationAccountDTO, empDetailsDTO.orElse(null));
     }
 
     @Transactional(readOnly = true)
@@ -41,5 +42,12 @@ public class AviationAccountEmpQueryOrchestrator {
         String empId = empQueryService.getEmpIdByAccountId(accountId).orElse(null);
 
         return ACCOUNT_HEADER_INFO_MAPPER.toAccountHeaderInfoDTO(accountInfo, empId);
+    }
+
+    private AviationAccountEmpDTO buildAviationAccountEmpDTO(AviationAccountDTO aviationAccountDTO,EmpDetailsDTO empDetailsDTO) {
+        return AviationAccountEmpDTO.builder()
+                .aviationAccount(aviationAccountDTO)
+                .emp(empDetailsDTO)
+                .build();
     }
 }

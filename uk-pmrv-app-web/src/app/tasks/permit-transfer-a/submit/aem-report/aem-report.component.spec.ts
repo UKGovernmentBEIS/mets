@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -8,7 +7,6 @@ import { PermitTransferAModule } from '@tasks/permit-transfer-a/permit-transfer-
 import { mockPostBuild, mockState } from '@tasks/permit-transfer-a/testing/mock-state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { TasksService } from 'pmrv-api';
 
@@ -37,8 +35,8 @@ describe('AemReportComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TransferAAemReportComponent],
-      providers: [KeycloakService, { provide: TasksService, useValue: tasksService }],
-      imports: [PermitTransferAModule, RouterTestingModule],
+      providers: [provideRouter([]), { provide: TasksService, useValue: tasksService }],
+      imports: [PermitTransferAModule],
     }).compileComponents();
 
     store = TestBed.inject(CommonTasksStore);
@@ -62,7 +60,7 @@ describe('AemReportComponent', () => {
     page.submitButton.click();
 
     expect(navigateSpy).toHaveBeenCalledTimes(1);
-    expect(navigateSpy).toHaveBeenCalledWith(['..', 'code'], { relativeTo: route });
+    expect(navigateSpy).toHaveBeenCalledWith(['..', 'activity-level-report'], { relativeTo: route });
     expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(0);
   });
 
@@ -73,7 +71,7 @@ describe('AemReportComponent', () => {
     page.submitButton.click();
 
     expect(navigateSpy).toHaveBeenCalledTimes(1);
-    expect(navigateSpy).toHaveBeenCalledWith(['..', 'code'], { relativeTo: route });
+    expect(navigateSpy).toHaveBeenCalledWith(['..', 'activity-level-report'], { relativeTo: route });
     expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
     expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith(mockPostBuild({ aerLiable: 'RECEIVER' }));
   });

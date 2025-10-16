@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { distinctUntilChanged, map, Observable, tap } from 'rxjs';
+import { distinctUntilChanged, map, Observable, switchMap, tap } from 'rxjs';
 
 import { Store } from '@core/store/store';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
 
 import {
+  InstallationAccountViewService,
   PermitCessation,
   PermitRevocation,
   PermitRevocationApplicationSubmitRequestTaskPayload,
@@ -25,6 +26,7 @@ export class PermitRevocationStore extends Store<PermitRevocationState> {
   constructor(
     private readonly tasksService: TasksService,
     private readonly businessErrorService: BusinessErrorService,
+    private readonly installationAccountViewService: InstallationAccountViewService,
   ) {
     super(initialState);
   }
@@ -51,6 +53,19 @@ export class PermitRevocationStore extends Store<PermitRevocationState> {
   get isPaymentRequired(): boolean {
     return true;
   }
+
+  get accountId$() {
+    return this.pipe(map((state) => state.accountId));
+  }
+
+  private readonly installationAccount$ = this.accountId$.pipe(
+    switchMap((accountId) => this.installationAccountViewService.getInstallationAccountById(accountId)),
+    map((result) => result.account),
+  );
+
+  isFinalAlrVisible$ = this.installationAccount$.pipe(
+    map((account) => account.faStatus && account.emitterType === 'GHGE'),
+  );
 
   get isAssignableAndCapable$(): Observable<boolean> {
     return this.pipe(map((state) => state?.userAssignCapable && state?.assignable));

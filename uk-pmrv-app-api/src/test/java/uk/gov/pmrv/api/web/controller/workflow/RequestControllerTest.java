@@ -6,7 +6,6 @@ import org.hibernate.validator.HibernateValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
@@ -24,6 +23,7 @@ import org.springframework.web.context.support.GenericWebApplicationContext;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
@@ -58,6 +58,10 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataT
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestTypeOperatorMapperService;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestTypeRegulatorMapperService;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestTypeToRoleMapperService;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestTypeVerifierMapperService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestCreateActionResourceTypeDelegator;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestCreateActionResourceTypeHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningSubmitApplicationCreateActionPayload;
@@ -68,8 +72,11 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestM
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -87,8 +94,6 @@ class RequestControllerTest {
 
     private MockMvc mockMvc;
 
-    @InjectMocks
-    private RequestController requestController;
 
     @Mock
     private AppSecurityComponent pmrvSecurityComponent;
@@ -109,9 +114,27 @@ class RequestControllerTest {
     
     @Mock
     private CountryService countryService;
-    
+
+    @Mock
+    private RequestTypeOperatorMapperService requestTypeOperatorMapperService;
+
+    @Mock
+    private RequestTypeRegulatorMapperService requestTypeRegulatorMapperService;
+
+    @Mock
+    private RequestTypeVerifierMapperService requestTypeVerifierMapperService;
+
+
     @BeforeEach
     public void setUp() {
+
+        List<RequestTypeToRoleMapperService> services = new ArrayList<>();
+        services.add(requestTypeOperatorMapperService);
+        services.add(requestTypeRegulatorMapperService);
+        services.add(requestTypeVerifierMapperService);
+
+        RequestController requestController = new RequestController(requestCreateActionResourceTypeDelegator, requestQueryService, services);
+
         mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
@@ -337,6 +360,74 @@ class RequestControllerTest {
         verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
         verify(requestQueryService, never()).findRequestDetailsBySearchCriteria(any());
     }
+
+    @Test
+    void getRequestTypesByUserRolesAndService_operator() throws Exception {
+
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.OPERATOR).build();
+        Set<RequestType> requestTypes = Set.of(RequestType.AER, RequestType.BDR, RequestType.INSTALLATION_ONSITE_INSPECTION);
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(requestTypeOperatorMapperService.getRequestTypes(appUser)).thenReturn(requestTypes);
+        when(requestTypeOperatorMapperService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .get(BASE_PATH + "/request-types")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*" ,hasSize(3)));
+
+
+        verify(requestTypeOperatorMapperService, times(1)).getRequestTypes(appUser);
+        verify(requestTypeVerifierMapperService, never()).getRequestTypes(appUser);
+        verify(requestTypeRegulatorMapperService, never()).getRequestTypes(appUser);
+    }
+
+    @Test
+    void getRequestTypesByUserRolesAndService_regulator() throws Exception {
+
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
+        Set<RequestType> requestTypes = Set.of(RequestType.AER, RequestType.BDR, RequestType.INSTALLATION_ONSITE_INSPECTION);
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(requestTypeRegulatorMapperService.getRequestTypes(appUser)).thenReturn(requestTypes);
+        when(requestTypeRegulatorMapperService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .get(BASE_PATH + "/request-types")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*" ,hasSize(3)));
+
+       verify(requestTypeRegulatorMapperService, times(1)).getRequestTypes(appUser);
+       verify(requestTypeVerifierMapperService, never()).getRequestTypes(appUser);
+       verify(requestTypeOperatorMapperService, never()).getRequestTypes(appUser);
+    }
+
+    @Test
+    void getRequestTypesByUserRolesAndService_verifier() throws Exception {
+
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.VERIFIER).build();
+        Set<RequestType> requestTypes = Set.of(RequestType.AER, RequestType.BDR);
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(requestTypeVerifierMapperService.getRequestTypes(appUser)).thenReturn(requestTypes);
+        when(requestTypeVerifierMapperService.getRoleType()).thenReturn(RoleTypeConstants.VERIFIER);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .get(BASE_PATH + "/request-types")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*" ,hasSize(2)));
+
+       verify(requestTypeVerifierMapperService, times(1)).getRequestTypes(appUser);
+       verify(requestTypeRegulatorMapperService, never()).getRequestTypes(appUser);
+       verify(requestTypeOperatorMapperService, never()).getRequestTypes(appUser);
+    }
+
     
     private LocalValidatorFactoryBean mockValidatorFactoryBean() {
         LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();

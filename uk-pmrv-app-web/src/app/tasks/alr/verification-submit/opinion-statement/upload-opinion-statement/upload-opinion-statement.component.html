@@ -5,6 +5,16 @@
     heading="Upload the activity level report verification opinion statement"
     caption="ALR verification opinion statement"
     [hideSubmit]="!isEditable()">
+    <p class="govuk-body">
+      Download a copy of the
+      <a
+        href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/958991/uk-ets-verification-report-template.xlsx"
+        class="govuk-link"
+        rel="noreferrer noopener"
+        target="_blank">
+        verification opinion statement template.
+      </a>
+    </p>
     <div class="govuk-!-width-three-quarters">
       <app-multiple-file-input
         [baseDownloadUrl]="getDownloadUrl()"

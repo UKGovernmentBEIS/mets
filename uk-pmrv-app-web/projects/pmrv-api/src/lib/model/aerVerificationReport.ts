@@ -41,5 +41,6 @@ export interface AerVerificationReport {
   recommendedImprovements: RecommendedImprovements;
   uncorrectedNonConformities: UncorrectedNonConformities;
   uncorrectedNonCompliances: UncorrectedNonCompliances;
+  isPostALRSectionRemoval?: boolean;
   activityLevelReport?: ActivityLevelReport;
 }

@@ -48,6 +48,8 @@ public interface PermitSurrenderMapper {
             grantDeterminationTarget.setReportDate(determinationSource.getReportDate());
             grantDeterminationTarget.setAllowancesSurrenderRequired(determinationSource.getAllowancesSurrenderRequired());
             grantDeterminationTarget.setAllowancesSurrenderDate(determinationSource.getAllowancesSurrenderDate());
+            grantDeterminationTarget.setAlrRequired(determinationSource.getAlrRequired());
+            grantDeterminationTarget.setAlrReportDate(determinationSource.getAlrReportDate());
         }
     }
     

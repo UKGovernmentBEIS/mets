@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
-import { map, Observable } from 'rxjs';
+import { combineLatest, first, map, Observable } from 'rxjs';
 
 import { PermitSurrenderStore } from '../../../../store/permit-surrender.store';
 import { DeterminationTypeUrlMap } from '../../../core/review';
@@ -17,16 +17,18 @@ export class ReasonGuard {
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return (
       this.router.getCurrentNavigation().extras?.state?.changing ||
-      this.store.pipe(
-        map((storeState) => {
+      combineLatest([this.store.pipe(), this.store.isFinalAlrVisible$]).pipe(
+        first(),
+        map(([storeState, isFinalAlrVisible]) => {
           const taskId = route.paramMap.get('taskId');
           const type = storeState?.reviewDetermination?.type;
           const wizardBaseUrl = `/permit-surrender/${taskId}/review/determination`;
           const wizardBaseTypeUrl = `${wizardBaseUrl}/${DeterminationTypeUrlMap[type]}`;
+
           return (
             (storeState.reviewDeterminationCompleted && this.router.parseUrl(`${wizardBaseTypeUrl}/summary`)) ||
             (!type && this.router.parseUrl(wizardBaseUrl)) ||
-            (isWizardComplete(storeState.reviewDetermination as any) &&
+            (isWizardComplete(storeState.reviewDetermination as any, isFinalAlrVisible) &&
               this.router.parseUrl(`${wizardBaseTypeUrl}/answers`)) ||
             true
           );

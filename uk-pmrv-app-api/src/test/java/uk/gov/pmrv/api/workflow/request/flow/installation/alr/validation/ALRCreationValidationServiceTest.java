@@ -54,14 +54,14 @@ public class ALRCreationValidationServiceTest {
 
         RequestParams params = RequestParams.builder()
                 .accountId(accountId)
-                .requestMetadata(ALRRequestMetaData.builder().type(RequestMetadataType.ALR).year(Year.of(2025)).build())
+                .requestMetadata(ALRRequestMetaData.builder().type(RequestMetadataType.ALR).year(Year.of(2025)).isFinal(false).build())
                 .build();
 
         when(alrRequestIdGenerator.generate(params)).thenReturn(requestId);
         when(requestQueryService.existsRequestById(requestId)).thenReturn(false);
 
 
-        RequestCreateValidationResult validationResult = service.validateYear(accountId, Year.of(2025));
+        RequestCreateValidationResult validationResult = service.validateYear(accountId, Year.of(2025), false);
 
         assertThat(validationResult.isValid()).isTrue();
 
@@ -76,13 +76,13 @@ public class ALRCreationValidationServiceTest {
 
         RequestParams params = RequestParams.builder()
                 .accountId(accountId)
-                .requestMetadata(ALRRequestMetaData.builder().type(RequestMetadataType.ALR).year(Year.of(2025)).build())
+                .requestMetadata(ALRRequestMetaData.builder().type(RequestMetadataType.ALR).year(Year.of(2025)).isFinal(false).build())
                 .build();
 
         when(alrRequestIdGenerator.generate(params)).thenReturn(requestId);
         when(requestQueryService.existsRequestById(requestId)).thenReturn(true);
 
-        RequestCreateValidationResult validationResult = service.validateYear(accountId, Year.of(2025));
+        RequestCreateValidationResult validationResult = service.validateYear(accountId, Year.of(2025), false);
 
         assertThat(validationResult.isValid()).isFalse();
         assertThat(validationResult.getReportedRequestTypes()).containsExactlyInAnyOrder(RequestType.ALR);
@@ -94,7 +94,7 @@ public class ALRCreationValidationServiceTest {
     @Test
     void validateAccountStatus() {
         Long accountId = 1L;
-        when(requestCreateValidatorService.validate(accountId,  Set.of(InstallationAccountStatus.LIVE), Set.of())).thenReturn(RequestCreateValidationResult.builder().valid(true).build());
+        when(requestCreateValidatorService.validate(accountId,  Set.of(InstallationAccountStatus.LIVE, InstallationAccountStatus.AWAITING_SURRENDER, InstallationAccountStatus.AWAITING_REVOCATION), Set.of())).thenReturn(RequestCreateValidationResult.builder().valid(true).build());
         RequestCreateValidationResult validationResult = service.validateAccountStatus(accountId);
         assertThat(validationResult.isValid()).isTrue();
     }
@@ -102,7 +102,7 @@ public class ALRCreationValidationServiceTest {
     @Test
     void validateAccountStatus_notApplicableAccountStatus_ReturnFalseValidation() {
         Long accountId = 1L;
-        when(requestCreateValidatorService.validate(accountId, Set.of(InstallationAccountStatus.LIVE), Set.of())).thenReturn(RequestCreateValidationResult.builder().valid(false).build());
+        when(requestCreateValidatorService.validate(accountId, Set.of(InstallationAccountStatus.LIVE, InstallationAccountStatus.AWAITING_SURRENDER, InstallationAccountStatus.AWAITING_REVOCATION), Set.of())).thenReturn(RequestCreateValidationResult.builder().valid(false).build());
         RequestCreateValidationResult validationResult = service.validateAccountStatus(accountId);
         assertThat(validationResult.isValid()).isFalse();
     }

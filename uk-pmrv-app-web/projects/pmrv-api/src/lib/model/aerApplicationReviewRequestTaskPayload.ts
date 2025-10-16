@@ -27,6 +27,7 @@ export interface AerApplicationReviewRequestTaskPayload extends RequestTaskPaylo
   aerSectionsCompleted?: { [key: string]: Array<boolean> };
   verificationSectionsCompleted?: { [key: string]: Array<boolean> };
   aerAttachments?: { [key: string]: string };
+  isPostALRSectionRemoval?: boolean;
   verificationReport?: AerVerificationReport;
   verificationAttachments?: { [key: string]: string };
   verifiedAer?: Aer;

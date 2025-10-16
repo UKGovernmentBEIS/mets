@@ -1,10 +1,15 @@
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, Router, UrlSegment, UrlTree } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRouteSnapshot, provideRouter, Router, UrlSegment, UrlTree } from '@angular/router';
 
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, Observable, of } from 'rxjs';
 
+import { mockClass, MockType } from '@testing';
+
+import { InstallationAccountViewService } from 'pmrv-api';
+
+import { mockedAccountPermit } from '../../accounts/testing/mock-data';
 import { PermitRevocationStore } from '../store/permit-revocation-store';
 import { mockTaskState } from '../testing/mock-state';
 import { NotifyOperatorGuard } from './notify-operator.guard';
@@ -13,6 +18,7 @@ describe('NotifyOperatorGuard', () => {
   let guard: NotifyOperatorGuard;
   let router: Router;
   let store: PermitRevocationStore;
+  let accountViewService: MockType<InstallationAccountViewService>;
 
   const activatedRouteSnapshot = new ActivatedRouteSnapshot();
   activatedRouteSnapshot.url = [new UrlSegment('determination', null)];
@@ -20,8 +26,16 @@ describe('NotifyOperatorGuard', () => {
   activatedRouteSnapshot.data = { requestTaskActionType: 'PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_SUBMISSION' };
 
   beforeEach(() => {
+    accountViewService = mockClass(InstallationAccountViewService);
+    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountPermit));
+
     TestBed.configureTestingModule({
-      imports: [HttpClientModule, RouterTestingModule],
+      providers: [
+        provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: InstallationAccountViewService, useValue: accountViewService },
+      ],
     });
     store = TestBed.inject(PermitRevocationStore);
     router = TestBed.inject(Router);

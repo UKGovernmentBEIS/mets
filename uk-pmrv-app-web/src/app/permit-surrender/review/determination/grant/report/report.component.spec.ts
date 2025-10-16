@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -77,7 +76,7 @@ describe('ReportComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ReportComponent],
-      imports: [RouterTestingModule, SharedModule],
+      imports: [SharedModule],
       providers: [
         { provide: ActivatedRoute, useValue: route },
         { provide: TasksService, useValue: tasksService },
@@ -163,7 +162,7 @@ describe('ReportComponent', () => {
       },
     });
 
-    expect(navigateSpy).toHaveBeenCalledWith(['../allowances'], { relativeTo: route });
+    expect(navigateSpy).toHaveBeenCalledWith(['../final-alr'], { relativeTo: route });
   });
 
   it('should submit upon valid date', () => {
@@ -199,6 +198,6 @@ describe('ReportComponent', () => {
       },
     });
 
-    expect(navigateSpy).toHaveBeenCalledWith(['../allowances'], { relativeTo: route });
+    expect(navigateSpy).toHaveBeenCalledWith(['../final-alr'], { relativeTo: route });
   });
 });

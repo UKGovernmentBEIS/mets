@@ -77,6 +77,13 @@
       </dd>
     </div>
 
+    <div govukSummaryListRow *ngIf="regulatorData.details?.notes">
+      <dt govukSummaryListRowKey>Regulator notes</dt>
+      <dd govukSummaryListRowValue>
+        <div class="pre-wrap">{{ regulatorData.details?.notes }}</div>
+      </dd>
+    </div>
+
     <div govukSummaryListRow *ngIf="regulatorData.type">
       <dt govukSummaryListRowKey>Decision status</dt>
       <dd govukSummaryListRowValue>{{ regulatorData.type | reviewGroupDecision }}</dd>

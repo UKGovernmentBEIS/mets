@@ -14,6 +14,7 @@ import { FileInfoDTO } from './fileInfoDTO';
 export interface BatchReissueCompletedRequestActionPayloadAllOf {
   submitter?: string;
   filters?: object;
+  changesDetails?: object;
   signatory?: string;
   signatoryName?: string;
   numberOfAccounts?: number;

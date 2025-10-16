@@ -1,9 +1,7 @@
 <app-base-action-container-component
   [header]="'Batch variation completed'"
   [customContentTemplate]="customContentTemplate"
-  [expectedActionType]="['BATCH_REISSUE_COMPLETED']"
->
-</app-base-action-container-component>
+  [expectedActionType]="['BATCH_REISSUE_COMPLETED']"></app-base-action-container-component>
 
 <ng-template #customContentTemplate>
   <p class="govuk-heading-m">Batch variation details</p>
@@ -21,6 +19,27 @@
           {{ (action$ | async).creationDate | govukDate }}
         </dd>
       </div>
+      <div govukSummaryListRow *ngIf="(payload$ | async)?.changesDetails?.['changesSummary'] as changesSummary">
+        <dt govukSummaryListRowKey>Summary</dt>
+        <dd govukSummaryListRowValue>
+          {{ changesSummary }}
+        </dd>
+      </div>
+      <div
+        govukSummaryListRow
+        *ngIf="(payload$ | async)?.changesDetails?.['changes'] as changes"
+        [hidden]="!changes?.length">
+        <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
+        <dd govukSummaryListRowValue>
+          <ol class="govuk-list govuk-list--number">
+            @for (change of changes; track $index) {
+              @if (change) {
+                <li>{{ change }}</li>
+              }
+            }
+          </ol>
+        </dd>
+      </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Signatory</dt>
         <dd govukSummaryListRowValue>
@@ -33,9 +52,9 @@
           <a
             [routerLink]="['/actions', (action$ | async).id, 'file-download', 'document', report.uuid]"
             govukLink
-            target="_blank"
-            >{{ report.name }}</a
-          >
+            target="_blank">
+            {{ report.name }}
+          </a>
         </dd>
       </div>
     </ng-container>
@@ -44,6 +63,5 @@
   <p class="govuk-heading-m">Selected emitters</p>
   <app-permit-batch-reissue-filters-template
     [filters]="filters$ | async"
-    [editable]="false"
-  ></app-permit-batch-reissue-filters-template>
+    [editable]="false"></app-permit-batch-reissue-filters-template>
 </ng-template>

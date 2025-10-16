@@ -4,8 +4,7 @@
     app-summary-header
     (changeClick)="changeClick('')"
     [changeRoute]="(isEditable$ | async) ? '.' : undefined"
-    class="govuk-heading-m"
-  >
+    class="govuk-heading-m">
     <span class="govuk-visually-hidden">Decision</span>
   </h2>
   <dl govuk-summary-list>
@@ -21,8 +20,7 @@
     app-summary-header
     (changeClick)="changeClick('reason')"
     [changeRoute]="(isEditable$ | async) ? '.' : undefined"
-    class="govuk-heading-m"
-  >
+    class="govuk-heading-m">
     <span class="govuk-visually-hidden">Supporting note</span>
   </h2>
   <dl govuk-summary-list>
@@ -38,8 +36,7 @@
     app-summary-header
     (changeClick)="changeClick('stop-date')"
     [changeRoute]="(isEditable$ | async) ? '.' : undefined"
-    class="govuk-heading-m"
-  >
+    class="govuk-heading-m">
     <span class="govuk-visually-hidden">Date regulated activities ended</span>
   </h2>
   <dl govuk-summary-list>
@@ -55,15 +52,14 @@
     app-summary-header
     (changeClick)="changeClick('notice-date')"
     [changeRoute]="(isEditable$ | async) ? '.' : undefined"
-    class="govuk-heading-m"
-  >
+    class="govuk-heading-m">
     <span class="govuk-visually-hidden">Effective date of notice</span>
   </h2>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Effective date of notice</dt>
       <dd govukSummaryListRowValue [ngClass]="{ error: (invalidNoticeDate$ | async) }">
-        <span> {{ grantDetermination.noticeDate | govukDate }}</span>
+        <span>{{ grantDetermination.noticeDate | govukDate }}</span>
       </dd>
     </div>
   </dl>
@@ -72,25 +68,41 @@
     app-summary-header
     (changeClick)="changeClick('report')"
     [changeRoute]="(isEditable$ | async) ? '.' : undefined"
-    class="govuk-heading-m"
-  >
-    <span class="govuk-visually-hidden">Surrender report</span>
+    class="govuk-heading-m">
+    <span class="govuk-visually-hidden">Surrender annual emmisions report</span>
   </h2>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Surrender report</dt>
+      <dt govukSummaryListRowKey>Surrender annual emmisions report</dt>
       <dd govukSummaryListRowValue>
         {{ grantDetermination.reportRequired ? (grantDetermination.reportDate | govukDate) : 'No' }}
       </dd>
     </div>
   </dl>
 
+  <ng-container *ngIf="grantDetermination.alrRequired !== undefined">
+    <h2
+      app-summary-header
+      (changeClick)="changeClick('final-alr')"
+      [changeRoute]="(isEditable$ | async) ? '.' : undefined"
+      class="govuk-heading-m">
+      <span class="govuk-visually-hidden">Surrender activity level report</span>
+    </h2>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Surrender activity level report</dt>
+        <dd govukSummaryListRowValue>
+          {{ grantDetermination.alrRequired ? (grantDetermination.alrReportDate | govukDate) : 'No' }}
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+
   <h2
     app-summary-header
     (changeClick)="changeClick('allowances')"
     [changeRoute]="(isEditable$ | async) ? '.' : undefined"
-    class="govuk-heading-m"
-  >
+    class="govuk-heading-m">
     <span class="govuk-visually-hidden">Surrender of allowances</span>
   </h2>
   <dl govuk-summary-list>

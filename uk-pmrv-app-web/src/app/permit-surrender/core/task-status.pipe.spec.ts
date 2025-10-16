@@ -1,5 +1,5 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { firstValueFrom } from 'rxjs';
 
@@ -14,11 +14,10 @@ describe('TaskStatusPipe', () => {
   let pipe: TaskStatusPipe;
   let store: PermitSurrenderStore;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [TaskStatusPipe],
-      providers: [{ provide: TasksService, useValue: mockClass(TasksService) }],
+      providers: [provideHttpClient(), { provide: TasksService, useValue: mockClass(TasksService) }],
     });
 
     store = TestBed.inject(PermitSurrenderStore);

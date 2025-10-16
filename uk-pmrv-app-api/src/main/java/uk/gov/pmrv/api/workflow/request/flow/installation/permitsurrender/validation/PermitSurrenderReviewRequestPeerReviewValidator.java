@@ -8,6 +8,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.validation.PeerReviewerTaskAssignmentValidator;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderApplicationReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderReviewDeterminationGrant;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.PermitSurrenderReviewDeterminationHandlerService;
 
 @Service
@@ -22,6 +23,10 @@ public class PermitSurrenderReviewRequestPeerReviewValidator {
 
         PermitSurrenderApplicationReviewRequestTaskPayload requestTaskPayload =
             (PermitSurrenderApplicationReviewRequestTaskPayload) requestTask.getPayload();
+
+        if (requestTaskPayload.getReviewDetermination() instanceof PermitSurrenderReviewDeterminationGrant grantPayload) {
+            grantPayload.setAccountId(requestTask.getRequest().getAccountId());
+        }
 
         permitSurrenderReviewDeterminationHandlerService.validateReview(requestTaskPayload.getReviewDecision(), requestTaskPayload.getReviewDetermination());
     }

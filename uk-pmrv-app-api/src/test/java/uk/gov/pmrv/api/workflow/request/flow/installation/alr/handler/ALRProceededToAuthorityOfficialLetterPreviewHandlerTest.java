@@ -6,8 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.allowance.domain.ActivityLevel;
-import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
 import uk.gov.pmrv.api.allowance.domain.enums.ChangeType;
 import uk.gov.pmrv.api.allowance.domain.enums.SubInstallationName;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
@@ -106,9 +104,9 @@ public class ALRProceededToAuthorityOfficialLetterPreviewHandlerTest {
         when(requestTaskService.findTaskById(taskId)).thenReturn(requestTask);
         when(previewOfficialNoticeService.generateCommonParams(request, decisionNotification)).thenReturn(templateParams);
         when(documentFileGeneratorService.generateFileDocument(
-                DocumentTemplateType.DOAL_SUBMITTED,
+                DocumentTemplateType.ALR_SUBMITTED,
                 templateParams,
-                "Activity_level_determination_preliminary_allocation_letter.pdf")).thenReturn(fileDTO);
+                "Activity_level_report_preliminary_allocation_letter.pdf")).thenReturn(fileDTO);
 
         final FileDTO result = handler.generateDocument(taskId, decisionNotification);
 
@@ -118,8 +116,8 @@ public class ALRProceededToAuthorityOfficialLetterPreviewHandlerTest {
         verify(requestTaskService, times(1)).findTaskById(taskId);
         verify(previewOfficialNoticeService, times(1)).generateCommonParams(request, decisionNotification);
         verify(documentFileGeneratorService, times(1)).generateFileDocument(
-                DocumentTemplateType.DOAL_SUBMITTED,
+                DocumentTemplateType.ALR_SUBMITTED,
                 templateParams,
-                "Activity_level_determination_preliminary_allocation_letter.pdf");
+                "Activity_level_report_preliminary_allocation_letter.pdf");
     }
 }

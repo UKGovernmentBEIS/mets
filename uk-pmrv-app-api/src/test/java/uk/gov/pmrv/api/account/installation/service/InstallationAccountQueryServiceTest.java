@@ -163,6 +163,24 @@ class InstallationAccountQueryServiceTest {
 		assertThat(result).containsExactlyInAnyOrder(mockedDTO);
 		verify(installationAccountRepository, times(1)).findAllByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, statuses, emitterTypes, categories);
     }
+
+    @Test
+    void getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus() {
+        CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+    	Set<InstallationAccountStatus> statuses = Set.of(InstallationAccountStatus.LIVE);
+    	Set<InstallationCategory> categories = Set.of(InstallationCategory.A);
+    	Set<EmitterType> emitterTypes = Set.of(EmitterType.GHGE);
+
+    	InstallationAccountIdAndNameAndLegalEntityNameDTO mockedDTO = mock(InstallationAccountIdAndNameAndLegalEntityNameDTO.class);
+
+		when(installationAccountRepository.findAllByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(ca, statuses, emitterTypes, categories, true))
+				.thenReturn(Set.of(mockedDTO));
+
+		Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> result = service.getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(ca, statuses, emitterTypes, categories, true);
+
+		assertThat(result).containsExactlyInAnyOrder(mockedDTO);
+		verify(installationAccountRepository, times(1)).findAllByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(ca, statuses, emitterTypes, categories, true);
+    }
     
     @Test
     void getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes_null_inputs() {

@@ -19,7 +19,7 @@
           <div *ngIf="errors()?.invalidDate" class="error">{{ errors()?.invalidDate }}</div>
         </dd>
         <dd govukSummaryListRowActions *ngIf="isEditableDetails()">
-          <a govukLink [routerLink]="['../', 'details']">Change</a>
+          <a govukLink hidden-text="on-site inspection date" [routerLink]="['../', 'details']">Change</a>
         </dd>
       </div>
     }
@@ -28,11 +28,14 @@
       <dt govukSummaryListRowKey>Names of officers</dt>
       <dd govukSummaryListRowValue class="pre-wrap">
         <ng-container *ngFor="let officer of details.officerNames; let i = index; let isLast = last">
-          <div class="pre-wrap">{{ i + 1 }}. {{ officer }} <br /></div>
+          <div class="pre-wrap">
+            {{ i + 1 }}. {{ officer }}
+            <br />
+          </div>
         </ng-container>
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditableDetails()">
-        <a govukLink [routerLink]="['../', 'details']">Change</a>
+        <a govukLink hidden-text="the names of the officers" [routerLink]="['../', 'details']">Change</a>
       </dd>
     </div>
 
@@ -44,7 +47,9 @@
         <app-summary-download-files [files]="visibleFiles$ | async"></app-summary-download-files>
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditableDetails()">
-        <a govukLink [routerLink]="['..', 'details']">Change</a>
+        <a govukLink hidden-text="the uploaded files (visible to the Operator)" [routerLink]="['..', 'details']">
+          Change
+        </a>
       </dd>
     </div>
 
@@ -54,7 +59,9 @@
         <app-summary-download-files [files]="notVisibleFiles$ | async"></app-summary-download-files>
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditableDetails()">
-        <a govukLink [routerLink]="['..', 'details']">Change</a>
+        <a govukLink hidden-text="the uploaded files (not visible to the Operator)" [routerLink]="['..', 'details']">
+          Change
+        </a>
       </dd>
     </div>
 
@@ -64,7 +71,7 @@
         {{ details.additionalInformation }}
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditableDetails()">
-        <a govukLink [routerLink]="['../', 'details']">Change</a>
+        <a govukLink hidden-text="the additional information" [routerLink]="['../', 'details']">Change</a>
       </dd>
     </div>
   </dl>
@@ -77,8 +84,7 @@
         id="confirmBtn"
         type="button"
         (click)="onConfirm()"
-        routerLinkActive="router-link-active"
-      >
+        routerLinkActive="router-link-active">
         Confirm and continue
       </button>
     </div>

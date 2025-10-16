@@ -18,13 +18,25 @@ public class AerActivityLevelReportValidator implements AerContextValidator {
     public AerValidationResult validate(AerContainer aerContainer) {
         List<AerViolation> violations = new ArrayList<>();
         //TODO: waste
-        if (aerContainer.getPermitOriginatedData().getPermitType() == PermitType.GHGE && aerContainer.getAer().getActivityLevelReport() == null) {
-            violations.add(new AerViolation(AerContainer.class.getSimpleName(),
-                AerViolation.AerViolationMessage.ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_GHGE));
-        } else if (aerContainer.getPermitOriginatedData().getPermitType() == PermitType.HSE && aerContainer.getAer().getActivityLevelReport() != null) {
-            violations.add(new AerViolation(AerContainer.class.getSimpleName(),
-                AerViolation.AerViolationMessage.ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_HSE));
+
+        Boolean postALR = aerContainer.getIsPostALRSectionRemoval();
+        if (postALR == null || !postALR) {
+            if (aerContainer.getPermitOriginatedData().getPermitType() == PermitType.GHGE && aerContainer.getAer().getActivityLevelReport() == null) {
+                violations.add(new AerViolation(AerContainer.class.getSimpleName(),
+                        AerViolation.AerViolationMessage.ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_GHGE));
+            } else if (aerContainer.getPermitOriginatedData().getPermitType() == PermitType.HSE && aerContainer.getAer().getActivityLevelReport() != null) {
+                violations.add(new AerViolation(AerContainer.class.getSimpleName(),
+                        AerViolation.AerViolationMessage.ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_HSE));
+            }
         }
+
+        else {
+            if (aerContainer.getAer().getActivityLevelReport() != null) {
+                violations.add(new AerViolation(AerContainer.class.getSimpleName(),
+                        AerViolation.AerViolationMessage.ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE));
+            }
+        }
+
         return AerValidationResult.builder()
             .valid(violations.isEmpty())
             .aerViolations(violations)

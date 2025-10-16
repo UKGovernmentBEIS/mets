@@ -1,20 +1,24 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 
 import { mockTaskState } from '@permit-revocation/testing/mock-state';
 import { addDays, format, startOfDay } from 'date-fns';
 
-import { TasksService } from 'pmrv-api';
+import { InstallationAccountViewService, TasksService } from 'pmrv-api';
 
-import { mockClass } from '../../../testing';
+import { mockClass, MockType } from '../../../testing';
+import { mockedAccountPermit } from '../../accounts/testing/mock-data';
 import { PermitRevocationStore } from '../store/permit-revocation-store';
 import { TaskStatusPipe } from './task-status.pipe';
 
 describe('TaskStatusPipe', () => {
   let pipe: TaskStatusPipe;
   let store: PermitRevocationStore;
+  let accountViewService: MockType<InstallationAccountViewService>;
 
   const effectiveDate = (formatStr: string): string => format(startOfDay(addDays(new Date(), 28)), formatStr);
 
@@ -32,13 +36,24 @@ describe('TaskStatusPipe', () => {
     annualEmissionsReportRequired: true,
     annualEmissionsReportDate: today(),
     feeCharged: false,
+    alrRequired: true,
+    alrReportDate: today(),
   };
 
   beforeEach(async () => {
+    accountViewService = mockClass(InstallationAccountViewService);
+    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountPermit));
+
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [],
       declarations: [TaskStatusPipe],
-      providers: [{ provide: TasksService, useValue: mockClass(TasksService) }],
+      providers: [
+        provideRouter([]),
+        { provide: TasksService, useValue: mockClass(TasksService) },
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: InstallationAccountViewService, useValue: accountViewService },
+      ],
     });
 
     store = TestBed.inject(PermitRevocationStore);

@@ -12,8 +12,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueChangesDetails;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueFilters;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueChangesDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueFilters;
+
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -35,7 +38,18 @@ public class BatchReissueSubmittedRequestActionPayload extends RequestActionPayl
         @JsonSubTypes.Type(value = EmpBatchReissueFilters.class, name = "EMP_BATCH_REISSUE_COMPLETED_PAYLOAD"),
     })
 	private BatchReissueFilters filters;
-	
+
+    @Valid
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.EXTERNAL_PROPERTY, property = "payloadType", visible = true)
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value = PermitBatchReissueChangesDetails.class, name = "PERMIT_BATCH_REISSUE_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = EmpBatchReissueChangesDetails.class, name = "EMP_BATCH_REISSUE_SUBMITTED_PAYLOAD"),
+
+        @JsonSubTypes.Type(value = PermitBatchReissueChangesDetails.class, name = "PERMIT_BATCH_REISSUE_COMPLETED_PAYLOAD"),
+        @JsonSubTypes.Type(value = EmpBatchReissueChangesDetails.class, name = "EMP_BATCH_REISSUE_COMPLETED_PAYLOAD"),
+    })
+	private BatchReissueChangesDetails changesDetails;
+
 	@NotBlank
     private String signatory;
 	

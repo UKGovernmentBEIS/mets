@@ -56,6 +56,8 @@ describe('CompletedComponent', () => {
     expect(page.values.map((val) => val.textContent.trim())).toEqual([
       'submitter1',
       '8 Jun 2023',
+      'summary of changes',
+      'change1change2',
       'signName',
       'BRI0048-E.csv',
       'Live',

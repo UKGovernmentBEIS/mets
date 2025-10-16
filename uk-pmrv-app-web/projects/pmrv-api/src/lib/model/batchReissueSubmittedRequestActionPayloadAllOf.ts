@@ -13,6 +13,7 @@
 export interface BatchReissueSubmittedRequestActionPayloadAllOf {
   submitter?: string;
   filters?: object;
+  changesDetails?: object;
   signatory?: string;
   signatoryName?: string;
 }

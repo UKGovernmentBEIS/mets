@@ -1,6 +1,6 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { firstValueFrom, Observable } from 'rxjs';
 
@@ -27,8 +27,7 @@ describe('StopDateGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [{ provide: TasksService, useValue: tasksService }],
+      providers: [provideHttpClient(), { provide: TasksService, useValue: tasksService }],
     });
     guard = TestBed.inject(StopDateGuard);
     router = TestBed.inject(Router);

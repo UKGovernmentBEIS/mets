@@ -22,6 +22,7 @@ import { TriggerDoalComponent } from './trigger-doal/trigger-doal.component';
 import { TriggerHseTiComponent } from './trigger-hseti/trigger-hseti.component';
 import { AerMarkAsNotRequiredComponent } from './workflows/aer-mark-as-not-required/aer-mark-as-not-required.component';
 import { AerReinitializeComponent } from './workflows/aer-reinitialize/aer-reinitialize.component';
+import { AlrMarkAsNotRequiredComponent } from './workflows/alr-mark-as-not-required/alr-mark-as-not-required.component';
 
 const standaloneComponents: Type<any>[] = [InspectionsComponent, TriggerHseTiComponent];
 
@@ -31,6 +32,7 @@ const standaloneComponents: Type<any>[] = [InspectionsComponent, TriggerHseTiCom
     AddressComponent,
     AerMarkAsNotRequiredComponent,
     AerReinitializeComponent,
+    AlrMarkAsNotRequiredComponent,
     AuditYearComponent,
     DetailsComponent,
     FaStatusComponent,

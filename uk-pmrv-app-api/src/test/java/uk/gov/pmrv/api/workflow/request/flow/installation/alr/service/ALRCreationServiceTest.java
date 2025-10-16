@@ -25,6 +25,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.alr.validation.ALRCrea
 import java.time.Year;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -67,10 +68,12 @@ public class ALRCreationServiceTest {
                 .requestPayload(ALRRequestPayload.builder()
                         .payloadType(RequestPayloadType.ALR_REQUEST_PAYLOAD)
                         .alr(ALR.builder().build())
+                        .reportingYear(Year.of(2025))
                         .build())
                 .requestMetadata(ALRRequestMetaData.builder()
                         .type(RequestMetadataType.ALR)
                         .year(Year.of(2025))
+                        .isFinal(false)
                         .build())
                 .processVars(processVars)
                 .build();
@@ -90,7 +93,7 @@ public class ALRCreationServiceTest {
         when(alrCreationValidatorService.validateAccountStatus(accountId))
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
 
-        when(alrCreationValidatorService.validateYear(eq(accountId), any()))
+        when(alrCreationValidatorService.validateYear(eq(accountId), any(), eq(false)))
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
 
         when(alrCreationValidatorService.validateAccountEmitterTypeAndFreeAllocations(accountId))
@@ -102,26 +105,26 @@ public class ALRCreationServiceTest {
         when(startProcessRequestService.startProcess(requestParams))
                 .thenReturn(request);
 
-        Request actualRequest = service.createALR(accountId);
+        Request actualRequest = service.createALR(accountId, false, Optional.empty());
 
         assertThat(actualRequest).isEqualTo(request);
 
         verify(alrCreationValidatorService, times(1)).validateAccountStatus(accountId);
-        verify(alrCreationValidatorService, times(1)).validateYear(eq(accountId), any());
+        verify(alrCreationValidatorService, times(1)).validateYear(eq(accountId), any(), eq(false));
         verify(alrDueDateService, times(1)).generateDueDate();
 
         verify(startProcessRequestService, times(1)).startProcess(requestParams);
     }
 
     @Test
-    void createAlr_accountStatusIsNotValid_throwALR_CREATION_NOT_ALLOWEDException() {
+    void createAlr_accountStatusIsNotValid_throw_ALR_CREATION_NOT_ALLOWED_Exception() {
         Long accountId = 1L;
 
         when(alrCreationValidatorService.validateAccountStatus(accountId))
                 .thenReturn(RequestCreateValidationResult.builder().valid(false).build());
 
         BusinessException ex = assertThrows(BusinessException.class, () ->
-                service.createALR(accountId));
+                service.createALR(accountId, false, Optional.empty()));
 
         assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.ALR_CREATION_NOT_ALLOWED);
 
@@ -138,11 +141,11 @@ public class ALRCreationServiceTest {
         when(alrCreationValidatorService.validateAccountStatus(accountId))
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
 
-        when(alrCreationValidatorService.validateYear(accountId, Year.of(2025)))
+        when(alrCreationValidatorService.validateYear(accountId, Year.of(2025), false))
                 .thenReturn(RequestCreateValidationResult.builder().valid(false).build());
 
         BusinessException ex = assertThrows(BusinessException.class, () ->
-                service.createALR(accountId));
+                service.createALR(accountId, false, Optional.empty()));
 
         assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.ALR_CREATION_NOT_ALLOWED);
         verify(startProcessRequestService, never()).startProcess(any());
@@ -158,14 +161,14 @@ public class ALRCreationServiceTest {
         when(alrCreationValidatorService.validateAccountStatus(accountId))
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
 
-        when(alrCreationValidatorService.validateYear(accountId, Year.of(2025)))
+        when(alrCreationValidatorService.validateYear(accountId, Year.of(2025), false))
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
 
         when(alrCreationValidatorService.validateAccountEmitterTypeAndFreeAllocations(accountId))
                 .thenReturn(RequestCreateValidationResult.builder().valid(false).build());
 
         BusinessException ex = assertThrows(BusinessException.class, () ->
-                service.createALR(accountId));
+                service.createALR(accountId, false, Optional.empty()));
 
         assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.ALR_CREATION_NOT_ALLOWED);
         verify(startProcessRequestService, never()).startProcess(any());
@@ -185,10 +188,12 @@ public class ALRCreationServiceTest {
                 .requestPayload(ALRRequestPayload.builder()
                         .payloadType(RequestPayloadType.ALR_REQUEST_PAYLOAD)
                         .alr(ALR.builder().build())
+                        .reportingYear(alrYear)
                         .build())
                 .requestMetadata(ALRRequestMetaData.builder()
                         .type(RequestMetadataType.ALR)
                         .year(Year.of(2025))
+                        .isFinal(false)
                         .build())
                 .processVars(processVars)
                 .build();
@@ -201,7 +206,7 @@ public class ALRCreationServiceTest {
                 .status(RequestStatus.IN_PROGRESS)
                 .build();
 
-        when(alrCreationValidatorService.validateYear(eq(accountId), any()))
+        when(alrCreationValidatorService.validateYear(eq(accountId), any(), eq(false)))
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
 
         when(startProcessRequestService.startProcess(requestParams))
@@ -210,11 +215,11 @@ public class ALRCreationServiceTest {
         when(alrCreationValidatorService.validateAccountEmitterTypeAndFreeAllocations(accountId))
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
 
-        Request actualRequest = service.createALRForYear(accountId, alrYear, expirationDate);
+        Request actualRequest = service.createALRForYear(accountId, alrYear, expirationDate, false);
 
         assertThat(actualRequest).isEqualTo(request);
 
-        verify(alrCreationValidatorService, times(1)).validateYear(eq(accountId), any());
+        verify(alrCreationValidatorService, times(1)).validateYear(eq(accountId), any(), eq(false));
         verify(startProcessRequestService, times(1)).startProcess(requestParams);
     }
 }

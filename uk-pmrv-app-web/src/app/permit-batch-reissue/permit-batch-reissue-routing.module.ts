@@ -4,6 +4,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { RegulatorsGuard } from '../regulators/regulators.guard';
 import { BatchReissueSubmitGuard } from '../shared/guards/batch-reissue-submit.guard';
 import { RequestsComponent } from './requests/requests.component';
+import { ChangesComponent } from './submit/changes/changes.component';
+import { ChangesSummaryComponent } from './submit/changes-summary/changes-summary.component';
+import { ChangesSummaryGuard } from './submit/changes-summary/changes-summary.guard';
 import { FiltersComponent } from './submit/filters/filters.component';
 import { PermitBatchReissueSubmitGuard } from './submit/permit-batch-reissue-submit.guard';
 import { SignatoryComponent } from './submit/signatory/signatory.component';
@@ -33,9 +36,27 @@ const routes: Routes = [
         component: FiltersComponent,
       },
       {
-        path: 'signatory',
+        path: 'changes-summary',
         data: {
           backlink: '../filters',
+          pageTitle: 'Enter a summary of changes for the permit variation log - Permit batch reissue',
+        },
+        resolve: { regulators: RegulatorsGuard },
+        canActivate: [ChangesSummaryGuard],
+        component: ChangesSummaryComponent,
+      },
+      {
+        path: 'changes',
+        data: {
+          backlink: '../changes-summary',
+          pageTitle: 'List changes to include in the variation schedule - Permit batch reissue',
+        },
+        component: ChangesComponent,
+      },
+      {
+        path: 'signatory',
+        data: {
+          backlink: '../changes',
           pageTitle: 'Select name and signature for official notice - Permit batch reissue',
         },
         resolve: { regulators: RegulatorsGuard },

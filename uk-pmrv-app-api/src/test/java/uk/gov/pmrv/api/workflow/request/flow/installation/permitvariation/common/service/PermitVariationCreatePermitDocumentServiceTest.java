@@ -98,6 +98,7 @@ public class PermitVariationCreatePermitDocumentServiceTest {
         final PermitVariationRequestInfo variationCurrentRequestInfo = PermitVariationRequestInfo.builder()
         		.metadata(variationCurrentMetadata)
         		.endDate(currentVariationRequestEndDate)
+                .changeType("AEM Variation")
         		.build();
         
         final List<PermitVariationRequestInfo> allVariationRequestInfo = 

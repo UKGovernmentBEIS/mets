@@ -105,7 +105,7 @@ export const mockedAccount: InstallationAccountDTO = {
   accountType: 'INSTALLATION',
   status: 'LIVE',
   siteName: 'siteName',
-  commencementDate: '',
+  commencementDate: '1978-09-08',
   competentAuthority: 'ENGLAND',
   emissionTradingScheme: 'CORSIA',
   location: {

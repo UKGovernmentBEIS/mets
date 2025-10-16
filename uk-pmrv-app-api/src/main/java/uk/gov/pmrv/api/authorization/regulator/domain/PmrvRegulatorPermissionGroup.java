@@ -76,6 +76,7 @@ public class PmrvRegulatorPermissionGroup {
     //ALR
     public static final String SUBMIT_ALR_REVIEW = "SUBMIT_ALR_REVIEW";
     public static final String PEER_REVIEW_ALR = "PEER_REVIEW_ALR";
+    public static final String MARK_NOT_REQUIRED_ALR = "MARK_NOT_REQUIRED_ALR";
 
 
     //Aviation related permission groups

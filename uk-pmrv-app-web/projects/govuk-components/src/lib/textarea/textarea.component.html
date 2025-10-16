@@ -5,9 +5,7 @@
   [class]="currentLabelSize">
   {{ currentLabel }}
 </label>
-<span *ngIf="hint" [id]="identifier + '-hint'" class="govuk-hint">
-  {{ hint }}
-</span>
+<div *ngIf="hint" [id]="identifier + '-hint'" class="govuk-hint" [innerHTML]="hint"></div>
 <govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="identifier" />
 <textarea
   #textArea

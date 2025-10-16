@@ -39,10 +39,12 @@ public interface PermitVariationMapper extends PermitDeterminableMapper {
     		PermitDeterminableMapper.super.setAnnualEmissionsTargets(permitContainer, permitVariationRequestPayload);
     	}
     }
-    
+
+	@Mapping(target = "changeType", constant = "AEM Variation")
     PermitVariationRequestInfo toPermitVariationRequestInfo(Request request);
     
     @Mapping(target = "endDate", source = "endDate")
+	@Mapping(target = "changeType", constant = "AEM Variation")
     PermitVariationRequestInfo toPermitVariationRequestInfo(Request request, LocalDateTime endDate);
     
     @AfterMapping

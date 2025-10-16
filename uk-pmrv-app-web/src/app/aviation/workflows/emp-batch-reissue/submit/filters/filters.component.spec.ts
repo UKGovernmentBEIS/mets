@@ -97,7 +97,7 @@ describe('FiltersComponent', () => {
       fixture.detectChanges();
 
       expect(navigateSpy).toHaveBeenCalledTimes(1);
-      expect(navigateSpy).toHaveBeenCalledWith(['..', 'signatory'], { relativeTo: route });
+      expect(navigateSpy).toHaveBeenCalledWith(['..', 'changes'], { relativeTo: route });
       expect(store.getState()).toEqual({
         reportingStatuses: ['REQUIRED_TO_REPORT', 'EXEMPT_COMMERCIAL'],
         emissionTradingSchemes: ['UK_ETS_AVIATION'],

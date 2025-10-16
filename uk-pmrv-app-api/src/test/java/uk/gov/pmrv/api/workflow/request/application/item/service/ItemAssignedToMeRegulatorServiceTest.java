@@ -15,6 +15,7 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.application.authorization.RegulatorAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
+import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemOrderBy;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTO;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
@@ -71,19 +72,19 @@ class ItemAssignedToMeRegulatorServiceTest {
             .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType))
             .thenReturn(scopedRequestTaskTypes);
         doReturn(expectedItemPage).when(itemRegulatorRepository).findItems(appUser.getUserId(), ItemAssignmentType.ME,
-            scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+            scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
         doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, appUser);
 
         // Invoke
         ItemDTOResponse actualItemDTOResponse = itemService
-                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
 
         // Assert
         assertEquals(expectedItemDTOResponse, actualItemDTOResponse);
 
         verify(regulatorAuthorityResourceAdapter, times(1))
             .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType);
-        verify(itemRegulatorRepository, times(1)).findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+        verify(itemRegulatorRepository, times(1)).findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
         verify(itemResponseService, times(1)).toItemDTOResponse(expectedItemPage, accountType, appUser);
     }
 
@@ -103,12 +104,12 @@ class ItemAssignedToMeRegulatorServiceTest {
         doReturn(scopedRequestTaskTypes)
             .when(regulatorAuthorityResourceAdapter)
             .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType);
-        doReturn(expectedItemPage).when(itemRegulatorRepository).findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+        doReturn(expectedItemPage).when(itemRegulatorRepository).findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
         doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, appUser);
 
         // Invoke
         ItemDTOResponse actualItemDTOResponse = itemService
-            .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+            .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
 
         // Assert
         assertEquals(ItemDTOResponse.emptyItemDTOResponse(), actualItemDTOResponse);
@@ -116,7 +117,7 @@ class ItemAssignedToMeRegulatorServiceTest {
         verify(regulatorAuthorityResourceAdapter, times(1))
             .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType);
         verify(itemRegulatorRepository, times(1))
-                .findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build());
+                .findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
         verify(itemResponseService, times(1)).toItemDTOResponse(expectedItemPage, accountType, appUser);
     }
 

@@ -70,6 +70,16 @@ public class InstallationAccountQueryService {
 				categories == null ? Set.of() : categories);
 	}
 
+    public Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(
+			CompetentAuthorityEnum ca, Set<InstallationAccountStatus> statuses,
+			Set<EmitterType> emitterTypes, Set<InstallationCategory> categories, boolean faStatus) {
+		return installationAccountRepository.findAllByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(
+				ca,
+				statuses == null ? Set.of() : statuses,
+				emitterTypes == null ? Set.of() : emitterTypes,
+				categories == null ? Set.of() : categories, faStatus);
+	}
+
     public boolean existsAccountById(Long accountId) {
         return installationAccountRepository.existsById(accountId);
     }

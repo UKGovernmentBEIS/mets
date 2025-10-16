@@ -10,7 +10,13 @@ import { ConfigStore } from '@core/config/config.store';
 import { GovukValidators } from '../../../../../projects/govuk-components/src/public-api';
 import { DestroySubject } from '../../../core/services/destroy-subject.service';
 import { originalOrder } from '../../../shared/keyvalue-order';
-import { accountCategoryLabelMap, accountStatusLabelMap, accountTypeLabelMap } from '../filters-label.map';
+import {
+  accountCategoryLabelMap,
+  accountStatusLabelMap,
+  accountTypeLabelMap,
+  allocationStatusLabelMap,
+} from '../filters-label.map';
+import { PermitBatchReissueState } from '../store/permit-batch-reissue.state';
 import { PermitBatchReissueStore } from '../store/permit-batch-reissue.store';
 
 @Component({
@@ -23,6 +29,7 @@ export class FiltersComponent implements OnInit {
     accountStatuses: [[], { validators: GovukValidators.required('Select a status'), updateOn: 'change' }],
     emitterTypes: [[], { validators: GovukValidators.required('Select a permit type'), updateOn: 'change' }],
     installationCategories: [[], { updateOn: 'change' }],
+    allocationStatuses: [[], { updateOn: 'change' }],
   });
 
   readonly originalOrder = originalOrder;
@@ -31,8 +38,10 @@ export class FiltersComponent implements OnInit {
   accountTypeLabelMap = accountTypeLabelMap;
   readonly accountCategoryLabelMap = accountCategoryLabelMap;
   private readonly wastePermitEnabled$ = this.configStore.pipe(selectIsFeatureEnabled('wastePermitEnabled'));
+  readonly allocationStatusLabelMap = allocationStatusLabelMap;
 
   displayInstallationCategories = true;
+  displayAllocationStatuses = false;
 
   constructor(
     private readonly formBuilder: UntypedFormBuilder,
@@ -43,18 +52,44 @@ export class FiltersComponent implements OnInit {
     private readonly configStore: ConfigStore,
   ) {}
 
+  stateToForm(state: PermitBatchReissueState) {
+    const { freeAllocation, nonFreeAllocation, ...rest } = state;
+
+    const allocationStatuses = [];
+    if (freeAllocation) {
+      allocationStatuses.push('FREE_ALLOCATION');
+    }
+    if (nonFreeAllocation) {
+      allocationStatuses.push('NONFREE_ALLOCATION');
+    }
+
+    return { ...rest, allocationStatuses: [...allocationStatuses] };
+  }
+
+  formToState(formValue): PermitBatchReissueState {
+    const allocationStatuses = this.form.value.allocationStatuses;
+    delete formValue.allocationStatuses;
+
+    const freeAllocation = allocationStatuses?.includes('FREE_ALLOCATION') ? true : false;
+    const nonFreeAllocation = allocationStatuses?.includes('NONFREE_ALLOCATION') ? true : false;
+
+    return { ...formValue, freeAllocation, nonFreeAllocation };
+  }
+
   ngOnInit(): void {
     this.filterWasteBasedOnConfiguration();
 
     this.store
       .pipe(
-        tap((state) => this.form.patchValue(state)),
+        tap((state) => this.form.patchValue(this.stateToForm({ ...state }))),
         takeUntil(this.destroy$),
       )
       .subscribe();
 
     const emitterTypesControl = this.form.get('emitterTypes');
     const installationCategoriesControl = this.form.get('installationCategories');
+    const allocationStatusesControl = this.form.get('allocationStatuses');
+
     emitterTypesControl.valueChanges
       .pipe(startWith(emitterTypesControl.value), takeUntil(this.destroy$))
       .subscribe((value) => {
@@ -69,19 +104,24 @@ export class FiltersComponent implements OnInit {
           installationCategoriesControl.markAsDirty();
         }
 
+        if (val?.includes('GHGE') || val?.includes('HSE')) {
+          this.displayAllocationStatuses = true;
+        } else {
+          this.displayAllocationStatuses = false;
+          allocationStatusesControl.setValue(null, { emitEvent: false });
+        }
+
         installationCategoriesControl.updateValueAndValidity();
+        allocationStatusesControl.updateValueAndValidity();
         this.form.updateValueAndValidity();
       });
-    installationCategoriesControl.addValidators(GovukValidators.required('Select a category'));
-    installationCategoriesControl.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-    this.displayInstallationCategories = true;
   }
 
   onSubmit(): void {
     if (this.form.dirty) {
-      this.store.patchState(this.form.value);
+      this.store.patchState(this.formToState(this.form.value));
     }
-    this.router.navigate(['..', 'signatory'], { relativeTo: this.route });
+    this.router.navigate(['..', 'changes-summary'], { relativeTo: this.route });
   }
 
   private filterWasteBasedOnConfiguration(): void {

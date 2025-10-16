@@ -1,6 +1,6 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, Router, UrlSegment, UrlTree } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRouteSnapshot, provideRouter, Router, UrlSegment, UrlTree } from '@angular/router';
 
 import { firstValueFrom, Observable } from 'rxjs';
 
@@ -24,8 +24,7 @@ describe('ReasonGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [{ provide: TasksService, useValue: tasksService }],
+      providers: [provideRouter([]), provideHttpClient(), { provide: TasksService, useValue: tasksService }],
     });
     guard = TestBed.inject(ReasonGuard);
     router = TestBed.inject(Router);
@@ -37,7 +36,7 @@ describe('ReasonGuard', () => {
     expect(guard).toBeTruthy();
   });
 
-  it('should redirect to first step when not completed', async () => {
+  it('should redirect to first step when not completed', () => {
     store.setState({
       ...mockTaskState,
       reviewDeterminationCompleted: false,
@@ -47,12 +46,12 @@ describe('ReasonGuard', () => {
       },
     });
 
-    await expect(
-      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<boolean | UrlTree>),
-    ).resolves.toEqual(router.parseUrl(`/permit-surrender/${mockTaskState.requestTaskId}/review/determination`));
+    expect(firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<boolean | UrlTree>)).resolves.toEqual(
+      router.parseUrl(`/permit-surrender/${mockTaskState.requestTaskId}/review/determination`),
+    );
   });
 
-  it('should redirect to summary when status is completed', async () => {
+  it('should redirect to summary when status is completed', () => {
     store.setState({
       ...mockTaskState,
       reviewDeterminationCompleted: true,
@@ -62,14 +61,12 @@ describe('ReasonGuard', () => {
       },
     });
 
-    await expect(
-      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<boolean | UrlTree>),
-    ).resolves.toEqual(
+    expect(firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<boolean | UrlTree>)).resolves.toEqual(
       router.parseUrl(`/permit-surrender/${mockTaskState.requestTaskId}/review/determination/grant/summary`),
     );
   });
 
-  it('should redirect to answers when status is not completed and wizard completed', async () => {
+  it('should redirect to answers when status is not completed and wizard completed', () => {
     store.setState({
       ...mockTaskState,
       reviewDeterminationCompleted: false,
@@ -83,14 +80,12 @@ describe('ReasonGuard', () => {
       } as PermitSurrenderReviewDeterminationGrant,
     });
 
-    await expect(
-      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<boolean | UrlTree>),
-    ).resolves.toEqual(
+    expect(firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<boolean | UrlTree>)).resolves.toEqual(
       router.parseUrl(`/permit-surrender/${mockTaskState.requestTaskId}/review/determination/grant/answers`),
     );
   });
 
-  it('should return true when wizard and status are not completed', async () => {
+  it('should return true when wizard and status are not completed', () => {
     store.setState({
       ...mockTaskState,
       reviewDeterminationCompleted: false,
@@ -99,8 +94,8 @@ describe('ReasonGuard', () => {
       } as any,
     });
 
-    await expect(
-      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>),
-    ).resolves.toEqual(true);
+    expect(firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>)).resolves.toEqual(
+      true,
+    );
   });
 });

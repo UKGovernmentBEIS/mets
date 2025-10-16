@@ -1,9 +1,8 @@
 <app-permit-task
   reviewGroupTitle="Monitoring methodology"
   reviewGroupUrl="monitoring-methodology-plan"
-  [breadcrumb]="true"
->
-  <app-page-heading caption="Monitoring Methodology Plan"> Sub-installations </app-page-heading>
+  [breadcrumb]="true">
+  <app-page-heading caption="Monitoring Methodology Plan">Sub-installations</app-page-heading>
 
   <ng-container *ngIf="competentAuthority !== 'OPRED'">
     <h2 class="govuk-heading-m">Sub-installations with product benchmarks</h2>
@@ -24,18 +23,17 @@
               <ng-container *ngSwitchCase="'action'">
                 <a
                   *ngIf="isEditable$ | async"
+                  [hidden-text]="hiddenTextOnRemove(row.subInstallationType)"
                   govukLink
                   [routerLink]="['./', row.subInstallationNo, 'delete']"
-                  style="float: right"
-                >
+                  style="float: right">
                   Remove
                 </a>
               </ng-container>
               <ng-container *ngSwitchCase="'status'">
                 <govuk-tag
                   [color]="'MMP_SUB_INSTALLATION_Product_Benchmark' | taskStatus: index | async | tagColor"
-                  class="app-task-list__tag"
-                >
+                  class="app-task-list__tag">
                   {{ 'MMP_SUB_INSTALLATION_Product_Benchmark' | taskStatus: index | async | i18nSelect: statusMap }}
                 </govuk-tag>
               </ng-container>
@@ -50,8 +48,7 @@
       *ngIf="
         (store.isEditable$ | async) === true &&
         (!!(productBenchmarks$ | async) === false || (productBenchmarks$ | async)?.length < 10)
-      "
-    >
+      ">
       <a routerLink="./sub-installation-details" govukButton govukSecondaryButton type="button">Add an item</a>
     </div>
   </ng-container>
@@ -82,17 +79,16 @@
               <a
                 *ngIf="isEditable$ | async"
                 govukLink
+                [hidden-text]="hiddenTextOnRemove(row.subInstallationType)"
                 [routerLink]="['./', row.subInstallationNo, 'delete']"
-                style="float: right"
-              >
+                style="float: right">
                 Remove
               </a>
             </ng-container>
             <ng-container *ngSwitchCase="'status'">
               <govuk-tag
                 [color]="'MMP_SUB_INSTALLATION_Fallback_Approach' | taskStatus: index | async | tagColor"
-                class="app-task-list__tag"
-              >
+                class="app-task-list__tag">
                 {{ 'MMP_SUB_INSTALLATION_Fallback_Approach' | taskStatus: index | async | i18nSelect: statusMap }}
               </govuk-tag>
             </ng-container>
@@ -107,13 +103,11 @@
     *ngIf="
       (store.isEditable$ | async) === true &&
       (!!(fallbackApproaches$ | async) === false || (fallbackApproaches$ | async)?.length < 7)
-    "
-  >
+    ">
     <a routerLink="./sub-installation-fallback-details" govukButton govukSecondaryButton type="button">Add an item</a>
   </div>
 
   <app-list-return-link
     reviewGroupTitle="Monitoring methodology"
-    reviewGroupUrl="monitoring-methodology-plan"
-  ></app-list-return-link>
+    reviewGroupUrl="monitoring-methodology-plan"></app-list-return-link>
 </app-permit-task>

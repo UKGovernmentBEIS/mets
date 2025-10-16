@@ -28,6 +28,7 @@ import { AccountComponent } from './account.component';
 import { AccountGuard } from './account.guard';
 import { AuditYearComponent } from './audit-year/audit-year.component';
 import { AddressComponent } from './edit/address/address.component';
+import { CommencementDateComponent } from './edit/commencement-date/commencement-date.component';
 import { FaStatusComponent } from './edit/fa-status/fa-status.component';
 import { NameComponent } from './edit/name/name.component';
 import { RegistryIdComponent } from './edit/registry-id/registry-id.component';
@@ -39,6 +40,8 @@ import { TriggerHseTiComponent } from './trigger-hseti/trigger-hseti.component';
 import { AerMarkAsNotRequiredComponent } from './workflows/aer-mark-as-not-required/aer-mark-as-not-required.component';
 import { MarkAsNotRequiredGuard } from './workflows/aer-mark-as-not-required/mark-as-not-required-guard.service';
 import { AerReinitializeComponent } from './workflows/aer-reinitialize/aer-reinitialize.component';
+import { AlrMarkAsNotRequiredComponent } from './workflows/alr-mark-as-not-required/alr-mark-as-not-required.component';
+import { AlrMarkAsNotRequiredGuard } from './workflows/alr-mark-as-not-required/alr-mark-as-not-required.guard';
 import { WorkflowGuard } from './workflows/workflow.guard';
 
 const routes: Routes = [
@@ -181,6 +184,17 @@ const routes: Routes = [
             canDeactivate: [PendingRequestGuard],
           },
           {
+            path: 'commencement-date',
+            data: {
+              pageTitle: 'Edit commencement date',
+              roleTypeGuards: 'REGULATOR',
+              breadcrumb: ({ accountPermit }) => `Edit ${accountPermit.account.name} commencement date`,
+            },
+            component: CommencementDateComponent,
+            canActivate: [RoleTypeGuard, AccountStatusGuard],
+            canDeactivate: [PendingRequestGuard],
+          },
+          {
             path: 'legal-entity',
             data: {
               pageTitle: 'Edit legal entity',
@@ -253,6 +267,16 @@ const routes: Routes = [
                 },
                 component: AerMarkAsNotRequiredComponent,
                 canActivate: [MarkAsNotRequiredGuard],
+                canDeactivate: [PendingRequestGuard],
+              },
+              {
+                path: 'alr-mark-as-not-required',
+                data: {
+                  pageTitle: 'Mark the activity level report workflow as not required',
+                  breadcrumb: 'Mark work flow as not required',
+                },
+                component: AlrMarkAsNotRequiredComponent,
+                canActivate: [AlrMarkAsNotRequiredGuard],
                 canDeactivate: [PendingRequestGuard],
               },
               {

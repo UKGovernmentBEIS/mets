@@ -18,7 +18,6 @@ import { alrQuestionFormProvider } from './question-form.provider';
 })
 export class AlrSendReportQuestionComponent {
   isEditable = this.alrService.isEditable;
-  competentAuthority = this.alrService.competentAuthority;
 
   constructor(
     @Inject(ALR_TASK_FORM) readonly form: UntypedFormGroup,

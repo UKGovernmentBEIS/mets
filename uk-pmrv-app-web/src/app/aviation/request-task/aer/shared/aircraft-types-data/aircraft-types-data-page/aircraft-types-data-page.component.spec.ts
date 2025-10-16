@@ -1,10 +1,9 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -12,7 +11,6 @@ import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { PendingRequestService } from '@core/guards/pending-request.service';
-import { BackLinkService } from '@shared/back-link/back-link.service';
 import { BasePage, mockClass } from '@testing';
 
 import { AircraftTypesService } from 'pmrv-api';
@@ -41,12 +39,13 @@ describe('AircraftTypesDataPageComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, FormsModule, ReactiveFormsModule, HttpClientTestingModule],
+      imports: [FormsModule, ReactiveFormsModule],
       providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        provideRouter([]),
         { provide: TASK_FORM_PROVIDER, useClass: AircraftTypesDataFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
         { provide: PendingRequestService, useValue: mockClass(PendingRequestService) },
-        { provide: BackLinkService, useValue: mockClass(BackLinkService) },
         { provide: AircraftTypesService, useValue: aircraftTypesService },
         { provide: ChangeDetectorRef, useValue: {} },
       ],
@@ -89,7 +88,7 @@ describe('AircraftTypesDataPageComponent', () => {
     const paragraphElements = fixture.debugElement.queryAll(By.css('.govuk-body'));
     const uploadInstruction = paragraphElements[0].nativeElement;
     expect(uploadInstruction.textContent).toContain(
-      'Upload a comma-separated values (.csv) file of the aircraft types which you have operated during the scheme year on UK ETS flights. This should include owned and leased-in aircraft.',
+      'Upload a CSV file with the aircraft types you have operated on UK ETS flights during the scheme year, including owned and leased-in aircraft. You should include at least one relevant start and end date in your file.',
     );
   });
 

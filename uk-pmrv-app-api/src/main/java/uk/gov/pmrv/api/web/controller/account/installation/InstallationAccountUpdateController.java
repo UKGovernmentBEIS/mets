@@ -27,6 +27,7 @@ import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateInstallation
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateRegistryIdDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateSiteNameDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateSopIdDTO;
+import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountUpdateService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
@@ -141,6 +142,20 @@ public class InstallationAccountUpdateController {
         AccountUpdateFaStatusDTO accountUpdateFaStatusDTO
     ) {
         installationAccountUpdateService.updateFaStatus(accountId, accountUpdateFaStatusDTO);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/commencement-date")
+    @Operation(summary = "Update the commencement date of the account")
+    @ApiResponse(responseCode = "200", description = SwaggerApiInfo.OK)
+    @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "404", description = SwaggerApiInfo.NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @AuthorizedRole(roleType = {REGULATOR})
+    public ResponseEntity<Void> updateCommencementDate(
+            @PathVariable("id") @Parameter(description = "The account id", required = true) Long accountId,
+            @RequestBody @Valid @Parameter(description = "The commencement date", required = true) AccountUpdateCommencementDateDTO commencementDateDTO) {
+        installationAccountUpdateService.updateCommencementDate(accountId, commencementDateDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

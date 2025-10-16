@@ -20,4 +20,7 @@ public class ALRRequestMetaData extends RequestMetadata implements RequestMetada
 
     @NotNull
     private Year year;
+
+    @NotNull
+    private Boolean isFinal;
 }

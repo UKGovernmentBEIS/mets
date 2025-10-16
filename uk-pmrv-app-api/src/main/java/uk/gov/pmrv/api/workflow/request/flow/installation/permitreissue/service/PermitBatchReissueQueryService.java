@@ -3,6 +3,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.service
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountIdAndNameAndLegalEntityNameDTO;
+import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.permit.domain.dto.PermitEntityAccountDTO;
@@ -12,6 +13,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.P
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -23,15 +25,11 @@ public class PermitBatchReissueQueryService {
 	private final PermitQueryService permitQueryService;
 	
 	public boolean existAccountsByCAAndFilters(CompetentAuthorityEnum ca, PermitBatchReissueFilters filters) {
-		return installationAccountQueryService
-				.getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, filters.getAccountStatuses(),
-						filters.getEmitterTypes(), filters.getInstallationCategories()).size() > 0; //TODO use count query
+		return !findAccounts(ca, filters).isEmpty();
 	}
 
 	public Map<Long, PermitReissueAccountDetails> findAccountsByCAAndFilters(CompetentAuthorityEnum ca, PermitBatchReissueFilters filters){
-		final Map<Long, InstallationAccountIdAndNameAndLegalEntityNameDTO> accountDetails = installationAccountQueryService
-				.getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, filters.getAccountStatuses(),
-						filters.getEmitterTypes(), filters.getInstallationCategories())
+		final Map<Long, InstallationAccountIdAndNameAndLegalEntityNameDTO> accountDetails = findAccounts(ca, filters)
 				.stream().collect(Collectors.toMap(InstallationAccountIdAndNameAndLegalEntityNameDTO::getAccountId,
 						Function.identity()));
 		
@@ -47,6 +45,26 @@ public class PermitBatchReissueQueryService {
 					.operatorName(accountInfo.getLegalEntityName())
 					.build();
 		}));
+	}
+
+	private Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> findAccounts(CompetentAuthorityEnum ca, PermitBatchReissueFilters filters) {
+		if ( (filters.getEmitterTypes().size() == 1 && filters.getEmitterTypes().contains(EmitterType.WASTE)) ||
+				!(filters.isFreeAllocation() ^ filters.isNonFreeAllocation())) {
+			return installationAccountQueryService
+                    .getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(
+							ca,
+							filters.getAccountStatuses(),
+                            filters.getEmitterTypes(),
+							filters.getInstallationCategories()); //TODO use count query
+		}
+
+		return installationAccountQueryService
+                    .getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(
+							ca,
+							filters.getAccountStatuses(),
+                            filters.getEmitterTypes(),
+							filters.getInstallationCategories(),
+                            filters.isFreeAllocation());
 	}
 	
 }

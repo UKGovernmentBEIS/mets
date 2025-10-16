@@ -66,7 +66,130 @@ class PermitBatchReissueQueryServiceTest {
 		assertThat(result).isTrue();
 		
 		verify(installationAccountQueryService, times(1)).getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, statuses, emitterTypes, categories);
-		
+	}
+
+	@Test
+	void existAccountsByCAAndFilters_onlyFreeAllocation() {
+		CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+		Set<InstallationAccountStatus> statuses = Set.of(InstallationAccountStatus.LIVE);
+		Set<InstallationCategory> categories = Set.of(InstallationCategory.A);
+		Set<EmitterType> emitterTypes = Set.of(EmitterType.GHGE);
+
+		PermitBatchReissueFilters filters = PermitBatchReissueFilters.builder()
+				.accountStatuses(statuses)
+				.installationCategories(categories)
+				.emitterTypes(emitterTypes)
+				.freeAllocation(true)
+				.nonFreeAllocation(false)
+				.build();
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTO account1 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(1L).accountName("acc1").legalEntityName("le1").build();
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTOImpl account2 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(2L).accountName("acc2").legalEntityName("le2").build();
+
+		when(installationAccountQueryService
+				.getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(ca, statuses, emitterTypes, categories, true)).thenReturn(Set.of(account1));
+
+		boolean result = cut.existAccountsByCAAndFilters(ca, filters);
+
+		assertThat(result).isTrue();
+
+		verify(installationAccountQueryService, times(1)).getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(ca, statuses, emitterTypes, categories, true);
+	}
+
+	@Test
+	void existAccountsByCAAndFilters_onlyNonFreeAllocation() {
+		CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+		Set<InstallationAccountStatus> statuses = Set.of(InstallationAccountStatus.LIVE);
+		Set<InstallationCategory> categories = Set.of(InstallationCategory.A);
+		Set<EmitterType> emitterTypes = Set.of(EmitterType.GHGE);
+
+		PermitBatchReissueFilters filters = PermitBatchReissueFilters.builder()
+				.accountStatuses(statuses)
+				.installationCategories(categories)
+				.emitterTypes(emitterTypes)
+				.freeAllocation(false)
+				.nonFreeAllocation(true)
+				.build();
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTO account1 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(1L).accountName("acc1").legalEntityName("le1").build();
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTOImpl account2 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(2L).accountName("acc2").legalEntityName("le2").build();
+
+		when(installationAccountQueryService
+				.getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(ca, statuses, emitterTypes, categories, false)).thenReturn(Set.of(account1));
+
+		boolean result = cut.existAccountsByCAAndFilters(ca, filters);
+
+		assertThat(result).isTrue();
+
+		verify(installationAccountQueryService, times(1)).getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(ca, statuses, emitterTypes, categories, false);
+	}
+
+	@Test
+	void existAccountsByCAAndFilters_neitherFreeAllocationNorNonFreeAllocation() {
+		CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+		Set<InstallationAccountStatus> statuses = Set.of(InstallationAccountStatus.LIVE);
+		Set<InstallationCategory> categories = Set.of(InstallationCategory.A);
+		Set<EmitterType> emitterTypes = Set.of(EmitterType.GHGE);
+
+		PermitBatchReissueFilters filters = PermitBatchReissueFilters.builder()
+				.accountStatuses(statuses)
+				.installationCategories(categories)
+				.emitterTypes(emitterTypes)
+				.freeAllocation(false)
+				.nonFreeAllocation(false)
+				.build();
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTO account1 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(1L).accountName("acc1").legalEntityName("le1").build();
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTOImpl account2 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(2L).accountName("acc2").legalEntityName("le2").build();
+
+		when(installationAccountQueryService
+				.getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, statuses, emitterTypes, categories)).thenReturn(Set.of(account1, account2));
+
+		boolean result = cut.existAccountsByCAAndFilters(ca, filters);
+
+		assertThat(result).isTrue();
+
+		verify(installationAccountQueryService, times(1)).getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, statuses, emitterTypes, categories);
+	}
+
+	@Test
+	void existAccountsByCAAndFilters_bothFreeAllocationAndNonFreeAllocation() {
+		CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+		Set<InstallationAccountStatus> statuses = Set.of(InstallationAccountStatus.LIVE);
+		Set<InstallationCategory> categories = Set.of(InstallationCategory.A);
+		Set<EmitterType> emitterTypes = Set.of(EmitterType.GHGE);
+
+		PermitBatchReissueFilters filters = PermitBatchReissueFilters.builder()
+				.accountStatuses(statuses)
+				.installationCategories(categories)
+				.emitterTypes(emitterTypes)
+				.freeAllocation(true)
+				.nonFreeAllocation(true)
+				.build();
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTO account1 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(1L).accountName("acc1").legalEntityName("le1").build();
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTOImpl account2 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(2L).accountName("acc2").legalEntityName("le2").build();
+
+		when(installationAccountQueryService
+				.getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, statuses, emitterTypes, categories)).thenReturn(Set.of(account1, account2));
+
+		boolean result = cut.existAccountsByCAAndFilters(ca, filters);
+
+		assertThat(result).isTrue();
+
+		verify(installationAccountQueryService, times(1)).getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, statuses, emitterTypes, categories);
 	}
 	
 	@Test
@@ -99,6 +222,178 @@ class PermitBatchReissueQueryServiceTest {
 		
 		Map<Long, PermitReissueAccountDetails> result = cut.findAccountsByCAAndFilters(ca, filters);
 		
+		assertThat(result).containsExactlyInAnyOrderEntriesOf(Map.of(
+				1L, PermitReissueAccountDetails.builder().installationName("acc1").operatorName("le1").permitId("permitId1").build(),
+				2L, PermitReissueAccountDetails.builder().installationName("acc2").operatorName("le2").permitId("permitId2").build()
+				));
+		verify(installationAccountQueryService, times(1)).getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, statuses, emitterTypes, categories);
+		verify(permitQueryService, times(1)).getPermitByAccountIds(List.of(1L, 2L));
+	}
+
+	@Test
+	void findAccountsByCAAndFilters_onlyFreeAllocation() {
+		CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+		Set<InstallationAccountStatus> statuses = Set.of(InstallationAccountStatus.LIVE);
+		Set<InstallationCategory> categories = Set.of(InstallationCategory.A);
+		Set<EmitterType> emitterTypes = Set.of(EmitterType.GHGE);
+
+		PermitBatchReissueFilters filters = PermitBatchReissueFilters.builder()
+				.accountStatuses(statuses)
+				.installationCategories(categories)
+				.emitterTypes(emitterTypes)
+				.freeAllocation(true)
+				.nonFreeAllocation(false)
+				.build();
+
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTO account1 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(1L).accountName("acc1").legalEntityName("le1").build();
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTOImpl account2 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(2L).accountName("acc2").legalEntityName("le2").build();
+
+
+		Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> accounts = Set.of(account1);
+
+		when(installationAccountQueryService.getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(ca, statuses, emitterTypes, categories, true))
+				.thenReturn(accounts);
+
+		Map<Long, PermitEntityAccountDTO> accountPermitDetails = Map.of(1L, PermitEntityAccountDTOImpl.builder().accountId(1L).permitEntityId("permitId1").build());
+
+		when(permitQueryService.getPermitByAccountIds(List.of(1L))).thenReturn(accountPermitDetails);
+
+		Map<Long, PermitReissueAccountDetails> result = cut.findAccountsByCAAndFilters(ca, filters);
+
+		assertThat(result).containsExactlyInAnyOrderEntriesOf(Map.of(
+				1L, PermitReissueAccountDetails.builder().installationName("acc1").operatorName("le1").permitId("permitId1").build()
+				));
+		verify(installationAccountQueryService, times(1)).getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(ca, statuses, emitterTypes, categories, true);
+		verify(permitQueryService, times(1)).getPermitByAccountIds(List.of(1L));
+	}
+
+	@Test
+	void findAccountsByCAAndFilters_onlyNonFreeAllocation() {
+		CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+		Set<InstallationAccountStatus> statuses = Set.of(InstallationAccountStatus.LIVE);
+		Set<InstallationCategory> categories = Set.of(InstallationCategory.A);
+		Set<EmitterType> emitterTypes = Set.of(EmitterType.GHGE);
+
+		PermitBatchReissueFilters filters = PermitBatchReissueFilters.builder()
+				.accountStatuses(statuses)
+				.installationCategories(categories)
+				.emitterTypes(emitterTypes)
+				.freeAllocation(false)
+				.nonFreeAllocation(true)
+				.build();
+
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTO account1 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(1L).accountName("acc1").legalEntityName("le1").build();
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTOImpl account2 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(2L).accountName("acc2").legalEntityName("le2").build();
+
+
+		Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> accounts = Set.of(account1);
+
+		when(installationAccountQueryService.getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(ca, statuses, emitterTypes, categories, false))
+				.thenReturn(accounts);
+
+		Map<Long, PermitEntityAccountDTO> accountPermitDetails = Map.of(1L, PermitEntityAccountDTOImpl.builder().accountId(1L).permitEntityId("permitId1").build());
+
+		when(permitQueryService.getPermitByAccountIds(List.of(1L))).thenReturn(accountPermitDetails);
+
+		Map<Long, PermitReissueAccountDetails> result = cut.findAccountsByCAAndFilters(ca, filters);
+
+		assertThat(result).containsExactlyInAnyOrderEntriesOf(Map.of(
+				1L, PermitReissueAccountDetails.builder().installationName("acc1").operatorName("le1").permitId("permitId1").build()
+				));
+		verify(installationAccountQueryService, times(1)).getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(ca, statuses, emitterTypes, categories, false);
+		verify(permitQueryService, times(1)).getPermitByAccountIds(List.of(1L));
+	}
+
+	@Test
+	void findAccountsByCAAndFilters_neitherFreeAllocationNorNonFreeAllocation() {
+		CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+		Set<InstallationAccountStatus> statuses = Set.of(InstallationAccountStatus.LIVE);
+		Set<InstallationCategory> categories = Set.of(InstallationCategory.A);
+		Set<EmitterType> emitterTypes = Set.of(EmitterType.GHGE);
+
+		PermitBatchReissueFilters filters = PermitBatchReissueFilters.builder()
+				.accountStatuses(statuses)
+				.installationCategories(categories)
+				.emitterTypes(emitterTypes)
+				.freeAllocation(false)
+				.nonFreeAllocation(false)
+				.build();
+
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTO account1 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(1L).accountName("acc1").legalEntityName("le1").build();
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTOImpl account2 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(2L).accountName("acc2").legalEntityName("le2").build();
+
+
+		Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> accounts = Set.of(account1, account2);
+
+		when(installationAccountQueryService.getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, statuses, emitterTypes, categories))
+				.thenReturn(accounts);
+
+		Map<Long, PermitEntityAccountDTO> accountPermitDetails = Map.of(
+				1L, PermitEntityAccountDTOImpl.builder().accountId(1L).permitEntityId("permitId1").build(),
+				2L, PermitEntityAccountDTOImpl.builder().accountId(2L).permitEntityId("permitId2").build()
+		);
+
+		when(permitQueryService.getPermitByAccountIds(List.of(1L, 2L))).thenReturn(accountPermitDetails);
+
+		Map<Long, PermitReissueAccountDetails> result = cut.findAccountsByCAAndFilters(ca, filters);
+
+		assertThat(result).containsExactlyInAnyOrderEntriesOf(Map.of(
+				1L, PermitReissueAccountDetails.builder().installationName("acc1").operatorName("le1").permitId("permitId1").build(),
+				2L, PermitReissueAccountDetails.builder().installationName("acc2").operatorName("le2").permitId("permitId2").build()
+				));
+		verify(installationAccountQueryService, times(1)).getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, statuses, emitterTypes, categories);
+		verify(permitQueryService, times(1)).getPermitByAccountIds(List.of(1L, 2L));
+	}
+
+	@Test
+	void findAccountsByCAAndFilters_bothFreeAllocationAndNonFreeAllocation() {
+		CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+		Set<InstallationAccountStatus> statuses = Set.of(InstallationAccountStatus.LIVE);
+		Set<InstallationCategory> categories = Set.of(InstallationCategory.A);
+		Set<EmitterType> emitterTypes = Set.of(EmitterType.GHGE);
+
+		PermitBatchReissueFilters filters = PermitBatchReissueFilters.builder()
+				.accountStatuses(statuses)
+				.installationCategories(categories)
+				.emitterTypes(emitterTypes)
+				.freeAllocation(true)
+				.nonFreeAllocation(true)
+				.build();
+
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTO account1 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(1L).accountName("acc1").legalEntityName("le1").build();
+
+		InstallationAccountIdAndNameAndLegalEntityNameDTOImpl account2 =
+				InstallationAccountIdAndNameAndLegalEntityNameDTOImpl.builder().accountId(2L).accountName("acc2").legalEntityName("le2").build();
+
+
+		Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> accounts = Set.of(account1, account2);
+
+		when(installationAccountQueryService.getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, statuses, emitterTypes, categories))
+				.thenReturn(accounts);
+
+		Map<Long, PermitEntityAccountDTO> accountPermitDetails = Map.of(
+				1L, PermitEntityAccountDTOImpl.builder().accountId(1L).permitEntityId("permitId1").build(),
+				2L, PermitEntityAccountDTOImpl.builder().accountId(2L).permitEntityId("permitId2").build()
+		);
+
+		when(permitQueryService.getPermitByAccountIds(List.of(1L, 2L))).thenReturn(accountPermitDetails);
+
+		Map<Long, PermitReissueAccountDetails> result = cut.findAccountsByCAAndFilters(ca, filters);
+
 		assertThat(result).containsExactlyInAnyOrderEntriesOf(Map.of(
 				1L, PermitReissueAccountDetails.builder().installationName("acc1").operatorName("le1").permitId("permitId1").build(),
 				2L, PermitReissueAccountDetails.builder().installationName("acc2").operatorName("le2").permitId("permitId2").build()

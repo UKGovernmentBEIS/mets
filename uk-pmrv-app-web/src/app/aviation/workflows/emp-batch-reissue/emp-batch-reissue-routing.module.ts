@@ -5,6 +5,8 @@ import { BatchReissueSubmitGuard } from '@shared/guards/batch-reissue-submit.gua
 
 import { RegulatorsGuard } from '../../../regulators/regulators.guard';
 import { RequestsComponent } from './requests/requests.component';
+import { ChangesComponent } from './submit/changes/changes.component';
+import { ChangesGuard } from './submit/changes/changes.guard';
 import { EmpBatchReissueSubmitGuard } from './submit/emp-batch-reissue-submit.guard';
 import { FiltersComponent } from './submit/filters/filters.component';
 import { SignatoryComponent } from './submit/signatory/signatory.component';
@@ -34,9 +36,19 @@ const routes: Routes = [
         component: FiltersComponent,
       },
       {
-        path: 'signatory',
+        path: 'changes',
         data: {
           backlink: '../filters',
+          pageTitle: 'List changes to include in the variation schedule - Emp batch reissue',
+        },
+        resolve: { regulators: RegulatorsGuard },
+        canActivate: [ChangesGuard],
+        component: ChangesComponent,
+      },
+      {
+        path: 'signatory',
+        data: {
+          backlink: '../changes',
           pageTitle: 'Select name and signature for official notice - Emp batch reissue',
         },
         resolve: { regulators: RegulatorsGuard },

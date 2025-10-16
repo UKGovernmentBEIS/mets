@@ -77,4 +77,41 @@ class AerActivityLevelReportValidatorTest {
         assertTrue(aerValidationResult.isValid());
         assertEquals(0, aerValidationResult.getAerViolations().size());
     }
+
+    @Test
+    void invalid_when_postALRremoval_true_and_activity_level_not_null() {
+        AerContainer aerContainer = AerContainer.builder()
+                .permitOriginatedData(PermitOriginatedData.builder()
+                        .permitType(PermitType.GHGE)
+                        .build())
+                .aer(Aer.builder()
+                        .activityLevelReport(ActivityLevelReport.builder()
+                                .freeAllocationOfAllowances(false)
+                                .build())
+                        .build())
+                .isPostALRSectionRemoval(true)
+                .build();
+
+        AerValidationResult aerValidationResult = aerActivityLevelReportValidator.validate(aerContainer);
+        assertFalse(aerValidationResult.isValid());
+        assertEquals(1, aerValidationResult.getAerViolations().size());
+        assertEquals(AerViolation.AerViolationMessage.ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE.getMessage(),
+                aerValidationResult.getAerViolations().get(0).getMessage());
+    }
+
+    @Test
+    void valid_when_postALRremoval_true_and_activity_level_null() {
+        AerContainer aerContainer = AerContainer.builder()
+                .permitOriginatedData(PermitOriginatedData.builder()
+                        .permitType(PermitType.GHGE)
+                        .build())
+                .aer(Aer.builder()
+                        .build())
+                .isPostALRSectionRemoval(true)
+                .build();
+
+        AerValidationResult aerValidationResult = aerActivityLevelReportValidator.validate(aerContainer);
+        assertTrue(aerValidationResult.isValid());
+        assertEquals(0, aerValidationResult.getAerViolations().size());
+    }
 }

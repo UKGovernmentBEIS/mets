@@ -5,23 +5,19 @@
       [customContentTemplate]="customContentTemplate"
       expectedTaskType="AER_APPLICATION_REVIEW"
       [notification]="notification"
-      [daysRemaining]="daysRemaining$ | async"
-    >
-    </app-base-task-container-component>
+      [daysRemaining]="daysRemaining$ | async"></app-base-task-container-component>
   </ng-container>
 
   <ng-container *ngIf="requestTaskType === 'AER_WAIT_FOR_AMENDS'">
     <app-base-task-container-component
       [header]="aerTitle$ | async"
       [customContentTemplate]="customContentTemplate"
-      expectedTaskType="AER_WAIT_FOR_AMENDS"
-    >
-    </app-base-task-container-component>
+      expectedTaskType="AER_WAIT_FOR_AMENDS"></app-base-task-container-component>
   </ng-container>
 
   <ng-template #customContentTemplate>
     <ng-container *ngIf="requestTaskType === 'AER_WAIT_FOR_AMENDS'">
-      <govuk-warning-text> You cannot edit the report as the operator is due to amend it </govuk-warning-text>
+      <govuk-warning-text>You cannot edit the report as the operator is due to amend it</govuk-warning-text>
     </ng-container>
 
     <ng-container *ngIf="requestTaskType === 'AER_APPLICATION_REVIEW'">
@@ -31,8 +27,7 @@
           (click)="completeReview()"
           govukButton
           title="Complete review"
-          type="button"
-        >
+          type="button">
           Complete review
         </button>
 
@@ -41,8 +36,7 @@
           (click)="sendReturnForAmends()"
           govukButton
           title="Return for amends"
-          type="button"
-        >
+          type="button">
           Return for amends
         </button>
       </div>
@@ -56,40 +50,34 @@
               app-task-item
               [link]="baseUrl + 'details'"
               [linkText]="'INSTALLATION_DETAILS' | aerTaskDescription"
-              [status]="'INSTALLATION_DETAILS' | taskStatus | async"
-            ></li>
+              [status]="'INSTALLATION_DETAILS' | taskStatus | async"></li>
             <li
               app-task-item
               [link]="baseUrl + 'fuels'"
               [linkText]="'FUELS_AND_EQUIPMENT' | aerTaskDescription"
-              [status]="'FUELS_AND_EQUIPMENT' | taskStatus | async"
-            ></li>
+              [status]="'FUELS_AND_EQUIPMENT' | taskStatus | async"></li>
             <li
               *ngFor="let approach of monitoringApproaches$ | async"
               app-task-item
               [link]="baseUrl + approach.link"
               [linkText]="approach.linkText"
-              [status]="approach.status | taskStatus | async"
-            ></li>
+              [status]="approach.status | taskStatus | async"></li>
             <li
               app-task-item
               [link]="baseUrl + 'emissions-summary'"
               [linkText]="'EMISSIONS_SUMMARY' | aerTaskDescription"
-              [status]="'EMISSIONS_SUMMARY' | taskStatus | async"
-            ></li>
+              [status]="'EMISSIONS_SUMMARY' | taskStatus | async"></li>
             <li
-              *ngIf="isGHGE$ | async"
+              *ngIf="(isGHGE$ | async) && (showAlr$ | async)"
               app-task-item
               [link]="baseUrl + 'activity-level-report'"
               linkText="Activity level report"
-              [status]="'ACTIVITY_LEVEL_REPORT' | taskStatus | async"
-            ></li>
+              [status]="'ACTIVITY_LEVEL_REPORT' | taskStatus | async"></li>
             <li
               app-task-item
               [link]="baseUrl + 'additional-info'"
               [linkText]="'ADDITIONAL_INFORMATION' | aerTaskDescription"
-              [status]="'ADDITIONAL_INFORMATION' | taskStatus | async"
-            ></li>
+              [status]="'ADDITIONAL_INFORMATION' | taskStatus | async"></li>
           </ul>
         </li>
 
@@ -100,39 +88,33 @@
                 app-task-item
                 [link]="baseUrl + 'verifier-details'"
                 linkText="Verifier details"
-                [status]="'VERIFIER_DETAILS' | taskStatus | async"
-              ></li>
+                [status]="'VERIFIER_DETAILS' | taskStatus | async"></li>
               <li
                 app-task-item
                 [link]="baseUrl + 'opinion-statement'"
                 linkText="Opinion statement"
-                [status]="'OPINION_STATEMENT' | taskStatus | async"
-              ></li>
+                [status]="'OPINION_STATEMENT' | taskStatus | async"></li>
               <li
                 app-task-item
                 [link]="baseUrl + 'compliance-ets'"
                 linkText="Compliance with ETS rules"
-                [status]="'ETS_COMPLIANCE_RULES' | taskStatus | async"
-              ></li>
+                [status]="'ETS_COMPLIANCE_RULES' | taskStatus | async"></li>
               <li
                 app-task-item
                 [link]="baseUrl + 'compliance-monitoring'"
                 linkText="Compliance with monitoring and reporting principles"
-                [status]="'COMPLIANCE_MONITORING_REPORTING' | taskStatus | async"
-              ></li>
+                [status]="'COMPLIANCE_MONITORING_REPORTING' | taskStatus | async"></li>
               <li
-                *ngIf="isGHGE$ | async"
+                *ngIf="(isGHGE$ | async) && (showAlr$ | async)"
                 app-task-item
                 [link]="baseUrl + 'verified-activity-level-report'"
                 linkText="Verification report of the activity level report"
-                [status]="'VERIFICATION_ACTIVITY_LEVEL_REPORT' | taskStatus | async"
-              ></li>
+                [status]="'VERIFICATION_ACTIVITY_LEVEL_REPORT' | taskStatus | async"></li>
               <li
                 app-task-item
                 [link]="baseUrl + 'overall-decision'"
                 linkText="Overall decision"
-                [status]="'OVERALL_DECISION' | taskStatus | async"
-              ></li>
+                [status]="'OVERALL_DECISION' | taskStatus | async"></li>
             </ul>
           </li>
 
@@ -142,44 +124,37 @@
                 app-task-item
                 [link]="baseUrl + 'misstatements'"
                 linkText="Uncorrected misstatements"
-                [status]="'UNCORRECTED_MISSTATEMENTS' | taskStatus | async"
-              ></li>
+                [status]="'UNCORRECTED_MISSTATEMENTS' | taskStatus | async"></li>
               <li
                 app-task-item
                 [link]="baseUrl + 'non-conformities'"
                 linkText="Uncorrected non-conformities"
-                [status]="'UNCORRECTED_NON_CONFORMITIES' | taskStatus | async"
-              ></li>
+                [status]="'UNCORRECTED_NON_CONFORMITIES' | taskStatus | async"></li>
               <li
                 app-task-item
                 [link]="baseUrl + 'non-compliances'"
                 linkText="Uncorrected non-compliances"
-                [status]="'UNCORRECTED_NON_COMPLIANCES' | taskStatus | async"
-              ></li>
+                [status]="'UNCORRECTED_NON_COMPLIANCES' | taskStatus | async"></li>
               <li
                 app-task-item
                 [link]="baseUrl + 'recommended-improvements'"
                 linkText="Recommended improvements"
-                [status]="'RECOMMENDED_IMPROVEMENTS' | taskStatus | async"
-              ></li>
+                [status]="'RECOMMENDED_IMPROVEMENTS' | taskStatus | async"></li>
               <li
                 app-task-item
                 [link]="baseUrl + 'data-gaps'"
                 linkText="Methodologies to close data gaps"
-                [status]="'CLOSE_DATA_GAPS_METHODOLOGIES' | taskStatus | async"
-              ></li>
+                [status]="'CLOSE_DATA_GAPS_METHODOLOGIES' | taskStatus | async"></li>
               <li
                 app-task-item
                 [link]="baseUrl + 'materiality-level'"
                 linkText="Materiality level and reference documents"
-                [status]="'MATERIALITY_LEVEL' | taskStatus | async"
-              ></li>
+                [status]="'MATERIALITY_LEVEL' | taskStatus | async"></li>
               <li
                 app-task-item
                 [link]="baseUrl + 'summary-of-conditions'"
                 linkText="Summary of conditions, changes, clarifications and variations"
-                [status]="'SUMMARY_OF_CONDITIONS' | taskStatus | async"
-              ></li>
+                [status]="'SUMMARY_OF_CONDITIONS' | taskStatus | async"></li>
             </ul>
           </li>
         </ng-container>

@@ -39,15 +39,23 @@ class PermitRevocationEffectiveDateReachedHandlerTest {
         Map<String, Object> variables = new HashMap<>(){{
             put(BpmnProcessConstants.AER_REQUIRED, true);
             put(BpmnProcessConstants.AER_EXPIRATION_DATE, reportDate);
+            put(BpmnProcessConstants.ALR_EXPIRATION_DATE, reportDate);
+            put(BpmnProcessConstants.ALR_REQUIRED, true);
+            put(BpmnProcessConstants.ALR_FINAL, true);
+            put(BpmnProcessConstants.ACCOUNT_ID, 1L);
         }};
 
         when(execution.getVariable(BpmnProcessConstants.REQUEST_ID)).thenReturn(requestId);
-        when(service.constructAerVariables(requestId)).thenReturn(variables);
+        when(service.constructAerAndAlrVariables(requestId)).thenReturn(variables);
 
         handler.execute(execution);
 
         verify(execution, times(1)).getVariable(BpmnProcessConstants.REQUEST_ID);
         verify(execution, times(1)).setVariable(BpmnProcessConstants.AER_REQUIRED, true);
         verify(execution, times(1)).setVariable(BpmnProcessConstants.AER_EXPIRATION_DATE, reportDate);
+        verify(execution, times(1)).setVariable(BpmnProcessConstants.ACCOUNT_ID, 1L);
+        verify(execution, times(1)).setVariable(BpmnProcessConstants.ALR_FINAL, true);
+        verify(execution, times(1)).setVariable(BpmnProcessConstants.ALR_REQUIRED, true);
+        verify(execution, times(1)).setVariable(BpmnProcessConstants.ALR_EXPIRATION_DATE, reportDate);
     }
 }

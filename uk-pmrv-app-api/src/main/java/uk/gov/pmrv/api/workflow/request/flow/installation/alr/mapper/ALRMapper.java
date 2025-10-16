@@ -8,6 +8,8 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetai
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AlrApplicationMarkNotRequiredRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AlrMarkNotRequiredDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRVerificationReport;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationSubmittedRequestActionPayload;
@@ -90,6 +92,11 @@ public interface ALRMapper {
 
     @Mapping(target = "payloadType", expression = "java(uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType.ALR_APPLICATION_CLOSED_PAYLOAD)")
     ALRApplicationClosedRequestActionPayload toALRApplicationClosedRequestActionPayload(ALRRequestPayload requestPayload);
+
+    @Mapping(target = "payloadType", expression = "java(uk.gov.pmrv.api.workflow.request.core.domain.enumeration" +
+            ".RequestActionPayloadType.ALR_APPLICATION_MARK_NOT_REQUIRED_PAYLOAD)")
+    @Mapping(target = "markNotRequiredDetails", source = ".")
+    AlrApplicationMarkNotRequiredRequestActionPayload toAlrApplicationMarkNotRequiredRequestActionPayload(AlrMarkNotRequiredDetails alrMarkNotRequiredDetails);
 
     @Mapping(target = "payloadType", expression = "java(uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType.ALR_APPLICATION_ACCEPTED_PAYLOAD)")
     @Mapping(target = "attachments", ignore = true)

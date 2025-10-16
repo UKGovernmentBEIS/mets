@@ -1,8 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, filter, map, take } from 'rxjs';
+import { combineLatest, filter, map, Subscription, take } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
 import { RequestTaskStore } from '@aviation/request-task/store';
@@ -22,6 +30,7 @@ import {
 } from '@aviation/shared/validators';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
+import { csvRowValidator } from '@shared/utils/validators';
 import { format, isValid, parse } from 'date-fns';
 import Papa from 'papaparse';
 
@@ -32,12 +41,11 @@ import { AircraftTypesDataFormProvider } from '../aircraft-types-data-form.provi
 @Component({
   selector: 'app-aircraft-types-data-page',
   templateUrl: './aircraft-types-data-page.component.html',
-  styles: [],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SharedModule, ReturnToLinkComponent, CsvDataWizardStepComponent, AircraftTypesDataTableComponent],
 })
-export class AircraftTypesDataPageComponent implements OnInit {
+export class AircraftTypesDataPageComponent implements OnInit, OnDestroy {
   form = this.formProvider.form;
   @ViewChild(CsvDataWizardStepComponent) wizardStep: CsvDataWizardStepComponent;
   parsedData: AviationAerAircraftDataDetails[];
@@ -53,6 +61,9 @@ export class AircraftTypesDataPageComponent implements OnInit {
     map((isCorsia) => (isCorsia ? 'CORSIA' : 'UK ETS')),
   );
 
+  private subscription: Subscription;
+  private statusSubscription: Subscription;
+
   constructor(
     @Inject(TASK_FORM_PROVIDER) private formProvider: AircraftTypesDataFormProvider,
     private store: RequestTaskStore,
@@ -62,10 +73,26 @@ export class AircraftTypesDataPageComponent implements OnInit {
     private cd: ChangeDetectorRef,
   ) {}
 
+  fileControl = new FormControl(
+    null,
+    [
+      fileExtensionValidator(['csv'], ['text/csv', 'application/vnd.ms-excel'], 'Only CSV files are accepted'),
+      maxFileSizeValidator(20, 'Maximum allowed file size is 20 MB'),
+      fileNameLengthValidator(100, 'Maximum allowed file name length is 100 characters'),
+      emptyFileValidator('Empty file uploaded'),
+    ],
+    [
+      csvRowValidator(
+        `Each row must have 6 comma separated values, labelled ‘aircraft type designator’, ‘sub type’, ‘registration number’, ‘owner or lessor name’, ‘start date’, ‘end date’`,
+        6,
+      ),
+    ],
+  );
+
   ngOnInit(): void {
     const aircraftTypesDataControl = this.form.get('aviationAerAircraftDataDetails');
     let aviationAerAircraftDataDetails = null;
-    if (aircraftTypesDataControl && aircraftTypesDataControl.value) {
+    if (aircraftTypesDataControl?.value) {
       aviationAerAircraftDataDetails = aircraftTypesDataControl.value;
     }
 
@@ -77,6 +104,12 @@ export class AircraftTypesDataPageComponent implements OnInit {
 
     this.exampleTableData = exampleData;
     this.form.updateValueAndValidity();
+
+    this.statusSubscription = this.fileControl.statusChanges
+      .pipe(filter((status: string) => status === 'INVALID' || status === 'VALID'))
+      .subscribe(() => {
+        this.processControlStatus();
+      });
   }
 
   onSubmit() {
@@ -99,33 +132,9 @@ export class AircraftTypesDataPageComponent implements OnInit {
     this.form.get('aviationAerAircraftDataDetails').reset();
     this.wizardStep.isSummaryDisplayedSubject.next(false);
     this.uploadedFile = event.target.files[0];
-    const fileControl = new FormControl(this.uploadedFile, [
-      fileExtensionValidator(['csv'], ['text/csv', 'application/vnd.ms-excel'], 'Only CSV files are accepted'),
-      maxFileSizeValidator(20, 'Maximum allowed file size is 20 MB'),
-      fileNameLengthValidator(100, 'Maximum allowed file name length is 100 characters'),
-      emptyFileValidator('Empty file uploaded'),
-    ]);
+    this.fileControl.setValue(this.uploadedFile);
+    this.fileControl.updateValueAndValidity({ emitEvent: true, onlySelf: false });
 
-    this.errorList = [];
-
-    if (fileControl.errors) {
-      this.parsedData = null;
-      for (const errorKey in fileControl.errors) {
-        if (Object.prototype.hasOwnProperty.call(fileControl.errors, errorKey)) {
-          this.errorList.push(fileControl.errors[errorKey]);
-        }
-      }
-    }
-
-    if (this.errorList.length === 0) {
-      Papa.parse(this.uploadedFile, {
-        skipEmptyLines: true,
-        complete: (result) => {
-          this.processCSVData(result.data);
-        },
-      });
-      this.alreadyUploaded = false;
-    }
     event.target.value = '';
   }
 
@@ -135,16 +144,16 @@ export class AircraftTypesDataPageComponent implements OnInit {
     }
 
     let tempData = data.map((row) => {
-      const parsedStartDate = parse(row[4], 'dd/MM/yyyy', new Date());
-      const parsedEndDate = parse(row[5], 'dd/MM/yyyy', new Date());
+      const parsedStartDate = parse(row[4].replaceAll('-', '/'), 'dd/MM/yyyy', new Date());
+      const parsedEndDate = parse(row[5].replaceAll('-', '/'), 'dd/MM/yyyy', new Date());
 
       return {
         aircraftTypeDesignator: row[0],
         subType: row[1],
         registrationNumber: row[2],
         ownerOrLessor: row[3],
-        startDate: isValid(parsedStartDate) ? format(parsedStartDate, 'yyyy-MM-dd') : row[4],
-        endDate: isValid(parsedEndDate) ? format(parsedEndDate, 'yyyy-MM-dd') : row[5],
+        startDate: isValid(parsedStartDate) ? format(parsedStartDate, 'yyyy-MM-dd') : row[4].replaceAll('-', '/'),
+        endDate: isValid(parsedEndDate) ? format(parsedEndDate, 'yyyy-MM-dd') : row[5].replaceAll('-', '/'),
       } as AviationAerAircraftDataDetails;
     });
 
@@ -178,5 +187,36 @@ export class AircraftTypesDataPageComponent implements OnInit {
         this.formProvider.getAircraftDataDetailsControl().setValue(tempData);
         this.formProvider.getAircraftDataDetailsControl().updateValueAndValidity();
       });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    if (this.statusSubscription) {
+      this.statusSubscription.unsubscribe();
+    }
+  }
+
+  private processControlStatus(): void {
+    this.errorList = [];
+    if (this.fileControl.errors) {
+      this.parsedData = null;
+      for (const errorKey in this.fileControl.errors) {
+        if (Object.hasOwn(this.fileControl.errors, errorKey)) {
+          this.errorList.push(this.fileControl.errors[errorKey]);
+        }
+      }
+      this.cd.markForCheck();
+    }
+    if (this.errorList.length === 0 && this.uploadedFile) {
+      Papa.parse(this.uploadedFile, {
+        skipEmptyLines: true,
+        complete: (result) => {
+          this.processCSVData(result.data);
+        },
+      });
+      this.alreadyUploaded = false;
+    }
   }
 }

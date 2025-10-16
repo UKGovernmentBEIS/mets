@@ -15,6 +15,8 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.validation.ALRCreationValidationService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferAApplicationRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.TransferParty;
@@ -27,6 +29,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +46,10 @@ class PermitTransferAValidatorServiceTest {
 
     @Mock
     private InstallationAccountQueryService installationAccountQueryService;
-    
+
+    @Mock
+    private ALRCreationValidationService alrCreationValidationService;
+
     @Test
     void validateTaskPayload_whenAttachmentsMissing_thenException() {
         
@@ -88,11 +94,39 @@ class PermitTransferAValidatorServiceTest {
 
         when(installationAccountQueryService.getByActiveTransferCode("123456789"))
             .thenReturn(Optional.of(InstallationAccountDTO.builder().id(23L).build()));
+        when(alrCreationValidationService.validateAccountEmitterTypeAndFreeAllocations(any())).thenReturn(RequestCreateValidationResult.builder().valid(false).build());
         when(requestRepository.findByAccountIdAndTypeAndStatus(23L, RequestType.PERMIT_TRANSFER_B, RequestStatus.IN_PROGRESS))
             .thenReturn(List.of(Request.builder().id("request id").build()));
         
         final BusinessException businessException = assertThrows(BusinessException.class, () ->
             validator.validatePermitTransferA(requestTask));
+
+        assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());
+    }
+
+    @Test
+    void validatePermitTransferA_whenExpectsALRButDoesntExist_thenException() {
+
+        final RequestTask requestTask = RequestTask.builder()
+                .request(Request.builder().accountId(1L).build())
+                .payload(PermitTransferAApplicationRequestTaskPayload.builder()
+                        .permitTransferDetails(
+                                PermitTransferDetails.builder()
+                                        .reason("the reason")
+                                        .payer(TransferParty.TRANSFERER)
+                                        .transferCode("123456789")
+                                        .transferDate(LocalDate.of(2022, 1, 1))
+                                        .build()
+                        )
+                        .build())
+                .build();
+
+        when(installationAccountQueryService.getByActiveTransferCode("123456789"))
+                .thenReturn(Optional.of(InstallationAccountDTO.builder().id(23L).build()));
+        when(alrCreationValidationService.validateAccountEmitterTypeAndFreeAllocations(any())).thenReturn(RequestCreateValidationResult.builder().valid(true).build());
+
+        final BusinessException businessException = assertThrows(BusinessException.class, () ->
+                validator.validatePermitTransferA(requestTask));
 
         assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());
     }

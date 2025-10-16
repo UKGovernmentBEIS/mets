@@ -45,7 +45,22 @@ class RequestQueryServiceTest {
 
     @Mock
     private RequestDetailsRepository requestDetailsRepository;
-    
+
+
+    @Test
+    void findRequestsByAccountIdAndType() {
+        Long accountId = 1L;
+        Request request1 = Request.builder().id("1").type(RequestType.PERMIT_REISSUE).status(RequestStatus.IN_PROGRESS).build();
+        Request request2 = Request.builder().id("W").type(RequestType.PERMIT_REISSUE).status(RequestStatus.COMPLETED).build();
+
+        when(requestRepository.findByAccountIdAndType(accountId, RequestType.PERMIT_REISSUE)).thenReturn(List.of(request1, request2));
+
+        List<Request> result = service.findRequestsByAccountIdAndType(accountId, RequestType.PERMIT_REISSUE);
+
+        assertThat(result).containsExactlyInAnyOrder(request1, request2);
+        verify(requestRepository, times(1)).findByAccountIdAndType(accountId, RequestType.PERMIT_REISSUE);
+    }
+
     @Test
     void findInProgressRequestsByAccount() {
         Long accountId = 1L;

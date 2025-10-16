@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -8,7 +8,6 @@ import { VerificationSubmitContainerComponent } from '@tasks/aer/verification-su
 import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { AerModule } from '../aer.module';
 
@@ -29,80 +28,160 @@ describe('VerificationSubmitContainerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [KeycloakService],
-      imports: [SharedModule, RouterTestingModule, TaskSharedModule, AerModule],
+      imports: [SharedModule, TaskSharedModule, AerModule],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
-  beforeEach(() => {
-    store = TestBed.inject(CommonTasksStore);
-    jest.spyOn(store, 'storeInitialized$', 'get').mockReturnValue(of(true));
-    jest.spyOn(store, 'requestMetadata$', 'get').mockReturnValue(
-      of({
-        type: 'AER',
-        year: '2022',
-      }),
-    );
-    jest.spyOn(store, 'requestTaskItem$', 'get').mockReturnValue(
-      of({
-        requestTask: {
-          id: 1,
-          type: 'AER_APPLICATION_VERIFICATION_SUBMIT',
-          payload: {
-            payloadType: 'AER_APPLICATION_SUBMIT_PAYLOAD',
-            aer: {
-              monitoringApproachEmissions: {
-                CALCULATION_CO2: {
-                  type: 'CALCULATION_CO2',
+  describe('Submit Non GHGE', () => {
+    beforeEach(() => {
+      store = TestBed.inject(CommonTasksStore);
+      jest.spyOn(store, 'storeInitialized$', 'get').mockReturnValue(of(true));
+      jest.spyOn(store, 'requestMetadata$', 'get').mockReturnValue(
+        of({
+          type: 'AER',
+          year: '2022',
+        }),
+      );
+      jest.spyOn(store, 'requestTaskItem$', 'get').mockReturnValue(
+        of({
+          requestTask: {
+            id: 1,
+            type: 'AER_APPLICATION_VERIFICATION_SUBMIT',
+            payload: {
+              payloadType: 'AER_APPLICATION_SUBMIT_PAYLOAD',
+              aer: {
+                monitoringApproachEmissions: {
+                  CALCULATION_CO2: {
+                    type: 'CALCULATION_CO2',
+                  },
+                  MEASUREMENT_CO2: null,
                 },
-                MEASUREMENT_CO2: null,
+              },
+              aerSectionsCompleted: {
+                emissionSources: [true],
+                sourceStreams: [true],
+                monitoringApproachEmissions: [false],
               },
             },
-            aerSectionsCompleted: {
-              emissionSources: [true],
-              sourceStreams: [true],
-              monitoringApproachEmissions: [false],
+          },
+          allowedRequestTaskActions: [],
+        }),
+      );
+
+      fixture = TestBed.createComponent(VerificationSubmitContainerComponent);
+      component = fixture.componentInstance;
+      page = new Page(fixture);
+      fixture.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should render the content', () => {
+      expect(page.heading).toEqual('2022 emissions report');
+      expect(page.sections.map((el) => el.textContent.trim())).toEqual([
+        'Installation details',
+        'Fuels and equipment inventory',
+        'Calculation of CO2 emissions',
+        'Measurement of CO2 emissions',
+        'Emissions summary',
+        'Additional information',
+
+        'Verifier details',
+        'Opinion statement',
+        'Compliance with ETS rules',
+        'Compliance with monitoring and reporting principles',
+        'Overall decision',
+
+        'Uncorrected misstatements',
+        'Uncorrected non-conformities',
+        'Uncorrected non-compliances',
+        'Recommended improvements',
+        'Methodologies to close data gaps',
+        'Materiality level and reference documents',
+        'Summary of conditions, changes, clarifications and variations',
+        'Send report to operator',
+      ]);
+    });
+  });
+
+  describe('Submit GHGE with non hidden ALR', () => {
+    beforeEach(() => {
+      store = TestBed.inject(CommonTasksStore);
+      jest.spyOn(store, 'storeInitialized$', 'get').mockReturnValue(of(true));
+      jest.spyOn(store, 'requestMetadata$', 'get').mockReturnValue(
+        of({
+          type: 'AER',
+          year: '2022',
+        }),
+      );
+      jest.spyOn(store, 'requestTaskItem$', 'get').mockReturnValue(
+        of({
+          requestTask: {
+            id: 1,
+            type: 'AER_APPLICATION_VERIFICATION_SUBMIT',
+            payload: {
+              permitOriginatedData: { permitType: 'GHGE' },
+              isPostALRSectionRemoval: null,
+              payloadType: 'AER_APPLICATION_SUBMIT_PAYLOAD',
+              aer: {
+                monitoringApproachEmissions: {
+                  CALCULATION_CO2: {
+                    type: 'CALCULATION_CO2',
+                  },
+                  MEASUREMENT_CO2: null,
+                },
+              },
+              aerSectionsCompleted: {
+                emissionSources: [true],
+                sourceStreams: [true],
+                monitoringApproachEmissions: [false],
+              },
             },
           },
-        },
-        allowedRequestTaskActions: [],
-      }),
-    );
+          allowedRequestTaskActions: [],
+        }),
+      );
 
-    fixture = TestBed.createComponent(VerificationSubmitContainerComponent);
-    component = fixture.componentInstance;
-    page = new Page(fixture);
-    fixture.detectChanges();
-  });
+      fixture = TestBed.createComponent(VerificationSubmitContainerComponent);
+      component = fixture.componentInstance;
+      page = new Page(fixture);
+      fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
 
-  it('should render the content', () => {
-    expect(page.heading).toEqual('2022 emissions report');
-    expect(page.sections.map((el) => el.textContent.trim())).toEqual([
-      'Installation details',
-      'Fuels and equipment inventory',
-      'Calculation of CO2 emissions',
-      'Measurement of CO2 emissions',
-      'Emissions summary',
-      'Additional information',
+    it('should render the content', () => {
+      expect(page.heading).toEqual('2022 emissions report');
+      expect(page.sections.map((el) => el.textContent.trim())).toEqual([
+        'Installation details',
+        'Fuels and equipment inventory',
+        'Calculation of CO2 emissions',
+        'Measurement of CO2 emissions',
+        'Emissions summary',
+        'Activity level report',
+        'Additional information',
 
-      'Verifier details',
-      'Opinion statement',
-      'Compliance with ETS rules',
-      'Compliance with monitoring and reporting principles',
-      'Overall decision',
+        'Verifier details',
+        'Opinion statement',
+        'Compliance with ETS rules',
+        'Compliance with monitoring and reporting principles',
+        'Verification report of the activity level report',
+        'Overall decision',
 
-      'Uncorrected misstatements',
-      'Uncorrected non-conformities',
-      'Uncorrected non-compliances',
-      'Recommended improvements',
-      'Methodologies to close data gaps',
-      'Materiality level and reference documents',
-      'Summary of conditions, changes, clarifications and variations',
-      'Send report to operator',
-    ]);
+        'Uncorrected misstatements',
+        'Uncorrected non-conformities',
+        'Uncorrected non-compliances',
+        'Recommended improvements',
+        'Methodologies to close data gaps',
+        'Materiality level and reference documents',
+        'Summary of conditions, changes, clarifications and variations',
+        'Send report to operator',
+      ]);
+    });
   });
 });

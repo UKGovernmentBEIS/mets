@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.validation.ALRCreationValidationService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderReviewDecision;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderReviewDecisionType;
@@ -13,6 +15,12 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain
 @Validated
 @Service
 class PermitSurrenderReviewDeterminationGrantHandler implements PermitSurrenderReviewDeterminationHandler<PermitSurrenderReviewDeterminationGrant> {
+
+    private final ALRCreationValidationService alrCreationValidationService;
+
+    PermitSurrenderReviewDeterminationGrantHandler(ALRCreationValidationService alrCreationValidationService) {
+        this.alrCreationValidationService = alrCreationValidationService;
+    }
 
     public void handleDeterminationUponDecision(PermitSurrenderApplicationReviewRequestTaskPayload taskPayload,
             PermitSurrenderReviewDecision reviewDecision) {
@@ -30,7 +38,11 @@ class PermitSurrenderReviewDeterminationGrantHandler implements PermitSurrenderR
     }
     
     public void validateReview(PermitSurrenderReviewDecision reviewDecision, PermitSurrenderReviewDeterminationGrant reviewDetermination) {
-        if(reviewDecision.getType() != PermitSurrenderReviewDecisionType.ACCEPTED) {
+        RequestCreateValidationResult alrValidationResult = alrCreationValidationService.validateAccountEmitterTypeAndFreeAllocations(reviewDetermination.getAccountId());
+        boolean hasALR = alrValidationResult.isValid();
+        boolean hasALRproperties = reviewDetermination.getAlrRequired() != null || reviewDetermination.getAlrReportDate() != null;
+
+        if(reviewDecision.getType() != PermitSurrenderReviewDecisionType.ACCEPTED || (hasALR && !hasALRproperties) || (!hasALR && hasALRproperties)) {
             throw new BusinessException(ErrorCode.FORM_VALIDATION);
         }
     }

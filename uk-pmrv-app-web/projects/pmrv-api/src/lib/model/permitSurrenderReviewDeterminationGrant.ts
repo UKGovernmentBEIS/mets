@@ -17,6 +17,8 @@ export interface PermitSurrenderReviewDeterminationGrant {
   noticeDate: string;
   reportRequired: boolean;
   reportDate?: string;
+  alrRequired?: boolean;
+  alrReportDate?: string;
   allowancesSurrenderRequired: boolean;
   allowancesSurrenderDate?: string;
 }

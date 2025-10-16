@@ -68,5 +68,11 @@ export class SubmittedComponent {
     map((payload) => payload?.permitOriginatedData?.permitType === 'GHGE'),
   );
 
+  hasActivityLevelReport$ = this.payload$.pipe(map((payload) => !!payload?.aer?.activityLevelReport));
+
+  hasVerifiedActivityLevelReport$ = this.payload$.pipe(
+    map((payload) => !!payload?.verificationReport?.activityLevelReport),
+  );
+
   constructor(private readonly aerService: AerService) {}
 }
