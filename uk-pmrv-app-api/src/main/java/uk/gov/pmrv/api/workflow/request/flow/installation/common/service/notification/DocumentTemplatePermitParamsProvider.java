@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.common.service.notification;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -69,7 +70,17 @@ public class DocumentTemplatePermitParamsProvider {
                 .submissionDate(r.getSubmissionDate())
                 .metadata(PermitVariationRequestMetadata
                         .builder()
-                        .logChanges(((PermitBatchReissueChangesDetails) (((ReissueRequestMetadata) r.getMetadata()).getChangesDetails())).getChangesSummary())
+                        .logChanges(
+                            Optional.of(r)
+                                .map(Request::getMetadata)
+                                .filter(metadata -> metadata instanceof ReissueRequestMetadata)
+                                .map(metadata -> (ReissueRequestMetadata) metadata)
+                                .map(ReissueRequestMetadata::getChangesDetails)
+                                .filter(changesDetails -> changesDetails instanceof PermitBatchReissueChangesDetails)
+                                .map(changesDetails -> (PermitBatchReissueChangesDetails) changesDetails)
+                                .map(PermitBatchReissueChangesDetails::getChangesSummary)
+                                .orElse(null)
+                        )
                         .build())
                 .build()).toList();
 

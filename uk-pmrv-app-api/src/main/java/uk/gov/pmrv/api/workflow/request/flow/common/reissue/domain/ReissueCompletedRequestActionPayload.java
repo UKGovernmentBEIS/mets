@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -18,6 +19,7 @@ import lombok.experimental.SuperBuilder;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueChangesDetails;
+import uk.gov.pmrv.api.workflow.request.flow.common.reissue.mapper.BatchReissueChangesDetailsDeserializer;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueChangesDetails;
 
 @Data
@@ -25,7 +27,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.P
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class ReissueCompletedRequestActionPayload extends RequestActionPayload {
+@JsonDeserialize(using = BatchReissueChangesDetailsDeserializer.class)
+public class  ReissueCompletedRequestActionPayload extends RequestActionPayload {
 
     @Valid
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "payloadType", visible = true)

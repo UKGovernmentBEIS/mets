@@ -122,6 +122,7 @@ describe('Report Component', () => {
       ...store.getState(),
       requestTaskId: mockTaskState.requestTaskId,
       isEditable: true,
+      accountId: 1,
       permitRevocation: {
         reason: 'some reason',
         activitiesStopped: false,

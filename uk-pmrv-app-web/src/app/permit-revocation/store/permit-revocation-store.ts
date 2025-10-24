@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { distinctUntilChanged, map, Observable, switchMap, tap } from 'rxjs';
+import { distinctUntilChanged, filter, map, Observable, switchMap, tap } from 'rxjs';
 
 import { Store } from '@core/store/store';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
@@ -55,7 +55,10 @@ export class PermitRevocationStore extends Store<PermitRevocationState> {
   }
 
   get accountId$() {
-    return this.pipe(map((state) => state.accountId));
+    return this.pipe(
+      map((state) => state.accountId),
+      filter((id) => id !== null && id !== undefined),
+    );
   }
 
   private readonly installationAccount$ = this.accountId$.pipe(

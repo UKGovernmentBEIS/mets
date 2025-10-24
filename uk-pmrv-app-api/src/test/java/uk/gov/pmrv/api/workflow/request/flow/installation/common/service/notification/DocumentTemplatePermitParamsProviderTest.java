@@ -449,7 +449,7 @@ class DocumentTemplatePermitParamsProviderTest {
         Request pr2 = Request
                 .builder()
                 .type(RequestType.PERMIT_REISSUE)
-                .submissionDate(sd)
+                .submissionDate(sd.minusMonths(1))
                 .id("PR2")
                 .metadata(ReissueRequestMetadata
                         .builder()
@@ -459,6 +459,14 @@ class DocumentTemplatePermitParamsProviderTest {
                                         .build())
                         .build())
                 .build();
+
+        Request pr3 = Request
+            .builder()
+            .type(RequestType.PERMIT_REISSUE)
+            .submissionDate(sd)
+            .id("PR3")
+            .metadata(null) // assure it can handle null metadata for old reissue requests
+            .build();
 
         List<PermitVariationRequestInfo> reissueRequestsInfoList = new ArrayList<>();
         reissueRequestsInfoList.add(PermitVariationRequestInfo
@@ -476,12 +484,23 @@ class DocumentTemplatePermitParamsProviderTest {
                 .builder()
                 .id("PR2")
                 .changeType("Batch Variation")
-                .submissionDate(sd)
+                .submissionDate(sd.minusMonths(1))
                 .metadata(PermitVariationRequestMetadata
                         .builder()
                         .logChanges("Summary 2")
                         .build())
                 .build());
+
+        reissueRequestsInfoList.add(PermitVariationRequestInfo
+            .builder()
+            .id("PR3")
+            .changeType("Batch Variation")
+            .submissionDate(sd)
+            .metadata(PermitVariationRequestMetadata
+                .builder()
+                .logChanges(null)
+                .build())
+            .build());
 
         List<PermitVariationRequestInfo> allRequestsInfoList = new ArrayList<>();
 
@@ -489,7 +508,7 @@ class DocumentTemplatePermitParamsProviderTest {
         allRequestsInfoList.addAll(reissueRequestsInfoList);
 
         when(commonParamsProvider.constructCommonTemplateParams(request, signatory)).thenReturn(commonTemplateParams);
-        when(requestQueryService.findRequestsByAccountIdAndType(accountId, RequestType.PERMIT_REISSUE)).thenReturn(List.of(pr1, pr2));
+        when(requestQueryService.findRequestsByAccountIdAndType(accountId, RequestType.PERMIT_REISSUE)).thenReturn(List.of(pr1, pr2, pr3));
 
         //invoke
         TemplateParams result = provider.constructTemplateParams(sourceParams);

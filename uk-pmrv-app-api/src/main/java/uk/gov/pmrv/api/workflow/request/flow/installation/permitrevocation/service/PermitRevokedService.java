@@ -43,7 +43,7 @@ public class PermitRevokedService {
                     DateUtils.atEndOfDay(revocation.getAnnualEmissionsReportDate()));
         }
 
-        variables.put(BpmnProcessConstants.ALR_REQUIRED, revocation.getAlrRequired());
+        variables.put(BpmnProcessConstants.ALR_REQUIRED, Boolean.TRUE.equals(revocation.getAlrRequired()));
 
         if(Boolean.TRUE.equals(revocation.getAlrRequired())) {
             variables.put(BpmnProcessConstants.ALR_FINAL, Boolean.TRUE);

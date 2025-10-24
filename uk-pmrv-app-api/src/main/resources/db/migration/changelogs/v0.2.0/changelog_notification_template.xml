@@ -4858,4 +4858,26 @@ Thank you.$$
             </sql>
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_update_alr_templates_content_accept_all_cas" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="type" value="ALR_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Approval of Allocation (with corrections)_EA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="type" value="ALR_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Approval of Allocation (with corrections)_NI.docx" />
+        </customChange>
+    </changeSet>
+    <changeSet id="0_2_0_update_alr_templates_content_reject_all_cas" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="type" value="ALR_REJECTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of ALR Rejection of Allocation_EA.docx" />
+        </customChange>
+    </changeSet>
 </databaseChangeLog>

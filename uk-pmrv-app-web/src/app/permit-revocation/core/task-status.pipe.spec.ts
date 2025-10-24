@@ -68,12 +68,11 @@ describe('TaskStatusPipe', () => {
   });
 
   it('should resolve apply status', async () => {
-    await expect(firstValueFrom(pipe.transform('REVOCATION_APPLY'))).resolves.toEqual('not started');
-
     store.setState({
-      ...store.getState(),
+      ...mockTaskState,
       permitRevocation: undefined,
     });
+
     await expect(firstValueFrom(pipe.transform('REVOCATION_APPLY'))).resolves.toEqual('not started');
   });
 

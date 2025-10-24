@@ -70,7 +70,7 @@ public class PermitVariationPreviewPermitDocumentBaseService {
         final PermitVariationRequestMetadata requestMetadata = (PermitVariationRequestMetadata) request.getMetadata();
         final PermitVariationRequestInfo variationCurrentRequest = PermitVariationRequestInfo.builder()
             .id(request.getId())
-            .submissionDate(request.getSubmissionDate())
+            .submissionDate(request.getSubmissionDate() != null ? request.getSubmissionDate() : dateService.getLocalDateTime()) // in previews submission date is null. Put current date as if it was just submitted
             .endDate(dateService.getLocalDateTime())
             .metadata(PermitVariationRequestMetadata.builder()
                 .type(RequestMetadataType.PERMIT_VARIATION)

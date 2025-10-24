@@ -85,7 +85,7 @@ public class PermitSurrenderReviewGrantedService {
                     DateUtils.atEndOfDay(reviewDeterminationGrant.getReportDate()));
         }
 
-        variables.put(BpmnProcessConstants.ALR_REQUIRED, reviewDeterminationGrant.getAlrRequired());
+        variables.put(BpmnProcessConstants.ALR_REQUIRED, Boolean.TRUE.equals(reviewDeterminationGrant.getAlrRequired()));
 
         if(Boolean.TRUE.equals(reviewDeterminationGrant.getAlrRequired())) {
             variables.put(BpmnProcessConstants.ALR_FINAL, Boolean.TRUE);
