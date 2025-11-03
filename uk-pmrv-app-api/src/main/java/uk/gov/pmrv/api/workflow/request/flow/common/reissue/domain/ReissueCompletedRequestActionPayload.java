@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueChangesDetails;
-import uk.gov.pmrv.api.workflow.request.flow.common.reissue.mapper.BatchReissueChangesDetailsDeserializer;
+import uk.gov.pmrv.api.workflow.request.flow.common.reissue.mapper.ReissueChangesDetailsDeserializer;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueChangesDetails;
 
 @Data
@@ -27,8 +27,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.P
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@JsonDeserialize(using = BatchReissueChangesDetailsDeserializer.class)
-public class  ReissueCompletedRequestActionPayload extends RequestActionPayload {
+@JsonDeserialize(using = ReissueChangesDetailsDeserializer.class)
+public class ReissueCompletedRequestActionPayload extends RequestActionPayload {
 
     @Valid
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "payloadType", visible = true)

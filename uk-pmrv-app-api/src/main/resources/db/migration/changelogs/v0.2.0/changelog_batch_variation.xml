@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.2.0/changelog_aviation_rpt_airports.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_0_batch_variation_changes_initialization" author="dridakisc@unisystems.gr">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">
+                SELECT CASE WHEN EXISTS (
+                    SELECT 1 FROM REQUEST_ACTION
+                    WHERE TYPE IN ('BATCH_REISSUE_SUBMITTED','BATCH_REISSUE_COMPLETED','REISSUE_COMPLETED')
+                      AND NOT jsonb_exists(payload, 'changesDetails')
+                ) THEN 1 ELSE 0 END;
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            UPDATE REQUEST_ACTION
+            SET payload = payload || jsonb_build_object('changesDetails', NULL)
+            WHERE TYPE IN ('BATCH_REISSUE_SUBMITTED','BATCH_REISSUE_COMPLETED','REISSUE_COMPLETED')
+              AND NOT jsonb_exists(payload, 'changesDetails');
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE REQUEST_ACTION
+                SET payload = payload - 'changesDetails'
+                WHERE TYPE IN ('BATCH_REISSUE_SUBMITTED','BATCH_REISSUE_COMPLETED','REISSUE_COMPLETED')
+                  AND jsonb_exists(payload, 'changesDetails')
+                  AND ((payload->'changesDetails') IS NULL OR (payload->'changesDetails') = 'null'::jsonb);
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

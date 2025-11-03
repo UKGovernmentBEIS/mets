@@ -99,11 +99,12 @@ class PermitVariationRegulatorLedPeerReviewPreviewPermitDocumentServiceTest {
         final int consolidationNumber = 2;
         final int newConsolidationNumber = consolidationNumber + 1;
         final List<PermitVariationRequestInfo> variationRequestInfos = List.of(PermitVariationRequestInfo.builder()
+            .changeType("AEM Variation")
             .submissionDate(submissionDate)
             .endDate(now)
             .build());
         final PermitVariationRequestInfo variationRequestInfo =
-            PermitVariationRequestInfo.builder().endDate(now).submissionDate(submissionDate).metadata(
+            PermitVariationRequestInfo.builder().changeType("AEM Variation").endDate(now).submissionDate(submissionDate).metadata(
                 PermitVariationRequestMetadata.builder()
                     .type(RequestMetadataType.PERMIT_VARIATION)
                     .rfiResponseDates(rfiResponseDates)

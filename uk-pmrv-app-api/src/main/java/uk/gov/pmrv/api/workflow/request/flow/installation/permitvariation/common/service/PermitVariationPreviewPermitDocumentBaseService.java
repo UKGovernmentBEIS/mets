@@ -70,8 +70,9 @@ public class PermitVariationPreviewPermitDocumentBaseService {
         final PermitVariationRequestMetadata requestMetadata = (PermitVariationRequestMetadata) request.getMetadata();
         final PermitVariationRequestInfo variationCurrentRequest = PermitVariationRequestInfo.builder()
             .id(request.getId())
+            .changeType("AEM Variation")
             .submissionDate(request.getSubmissionDate() != null ? request.getSubmissionDate() : dateService.getLocalDateTime()) // in previews submission date is null. Put current date as if it was just submitted
-            .endDate(dateService.getLocalDateTime())
+            .endDate(dateService.getLocalDateTime()) // in previews end date is null. Put current date as if it was just closed
             .metadata(PermitVariationRequestMetadata.builder()
                 .type(RequestMetadataType.PERMIT_VARIATION)
                 .rfiResponseDates(requestMetadata.getRfiResponseDates())

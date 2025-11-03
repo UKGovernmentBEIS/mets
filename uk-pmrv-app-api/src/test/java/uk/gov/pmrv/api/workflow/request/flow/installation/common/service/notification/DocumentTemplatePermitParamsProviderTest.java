@@ -436,6 +436,7 @@ class DocumentTemplatePermitParamsProviderTest {
                 .builder()
                 .type(RequestType.PERMIT_REISSUE)
                 .submissionDate(sd.minusMonths(10))
+                .endDate(sd.minusMonths(10))
                 .id("PR1")
                 .metadata(ReissueRequestMetadata
                         .builder()
@@ -450,6 +451,7 @@ class DocumentTemplatePermitParamsProviderTest {
                 .builder()
                 .type(RequestType.PERMIT_REISSUE)
                 .submissionDate(sd.minusMonths(1))
+                .endDate(sd.minusMonths(1))
                 .id("PR2")
                 .metadata(ReissueRequestMetadata
                         .builder()
@@ -464,6 +466,7 @@ class DocumentTemplatePermitParamsProviderTest {
             .builder()
             .type(RequestType.PERMIT_REISSUE)
             .submissionDate(sd)
+            .endDate(sd)
             .id("PR3")
             .metadata(null) // assure it can handle null metadata for old reissue requests
             .build();
@@ -474,6 +477,7 @@ class DocumentTemplatePermitParamsProviderTest {
                 .id("PR1")
                 .changeType("Batch Variation")
                 .submissionDate(sd.minusMonths(10))
+                .endDate(sd.minusMonths(10))
                 .metadata(PermitVariationRequestMetadata
                         .builder()
                         .logChanges("Summary 1")
@@ -485,6 +489,7 @@ class DocumentTemplatePermitParamsProviderTest {
                 .id("PR2")
                 .changeType("Batch Variation")
                 .submissionDate(sd.minusMonths(1))
+                .endDate(sd.minusMonths(1))
                 .metadata(PermitVariationRequestMetadata
                         .builder()
                         .logChanges("Summary 2")
@@ -496,6 +501,7 @@ class DocumentTemplatePermitParamsProviderTest {
             .id("PR3")
             .changeType("Batch Variation")
             .submissionDate(sd)
+            .endDate(sd)
             .metadata(PermitVariationRequestMetadata
                 .builder()
                 .logChanges(null)
@@ -504,8 +510,8 @@ class DocumentTemplatePermitParamsProviderTest {
 
         List<PermitVariationRequestInfo> allRequestsInfoList = new ArrayList<>();
 
-        allRequestsInfoList.addAll(variationRequestInfoList);
         allRequestsInfoList.addAll(reissueRequestsInfoList);
+        allRequestsInfoList.addAll(variationRequestInfoList);
 
         when(commonParamsProvider.constructCommonTemplateParams(request, signatory)).thenReturn(commonTemplateParams);
         when(requestQueryService.findRequestsByAccountIdAndType(accountId, RequestType.PERMIT_REISSUE)).thenReturn(List.of(pr1, pr2, pr3));

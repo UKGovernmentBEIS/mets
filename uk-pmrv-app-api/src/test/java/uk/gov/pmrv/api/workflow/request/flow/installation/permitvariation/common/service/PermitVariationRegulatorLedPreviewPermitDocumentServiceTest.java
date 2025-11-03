@@ -107,7 +107,7 @@ class PermitVariationRegulatorLedPreviewPermitDocumentServiceTest {
             .endDate(now)
             .build());
         final PermitVariationRequestInfo variationRequestInfo =
-            PermitVariationRequestInfo.builder().endDate(now).submissionDate(submissionDate).metadata(
+            PermitVariationRequestInfo.builder().endDate(now).submissionDate(submissionDate).changeType("AEM Variation").metadata(
                 PermitVariationRequestMetadata.builder()
                     .type(RequestMetadataType.PERMIT_VARIATION)
                     .rfiResponseDates(rfiResponseDates)

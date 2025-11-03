@@ -1,5 +1,7 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.common.service.notification;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +34,6 @@ import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueReques
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueChangesDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestInfo;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestInfoSubmissionDateComparator;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestMetadata;
 
 import java.util.ArrayList;
@@ -48,9 +49,10 @@ public class DocumentTemplatePermitParamsProvider {
 
     private final InstallationDocumentTemplateCommonParamsProvider commonParamsProvider;
     private final RequestQueryService requestQueryService;
+    private final Comparator<PermitVariationRequestInfo> comparator = Comparator.comparing(PermitVariationRequestInfo::getEndDate, Comparator.nullsLast(LocalDateTime::compareTo))
+        .thenComparing(PermitVariationRequestInfo::getSubmissionDate, Comparator.nullsLast(LocalDateTime::compareTo));
 
     public TemplateParams constructTemplateParams(final DocumentTemplatePermitParamsSourceData sourceData) {
-
         final Request request = sourceData.getRequest();
         final String signatory = sourceData.getSignatory();
         final TemplateParams templateParams = commonParamsProvider.constructCommonTemplateParams(request, signatory);
@@ -68,6 +70,7 @@ public class DocumentTemplatePermitParamsProvider {
                 .id(r.getId())
                 .changeType("Batch Variation")
                 .submissionDate(r.getSubmissionDate())
+                .endDate(r.getEndDate())
                 .metadata(PermitVariationRequestMetadata
                         .builder()
                         .logChanges(
@@ -87,7 +90,7 @@ public class DocumentTemplatePermitParamsProvider {
         allPermitChangesRequestInfoList.addAll(variationRequestInfoList);
         allPermitChangesRequestInfoList.addAll(reissueRequestsInfoList);
 
-        allPermitChangesRequestInfoList.sort(new PermitVariationRequestInfoSubmissionDateComparator());
+        allPermitChangesRequestInfoList.sort(comparator);
 
         final Map<String, List<ReferenceSource>> referenceSources =
             this.constructReferenceSources(permitContainer.getPermit());
