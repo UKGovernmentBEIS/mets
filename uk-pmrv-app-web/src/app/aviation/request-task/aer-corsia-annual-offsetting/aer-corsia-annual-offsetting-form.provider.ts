@@ -60,7 +60,6 @@ export class AnnualOffsettingRequirementsFormProvider
           ]),
           sectorGrowth: new FormControl(null as number, [
             GovukValidators.required('Enter Sector growth value'),
-            GovukValidators.maxDecimalsValidator(2),
             GovukValidators.max(maxValue, `Sector growth value must be less than ${maxValue}`),
           ]),
           calculatedAnnualOffsetting: new FormControl(null as number, [

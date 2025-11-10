@@ -433,16 +433,30 @@ export class AggregatedConsumptionFlightDataFormProvider
               };
             }
 
-            if (notUkEtsDepartureAerodromeCodeRows.length > 0 || notUkEtsArrivalAerodromeCodeRows.length > 0) {
+            if (
+              notUkEtsDepartureAerodromeCodeRows.length > 0 ||
+              notUkEtsArrivalAerodromeCodeRows.length > 0 ||
+              notUkEtsDepartureArrivalAerodromeCodesPairRows.length > 0
+            ) {
               const departureColumns = notUkEtsDepartureAerodromeCodeRows.length > 0 ? ['airportFrom'] : [];
               const arrivalColumns = notUkEtsArrivalAerodromeCodeRows.length > 0 ? ['airportTo'] : [];
-              const rows = [...notUkEtsDepartureAerodromeCodeRows, ...notUkEtsArrivalAerodromeCodeRows];
+              const departureArrivalColumns =
+                notUkEtsDepartureArrivalAerodromeCodesPairRows.length > 0 ? ['airportTo'] : [];
+              const rows = [
+                ...notUkEtsDepartureAerodromeCodeRows,
+                ...notUkEtsArrivalAerodromeCodeRows,
+                ...notUkEtsDepartureArrivalAerodromeCodesPairRows,
+              ];
 
               errors['notUkEtsAerodromeCode'] = {
                 rows: Array.from(new Set(rows.map((a) => a.rowIndex))).map((rowIndex) => {
                   return rows.find((a) => a.rowIndex === rowIndex);
                 }),
-                columns: this.mapFieldsToColumnNames([...departureColumns, ...arrivalColumns]),
+                columns: this.mapFieldsToColumnNames([
+                  ...departureColumns,
+                  ...arrivalColumns,
+                  ...departureArrivalColumns,
+                ]),
                 message: 'Route outside the scope of UK ETS',
               };
             }
@@ -452,14 +466,6 @@ export class AggregatedConsumptionFlightDataFormProvider
                 rows: invalidArrivalAerodromeCodeRows,
                 columns: this.mapFieldsToColumnNames(['airportTo']),
                 message: 'One or more aerodrome of arrival ICAO codes are invalid',
-              };
-            }
-
-            if (notUkEtsDepartureArrivalAerodromeCodesPairRows.length > 0) {
-              errors['notUkEtsDepartureArrivalAerodromeCodesPair'] = {
-                rows: notUkEtsDepartureArrivalAerodromeCodesPairRows,
-                columns: this.mapFieldsToColumnNames(['airportTo']),
-                message: 'Aerodrome of arrival codes must be within the scope of UK ETS',
               };
             }
 

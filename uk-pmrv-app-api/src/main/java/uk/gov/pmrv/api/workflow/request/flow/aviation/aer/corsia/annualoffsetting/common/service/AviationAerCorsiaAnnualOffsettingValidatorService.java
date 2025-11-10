@@ -20,8 +20,11 @@ public class AviationAerCorsiaAnnualOffsettingValidatorService {
     private static final double PERCENTAGE = 100.0;
 
     public void validateAviationAerCorsiaAnnualOffsetting(@NotNull @Valid AviationAerCorsiaAnnualOffsetting aviationAerCorsiaAnnualOffsetting) {
-        BigDecimal expectedValue = BigDecimal.valueOf(aviationAerCorsiaAnnualOffsetting.getSectorGrowth()
-                / PERCENTAGE * aviationAerCorsiaAnnualOffsetting.getTotalChapter().doubleValue()).setScale(0, RoundingMode.HALF_UP);
+        BigDecimal sectorGrowth = aviationAerCorsiaAnnualOffsetting.getSectorGrowth();
+        BigDecimal percentage = BigDecimal.valueOf(PERCENTAGE);
+        BigDecimal totalChapter = BigDecimal.valueOf(aviationAerCorsiaAnnualOffsetting.getTotalChapter());
+
+        BigDecimal expectedValue = sectorGrowth.multiply(totalChapter).divide(percentage, 0, RoundingMode.HALF_UP);
 
         boolean result = Math.abs(aviationAerCorsiaAnnualOffsetting.getCalculatedAnnualOffsetting() - expectedValue.floatValue()) < EPSILON;
 

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import java.math.BigDecimal;
 import java.time.Year;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ class AviationAerCorsiaAnnualOffsettingValidatorServiceTest {
 
         AviationAerCorsiaAnnualOffsetting offsettingData = AviationAerCorsiaAnnualOffsetting.builder()
                 .schemeYear(year)
-                .sectorGrowth(2.34)
+                .sectorGrowth(BigDecimal.valueOf(2.34))
                 .totalChapter(100)
                 .calculatedAnnualOffsetting(2)  // 2.34 * 100 = 234
                 .build();
@@ -54,7 +55,7 @@ class AviationAerCorsiaAnnualOffsettingValidatorServiceTest {
 
         AviationAerCorsiaAnnualOffsetting offsettingData = AviationAerCorsiaAnnualOffsetting.builder()
             .schemeYear(null) // should not be null
-            .sectorGrowth(2.345) // more fraction digits than allowed
+            .sectorGrowth(null) // should not be null
             .totalChapter(-1) // should be positive
             .calculatedAnnualOffsetting(2)
             .build();
@@ -71,7 +72,7 @@ class AviationAerCorsiaAnnualOffsettingValidatorServiceTest {
 
         AviationAerCorsiaAnnualOffsetting offsettingData = AviationAerCorsiaAnnualOffsetting.builder()
             .schemeYear(year)
-            .sectorGrowth(2.34)
+            .sectorGrowth(BigDecimal.valueOf(2.34))
             .totalChapter(100)
             .calculatedAnnualOffsetting(9) // 2.34 * 100 = 234
             .build();

@@ -1,8 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.annualoffsetting.common.domain;
 
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +25,7 @@ public class AviationAerCorsiaAnnualOffsetting {
     private Integer totalChapter;
 
     @NotNull(message = "Sector growth value is mandatory.")
-    @Digits(integer = Integer.MAX_VALUE, fraction = 2, message = "Sector growth value must have up to 2 decimal places.")
-    private Double sectorGrowth;
+    private BigDecimal sectorGrowth;
 
 
     private Integer calculatedAnnualOffsetting;

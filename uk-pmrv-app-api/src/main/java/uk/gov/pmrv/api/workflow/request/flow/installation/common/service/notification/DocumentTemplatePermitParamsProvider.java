@@ -28,6 +28,7 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.Measure
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.MeasurementOfN2OMonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStream;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueRequestMetadata;
@@ -70,7 +71,8 @@ public class DocumentTemplatePermitParamsProvider {
                 .id(r.getId())
                 .changeType("Batch Variation")
                 .submissionDate(r.getSubmissionDate())
-                .endDate(r.getEndDate())
+                // if end date is null and batch reissue is still in progress then it's the current batch re-issue to which we add now as end date
+                .endDate(r.getEndDate() != null || !RequestStatus.IN_PROGRESS.equals(r.getStatus()) ? r.getEndDate() : LocalDateTime.now())
                 .metadata(PermitVariationRequestMetadata
                         .builder()
                         .logChanges(

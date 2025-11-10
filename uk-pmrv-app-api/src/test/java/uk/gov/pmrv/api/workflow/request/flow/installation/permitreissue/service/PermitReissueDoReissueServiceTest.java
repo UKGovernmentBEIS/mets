@@ -80,7 +80,6 @@ class PermitReissueDoReissueServiceTest {
 		
 		verify(requestService, times(1)).findRequestById(requestId);
 		verify(permitReissueAccountValidationService, times(1)).isAccountApplicableToReissue(request);
-		verify(permitService, times(1)).incrementPermitConsolidationNumber(accountId);
 		verify(reissueUpdatePayloadConsolidationNumberService, times(1)).updateRequestPayloadConsolidationNumber(request);
 		verify(permitReissueGenerateDocumentsService, times(1)).generateDocuments(request);
 		verify(reissueAddCompletedRequestActionService, times(1)).add(requestId);

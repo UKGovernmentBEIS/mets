@@ -51,7 +51,6 @@ public class PermitReissueDoReissueService {
 		PermitContainer permitContainer = permitEntityDto.getPermitContainer();
 		permitContainer.setActivationDate(newActivationDate);
 
-		permitService.incrementPermitConsolidationNumber(accountId);
 		permitService.updatePermit(permitContainer, accountId);
 		
 		reissueUpdatePayloadConsolidationNumberService.updateRequestPayloadConsolidationNumber(request);

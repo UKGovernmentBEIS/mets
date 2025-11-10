@@ -6,10 +6,12 @@ export const recallActionTypeMap: Partial<
   BDR_WAIT_FOR_VERIFICATION: 'BDR_RECALL_FROM_VERIFICATION',
   BDR_AMEND_WAIT_FOR_VERIFICATION: 'BDR_RECALL_FROM_VERIFICATION',
   ALR_WAIT_FOR_VERIFICATION: 'ALR_RECALL_FROM_VERIFICATION',
+  ALR_AMEND_WAIT_FOR_VERIFICATION: 'ALR_RECALL_FROM_VERIFICATION',
 };
 
 export const recallReturnToTextMap: Partial<Record<RequestTaskDTO['type'], string>> = {
   BDR_WAIT_FOR_VERIFICATION: 'Baseline data report',
   BDR_AMEND_WAIT_FOR_VERIFICATION: 'Baseline data report',
   ALR_WAIT_FOR_VERIFICATION: 'Complete activity level report',
+  ALR_AMEND_WAIT_FOR_VERIFICATION: 'Activity level report sent to verifier',
 };

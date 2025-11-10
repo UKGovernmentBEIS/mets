@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.annualoffsetting.service;
 
+import java.math.BigDecimal;
 import java.time.Year;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class AviationAerCorsiaAnnualOffsettingSubmittedDocumentTemplateWorkflowP
                 .builder()
                 .calculatedAnnualOffsetting(6)
                 .schemeYear(Year.of(2023))
-                .sectorGrowth(2.9)
+                .sectorGrowth(BigDecimal.valueOf(2.9))
                 .totalChapter(1)
                 .build();
 

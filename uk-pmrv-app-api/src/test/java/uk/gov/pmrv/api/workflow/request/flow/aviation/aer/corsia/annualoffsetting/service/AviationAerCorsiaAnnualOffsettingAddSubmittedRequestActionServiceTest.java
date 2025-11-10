@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.annualoffsetting.service;
 
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,7 +54,7 @@ public class AviationAerCorsiaAnnualOffsettingAddSubmittedRequestActionServiceTe
                         .builder()
                         .calculatedAnnualOffsetting(6)
                         .schemeYear(Year.of(2023))
-                        .sectorGrowth(2.0)
+                        .sectorGrowth(BigDecimal.valueOf(2.0))
                         .totalChapter(12)
                         .build();
 

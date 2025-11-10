@@ -55,13 +55,6 @@ public class PermitService {
     }
 
     @Transactional
-    public void incrementPermitConsolidationNumber(Long accountId) {
-    	PermitEntity permitEntity = permitRepo.findByAccountId(accountId)
-				.orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
-    	doIncrementPermitConsolidationNumber(permitEntity);
-    }
-
-    @Transactional
     public void setFileDocumentUuid(final String permitId, final String fileDocumentUuid) {
         permitRepo.updateFileDocumentUuid(permitId, fileDocumentUuid);
     }
