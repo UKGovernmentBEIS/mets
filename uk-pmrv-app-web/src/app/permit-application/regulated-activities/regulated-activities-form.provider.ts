@@ -22,11 +22,7 @@ export const regulatedActivitiesFormProvider = {
     const state = store.getState();
     const isWasteSelected = store.permitType === 'WASTE';
     const group = fb.group(
-      controlsConfig(
-        mapToForm(state.permit.regulatedActivities, state?.features?.['co2-venting.permit-workflows.enabled']),
-        state.features?.wastePermitEnabled,
-        isWasteSelected,
-      ),
+      controlsConfig(mapToForm(state.permit.regulatedActivities), state.features?.wastePermitEnabled, isWasteSelected),
       {
         validators: atLeastOneValidator(),
         updateOn: 'change',
@@ -391,38 +387,25 @@ function atLeastOneValidator(): ValidatorFn {
       : { atLeastOne: 'Select all the regulated activities carried out the installation' };
 }
 
-function mapToForm(regulatedActivities: RegulatedActivity[], upstreamFlag?: boolean): Partial<RegulatedActivitiesForm> {
+function mapToForm(regulatedActivities: RegulatedActivity[]): Partial<RegulatedActivitiesForm> {
   return regulatedActivities?.reduce(
     (form: Partial<RegulatedActivitiesForm>, activity) => ({
       ...form,
       ...(activity.capacity ? { [`${activity.type}_CAPACITY`]: activity.capacity } : null),
       ...(activity.capacityUnit ? { [`${activity.type}_CAPACITY_UNIT`]: activity.capacityUnit } : null),
-      [findGroupByType(activity.type, upstreamFlag)]: [
-        ...(form?.[findGroupByType(activity.type, upstreamFlag)] ?? []),
-        ...[activity.type],
-      ],
+      [findGroupByType(activity.type)]: [...(form?.[findGroupByType(activity.type)] ?? []), ...[activity.type]],
     }),
     {},
   );
 }
 
-function findTypesByGroupName(
-  groupName: keyof RegulatedActivitiesFormGroup,
-  upstreamFlag?: boolean,
-): RegulatedActivity['type'][] {
-  return (
-    upstreamFlag
-      ? { ...formGroupOptions, COMBUSTION_GROUP: [...formGroupOptions.COMBUSTION_GROUP, 'UPSTREAM_GHG_REMOVAL'] }
-      : formGroupOptions
-  )[groupName] as any;
+function findTypesByGroupName(groupName: keyof RegulatedActivitiesFormGroup): RegulatedActivity['type'][] {
+  return formGroupOptions[groupName] as any;
 }
 
-function findGroupByType(type: RegulatedActivity['type'], upstreamFlag?: boolean): keyof RegulatedActivitiesFormGroup {
-  return Object.keys(
-    upstreamFlag
-      ? { ...formGroupOptions, COMBUSTION_GROUP: [...formGroupOptions.COMBUSTION_GROUP, 'UPSTREAM_GHG_REMOVAL'] }
-      : formGroupOptions,
-  ).find((key: keyof RegulatedActivitiesFormGroup): key is keyof RegulatedActivitiesFormGroup =>
-    findTypesByGroupName(key, upstreamFlag).includes(type),
+function findGroupByType(type: RegulatedActivity['type']): keyof RegulatedActivitiesFormGroup {
+  return Object.keys(formGroupOptions).find(
+    (key: keyof RegulatedActivitiesFormGroup): key is keyof RegulatedActivitiesFormGroup =>
+      findTypesByGroupName(key).includes(type),
   );
 }

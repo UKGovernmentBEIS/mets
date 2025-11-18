@@ -78,9 +78,13 @@ export class RegulatedActivityComponent implements PendingRequest, OnInit {
               'regulatedActivities',
             )
             .pipe(this.pendingRequest.trackRequest())
-            .subscribe(() =>
-              this.router.navigate(this.changing ? ['..'] : ['..', id, 'capacity'], { relativeTo: this.route }),
-            );
+            .subscribe(() => {
+              const type = (this.form.get('activity').value ??
+                this.form.get('activityCategory').value) as RegulatedActivity['type'];
+
+              const nextStep = type === 'UPSTREAM_GHG_REMOVAL' ? 'crf-codes' : 'capacity';
+              return this.router.navigate(this.changing ? ['..'] : ['..', id, nextStep], { relativeTo: this.route });
+            });
         }),
       )
       .subscribe();

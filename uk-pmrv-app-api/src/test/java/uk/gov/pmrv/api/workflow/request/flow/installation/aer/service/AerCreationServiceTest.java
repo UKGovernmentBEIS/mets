@@ -88,6 +88,8 @@ class AerCreationServiceTest {
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
         when(aerCreationValidatorService.validateYear(eq(accountId), any()))
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
+        when(aerCreationValidatorService.validateAerCreationForWaste(eq(accountId)))
+            .thenReturn(true);
         when(aerDueDateService.generateDueDate())
                 .thenReturn(expirationDate);
         when(permitQueryService.getPermitContainerByAccountId(accountId)).thenReturn(permitContainer);
@@ -141,6 +143,8 @@ class AerCreationServiceTest {
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
         when(aerCreationValidatorService.validateYear(eq(accountId), any()))
                 .thenReturn(RequestCreateValidationResult.builder().valid(false).build());
+        when(aerCreationValidatorService.validateAerCreationForWaste(eq(accountId)))
+                .thenReturn(true);
 
         // Invoke
         BusinessException ex = assertThrows(BusinessException.class, () ->

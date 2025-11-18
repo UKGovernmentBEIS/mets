@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, Inject, Signal } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -28,6 +28,11 @@ export class UploadReportComponent implements PendingRequest {
   bdrRequestMetadata: Signal<BDRApplicationSubmitRequestTaskPayload> = this.bdrService.requestMetadata;
   requestTaskType: Signal<BDRApplicationSubmitRequestTaskPayload> = this.bdrService.requestTaskType;
   requestId = this.bdrService.requestId;
+
+  originalFileName: Signal<string> = computed(() => {
+    const payload = this.bdrPayload();
+    return payload.bdrAttachments?.[payload.bdr?.bdrFile];
+  });
 
   renameFile = (originalFile: File): File => {
     const suffix = originalFile.name.slice(((originalFile.name.lastIndexOf('.') - 1) >>> 0) + 1);
@@ -88,7 +93,7 @@ export class UploadReportComponent implements PendingRequest {
   }
 
   private getFileNextVersion(): number {
-    const fileName = this.form.controls.bdrFile?.value?.file?.name;
+    const fileName = this.originalFileName();
     if (fileName) {
       const match = fileName.match(/-v(\d+)-/);
       return match ? parseInt(match[1]) + 1 : 1;

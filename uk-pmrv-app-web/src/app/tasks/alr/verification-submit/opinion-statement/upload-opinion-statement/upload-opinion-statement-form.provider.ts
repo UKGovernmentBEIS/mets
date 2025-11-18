@@ -14,13 +14,13 @@ export const alrOpinionStatementFormProvider = {
     const disabled = !state.isEditable;
     const {
       verificationAttachments,
-      verificationReport: { opinionStatement: { opinionStatementFiles, supportingFiles, notes } = {} } = {},
+      verificationReport: { opinionStatement: { opinionStatementFile, supportingFiles, notes } = {} } = {},
     } = state.requestTaskItem.requestTask.payload as ALRApplicationVerificationSubmitRequestTaskPayload;
 
     return fb.group({
-      opinionStatementFiles: requestTaskFileService.buildFormControl(
+      opinionStatementFile: requestTaskFileService.buildFormControl(
         store.requestTaskId,
-        opinionStatementFiles ?? [],
+        opinionStatementFile ?? '',
         verificationAttachments,
         'ALR_VERIFICATION_UPLOAD_ATTACHMENT',
         true,

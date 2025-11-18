@@ -5,18 +5,16 @@
       [formGroup]="form"
       heading="Send report"
       submitText="Continue"
-      [hideSubmit]="(aerService.isEditable$ | async) === false"
-    >
+      [hideSubmit]="(aerService.isEditable$ | async) === false">
       <p class="govuk-body">
-        As a HSE permit holder, you can either send your emissions report to a verifier for a verification opinion or
-        directly to {{ aerService.competentAuthority$ | async | competentAuthority }}.
+        As a {{ permitTypeHolder$ | async }} holder, you can either send your emissions report to a verifier for a
+        verification opinion or directly to {{ aerService.competentAuthority$ | async | competentAuthority }}.
       </p>
       <div
         formControlName="option"
         govuk-radio
         legend="Do you want to send this report for verification?"
-        legendSize="medium"
-      >
+        legendSize="medium">
         <govuk-radio-option [value]="true" label="Yes, send report for verification"></govuk-radio-option>
         <govuk-radio-option [value]="false" label="No, send report to regulator"></govuk-radio-option>
       </div>

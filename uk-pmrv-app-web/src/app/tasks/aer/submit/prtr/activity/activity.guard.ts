@@ -19,14 +19,14 @@ export class ActivityGuard {
       map((storeState) => {
         const wizardUrl = `/tasks/${route.paramMap.get('taskId')}/aer/submit/prtr`;
         const activities = (storeState.requestTaskItem.requestTask.payload as AerApplicationSubmitRequestTaskPayload)
-          .aer?.pollutantRegisterActivities;
+          .aer?.prtrCodes;
         const index = Number(route.paramMap.get('index'));
 
         return (
           (storeState.isEditable &&
             (route.url.find((segment) => segment.path === 'delete')
-              ? (activities?.activities?.length ?? 0) > index
-              : (activities?.activities?.length ?? 0) >= index)) ||
+              ? (activities?.codes?.length ?? 0) > index
+              : (activities?.codes?.length ?? 0) >= index)) ||
           this.router.parseUrl(wizardUrl.concat('/summary'))
         );
       }),

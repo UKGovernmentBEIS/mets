@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { PrtrSummaryTemplateComponent } from '@shared/components/prtr/prtr-summary-template.component';
 import { SharedModule } from '@shared/shared.module';
 
-import { PollutantRegisterActivities } from 'pmrv-api';
+import { PRTRCodes } from 'pmrv-api';
 
 describe('PrtrSummaryTemplateComponent', () => {
   let component: PrtrSummaryTemplateComponent;
@@ -20,17 +20,18 @@ describe('PrtrSummaryTemplateComponent', () => {
     `,
   })
   class TestComponent {
-    activities: PollutantRegisterActivities = {
+    activities: PRTRCodes = {
       exist: true,
-      activities: ['_1_A_2_C_CHEMICALS', '_1_A_3_C_RAILWAYS', '_1_B_2_A_OIL'],
+      codes: ['_1_A_MINERAL_OIL_GAS_REFINERIES', '_1_B_INSTALLATIONS_FOR_GASIFICATION_LIGUEFACTION'],
     };
     isEditable = true;
   }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       declarations: [TestComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -50,9 +51,8 @@ describe('PrtrSummaryTemplateComponent', () => {
     expect(element.querySelector('dl')).toBeFalsy();
     expect(Array.from(element.querySelectorAll('tr')).map((el) => el.textContent.trim())).toEqual([
       '',
-      'Main activity1.A.2.c ChemicalsDelete',
-      'Main activity1.A.3.c RailwaysDelete',
-      'Main activity1.B.2.a OilDelete',
+      'Main activity1.(a) Mineral oil and gas refineriesDelete',
+      'Main activity1.(b) Installations for gasification and liquefactionDelete',
     ]);
     expect(element.querySelector('h2').textContent.trim()).toEqual('EPRTR codes added');
     expect(element.querySelector('button').textContent.trim()).toEqual('Add another');
@@ -63,9 +63,8 @@ describe('PrtrSummaryTemplateComponent', () => {
     expect(element.querySelector('dl')).toBeFalsy();
     expect(Array.from(element.querySelectorAll('tr')).map((el) => el.textContent.trim())).toEqual([
       '',
-      'Main activity1.A.2.c Chemicals',
-      'Main activity1.A.3.c Railways',
-      'Main activity1.B.2.a Oil',
+      'Main activity1.(a) Mineral oil and gas refineries',
+      'Main activity1.(b) Installations for gasification and liquefaction',
     ]);
     expect(element.querySelector('h2')).toBeFalsy();
     expect(element.querySelector('button')).toBeFalsy();

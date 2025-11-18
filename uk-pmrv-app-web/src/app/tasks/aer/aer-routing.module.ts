@@ -124,6 +124,7 @@ import { VerifierDetailsComponent } from '@tasks/aer/verification-submit/verifie
 import { RecallComponent } from '@tasks/aer/verification-wait/recall/recall.component';
 import { VerificationWaitComponent } from '@tasks/aer/verification-wait/verification-wait.component';
 
+import { regulatedActivityBacklinkResolver } from './core/aer-backlink.resolver';
 import { EmissionsSummaryComponent as ReviewEmissionsSummaryComponent } from './review/emissions-summary/emissions-summary.component';
 import { ReturnForAmendsComponent } from './review/return-for-amends/return-for-amends.component';
 import { SkipReviewComponent } from './review/skip-review/skip-review.component';
@@ -136,6 +137,8 @@ import { AmendSummaryGuard } from './submit/amend/summary/amend-summary.guard';
 import { EmissionsSummaryComponent } from './submit/emissions-summary/emissions-summary.component';
 import { InstallationDetailsComponent } from './submit/installation-details/installation-details.component';
 import { RefreshResolver } from './submit/prtr/activity/refresh.resolver';
+import { SubActivityComponent } from './submit/prtr/activity/sub-activity/sub-activity.component';
+import { WasteCrfCodeComponent } from './submit/regulated-activities/add/waste-crf-code/waste-crf-code.component';
 import { SubmitContainerComponent } from './submit/submit-container.component';
 import { ActivityLevelReportComponent } from './verification-submit/activity-level-report/activity-level-report.component';
 import { FuelsComponent } from './verification-submit/fuels/fuels.component';
@@ -164,7 +167,7 @@ const routes: Routes = [
       },
       {
         path: 'prtr',
-        data: { aerTask: 'pollutantRegisterActivities' },
+        data: { aerTask: 'prtrCodes' },
         children: [
           {
             path: '',
@@ -178,6 +181,16 @@ const routes: Routes = [
                 path: '',
                 data: { pageTitle: 'European Pollutant Release and Transfer Register codes (PRTR) - New entry' },
                 component: ActivityComponent,
+                canActivate: [ActivityGuard],
+                resolve: { refresh: RefreshResolver },
+              },
+              {
+                path: 'subActivity',
+                data: {
+                  pageTitle: 'European Pollutant Release and Transfer Register codes (PRTR) - New entry',
+                  backlink: '../',
+                },
+                component: SubActivityComponent,
                 canActivate: [ActivityGuard],
                 resolve: { refresh: RefreshResolver },
               },
@@ -479,7 +492,8 @@ const routes: Routes = [
           },
           {
             path: ':activityId/crf-codes',
-            data: { pageTitle: 'Add regulated activity crf codes', backlink: '../capacity' },
+            resolve: { backlinkUrl: regulatedActivityBacklinkResolver },
+            data: { pageTitle: 'Add regulated activity crf codes', backlink: ({ backlinkUrl }) => backlinkUrl },
             component: CrfCodesComponent,
             canActivate: [RegulatedActivityGuard],
             canDeactivate: [PendingRequestGuard],
@@ -495,6 +509,13 @@ const routes: Routes = [
             path: ':activityId/industrial-crf-code',
             data: { pageTitle: 'Add regulated activity industrial crf code', backlink: '../crf-codes' },
             component: IndustrialCrfCodeComponent,
+            canActivate: [RegulatedActivityGuard],
+            canDeactivate: [PendingRequestGuard],
+          },
+          {
+            path: ':activityId/waste-crf-code',
+            data: { pageTitle: 'Add regulated activity waste crf code', backlink: '../waste-codes' },
+            component: WasteCrfCodeComponent,
             canActivate: [RegulatedActivityGuard],
             canDeactivate: [PendingRequestGuard],
           },

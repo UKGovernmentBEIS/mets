@@ -38,7 +38,7 @@ public class AviationAerCorsiaAnnualOffsettingSubmittedDocumentTemplateWorkflowP
                 .builder()
                 .calculatedAnnualOffsetting(6)
                 .schemeYear(Year.of(2023))
-                .sectorGrowth(BigDecimal.valueOf(2.9))
+                .sectorGrowth(BigDecimal.valueOf(2.9213314))
                 .totalChapter(1)
                 .build();
 
@@ -56,10 +56,10 @@ public class AviationAerCorsiaAnnualOffsettingSubmittedDocumentTemplateWorkflowP
 
 		Map<String, Object> expectedParams = new HashMap<>();
         expectedParams.put("schemeYear", aviationAerCorsiaAnnualOffsetting.getSchemeYear().toString());
-        expectedParams.put("calculatedAnnualOffsettingRequirements",aviationAerCorsiaAnnualOffsetting.getCalculatedAnnualOffsetting());
-        expectedParams.put("schemeYearPlusOne", aviationAerCorsiaAnnualOffsetting.getSchemeYear().plusYears(1));
-        expectedParams.put("annualOffsettingRequirements", aviationAerCorsiaAnnualOffsetting.getTotalChapter());
-        expectedParams.put("sectorGrowth", aviationAerCorsiaAnnualOffsetting.getSectorGrowth());
+        expectedParams.put("calculatedAnnualOffsettingRequirements",aviationAerCorsiaAnnualOffsetting.getCalculatedAnnualOffsetting().toString());
+        expectedParams.put("schemeYearPlusOne", aviationAerCorsiaAnnualOffsetting.getSchemeYear().plusYears(1).toString());
+        expectedParams.put("annualOffsettingRequirements", aviationAerCorsiaAnnualOffsetting.getTotalChapter().toString());
+        expectedParams.put("sectorGrowth", aviationAerCorsiaAnnualOffsetting.getSectorGrowth().toString());
 
 		assertThat(result).containsExactlyInAnyOrderEntriesOf(expectedParams);
 	}

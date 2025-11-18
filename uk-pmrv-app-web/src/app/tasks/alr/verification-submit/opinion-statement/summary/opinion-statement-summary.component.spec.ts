@@ -45,7 +45,7 @@ describe('SummaryComponent', () => {
       alrVerificationMockStateBuild(
         {
           opinionStatement: {
-            opinionStatementFiles: ['ebff80af-8c13-4f5a-b1eb-75b74a2121c5'],
+            opinionStatementFile: 'ebff80af-8c13-4f5a-b1eb-75b74a2121c5',
             supportingFiles: [],
             notes: null,
           },
@@ -85,7 +85,7 @@ describe('SummaryComponent', () => {
       alrMockVerificationPostBuild(
         {
           opinionStatement: {
-            opinionStatementFiles: ['ebff80af-8c13-4f5a-b1eb-75b74a2121c5'],
+            opinionStatementFile: 'ebff80af-8c13-4f5a-b1eb-75b74a2121c5',
             supportingFiles: [],
             notes: null,
           },

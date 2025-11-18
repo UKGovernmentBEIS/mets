@@ -1,14 +1,12 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, Router, UrlSegment, UrlTree } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRouteSnapshot, provideRouter, Router, UrlSegment, UrlTree } from '@angular/router';
 
 import { firstValueFrom, Observable } from 'rxjs';
 
 import { ActivityGuard } from '@tasks/aer/submit/prtr/activity/activity.guard';
 import { mockStateBuild } from '@tasks/aer/submit/testing/mock-state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
-import { KeycloakService } from 'keycloak-angular';
 
 describe('ActivityGuard', () => {
   let router: Router;
@@ -25,8 +23,7 @@ describe('ActivityGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [KeycloakService],
+      providers: [provideRouter([]), provideHttpClient()],
     });
     guard = TestBed.inject(ActivityGuard);
     router = TestBed.inject(Router);
@@ -41,9 +38,9 @@ describe('ActivityGuard', () => {
   it('should allow', async () => {
     store.setState(
       mockStateBuild({
-        pollutantRegisterActivities: {
+        prtrCodes: {
           exist: true,
-          activities: ['_1_A_2_C_CHEMICALS', '_1_A_3_C_RAILWAYS'],
+          codes: ['_1_A_MINERAL_OIL_GAS_REFINERIES', '_1_B_INSTALLATIONS_FOR_GASIFICATION_LIGUEFACTION'],
         },
       }),
     );
@@ -56,7 +53,7 @@ describe('ActivityGuard', () => {
   it('should not allow', async () => {
     store.setState(
       mockStateBuild({
-        pollutantRegisterActivities: undefined,
+        prtrCodes: undefined,
       }),
     );
 
@@ -66,9 +63,9 @@ describe('ActivityGuard', () => {
 
     store.setState(
       mockStateBuild({
-        pollutantRegisterActivities: {
+        prtrCodes: {
           exist: true,
-          activities: ['_1_A_2_C_CHEMICALS'],
+          codes: ['_1_A_MINERAL_OIL_GAS_REFINERIES'],
         },
       }),
     );
@@ -79,9 +76,9 @@ describe('ActivityGuard', () => {
 
     store.setState({
       ...mockStateBuild({
-        pollutantRegisterActivities: {
+        prtrCodes: {
           exist: true,
-          activities: ['_1_A_2_C_CHEMICALS', '_1_A_3_C_RAILWAYS', '_1_B_2_A_OIL'],
+          codes: ['_1_A_MINERAL_OIL_GAS_REFINERIES', '_2_C_1_HOT_ROLLING_MILLS'],
         },
       }),
       isEditable: false,

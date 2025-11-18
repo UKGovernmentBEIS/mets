@@ -29,8 +29,10 @@ describe('RegulatedActivitiesSummaryTemplateComponent', () => {
       capacityUnit: 'KVA',
       hasEnergyCrf: true,
       hasIndustrialCrf: true,
+      hasWasteCrf: true,
       energyCrf: '_1_A_1_A_PUBLIC_ELECTRICITY_AND_HEAT_PRODUCTION',
       industrialCrf: '_2_A_4_OTHER_PROCESS_USES_OF_CARBONATES',
+      wasteCrf: '_5_A_1_A_SOLID_WASTE_DISPOSAL_TO_LAND',
     };
     isEditable = true;
   }
@@ -63,7 +65,7 @@ describe('RegulatedActivitiesSummaryTemplateComponent', () => {
       'Change',
       '100 kVA',
       'Change',
-      '1.A.1.a Public Electricity and Heat Production2.A.4 Other Process uses of Carbonates',
+      '5.A.1.a Solid Waste Disposal to land1.A.1.a Public Electricity and Heat Production2.A.4 Other Process uses of Carbonates',
       'Change',
     ]);
   });
@@ -75,7 +77,7 @@ describe('RegulatedActivitiesSummaryTemplateComponent', () => {
     expect(Array.from(element.querySelectorAll('dd')).map((el) => el.textContent.trim())).toEqual([
       'Ammonia production (Carbon dioxide)',
       '100 kVA',
-      '1.A.1.a Public Electricity and Heat Production2.A.4 Other Process uses of Carbonates',
+      '5.A.1.a Solid Waste Disposal to land1.A.1.a Public Electricity and Heat Production2.A.4 Other Process uses of Carbonates',
     ]);
   });
 });

@@ -1490,6 +1490,7 @@ export * from './procedure';
 export * from './procedureForm';
 export * from './procedureOptionalForm';
 export * from './procedurePlan';
+export * from './pRTRCodes';
 export * from './quantityProductDataSource';
 export * from './rdeDecisionForcedRequestActionPayload';
 export * from './rdeDecisionForcedRequestActionPayloadAllOf';

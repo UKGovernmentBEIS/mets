@@ -137,6 +137,8 @@ export class SourceStreamDescriptionPipe implements PipeTransform {
         return 'Pilot Flare Gas';
       case 'PROPANE':
         return 'Propane';
+      case 'RDF':
+        return 'RDF';
       case 'REFINERY_FEEDSTOCKS':
         return 'Refinery Feedstocks';
       case 'REFINERY_GAS':
@@ -145,8 +147,6 @@ export class SourceStreamDescriptionPipe implements PipeTransform {
         return 'Residual Fuel Oil';
       case 'SCRAP_TYRES':
         return 'Scrap Tyres';
-      case 'SDF':
-        return 'SDF';
       case 'SHALE_OIL':
         return 'Shale Oil';
       case 'SLUDGE_GAS':

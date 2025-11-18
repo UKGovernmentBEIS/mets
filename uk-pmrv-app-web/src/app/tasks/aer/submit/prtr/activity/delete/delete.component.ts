@@ -24,8 +24,8 @@ import { AerService } from '@tasks/aer/core/aer.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteComponent {
-  activity$ = combineLatest([this.route.paramMap, this.aerService.getTask('pollutantRegisterActivities')]).pipe(
-    map(([paramMap, activities]) => activities.activities[Number(paramMap.get('index'))]),
+  activity$ = combineLatest([this.route.paramMap, this.aerService.getTask('prtrCodes')]).pipe(
+    map(([paramMap, activities]) => activities.codes[Number(paramMap.get('index'))]),
   );
 
   constructor(
@@ -36,7 +36,7 @@ export class DeleteComponent {
   ) {}
 
   onDelete(): void {
-    combineLatest([this.route.paramMap, this.aerService.getTask('pollutantRegisterActivities')])
+    combineLatest([this.route.paramMap, this.aerService.getTask('prtrCodes')])
       .pipe(
         first(),
         switchMap(([paramMap, activities]) => {
@@ -44,15 +44,14 @@ export class DeleteComponent {
 
           return this.aerService.postTaskSave(
             {
-              pollutantRegisterActivities: {
+              prtrCodes: {
                 ...activities,
-                activities:
-                  activities.activities.length <= 1 ? [] : activities.activities.filter((_, idx) => idx !== index),
+                codes: activities.codes.length <= 1 ? [] : activities.codes.filter((_, idx) => idx !== index),
               },
             },
             undefined,
             false,
-            'pollutantRegisterActivities',
+            'prtrCodes',
           );
         }),
         this.pendingRequest.trackRequest(),

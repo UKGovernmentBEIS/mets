@@ -80,7 +80,7 @@ public enum SourceStreamDescription {
     SLUDGE_GAS("Sludge Gas"),
     SOUR_GAS("Sour Gas"),
     SOUR_GAS_FLARE("Sour Gas Flare"),
-    SDF("SDF"),
+    RDF("RDF"),
     SSF("SSF"),
     SRF("SRF"),
     SUB_BITUMINOUS_COAL("Sub-Bituminous Coal"),

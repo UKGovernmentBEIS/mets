@@ -1,6 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { of } from 'rxjs';
@@ -19,13 +18,11 @@ describe('OpinionStatementComponent', () => {
   let store: CommonTasksStore;
   let page: Page;
   let router: Router;
-  let fileControl: FormControl;
 
   const activatedRoute: ActivatedRouteStub = new ActivatedRouteStub({ taskId: 1 });
   const tasksService = mockClass(TasksService);
   const attachmentService = mockClass(RequestTaskAttachmentsHandlingService);
-  const uuid1 = '11111111-1111-4111-a111-111111111111';
-  const uuid2 = '22222222-2222-4222-a222-222222222222';
+  const uuid1 = '22222222-2222-4222-a222-222222222222';
 
   class Page extends BasePage<AlrUploadOpinionStatementComponent> {
     get multipleFileInputs(): HTMLElement[] {
@@ -85,7 +82,7 @@ describe('OpinionStatementComponent', () => {
 
   it('should display all HTMLElements and form with 0 errors', () => {
     expect(page.errorSummary).toBeFalsy();
-    expect(page.multipleFileInputs.length).toEqual(2);
+    expect(page.multipleFileInputs.length).toEqual(1);
     expect(page.fileDeleteButtons).toEqual([]);
     expect(page.submitButton).toBeTruthy();
   });
@@ -104,19 +101,14 @@ describe('OpinionStatementComponent', () => {
 
     tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
     attachmentService.uploadRequestTaskAttachment.mockReturnValue(
-      asyncData<any>(new HttpResponse({ body: { uuid: uuid2 } })),
+      asyncData<any>(new HttpResponse({ body: { uuid: uuid1 } })),
     );
 
-    fileControl = component.form?.get('opinionStatementFiles') as FormControl;
-    fileControl.setValue([{ file: new File(['test content 1'], 'testfile1.jpg'), uuid: uuid1 }]);
     page.filesValue = [new File(['test content 2'], 'testfile2.jpg')];
     fixture.detectChanges();
 
-    expect(page.fileDeleteButtons).toHaveLength(2);
-    expect(page.filesText.map((row) => row.textContent.trim())).toEqual([
-      'testfile1.jpg',
-      'testfile2.jpg has been uploaded',
-    ]);
+    expect(page.fileDeleteButtons).toHaveLength(1);
+    expect(page.filesText.map((row) => row.textContent.trim())).toEqual(['testfile2.jpg']);
 
     page.submitButton.click();
     fixture.detectChanges();
@@ -127,7 +119,7 @@ describe('OpinionStatementComponent', () => {
       alrMockVerificationPostBuild(
         {
           opinionStatement: {
-            opinionStatementFiles: ['11111111-1111-4111-a111-111111111111', '22222222-2222-4222-a222-222222222222'],
+            opinionStatementFile: uuid1,
             supportingFiles: [],
             notes: null,
           },

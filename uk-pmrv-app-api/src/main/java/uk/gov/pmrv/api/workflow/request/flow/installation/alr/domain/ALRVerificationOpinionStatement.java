@@ -15,8 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ALRVerificationOpinionStatement {
 
-    @Builder.Default
-    private Set<UUID> opinionStatementFiles = new HashSet<>();
+    private UUID opinionStatementFile;
 
     @Builder.Default
     private Set<UUID> supportingFiles = new HashSet<>();

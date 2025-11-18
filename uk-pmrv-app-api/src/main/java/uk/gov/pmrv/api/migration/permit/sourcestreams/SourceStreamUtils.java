@@ -80,7 +80,7 @@ import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescriptio
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SLUDGE_GAS;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SOUR_GAS;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SOUR_GAS_FLARE;
-import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SDF;
+import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.RDF;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SSF;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SRF;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SUB_BITUMINOUS_COAL;
@@ -259,7 +259,7 @@ public class SourceStreamUtils {
         etsDescriptionMap.put("Sludge Gas", SLUDGE_GAS);
         etsDescriptionMap.put("Sour Gas", SOUR_GAS);
         etsDescriptionMap.put("Sour Gas Flare", SOUR_GAS_FLARE);
-        etsDescriptionMap.put("SDF", SDF);
+        etsDescriptionMap.put("RDF", RDF);
         etsDescriptionMap.put("SSF", SSF);
         etsDescriptionMap.put("SRF", SRF);
         etsDescriptionMap.put("Sub-Bituminous Coal", SUB_BITUMINOUS_COAL);

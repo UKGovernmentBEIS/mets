@@ -6,6 +6,7 @@ import {
   Inject,
   OnDestroy,
   OnInit,
+  signal,
   ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -68,6 +69,12 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
   exampleTableData: any;
   errorList = [];
   isCorsia$ = this.store.pipe(aerQuery.selectIsCorsia);
+  showNotification = signal(false);
+  aggregatedEmissionDataDetails =
+    this.store.aerDelegate.payload.aer?.aggregatedEmissionsData?.aggregatedEmissionDataDetails ||
+    ([] as
+      | Array<AviationAerUkEtsAggregatedEmissionDataDetails>
+      | Array<AviationAerCorsiaAggregatedEmissionDataDetails>);
 
   private subscription: Subscription;
   private statusSubscription: Subscription;
@@ -227,9 +234,11 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
         setTimeout(() => {
           if (!this.form.get('aggregatedEmissionDataDetails').errors) {
             this.parsedData = tempData;
+            this.showNotification.set(true);
           } else {
             this.wizardStep.isSummaryDisplayedSubject.next(true);
             this.parsedData = null;
+            this.showNotification.set(false);
           }
           this.cd.detectChanges();
         }, 500);
@@ -243,6 +252,7 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
       for (const errorKey in this.fileControl.errors) {
         if (Object.prototype.hasOwnProperty.call(this.fileControl.errors, errorKey)) {
           this.errorList.push(this.fileControl.errors[errorKey]);
+          this.showNotification.set(false);
         }
       }
       this.cd.markForCheck();

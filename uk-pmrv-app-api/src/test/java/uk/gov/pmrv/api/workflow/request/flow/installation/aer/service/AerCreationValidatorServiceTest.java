@@ -7,8 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import uk.gov.netz.api.configuration.domain.ConfigurationDTO;
+import uk.gov.netz.api.configuration.service.ConfigurationService;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountStatus;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
+import uk.gov.pmrv.api.permit.domain.PermitContainer;
+import uk.gov.pmrv.api.permit.domain.PermitType;
+import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
@@ -18,12 +23,11 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestCreateValidat
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestMetadata;
 
 import java.time.Year;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AerCreationValidatorServiceTest {
@@ -39,6 +43,12 @@ class AerCreationValidatorServiceTest {
 
     @Mock
     private RequestCreateValidatorService requestCreateValidatorService;
+
+    @Mock
+    private PermitQueryService permitQueryService;
+
+    @Mock
+    private ConfigurationService configurationService;
 
     @Test
     void validateYear() {
@@ -105,5 +115,88 @@ class AerCreationValidatorServiceTest {
         assertThat(actual).isEqualTo(validationResult);
         verify(requestCreateValidatorService, times(1))
                 .validate(accountId, applicableAccountStatuses, mutuallyExclusiveRequests);
+    }
+
+    @Test
+    void validateAerCreationForWaste_permitIsWasteAndToggleTrue_returnsTrue() {
+        Long accountId = 1L;
+
+        PermitContainer permitContainer = PermitContainer.builder()
+                .permitType(PermitType.WASTE)
+                .build();
+
+        ConfigurationDTO config = ConfigurationDTO.builder()
+                .value("true")
+                .build();
+
+        when(permitQueryService.getPermitContainerByAccountId(accountId)).thenReturn(permitContainer);
+        when(configurationService.getConfigurationByKey("waste.aer-alr.enable.flag")).thenReturn(Optional.of(config));
+
+        boolean result = service.validateAerCreationForWaste(accountId);
+
+        assertThat(result).isTrue();
+
+        verify(permitQueryService, times(1)).getPermitContainerByAccountId(accountId);
+        verify(configurationService, times(1)).getConfigurationByKey("waste.aer-alr.enable.flag");
+    }
+
+    @Test
+    void validateAerCreationForWaste_permitIsWasteAndToggleFalse_returnsFalse() {
+        Long accountId = 1L;
+
+        PermitContainer permitContainer = PermitContainer.builder()
+                .permitType(PermitType.WASTE)
+                .build();
+
+        ConfigurationDTO config = ConfigurationDTO.builder()
+                .value("false")
+                .build();
+
+        when(permitQueryService.getPermitContainerByAccountId(accountId)).thenReturn(permitContainer);
+        when(configurationService.getConfigurationByKey("waste.aer-alr.enable.flag")).thenReturn(Optional.of(config));
+
+        boolean result = service.validateAerCreationForWaste(accountId);
+
+        assertThat(result).isFalse();
+
+        verify(permitQueryService).getPermitContainerByAccountId(accountId);
+        verify(configurationService).getConfigurationByKey("waste.aer-alr.enable.flag");
+    }
+
+    @Test
+    void validateAerCreationForWaste_permitIsWasteAndToggleMissing_returnsFalse() {
+        Long accountId = 1L;
+
+        PermitContainer permitContainer = PermitContainer.builder()
+                .permitType(PermitType.WASTE)
+                .build();
+
+        when(permitQueryService.getPermitContainerByAccountId(accountId)).thenReturn(permitContainer);
+        when(configurationService.getConfigurationByKey("waste.aer-alr.enable.flag")).thenReturn(Optional.empty());
+
+        boolean result = service.validateAerCreationForWaste(accountId);
+
+        assertThat(result).isFalse();
+
+        verify(permitQueryService).getPermitContainerByAccountId(accountId);
+        verify(configurationService).getConfigurationByKey("waste.aer-alr.enable.flag");
+    }
+
+    @Test
+    void validateAerCreationForWaste_permitIsNotWaste_returnsTrue() {
+        Long accountId = 1L;
+
+        PermitContainer permitContainer = PermitContainer.builder()
+                .permitType(PermitType.HSE) // non-WASTE type
+                .build();
+
+        when(permitQueryService.getPermitContainerByAccountId(accountId)).thenReturn(permitContainer);
+
+        boolean result = service.validateAerCreationForWaste(accountId);
+
+        assertThat(result).isTrue();
+
+        verify(permitQueryService).getPermitContainerByAccountId(accountId);
+        verifyNoInteractions(configurationService);
     }
 }

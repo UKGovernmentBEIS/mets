@@ -3,8 +3,7 @@
     (formSubmit)="onContinue()"
     [formGroup]="form"
     heading="What tier have you used for this entry?"
-    [hideSubmit]="(isEditable$ | async) === false"
-  >
+    [hideSubmit]="(isEditable$ | async) === false">
     <ng-container *ngIf="(permitParamMonitoringTier$ | async)?.length">
       <p class="govuk-body">
         {{ permitParamMonitoringTier$ | async | appliedTier }} is applied in your monitoring plan
@@ -28,5 +27,5 @@
     </ng-container>
   </app-wizard-step>
 
-  <a govukLink routerLink="../..">Return to: {{ taskKey | monitoringApproachEmissionDescription }} </a>
+  <a govukLink routerLink="../..">Return to: {{ taskKey | monitoringApproachEmissionDescription }}</a>
 </app-aer-task>

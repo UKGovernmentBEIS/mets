@@ -186,6 +186,11 @@ export class AerService extends TasksHelperService {
     return this.store.pipe(
       first(),
       switchMap((state) => {
+        const oldAer = (state.requestTaskItem.requestTask.payload as AerApplicationSubmitRequestTaskPayload).aer;
+        if (statusKey === 'prtrCodes') {
+          delete oldAer.pollutantRegisterActivities;
+        }
+
         const postAerState = {
           ...state,
           requestTaskItem: {
@@ -195,7 +200,7 @@ export class AerService extends TasksHelperService {
               payload: {
                 ...state.requestTaskItem.requestTask.payload,
                 aer: {
-                  ...(state.requestTaskItem.requestTask.payload as AerApplicationSubmitRequestTaskPayload).aer,
+                  ...oldAer,
                   ...value,
                 },
                 aerAttachments: {

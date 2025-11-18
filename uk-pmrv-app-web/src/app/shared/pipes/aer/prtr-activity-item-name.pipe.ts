@@ -1,11 +1,147 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { PollutantRegisterActivities } from 'pmrv-api';
+import { PollutantRegisterActivities, PRTRCodes } from 'pmrv-api';
 
 @Pipe({ name: 'prtrActivityItemName' })
 export class PrtrActivityItemNamePipe implements PipeTransform {
-  transform(activityItem?: PollutantRegisterActivities['activities'][number]): string {
+  transform(activityItem?: PRTRCodes['codes'][number] | PollutantRegisterActivities['activities'][number]): string {
     switch (activityItem) {
+      case '_1_A_MINERAL_OIL_GAS_REFINERIES':
+        return '1.(a) Mineral oil and gas refineries';
+      case '_1_B_INSTALLATIONS_FOR_GASIFICATION_LIGUEFACTION':
+        return '1.(b) Installations for gasification and liquefaction';
+      case '_1_C_THERMAL_POWER_STATIONS_OTHER_COMBUSTION_INSTALLATIONS':
+        return '1.(c) Thermal power stations and other combustion installations';
+      case '_1_D_COKE_OVENS':
+        return '1.(d) Coke Ovens';
+      case '_1_E_COAL_ROLLING_MILLS':
+        return '1.(e) Coal rolling mills';
+      case '_1_F_INSTALLATIONS_MANUFACTURE_OF_COAL_PRODUCTS_SOLID_SMOKELESS_FUEL':
+        return '1.(f) Installations for the manufacture of coal products and solid smokeless fuel';
+      case '_2_A_METAL_ORE_ROASTING_OR_SINTERING_INSTALLATIONS':
+        return '2.(a) Metal ore (including sulfide ore) roasting or sintering installations';
+      case '_2_B_INSTALLATIONS_FOR_PRODUCTION_OF_PIG_IRON_OR_STEEL':
+        return '2.(b) Installations for the production of pig iron or steel (primary or secondary melting) including continuous casting';
+      case '_2_C_1_HOT_ROLLING_MILLS':
+        return '2.(c).(i) Installations for the processing of ferrous metals: hot-rolling mills';
+      case '_2_C_2_SMITHERIES_WITH_HAMMERS':
+        return '2.(c).(ii) Installations for the processing of ferrous metals: smitheries with hammers';
+      case '_2_C_3_APPLICATION_OF_PROTECTIVE_FUSED_METAL_COATS':
+        return '2.(c).(iii) Installations for the processing of ferrous metals: application of protective fused metal coats';
+      case '_2_D_FERROUS_METAL_FOUNDRIES_WITH_PRODUCTION_CAPACITY_OF_20_TONNES_PER_DAY':
+        return '2.(d) Ferrous metal foundries with a production capacity of 20 tonnes per day';
+      case '_2_E_1_PRODUCTION_OF_NON_FERROUS_CRUDE_METALS':
+        return '2.(e).(i) Installations: for the production of non-ferrous crude metals from ore, concentrates or secondary raw materials by metallurgical, chemical, or electrolytic processes';
+      case '_2_E_2_SMELTING_OF_NON_FERROUS_METALS':
+        return '2.(e).(ii) Installations: for the smelting, including the alloying, of non-ferrous metals, including recovered products (refining, foundry casting and so on)';
+      case '_2_F_INSTALLATIONS_FOR_SURFACE_TREATMENT_OF_METALS_AND_PLASTIC_MATERIALS':
+        return '2.(f) Installations for surface treatment of metals and plastic materials using an electrolytic or chemical process';
+      case '_3_A_UNDERGROUND_MINING_AND_RELATED_OPERATIONS':
+        return '3.(a) Underground mining and related operations';
+      case '_3_B_OPENCAST_MINING_AND_QUARRYING':
+        return '3.(b) Opencast mining and quarrying';
+      case '_3_C_1_CEMENT_CLINKER_IN_ROTARY_KILNS':
+        return '3.(c).(i) Installations for the production of: cement clinker in rotary kilns';
+      case '_3_C_2_LIME_IN_ROTARY_KILNS':
+        return '3.(c).(ii) Installations for the production of: lime in rotary kilns';
+      case '_3_C_3_CEMENT_CLINKER_OR_LIME_IN_OTHER_FURNACES':
+        return '3.(c).(iii) Installations for the production of: cement clinker or lime in other furnaces';
+      case '_3_D_INSTALLATIONS_FOR_THE_PRODUCTION_OF_ASBESTOS_AND_MANUFACTURE_OF_ASBESTOS_BASED_PRODUCTS':
+        return '3.(d) Installations for the production of asbestos and the manufacture of asbestos-based products';
+      case '_3_E_INSTALLATIONS_FOR_THE_MANUFACTURE_OF_GLASS_INCLUDING_GLASS_FIBRE':
+        return '3.(e) Installations for the manufacture of glass, including glass fibre';
+      case '_3_F_INSTALLATIONS_FOR_MELTING_MINERAL_SUBSTANCES':
+        return '3.(f) Installations for melting mineral substances, including the production of mineral fibres';
+      case '_3_G_INSTALLATIONS_FOR_THE_MANUFACTURE_OF_CERAMIC_PRODUCTS':
+        return '3.(g) Installations for the manufacture of ceramic products by firing, in particular roofing tiles, bricks, refractory bricks, tiles, stoneware or porcelain';
+      case '_4_A_1_SIMPLE_HYDROCARBONS':
+        return '4.(a).(i) Chemical installations for the production on an industrial scale of basic organic chemicals, such as: simple hydrocarbons';
+      case '_4_A_2_OXYGEN_CONTAINING_HYDROCARBONS':
+        return '4.(a).(ii) Chemical installations for the production on an industrial scale of basic organic chemicals, such as: oxygen-containing hydrocarbons';
+      case '_4_A_3_SULFUROUS_HYDROCARBONS':
+        return '4.(a).(iii)  Chemical installations for the production on an industrial scale of basic organic chemicals, such as: sulfurous hydrocarbons';
+      case '_4_A_4_NITROGENOUS_HYDROCARBONS':
+        return '4.(a).(iv) Chemical installations for the production on an industrial scale of basic organic chemicals, such as: nitrogenous hydrocarbons';
+      case '_4_A_5_PHOSPHOROUS_HYDROCARBONS':
+        return '4.(a).(v) Chemical installations for the production on an industrial scale of basic organic chemicals, such as: phosphorus-containing hydrocarbons';
+      case '_4_A_6_HALOGENIC_HYDROCARBONS':
+        return '4.(a).(vi) Chemical installations for the production on an industrial scale of basic organic chemicals, such as: halogenic hydrocarbons';
+      case '_4_A_7_ORGANOMETALLIC_COMPOUNDS':
+        return '4.(a).(vii) Chemical installations for the production on an industrial scale of basic organic chemicals, such as: organometallic compounds';
+      case '_4_A_8_BASIC_PLASTIC_MATERIALS':
+        return '4.(a).(viii) Chemical installations for the production on an industrial scale of basic organic chemicals, such as: basic plastic materials';
+      case '_4_A_9_SYNTHETIC_RUBBERS':
+        return '4.(a).(ix) Chemical installations for the production on an industrial scale of basic organic chemicals, such as: synthetic rubbers';
+      case '_4_A_10_DYES_AND_PIGMENTS':
+        return '4.(a).(x) Chemical installations for the production on an industrial scale of basic organic chemicals, such as: dyes and pigments';
+      case '_4_A_11_SURFACE_ACTIVE_AGENTS_AND_SURFACTANS':
+        return '4.(a).(xi) Chemical installations for the production on an industrial scale of basic organic chemicals, such as: surface-active agents and surfactants';
+      case '_4_B_1_GASES':
+        return '4.(b).(i) Chemical installations for the production on an industrial scale of basic inorganic chemicals, such as: gases';
+      case '_4_B_2_ACIDS':
+        return '4.(b).(ii) Chemical installations for the production on an industrial scale of basic inorganic chemicals, such as: acids';
+      case '_4_B_3_BASES':
+        return '4.(b).(iii) Chemical installations for the production on an industrial scale of basic inorganic chemicals, such as: bases';
+      case '_4_B_4_SALTS':
+        return '4.(b).(iv) Chemical installations for the production on an industrial scale of basic inorganic chemicals, such as: salts';
+      case '_4_B_5_NON_METALS_METAL_OXIDES':
+        return '4.(b).(v) Chemical installations for the production on an industrial scale of basic inorganic chemicals, such as: non-metals, metal oxides or other inorganic compounds';
+      case '_4_C_CHEMICAL_INSTALLATIONS_FOR_PRODUCTION_ON_INDUSTRIAL_SCALE_OF_PHOSPHOROUS':
+        return '4.(c) Chemical installations for the production on an industrial scale of phosphorous-, nitrogen- or potassium-based fertilisers';
+      case '_4_D_CHEMICAL_INSTALLATIONS_FOR_PRODUCTION_ON_INDUSTRIAL_SCALE_OF_BASIC_PLANT_HEALTH':
+        return '4.(d) Chemical installations for the production on an industrial scale of basic plant health products and of biocides';
+      case '_4_E_INSTALLATIONS_USING_CHEMICAL_OR_BIOLOGICAL_PROCESS':
+        return '4.(e) Installations using a chemical or biological process for the production on an industrial scale of basic pharmaceutical products';
+      case '_4_F_INSTALLATIONS_FOR_PRODUCTION_ON_INDUSTRIAL_SCALE_OF_EXPLOSIVES':
+        return '4.(f) Installations for the production on an industrial scale of explosives and pyrotechnic products';
+      case '_5_A_INSTALLATIONS_FOR_THE_RECOVERY_OR_DISPOSAL_OF_HAZARDOUS_WASTE':
+        return '5.(a) Installations for the recovery or disposal of hazardous waste';
+      case '_5_B_INSTALLATIONS_FOR_THE_INCINERATION_OF_NON_HAZARDOUS_WASTE':
+        return '5.(b) Installations for the incineration of non-hazardous waste';
+      case '_5_C_INSTALLATIONS_FOR_THE_DISPOSAL_OF_NON_HAZARDOUS_WASTE':
+        return '5.(c) Installations for the disposal of non-hazardous waste';
+      case '_5_D_LANDFILLS':
+        return '5.(d) Landfills';
+      case '_5_E_INSTALLATIONS_FOR_DISPOSAL_OR_RECYCLING_OF_ANIMAL_CARCASSES':
+        return '5.(e) Installations for the disposal or recycling of animal carcasses and animal waste';
+      case '_5_F_URBAN_WASTE_WATER_TREATMENT_PLANTS':
+        return '5.(f) Urban waste-water treatment plants';
+      case '_5_G_INDEPENDENTLY_OPERATED_INDUSTRIAL_WASTE_WATER_TREATMENT':
+        return '5.(g) Independently operated industrial waste-water treatment plants which serve one or more activities of this annex';
+      case '_6_A_INDUSTRIAL_PLANTS_FOR_PRODUCTION_OF_PULP_FROM_WOOD_OR_OTHER_FIBROUS':
+        return '6.(a) Industrial plants for the production of pulp from timber or similar fibrous materials';
+      case '_6_B_INDUSTRIAL_PLANTS_FOR_PRODUCTION_OF_PAPER_AND_BOARD':
+        return '6.(b) Industrial plants for the production of paper and board and other primary wood products (such as chipboard, fibreboard and plywood)';
+      case '_6_C_INDUSTRIAL_PLANTS_FOR_PRESERVATION_OF_WOOD':
+        return '6.(c) Industrial plants for the preservation of wood and wood products with chemicals';
+      case '_7_A_1_WITH_40000_PLACES_FOR_POULTRY':
+        return '7.(a).(i) Installations for the intensive rearing of poultry or pigs: with 40,000 places for poultry';
+      case '_7_A_2_WITH_2000_PLACES_FOR_PRODUCTION_PIGS':
+        return '7.(a).(ii) Installations for the intensive rearing of poultry or pigs: with 2,000 places for production pigs (over 30 kg)';
+      case '_7_A_3_WITH_750_PLACES_FOR_SOWS':
+        return '7.(a).(iii) Installations for the intensive rearing of poultry or pigs: with 750 places for sows';
+      case '_7_B_INTENSIVE_AQUACULTURE':
+        return '7.(b) Intensive aquaculture';
+      case '_8_A_SLAGHTERHOUSES':
+        return '8.(a) Slaughterhouses';
+      case '_8_B_1_ANIMAL_RAW_MATERIALS':
+        return '8.(b).(i) Treatment and processing intended for the production of food and beverage products from: animal raw materials (other than milk)';
+      case '_8_B_2_VEGETABLE_RAW_MATERIALS':
+        return '8.(b).(ii) Treatment and processing intended for the production of food and beverage products from: vegetable raw materials';
+      case '_8_C_TREATMENT_AND_PROCESSING_OF_MILK':
+        return '8.(c) Treatment and processing of milk';
+      case '_9_A_PLANTS_FOR_THE_PRETREATMENT':
+        return '9.(a) Plants for the pre-treatment (operations such as washing, bleaching, mercerisation) or dyeing of fibres or textiles';
+      case '_9_B_PLANTS_FOR_THE_TANNING':
+        return '9.(b) Plants for the tanning of hides and skins';
+      case '_9_C_INSTALLATIONS_FOR_THE_SURFACE_TREATMENT':
+        return '9.(c) Installations for the surface treatment of substances, objects or products using organic solvents, in particular for dressing, printing, coating, degreasing, waterproofing, sizing, painting, cleaning, or impregnating';
+      case '_9_D_INSTALLATIONS_FOR_THE_PRODUCTION_OF_CARBON':
+        return '9.(d) Installations for the production of carbon (hard-burnt coal) or electro-graphite by means of incineration or graphitisation';
+      case '_9_E_INSTALLATIONS_FOR_THE_BUILDING_AND_PAINTING_OR_REMOVAL_OF_PAINT':
+        return '9.(e) Installations for the building of and painting or removal of paint from ships';
+
+      //OLD CODES
       case '_1_A_1_A_PUBLIC_ELECTRICITY_AND_HEAT_PRODUCTION':
         return '1.A.1.a Public Electricity and Heat Production';
       case '_1_A_1_B_PETROLEUM_REFINING':

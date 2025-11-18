@@ -1,6 +1,7 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.aer.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
@@ -31,6 +32,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class AerCreationService {
 
     private final StartProcessRequestService startProcessRequestService;
@@ -60,6 +62,11 @@ public class AerCreationService {
     @Transactional
     public Request createRequestAerForYear(Long accountId, Year aerYear, Date expirationDate, AerInitiatorRequest initiatorRequest) {
         // Validate if AER is allowed
+        if (!aerCreationValidatorService.validateAerCreationForWaste(accountId)) {
+            log.info("AER was not created for account id " + accountId + " since permit type is WASTE and waste.aer-alr.enable.flag is false.");
+            return null;
+        }
+
         RequestCreateValidationResult validationResult = aerCreationValidatorService.validateYear(accountId, aerYear);
         if(!validationResult.isValid()) {
             throw new BusinessException(MetsErrorCode.AER_CREATION_NOT_ALLOWED, validationResult);

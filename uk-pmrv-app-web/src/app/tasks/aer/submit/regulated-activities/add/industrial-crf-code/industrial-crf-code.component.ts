@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -34,13 +34,11 @@ export class IndustrialCrfCodeComponent implements PendingRequest, AfterViewInit
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly destroy$: DestroySubject,
-    private cdr: ChangeDetectorRef,
   ) {}
 
   ngAfterViewInit(): void {
     if (this.form.get('industrialCrfCategory')) {
       this.form.get('industrialCrf').enable();
-      this.cdr.detectChanges();
     }
 
     this.form
@@ -50,7 +48,6 @@ export class IndustrialCrfCodeComponent implements PendingRequest, AfterViewInit
         if (this.form.get('industrialCrfCategory')) {
           this.form.get('industrialCrf').setValue(null);
           this.form.get('industrialCrf').enable();
-          this.cdr.detectChanges();
         }
       });
   }
@@ -62,6 +59,7 @@ export class IndustrialCrfCodeComponent implements PendingRequest, AfterViewInit
         map(([regulatedActivities, paramMap]) => {
           const activity = regulatedActivities.find((activity) => activity.id === paramMap.get('activityId'));
           activity.industrialCrf = this.form.get('industrialCrf').value;
+
           return this.aerService
             .postTaskSave({ regulatedActivities: regulatedActivities }, {}, false, 'regulatedActivities')
             .pipe(this.pendingRequest.trackRequest())

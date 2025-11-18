@@ -550,6 +550,20 @@ export class AlrService extends TasksHelperService {
       : null;
   }
 
+  getVerifierDownloadUrlFile(file: string): AttachedFile {
+    const attachments: { [key: string]: string } = (
+      this.store.getValue().requestTaskItem.requestTask.payload as ALRApplicationVerificationSubmitRequestTaskPayload
+    )?.verificationAttachments;
+    const url = this.getBaseFileDownloadUrl();
+
+    return file
+      ? {
+          downloadUrl: url + `${file}`,
+          fileName: attachments[file],
+        }
+      : null;
+  }
+
   getVerifierDownloadUrlFiles(files: string[]): AttachedFile[] {
     const attachments: { [key: string]: string } = (
       this.store.getValue().requestTaskItem.requestTask.payload as ALRApplicationVerificationSubmitRequestTaskPayload

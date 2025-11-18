@@ -19,6 +19,7 @@ export const crfCodesFormProvider = {
     const activity = activities?.find((activity) => activity.id === route.snapshot.paramMap.get('activityId'));
     const group = fb.group(
       {
+        hasWasteCrf: [[activity?.hasWasteCrf]],
         hasEnergyCrf: [[activity?.hasEnergyCrf]],
         hasIndustrialCrf: [[activity?.hasIndustrialCrf]],
       },
@@ -38,6 +39,7 @@ function atLeastOneRequiredValidator(message: string): ValidatorFn {
   return GovukValidators.builder(message, (group: FormGroup) => {
     const hasEnergyCrf = group.get('hasEnergyCrf').value?.[0] ?? false;
     const hasIndustrialCrf = group.get('hasIndustrialCrf').value?.[0] ?? false;
-    return !!hasEnergyCrf || !!hasIndustrialCrf ? null : { atLeastOneRequired: true };
+    const hasWasteCrf = group.get('hasWasteCrf').value?.[0] ?? false;
+    return !!hasEnergyCrf || !!hasIndustrialCrf || !!hasWasteCrf ? null : { atLeastOneRequired: true };
   });
 }

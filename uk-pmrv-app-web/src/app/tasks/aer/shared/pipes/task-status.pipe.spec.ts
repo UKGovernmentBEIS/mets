@@ -88,7 +88,7 @@ describe('TaskStatusPipe', () => {
     await expect(firstValueFrom(pipe.transform('emissionSources'))).resolves.toEqual('complete');
     await expect(firstValueFrom(pipe.transform('monitoringApproachEmissions'))).resolves.toEqual('complete');
     await expect(firstValueFrom(pipe.transform('regulatedActivities'))).resolves.toEqual('complete');
-    await expect(firstValueFrom(pipe.transform('pollutantRegisterActivities'))).resolves.toEqual('complete');
+    await expect(firstValueFrom(pipe.transform('prtrCodes'))).resolves.toEqual('complete');
     await expect(firstValueFrom(pipe.transform('naceCodes'))).resolves.toEqual('complete');
     await expect(firstValueFrom(pipe.transform('CALCULATION_CO2'))).resolves.toEqual('complete');
 
@@ -118,7 +118,7 @@ describe('TaskStatusPipe', () => {
     await expect(firstValueFrom(pipe.transform('emissionSources'))).resolves.toEqual('in progress');
     await expect(firstValueFrom(pipe.transform('monitoringApproachEmissions'))).resolves.toEqual('in progress');
     await expect(firstValueFrom(pipe.transform('regulatedActivities'))).resolves.toEqual('in progress');
-    await expect(firstValueFrom(pipe.transform('pollutantRegisterActivities'))).resolves.toEqual('in progress');
+    await expect(firstValueFrom(pipe.transform('prtrCodes'))).resolves.toEqual('in progress');
     await expect(firstValueFrom(pipe.transform('naceCodes'))).resolves.toEqual('in progress');
     await expect(firstValueFrom(pipe.transform('CALCULATION_CO2'))).resolves.toEqual('cannot start yet');
 

@@ -25,13 +25,15 @@ import { MeasurementOfCO2Emissions } from './measurementOfCO2Emissions';
 import { MeasurementOfN2OEmissions } from './measurementOfN2OEmissions';
 import { NaceCodes } from './naceCodes';
 import { PollutantRegisterActivities } from './pollutantRegisterActivities';
+import { PRTRCodes } from './pRTRCodes';
 import { SourceStream } from './sourceStream';
 
 export interface Aer {
   additionalDocuments: AdditionalDocuments;
   abbreviations: Abbreviations;
   confidentialityStatement: ConfidentialityStatement;
-  pollutantRegisterActivities: PollutantRegisterActivities;
+  pollutantRegisterActivities?: PollutantRegisterActivities;
+  prtrCodes?: PRTRCodes;
   naceCodes: NaceCodes;
   sourceStreams: Array<SourceStream>;
   emissionSources: Array<EmissionSource>;

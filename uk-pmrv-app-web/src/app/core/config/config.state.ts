@@ -4,7 +4,6 @@ export const FEATURES = [
   'serviceGatewayEnabled',
   'inspectionsWfAccountsTabEnabled',
   'corsia3yearOffsettingEnabled',
-  'co2-venting.permit-workflows.enabled',
   'bdrEnabled',
   'wastePermitEnabled',
 ] as const;

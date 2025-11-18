@@ -38,7 +38,7 @@ export const amendTasksPerReviewGroup = {
 export const amendTasksPerReviewSection = {
   INSTALLATION_DETAILS: [
     'aerMonitoringPlanDeviation',
-    'pollutantRegisterActivities',
+    'prtrCodes',
     'naceCodes',
     'regulatedActivities',
     'monitoringApproachEmissions',

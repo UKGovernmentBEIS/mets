@@ -23,6 +23,7 @@ import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.AerMonitor
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.MonitoringApproachEmissions;
 import uk.gov.pmrv.api.reporting.domain.nace.NaceCodes;
 import uk.gov.pmrv.api.reporting.domain.pollutantregistercodes.PollutantRegisterActivities;
+import uk.gov.pmrv.api.reporting.domain.prtr.PRTRCodes;
 import uk.gov.pmrv.api.reporting.domain.regulatedactivities.AerRegulatedActivities;
 
 import java.util.Collections;
@@ -39,6 +40,10 @@ import java.util.stream.Collectors;
 @SpELExpression(expression = "{(#monitoringApproachEmissions.keySet.contains('MEASUREMENT_CO2') " +
     "|| #monitoringApproachEmissions.keySet.contains('MEASUREMENT_N2O')) == (#emissionPoints != null)}",
     message = "aer.monitoringApproaches.emissionPoints")
+@SpELExpression(
+        expression =  "{!(#pollutantRegisterActivities?.exist == true and #prtrCodes?.exist == true)}",
+        message = "aer.pollutantRegisterActivities.or.prtrcodes.exist"
+)
 public class Aer {
 
     @Valid
@@ -54,8 +59,10 @@ public class Aer {
     private ConfidentialityStatement confidentialityStatement;
 
     @Valid
-    @NotNull
     private PollutantRegisterActivities pollutantRegisterActivities;
+
+    @Valid
+    private PRTRCodes prtrCodes;
 
     @Valid
     @NotNull

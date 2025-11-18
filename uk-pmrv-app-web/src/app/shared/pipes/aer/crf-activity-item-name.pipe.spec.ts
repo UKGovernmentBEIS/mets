@@ -122,6 +122,31 @@ describe('CrfActivityItemNamePipe', () => {
 
     expect(pipe.transform('_2_H_OTHER')).toEqual('2.H Other');
 
+    expect(pipe.transform('_5_A_1_A_SOLID_WASTE_DISPOSAL_TO_LAND')).toEqual('5.A.1.a Solid Waste Disposal to land');
+
+    expect(pipe.transform('_5_B_1_A_MUNICIPAL_SOLID_WASTE_COMPOSTING')).toEqual(
+      '5.B.1.a Municipal Solid Waste: composting',
+    );
+
+    expect(pipe.transform('_5_B_2_A_MUNICIPAL_SOLID_WASTE_ANAEROBIC_DIGESTION_AT_BIOGAS_FACILITIES')).toEqual(
+      '5.B.2.a Municipal Solid Waste: Anaerobic digestion at biogas facilities',
+    );
+
+    expect(pipe.transform('_5_C_1_1_B_INCINERATION_SEWAGE_SLUDGE')).toEqual('5.C.1.1.b Incineration: Sewage Sludge');
+    expect(pipe.transform('_5_C_1_2_A_INCINERATION_MUNICIPAL_SOLID_WASTE')).toEqual(
+      '5.C.1.2.a Incineration: Municipal Solid Waste',
+    );
+    expect(pipe.transform('_5_C_1_2_B_INCINERATION_CLINICAL_WASTE')).toEqual('5.C.1.2.b Incineration: Clinical waste');
+    expect(pipe.transform('_5_C_2_1_B_OPEN_BURNING_OTHER_BIOGENIC_WASTE')).toEqual(
+      '5.C.2.1.b Open Burning: other biogenic waste',
+    );
+    expect(pipe.transform('_5_C_2_2_B_OPEN_BURNING_ACCIDENTAL_BUILDING_AND_VEHICLE_FIRES')).toEqual(
+      '5.C.2.2.b Open Burning: accidental building and vehicle fires',
+    );
+
+    expect(pipe.transform('_5_D_1_DOMESTIC')).toEqual('5.D.1 Domestic');
+    expect(pipe.transform('_5_D_2_INDUSTRIAL')).toEqual('5.D.2 Industrial');
+
     expect(pipe.transform(undefined)).toEqual('');
   });
 });

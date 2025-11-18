@@ -123,6 +123,8 @@ describe('IndustrialCrfCodeComponent', () => {
           hasIndustrialCrf: true,
           energyCrf: '_1_A_1_A_PUBLIC_ELECTRICITY_AND_HEAT_PRODUCTION',
           industrialCrf: '_1_A_2_D_PULP_PAPER_AND_PRINT',
+          hasWasteCrf: false,
+          wasteCrf: null,
         },
       ];
       const navigateSpy = jest.spyOn(router, 'navigate');

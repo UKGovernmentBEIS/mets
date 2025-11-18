@@ -33,14 +33,14 @@ export class PrtrComponent {
       this.aerService
         .postTaskSave(
           {
-            pollutantRegisterActivities: {
+            prtrCodes: {
               exist: false,
-              activities: [],
+              codes: [],
             },
           },
           undefined,
           false,
-          'pollutantRegisterActivities',
+          'prtrCodes',
         )
         .pipe(this.pendingRequest.trackRequest())
         .subscribe(() => this.router.navigate(['summary'], { relativeTo: this.route }));

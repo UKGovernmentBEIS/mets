@@ -43,7 +43,7 @@ export const mockAerApplyPayload: AerApplicationSubmitRequestTaskPayload = {
     additionalDocuments: [true],
     confidentialityStatement: [true],
     activityLevelReport: [true],
-    pollutantRegisterActivities: [true],
+    prtrCodes: [true],
     sourceStreams: [false],
     monitoringApproachEmissions: [true],
     emissionSources: [false],
@@ -140,7 +140,7 @@ export const mockAerApplyPayload: AerApplicationSubmitRequestTaskPayload = {
         reference: 'emission source 2 reference',
       },
     ],
-    pollutantRegisterActivities: {
+    prtrCodes: {
       exist: false,
     },
     monitoringApproachEmissions: {
@@ -350,8 +350,10 @@ export const mockAerApplyPayload: AerApplicationSubmitRequestTaskPayload = {
         capacityUnit: 'KVA',
         hasEnergyCrf: true,
         hasIndustrialCrf: true,
+        hasWasteCrf: false,
         energyCrf: '_1_A_1_A_PUBLIC_ELECTRICITY_AND_HEAT_PRODUCTION',
         industrialCrf: '_2_A_4_OTHER_PROCESS_USES_OF_CARBONATES',
+        wasteCrf: null,
       },
     ],
     aerMonitoringPlanDeviation: {

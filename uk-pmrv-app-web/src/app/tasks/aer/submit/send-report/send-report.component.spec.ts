@@ -78,7 +78,7 @@ describe('SendReportComponent', () => {
     it('should show content', () => {
       expect(page.heading.textContent.trim()).toEqual('Send report');
       expect(page.paragraphsContent).toEqual([
-        'As a HSE permit holder, you can either send your emissions report to a verifier for a verification opinion or directly to Natural Resources Wales.',
+        'As a waste voluntary monitoring plan holder, you can either send your emissions report to a verifier for a verification opinion or directly to Natural Resources Wales.',
       ]);
     });
 

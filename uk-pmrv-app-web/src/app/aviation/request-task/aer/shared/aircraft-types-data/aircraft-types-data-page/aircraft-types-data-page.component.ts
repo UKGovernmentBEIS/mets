@@ -5,6 +5,7 @@ import {
   Inject,
   OnDestroy,
   OnInit,
+  signal,
   ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -60,6 +61,10 @@ export class AircraftTypesDataPageComponent implements OnInit, OnDestroy {
     aerQuery.selectIsCorsia,
     map((isCorsia) => (isCorsia ? 'CORSIA' : 'UK ETS')),
   );
+  showNotification = signal(false);
+  aviationAerAircraftDataDetails =
+    this.store.aerDelegate.payload.aer?.aviationAerAircraftData?.aviationAerAircraftDataDetails ||
+    ([] as Array<AviationAerAircraftDataDetails>);
 
   private subscription: Subscription;
   private statusSubscription: Subscription;
@@ -178,9 +183,11 @@ export class AircraftTypesDataPageComponent implements OnInit, OnDestroy {
           .subscribe(() => {
             if (!this.formProvider.getAircraftDataDetailsControl().errors) {
               this.parsedData = tempData;
+              this.showNotification.set(true);
             } else {
               this.wizardStep.isSummaryDisplayedSubject.next(true);
               this.parsedData = null;
+              this.showNotification.set(false);
             }
             this.cd.detectChanges();
           });
@@ -205,6 +212,7 @@ export class AircraftTypesDataPageComponent implements OnInit, OnDestroy {
       for (const errorKey in this.fileControl.errors) {
         if (Object.hasOwn(this.fileControl.errors, errorKey)) {
           this.errorList.push(this.fileControl.errors[errorKey]);
+          this.showNotification.set(false);
         }
       }
       this.cd.markForCheck();

@@ -12,7 +12,11 @@ export type CrfCategory =
   | '_2_D'
   | '_2_E'
   | '_2_F'
-  | '_2_G';
+  | '_2_G'
+  | '_5_A'
+  | '_5_B'
+  | '_5_C'
+  | '_5_D';
 
 type CrfCode =
   | '_1_A_1_A'
@@ -82,7 +86,17 @@ type CrfCode =
   | '_2_G_1'
   | '_2_G_2'
   | '_2_G_3'
-  | '_2_G_4';
+  | '_2_G_4'
+  | '_5_A_1_A'
+  | '_5_B_1_A'
+  | '_5_B_2_A'
+  | '_5_C_1_1_B'
+  | '_5_C_1_2_A'
+  | '_5_C_1_2_B'
+  | '_5_C_2_1_B'
+  | '_5_C_2_2_B'
+  | '_5_D_1'
+  | '_5_D_2';
 
 export const crfCategories: CrfCategory[] = [
   '_1_A_1',
@@ -99,6 +113,10 @@ export const crfCategories: CrfCategory[] = [
   '_2_E',
   '_2_F',
   '_2_G',
+  '_5_A',
+  '_5_B',
+  '_5_C',
+  '_5_D',
 ];
 
 export const activityItemNameMap: Record<CrfCategory | CrfCode, string> = {
@@ -184,4 +202,18 @@ export const activityItemNameMap: Record<CrfCategory | CrfCode, string> = {
   _2_G_2: '2.G.2 SF6 and PFCs from Other Product Use',
   _2_G_3: '2.G.3 N2O from Product Uses',
   _2_G_4: '2.G.4 Other',
+  _5_A: 'Solid Disposable Waste',
+  _5_A_1_A: '5.A.1.a Solid Waste Disposal to land',
+  _5_B: 'Biological Treatment of Solid Waste',
+  _5_B_1_A: '5.B.1.a Municipal Solid Waste: composting',
+  _5_B_2_A: '5.B.2.a Municipal Solid Waste: Anaerobic digestion at biogas facilities',
+  _5_C: 'Incineration and Open Burning of Waste',
+  _5_C_1_1_B: '5.C.1.1.b Incineration: Sewage Sludge',
+  _5_C_1_2_A: '5.C.1.2.a Incineration: Municipal Solid Waste',
+  _5_C_1_2_B: '5.C.1.2.b Incineration: Clinical waste',
+  _5_C_2_1_B: '5.C.2.1.b Open Burning: other biogenic waste',
+  _5_C_2_2_B: '5.C.2.2.b Open Burning: accidental building and vehicle fires',
+  _5_D: 'Wastewater Treatment and Discharge',
+  _5_D_1: '5.D.1 Domestic',
+  _5_D_2: '5.D.2 Industrial',
 };

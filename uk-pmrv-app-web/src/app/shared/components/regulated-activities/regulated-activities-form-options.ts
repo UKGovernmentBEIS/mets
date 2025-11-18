@@ -46,7 +46,7 @@ export const formGroupOptions: {
   [K in keyof RegulatedActivitiesFormGroup]: RegulatedActivity['type'][];
 } = {
   WASTE_GROUP: ['WASTE'],
-  COMBUSTION_GROUP: ['COMBUSTION'],
+  COMBUSTION_GROUP: ['COMBUSTION', 'UPSTREAM_GHG_REMOVAL'],
   REFINING_GROUP: ['MINERAL_OIL_REFINING'],
   METAL_GROUP: [
     'COKE_PRODUCTION',

@@ -30,7 +30,7 @@ export function getAvailableSections(
     'monitoringApproachEmissions',
     'emissionPoints',
     'regulatedActivities',
-    'pollutantRegisterActivities',
+    'prtrCodes',
     'naceCodes',
     'CALCULATION_CO2',
     'MEASUREMENT_CO2',
@@ -80,10 +80,10 @@ export function getSectionStatus(key: StatusKey, payload: AerApplicationSubmitRe
         : (payload.aer[key]?.length ?? Object.keys(payload.aer[key] || {})?.length)
           ? 'in progress'
           : 'not started';
-    case 'pollutantRegisterActivities':
+    case 'prtrCodes':
       return payload.aerSectionsCompleted[key]?.[0]
         ? 'complete'
-        : payload.aer[key]?.exist === false || payload.aer[key]?.activities?.length > 0
+        : payload.aer[key]?.exist === false || payload.aer[key]?.codes?.length > 0
           ? 'in progress'
           : 'not started';
     case 'naceCodes':

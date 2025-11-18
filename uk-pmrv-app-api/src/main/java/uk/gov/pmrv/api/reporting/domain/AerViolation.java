@@ -41,6 +41,7 @@ public class AerViolation {
         CALCULATION_INVALID_TRANSFER_OBJECT("Has Transfer and Transfer object are not mutually valid"),
         MEASUREMENT_INCORRECT_TOTAL_EMISSIONS("Total emissions provided differ from the ones calculated by the system"),
         CALCULATION_PFC_INCORRECT_TOTAL_EMISSIONS("Total emissions provided differ from the ones calculated by the system"),
+        INVALID_WASTE_REGULATED_ACTIVITY("Waste Regulated Activity must be selected"),
 
         NO_VERIFICATION_REPORT_FOUND("No verification report found"),
         VERIFIED_DATA_FOUND("Verification report found"),

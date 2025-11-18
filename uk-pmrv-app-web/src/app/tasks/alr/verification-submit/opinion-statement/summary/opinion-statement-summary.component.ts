@@ -11,7 +11,7 @@ import { ALRApplicationVerificationSubmitRequestTaskPayload, ALRVerificationOpin
 
 interface ViewModel {
   isEditable: boolean;
-  opinionStatementFiles: AttachedFile[];
+  opinionStatementFile: AttachedFile;
   supportingFiles: AttachedFile[];
   notes: ALRVerificationOpinionStatement['notes'];
   hideSubmit: boolean;
@@ -32,12 +32,12 @@ export class AlrOpinionStatementSummaryComponent {
     const isEditable = this.isEditable();
     const {
       verificationSectionsCompleted,
-      verificationReport: { opinionStatement: { opinionStatementFiles, supportingFiles, notes } = {} } = {},
+      verificationReport: { opinionStatement: { opinionStatementFile, supportingFiles, notes } = {} } = {},
     } = this.payload();
 
     return {
       isEditable,
-      opinionStatementFiles: this.alrService.getVerifierDownloadUrlFiles(opinionStatementFiles),
+      opinionStatementFile: this.alrService.getVerifierDownloadUrlFile(opinionStatementFile),
       supportingFiles: this.alrService.getVerifierDownloadUrlFiles(supportingFiles),
       notes,
       hideSubmit: !verificationSectionsCompleted?.['opinionStatement']?.[0] && isEditable,

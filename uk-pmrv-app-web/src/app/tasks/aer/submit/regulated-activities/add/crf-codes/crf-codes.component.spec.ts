@@ -45,6 +45,14 @@ describe('CrfCodesComponent', () => {
       this.fixture.componentInstance.form.get('hasIndustrialCrf').setValue([value]);
     }
 
+    get hasWasteCrf() {
+      return this.fixture.componentInstance.form.get('hasWasteCrf').value;
+    }
+
+    set hasWasteCrf(value: boolean) {
+      this.fixture.componentInstance.form.get('hasWasteCrf').setValue([value]);
+    }
+
     get submitButton() {
       return this.query<HTMLButtonElement>('button[type="submit"]');
     }
@@ -123,6 +131,8 @@ describe('CrfCodesComponent', () => {
           hasIndustrialCrf: false,
           energyCrf: '_1_A_1_A_PUBLIC_ELECTRICITY_AND_HEAT_PRODUCTION',
           industrialCrf: null,
+          hasWasteCrf: false,
+          wasteCrf: null,
         },
       ];
       const navigateSpy = jest.spyOn(router, 'navigate');

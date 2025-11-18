@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, Inject, Signal } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
@@ -18,7 +18,7 @@ import { hseTiUploadReportFormProvider } from './hseti-details-form.provider';
   templateUrl: './hseti-details.component.html',
   providers: [hseTiUploadReportFormProvider],
   standalone: true,
-  imports: [SharedModule, TaskSharedModule, HseTiTaskSharedModule],
+  imports: [SharedModule, TaskSharedModule, HseTiTaskSharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HSETIDetailsComponent implements PendingRequest {

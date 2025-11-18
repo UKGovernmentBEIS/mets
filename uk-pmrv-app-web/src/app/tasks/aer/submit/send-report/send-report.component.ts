@@ -20,6 +20,10 @@ export class SendReportComponent {
     .getPayload()
     .pipe(map((payload) => sendReportStatus(payload) !== 'cannot start yet'));
 
+  permitTypeHolder$ = this.aerService
+    .getPayload()
+    .pipe(map((payload) => (payload['permitType'] === 'HSE' ? 'HSE permit' : 'waste voluntary monitoring plan')));
+
   constructor(
     @Inject(AER_TASK_FORM) readonly form: UntypedFormGroup,
     readonly aerService: AerService,

@@ -1,10 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
-
-import { KeycloakService } from 'keycloak-angular';
 
 import { TasksService } from 'pmrv-api';
 
@@ -62,9 +59,9 @@ describe('TiersUsedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, AerModule, RouterTestingModule, MeasurementModule],
+      imports: [SharedModule, AerModule, MeasurementModule],
       providers: [
-        KeycloakService,
+        provideRouter([]),
         { provide: ActivatedRoute, useValue: route },
         { provide: TasksService, useValue: tasksService },
       ],
@@ -112,6 +109,7 @@ describe('TiersUsedComponent', () => {
       page.submitButton.click();
       fixture.detectChanges();
 
+      expect(page.tierRadios.length).toBe(4);
       page.tierRadios[0].click();
 
       page.submitButton.click();

@@ -116,6 +116,8 @@ import { AmendSummaryComponent } from './submit/amend/summary/amend-summary.comp
 import { AmendSummaryTemplateComponent } from './submit/amend/summary/amend-summary-template.component';
 import { EmissionsSummaryComponent } from './submit/emissions-summary/emissions-summary.component';
 import { InstallationDetailsComponent } from './submit/installation-details/installation-details.component';
+import { SubActivityComponent } from './submit/prtr/activity/sub-activity/sub-activity.component';
+import { WasteCrfCodeComponent } from './submit/regulated-activities/add/waste-crf-code/waste-crf-code.component';
 import { SubmitContainerComponent } from './submit/submit-container.component';
 import { ActivityLevelReportComponent } from './verification-submit/activity-level-report/activity-level-report.component';
 import { FallbackComponent } from './verification-submit/fallback/fallback.component';
@@ -226,6 +228,7 @@ import { RecallComponent } from './verification-wait/recall/recall.component';
     SourceStreamDetailsComponent,
     SourceStreamHelpComponent,
     SourceStreamsComponent,
+    SubActivityComponent,
     SubmitContainerComponent,
     SummaryAbbreviationsComponent,
     SummaryAdditionalDocumentsComponent,
@@ -241,6 +244,7 @@ import { RecallComponent } from './verification-wait/recall/recall.component';
     VerifierDetailsSummaryComponent,
     VerifierEmissionsSummary,
     VerifierSendReportComponent,
+    WasteCrfCodeComponent,
   ],
   imports: [
     AerRoutingModule,

@@ -50,8 +50,8 @@ describe('DeleteComponent', () => {
     store = TestBed.inject(CommonTasksStore);
     store.setState(
       mockStateBuild({
-        pollutantRegisterActivities: {
-          activities: ['_1_A_2_B_NON_FERROUS_METALS', '_2_D_3_OTHER', '_2_H_OTHER'],
+        prtrCodes: {
+          codes: ['_1_A_MINERAL_OIL_GAS_REFINERIES', '_1_B_INSTALLATIONS_FOR_GASIFICATION_LIGUEFACTION'],
           exist: true,
         },
       }),
@@ -69,7 +69,9 @@ describe('DeleteComponent', () => {
   });
 
   it('should display the activity item name', () => {
-    expect(page.header.textContent.trim()).toEqual('Are you sure you want to delete ‘2.D.3 Other’?');
+    expect(page.header.textContent.trim()).toEqual(
+      'Are you sure you want to delete ‘1.(b) Installations for gasification and liquefaction’?',
+    );
   });
 
   it('should show activities and submit form', () => {
@@ -81,12 +83,12 @@ describe('DeleteComponent', () => {
     expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith(
       mockPostBuild(
         {
-          pollutantRegisterActivities: {
-            activities: ['_1_A_2_B_NON_FERROUS_METALS', '_2_H_OTHER'],
+          prtrCodes: {
+            codes: ['_1_A_MINERAL_OIL_GAS_REFINERIES'],
             exist: true,
           },
         },
-        { pollutantRegisterActivities: [false] },
+        { prtrCodes: [false] },
       ),
     );
   });

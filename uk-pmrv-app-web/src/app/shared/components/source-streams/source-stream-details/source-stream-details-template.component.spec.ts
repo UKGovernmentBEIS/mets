@@ -4,7 +4,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { ConfigStore } from '@core/config/config.store';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SourceStreamDetailsTemplateComponent } from '@shared/components/source-streams/source-stream-details/source-streams-details-template.component';
 import { SharedModule } from '@shared/shared.module';
@@ -16,7 +15,6 @@ describe('SourceStreamDetailsTemplateComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
   let element: HTMLElement;
   const destroySubject = mockClass(DestroySubject);
-  let configStore: ConfigStore;
 
   @Component({
     template: `
@@ -44,9 +42,6 @@ describe('SourceStreamDetailsTemplateComponent', () => {
       declarations: [TestComponent],
       providers: [{ provide: DestroySubject, useValue: destroySubject }],
     }).compileComponents();
-
-    configStore = TestBed.inject(ConfigStore);
-    configStore.setState({ features: { 'co2-venting.permit-workflows.enabled': false } });
   });
 
   beforeEach(() => {

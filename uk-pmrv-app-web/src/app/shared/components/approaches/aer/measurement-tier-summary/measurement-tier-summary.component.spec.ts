@@ -74,7 +74,7 @@ describe('MeasurementTierSummaryComponent', () => {
           reference: 'emission source 2 reference',
         },
       ],
-      pollutantRegisterActivities: undefined,
+      prtrCodes: undefined,
       monitoringApproachEmissions: {
         MEASUREMENT_CO2: {
           type: 'MEASUREMENT_CO2',

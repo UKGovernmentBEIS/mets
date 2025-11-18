@@ -55,7 +55,7 @@ describe('CalculationEmissionsGroupComponent', () => {
           reference: 'emission source 2 reference',
         },
       ],
-      pollutantRegisterActivities: undefined,
+      prtrCodes: undefined,
       monitoringApproachEmissions: {
         CALCULATION_CO2: {
           type: 'CALCULATION_CO2',

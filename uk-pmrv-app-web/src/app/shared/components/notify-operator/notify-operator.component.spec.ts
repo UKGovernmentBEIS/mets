@@ -8,7 +8,7 @@ import { of, throwError } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SharedModule } from '@shared/shared.module';
-import { ActivatedRouteStub, asyncData, MockType } from '@testing';
+import { ActivatedRouteStub, asyncData, BasePage, MockType } from '@testing';
 
 import {
   CaExternalContactsService,
@@ -30,19 +30,28 @@ describe('NotifyOperatorComponent', () => {
   let externalContactsService: MockType<CaExternalContactsService>;
   let tasksAssignmentService: MockType<TasksAssignmentService>;
   let tasksService: MockType<TasksService>;
+  let page: Page;
 
   @Component({
     template: `
       <app-notify-operator
         [taskId]="237"
         [accountId]="1"
-        requestTaskActionType="PERMIT_SURRENDER_NOTIFY_OPERATOR_FOR_DECISION"
+        requestTaskActionType="HSE_TI_REGULATOR_REVIEW_SUBMIT"
         [pendingRfi]="false"
         [pendingRde]="true"
+        [decisionType]="'rejected'"
+        [allocationPeriod]="'2024-2025'"
         [confirmationMessage]="'Surrender completed'"></app-notify-operator>
     `,
   })
   class TestComponent {}
+
+  class Page extends BasePage<TestComponent> {
+    get bodyValues() {
+      return this.queryAll<HTMLDivElement>('.govuk-body');
+    }
+  }
 
   const mockAssignees = [
     {
@@ -148,6 +157,7 @@ describe('NotifyOperatorComponent', () => {
     component = fixture.debugElement.query(By.directive(NotifyOperatorComponent)).componentInstance;
     hostElement = fixture.nativeElement;
     fixture.detectChanges();
+    page = new Page(fixture);
     jest.clearAllMocks();
   });
 
@@ -177,10 +187,10 @@ describe('NotifyOperatorComponent', () => {
 
     expect(tasksService.processRequestTaskAction).toHaveBeenCalled();
     expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith({
-      requestTaskActionType: 'PERMIT_SURRENDER_NOTIFY_OPERATOR_FOR_DECISION',
+      requestTaskActionType: 'HSE_TI_REGULATOR_REVIEW_SUBMIT',
       requestTaskId: 237,
       requestTaskActionPayload: {
-        payloadType: 'PERMIT_SURRENDER_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD',
+        payloadType: 'HSE_TI_REGULATOR_REVIEW_SUBMIT_PAYLOAD',
         decisionNotification: {
           operators: ['cceaad6d-4b09-48bf-9556-77e10f874028'],
           externalContacts: [],
@@ -313,5 +323,19 @@ describe('NotifyOperatorComponent', () => {
 
       expect(assignees.value).toEqual(users.value);
     });
+  });
+
+  it('should populate the decision inside the body text', () => {
+    component.form.get('assignees').setValue(mockAssignees[0].id);
+    component.form.get('users').setValue([mockUsers.authorities[0].userId]);
+
+    const submitButton = fixture.debugElement.query(By.css('button[type="submit"]'));
+    submitButton.nativeElement.click();
+
+    fixture.detectChanges();
+
+    expect(page.bodyValues[0].textContent.trim()).toBe(
+      "You have rejected the operator's 2024-2025 HSE target increase application.",
+    );
   });
 });

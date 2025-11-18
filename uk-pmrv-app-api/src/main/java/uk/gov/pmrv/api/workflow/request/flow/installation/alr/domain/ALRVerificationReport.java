@@ -37,9 +37,9 @@ public class ALRVerificationReport extends VerificationReport {
 
         Set<UUID> attachments = new HashSet<>();
 
-        Set<UUID> opinionFiles = verificationData.getOpinionStatement().getOpinionStatementFiles();
-        if (ObjectUtils.isNotEmpty(opinionFiles)) {
-            attachments.addAll(opinionFiles);
+        UUID opinionFile = verificationData.getOpinionStatement().getOpinionStatementFile();
+        if (opinionFile != null) {
+            attachments.add(opinionFile);
         }
 
         Set<UUID> supportingFiles = verificationData.getOpinionStatement().getSupportingFiles();

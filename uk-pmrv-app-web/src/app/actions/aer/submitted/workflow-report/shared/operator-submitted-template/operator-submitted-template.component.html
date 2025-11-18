@@ -7,14 +7,12 @@
     <app-installation-details-summary
       [installationOperatorDetails]="payload.installationOperatorDetails"
       [hideSubheadings]="true"
-      [hasBorders]="true"
-    ></app-installation-details-summary>
+      [hasBorders]="true"></app-installation-details-summary>
 
     <h2 class="govuk-heading-m govuk-!-margin-top-6">Pollutant Release and Transfer Register codes (PRTR)</h2>
     <app-prtr-summary-template
-      [activities]="payload.aer.pollutantRegisterActivities"
-      [noBottomBorder]="false"
-    ></app-prtr-summary-template>
+      [activities]="payload.aer.prtrCodes ?? payload.aer.pollutantRegisterActivities"
+      [noBottomBorder]="false"></app-prtr-summary-template>
 
     <h2 class="govuk-heading-m govuk-!-margin-top-6">NACE codes</h2>
     <app-nace-codes-summary-template [naceCodes]="payload.aer.naceCodes"></app-nace-codes-summary-template>
@@ -22,8 +20,7 @@
     <h2 class="govuk-heading-m govuk-!-margin-top-6">Regulated activities carried out at the installation</h2>
     <ng-container *ngFor="let activity of payload.aer.regulatedActivities | regulatedActivitiesSort">
       <app-aer-regulated-activities-summary-template
-        [activity]="activity"
-      ></app-aer-regulated-activities-summary-template>
+        [activity]="activity"></app-aer-regulated-activities-summary-template>
     </ng-container>
 
     <h2 class="govuk-heading-m govuk-!-margin-top-6">Monitoring plan versions during the reporting year</h2>
@@ -31,8 +28,7 @@
 
     <h2 class="govuk-heading-m govuk-!-margin-top-6">Monitoring approaches used during the reporting year</h2>
     <app-approaches-used-summary-template
-      [monitoringApproaches]="payload.aer.monitoringApproachEmissions"
-    ></app-approaches-used-summary-template>
+      [monitoringApproaches]="payload.aer.monitoringApproachEmissions"></app-approaches-used-summary-template>
   </div>
 
   <div class="pg-break"></div>
@@ -43,8 +39,7 @@
     <h2 class="govuk-heading-m">Source streams (fuels and materials)</h2>
     <app-source-streams-summary-table
       [bottomBorder]="true"
-      [data]="payload.aer.sourceStreams"
-    ></app-source-streams-summary-table>
+      [data]="payload.aer.sourceStreams"></app-source-streams-summary-table>
 
     <h2 class="govuk-heading-m">Emission sources</h2>
     <govuk-table [columns]="sourcesColumns" [data]="payload.aer.emissionSources"></govuk-table>
@@ -75,13 +70,11 @@
     <h2 class="govuk-heading-m">Additional documents and information</h2>
     <app-documents-summary-template
       [data]="payload.aer.additionalDocuments"
-      [files]="additionalDocumentFiles"
-    ></app-documents-summary-template>
+      [files]="additionalDocumentFiles"></app-documents-summary-template>
 
     <h2 class="govuk-heading-m">Confidentiality statement</h2>
     <app-confidentiality-statement-summary-template
-      [data]="payload.aer.confidentialityStatement"
-    ></app-confidentiality-statement-summary-template>
+      [data]="payload.aer.confidentialityStatement"></app-confidentiality-statement-summary-template>
   </div>
 
   <div *ngIf="payload.aer?.activityLevelReport">
@@ -90,7 +83,6 @@
 
     <app-activity-level-report-group
       [activityLevelReport]="payload.aer?.activityLevelReport"
-      [documentFiles]="activityLevelReportFiles"
-    ></app-activity-level-report-group>
+      [documentFiles]="activityLevelReportFiles"></app-activity-level-report-group>
   </div>
 </ng-container>

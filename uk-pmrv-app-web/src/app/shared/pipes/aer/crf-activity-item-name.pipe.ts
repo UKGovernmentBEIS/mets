@@ -158,6 +158,32 @@ export class CrfActivityItemNamePipe implements PipeTransform {
 
       case '_2_H_OTHER':
         return '2.H Other';
+
+      case '_5_A_1_A_SOLID_WASTE_DISPOSAL_TO_LAND':
+        return '5.A.1.a Solid Waste Disposal to land';
+
+      case '_5_B_1_A_MUNICIPAL_SOLID_WASTE_COMPOSTING':
+        return '5.B.1.a Municipal Solid Waste: composting';
+
+      case '_5_B_2_A_MUNICIPAL_SOLID_WASTE_ANAEROBIC_DIGESTION_AT_BIOGAS_FACILITIES':
+        return '5.B.2.a Municipal Solid Waste: Anaerobic digestion at biogas facilities';
+
+      case '_5_C_1_1_B_INCINERATION_SEWAGE_SLUDGE':
+        return '5.C.1.1.b Incineration: Sewage Sludge';
+      case '_5_C_1_2_A_INCINERATION_MUNICIPAL_SOLID_WASTE':
+        return '5.C.1.2.a Incineration: Municipal Solid Waste';
+      case '_5_C_1_2_B_INCINERATION_CLINICAL_WASTE':
+        return '5.C.1.2.b Incineration: Clinical waste';
+      case '_5_C_2_1_B_OPEN_BURNING_OTHER_BIOGENIC_WASTE':
+        return '5.C.2.1.b Open Burning: other biogenic waste';
+      case '_5_C_2_2_B_OPEN_BURNING_ACCIDENTAL_BUILDING_AND_VEHICLE_FIRES':
+        return '5.C.2.2.b Open Burning: accidental building and vehicle fires';
+
+      case '_5_D_1_DOMESTIC':
+        return '5.D.1 Domestic';
+      case '_5_D_2_INDUSTRIAL':
+        return '5.D.2 Industrial';
+
       default:
         return '';
     }

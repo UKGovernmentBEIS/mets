@@ -87,7 +87,7 @@ export interface SourceStream {
     | 'SLUDGE_GAS'
     | 'SOUR_GAS'
     | 'SOUR_GAS_FLARE'
-    | 'SDF'
+    | 'RDF'
     | 'SSF'
     | 'SRF'
     | 'SUB_BITUMINOUS_COAL'

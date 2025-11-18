@@ -78,7 +78,7 @@ export const mockState = {
             reference: 'emission source 2 reference',
           },
         ],
-        pollutantRegisterActivities: {
+        prtrCodes: {
           exist: false,
         },
         monitoringApproachEmissions: {

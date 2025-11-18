@@ -28,14 +28,12 @@ export class AlrOpinionStatementReviewComponent {
   isEditable: Signal<boolean> = this.alrService.isEditable;
   alrPayload: Signal<ALRApplicationVerificationSubmitRequestTaskPayload> = this.alrService.payload;
 
-  opinionStatementFiles: Signal<AttachedFile[]> = computed(() => {
+  opinionStatementFile: Signal<AttachedFile> = computed(() => {
     const payload = this.alrPayload();
 
-    return payload?.verificationReport?.opinionStatement?.opinionStatementFiles
-      ? this.alrService.getVerifierDownloadUrlFiles(
-          payload?.verificationReport?.opinionStatement?.opinionStatementFiles,
-        )
-      : [];
+    return payload?.verificationReport?.opinionStatement?.opinionStatementFile
+      ? this.alrService.getVerifierDownloadUrlFile(payload?.verificationReport?.opinionStatement?.opinionStatementFile)
+      : ({} as AttachedFile);
   });
 
   constructor(

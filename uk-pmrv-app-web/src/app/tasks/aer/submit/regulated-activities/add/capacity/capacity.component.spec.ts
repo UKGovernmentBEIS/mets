@@ -118,6 +118,8 @@ describe('CapacityComponent', () => {
           capacityUnit: 'KG_PER_DAY',
           hasEnergyCrf: true,
           hasIndustrialCrf: true,
+          hasWasteCrf: false,
+          wasteCrf: null,
           energyCrf: '_1_A_1_A_PUBLIC_ELECTRICITY_AND_HEAT_PRODUCTION',
           industrialCrf: '_2_A_4_OTHER_PROCESS_USES_OF_CARBONATES',
         },

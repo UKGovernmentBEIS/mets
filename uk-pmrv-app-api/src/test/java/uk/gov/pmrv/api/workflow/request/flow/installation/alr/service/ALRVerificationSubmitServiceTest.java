@@ -78,7 +78,7 @@ public class ALRVerificationSubmitServiceTest {
         final ALRVerificationData verificationData = ALRVerificationData.builder()
                 .opinionStatement(ALRVerificationOpinionStatement
                         .builder()
-                        .opinionStatementFiles(Set.of(attachmentId))
+                        .opinionStatementFile(attachmentId)
                         .notes("Test")
                         .build())
                 .build();

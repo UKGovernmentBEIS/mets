@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 
-import { combineLatest, takeUntil, tap } from 'rxjs';
+import { takeUntil, tap } from 'rxjs';
 
 import { selectIsFeatureEnabled } from '@core/config/config.selectors';
 import { ConfigStore } from '@core/config/config.store';
@@ -24,7 +24,6 @@ export interface SourceStreamOption {
 export class SourceStreamDetailsTemplateComponent implements OnInit {
   @Input() form: UntypedFormGroup;
   @Input() isEditing: boolean;
-  @Input() showUpstream: boolean = false;
   @Output() readonly formSubmit = new EventEmitter<UntypedFormGroup>();
 
   descriptionOptions = descriptionOptions;
@@ -32,22 +31,13 @@ export class SourceStreamDetailsTemplateComponent implements OnInit {
   sourceStreamType = new SourceStreamTypePipe();
   sourceStreamTypesArray: Array<SourceStreamOption> = [];
 
-  private readonly co2VentingEnabled$ = this.configStore.pipe(
-    selectIsFeatureEnabled('co2-venting.permit-workflows.enabled'),
-  );
   private readonly wastePermitEnabled$ = this.configStore.pipe(selectIsFeatureEnabled('wastePermitEnabled'));
 
   ngOnInit(): void {
-    combineLatest([this.co2VentingEnabled$, this.wastePermitEnabled$])
+    this.wastePermitEnabled$
       .pipe(
         takeUntil(this.destroy$),
-        tap(([co2VentingEnabled, wastePermitEnabled]) => {
-          if (co2VentingEnabled && this.showUpstream) {
-            this.typeOptions = [...typeOptions, 'UPSTREAM_GHG_REMOVAL_VENTING_CO2'];
-            this.descriptionOptions = [...descriptionOptions, 'VENTED_GAS'];
-            this.descriptionOptions.sort();
-          }
-
+        tap((wastePermitEnabled) => {
           this.typeOptions.forEach((option) => {
             this.sourceStreamTypesArray.push({ label: this.sourceStreamType.transform(option), value: option });
           });
@@ -59,7 +49,7 @@ export class SourceStreamDetailsTemplateComponent implements OnInit {
                 option !== 'CLINICAL_WASTE' &&
                 option !== 'COMMERCIAL_INDUSTRIAL_WASTE' &&
                 option !== 'HAZARDOUS_WASTE' &&
-                option !== 'SDF' &&
+                option !== 'RDF' &&
                 option !== 'SRF',
             );
           }

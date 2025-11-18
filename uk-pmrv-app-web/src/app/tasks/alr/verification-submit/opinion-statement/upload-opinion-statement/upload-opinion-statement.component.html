@@ -16,12 +16,11 @@
       </a>
     </p>
     <div class="govuk-!-width-three-quarters">
-      <app-multiple-file-input
-        [baseDownloadUrl]="getDownloadUrl()"
-        label="Upload the activity level report verification opinion statement"
+      <app-file-input
+        [downloadUrl]="getDocumentDownloadUrl"
+        formControlName="opinionStatementFile"
         headerSize="s"
-        formControlName="opinionStatementFiles"
-        listTitle="Uploaded files"></app-multiple-file-input>
+        listTitle="Uploaded files"></app-file-input>
     </div>
 
     <div class="govuk-!-width-three-quarters">

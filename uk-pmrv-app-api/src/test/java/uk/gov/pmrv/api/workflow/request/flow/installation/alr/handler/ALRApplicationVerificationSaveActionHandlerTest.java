@@ -17,7 +17,6 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRVerifica
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.service.ALRVerificationSubmitService;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.mockito.Mockito.times;
@@ -46,7 +45,7 @@ public class ALRApplicationVerificationSaveActionHandlerTest {
                 .verificationData(ALRVerificationData.builder()
                         .opinionStatement(ALRVerificationOpinionStatement
                                 .builder()
-                                .opinionStatementFiles(Set.of(attachmentId))
+                                .opinionStatementFile(attachmentId)
                                 .notes("Test")
                                 .build())
                         .build())

@@ -41,18 +41,7 @@ export class RegulatedActivitiesComponent extends SectionComponent implements Pe
   }> = computed(() => {
     const features = this.stateFeatures();
 
-    let groupOptions: {
-      [K in keyof RegulatedActivitiesFormGroup]: RegulatedActivity['type'][];
-    };
-
-    if (features?.['co2-venting.permit-workflows.enabled'] && !this.hideUpstream()) {
-      groupOptions = {
-        ...formGroupOptions,
-        COMBUSTION_GROUP: [...formGroupOptions.COMBUSTION_GROUP, 'UPSTREAM_GHG_REMOVAL'],
-      };
-    } else {
-      groupOptions = formGroupOptions;
-    }
+    const groupOptions = formGroupOptions;
 
     if (!features?.['wastePermitEnabled']) {
       if (groupOptions.WASTE_GROUP) {

@@ -20,10 +20,12 @@ public class AviationAerCorsiaAnnualOffsettingSubmittedDocumentTemplateWorkflowP
 
         Map<String, Object> map = new HashMap<>();
         map.put("schemeYear", payload.getAviationAerCorsiaAnnualOffsetting().getSchemeYear().toString());
-        map.put("calculatedAnnualOffsettingRequirements", payload.getAviationAerCorsiaAnnualOffsetting().getCalculatedAnnualOffsetting());
-        map.put("schemeYearPlusOne", payload.getAviationAerCorsiaAnnualOffsetting().getSchemeYear().plusYears(1L));
-        map.put("annualOffsettingRequirements", payload.getAviationAerCorsiaAnnualOffsetting().getTotalChapter());
-        map.put("sectorGrowth", payload.getAviationAerCorsiaAnnualOffsetting().getSectorGrowth());
+        map.put("calculatedAnnualOffsettingRequirements",
+            payload.getAviationAerCorsiaAnnualOffsetting().getCalculatedAnnualOffsetting() != null
+                ? payload.getAviationAerCorsiaAnnualOffsetting().getCalculatedAnnualOffsetting().toString() : null);
+        map.put("schemeYearPlusOne", payload.getAviationAerCorsiaAnnualOffsetting().getSchemeYear().plusYears(1L).toString());
+        map.put("annualOffsettingRequirements", payload.getAviationAerCorsiaAnnualOffsetting().getTotalChapter().toString());
+        map.put("sectorGrowth", payload.getAviationAerCorsiaAnnualOffsetting().getSectorGrowth().toString());
 
         return map;
     }

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { GovukTableColumn } from 'govuk-components';
 
-import { PollutantRegisterActivities } from 'pmrv-api';
+import { PollutantRegisterActivities, PRTRCodes } from 'pmrv-api';
 
 @Component({
   selector: 'app-prtr-summary-template',
@@ -13,7 +13,7 @@ import { PollutantRegisterActivities } from 'pmrv-api';
 export class PrtrSummaryTemplateComponent implements OnInit {
   @Input() cssClass: string;
   @Input() noBottomBorder: boolean;
-  @Input() activities: PollutantRegisterActivities;
+  @Input() activities: PRTRCodes | PollutantRegisterActivities;
   @Input() isEditable: boolean;
 
   activityItems: { activity: any }[];
@@ -29,7 +29,8 @@ export class PrtrSummaryTemplateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.activityItems = this.activities?.activities?.map((item) => ({ activity: item })) ?? [];
+    const activityCodes = this.activities?.['codes'] ?? this.activities?.['activities'];
+    this.activityItems = activityCodes?.map((item) => ({ activity: item })) ?? [];
   }
 
   addAnother(): void {

@@ -21,11 +21,12 @@ export class AerRegulatedActivitiesSummaryTemplateComponent {
     return (
       !this.hasAtLeastOneCrfCode() ||
       (this.activity.hasIndustrialCrf && !this.activity.industrialCrf) ||
-      (this.activity.hasEnergyCrf && !this.activity.energyCrf)
+      (this.activity.hasEnergyCrf && !this.activity.energyCrf) ||
+      (this.activity.hasWasteCrf && !this.activity.wasteCrf)
     );
   }
 
   hasAtLeastOneCrfCode(): boolean {
-    return !!this.activity.energyCrf || !!this.activity.industrialCrf;
+    return !!this.activity.energyCrf || !!this.activity.industrialCrf || !!this.activity.wasteCrf;
   }
 }

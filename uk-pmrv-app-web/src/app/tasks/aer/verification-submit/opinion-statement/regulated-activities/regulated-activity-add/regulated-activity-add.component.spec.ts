@@ -79,7 +79,7 @@ describe('RegulatedActivityAddComponent', () => {
     expect(page.heading1).toBeTruthy();
     expect(page.heading1.textContent.trim()).toEqual('Select a regulated activity used at the installation');
     expect(page.categoryInputs).toHaveLength(9);
-    expect(page.activityInputs).toHaveLength(26);
+    expect(page.activityInputs).toHaveLength(28);
     expect(page.submitButton).toBeTruthy();
     expect(page.errorSummary).toBeFalsy();
   });
@@ -109,7 +109,7 @@ describe('RegulatedActivityAddComponent', () => {
 
     page.categoryInputs[7].click();
     fixture.detectChanges();
-    page.activityInputs[24].click();
+    page.activityInputs[26].click();
 
     page.submitButton.click();
     fixture.detectChanges();

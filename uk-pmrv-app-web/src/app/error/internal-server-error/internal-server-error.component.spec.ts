@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { provideRouter, Router, RouterLinkWithHref } from '@angular/router';
 
 import { GenericServiceErrorCode } from '@error/service-errors';
 import { SharedModule } from '@shared/shared.module';
+import { RouterStubComponent } from '@testing';
 
 import { InternalServerErrorComponent } from './internal-server-error.component';
 
@@ -13,8 +14,9 @@ describe('InternalServerErrorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule],
+      imports: [SharedModule, RouterLinkWithHref],
       declarations: [InternalServerErrorComponent],
+      providers: [provideRouter([{ path: 'contact-us', component: RouterStubComponent }])],
     }).compileComponents();
   });
 
@@ -32,8 +34,9 @@ describe('InternalServerErrorComponent', () => {
       expect(component).toBeTruthy();
     });
 
-    it('should display all HTML elements', () => {
+    it('should display all HTML elements', async () => {
       const element: HTMLElement = fixture.nativeElement;
+      const navigateByUrlSpy = jest.spyOn(router, 'navigateByUrl');
       const paragraphContents = Array.from(element.querySelectorAll<HTMLParagraphElement>('p')).map((el) =>
         el.textContent.trim(),
       );
@@ -43,7 +46,15 @@ describe('InternalServerErrorComponent', () => {
         'Try again later.',
         'Contact the UK ETS reporting helpdesk  if you have any questions.',
       ]);
-      expect(element.querySelector('a').href).toEqual('mailto:METS@energysecurity.gov.uk');
+
+      const link: HTMLAnchorElement = element.querySelector<HTMLAnchorElement>('a');
+      link.click();
+
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(navigateByUrlSpy).toHaveBeenCalledTimes(1);
+      expect(router.url).toBe('/contact-us');
     });
   });
 
@@ -63,7 +74,8 @@ describe('InternalServerErrorComponent', () => {
       expect(component).toBeTruthy();
     });
 
-    it('should display all HTML elements', () => {
+    it('should display all HTML elements', async () => {
+      const navigateByUrlSpy = jest.spyOn(router, 'navigateByUrl');
       const element: HTMLElement = fixture.nativeElement;
       const paragraphContents = Array.from(element.querySelectorAll<HTMLParagraphElement>('p')).map((el) =>
         el.textContent.trim(),
@@ -73,7 +85,14 @@ describe('InternalServerErrorComponent', () => {
       expect(paragraphContents).toEqual([
         "We're experiencing temporary difficulties in syncing data. Please try again later or contact the UK ETS reporting helpdesk for assistance.",
       ]);
-      expect(element.querySelector('a').href).toEqual('mailto:METS@energysecurity.gov.uk');
+      const link: HTMLAnchorElement = element.querySelector<HTMLAnchorElement>('a');
+      link.click();
+
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(navigateByUrlSpy).toHaveBeenCalledTimes(1);
+      expect(router.url).toBe('/contact-us');
     });
   });
 });

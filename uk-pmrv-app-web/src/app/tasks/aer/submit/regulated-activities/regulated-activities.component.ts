@@ -25,7 +25,7 @@ export class RegulatedActivitiesComponent {
   displayErrorSummary$ = new BehaviorSubject(false);
   isSummaryDisplayed$ = this.displayErrorSummary$.pipe(
     tap(() => this.form.updateValueAndValidity()),
-    map((displaySummary) => displaySummary || this.form.errors?.missingCrf),
+    map((displaySummary) => displaySummary || this.form.errors?.missingCrf || this.form.errors?.missingWaste),
   );
 
   constructor(

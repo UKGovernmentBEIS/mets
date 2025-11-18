@@ -10,6 +10,7 @@ import { AttachedFile } from '@shared/types/attached-file.type';
 export class OpinionStatementSummaryTemplateComponent {
   @Input() isEditable = false;
   @Input() opinionStatementFilesText = 'Uploaded BDR verification opinion statement';
+  @Input() opinionStatementFile: AttachedFile;
   @Input() opinionStatementFiles: AttachedFile[];
   @Input() supportingFiles: AttachedFile[];
   @Input() notes: string;

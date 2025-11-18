@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -35,13 +35,11 @@ export class EnergyCrfCodeComponent implements PendingRequest, AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly destroy$: DestroySubject,
-    private cdr: ChangeDetectorRef,
   ) {}
 
   ngAfterViewInit(): void {
     if (this.form.get('energyCrfCategory')) {
       this.form.get('energyCrf').enable();
-      this.cdr.detectChanges();
     }
 
     this.form
@@ -51,7 +49,6 @@ export class EnergyCrfCodeComponent implements PendingRequest, AfterViewInit {
         if (this.form.get('energyCrfCategory')) {
           this.form.get('energyCrf').setValue(null);
           this.form.get('energyCrf').enable();
-          this.cdr.detectChanges();
         }
       });
   }

@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -9,7 +8,6 @@ import { PrtrComponent } from '@tasks/aer/submit/prtr/prtr.component';
 import { mockPostBuild, mockStateBuild } from '@tasks/aer/submit/testing/mock-state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { TasksService } from 'pmrv-api';
 
@@ -50,15 +48,15 @@ describe('PrtrComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
-      providers: [KeycloakService, { provide: TasksService, useValue: tasksService }],
+      imports: [AerModule],
+      providers: [{ provide: TasksService, useValue: tasksService }, provideRouter([])],
     }).compileComponents();
   });
 
   describe('for new prtr', () => {
     beforeEach(() => {
       store = TestBed.inject(CommonTasksStore);
-      store.setState(mockStateBuild({ pollutantRegisterActivities: null }));
+      store.setState(mockStateBuild({ prtrCodes: null }));
     });
     beforeEach(createComponent);
 
@@ -84,10 +82,7 @@ describe('PrtrComponent', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
       expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith(
-        mockPostBuild(
-          { pollutantRegisterActivities: { activities: [], exist: false } },
-          { pollutantRegisterActivities: [false] },
-        ),
+        mockPostBuild({ prtrCodes: { codes: [], exist: false } }, { prtrCodes: [false] }),
       );
       expect(navigateSpy).toHaveBeenCalledWith(['summary'], {
         relativeTo: activatedRoute,
@@ -98,7 +93,7 @@ describe('PrtrComponent', () => {
   describe('for existing prtr', () => {
     beforeEach(() => {
       store = TestBed.inject(CommonTasksStore);
-      store.setState(mockStateBuild({ pollutantRegisterActivities: { exist: false } }));
+      store.setState(mockStateBuild({ prtrCodes: { exist: false } }));
     });
     beforeEach(createComponent);
 

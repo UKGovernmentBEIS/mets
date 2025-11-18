@@ -120,6 +120,8 @@ describe('RegulatedActivityComponent', () => {
           hasIndustrialCrf: true,
           energyCrf: '_1_A_1_A_PUBLIC_ELECTRICITY_AND_HEAT_PRODUCTION',
           industrialCrf: '_2_A_4_OTHER_PROCESS_USES_OF_CARBONATES',
+          hasWasteCrf: false,
+          wasteCrf: null,
         },
       ];
       const navigateSpy = jest.spyOn(router, 'navigate');

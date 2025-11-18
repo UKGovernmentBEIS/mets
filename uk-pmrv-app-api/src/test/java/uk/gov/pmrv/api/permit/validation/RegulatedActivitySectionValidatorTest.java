@@ -14,6 +14,13 @@ import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivities;
 import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivity;
 import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivityType;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreams;
+import uk.gov.pmrv.api.reporting.domain.Aer;
+import uk.gov.pmrv.api.reporting.domain.AerContainer;
+import uk.gov.pmrv.api.reporting.domain.AerValidationResult;
+import uk.gov.pmrv.api.reporting.domain.AerViolation;
+import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.PermitOriginatedData;
+import uk.gov.pmrv.api.reporting.domain.regulatedactivities.AerRegulatedActivities;
+import uk.gov.pmrv.api.reporting.domain.regulatedactivities.AerRegulatedActivity;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -84,6 +91,55 @@ public class RegulatedActivitySectionValidatorTest  {
         assertThat(permitViolations.size()).isEqualTo(1);
         assertThat(permitViolations).containsExactly(
                 new PermitViolation(PermitViolation.PermitViolationMessage.INVALID_WASTE_REGULATED_ACTIVITY));
+    }
+
+    @Test
+    void validateAerContainer_valid() {
+        AerRegulatedActivity regulatedActivity = new AerRegulatedActivity();
+        regulatedActivity.setType(RegulatedActivityType.WASTE);
+
+        final Aer aer = Aer.builder()
+                .regulatedActivities(AerRegulatedActivities.builder()
+                        .regulatedActivities(List.of(regulatedActivity))
+                        .build())
+                .build();
+
+        final AerContainer aerContainer = AerContainer.builder()
+                .permitOriginatedData(
+                        PermitOriginatedData.builder().permitType(PermitType.WASTE).build())
+                .aer(aer)
+                .build();
+
+        final AerValidationResult result = regulatedActivitySectionValidator.validate(aerContainer);
+
+        assertTrue(result.isValid());
+        assertTrue(result.getAerViolations().isEmpty());
+    }
+
+    @Test
+    void validateAerContainer_invalid() {
+        AerRegulatedActivity regulatedActivity = new AerRegulatedActivity();
+        regulatedActivity.setType(RegulatedActivityType.COMBUSTION);
+
+        final Aer aer = Aer.builder()
+                .regulatedActivities(AerRegulatedActivities.builder()
+                        .regulatedActivities(List.of(regulatedActivity))
+                        .build())
+                .build();
+
+        final AerContainer aerContainer = AerContainer.builder()
+                .permitOriginatedData(
+                        PermitOriginatedData.builder().permitType(PermitType.WASTE).build())
+                .aer(aer)
+                .build();
+
+        final AerValidationResult result = regulatedActivitySectionValidator.validate(aerContainer);
+
+        assertFalse(result.isValid());
+        assertThat(result.getAerViolations()).hasSize(1);
+        assertThat(result.getAerViolations()).containsExactly(
+                new AerViolation(AerContainer.class.getSimpleName(),
+                        AerViolation.AerViolationMessage.INVALID_WASTE_REGULATED_ACTIVITY));
     }
 
 }

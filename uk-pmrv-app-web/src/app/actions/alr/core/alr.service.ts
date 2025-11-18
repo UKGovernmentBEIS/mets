@@ -91,6 +91,20 @@ export class AlrActionService {
     );
   }
 
+  getVerifierDownloadUrlFile(file: string): AttachedFile {
+    const url = this.getBaseFileDownloadUrl();
+    const attachments: { [key: string]: string } = (
+      this.store.getValue().action.payload as ALRApplicationSubmittedRequestActionPayload
+    )?.verificationAttachments;
+
+    return file
+      ? {
+          downloadUrl: url + `${file}`,
+          fileName: attachments[file],
+        }
+      : null;
+  }
+
   getVerifierDownloadUrlFiles(files: string[]): AttachedFile[] {
     const url = this.getBaseFileDownloadUrl();
     const attachments: { [key: string]: string } = (

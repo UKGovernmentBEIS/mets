@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { AerService } from '@tasks/aer/core/aer.service';
 
-import { PollutantRegisterActivities } from 'pmrv-api';
+import { PRTRCodes } from 'pmrv-api';
 
 @Component({
   selector: 'app-prtr-summary',
@@ -14,7 +14,7 @@ import { PollutantRegisterActivities } from 'pmrv-api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryComponent {
-  activities$: Observable<PollutantRegisterActivities> = this.aerService.getTask('pollutantRegisterActivities');
+  activities$: Observable<PRTRCodes> = this.aerService.getTask('prtrCodes');
 
   constructor(
     readonly pendingRequest: PendingRequestService,
@@ -25,7 +25,7 @@ export class SummaryComponent {
 
   onSubmit(): void {
     this.aerService
-      .postTaskSave({}, {}, true, 'pollutantRegisterActivities')
+      .postTaskSave({}, {}, true, 'prtrCodes')
       .pipe(this.pendingRequest.trackRequest())
       .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
   }

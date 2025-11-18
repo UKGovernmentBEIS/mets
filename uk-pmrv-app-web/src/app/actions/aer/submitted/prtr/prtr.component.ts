@@ -20,7 +20,7 @@ export class PrtrComponent {
     this.aerService.getPayload() as Observable<
       AerApplicationSubmittedRequestActionPayload | AerApplicationCompletedRequestActionPayload
     >
-  ).pipe(map((payload) => payload.aer.pollutantRegisterActivities));
+  ).pipe(map((payload) => payload.aer.prtrCodes ?? payload.aer.pollutantRegisterActivities));
 
   constructor(private readonly aerService: AerService) {}
 }

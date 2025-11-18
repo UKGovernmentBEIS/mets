@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -10,7 +9,6 @@ import { mockState } from '@tasks/aer/submit/testing/mock-aer-apply-action';
 import { mockPostBuild, mockStateBuild } from '@tasks/aer/submit/testing/mock-state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { TasksService } from 'pmrv-api';
 
@@ -56,8 +54,8 @@ describe('SummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
-      providers: [KeycloakService, { provide: TasksService, useValue: tasksService }],
+      imports: [AerModule],
+      providers: [provideRouter([]), { provide: TasksService, useValue: tasksService }],
     }).compileComponents();
   });
 
@@ -78,9 +76,9 @@ describe('SummaryComponent', () => {
       store = TestBed.inject(CommonTasksStore);
       store.setState(
         mockStateBuild({
-          pollutantRegisterActivities: {
+          prtrCodes: {
             exist: true,
-            activities: ['_1_A_2_C_CHEMICALS', '_1_A_3_C_RAILWAYS', '_1_B_2_A_OIL'],
+            codes: ['_1_A_MINERAL_OIL_GAS_REFINERIES', '_1_B_INSTALLATIONS_FOR_GASIFICATION_LIGUEFACTION'],
           },
         }),
       );
@@ -95,7 +93,7 @@ describe('SummaryComponent', () => {
     it('should show add another and complete button', () => {
       expect(page.submitButton).toBeTruthy();
       expect(page.addAnotherBtn).toBeTruthy();
-      expect(page.activities.length).toEqual(4);
+      expect(page.activities.length).toEqual(3);
     });
 
     it('should display the activities and submit status', () => {
@@ -103,12 +101,11 @@ describe('SummaryComponent', () => {
       tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
 
       expect(page.summaryDefinitions).toEqual([]);
-      expect(page.activitiesTextContents).toHaveLength(4);
+      expect(page.activitiesTextContents).toHaveLength(3);
       expect(page.activitiesTextContents).toEqual([
         [],
-        ['Main activity', '1.A.2.c Chemicals', 'Delete'],
-        ['Main activity', '1.A.3.c Railways', 'Delete'],
-        ['Main activity', '1.B.2.a Oil', 'Delete'],
+        ['Main activity', '1.(a) Mineral oil and gas refineries', 'Delete'],
+        ['Main activity', '1.(b) Installations for gasification and liquefaction', 'Delete'],
       ]);
 
       expect(page.summaryHeader.textContent).toEqual('EPRTR codes added');
@@ -120,12 +117,12 @@ describe('SummaryComponent', () => {
       expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith(
         mockPostBuild(
           {
-            pollutantRegisterActivities: {
-              activities: ['_1_A_2_C_CHEMICALS', '_1_A_3_C_RAILWAYS', '_1_B_2_A_OIL'],
+            prtrCodes: {
+              codes: ['_1_A_MINERAL_OIL_GAS_REFINERIES', '_1_B_INSTALLATIONS_FOR_GASIFICATION_LIGUEFACTION'],
               exist: true,
             },
           },
-          { pollutantRegisterActivities: [true] },
+          { prtrCodes: [true] },
         ),
       );
       expect(navigateSpy).toHaveBeenCalledWith(['../..'], { relativeTo: activatedRoute });
@@ -163,12 +160,12 @@ describe('SummaryComponent', () => {
       expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith(
         mockPostBuild(
           {
-            pollutantRegisterActivities: {
-              activities: undefined,
+            prtrCodes: {
+              codes: undefined,
               exist: false,
             },
           },
-          { pollutantRegisterActivities: [true] },
+          { prtrCodes: [true] },
         ),
       );
     });

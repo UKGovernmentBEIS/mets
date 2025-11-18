@@ -73,6 +73,7 @@ describe('SourceStreamDescriptionPipe', () => {
     expect(pipe.transform('PILOT_AND_PURGE_FLARE_GAS')).toEqual('Pilot and Purge Flare Gas');
     expect(pipe.transform('PILOT_FLARE_GAS')).toEqual('Pilot Flare Gas');
     expect(pipe.transform('PROPANE')).toEqual('Propane');
+    expect(pipe.transform('RDF')).toEqual('RDF');
     expect(pipe.transform('REFINERY_FEEDSTOCKS')).toEqual('Refinery Feedstocks');
     expect(pipe.transform('REFINERY_GAS')).toEqual('Refinery Gas');
     expect(pipe.transform('RESIDUAL_FUEL_OIL')).toEqual('Residual Fuel Oil');
@@ -81,7 +82,6 @@ describe('SourceStreamDescriptionPipe', () => {
     expect(pipe.transform('SLUDGE_GAS')).toEqual('Sludge Gas');
     expect(pipe.transform('SOUR_GAS')).toEqual('Sour Gas');
     expect(pipe.transform('SOUR_GAS_FLARE')).toEqual('Sour Gas Flare');
-    expect(pipe.transform('SDF')).toEqual('SDF');
     expect(pipe.transform('SRF')).toEqual('SRF');
     expect(pipe.transform('SSF')).toEqual('SSF');
     expect(pipe.transform('SUB_BITUMINOUS_COAL')).toEqual('Sub-Bituminous Coal');

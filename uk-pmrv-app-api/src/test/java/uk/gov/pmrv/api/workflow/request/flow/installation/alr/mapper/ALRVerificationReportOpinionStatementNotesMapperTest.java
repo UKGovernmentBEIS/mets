@@ -13,7 +13,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRVerifica
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRVerificationReport;
 
 
-import java.util.Set;
+
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,7 +37,7 @@ public class ALRVerificationReportOpinionStatementNotesMapperTest {
                                 .builder()
                                 .opinionStatement(ALRVerificationOpinionStatement
                                         .builder()
-                                        .opinionStatementFiles(Set.of(attachmentId))
+                                        .opinionStatementFile(attachmentId)
                                         .notes("Test")
                                         .build())
                                 .build())
@@ -63,7 +63,7 @@ public class ALRVerificationReportOpinionStatementNotesMapperTest {
                 .getVerificationReport()
                 .getVerificationData()
                 .getOpinionStatement()
-                .getOpinionStatementFiles()).containsExactly(attachmentId);
+                .getOpinionStatementFile()).isEqualTo(attachmentId);
         assertThat(((ALRApplicationSubmittedRequestActionPayload) result.getPayload())
                 .getVerificationReport()
                 .getVerificationData()

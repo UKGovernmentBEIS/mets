@@ -1,33 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
 import { AerModule } from '@tasks/aer/aer.module';
 import { ActivityComponent } from '@tasks/aer/submit/prtr/activity/activity.component';
-import { mockPostBuild, mockStateBuild } from '@tasks/aer/submit/testing/mock-state';
+import { mockStateBuild } from '@tasks/aer/submit/testing/mock-state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
-import { BasePage, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
-
-import { TasksService } from 'pmrv-api';
+import { ActivatedRouteStub, BasePage } from '@testing';
 
 describe('ActivityComponent', () => {
   let page: Page;
   let store: CommonTasksStore;
   let component: ActivityComponent;
   let fixture: ComponentFixture<ActivityComponent>;
-
-  const tasksService = mockClass(TasksService);
+  let router: Router;
+  const activatedRoute: ActivatedRouteStub = new ActivatedRouteStub({
+    paramMap: of(convertToParamMap({ index: 0 })),
+    snapshot: {
+      paramMap: convertToParamMap({ index: 0 }),
+    },
+  });
 
   class Page extends BasePage<ActivityComponent> {
     get activityRadioButtons() {
       return this.queryAll<HTMLInputElement>('input[name$="activity"]');
-    }
-
-    get subActivityA2RadioButtons() {
-      return this.queryAll<HTMLInputElement>('input[name$="subActivityA2"]');
     }
 
     get errorSummary() {
@@ -53,20 +50,12 @@ describe('ActivityComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
+      imports: [AerModule],
       providers: [
-        KeycloakService,
-        { provide: TasksService, useValue: tasksService },
+        provideRouter([]),
         {
           provide: ActivatedRoute,
-          useValue: {
-            queryParams: of({ activityItem: '_1_A' }),
-            paramMap: of(convertToParamMap({ index: 0 })),
-            snapshot: {
-              queryParams: { activityItem: '_1_A' },
-              paramMap: convertToParamMap({ index: 0 }),
-            },
-          },
+          useValue: activatedRoute,
         },
       ],
     }).compileComponents();
@@ -75,7 +64,8 @@ describe('ActivityComponent', () => {
   describe('for new prtr', () => {
     beforeEach(() => {
       store = TestBed.inject(CommonTasksStore);
-      store.setState(mockStateBuild({ pollutantRegisterActivities: null }));
+      store.setState(mockStateBuild({ prtrCodes: null }));
+      router = TestBed.inject(Router);
     });
     beforeEach(createComponent);
 
@@ -84,115 +74,37 @@ describe('ActivityComponent', () => {
     });
 
     it('should show activities and submit form', () => {
-      tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
+      const navigateSpy = jest.spyOn(router, 'navigate');
 
       expect(page.activityRadioButtons.map((el) => el.value)).toEqual([
-        '_1_A_1',
-        '_1_A_2',
-        '_1_A_3',
-        '_1_A_4',
-        '_1_A_5',
+        '_1',
+        '_2',
+        '_3',
+        '_4',
+        '_5',
+        '_6',
+        '_7',
+        '_8',
+        '_9',
       ]);
 
       page.submitButton.click();
       fixture.detectChanges();
 
       expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummaryList).toEqual(['Enter the activity']);
+      expect(page.errorSummaryList).toEqual(['Enter the relevant sector']);
 
       page.activityRadioButtons[1].click();
       fixture.detectChanges();
 
-      expect(page.subActivityA2RadioButtons.map((el) => el.value)).toEqual([
-        '_1_A_2_A',
-        '_1_A_2_B',
-        '_1_A_2_C',
-        '_1_A_2_D',
-        '_1_A_2_E',
-        '_1_A_2_F',
-        '_1_A_2_GVII',
-        '_1_A_2_GVIII',
-      ]);
-
-      page.subActivityA2RadioButtons[1].click();
       page.submitButton.click();
       fixture.detectChanges();
 
-      expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
-      expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith(
-        mockPostBuild(
-          {
-            pollutantRegisterActivities: {
-              activities: ['_1_A_2_B_NON_FERROUS_METALS'],
-              exist: true,
-            },
-          },
-          { pollutantRegisterActivities: [false] },
-        ),
-      );
-    });
-  });
-
-  describe('for existing prtr', () => {
-    beforeEach(() => {
-      store = TestBed.inject(CommonTasksStore);
-      store.setState(
-        mockStateBuild({
-          pollutantRegisterActivities: {
-            activities: ['_1_A_2_B_NON_FERROUS_METALS', '_2_D_3_OTHER', '_2_H_OTHER'],
-            exist: true,
-          },
-        }),
-      );
-    });
-    beforeEach(createComponent);
-
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
-
-    it('should show activities and submit form', () => {
-      tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
-
-      expect(page.activityRadioButtons.map((el) => el.value)).toEqual([
-        '_1_A_1',
-        '_1_A_2',
-        '_1_A_3',
-        '_1_A_4',
-        '_1_A_5',
-      ]);
-      page.activityRadioButtons[1].click();
-      fixture.detectChanges();
-
-      page.subActivityA2RadioButtons[0].click();
-      page.submitButton.click();
-      fixture.detectChanges();
-
-      expect(page.errorSummary).toBeFalsy();
-      expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
-      expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith(
-        mockPostBuild(
-          {
-            pollutantRegisterActivities: {
-              activities: ['_1_A_2_A_IRON_AND_STEEL', '_2_D_3_OTHER', '_2_H_OTHER'],
-              exist: true,
-            },
-          },
-          { pollutantRegisterActivities: [false] },
-        ),
-      );
-    });
-
-    it('should show error when submit same activity', () => {
-      page.activityRadioButtons[1].click();
-      fixture.detectChanges();
-
-      page.subActivityA2RadioButtons[1].click();
-      page.submitButton.click();
-      fixture.detectChanges();
-
-      expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummaryList).toEqual(['You have already added this activity']);
+      expect(navigateSpy).toHaveBeenCalledTimes(1);
+      expect(navigateSpy).toHaveBeenCalledWith(['../../activity', 0, 'subActivity'], {
+        relativeTo: activatedRoute,
+        queryParams: { activityItem: '_2' },
+      });
     });
   });
 });

@@ -13,9 +13,6 @@ export const opinionStatementSummaryGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   return (
-    !isEditable ||
-    (payload?.verificationReport?.opinionStatement?.opinionStatementFiles &&
-      payload?.verificationReport?.opinionStatement?.opinionStatementFiles?.length > 0) ||
-    router.parseUrl(baseUrl)
+    !isEditable || !!payload?.verificationReport?.opinionStatement?.opinionStatementFile || router.parseUrl(baseUrl)
   );
 };

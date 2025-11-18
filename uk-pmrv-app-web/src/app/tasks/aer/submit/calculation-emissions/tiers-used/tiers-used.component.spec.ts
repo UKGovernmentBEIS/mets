@@ -41,6 +41,9 @@ describe('TiersUsedComponent', () => {
     get netCalorificValueRadios() {
       return this.queryAll<HTMLInputElement>('input[name$="NET_CALORIFIC_VALUE"]');
     }
+    get biomassFractionRadios() {
+      return this.queryAll<HTMLInputElement>('input[name$="BIOMASS_FRACTION"]');
+    }
 
     get errorSummary() {
       return this.query<HTMLDivElement>('.govuk-error-summary');

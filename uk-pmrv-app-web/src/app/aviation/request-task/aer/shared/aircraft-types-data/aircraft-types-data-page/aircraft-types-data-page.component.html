@@ -1,3 +1,13 @@
+<govuk-notification-banner *ngIf="showNotification()" type="success">
+  <h1 class="govuk-notification-banner__heading">
+    {{
+      aviationAerAircraftDataDetails.length > 0
+        ? 'The aircraft types data file has been replaced successfully.'
+        : 'The aircraft types data file has been uploaded successfully.'
+    }}
+  </h1>
+</govuk-notification-banner>
+
 <div
   *ngIf="errorList?.length > 0"
   aria-labelledby="error-summary-title"

@@ -10,7 +10,7 @@ import { ALRApplicationSubmittedRequestActionPayload } from 'pmrv-api';
 
 interface ViewModel {
   notes: string;
-  opinionStatementFiles: AttachedFile[];
+  opinionStatementFile: AttachedFile;
   supportingFiles: AttachedFile[];
 }
 
@@ -24,7 +24,7 @@ interface ViewModel {
         <app-opinion-statement-summary-template
           opinionStatementFilesText="Uploaded ALR verification opinion statement"
           [notes]="vm?.notes"
-          [opinionStatementFiles]="vm?.opinionStatementFiles"
+          [opinionStatementFile]="vm?.opinionStatementFile"
           [supportingFiles]="vm?.supportingFiles"
           [isEditable]="false"></app-opinion-statement-summary-template>
       </app-action-task>
@@ -40,9 +40,9 @@ export class AlrOpinionStatementSubmittedComponent {
 
     return {
       notes: opinionStatement?.notes,
-      opinionStatementFiles: opinionStatement?.opinionStatementFiles
-        ? this.alrActionService.getVerifierDownloadUrlFiles(opinionStatement?.opinionStatementFiles)
-        : [],
+      opinionStatementFile: opinionStatement?.opinionStatementFile
+        ? this.alrActionService.getVerifierDownloadUrlFile(opinionStatement?.opinionStatementFile)
+        : ({} as any),
       supportingFiles: opinionStatement?.supportingFiles
         ? this.alrActionService.getVerifierDownloadUrlFiles(opinionStatement?.supportingFiles)
         : [],

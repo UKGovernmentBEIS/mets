@@ -10,7 +10,7 @@
       <a govukLink [routerLink]="[activity.id]" [state]="{ changing: true }">Change</a>
     </dd>
   </div>
-  <div govukSummaryListRow>
+  <div govukSummaryListRow *ngIf="activity.type !== 'UPSTREAM_GHG_REMOVAL'">
     <ng-container *ngIf="hasError && !activity.capacity; else capacity">
       <dt class="missing-row-key" govukSummaryListRowKey><span>Capacity</span></dt>
       <dd govukSummaryListRowValue>
@@ -34,9 +34,12 @@
     <ng-container *ngIf="hasError && missingCrfCode(); else crfCodes">
       <dt class="missing-row-key" govukSummaryListRowKey><span>CRF codes</span></dt>
       <dd govukSummaryListRowValue>
+        <div *ngIf="activity.wasteCrf">{{ activity.wasteCrf | crfActivityItemName }}</div>
+        <span class="error">
+          {{ errors.missingCrf ?? errors.missingIndustrialCrf ?? errors.missingEnergyCrf ?? errors.missingWasteCrf }}
+        </span>
         <div *ngIf="activity.energyCrf">{{ activity.energyCrf | crfActivityItemName }}</div>
         <div *ngIf="activity.industrialCrf">{{ activity.industrialCrf | crfActivityItemName }}</div>
-        <span class="error">{{ errors.missingCrf ?? errors.missingIndustrialCrf ?? errors.missingEnergyCrf }}</span>
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a govukLink [routerLink]="[activity.id, 'crf-codes']" [state]="{ changing: true }">Change</a>
@@ -46,6 +49,7 @@
       <dt govukSummaryListRowKey>CRF codes</dt>
       <dd govukSummaryListRowValue class="">
         <ng-container>
+          <div *ngIf="activity.wasteCrf">{{ activity.wasteCrf | crfActivityItemName }}</div>
           <div *ngIf="activity.energyCrf">{{ activity.energyCrf | crfActivityItemName }}</div>
           <div *ngIf="activity.industrialCrf">{{ activity.industrialCrf | crfActivityItemName }}</div>
         </ng-container>

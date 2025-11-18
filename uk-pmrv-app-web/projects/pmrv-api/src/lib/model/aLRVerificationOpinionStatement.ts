@@ -11,7 +11,7 @@
  */
 
 export interface ALRVerificationOpinionStatement {
-  opinionStatementFiles?: Array<string>;
+  opinionStatementFile?: string;
   supportingFiles?: Array<string>;
   notes?: string;
 }

@@ -3,7 +3,7 @@
 
   <p class="govuk-body">
     We're experiencing temporary difficulties in syncing data. Please try again later or contact the
-    <a href="mailto:METS@energysecurity.gov.uk" govukLink class="govuk-!-font-weight-bold">UK ETS reporting helpdesk</a>
+    <a [routerLink]="['/contact-us']" govukLink class="govuk-!-font-weight-bold">UK ETS reporting helpdesk</a>
     for assistance.
   </p>
 } @else if (errorCode === genericServiceErrorCode.INTREGACCOUNTCREATEUKETS1000) {
@@ -12,7 +12,7 @@
   <p class="govuk-body">Try again later.</p>
   <p class="govuk-body">
     Contact
-    <a href="mailto:METS@energysecurity.gov.uk" govukLink class="govuk-!-font-weight-bold">UK ETS reporting helpdesk</a>
+    <a [routerLink]="['/contact-us']" govukLink class="govuk-!-font-weight-bold">UK ETS reporting helpdesk</a>
     for assistance.
   </p>
 } @else {
@@ -21,7 +21,7 @@
   <p class="govuk-body">Try again later.</p>
 
   <p class="govuk-body">
-    <a href="mailto:METS@energysecurity.gov.uk" govukLink class="govuk-!-font-weight-bold">
+    <a [routerLink]="['/contact-us']" govukLink class="govuk-!-font-weight-bold">
       Contact the UK ETS reporting helpdesk
     </a>
     if you have any questions.

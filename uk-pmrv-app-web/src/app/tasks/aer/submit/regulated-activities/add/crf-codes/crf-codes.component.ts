@@ -39,15 +39,20 @@ export class CrfCodesComponent implements PendingRequest {
         map(([regulatedActivities, paramMap]) => {
           const hasEnergyCrf = this.form.get('hasEnergyCrf').value?.[0] ?? false;
           const hasIndustrialCrf = this.form.get('hasIndustrialCrf').value?.[0] ?? false;
-          const nextStep = hasEnergyCrf ? 'energy-crf-code' : 'industrial-crf-code';
+          const hasWasteCrf = this.form.get('hasWasteCrf').value?.[0] ?? false;
+          const nextStep = hasWasteCrf ? 'waste-crf-code' : hasEnergyCrf ? 'energy-crf-code' : 'industrial-crf-code';
           const activity = regulatedActivities.find((activity) => activity.id === paramMap.get('activityId'));
           activity.hasEnergyCrf = hasEnergyCrf;
           activity.hasIndustrialCrf = hasIndustrialCrf;
+          activity.hasWasteCrf = hasWasteCrf;
           if (!hasEnergyCrf) {
             activity.energyCrf = null;
           }
           if (!hasIndustrialCrf) {
             activity.industrialCrf = null;
+          }
+          if (!hasWasteCrf) {
+            activity.wasteCrf = null;
           }
           return this.aerService
             .postTaskSave({ regulatedActivities: regulatedActivities }, {}, false, 'regulatedActivities')

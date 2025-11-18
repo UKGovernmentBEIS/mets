@@ -1,10 +1,19 @@
+<govuk-notification-banner *ngIf="showNotification()" type="success">
+  <h1 class="govuk-notification-banner__heading">
+    {{
+      aggregatedEmissionDataDetails.length > 0
+        ? 'The aggregated consumption and flight data file has been replaced successfully.'
+        : 'The aggregated consumption and flight data file has been uploaded successfully.'
+    }}
+  </h1>
+</govuk-notification-banner>
+
 <div
   *ngIf="errorList?.length > 0"
   aria-labelledby="error-summary-title"
   class="govuk-error-summary"
   role="alert"
-  tabindex="-1"
->
+  tabindex="-1">
   <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
   <div class="govuk-error-summary__body">
     <ul class="govuk-list govuk-error-summary__list">
@@ -24,13 +33,12 @@
   [formGroup]="form"
   heading="Aggregated consumption and flight data"
   submitText="Continue"
-  [hideSubmit]="!fileLoaded || !parsedData"
->
+  [hideSubmit]="!fileLoaded || !parsedData">
   <div class="govuk-!-width-three-quarters">
     <p class="govuk-body">
       Upload a comma-separated values (.csv) file of fuel consumption in tonnes per aerodrome pair, for
-      <span *ngIf="(isCorsia$ | async) === true"> all international flights in scope of CORSIA </span>
-      <span *ngIf="(isCorsia$ | async) === false"> UK ETS flights </span>
+      <span *ngIf="(isCorsia$ | async) === true">all international flights in scope of CORSIA</span>
+      <span *ngIf="(isCorsia$ | async) === false">UK ETS flights</span>
       that you have operated during the scheme year.
     </p>
     <p *ngIf="(isCorsia$ | async) === false" class="govuk-body">
@@ -57,8 +65,7 @@
     <app-flight-data-table
       [headingText]="'Your CSV file needs to look like this example'"
       [customColumns]="exampleTableColumns"
-      [emissionDataDetails]="exampleTableData"
-    ></app-flight-data-table>
+      [emissionDataDetails]="exampleTableData"></app-flight-data-table>
   </div>
 
   <input type="text" [hidden]="true" formControlName="aggregatedEmissionDataDetails" />
@@ -66,8 +73,7 @@
     <app-flight-data-table
       [headingText]="fileName"
       [emissionDataDetails]="parsedData"
-      [isCorsia]="isCorsia$ | async"
-    ></app-flight-data-table>
+      [isCorsia]="isCorsia$ | async"></app-flight-data-table>
   </div>
 </app-csv-data-wizard-step>
 <app-return-to-link></app-return-to-link>

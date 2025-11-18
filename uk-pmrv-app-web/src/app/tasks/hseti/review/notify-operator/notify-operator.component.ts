@@ -18,6 +18,7 @@ interface ViewModel {
   requestTaskActionType: RequestTaskActionProcessDTO['requestTaskActionType'];
   previewDocuments: DocumentFilenameAndDocumentType[];
   confirmationMessage: string;
+  decisionType: string;
 }
 
 @Component({
@@ -34,6 +35,7 @@ interface ViewModel {
             [confirmationMessage]="vm.confirmationMessage"
             [requestTaskActionType]="vm.requestTaskActionType"
             [referenceCode]="vm.requestId"
+            [decisionType]="vm.decisionType"
             [previewDocuments]="vm.previewDocuments"
             [allocationPeriod]="allocationPeriod()"></app-notify-operator>
         </div>
@@ -78,6 +80,7 @@ export class HsetiNotifyOperatorComponent {
       requestTaskActionType,
       previewDocuments: getHsetiPreviewDocumentsInfo(requestTaskType, payload.overallDecision?.type),
       confirmationMessage: confirmationMessageOptions[payload.overallDecision?.type] || '',
+      decisionType: payload.overallDecision?.type?.toLowerCase()?.replace(/_/g, ' ') || '',
     };
   });
 

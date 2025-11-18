@@ -6,15 +6,19 @@ import org.springframework.stereotype.Component;
 import uk.gov.pmrv.api.permit.domain.*;
 import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivity;
 import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivityType;
+import uk.gov.pmrv.api.reporting.domain.AerContainer;
+import uk.gov.pmrv.api.reporting.domain.AerValidationResult;
+import uk.gov.pmrv.api.reporting.domain.AerViolation;
+import uk.gov.pmrv.api.reporting.domain.regulatedactivities.AerRegulatedActivity;
+import uk.gov.pmrv.api.reporting.validation.AerContextValidator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.INVALID_WASTE_REGULATED_ACTIVITY;
 
 @Component
 @RequiredArgsConstructor
-public class RegulatedActivitySectionValidator implements PermitSectionContextValidator<RegulatedActivity> {
+public class RegulatedActivitySectionValidator implements PermitSectionContextValidator<RegulatedActivity>, AerContextValidator {
 
     @Override
     public PermitValidationResult validate(@Valid RegulatedActivity regulatedActivity,
@@ -31,7 +35,7 @@ public class RegulatedActivitySectionValidator implements PermitSectionContextVa
             boolean hasWaste = regulatedActivities.stream()
                     .anyMatch(activity -> RegulatedActivityType.WASTE.equals(activity.getType()));
             if(!hasWaste) {
-                permitViolations.add(new PermitViolation(INVALID_WASTE_REGULATED_ACTIVITY));
+                permitViolations.add(new PermitViolation(PermitViolation.PermitViolationMessage.INVALID_WASTE_REGULATED_ACTIVITY));
             }
         }
 
@@ -41,4 +45,25 @@ public class RegulatedActivitySectionValidator implements PermitSectionContextVa
                 .build();
     }
 
+    @Override
+    public AerValidationResult validate(AerContainer aerContainer) {
+
+        List<AerViolation> aerViolations = new ArrayList<>();
+
+
+        if(PermitType.WASTE.equals(aerContainer.getPermitOriginatedData().getPermitType())) {
+            List<AerRegulatedActivity> regulatedActivities = aerContainer.getAer().getRegulatedActivities().getRegulatedActivities();
+            boolean hasWaste = regulatedActivities.stream()
+                    .anyMatch(activity -> RegulatedActivityType.WASTE.equals(activity.getType()));
+            if(!hasWaste) {
+                aerViolations.add(new AerViolation(AerContainer.class.getSimpleName(),
+                        AerViolation.AerViolationMessage.INVALID_WASTE_REGULATED_ACTIVITY));
+            }
+        }
+
+        return AerValidationResult.builder()
+                .valid(aerViolations.isEmpty())
+                .aerViolations(aerViolations)
+                .build();
+    }
 }

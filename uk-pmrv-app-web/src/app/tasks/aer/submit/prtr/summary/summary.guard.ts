@@ -22,8 +22,8 @@ export class SummaryGuard {
         } else {
           const aer = (storeState.requestTaskItem.requestTask.payload as AerApplicationSubmitRequestTaskPayload).aer;
           return (
-            aer?.pollutantRegisterActivities?.exist === false ||
-            (aer?.pollutantRegisterActivities?.exist && aer?.pollutantRegisterActivities?.activities?.length > 0) ||
+            aer?.prtrCodes?.exist === false ||
+            (aer?.prtrCodes?.exist && aer?.prtrCodes?.codes?.length > 0) ||
             this.router.parseUrl(state.url.slice(0, state.url.lastIndexOf('/summary')))
           );
         }

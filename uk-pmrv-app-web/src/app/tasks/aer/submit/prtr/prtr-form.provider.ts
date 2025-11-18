@@ -13,8 +13,7 @@ export const prtrFormProvider = {
   useFactory: (fb: UntypedFormBuilder, store: CommonTasksStore) => {
     const state = store.getValue();
 
-    const item = (state.requestTaskItem.requestTask.payload as AerApplicationSubmitRequestTaskPayload).aer
-      ?.pollutantRegisterActivities;
+    const item = (state.requestTaskItem.requestTask.payload as AerApplicationSubmitRequestTaskPayload).aer?.prtrCodes;
 
     return fb.group({
       exist: [

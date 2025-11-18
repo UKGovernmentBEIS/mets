@@ -121,8 +121,10 @@ describe('EnergyCrfCodeComponent', () => {
           capacityUnit: 'KVA',
           hasEnergyCrf: true,
           hasIndustrialCrf: true,
+          hasWasteCrf: false,
           energyCrf: '_1_A_2_GVIII_STATIONARY_COMBUSTION_IN_MANUFACTURING_AND_CONSTRUCTION_OTHER',
           industrialCrf: '_2_A_4_OTHER_PROCESS_USES_OF_CARBONATES',
+          wasteCrf: null,
         },
       ];
       const navigateSpy = jest.spyOn(router, 'navigate');

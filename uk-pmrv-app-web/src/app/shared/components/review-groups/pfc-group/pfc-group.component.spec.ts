@@ -53,7 +53,7 @@ describe('PfcGroupComponent', () => {
           reference: 'emission source 2 reference',
         },
       ],
-      pollutantRegisterActivities: undefined,
+      prtrCodes: undefined,
       monitoringApproachEmissions: {
         CALCULATION_PFC: {
           type: 'CALCULATION_PFC',

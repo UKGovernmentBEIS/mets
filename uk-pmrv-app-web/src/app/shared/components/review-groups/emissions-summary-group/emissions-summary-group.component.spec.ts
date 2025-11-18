@@ -77,7 +77,7 @@ describe('EmissionsSummaryGroupComponent', () => {
           description: 'COKE',
         },
       ],
-      pollutantRegisterActivities: undefined,
+      prtrCodes: undefined,
       monitoringApproachEmissions: {
         CALCULATION_CO2: {
           type: 'CALCULATION_CO2',

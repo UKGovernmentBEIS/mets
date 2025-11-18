@@ -39,6 +39,7 @@ class AerRegulatedActivitiesTest {
                         .capacityUnit(CapacityUnit.KG_PER_DAY)
                         .hasEnergyCrf(true)
                         .hasIndustrialCrf(false)
+                        .hasWasteCrf(false)
                         .energyCrf(CrfCode._1_A_1_C_MANUFACTURE_OF_SOLID_FUELS_AND_OTHER_ENERGY_INDUSTRIES)
                         .build(),
                     AerRegulatedActivity.builder()
@@ -48,6 +49,7 @@ class AerRegulatedActivitiesTest {
                         .capacityUnit(CapacityUnit.KW)
                         .hasEnergyCrf(true)
                         .hasIndustrialCrf(false)
+                        .hasWasteCrf(false)
                         .energyCrf(CrfCode._1_A_2_B_NON_FERROUS_METALS)
                         .build(),
                     AerRegulatedActivity.builder()
@@ -56,6 +58,7 @@ class AerRegulatedActivitiesTest {
                         .capacity(BigDecimal.ONE)
                         .capacityUnit(CapacityUnit.TONNES_PER_HOUR)
                         .hasEnergyCrf(true)
+                        .hasWasteCrf(false)
                         .hasIndustrialCrf(false)
                         .energyCrf(CrfCode._2_B_10_OTHER)
                         .build()
@@ -80,6 +83,7 @@ class AerRegulatedActivitiesTest {
                         .capacityUnit(CapacityUnit.KG_PER_DAY)
                         .hasEnergyCrf(true)
                         .hasIndustrialCrf(false)
+                        .hasWasteCrf(false)
                         .energyCrf(CrfCode._1_A_1_C_MANUFACTURE_OF_SOLID_FUELS_AND_OTHER_ENERGY_INDUSTRIES)
                         .build(),
                     AerRegulatedActivity.builder()
@@ -89,6 +93,7 @@ class AerRegulatedActivitiesTest {
                         .capacityUnit(CapacityUnit.KW)
                         .hasEnergyCrf(true)
                         .hasIndustrialCrf(false)
+                        .hasWasteCrf(false)
                         .energyCrf(CrfCode._1_A_2_B_NON_FERROUS_METALS)
                         .build(),
                     AerRegulatedActivity.builder()
@@ -98,6 +103,7 @@ class AerRegulatedActivitiesTest {
                         .capacityUnit(CapacityUnit.TONNES_PER_HOUR)
                         .hasEnergyCrf(true)
                         .hasIndustrialCrf(false)
+                        .hasWasteCrf(false)
                         .energyCrf(CrfCode._2_B_10_OTHER)
                         .build()
                 )
