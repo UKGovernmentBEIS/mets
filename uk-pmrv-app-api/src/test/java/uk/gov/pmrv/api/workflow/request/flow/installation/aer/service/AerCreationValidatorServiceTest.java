@@ -130,14 +130,14 @@ class AerCreationValidatorServiceTest {
                 .build();
 
         when(permitQueryService.getPermitContainerByAccountId(accountId)).thenReturn(permitContainer);
-        when(configurationService.getConfigurationByKey("waste.aer-alr.enable.flag")).thenReturn(Optional.of(config));
+        when(configurationService.getConfigurationByKey("waste.aer.enable.flag")).thenReturn(Optional.of(config));
 
         boolean result = service.validateAerCreationForWaste(accountId);
 
         assertThat(result).isTrue();
 
         verify(permitQueryService, times(1)).getPermitContainerByAccountId(accountId);
-        verify(configurationService, times(1)).getConfigurationByKey("waste.aer-alr.enable.flag");
+        verify(configurationService, times(1)).getConfigurationByKey("waste.aer.enable.flag");
     }
 
     @Test
@@ -153,14 +153,14 @@ class AerCreationValidatorServiceTest {
                 .build();
 
         when(permitQueryService.getPermitContainerByAccountId(accountId)).thenReturn(permitContainer);
-        when(configurationService.getConfigurationByKey("waste.aer-alr.enable.flag")).thenReturn(Optional.of(config));
+        when(configurationService.getConfigurationByKey("waste.aer.enable.flag")).thenReturn(Optional.of(config));
 
         boolean result = service.validateAerCreationForWaste(accountId);
 
         assertThat(result).isFalse();
 
         verify(permitQueryService).getPermitContainerByAccountId(accountId);
-        verify(configurationService).getConfigurationByKey("waste.aer-alr.enable.flag");
+        verify(configurationService).getConfigurationByKey("waste.aer.enable.flag");
     }
 
     @Test
@@ -172,14 +172,14 @@ class AerCreationValidatorServiceTest {
                 .build();
 
         when(permitQueryService.getPermitContainerByAccountId(accountId)).thenReturn(permitContainer);
-        when(configurationService.getConfigurationByKey("waste.aer-alr.enable.flag")).thenReturn(Optional.empty());
+        when(configurationService.getConfigurationByKey("waste.aer.enable.flag")).thenReturn(Optional.empty());
 
         boolean result = service.validateAerCreationForWaste(accountId);
 
         assertThat(result).isFalse();
 
         verify(permitQueryService).getPermitContainerByAccountId(accountId);
-        verify(configurationService).getConfigurationByKey("waste.aer-alr.enable.flag");
+        verify(configurationService).getConfigurationByKey("waste.aer.enable.flag");
     }
 
     @Test

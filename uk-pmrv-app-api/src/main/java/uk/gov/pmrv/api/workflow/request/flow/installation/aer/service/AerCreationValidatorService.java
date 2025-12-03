@@ -31,7 +31,7 @@ public class AerCreationValidatorService {
     private final PermitQueryService permitQueryService;
     private final ConfigurationService configurationService;
 
-    private static final String WASTE_AER_ALR_ENABLE_FLAG = "waste.aer-alr.enable.flag";
+    private static final String WASTE_AER_ENABLE_FLAG = "waste.aer.enable.flag";
 
     @Transactional
     public RequestCreateValidationResult validateYear(Long accountId, Year year) {
@@ -67,7 +67,7 @@ public class AerCreationValidatorService {
             return true;
         }
 
-        return configurationService.getConfigurationByKey(WASTE_AER_ALR_ENABLE_FLAG)
+        return configurationService.getConfigurationByKey(WASTE_AER_ENABLE_FLAG)
                 .map(ConfigurationDTO::getValue)
                 .map(Object::toString)
                 .map(Boolean::parseBoolean)

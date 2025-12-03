@@ -38,6 +38,7 @@ export const processCalculationSourceStreamTypes: SourceStream['type'][] = [
   'COMBUSTION_SCRUBBING_GYPSUM',
   'COMBUSTION_SCRUBBING_UREA',
   'PRIMARY_ALUMINIUM_PFC',
+  'UPSTREAM_GHG_REMOVAL_VENTING_CO2',
 ];
 
 export const massBalanceCalculationSourceStreamTypes: SourceStream['type'][] = [

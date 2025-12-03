@@ -3,7 +3,7 @@
   <hr class="govuk-!-margin-bottom-3" *ngIf="!noBorders" />
   <div *ngFor="let item of items">
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
-      {{ item.taskType | itemName: item.requestId?.split('-')[1] }}
+      {{ item.taskType | itemName: item.requestId?.split('-')[1] : item.requestId?.split('-')[2] }}
     </h3>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -11,11 +11,11 @@
           Days Remaining: {{ item.daysRemaining | daysRemaining }}
         </p>
         <a
-          [routerLink]="item | itemLink: (isAviation$ | async):this.router.url.includes('workflows')"
+          [routerLink]="item | itemLink: (isAviation$ | async) : this.router.url.includes('workflows')"
           [state]="{ isWorkflow: true }"
-          class="govuk-button govuk-button--secondary"
-          >View task</a
-        >
+          class="govuk-button govuk-button--secondary">
+          View task
+        </a>
       </div>
     </div>
     <hr class="govuk-!-margin-bottom-3" *ngIf="!noBorders" />

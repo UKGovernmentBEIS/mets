@@ -63,7 +63,7 @@ public class AerCreationService {
     public Request createRequestAerForYear(Long accountId, Year aerYear, Date expirationDate, AerInitiatorRequest initiatorRequest) {
         // Validate if AER is allowed
         if (!aerCreationValidatorService.validateAerCreationForWaste(accountId)) {
-            log.info("AER was not created for account id " + accountId + " since permit type is WASTE and waste.aer-alr.enable.flag is false.");
+            log.info("AER was not created for account id " + accountId + " since permit type is WASTE and waste.aer.enable.flag is false.");
             return null;
         }
 

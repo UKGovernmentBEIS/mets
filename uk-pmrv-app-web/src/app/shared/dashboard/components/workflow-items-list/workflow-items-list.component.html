@@ -4,7 +4,7 @@
       <ng-container [ngSwitch]="column.field">
         <ng-container *ngSwitchCase="'taskType'">
           <a [routerLink]="row | itemLink: (isAviation$ | async) : false" govukLink>
-            {{ row[column.field] | itemName: row.requestId?.split('-')[1] }}
+            {{ row[column.field] | itemName: row.requestId?.split('-')[1] : row.requestId?.split('-')[2] }}
           </a>
           <div>
             <govuk-tag *ngIf="row.isNew">New</govuk-tag>
