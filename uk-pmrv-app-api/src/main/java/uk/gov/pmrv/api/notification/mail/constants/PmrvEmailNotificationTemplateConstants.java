@@ -17,6 +17,7 @@ public final class PmrvEmailNotificationTemplateConstants {
     public static final String ACCOUNT_NAME = "accountName";
     public static final String ACCOUNT_PRIMARY_CONTACT = "accountPrimaryContact";
     public static final String EMITTER_ID = "emitterId";
+    public static final String PAYLOAD = "payload";
 
     public static final String COMPETENT_AUTHORITY_EMAIL = "competentAuthorityEmail";
     public static final String COMPETENT_AUTHORITY_NAME = "competentAuthorityName";

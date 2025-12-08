@@ -176,6 +176,7 @@ import { VirSaveApplicationRequestTaskActionPayload } from './virSaveApplication
 import { VirSaveRespondToRegulatorCommentsRequestTaskActionPayload } from './virSaveRespondToRegulatorCommentsRequestTaskActionPayload';
 import { VirSaveReviewRequestTaskActionPayload } from './virSaveReviewRequestTaskActionPayload';
 import { VirSubmitRespondToRegulatorCommentsRequestTaskActionPayload } from './virSubmitRespondToRegulatorCommentsRequestTaskActionPayload';
+import { WasteQDRApplicationSaveRequestTaskActionPayload } from './wasteQDRApplicationSaveRequestTaskActionPayload';
 import { WithholdingOfAllowancesSaveApplicationRequestTaskActionPayload } from './withholdingOfAllowancesSaveApplicationRequestTaskActionPayload';
 import { WithholdingOfAllowancesWithdrawalCloseApplicationRequestTaskActionPayload } from './withholdingOfAllowancesWithdrawalCloseApplicationRequestTaskActionPayload';
 import { WithholdingOfAllowancesWithdrawalSaveApplicationRequestTaskActionPayload } from './withholdingOfAllowancesWithdrawalSaveApplicationRequestTaskActionPayload';
@@ -444,6 +445,8 @@ export interface RequestTaskActionProcessDTO {
     | 'ALR_SAVE_AUTHORITY_RESPONSE'
     | 'ALR_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT'
     | 'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION'
+    | 'WASTE_QDR_SAVE_APPLICATION'
+    | 'WASTE_QDR_UPLOAD_ATTACHMENT'
     | 'EMP_ISSUANCE_UKETS_SAVE_APPLICATION'
     | 'EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION'
     | 'EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT'
@@ -458,6 +461,7 @@ export interface RequestTaskActionProcessDTO {
     | 'EMP_ISSUANCE_UKETS_SAVE_APPLICATION_AMEND'
     | 'EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION_AMEND'
     | 'EMP_ISSUANCE_UKETS_RECALL_FROM_AMENDS'
+    | 'EMP_ISSUANCE_UKETS_MANUAL_ACCOUNT_OPENING_REGISTRY'
     | 'EMP_VARIATION_UKETS_SAVE_APPLICATION'
     | 'EMP_VARIATION_UKETS_SAVE_APPLICATION_REGULATOR_LED'
     | 'EMP_VARIATION_UKETS_SUBMIT_APPLICATION'
@@ -770,6 +774,7 @@ export interface RequestTaskActionProcessDTO {
     | VirSaveRespondToRegulatorCommentsRequestTaskActionPayload
     | VirSaveReviewRequestTaskActionPayload
     | VirSubmitRespondToRegulatorCommentsRequestTaskActionPayload
+    | WasteQDRApplicationSaveRequestTaskActionPayload
     | WithholdingOfAllowancesSaveApplicationRequestTaskActionPayload
     | WithholdingOfAllowancesWithdrawalCloseApplicationRequestTaskActionPayload
     | WithholdingOfAllowancesWithdrawalSaveApplicationRequestTaskActionPayload;

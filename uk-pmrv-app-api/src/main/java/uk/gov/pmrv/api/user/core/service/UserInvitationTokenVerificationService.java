@@ -2,6 +2,8 @@ package uk.gov.pmrv.api.user.core.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
 import uk.gov.netz.api.authorization.core.service.AuthorityService;
 import uk.gov.netz.api.common.exception.BusinessException;
@@ -15,11 +17,24 @@ public class UserInvitationTokenVerificationService {
 
     private final JwtTokenService jwtTokenService;
     private final AuthorityService<?> authorityService;
-
-    public AuthorityInfoDTO verifyInvitationTokenForPendingAuthority(String invitationToken, JwtTokenAction tokenAction) {
+    
+    public AuthorityInfoDTO verifyInvitationToken(String invitationToken, JwtTokenAction tokenAction, AppUser currentUser) {
+    	AuthorityInfoDTO authorityInfo = verifyInvitationTokenForPendingAuthority(invitationToken, tokenAction);
+    	verifyInvitedUserIsTheCurrentUserIfExist(authorityInfo, currentUser);
+    	return authorityInfo;
+    }
+    
+    private AuthorityInfoDTO verifyInvitationTokenForPendingAuthority(String invitationToken, JwtTokenAction tokenAction) {
         String authorityUuid = jwtTokenService.resolveTokenActionClaim(invitationToken, tokenAction);
         return authorityService.findAuthorityByUuidAndStatusPending(authorityUuid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_TOKEN));
     }
+    
+    private void verifyInvitedUserIsTheCurrentUserIfExist(AuthorityInfoDTO authorityInfo, AppUser currentUser) {
+		if(currentUser != null && 
+				!currentUser.getUserId().equals(authorityInfo.getUserId())) {
+			throw new BusinessException(ErrorCode.INVALID_TOKEN);
+		}
+	}
 
 }

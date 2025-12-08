@@ -20,7 +20,6 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.DeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationGrantDetermination;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.service.PermitVariationUpdatePermitService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -62,6 +61,7 @@ class PermitVariationUpdatePermitServiceTest {
     			.determination(PermitVariationGrantDetermination.builder()
     					.type(DeterminationType.GRANTED)
     					.activationDate(activationDate)
+						.firstYearOfReportingObligation(2025)
     					.build())
     			.build();
     	Request request = Request.builder()
@@ -84,8 +84,9 @@ class PermitVariationUpdatePermitServiceTest {
     			.permitType(PermitType.GHGE)
     			.activationDate(activationDate)
     			.installationOperatorDetails(installationOperatorDetails)
+				.firstYearOfReportingObligation(2025)
     			.build(), accountId);
 		verify(installationAccountUpdateService, times(1)).updateAccountUponPermitVariationGranted(accountId,
-				EmitterType.GHGE, BigDecimal.valueOf(50000));
+				EmitterType.GHGE, BigDecimal.valueOf(50000),2025);
 	}
 }

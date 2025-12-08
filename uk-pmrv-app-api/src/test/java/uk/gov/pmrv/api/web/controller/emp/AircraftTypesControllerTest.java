@@ -83,6 +83,7 @@ class AircraftTypesControllerTest {
 
     @Test
     void getAircraftTypes() throws Exception {
+    	setupAppUser();
         AircraftTypeSearchCriteria searchCriteria = AircraftTypeSearchCriteria.builder()
             .term("747")
             .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build())
@@ -110,14 +111,11 @@ class AircraftTypesControllerTest {
 
     @Test
     void getCurrentUserDocumentTemplates_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder()
-            .userId("userId")
-            .build();
+    	AppUser appUser = setupAppUser();
         AircraftTypeSearchCriteria searchCriteria = AircraftTypeSearchCriteria.builder()
         		.paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
             .evaluate(appUser, new String[]{OPERATOR, REGULATOR, VERIFIER});
@@ -130,4 +128,10 @@ class AircraftTypesControllerTest {
 
         verifyNoInteractions(aircraftTypeQueryService);
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 }

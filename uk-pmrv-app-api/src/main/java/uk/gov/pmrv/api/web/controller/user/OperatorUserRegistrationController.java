@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.user.core.domain.dto.EmailDTO;
 import uk.gov.pmrv.api.user.core.domain.dto.InvitedUserCredentialsDTO;
 import uk.gov.pmrv.api.user.core.domain.dto.TokenDTO;
@@ -107,9 +109,10 @@ public class OperatorUserRegistrationController {
     @ApiResponse(responseCode = "404", description = SwaggerApiInfo.NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     public ResponseEntity<OperatorInvitedUserInfoDTO> acceptOperatorInvitation(
-            @RequestBody @Valid @Parameter(description = "The invitation token", required = true) TokenDTO invitationTokenDTO) {
+            @RequestBody @Valid @Parameter(description = "The invitation token", required = true) TokenDTO invitationTokenDTO,
+            @Parameter(hidden = true) AppUser currentUser) {
         OperatorInvitedUserInfoDTO operatorInvitedUserInfo =
-                operatorUserAcceptInvitationService.acceptInvitation(invitationTokenDTO.getToken());
+                operatorUserAcceptInvitationService.acceptInvitation(invitationTokenDTO.getToken(), currentUser);
         log.debug("Call to acceptOperatorInvitation: {}", invitationTokenDTO);
         return new ResponseEntity<>(operatorInvitedUserInfo, HttpStatus.OK);
     }
@@ -122,10 +125,11 @@ public class OperatorUserRegistrationController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     public ResponseEntity<OperatorUserDTO> acceptAuthorityAndEnableInvitedUserWithCredentials(
             @RequestBody @Valid @Parameter(description = "The operator user", required = true)
-                    OperatorUserRegistrationWithCredentialsDTO operatorUserRegistrationWithCredentialsDTO) {
+                    OperatorUserRegistrationWithCredentialsDTO operatorUserRegistrationWithCredentialsDTO,
+            @Parameter(hidden = true) AppUser currentUser) {
         log.debug("Call to acceptAuthorityAndEnableInvitedUserWithCredentials: {}", operatorUserRegistrationWithCredentialsDTO);
         return new ResponseEntity<>(operatorUserActivationService.acceptAuthorityAndEnableInvitedUserWithCredentials(
-                operatorUserRegistrationWithCredentialsDTO), HttpStatus.OK);
+                operatorUserRegistrationWithCredentialsDTO, currentUser), HttpStatus.OK);
     }
 
     @PutMapping(path = "/accept-authority-and-enable-invited-operator-without-credentials")
@@ -135,10 +139,11 @@ public class OperatorUserRegistrationController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     public ResponseEntity<OperatorUserDTO> acceptAuthorityAndEnableInvitedUserWithoutCredentials(
             @RequestBody @Valid @Parameter(description = "The operator user", required = true)
-                    OperatorUserRegistrationDTO operatorUserRegistrationDTO) {
+                    OperatorUserRegistrationDTO operatorUserRegistrationDTO,
+            @Parameter(hidden = true) AppUser currentUser) {
         log.debug("Call to acceptAuthorityAndEnableInvitedUserWithoutCredentials: {}", operatorUserRegistrationDTO);
         return new ResponseEntity<>(operatorUserActivationService
-                .acceptAuthorityAndEnableInvitedUser(operatorUserRegistrationDTO), HttpStatus.OK);
+                .acceptAuthorityAndEnableInvitedUser(operatorUserRegistrationDTO, currentUser), HttpStatus.OK);
     }
 
     @PutMapping(path = "/accept-authority-and-set-credentials-to-user")
@@ -149,9 +154,10 @@ public class OperatorUserRegistrationController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     public ResponseEntity<Void> acceptAuthorityAndSetCredentialsToUser(
             @RequestBody @Valid @Parameter(description = "The operator user credentials", required = true)
-                    InvitedUserCredentialsDTO invitedUserCredentialsDTO) {
+                    InvitedUserCredentialsDTO invitedUserCredentialsDTO,
+            @Parameter(hidden = true) AppUser currentUser) {
         log.debug("Call to acceptAuthorityAndSetCredentialsToUser: {}", invitedUserCredentialsDTO);
-        operatorUserActivationService.acceptAuthorityAndSetCredentialsToUser(invitedUserCredentialsDTO);
+        operatorUserActivationService.acceptAuthorityAndSetCredentialsToUser(invitedUserCredentialsDTO, currentUser);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

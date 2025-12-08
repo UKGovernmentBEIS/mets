@@ -2,6 +2,8 @@ package uk.gov.pmrv.api.user.operator.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
 import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
@@ -41,8 +43,9 @@ public class OperatorUserTokenVerificationService {
 	    }
     }
 	
-    public AuthorityInfoDTO verifyInvitationTokenForPendingAuthority(String invitationToken) {
-        return userInvitationTokenVerificationService
-            .verifyInvitationTokenForPendingAuthority(invitationToken, JwtTokenAction.OPERATOR_INVITATION);
+	public AuthorityInfoDTO verifyInvitationToken(String invitationToken, AppUser currentUser) {
+		return userInvitationTokenVerificationService
+	            .verifyInvitationToken(invitationToken, JwtTokenAction.OPERATOR_INVITATION, currentUser);
     }
+	
 }

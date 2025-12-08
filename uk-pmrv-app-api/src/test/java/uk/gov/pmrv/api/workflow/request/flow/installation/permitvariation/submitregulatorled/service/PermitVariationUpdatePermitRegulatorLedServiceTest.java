@@ -17,9 +17,9 @@ import uk.gov.pmrv.api.permit.domain.estimatedannualemissions.EstimatedAnnualEmi
 import uk.gov.pmrv.api.permit.service.PermitService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.DeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationRegulatorLedGrantDetermination;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.service.PermitVariationUpdatePermitRegulatorLedService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -61,6 +61,8 @@ class PermitVariationUpdatePermitRegulatorLedServiceTest {
     			.permit(permit)
     			.determinationRegulatorLed(PermitVariationRegulatorLedGrantDetermination.builder()
     					.activationDate(activationDate)
+						.type(DeterminationType.GRANTED)
+						.firstYearOfReportingObligation(2025)
     					.build())
     			.build();
     	Request request = Request.builder()
@@ -83,8 +85,9 @@ class PermitVariationUpdatePermitRegulatorLedServiceTest {
     			.permitType(PermitType.GHGE)
     			.activationDate(activationDate)
     			.installationOperatorDetails(installationOperatorDetails)
+				.firstYearOfReportingObligation(2025)
     			.build(), accountId);
 		verify(installationAccountUpdateService, times(1)).updateAccountUponPermitVariationRegulatorLedSubmit(accountId,
-				EmitterType.GHGE, BigDecimal.valueOf(50000));
+				EmitterType.GHGE, BigDecimal.valueOf(50000),2025);
 	}
 }

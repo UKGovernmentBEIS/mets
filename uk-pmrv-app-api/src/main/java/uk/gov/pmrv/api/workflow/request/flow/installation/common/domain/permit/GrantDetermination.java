@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import uk.gov.netz.api.common.validation.SpELExpression;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,10 +22,16 @@ import java.util.TreeMap;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@SpELExpression(
+        expression = "{#firstYearOfReportingObligation==null or " +
+                "(#firstYearOfReportingObligation ge 2021 and #firstYearOfReportingObligation le (T(java.time.Year).now().getValue() + 1))}",
+        message = "The first year of reporting obligation must be between 2021 and one year from now")
 public abstract class GrantDetermination extends Determination {
     
 	@NotNull
     private LocalDate activationDate;
+
+    private Integer firstYearOfReportingObligation;
 
     @Builder.Default
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

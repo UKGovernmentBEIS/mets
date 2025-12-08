@@ -15,7 +15,7 @@ import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData
 import uk.gov.netz.api.notificationapi.mail.domain.EmailRecipients;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.api.notificationapi.mail.service.SendEmailService;
-import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
+import uk.gov.netz.api.notificationapi.domain.NotificationContent;
 import uk.gov.pmrv.api.notification.template.service.NotificationTemplateProcessService;
 
 /**

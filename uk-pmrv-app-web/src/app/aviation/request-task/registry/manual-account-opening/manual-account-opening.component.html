@@ -1,0 +1,122 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading size="l" caption="Integration with registry">
+    {{ vm.header }}
+  </app-page-heading>
+
+  <p class="govuk-body govuk-inset-text">
+    By selecting ‘Confirm and send’ you confirm that part of the EMP information can be communicated to the Registry
+    service to create a Registry account.
+  </p>
+
+  <h2 class="govuk-heading-m">Operator details</h2>
+  <dl govuk-summary-list *ngIf="vm?.operatorDetails as operatorDetails">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Emitter ID</dt>
+      <dd govukSummaryListRowValue>{{ operatorDetails.emitterId }}</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Operator name</dt>
+      <dd govukSummaryListRowValue>{{ operatorDetails.operatorName }}</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>First known aviation activity</dt>
+      <dd govukSummaryListRowValue>{{ operatorDetails.firstKnownAviationActivity | govukDate }}</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Regulator</dt>
+      <dd govukSummaryListRowValue>{{ operatorDetails.regulator }}</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+  </dl>
+
+  <ng-container *ngIf="vm?.organizationDetails as organisationStructure">
+    <h2 class="govuk-heading-m">Organisation details</h2>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Organisation legal status</dt>
+        <dd govukSummaryListRowValue>
+          {{ organisationStructure.organisationLegalStatus | operatorDetailsLegalStatusType }}
+        </dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+      <ng-container [ngSwitch]="organisationStructure.organisationLegalStatus">
+        <ng-container *ngSwitchCase="'LIMITED_COMPANY'">
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Company registration number</dt>
+            <dd govukSummaryListRowValue>{{ $any(organisationStructure).companyRegistrationNumber }}</dd>
+            <dd govukSummaryListRowActions></dd>
+          </div>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Registered address</dt>
+            <dd govukSummaryListRowValue *ngIf="$any(organisationStructure).registeredAddress.type === 'ONSHORE_STATE'">
+              <div>
+                {{ $any(organisationStructure).registeredAddress.line1 }}
+                <ng-container *ngIf="$any(organisationStructure).registeredAddress.line2">
+                  , {{ $any(organisationStructure).registeredAddress.line2 }}
+                </ng-container>
+              </div>
+              <div>{{ $any(organisationStructure).registeredAddress.city }}</div>
+              <div>{{ $any(organisationStructure).registeredAddress.state }}</div>
+              <div>{{ $any(organisationStructure).registeredAddress.postcode }}</div>
+              <div>{{ $any(organisationStructure).registeredAddress.country | country }}</div>
+            </dd>
+            <dd govukSummaryListRowActions></dd>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'INDIVIDUAL'">
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Full name</dt>
+            <dd govukSummaryListRowValue>{{ $any(organisationStructure).fullName }}</dd>
+            <dd govukSummaryListRowActions></dd>
+          </div>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Address</dt>
+            <dd govukSummaryListRowValue>
+              <div>
+                {{ $any(organisationStructure).address.line1 }}
+                <ng-container *ngIf="$any(organisationStructure).address.line2">
+                  , {{ $any(organisationStructure).address.line2 }}
+                </ng-container>
+              </div>
+              <div>{{ $any(organisationStructure).address.city }}</div>
+              <div>{{ $any(organisationStructure).address.state }}</div>
+              <div>{{ $any(organisationStructure).address.postcode }}</div>
+              <div>{{ $any(organisationStructure).address.country | country }}</div>
+            </dd>
+            <dd govukSummaryListRowActions></dd>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'PARTNERSHIP'">
+          <div govukSummaryListRow *ngIf="$any(organisationStructure).partnershipName">
+            <dt govukSummaryListRowKey>Name of partnership</dt>
+            <dd govukSummaryListRowValue>{{ $any(organisationStructure).partnershipName }}</dd>
+            <dd govukSummaryListRowActions></dd>
+          </div>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Main office address</dt>
+            <dd govukSummaryListRowValue>
+              <div>
+                {{ $any(organisationStructure).mainOfficeAddress.line1 }}
+                <ng-container *ngIf="$any(organisationStructure).mainOfficeAddress.line2">
+                  , {{ $any(organisationStructure).mainOfficeAddress.line2 }}
+                </ng-container>
+              </div>
+              <div>{{ $any(organisationStructure).mainOfficeAddress.city }}</div>
+              <div>{{ $any(organisationStructure).mainOfficeAddress.state }}</div>
+              <div>{{ $any(organisationStructure).mainOfficeAddress.postcode }}</div>
+              <div>{{ $any(organisationStructure).mainOfficeAddress.country | country }}</div>
+            </dd>
+            <dd govukSummaryListRowActions></dd>
+          </div>
+        </ng-container>
+      </ng-container>
+    </dl>
+  </ng-container>
+  <div class="govuk-button-group">
+    <button appPendingButton govukButton type="submit" (click)="onSubmit()">Confirm and send</button>
+  </div>
+</ng-container>
+<app-return-to-link></app-return-to-link>

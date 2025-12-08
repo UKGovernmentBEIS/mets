@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.user.core.domain.dto.InvitedUserCredentialsDTO;
 import uk.gov.pmrv.api.user.core.domain.dto.InvitedUserInfoDTO;
 import uk.gov.pmrv.api.user.core.domain.dto.TokenDTO;
@@ -43,9 +45,10 @@ public class RegulatorUserRegistrationController {
     @ApiResponse(responseCode = "400", description = SwaggerApiInfo.ACCEPT_REGULATOR_USER_INVITATION_BAD_REQUEST ,content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     public ResponseEntity<InvitedUserInfoDTO> acceptRegulatorInvitation(
-            @RequestBody @Valid @Parameter(description = "The invitation token", required = true) TokenDTO invitationTokenDTO) {
+            @RequestBody @Valid @Parameter(description = "The invitation token", required = true) TokenDTO invitationTokenDTO,
+            @Parameter(hidden = true) AppUser currentUser) {
         log.debug("Call to acceptRegulatorInvitation: {}", invitationTokenDTO);
-        return new ResponseEntity<>(regulatorUserInvitationService.acceptInvitation(invitationTokenDTO.getToken()), HttpStatus.OK);
+        return new ResponseEntity<>(regulatorUserInvitationService.acceptInvitation(invitationTokenDTO.getToken(), currentUser), HttpStatus.OK);
     }
 
     @PutMapping(path = "/accept-authority-and-activate-user-from-invitation")
@@ -56,9 +59,10 @@ public class RegulatorUserRegistrationController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     public ResponseEntity<Void> acceptAuthorityAndActivateRegulatorUserFromInvite(
             @RequestBody @Valid @Parameter(description = "The regulator user credentials", required = true)
-                    InvitedUserCredentialsDTO invitedUserCredentialsDTO) {
+                    InvitedUserCredentialsDTO invitedUserCredentialsDTO,
+            @Parameter(hidden = true) AppUser currentUser) {
         log.debug("Call to acceptAuthorityAndActivateRegulatorUserFromInvite: {}", invitedUserCredentialsDTO);
-        regulatorUserActivateService.acceptAuthorityAndActivateInvitedUser(invitedUserCredentialsDTO);
+        regulatorUserActivateService.acceptAuthorityAndActivateInvitedUser(invitedUserCredentialsDTO, currentUser);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     

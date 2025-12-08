@@ -24,6 +24,7 @@ public enum NotificationTemplateWorkflowTaskType {
     AIR_SUBMIT("Submission"),
     AIR_RESPOND_TO_REGULATOR_COMMENTS("Follow up Action"),
     AER("Submission"),
+    WASTE_QDR("Submission"),
 
     INSTALLATION_INSPECTION_OPERATOR_RESPOND("Operator Response"),
 

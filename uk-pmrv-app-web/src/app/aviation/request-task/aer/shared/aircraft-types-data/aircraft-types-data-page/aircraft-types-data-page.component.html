@@ -1,9 +1,9 @@
 <govuk-notification-banner *ngIf="showNotification()" type="success">
   <h1 class="govuk-notification-banner__heading">
     {{
-      aviationAerAircraftDataDetails.length > 0
-        ? 'The aircraft types data file has been replaced successfully.'
-        : 'The aircraft types data file has been uploaded successfully.'
+      firstTimeUploaded()
+        ? 'The aircraft types data file has been uploaded successfully.'
+        : 'The aircraft types data file has been replaced successfully.'
     }}
   </h1>
 </govuk-notification-banner>

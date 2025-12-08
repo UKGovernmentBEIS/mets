@@ -181,6 +181,7 @@ class RegulatorAuthorityPermissionControllerTest {
 
     @Test
     void getRegulatorPermissionGroupLevels() throws Exception {
+    	setupAppUser();
         when(regulatorPermissionsAdapter.getPermissionGroupLevels()).thenReturn(Map.of(REVIEW_INSTALLATION_ACCOUNT, List.of(NONE, VIEW_ONLY, EXECUTE)));
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -217,5 +218,11 @@ class RegulatorAuthorityPermissionControllerTest {
             .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
             .build();
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 
 }

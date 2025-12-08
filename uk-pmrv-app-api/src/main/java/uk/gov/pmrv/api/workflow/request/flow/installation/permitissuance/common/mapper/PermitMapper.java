@@ -27,6 +27,11 @@ public interface PermitMapper extends PermitDeterminableMapper {
     	PermitDeterminableMapper.super.setAnnualEmissionsTargets(permitContainer, permitIssuanceRequestPayload);
     }
 
+    @AfterMapping
+    default void setFirstYearOfReportingObligation(@MappingTarget PermitContainer permitContainer, PermitIssuanceRequestPayload permitIssuanceRequestPayload) {
+        PermitDeterminableMapper.super.setFirstYearOfReportingObligation(permitContainer, permitIssuanceRequestPayload);
+    }
+
     PermitContainer toPermitContainer(PermitIssuanceApplicationRequestTaskPayload payload);
 
 }

@@ -31,7 +31,6 @@ describe('InformationSentToRegistryComponent', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         imports: [ActionSharedModule, PipesModule, SharedModule],
-        providers: [provideRouter([])],
       }).compileComponents();
 
       store = TestBed.inject(CommonActionsStore);
@@ -40,6 +39,7 @@ describe('InformationSentToRegistryComponent', () => {
         action: {
           type: 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY',
           requestId: '671',
+          submitter: 'system',
           payload: {
             payloadType: 'EMP_ISSUANCE_UKETS_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD',
             operatorDetails: {
@@ -65,8 +65,8 @@ describe('InformationSentToRegistryComponent', () => {
 
       fixture = TestBed.createComponent(InformationSentToRegistryComponent);
       component = fixture.componentInstance;
-      page = new Page(fixture);
       fixture.detectChanges();
+      page = new Page(fixture);
     });
 
     it('should create', () => {
@@ -81,8 +81,8 @@ describe('InformationSentToRegistryComponent', () => {
         ['Emission plan ID', 'UK-E-AV-00043'],
         ['Operator name', 'aviation_ukets20'],
         ['First known aviation activity', '26 Aug 2024'],
-        ['Regulator', 'Environment Agency'],
-        ['What is the legal status of your organisation?', 'Limited company'],
+        ['Regulator', 'ENGLAND'],
+        ['Organisation legal status', 'Limited company'],
         ['Company registration number', 'test'],
         ['Registered address', 'test test'],
       ]);
@@ -101,6 +101,7 @@ describe('InformationSentToRegistryComponent', () => {
         action: {
           type: 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY',
           requestId: '671',
+          submitter: 'system',
           payload: {
             payloadType: 'EMP_ISSUANCE_UKETS_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD',
             operatorDetails: {
@@ -142,8 +143,8 @@ describe('InformationSentToRegistryComponent', () => {
         ['Emission plan ID', 'UK-E-AV-00043'],
         ['Operator name', 'aviation_ukets20'],
         ['First known aviation activity', '26 Aug 2024'],
-        ['Regulator', 'Environment Agency'],
-        ['What is the legal status of your organisation?', 'Individual'],
+        ['Regulator', 'ENGLAND'],
+        ['Organisation legal status', 'Individual'],
         ['Full name', 'test fullname'],
         ['Address', 'test test'],
       ]);
@@ -163,6 +164,7 @@ describe('InformationSentToRegistryComponent', () => {
         action: {
           type: 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY',
           requestId: '671',
+          submitter: 'Regulator England',
           payload: {
             payloadType: 'EMP_ISSUANCE_UKETS_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD',
             operatorDetails: {
@@ -197,15 +199,15 @@ describe('InformationSentToRegistryComponent', () => {
     });
 
     it('should show summary details', () => {
-      expect(page.heading).toEqual('Information sent to registry by system');
+      expect(page.heading).toEqual('Information sent to registry by Regulator England');
       expect(page.summaryListValues).toHaveLength(8);
       expect(page.summaryListValues).toEqual([
         ['Emitter ID', 'EM00043'],
         ['Emission plan ID', 'UK-E-AV-00043'],
         ['Operator name', 'aviation_ukets20'],
         ['First known aviation activity', '26 Aug 2024'],
-        ['Regulator', 'Environment Agency'],
-        ['What is the legal status of your organisation?', 'Partnership'],
+        ['Regulator', 'ENGLAND'],
+        ['Organisation legal status', 'Partnership'],
         ['Name of partnership', 'test fullname'],
         ['Main office address', 'test test'],
       ]);

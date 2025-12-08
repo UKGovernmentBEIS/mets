@@ -4,11 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription, switchMap, take, tap } from 'rxjs';
 
-import { AuthStore } from '@core/store';
 import produce from 'immer';
 
 import { AviationAccountFormModel, AviationAccountFormProvider } from '../../services';
-import { AviationAccountsStore, selectAccount, selectAccountInfo } from '../../store';
+import { AviationAccountDetails, AviationAccountsStore, selectAccount, selectAccountInfo } from '../../store';
 
 @Component({
   selector: 'app-edit-aviation-account',
@@ -20,8 +19,8 @@ export class EditAviationAccountComponent implements OnInit, AfterViewInit, OnDe
   accountInfo$: Subscription;
   checkForUkAviation = false;
   accountInfoData: {
-    competentAuthority: 'ENGLAND' | 'NORTHERN_IRELAND' | 'OPRED' | 'SCOTLAND' | 'WALES';
-    accountType: 'AVIATION' | 'INSTALLATION';
+    competentAuthority: AviationAccountDetails['competentAuthority'];
+    accountType: AviationAccountDetails['accountType'];
   };
 
   constructor(
@@ -30,13 +29,12 @@ export class EditAviationAccountComponent implements OnInit, AfterViewInit, OnDe
     private readonly store: AviationAccountsStore,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    readonly authStore: AuthStore,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({ account: this.formProvider.form });
-    this.formProvider.addFieldsForEdit();
+    this.formProvider.modifyFieldsForEdit();
     this.accountInfo$ = this.store.pipe(selectAccountInfo).subscribe((response) => {
       this.accountInfoData = {
         competentAuthority: response?.competentAuthority,
@@ -51,7 +49,6 @@ export class EditAviationAccountComponent implements OnInit, AfterViewInit, OnDe
           crcoCode: response?.crcoCode,
           sopId: response?.sopId ? (response.sopId.toString() as any) : null,
           commencementDate: new Date(response?.commencementDate) as any,
-          registryId: response?.registryId ? response.registryId.toString() : null,
           id: response?.id,
           hasContactAddress: [!!response?.location],
           location: response?.location,

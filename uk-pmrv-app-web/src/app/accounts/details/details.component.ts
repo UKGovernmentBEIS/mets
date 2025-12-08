@@ -16,7 +16,7 @@ import {
   InstallationAccountPermitDTO,
 } from 'pmrv-api';
 
-import { accountFinalStatuses } from '../core/accountFinalStatuses';
+import { accountFinalStatuses, accountFirstYearStatuses } from '../core/accountFinalStatuses';
 
 @Component({
   selector: 'app-account-details',
@@ -82,5 +82,9 @@ export class DetailsComponent implements OnInit {
 
   canChangeByStatus(status: InstallationAccountDTO['status']): boolean {
     return accountFinalStatuses(status);
+  }
+
+  canChangeFirstYearByStatus(status: InstallationAccountDTO['status']): boolean {
+    return accountFirstYearStatuses(status);
   }
 }

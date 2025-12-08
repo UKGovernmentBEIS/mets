@@ -3,6 +3,8 @@ package uk.gov.pmrv.api.user.verifier.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.Authority;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
 import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
@@ -30,9 +32,9 @@ public class VerifierUserActivateService {
 	 * @param invitedUserCredentialsDTO
 	 */
     @Transactional
-    public void acceptAuthorityAndActivateInvitedUser(InvitedUserCredentialsDTO invitedUserCredentialsDTO) {
+    public void acceptAuthorityAndActivateInvitedUser(InvitedUserCredentialsDTO invitedUserCredentialsDTO, AppUser currentUser) {
         final AuthorityInfoDTO authorityInfo = verifierUserTokenVerificationService
-            .verifyInvitationTokenForPendingAuthority(invitedUserCredentialsDTO.getInvitationToken());
+            .verifyInvitationToken(invitedUserCredentialsDTO.getInvitationToken(), currentUser);
         final String userId = authorityInfo.getUserId();
         
         verifierUserRegisterValidationService.validate(authorityInfo.getUserId(),
@@ -58,9 +60,9 @@ public class VerifierUserActivateService {
     }
 
     @Transactional
-    public void acceptAuthorityForRegisteredVerifierInvitedUser(String invitationToken) {
+    public void acceptAuthorityForRegisteredVerifierInvitedUser(String invitationToken, AppUser currentUser) {
         final AuthorityInfoDTO authorityInfo = verifierUserTokenVerificationService
-            .verifyInvitationTokenForPendingAuthority(invitationToken);
+            .verifyInvitationToken(invitationToken, currentUser);
 
         // accept authority
         final Authority authority = verifierAuthorityService.acceptAuthority(authorityInfo.getId());

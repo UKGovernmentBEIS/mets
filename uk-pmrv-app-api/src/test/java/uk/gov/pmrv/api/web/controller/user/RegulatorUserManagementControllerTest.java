@@ -109,8 +109,8 @@ class RegulatorUserManagementControllerTest {
 
 	@Test
 	void getRegulatorUserByCaAndId() throws Exception {
+		AppUser currentUser = setupAppUser();
 		final String userId = "userId";
-		AppUser currentUser = AppUser.builder().userId("currentuser").build();
 		RegulatorUserDTO regulator = RegulatorUserDTO.builder()
 				.firstName("firstName")
 				.lastName("lastName")
@@ -118,7 +118,6 @@ class RegulatorUserManagementControllerTest {
 				.jobTitle("jobTitle")
 				.build();
 
-		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 		when(regulatorUserManagementService.getRegulatorUserByUserId(currentUser, userId))
 				.thenReturn(regulator);
 
@@ -138,9 +137,8 @@ class RegulatorUserManagementControllerTest {
 	@Test
 	void getRegulatorUserByCaAndId_forbidden() throws Exception {
 		final String userId = "userId";
-		AppUser currentUser = AppUser.builder().userId("currentuser").build();
+		AppUser currentUser = setupAppUser();
 
-		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
 				.when(appUserAuthorizationService)
 				.authorize(currentUser, "getRegulatorUserByCaAndId");
@@ -156,10 +154,9 @@ class RegulatorUserManagementControllerTest {
 
 	@Test
 	void getRegulatorUserByCaAndId_bad_request() throws Exception {
+		AppUser currentUser = setupAppUser();
 		final String userId = "userId";
-		AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
-		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 		when(regulatorUserManagementService.getRegulatorUserByUserId(currentUser, userId))
 				.thenThrow(new BusinessException(ErrorCode.AUTHORITY_USER_NOT_RELATED_TO_CA));
 
@@ -174,8 +171,8 @@ class RegulatorUserManagementControllerTest {
 
 	@Test
 	void updateRegulatorUserByCaAndId() throws Exception {
+		AppUser currentUser = setupAppUser();
 		final String userId = "userId";
-		AppUser currentUser = AppUser.builder().userId("currentuser").build();
 		RegulatorUserUpdateDTO regulatorUserUpdateDTO = buildRegulatorUserUpdateDTO();
 		MockMultipartFile regulatorUserUpdateDTORequestPart = new MockMultipartFile(
                 "regulatorUserUpdateDTO", 
@@ -187,8 +184,6 @@ class RegulatorUserManagementControllerTest {
         String contentType = MimeTypeUtils.TEXT_PLAIN_VALUE;
         byte[] fileContent = "content".getBytes();
         MockMultipartFile signatureRequestPart = new MockMultipartFile("signature", originalFilename, contentType, fileContent);
-
-		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
 		//invoke
         mockMvc
@@ -214,8 +209,8 @@ class RegulatorUserManagementControllerTest {
 
 	@Test
 	void updateRegulatorUserByCaAndId_forbidden() throws Exception {
+		AppUser currentUser = setupAppUser();
 	    final String userId = "userId";
-        AppUser currentUser = AppUser.builder().userId("currentuser").build();
         RegulatorUserUpdateDTO regulatorUserUpdateDTO = buildRegulatorUserUpdateDTO();
         MockMultipartFile regulatorUserUpdateDTORequestPart = new MockMultipartFile(
                 "regulatorUserUpdateDTO", 
@@ -228,7 +223,6 @@ class RegulatorUserManagementControllerTest {
         byte[] fileContent = "content".getBytes();
         MockMultipartFile signatureRequestPart = new MockMultipartFile("signature", originalFilename, contentType, fileContent);
 
-		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
 				.when(appUserAuthorizationService)
 				.authorize(currentUser, "updateRegulatorUserByCaAndId");
@@ -244,7 +238,7 @@ class RegulatorUserManagementControllerTest {
 
 	@Test
 	void updateCurrentRegulatorUser() throws Exception {
-		AppUser currentUser = AppUser.builder().userId("currentuser").build();
+		AppUser currentUser = setupAppUser();
 		RegulatorUserUpdateDTO regulatorUserUpdateDTO = buildRegulatorUserUpdateDTO();
 		MockMultipartFile regulatorUserUpdateDTORequestPart = new MockMultipartFile(
                 "regulatorUserUpdateDTO", 
@@ -256,8 +250,6 @@ class RegulatorUserManagementControllerTest {
         String contentType = MimeTypeUtils.TEXT_PLAIN_VALUE;
         byte[] fileContent = "content".getBytes();
         MockMultipartFile signatureRequestPart = new MockMultipartFile("signature", originalFilename, contentType, fileContent);
-
-		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
 		// Invoke
 		mockMvc.perform(MockMvcRequestBuilders.multipart(BASE_PATH)
@@ -281,7 +273,7 @@ class RegulatorUserManagementControllerTest {
 
 	@Test
 	void updateCurrentRegulatorUser_forbidden() throws Exception {
-		AppUser currentUser = AppUser.builder().userId("currentuser").build();
+		AppUser currentUser = setupAppUser();
 		RegulatorUserUpdateDTO regulatorUserUpdateDTO = buildRegulatorUserUpdateDTO();
 		MockMultipartFile regulatorUserUpdateDTORequestPart = new MockMultipartFile(
                 "regulatorUserUpdateDTO", 
@@ -295,7 +287,6 @@ class RegulatorUserManagementControllerTest {
         MockMultipartFile signatureRequestPart = new MockMultipartFile("signature", originalFilename, contentType, fileContent);
 
 
-		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
             .evaluate(currentUser, new String[] {RoleTypeConstants.REGULATOR});
@@ -311,6 +302,7 @@ class RegulatorUserManagementControllerTest {
 	
 	@Test
     void generateGetRegulatorSignatureToken() throws Exception {
+		setupAppUser();
 	    String userId = "userId";
         UUID signatureUuid = UUID.randomUUID();
         FileToken fileToken = FileToken.builder().token("token").tokenExpirationMinutes(10L).build();
@@ -331,12 +323,10 @@ class RegulatorUserManagementControllerTest {
 	
 	@Test
     void generateGetRegulatorSignatureToken_forbidden() throws Exception {
-		AppUser currentUser = AppUser.builder().userId("currentuser").build();
+		AppUser currentUser = setupAppUser();
         String userId = "userId";
         UUID signatureUuid = UUID.randomUUID();
         
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
-
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
         .when(appUserAuthorizationService)
         .authorize(currentUser, "generateGetRegulatorSignatureToken");
@@ -352,10 +342,8 @@ class RegulatorUserManagementControllerTest {
 	
 	@Test
 	void resetRegulator2Fa() throws Exception {
+		AppUser currentUser = setupAppUser();
 		final String userId = "userId";
-		AppUser currentUser = AppUser.builder().userId("currentuser").build();
-
-		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
 		//invoke
         mockMvc
@@ -367,10 +355,9 @@ class RegulatorUserManagementControllerTest {
 
 	@Test
 	void resetRegulator2Fa_forbidden() throws Exception {
+		AppUser currentUser = setupAppUser();
 	    final String userId = "userId";
-		AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
-		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
 				.when(appUserAuthorizationService)
 				.authorize(currentUser, "resetRegulator2Fa");
@@ -393,5 +380,11 @@ class RegulatorUserManagementControllerTest {
 						.build())
 			.permissions(Map.of(MANAGE_USERS_AND_CONTACTS, RegulatorPermissionLevel.NONE))
 			.build();
+	}
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("currentuser").build();
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
 	}
 }

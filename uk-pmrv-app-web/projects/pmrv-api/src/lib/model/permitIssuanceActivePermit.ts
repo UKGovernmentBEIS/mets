@@ -15,6 +15,6 @@ export interface PermitIssuanceActivePermit {
   permitId?: string;
   installationName?: string;
   operatorName?: string;
-  regulator?: 'ENGLAND' | 'NORTHERN_IRELAND' | 'OPRED' | 'SCOTLAND' | 'WALES';
+  regulator?: string;
   regulatedActivitiesStartDate?: string;
 }

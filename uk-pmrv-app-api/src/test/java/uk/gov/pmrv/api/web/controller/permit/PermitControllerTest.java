@@ -82,6 +82,7 @@ class PermitControllerTest {
 
     @Test
     void generateGetPermitAttachmentToken() throws Exception {
+    	setupAppUser();
         String permitId = "1";
         UUID attachmentUuid = UUID.randomUUID();
         FileToken expectedToken = FileToken.builder().token("token").build();
@@ -101,11 +102,9 @@ class PermitControllerTest {
 
     @Test
     void generateGetPermitAttachmentToken_forbidden() throws Exception {
+    	AppUser authUser = setupAppUser();
         Long permitId = 1L;
         UUID attachmentUuid = UUID.randomUUID();
-        AppUser authUser = AppUser.builder().userId("userId").build();
-
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(authUser, "generateGetPermitAttachmentToken", String.valueOf(permitId), null, null);
@@ -120,6 +119,7 @@ class PermitControllerTest {
 
     @Test
     void generateGetPermitDocumentToken() throws Exception {
+    	setupAppUser();
         String permitId = "1";
         UUID documentUuid = UUID.randomUUID();
         FileToken expectedToken = FileToken.builder().token("token").build();
@@ -139,11 +139,9 @@ class PermitControllerTest {
 
     @Test
     void generateGetPermitDocumentToken_forbidden() throws Exception {
+    	AppUser authUser = setupAppUser();
         Long permitId = 1L;
         UUID documentUuid = UUID.randomUUID();
-        AppUser authUser = AppUser.builder().userId("userId").build();
-
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(authUser, "generateGetPermitDocumentToken", String.valueOf(permitId), null, null);
@@ -155,4 +153,10 @@ class PermitControllerTest {
 
         verifyNoInteractions(permitDocumentService);
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 }

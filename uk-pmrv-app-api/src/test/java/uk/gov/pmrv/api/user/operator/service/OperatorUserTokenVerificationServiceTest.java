@@ -5,6 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
 import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
@@ -87,16 +89,19 @@ class OperatorUserTokenVerificationServiceTest {
 	}
 	
 	@Test
-	void verifyInvitationTokenForPendingAuthority() {
+	void verifyInvitationToken() {
+		String userId = "userId";
 		String invitationToken = "inv";
-		AuthorityInfoDTO authorityInfo = AuthorityInfoDTO.builder().accountId(1L).build();
-		when(userInvitationTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken,
-				JwtTokenAction.OPERATOR_INVITATION)).thenReturn(authorityInfo);
+		AppUser currentUser = AppUser.builder().userId(userId).build();
+		AuthorityInfoDTO authorityInfo = AuthorityInfoDTO.builder().accountId(1L).userId(userId).build();
+		when(userInvitationTokenVerificationService.verifyInvitationToken(invitationToken,
+				JwtTokenAction.OPERATOR_INVITATION, currentUser)).thenReturn(authorityInfo);
 		
-		AuthorityInfoDTO result = cut.verifyInvitationTokenForPendingAuthority(invitationToken);
+		AuthorityInfoDTO result = cut.verifyInvitationToken(invitationToken, currentUser);
 		
 		assertThat(result).isEqualTo(authorityInfo);
 		verify(userInvitationTokenVerificationService, times(1))
-				.verifyInvitationTokenForPendingAuthority(invitationToken, JwtTokenAction.OPERATOR_INVITATION);
+				.verifyInvitationToken(invitationToken, JwtTokenAction.OPERATOR_INVITATION, currentUser);
 	}
+	
 }

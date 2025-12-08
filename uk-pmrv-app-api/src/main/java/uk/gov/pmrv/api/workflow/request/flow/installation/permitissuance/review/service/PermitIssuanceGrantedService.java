@@ -46,6 +46,7 @@ public class PermitIssuanceGrantedService {
         installationAccountUpdateService.updateAccountUponPermitGranted(
             accountId,
             emitterType,
-            permitContainer.getPermit().getEstimatedAnnualEmissions().getQuantity());
+            permitContainer.getPermit().getEstimatedAnnualEmissions().getQuantity(),
+            permitContainer.getFirstYearOfReportingObligation());
     }
 }

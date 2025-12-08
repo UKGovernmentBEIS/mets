@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
+import uk.gov.netz.api.notificationapi.domain.NotificationContent;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
 @Data

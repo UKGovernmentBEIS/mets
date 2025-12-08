@@ -1,0 +1,61 @@
+<ng-container *ngIf="vm() as vm">
+  <app-waste-qdr-task returnLink="../../" [breadcrumb]="true" heading="Check your answers">
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Will you provide a quarterly data report for</dt>
+        <dd govukSummaryListRowValue>
+          {{ vm.qdr.reportProvided ? 'Yes' : 'No' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+          <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+
+      @if (!vm.qdr.reportProvided) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Reason for not submitting a quarterly report</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">
+            {{ vm.qdr.reasonForUnprovided }}
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+            <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+          </dd>
+        </div>
+      } @else {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Completed quarterly report</dt>
+          <dd govukSummaryListRowValue>
+            <app-summary-download-files [files]="[vm.reportFile]"></app-summary-download-files>
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+            <a govukLink [routerLink]="['..', 'upload']" [state]="{ changing: true }">Change</a>
+          </dd>
+        </div>
+
+        <div govukSummaryListRow *ngIf="vm.qdr.supportingFiles?.length > 0">
+          <dt govukSummaryListRowKey>Supporting data</dt>
+          <dd govukSummaryListRowValue>
+            <app-summary-download-files [files]="vm.supportingFiles"></app-summary-download-files>
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+            <a govukLink [routerLink]="['..', 'upload']" [state]="{ changing: true }">Change</a>
+          </dd>
+        </div>
+
+        <div govukSummaryListRow *ngIf="vm.qdr.notes">
+          <dt govukSummaryListRowKey>Notes</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">
+            {{ vm.qdr.notes }}
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+            <a govukLink [routerLink]="['..', 'upload']" [state]="{ changing: true }">Change</a>
+          </dd>
+        </div>
+      }
+    </dl>
+
+    <div *ngIf="!vm.hideSubmit" class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onSubmit()">Confirm and complete</button>
+    </div>
+  </app-waste-qdr-task>
+</ng-container>

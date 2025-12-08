@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, distinctUntilChanged, filter, map, Observable, switchMap, takeUntil } from 'rxjs';
 
+import { selectIsFeatureEnabled } from '@core/config/config.selectors';
+import { ConfigStore } from '@core/config/config.store';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AccountType, AuthStore, selectCurrentDomain, selectUserRoleType, UserState } from '@core/store/auth';
 
@@ -97,7 +99,14 @@ export class DashboardPageComponent implements OnInit {
     this.store.pipe(selectPageSize),
     this.store.pipe(selectOrderBy),
     this.store.pipe(selectFilterBy),
-    this.requestsService.getRequestTypesByUserRolesAndService(),
+    this.configStore.pipe(
+      selectIsFeatureEnabled('wasteQdrEnabled'),
+      switchMap((wasteQdrEnabled) =>
+        this.requestsService
+          .getRequestTypesByUserRolesAndService()
+          .pipe(map((requestTypes) => requestTypes.filter((type) => (wasteQdrEnabled ? true : type !== 'WASTE_QDR')))),
+      ),
+    ),
     this.store.pipe(selectAccountSearchTerm),
   ]).pipe(
     map(
@@ -124,7 +133,7 @@ export class DashboardPageComponent implements OnInit {
         pageSize,
         order,
         filterWorkflow,
-        filterRequestTypes: filterRequestTypes.sort(),
+        filterRequestTypes,
         accountSearchTerm,
       }),
     ),
@@ -141,6 +150,7 @@ export class DashboardPageComponent implements OnInit {
     private readonly router: Router,
     private readonly destroy$: DestroySubject,
     private readonly requestsService: RequestsService,
+    private readonly configStore: ConfigStore,
   ) {}
 
   ngOnInit(): void {

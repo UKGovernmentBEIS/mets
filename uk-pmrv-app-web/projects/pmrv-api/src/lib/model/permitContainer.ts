@@ -18,5 +18,6 @@ export interface PermitContainer {
   installationOperatorDetails: InstallationOperatorDetails;
   permitAttachments?: { [key: string]: string };
   activationDate?: string;
+  firstYearOfReportingObligation?: number;
   annualEmissionsTargets?: { [key: string]: string };
 }

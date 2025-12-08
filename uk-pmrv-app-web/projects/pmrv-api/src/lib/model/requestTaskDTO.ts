@@ -117,6 +117,7 @@ import { SystemMessageNotificationRequestTaskPayload } from './systemMessageNoti
 import { VirApplicationRespondToRegulatorCommentsRequestTaskPayload } from './virApplicationRespondToRegulatorCommentsRequestTaskPayload';
 import { VirApplicationReviewRequestTaskPayload } from './virApplicationReviewRequestTaskPayload';
 import { VirApplicationSubmitRequestTaskPayload } from './virApplicationSubmitRequestTaskPayload';
+import { WasteQDRApplicationSubmitRequestTaskPayload } from './wasteQDRApplicationSubmitRequestTaskPayload';
 import { WithholdingOfAllowancesApplicationPeerReviewRequestTaskPayload } from './withholdingOfAllowancesApplicationPeerReviewRequestTaskPayload';
 import { WithholdingOfAllowancesApplicationSubmitRequestTaskPayload } from './withholdingOfAllowancesApplicationSubmitRequestTaskPayload';
 import { WithholdingOfAllowancesWithdrawalApplicationSubmitRequestTaskPayload } from './withholdingOfAllowancesWithdrawalApplicationSubmitRequestTaskPayload';
@@ -320,6 +321,7 @@ export interface RequestTaskDTO {
     | 'ALR_WAIT_FOR_AUTHORITY_REVIEW'
     | 'ALR_APPLICATION_PEER_REVIEW'
     | 'ALR_WAIT_FOR_PEER_REVIEW'
+    | 'WASTE_QDR_APPLICATION_SUBMIT'
     | 'AVIATION_ACCOUNT_CLOSURE_SUBMIT'
     | 'AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT'
     | 'AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE'
@@ -554,6 +556,7 @@ export interface RequestTaskDTO {
     | VirApplicationRespondToRegulatorCommentsRequestTaskPayload
     | VirApplicationReviewRequestTaskPayload
     | VirApplicationSubmitRequestTaskPayload
+    | WasteQDRApplicationSubmitRequestTaskPayload
     | WithholdingOfAllowancesApplicationPeerReviewRequestTaskPayload
     | WithholdingOfAllowancesApplicationSubmitRequestTaskPayload
     | WithholdingOfAllowancesWithdrawalApplicationSubmitRequestTaskPayload;

@@ -1677,4 +1677,54 @@
             and permission = 'PERM_HSE_TI_APPLICATION_SUBMIT_EXECUTE_TASK';
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_waste_qdr_user_authorities_1" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_WASTE_QDR_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_role
+            where code in ('operator_admin', 'operator', 'consultant_agent');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_WASTE_QDR_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_authority au
+            where au.code in ('operator_admin', 'operator', 'consultant_agent');
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_WASTE_QDR_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_role
+            where code in ('operator_admin', 'operator', 'consultant_agent');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_WASTE_QDR_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_authority au
+            where au.code in ('operator_admin', 'operator', 'consultant_agent');
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('operator_admin', 'operator')
+            and rp.permission = 'PERM_WASTE_QDR_APPLICATION_SUBMIT_VIEW_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('operator_admin', 'operator', 'consultant_agent'))
+            and permission = 'PERM_WASTE_QDR_APPLICATION_SUBMIT_VIEW_TASK';
+
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('operator_admin', 'operator', 'consultant_agent')
+            and rp.permission = 'PERM_WASTE_QDR_APPLICATION_SUBMIT_EXECUTE_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('operator_admin', 'operator', 'consultant_agent'))
+            and permission = 'PERM_WASTE_QDR_APPLICATION_SUBMIT_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

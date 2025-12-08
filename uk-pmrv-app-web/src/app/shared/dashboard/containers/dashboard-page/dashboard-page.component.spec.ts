@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -137,7 +137,7 @@ describe('DashboardPageComponent', () => {
       getUnassignedItems: jest.fn().mockReturnValue(asyncData(unassignedItems)),
     };
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule.withRoutes([], { paramsInheritanceStrategy: 'always' })],
+      imports: [SharedModule],
       providers: [
         WorkflowItemsService,
         DashboardStore,
@@ -146,6 +146,7 @@ describe('DashboardPageComponent', () => {
         { provide: ItemsAssignedToOthersService, useValue: itemsAssignedToOthersService },
         { provide: UnassignedItemsService, useValue: unassignedItemsService },
         { provide: RequestsService, useValue: mockRequestsService },
+        provideRouter([]),
       ],
       declarations: [DashboardPageComponent],
     }).compileComponents();

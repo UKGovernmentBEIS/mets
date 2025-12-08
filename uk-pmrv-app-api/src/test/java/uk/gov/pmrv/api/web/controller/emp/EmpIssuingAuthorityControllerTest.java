@@ -79,7 +79,7 @@ class EmpIssuingAuthorityControllerTest {
 
     @Test
     void getEmpIssuingAuthorityNames() throws Exception {
-
+    	setupAppUser();
         when(empIssuingAuthorityQueryService.getAllIssuingAuthorityNames())
                 .thenReturn(List.of("name"));
 
@@ -110,4 +110,10 @@ class EmpIssuingAuthorityControllerTest {
 
         verifyNoInteractions(empIssuingAuthorityQueryService);
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 }

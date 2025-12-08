@@ -16,9 +16,7 @@
   <div govukSummaryListRow *ngIf="withRegistryId">
     <dt govukSummaryListRowKey>UK ETS registry ID</dt>
     <dd govukSummaryListRowValue>{{ summaryInfo.registryId }}</dd>
-    <dd govukSummaryListRowActions *ngIf="editable">
-      <a govukLink [routerLink]="[formRouterLink]">Change</a>
-    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable"></dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>SOP ID</dt>
@@ -35,10 +33,10 @@
     </dd>
   </div>
   <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>First known aviation activity</dt>
+    <dt govukSummaryListRowKey>First year of reporting obligation</dt>
     <dd govukSummaryListRowValue>{{ summaryInfo.commencementDate | govukDate }}</dd>
     <dd govukSummaryListRowActions *ngIf="editable">
-      <a govukLink [routerLink]="[formRouterLink]">Change</a>
+      <a govukLink [routerLink]="editModeEnabled ? ['./', 'edit-commencement-date'] : [formRouterLink]">Change</a>
     </dd>
   </div>
   <div govukSummaryListRow>
@@ -46,10 +44,8 @@
     <dd govukSummaryListRowValue>
       <ng-container *ngIf="summaryInfo.location">
         <div>
-          {{ $any(summaryInfo.location).line1
-          }}<ng-container *ngIf="$any(summaryInfo.location).line2"
-            >, {{ $any(summaryInfo.location).line2 }}
-          </ng-container>
+          {{ $any(summaryInfo.location).line1 }}
+          <ng-container *ngIf="$any(summaryInfo.location).line2">, {{ $any(summaryInfo.location).line2 }}</ng-container>
         </div>
         <div>{{ $any(summaryInfo.location).city }}</div>
         <div>{{ $any(summaryInfo.location).state }}</div>

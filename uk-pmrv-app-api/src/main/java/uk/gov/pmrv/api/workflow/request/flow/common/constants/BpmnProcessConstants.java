@@ -172,6 +172,10 @@ public class BpmnProcessConstants {
     public static final String HSE_TI_EXPIRATION_DATE = RequestExpirationType.HSETI.getCode() + _EXPIRATION_DATE;
     public static final String HSE_TI_REGULATOR_REVIEW_OUTCOME = "hsetiRegulatorReviewOutcome";
 
+    //Waste QDR
+    public static final String WASTE_QDR_EXPIRATION_DATE = RequestExpirationType.WASTEQDR.getCode() + _EXPIRATION_DATE;
+
+
     // messaging
     public static final String PROCESS_TO_MESSAGE_BUSINESS_KEY = "processToMessageBusinessKey";
     public static final String VARIABLES = "variables";

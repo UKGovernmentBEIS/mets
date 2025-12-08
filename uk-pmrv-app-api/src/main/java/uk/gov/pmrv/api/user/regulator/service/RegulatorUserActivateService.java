@@ -3,6 +3,8 @@ package uk.gov.pmrv.api.user.regulator.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.Authority;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
 import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
@@ -30,9 +32,9 @@ public class RegulatorUserActivateService {
 	 * @param invitedUserCredentialsDTO
 	 */
     @Transactional
-    public void acceptAuthorityAndActivateInvitedUser(InvitedUserCredentialsDTO invitedUserCredentialsDTO) {
+    public void acceptAuthorityAndActivateInvitedUser(InvitedUserCredentialsDTO invitedUserCredentialsDTO, AppUser currentUser) {
         final AuthorityInfoDTO authorityInfo = regulatorUserTokenVerificationService
-            .verifyInvitationTokenForPendingAuthority(invitedUserCredentialsDTO.getInvitationToken());
+            .verifyInvitationToken(invitedUserCredentialsDTO.getInvitationToken(), currentUser);
         final Long authorityId = authorityInfo.getId();
         final String userId = authorityInfo.getUserId();
         
@@ -59,9 +61,9 @@ public class RegulatorUserActivateService {
     }
     
     @Transactional
-    public void acceptAuthorityForRegisteredRegulatorInvitedUser(String invitationToken) {
+    public void acceptAuthorityForRegisteredRegulatorInvitedUser(String invitationToken, AppUser currentUser) {
         final AuthorityInfoDTO authorityInfo = regulatorUserTokenVerificationService
-            .verifyInvitationTokenForPendingAuthority(invitationToken);
+            .verifyInvitationToken(invitationToken, currentUser);
 
         final Long authorityId = authorityInfo.getId();
 

@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -46,7 +45,7 @@ describe('DetailsComponent', () => {
   const createModule = async () => {
     await TestBed.configureTestingModule({
       declarations: [DetailsComponent],
-      imports: [RouterTestingModule, SharedModule, SharedUserModule],
+      imports: [SharedModule, SharedUserModule, RouterLink],
       providers: [
         { provide: CountryService, useClass: CountryServiceStub },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
@@ -113,9 +112,9 @@ describe('DetailsComponent', () => {
         'permitDoc.pdf Attached documents att1.pdf  att2.pdf',
         '1 Jan 2023',
         'permitId',
-
         'accountName',
         'siteName',
+        '',
         '8 Sept 1978',
         '222',
         '111',
@@ -125,12 +124,10 @@ describe('DetailsComponent', () => {
         'New Permit',
         'NN166712 line town1231Greece',
         'Yes',
-
         '11111',
         'leName',
         'Limited Company',
         'line town1231Greece',
-
         'TEST_HC',
         '',
         'TEST_REG_NUM',
@@ -172,6 +169,7 @@ describe('DetailsComponent', () => {
       expect(page.accountDetails.map((dd) => dd.textContent.trim())).toEqual([
         'accountName',
         'siteName',
+        '',
         '8 Sept 1978',
         '222',
         '111',
@@ -181,12 +179,10 @@ describe('DetailsComponent', () => {
         'New Permit',
         'NN166712 line town1231Greece',
         'Yes',
-
         '11111',
         'leName',
         'Limited Company',
         'line town1231Greece',
-
         'TEST_HC',
         '',
         'TEST_REG_NUM',
@@ -231,9 +227,9 @@ describe('DetailsComponent', () => {
         'permitDoc.pdf Attached documents att1.pdf  att2.pdf',
         '1 Jan 2023',
         'permitId',
-
         'accountName',
         'siteName',
+        '',
         '8 Sept 1978',
         '222',
         '111',
@@ -243,12 +239,10 @@ describe('DetailsComponent', () => {
         'New Permit',
         'NN166712 line town1231Greece',
         'Yes',
-
         '11111',
         'leName',
         'Limited Company',
         'line town1231Greece',
-
         'TEST_HC',
         '',
         'TEST_REG_NUM',
@@ -270,9 +264,9 @@ describe('DetailsComponent', () => {
         'permitDoc.pdf Attached documents att1.pdf  att2.pdf',
         '1 Jan 2023',
         'permitId',
-
         'accountName',
         'siteName',
+        '',
         '8 Sept 1978',
         '222',
         '111',
@@ -329,6 +323,7 @@ describe('DetailsComponent', () => {
       expect(page.accountDetails.map((dd) => dd.textContent.trim())).toEqual([
         'accountName',
         'siteName',
+        '',
         '8 Sept 1978',
         '222',
         '111',
@@ -338,12 +333,10 @@ describe('DetailsComponent', () => {
         'New Permit',
         'NN166712 line town1231Greece',
         'Yes',
-
         '11111',
         'leName',
         'Limited Company',
         'line town1231Greece',
-
         'TEST_HC',
         '',
         'TEST_REG_NUM',
@@ -385,6 +378,7 @@ describe('DetailsComponent', () => {
       expect(page.accountDetails.map((dd) => dd.textContent.trim())).toEqual([
         'accountName',
         'siteName',
+        '',
         '8 Sept 1978',
         '222',
         '111',
@@ -394,12 +388,10 @@ describe('DetailsComponent', () => {
         'New Permit',
         'NN166712 line town1231Greece',
         'Yes',
-
         '11111',
         'leName',
         'Limited Company',
         'line town1231Greece',
-
         'TEST_HC',
         '',
         'TEST_REG_NUM',

@@ -22,15 +22,16 @@ import uk.gov.netz.api.security.Authorized;
 import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationDTO;
+import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateFaStatusDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateInstallationNameDTO;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateRegistryIdDTO;
+import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateRegistryReportingFirstYearDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateSiteNameDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateSopIdDTO;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountUpdateService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
+import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountPermitCommandOrchestrator;
 
 import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 
@@ -42,6 +43,7 @@ import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 public class InstallationAccountUpdateController {
 
     private final InstallationAccountUpdateService installationAccountUpdateService;
+    private final InstallationAccountPermitCommandOrchestrator installationAccountPermitCommandOrchestrator;
 
     @PostMapping("/site-name")
     @Operation(summary = "Update the site name of the account")
@@ -54,20 +56,6 @@ public class InstallationAccountUpdateController {
             @PathVariable("id") @Parameter(description = "The account id", required = true) Long accountId,
             @RequestBody @Valid @Parameter(description = "The site name", required = true) AccountUpdateSiteNameDTO siteNameDTO) {
         installationAccountUpdateService.updateAccountSiteName(accountId, siteNameDTO.getSiteName());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PostMapping("/registry-id")
-    @Operation(summary = "Update the uk ets registry id of the account")
-    @ApiResponse(responseCode = "200", description = SwaggerApiInfo.OK)
-    @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @ApiResponse(responseCode = "404", description = SwaggerApiInfo.NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @Authorized(resourceId = "#accountId")
-    public ResponseEntity<Void> updateInstallationAccountRegistryId(
-            @PathVariable("id") @Parameter(description = "The account id", required = true) Long accountId,
-            @RequestBody @Valid @Parameter(description = "The registry id", required = true) AccountUpdateRegistryIdDTO registryIdDTO) {
-        installationAccountUpdateService.updateAccountRegistryId(accountId, registryIdDTO.getRegistryId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -156,6 +144,21 @@ public class InstallationAccountUpdateController {
             @PathVariable("id") @Parameter(description = "The account id", required = true) Long accountId,
             @RequestBody @Valid @Parameter(description = "The commencement date", required = true) AccountUpdateCommencementDateDTO commencementDateDTO) {
         installationAccountUpdateService.updateCommencementDate(accountId, commencementDateDTO);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/registry-reporting-first-year")
+    @Operation(summary = "Update the first year of registry reporting obligation field of the account")
+    @ApiResponse(responseCode = "200", description = SwaggerApiInfo.OK)
+    @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "404", description = SwaggerApiInfo.NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @AuthorizedRole(roleType = {REGULATOR})
+    public ResponseEntity<Void> updateRegistryReportingFirstYear(
+            @PathVariable("id") @Parameter(description = "The account id", required = true) Long accountId,
+            @RequestBody @Valid @Parameter(description = "The first year of registry reporting obligation field", required = true)
+            AccountUpdateRegistryReportingFirstYearDTO accountUpdateRegistryReportingFirstYearDTO) {
+        installationAccountPermitCommandOrchestrator.updateRegistryReportingFirstYear(accountId, accountUpdateRegistryReportingFirstYearDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -87,6 +87,7 @@ class AccountVerificationBodyControllerTest {
     
     @Test
     void getVerificationBodyOfAccount() throws Exception {
+    	setupAppUser();
         Long accountId = 1L;
         Long verificationBodyId = 1L;
         String verificationBodyName = "vb";
@@ -108,10 +109,9 @@ class AccountVerificationBodyControllerTest {
     
     @Test
     void getVerificationBodyOfAccount_forbidden() throws Exception {
+    	AppUser user = setupAppUser();
         Long accountId = 1L;
-        AppUser user = AppUser.builder().userId("userId").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(user, "getVerificationBodyOfAccount", Long.toString(accountId), null, null);
@@ -127,6 +127,7 @@ class AccountVerificationBodyControllerTest {
     
     @Test
     void getActiveVerificationBodies() throws Exception {
+    	setupAppUser();
         Long accountId = 1L;
         Long verificationBodyId = 1L;
         String verificationBodyName = "vb";
@@ -149,10 +150,8 @@ class AccountVerificationBodyControllerTest {
     
     @Test
     void getActiveVerificationBodies_forbidden() throws Exception {
+    	AppUser user = setupAppUser();
         Long accountId = 1L;
-        AppUser user = AppUser.builder().userId("userId").build();
-
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(user, "getActiveVerificationBodies", Long.toString(accountId), null, null);
@@ -168,13 +167,11 @@ class AccountVerificationBodyControllerTest {
     
     @Test
     void appointVerificationBodyToAccount() throws Exception {
-        AppUser user = AppUser.builder().build();
+    	setupAppUser();
         Long accountId = 1L;
         Long verificationBodyId = 1L;
         AppointVerificationBodyDTO vb = 
                 AppointVerificationBodyDTO.builder().verificationBodyId(verificationBodyId).build();
-        
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -188,13 +185,12 @@ class AccountVerificationBodyControllerTest {
     
     @Test
     void appointVerificationBodyToAccount_forbidden() throws Exception {
-        AppUser user = AppUser.builder().build();
+    	AppUser user = setupAppUser();
         Long accountId = 1L;
         Long verificationBodyId = 1L;
         AppointVerificationBodyDTO vb = 
                 AppointVerificationBodyDTO.builder().verificationBodyId(verificationBodyId).build();
         
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(user, "appointVerificationBodyToAccount", String.valueOf(accountId), null, null);
@@ -212,12 +208,10 @@ class AccountVerificationBodyControllerTest {
 
     @Test
     void replaceVerificationBodyToAccount() throws Exception {
-        AppUser user = AppUser.builder().build();
+    	setupAppUser();
         Long accountId = 1L;
         Long verificationBodyId = 1L;
         AppointVerificationBodyDTO vb = AppointVerificationBodyDTO.builder().verificationBodyId(verificationBodyId).build();
-
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -232,12 +226,11 @@ class AccountVerificationBodyControllerTest {
 
     @Test
     void replaceVerificationBodyToAccount_forbidden() throws Exception {
-        AppUser user = AppUser.builder().build();
+    	AppUser user = setupAppUser();
         Long accountId = 1L;
         Long verificationBodyId = 1L;
         AppointVerificationBodyDTO vb = AppointVerificationBodyDTO.builder().verificationBodyId(verificationBodyId).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(user, "replaceVerificationBodyToAccount", String.valueOf(accountId), null, null);
@@ -252,4 +245,10 @@ class AccountVerificationBodyControllerTest {
         verify(accountVerificationBodyAppointService, never())
                 .replaceVerificationBodyToAccount(Mockito.anyLong(), Mockito.anyLong());
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 }

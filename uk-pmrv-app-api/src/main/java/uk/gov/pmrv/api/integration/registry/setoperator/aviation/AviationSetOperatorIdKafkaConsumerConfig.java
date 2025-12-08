@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import uk.gov.netz.api.kafka.consumer.NetzKafkaConsumerFactory;
+import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
 import uk.gov.pmrv.api.integration.registry.common.AviationConsumerConfigProperties;
-import uk.gov.pmrv.api.integration.registry.setoperator.common.SetOperatorIdResponseEvent;
 
 @Configuration
 @RequiredArgsConstructor
@@ -16,13 +16,13 @@ import uk.gov.pmrv.api.integration.registry.setoperator.common.SetOperatorIdResp
 public class AviationSetOperatorIdKafkaConsumerConfig {
 
     private final AviationConsumerConfigProperties aviationConsumerConfigProperties;
-    private final NetzKafkaConsumerFactory<String, SetOperatorIdResponseEvent> netzKafkaConsumerFactory;
+    private final NetzKafkaConsumerFactory<String, OperatorUpdateEvent> netzKafkaConsumerFactory;
 
     @Bean
-    ConcurrentKafkaListenerContainerFactory<String, SetOperatorIdResponseEvent> aviationSetOperatorIdKafkaListenerContainerFactory(
+    ConcurrentKafkaListenerContainerFactory<String, OperatorUpdateEvent> aviationSetOperatorIdKafkaListenerContainerFactory(
             @Value("${kafka.aviation.operator-identifier-response.group}") String groupId) {
         return netzKafkaConsumerFactory.createKafkaListenerContainerFactory(groupId, aviationConsumerConfigProperties,
-                SetOperatorIdResponseEvent.class);
+                OperatorUpdateEvent.class);
     }
 
 

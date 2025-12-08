@@ -16,11 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.security.Authorized;
+import uk.gov.netz.api.security.AuthorizedRole;
+import uk.gov.pmrv.api.integration.registry.accountcreated.aviation.request.AviationAccountRegistryIntegrationPreviewService;
+import uk.gov.pmrv.api.integration.registry.accountcreated.aviation.request.AviationAccountRegistryViewDTO;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.dto.AviationAccountEmpDTO;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.dto.AviationAccountHeaderInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.service.AviationAccountEmpQueryOrchestrator;
 
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.FORBIDDEN;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.NOT_FOUND;
@@ -36,6 +40,7 @@ import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
 public class AviationAccountViewController {
 
     private final AviationAccountEmpQueryOrchestrator orchestrator;
+    private final AviationAccountRegistryIntegrationPreviewService previewService;
 
     @GetMapping("/{id}")
     @Operation(summary = "Get the aviation account with the provided id")
@@ -61,4 +66,16 @@ public class AviationAccountViewController {
         @Parameter(description = "The account id") @PathVariable("id") Long accountId) {
         return new ResponseEntity<>(orchestrator.getAccountHeaderInfo(accountId), HttpStatus.OK);
     }
+
+    @GetMapping("/{requestId}/registry-view")
+    @Operation(summary = "Get the account information that will be sent to registry for a manual account creation")
+    @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AviationAccountHeaderInfoDTO.class))})
+    @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "404", description = NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @AuthorizedRole(roleType = REGULATOR)
+    public ResponseEntity<AviationAccountRegistryViewDTO> getAviationAccountViewForRegistry(@Parameter(description = "The request id") @PathVariable("requestId") String requestId) {
+        return new ResponseEntity<>(previewService.getAviationAccountRegistryView(requestId), HttpStatus.OK);
+    }
+
 }

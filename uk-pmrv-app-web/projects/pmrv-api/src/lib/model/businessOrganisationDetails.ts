@@ -10,9 +10,9 @@
  * Do not edit the class manually.
  */
 import { AddressDTO } from './addressDTO';
-import { PermitIssuanceOrganizationDetails } from './permitIssuanceOrganizationDetails';
+import { RegistryIntegrationOrganizationDetails } from './registryIntegrationOrganizationDetails';
 
-export interface BusinessOrganisationDetails extends PermitIssuanceOrganizationDetails {
+export interface BusinessOrganisationDetails extends RegistryIntegrationOrganizationDetails {
   registeredAddress?: AddressDTO;
   companyRegistrationNumber?: string;
   justification?: string;

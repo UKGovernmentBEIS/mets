@@ -1,0 +1,21 @@
+<app-permit-task [breadcrumb]="true">
+  <app-wizard-step
+    [showBackLink]="true"
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false">
+    <span class="govuk-caption-l">{{ determination$ | async }}</span>
+    <app-page-heading>Set the first year of Registry reporting obligation</app-page-heading>
+    <div class="govuk-body">
+      This field is mandatory for UK ETS GHGE installations. It will update the 'First year of verified emissions' field
+      in the Registry service.
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <div formControlName="firstYearOfReportingObligation" govuk-text-input inputType="number"></div>
+      </div>
+    </div>
+  </app-wizard-step>
+  <a govukLink routerLink="../..">Return to: {{ determinationHeader }}</a>
+</app-permit-task>

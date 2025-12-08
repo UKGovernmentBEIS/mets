@@ -7,6 +7,7 @@ export * from './accountReporting.service';
 export * from './accountVerificationBody.service';
 export * from './aircraftTypes.service';
 export * from './authorities.service';
+export * from './aviationAccountCreationRegistryController.service';
 export * from './aviationAccountReporting.service';
 export * from './aviationAccountReportingStatus.service';
 export * from './aviationAccounts.service';

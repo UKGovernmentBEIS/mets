@@ -29,6 +29,7 @@ public class PermitTransferBGrantedService {
 
         final Request request = requestService.findRequestById(requestId);
         final PermitTransferBRequestPayload requestPayload = (PermitTransferBRequestPayload) request.getPayload();
+        final Long accountAid = requestService.findRequestById(requestPayload.getRelatedRequestId()).getAccountId();
         final Long accountId = request.getAccountId();
 
         final InstallationOperatorDetails installationOperatorDetails = 
@@ -46,6 +47,7 @@ public class PermitTransferBGrantedService {
         installationAccountUpdateService.updateAccountUponTransferBGranted(
             accountId,
             emitterType,
+            accountAid,
             permitContainer.getPermit().getEstimatedAnnualEmissions().getQuantity());
     }
 }

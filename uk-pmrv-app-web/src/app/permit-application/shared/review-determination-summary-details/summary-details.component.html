@@ -35,6 +35,18 @@
     </div>
   </dl>
 
+  <dl *ngIf="determination.firstYearOfReportingObligation" govuk-summary-list [class]="cssClass" [hasBorders]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>First year of Registry reporting obligation</dt>
+      <dd govukSummaryListRowValue>
+        {{ determination.firstYearOfReportingObligation }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+        <a govukLink [routerLink]="['..', 'first-year']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
   <dl *ngIf="determination.officialNotice" govuk-summary-list [class]="cssClass" [hasBorders]="false">
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Official notice text</dt>
@@ -51,8 +63,7 @@
     *ngIf="(isPermitTypeHSE$ | async) && (emissionsTargets$ | async)?.length"
     govuk-summary-list
     [class]="cssClass"
-    [hasBorders]="false"
-  >
+    [hasBorders]="false">
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Εmission targets</dt>
       <dd govukSummaryListRowValue>

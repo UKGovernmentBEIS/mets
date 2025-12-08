@@ -43,6 +43,11 @@ describe('TimelineItemLinkPipe', () => {
     expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'registry', 'information-sent']);
   });
 
+  it('should return link for registry information', () => {
+    requestAction.type = 'PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'registry', 'information-sent']);
+  });
+
   it('should return link for peer review submission', () => {
     requestAction.type = 'PERMIT_ISSUANCE_APPLICATION_PEER_REVIEWER_ACCEPTED';
     expect(pipe.transform(requestAction)).toEqual([
@@ -518,6 +523,17 @@ describe('TimelineItemLinkPipe', () => {
   it('should return link for EMP CORSIA withdrawn by regulator', () => {
     requestAction.type = 'EMP_ISSUANCE_CORSIA_APPLICATION_DEEMED_WITHDRAWN';
     expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id, 'decision-summary']);
+  });
+
+  it('should return link for EMP manual account sent to registration', () => {
+    requestAction.type = 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY';
+    expect(pipe.transform(requestAction)).toEqual([
+      '/aviation',
+      'actions',
+      requestAction.id,
+      'registry',
+      'information-sent',
+    ]);
   });
 
   it('should return link for non compliance closed', () => {

@@ -44,4 +44,124 @@
             </sql>
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_REMOVE_OLD_MMP_PLANS_FROM_PERMIT_LOG_TABLE" author="dridakisc@unisystems.gr">
+        <sql>
+            CREATE TABLE mmp_plans_removal_log (
+               permitId TEXT NOT NULL,
+               data_before JSONB,
+               data_after JSONB,
+               timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+            );
+        </sql>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS mmp_plans_removal_log;
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_REMOVE_OLD_MMP_PLANS_FROM_PERMIT" author="dridakisc@unisystems.gr">
+        <sql>
+            <![CDATA[
+            BEGIN;
+
+            -- I. IDENTIFY TARGETS AND PREPARE DATA FOR LOGGING AND UPDATE
+            WITH RECURSIVE TargetPermits AS (
+                -- 1. Identify the target permits and prepare the UUIDs for removal
+                SELECT
+                    p.id,
+                    p.data AS data_before_update, -- Capture 'data_before' here
+                    (SELECT ARRAY_AGG(TRIM(elem))
+                     FROM jsonb_array_elements_text(p.data #> '{permit,monitoringMethodologyPlans,plans}') AS elem) AS uuids_to_remove
+                FROM
+                    permit p
+                        JOIN
+                    account_installation ai ON ai.id = p.account_id
+                WHERE
+                  -- Condition 1: Check if 'digitizedPlan' exists
+                    p.data @> '{"permit": {"monitoringMethodologyPlans": {"digitizedPlan": {}}}}'
+                  -- Condition 2: Ensure 'plans' array is not empty
+                  AND jsonb_array_length(p.data #> '{permit,monitoringMethodologyPlans,plans}') > 0
+                  -- Condition 3: Only for live accounts
+                  AND ai.status = 'LIVE'
+            ),
+            -- 2. Recursive CTE to iteratively remove all UUIDs from permitAttachments
+           RecursiveRemover (id, new_data, uuids_to_remove, index) AS (
+               -- Anchor Member
+               SELECT
+                   tp.id,
+                   tp.data_before_update, -- Start with the original data
+                   tp.uuids_to_remove,
+                   1 AS index
+               FROM
+                   TargetPermits tp
+               UNION ALL
+               -- Recursive Member
+               SELECT
+                 rr.id,
+                 rr.new_data #- ARRAY['permitAttachments', rr.uuids_to_remove[rr.index]],
+                rr.uuids_to_remove,
+                rr.index + 1
+                FROM
+                    RecursiveRemover rr
+                WHERE rr.index <= ARRAY_LENGTH(rr.uuids_to_remove, 1)
+                ),
+
+            -- 3. Final CTE to get the final cleaned data before the plans array is removed
+            PermitsWithUUIDsRemoved AS (
+                SELECT DISTINCT ON (id)
+                    id,
+                    new_data AS data_after_uuid_removal
+                FROM
+                    RecursiveRemover
+                ORDER BY id, index DESC
+            ),
+
+            -- II. EXECUTE THE UPDATE PART ---
+
+            -- 4. Execute the update, apply final cleanup, and return logging data
+            UpdatedPermits AS (
+                UPDATE permit AS p
+                SET
+                    -- 1. Use the data after UUIDs were removed
+                    data = pam.data_after_uuid_removal
+                    -- 2. THEN, remove the plans array from that data
+                    #- ARRAY['permit', 'monitoringMethodologyPlans', 'plans']
+                FROM PermitsWithUUIDsRemoved AS pam
+                WHERE p.id = pam.id
+                -- Capture the 'data_after' and the permit ID
+                RETURNING
+                    p.id AS permitId,
+                    p.data AS data_after
+            ),
+
+            -- 5. Join original data with updated data for the log table
+            DataForLogging AS (
+                SELECT
+                    up.permitId,
+                    tp.data_before_update AS data_before,
+                    up.data_after
+                FROM
+                    UpdatedPermits up
+                JOIN
+                    TargetPermits tp ON tp.id = up.permitId
+            )
+
+            -- III. EXECUTE THE LOGGING PART ---
+
+            -- 6. Insert the audit data into the new log table
+            INSERT INTO mmp_plans_removal_log (permitId, data_before, data_after)
+                    SELECT
+                        permitId,
+                        data_before,
+                        data_after
+                    FROM
+                        DataForLogging;
+
+            -- We just select permit IDs that were updated.
+            SELECT permitId from mmp_plans_removal_log;
+
+            COMMIT;
+        ]]>;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

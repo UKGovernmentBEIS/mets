@@ -10,8 +10,8 @@
  * Do not edit the class manually.
  */
 import { AddressDTO } from './addressDTO';
-import { PermitIssuanceOrganizationDetails } from './permitIssuanceOrganizationDetails';
+import { RegistryIntegrationOrganizationDetails } from './registryIntegrationOrganizationDetails';
 
-export interface IndividualOrganisationDetails extends PermitIssuanceOrganizationDetails {
+export interface IndividualOrganisationDetails extends RegistryIntegrationOrganizationDetails {
   operatorAddress?: AddressDTO;
 }

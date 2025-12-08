@@ -6,6 +6,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.Authority;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
 import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
@@ -59,9 +61,11 @@ class VerifierUserActivateServiceTest {
             .build();
         UserInfoDTO invitee = UserInfoDTO.builder().userId(authorityInfoDTO.getUserId()).build();
         UserInfoDTO inviter = UserInfoDTO.builder().userId(inviterUserId).build();
+        
+        AppUser currentUser = AppUser.builder().userId("userId").build();
 
         when(verifierUserTokenVerificationService
-            .verifyInvitationTokenForPendingAuthority(invitedUserCredentialsDTO.getInvitationToken()))
+            .verifyInvitationToken(invitedUserCredentialsDTO.getInvitationToken(), currentUser))
                 .thenReturn(authorityInfoDTO);
         when(verifierAuthorityService.acceptAuthority(authorityInfoDTO.getId()))
                 .thenReturn(Authority.builder().userId("userId").createdBy(inviterUserId).build());
@@ -71,11 +75,11 @@ class VerifierUserActivateServiceTest {
                 .thenReturn(inviter);
 
         // Invoke
-        verifierUserAcceptInvitationService.acceptAuthorityAndActivateInvitedUser(invitedUserCredentialsDTO);
+        verifierUserAcceptInvitationService.acceptAuthorityAndActivateInvitedUser(invitedUserCredentialsDTO, currentUser);
 
         // Verify
         verify(verifierUserTokenVerificationService, times(1))
-                .verifyInvitationTokenForPendingAuthority(invitedUserCredentialsDTO.getInvitationToken());
+                .verifyInvitationToken(invitedUserCredentialsDTO.getInvitationToken(), currentUser);
         verify(verifierUserRegisterValidationService, times(1))
         	.validate(authorityInfoDTO.getUserId(), 1L);
         verify(verifierAuthorityService, times(1))
@@ -104,9 +108,11 @@ class VerifierUserActivateServiceTest {
             .build();
         UserInfoDTO invitee = UserInfoDTO.builder().userId(authorityInfoDTO.getUserId()).build();
         UserInfoDTO inviter = UserInfoDTO.builder().userId(inviterUserId).build();
+        
+        AppUser currentUser = AppUser.builder().userId("userId").build();
 
         when(verifierUserTokenVerificationService
-            .verifyInvitationTokenForPendingAuthority("token"))
+            .verifyInvitationToken("token", currentUser))
                 .thenReturn(authorityInfoDTO);
         when(verifierAuthorityService.acceptAuthority(authorityInfoDTO.getId()))
                 .thenReturn(Authority.builder().userId("userId").createdBy(inviterUserId).build());
@@ -116,11 +122,11 @@ class VerifierUserActivateServiceTest {
                 .thenReturn(inviter);
 
         // Invoke
-        verifierUserAcceptInvitationService.acceptAuthorityForRegisteredVerifierInvitedUser("token");
+        verifierUserAcceptInvitationService.acceptAuthorityForRegisteredVerifierInvitedUser("token", currentUser);
 
         // Verify
         verify(verifierUserTokenVerificationService, times(1))
-                .verifyInvitationTokenForPendingAuthority("token");
+                .verifyInvitationToken("token", currentUser);
         verify(verifierAuthorityService, times(1))
                 .acceptAuthority(authorityInfoDTO.getId());
         verify(userRoleTypeService, times(1))

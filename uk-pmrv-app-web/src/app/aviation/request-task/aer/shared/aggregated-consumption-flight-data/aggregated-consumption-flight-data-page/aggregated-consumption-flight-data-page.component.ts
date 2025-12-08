@@ -70,14 +70,13 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
   errorList = [];
   isCorsia$ = this.store.pipe(aerQuery.selectIsCorsia);
   showNotification = signal(false);
-  aggregatedEmissionDataDetails =
-    this.store.aerDelegate.payload.aer?.aggregatedEmissionsData?.aggregatedEmissionDataDetails ||
-    ([] as
-      | Array<AviationAerUkEtsAggregatedEmissionDataDetails>
-      | Array<AviationAerCorsiaAggregatedEmissionDataDetails>);
+  firstTimeUploaded = signal(true);
 
   private subscription: Subscription;
   private statusSubscription: Subscription;
+  private aggregatedEmissionData:
+    | AviationAerUkEtsAggregatedEmissionDataDetails[]
+    | AviationAerCorsiaAggregatedEmissionDataDetails[] = this.form.get('aggregatedEmissionDataDetails').value || [];
 
   constructor(
     @Inject(TASK_FORM_PROVIDER) private formProvider: AggregatedConsumptionFlightDataFormProvider,
@@ -235,6 +234,8 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
           if (!this.form.get('aggregatedEmissionDataDetails').errors) {
             this.parsedData = tempData;
             this.showNotification.set(true);
+            this.firstTimeUploaded.set(this.aggregatedEmissionData.length === 0);
+            this.aggregatedEmissionData = tempData;
           } else {
             this.wizardStep.isSummaryDisplayedSubject.next(true);
             this.parsedData = null;

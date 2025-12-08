@@ -45,6 +45,7 @@ export interface RequestCreateActionProcessDTO {
     | 'BDR'
     | 'PERMANENT_CESSATION'
     | 'ALR'
+    | 'WASTE_QDR'
     | 'EMP_BATCH_REISSUE'
     | 'AVIATION_ACCOUNT_CLOSURE'
     | 'EMP_VARIATION_UKETS'

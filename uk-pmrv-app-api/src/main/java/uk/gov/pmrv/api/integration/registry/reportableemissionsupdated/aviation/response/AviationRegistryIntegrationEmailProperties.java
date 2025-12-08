@@ -13,7 +13,8 @@ import java.util.Map;
 @Configuration
 @ConfigurationProperties(prefix = "aviation.registry.integration.error.handle")
 @ConditionalOnExpression("'${registry.integration.emissions.updated.enabled:false}' == 'true' or " +
-                "'${registry.integration.set.operator.id.enabled:false}' == 'true'")
+                "'${registry.integration.set.operator.id.enabled:false}' == 'true' or " +
+               "'${registry.integration.account.creation.enabled:false}' == 'true'")
 public class AviationRegistryIntegrationEmailProperties {
 
     @NotNull

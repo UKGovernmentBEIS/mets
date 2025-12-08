@@ -9,7 +9,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.kafka.utils.KafkaConstants;
-import uk.gov.pmrv.api.integration.registry.setoperator.common.SetOperatorIdResponseEvent;
+import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
 
 @Component
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class AviationSetOperatorIdEventListener {
 
     @KafkaHandler
     @Transactional
-    public void handler(@Payload SetOperatorIdResponseEvent event, @Header(KafkaConstants.CORRELATION_ID_HEADER) String correlationId) {
+    public void handler(@Payload OperatorUpdateEvent event, @Header(KafkaConstants.CORRELATION_ID_HEADER) String correlationId) {
         handler.handleResponse(event, correlationId);
     }
 

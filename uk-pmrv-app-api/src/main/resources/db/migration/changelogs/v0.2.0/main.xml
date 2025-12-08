@@ -15,6 +15,7 @@
     <include file="db/migration/changelogs/ref_county.xml" />
 	<include file="db/migration/changelogs/mi_reports_ddl.xml" />
 	<include file="db/migration/changelogs/mi_reports_views_ddl.xml" />
+	<include file="db/migration/changelogs/third_party_data_provider_ddl.xml" />
 
 	<include file="changelog_configuration.xml" relativeToChangelogFile="true" />
     <include file="changelog_authorization_rules.xml" relativeToChangelogFile="true" />
@@ -32,4 +33,5 @@
 	<include file="changelog_request_payment.xml" relativeToChangelogFile="true" />
 	<include file="changelog_competent_authority.xml" relativeToChangelogFile="true" />
 	<include file="changelog_batch_variation.xml" relativeToChangelogFile="true" />
+	<include file="changelog_netz_account.xml" relativeToChangelogFile="true" />
 </databaseChangeLog>

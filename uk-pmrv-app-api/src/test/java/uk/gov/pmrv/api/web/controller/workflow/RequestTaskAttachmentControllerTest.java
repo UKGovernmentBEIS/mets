@@ -92,7 +92,7 @@ class RequestTaskAttachmentControllerTest {
 
     @Test
     void uploadRequestTaskAttachment() throws Exception {
-        AppUser authUser = AppUser.builder().userId("id").build();
+    	AppUser authUser = setupAppUser();
         Long requestTaskId = 1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_ISSUANCE_UPLOAD_SECTION_ATTACHMENT;
         String attachmentName = "attachment";
@@ -116,7 +116,6 @@ class RequestTaskAttachmentControllerTest {
 
         UUID attachmentUuid = UUID.randomUUID();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         when(requestTaskAttachmentUploadService.uploadAttachment(requestTaskId, requestTaskActionType, authUser, fileDTO))
             .thenReturn(FileUuidDTO.builder().uuid(attachmentUuid.toString()).build());
 
@@ -134,7 +133,7 @@ class RequestTaskAttachmentControllerTest {
 
     @Test
     void uploadRequestTaskAttachment_forbidden() throws Exception {
-        AppUser authUser = AppUser.builder().userId("id").build();
+    	AppUser authUser = setupAppUser();
         Long requestTaskId = 1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_ISSUANCE_UPLOAD_SECTION_ATTACHMENT;
         RequestTaskAttachmentActionProcessDTO requestTaskAttachmentActionProcessDTO = RequestTaskAttachmentActionProcessDTO.builder()
@@ -146,7 +145,6 @@ class RequestTaskAttachmentControllerTest {
         MockMultipartFile requestTaskActionDetails = new MockMultipartFile("requestTaskActionDetails", "filename.txt", "application/json",
                 mapper.writeValueAsString(requestTaskAttachmentActionProcessDTO).getBytes());
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(authUser, "uploadRequestTaskAttachment", String.valueOf(requestTaskId), null, null);
@@ -164,6 +162,7 @@ class RequestTaskAttachmentControllerTest {
 
     @Test
     void generateRequestTaskGetFileAttachmentToken() throws Exception {
+    	setupAppUser();
         Long requestTaskId = 1L;
         UUID attachmentUuid = UUID.randomUUID();
         FileToken expectedToken = FileToken.builder().token("token").build();
@@ -182,11 +181,9 @@ class RequestTaskAttachmentControllerTest {
 
     @Test
     void generateRequestTaskGetFileAttachmentToken_forbidden() throws Exception {
+    	AppUser appUser = setupAppUser();
         Long requestTaskId = 1L;
         UUID attachmentUuid = UUID.randomUUID();
-        AppUser appUser = AppUser.builder().userId("userId").build();
-
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(appUser, "generateRequestTaskGetFileAttachmentToken", String.valueOf(requestTaskId), null, null);
@@ -202,10 +199,7 @@ class RequestTaskAttachmentControllerTest {
     @Test
     @DisplayName("Should throw BAD REQUEST (400) when no attachment is provided")
     void uploadRequestTaskNoAttachment() throws Exception {
-        AppUser authUser = AppUser.builder().userId("id").build();
-
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
-
+    	setupAppUser();
         mockMvc.perform(
                 MockMvcRequestBuilders.multipart(BASE_PATH + "/upload")
             )
@@ -213,5 +207,11 @@ class RequestTaskAttachmentControllerTest {
                 result -> assertTrue(result.getResolvedException() instanceof MissingServletRequestPartException))
             .andExpect(status().isBadRequest());
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 
 }

@@ -657,7 +657,6 @@ describe('ItemNamePipe', () => {
     expect(pipe.transform('HSE_TI_APPLICATION_AMENDS_SUBMIT', '2021_2025')).toEqual(
       'Amend 2021-2025 HSE target increase application',
     );
-
     expect(pipe.transform('HSE_TI_MAKE_PAYMENT', '2021_2025')).toEqual(
       'Pay for 2021-2025 HSE target increase application',
     );
@@ -670,7 +669,6 @@ describe('ItemNamePipe', () => {
     expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW', '2021_2025')).toEqual(
       'Peer review 2021-2025 HSE target increase application',
     );
-
     expect(pipe.transform('HSE_TI_APPLICATION_SUBMIT', '21_25')).toEqual(
       'Complete 2021-2025 HSE target increase application',
     );
@@ -683,7 +681,6 @@ describe('ItemNamePipe', () => {
     expect(pipe.transform('HSE_TI_APPLICATION_AMENDS_SUBMIT', '21_25')).toEqual(
       'Amend 2021-2025 HSE target increase application',
     );
-
     expect(pipe.transform('HSE_TI_MAKE_PAYMENT', '21_25')).toEqual('Pay for 2021-2025 HSE target increase application');
     expect(pipe.transform('HSE_TI_CONFIRM_PAYMENT', '21_25')).toEqual(
       'Track payment for 2021-2025 HSE target increase application',
@@ -693,6 +690,10 @@ describe('ItemNamePipe', () => {
     );
     expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW', '21_25')).toEqual(
       'Peer review 2021-2025 HSE target increase application',
+    );
+
+    expect(pipe.transform('WASTE_QDR_APPLICATION_SUBMIT', 2022, 'Q1')).toEqual(
+      'Complete January to March 2022 quarterly data report',
     );
 
     expect(pipe.transform(null)).toBeNull();

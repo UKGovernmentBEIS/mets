@@ -11,11 +11,12 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import uk.gov.netz.api.common.config.KeycloakProperties;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.netz.api.userinfoapi.UserInfo;
-import uk.gov.pmrv.api.user.core.config.KeycloakProperties;
 import uk.gov.pmrv.api.user.core.domain.model.UserDetails;
 import uk.gov.pmrv.api.user.core.domain.model.UserDetailsRequest;
 
@@ -35,7 +36,7 @@ import java.util.Optional;
 public class AuthService {
 
     private final Keycloak keycloakAdminClient;
-    private final KeycloakCustomClient keycloakCustomClient;
+    private final KeycloakUserCustomClient keycloakCustomClient;
     private final KeycloakProperties keycloakProperties;
     private final Clock clock;
 

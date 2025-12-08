@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, RouterLink } from '@angular/router';
 
 import { GovukDatePipe } from '@shared/pipes/govuk-date.pipe';
 
@@ -30,8 +30,9 @@ describe('AviationAccountSummaryInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterLink],
       declarations: [TestParentComponent, AviationAccountSummaryInfoComponent, EtsNamePipe, GovukDatePipe],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestParentComponent);
