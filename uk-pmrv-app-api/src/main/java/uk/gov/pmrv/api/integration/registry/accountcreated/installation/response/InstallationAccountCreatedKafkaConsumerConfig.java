@@ -20,7 +20,7 @@ public class InstallationAccountCreatedKafkaConsumerConfig {
 	
 	@Bean
 	ConcurrentKafkaListenerContainerFactory<String, AccountOpeningEventOutcome> installationAccountCreatedKafkaListenerContainerFactory(
-			@Value("${kafka.installation.account-emissions-updated-response.group}") String groupId) {
+			@Value("${kafka.installation.account-created-response.group}") String groupId) {
 		return netzKafkaConsumerFactory.createKafkaListenerContainerFactory(groupId,
 				installationConsumerConfigProperties, AccountOpeningEventOutcome.class);
 	}

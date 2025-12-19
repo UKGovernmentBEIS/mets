@@ -34,4 +34,5 @@
 	<include file="changelog_competent_authority.xml" relativeToChangelogFile="true" />
 	<include file="changelog_batch_variation.xml" relativeToChangelogFile="true" />
 	<include file="changelog_netz_account.xml" relativeToChangelogFile="true" />
+	<include file="changelog_non_compliance.xml" relativeToChangelogFile="true" />
 </databaseChangeLog>
