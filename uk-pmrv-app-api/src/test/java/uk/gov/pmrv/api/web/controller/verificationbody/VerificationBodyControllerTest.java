@@ -153,7 +153,6 @@ class VerificationBodyControllerTest {
     
     @Test
     void getVerificationBodyById() throws Exception {
-    	setupAppUser();
         Long verificationBodyId = 1L;
         VerificationBodyDTO verificationBodyDTO = VerificationBodyDTO.builder().id(verificationBodyId).name("name").build();
         
@@ -170,8 +169,10 @@ class VerificationBodyControllerTest {
     
     @Test
     void getVerificationBodyById_forbidden() throws Exception {
-    	AppUser authUser = setupAppUser();
         Long verificationBodyId = 1L;
+        AppUser authUser = AppUser.builder().userId("user").build();
+        
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(authUser, "getVerificationBodyById");
@@ -187,7 +188,6 @@ class VerificationBodyControllerTest {
 
     @Test
     void deleteVerificationBodyById() throws Exception {
-    	setupAppUser();
         Long verificationBodyId = 1L;
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -199,8 +199,10 @@ class VerificationBodyControllerTest {
 
     @Test
     void deleteVerificationBodyById_forbidden() throws Exception {
-    	AppUser authUser = setupAppUser();
         long verificationBodyId = 1L;
+        AppUser authUser = AppUser.builder().userId("user").build();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(authUser, "deleteVerificationBodyById");
@@ -214,8 +216,8 @@ class VerificationBodyControllerTest {
 
     @Test
     void createVerificationBody() throws Exception {
-    	AppUser appUser = setupAppUser();
         String vbName = "vbName";
+        AppUser appUser = AppUser.builder().userId("authUserId").build();
         VerificationBodyCreationDTO verificationBodyCreationDTO = VerificationBodyCreationDTO.builder()
             .verificationBody(VerificationBodyEditDTO.builder().name(vbName).build())
             .build();
@@ -226,6 +228,7 @@ class VerificationBodyControllerTest {
             .status(VerificationBodyStatus.PENDING)
             .build();
 
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(verificationBodyAndUserOrchestrator.createVerificationBody(appUser, verificationBodyCreationDTO))
             .thenReturn(verificationBodyInfoDTO);
 
@@ -248,15 +251,16 @@ class VerificationBodyControllerTest {
 
     @Test
     void createVerificationBody_forbidden() throws Exception {
-    	AppUser authUser = setupAppUser();
         String vbName = "vbName";
+        AppUser appUser = AppUser.builder().userId("authUserId").build();
         VerificationBodyCreationDTO verificationBodyCreationDTO = VerificationBodyCreationDTO.builder()
             .verificationBody(VerificationBodyEditDTO.builder().name(vbName).build())
             .build();
 
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
-            .authorize(authUser, "createVerificationBody");
+            .authorize(appUser, "createVerificationBody");
 
 
         mockMvc.perform(
@@ -272,7 +276,6 @@ class VerificationBodyControllerTest {
     
     @Test
     void updateVerificationBody() throws Exception {
-    	setupAppUser();
         Long verificationBodyid = 1L;
         VerificationBodyUpdateDTO verificationBodyUpdateDTO = VerificationBodyUpdateDTO.builder()
                 .id(verificationBodyid)
@@ -291,13 +294,14 @@ class VerificationBodyControllerTest {
     
     @Test
     void updateVerificationBody_forbidden() throws Exception {
-    	AppUser authUser = setupAppUser();
+        AppUser authUser = AppUser.builder().userId("user").build();
         Long verificationBodyid = 1L;
         VerificationBodyUpdateDTO verificationBodyUpdateDTO = VerificationBodyUpdateDTO.builder()
                 .id(verificationBodyid)
                 .verificationBody(VerificationBodyEditDTO.builder().name("name").build())
                 .build();
         
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(authUser, "updateVerificationBody");
@@ -314,7 +318,6 @@ class VerificationBodyControllerTest {
 
     @Test
     void updateVerificationBodiesStatus() throws Exception {
-    	setupAppUser();
         VerificationBodyUpdateStatusDTO verificationBodyUpdateStatusDTO = VerificationBodyUpdateStatusDTO.builder()
                 .id(1L).status(VerificationBodyStatus.ACTIVE).build();
 
@@ -330,10 +333,11 @@ class VerificationBodyControllerTest {
 
     @Test
     void updateVerificationBodiesStatus_forbidden() throws Exception {
-    	AppUser authUser = setupAppUser();
+        AppUser authUser = AppUser.builder().userId("user").build();
         VerificationBodyUpdateStatusDTO verificationBodyUpdateStatusDTO = VerificationBodyUpdateStatusDTO.builder()
                 .id(1L).status(VerificationBodyStatus.ACTIVE).build();
 
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(authUser, "updateVerificationBodiesStatus");
@@ -346,10 +350,4 @@ class VerificationBodyControllerTest {
 
         verify(verificationBodyUpdateService, never()).updateVerificationBodiesStatus(Mockito.anyList());
     }
-    
-    private AppUser setupAppUser() {
-		AppUser user = AppUser.builder().userId("authId").build();
-		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-		return user;
-	}
 }

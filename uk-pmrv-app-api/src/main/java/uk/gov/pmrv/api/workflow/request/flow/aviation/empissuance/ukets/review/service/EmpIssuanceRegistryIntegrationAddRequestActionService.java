@@ -2,30 +2,22 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.
 
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
-import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmpDetailsDTO;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.IndividualOrganisation;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.LimitedCompanyOrganisation;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OrganisationLegalStatusType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.PartnershipOrganisation;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
-import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEts;
+import uk.gov.pmrv.api.integration.registry.accountcreated.aviation.request.AviationAccountCreatedRequestActionDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
-import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.AviationAccountCreatedRegistryEvent;
-import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.AviationIndividualCompanyDetails;
-import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.AviationLimitedCompanyDetails;
-import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.AviationOperatorDetails;
-import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.AviationOrganisationDetails;
-import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.AviationPartnershipDetails;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceIndividualCompanyDetails;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceLimitedCompanyDetails;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceOperatorDetails;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceOrganisationDetails;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuancePartnershipDetails;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceRegistryIntegrationRequestActionPayload;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,57 +25,43 @@ public class EmpIssuanceRegistryIntegrationAddRequestActionService {
 
     private final RequestService requestService;
 
-    private final AviationAccountQueryService aviationAccountQueryService;
-    private final EmissionsMonitoringPlanQueryService empQueryService;
+    public void addRequestAction(final String requestId, AviationAccountCreatedRequestActionDTO requestActionDTO) {
+        Request request = requestService.findRequestById(requestId);
 
-    public void addRequestAction(AviationAccountCreatedRegistryEvent aviationAccountCreatedRegistryEvent) {
-        final AviationAccountDTO accountDTO= aviationAccountQueryService.getAviationAccountDTOById(aviationAccountCreatedRegistryEvent.getAccountId());
-        final Optional<EmpDetailsDTO> empDetailsDTO = empQueryService.getEmissionsMonitoringPlanDetailsDTOByAccountId(aviationAccountCreatedRegistryEvent.getAccountId());
-
-
-        Request request = requestService.findRequestById(aviationAccountCreatedRegistryEvent.getRequestId());
-
-        AviationOperatorDetails aviationOperatorDetails = AviationOperatorDetails.builder()
-                .emitterId(accountDTO.getEmitterId())
-                .emissionsPlanId(empDetailsDTO.map(EmpDetailsDTO::getId).orElse(null))
-                .operatorName(accountDTO.getName())
-                .firstKnownAviationActivity(accountDTO.getCommencementDate())
-                .regulator(accountDTO.getCompetentAuthority().getCode())
+        EmpIssuanceOperatorDetails empIssuanceOperatorDetails = EmpIssuanceOperatorDetails.builder()
+                .emitterId(requestActionDTO.getEmitterId())
+                .emissionsPlanId(requestActionDTO.getPermitId())
+                .operatorName(requestActionDTO.getOperatorName())
+                .firstKnownAviationActivity(requestActionDTO.getFirstKnownAviationActivity())
+                .regulator(requestActionDTO.getCompetentAuthority())
                 .build();
 
-        EmissionsMonitoringPlanUkEts emissionsMonitoringPlanUkEts = aviationAccountCreatedRegistryEvent.getEmissionsMonitoringPlan();
-
-        AviationOrganisationDetails aviationOrganisationDetails =
-                switch (emissionsMonitoringPlanUkEts.getOperatorDetails().getOrganisationStructure().getLegalStatusType()) {
-                    case LIMITED_COMPANY -> AviationLimitedCompanyDetails.builder()
+        EmpIssuanceOrganisationDetails empIssuanceOrganisationDetails =
+                switch (requestActionDTO.getOrganisationStructure().getLegalStatusType()) {
+                    case LIMITED_COMPANY -> EmpIssuanceLimitedCompanyDetails.builder()
                             .organisationLegalStatus(OrganisationLegalStatusType.LIMITED_COMPANY)
-                            .registeredAddress(emissionsMonitoringPlanUkEts.getOperatorDetails().getOrganisationStructure().getOrganisationLocation())
-                            .companyRegistrationNumber(((LimitedCompanyOrganisation) emissionsMonitoringPlanUkEts.getOperatorDetails().getOrganisationStructure()).getRegistrationNumber())
+                            .registeredAddress(requestActionDTO.getOrganisationStructure().getOrganisationLocation())
+                            .companyRegistrationNumber(((LimitedCompanyOrganisation) requestActionDTO.getOrganisationStructure()).getRegistrationNumber())
                             .build();
-                    case INDIVIDUAL -> AviationIndividualCompanyDetails.builder()
+                    case INDIVIDUAL -> EmpIssuanceIndividualCompanyDetails.builder()
                             .organisationLegalStatus(OrganisationLegalStatusType.INDIVIDUAL)
-                            .fullName(((IndividualOrganisation) emissionsMonitoringPlanUkEts.getOperatorDetails().getOrganisationStructure()).getFullName())
-                            .address(emissionsMonitoringPlanUkEts.getOperatorDetails().getOrganisationStructure().getOrganisationLocation())
+                            .fullName(((IndividualOrganisation) requestActionDTO.getOrganisationStructure()).getFullName())
+                            .address(requestActionDTO.getOrganisationStructure().getOrganisationLocation())
                             .build();
-                    case PARTNERSHIP -> AviationPartnershipDetails.builder()
+                    case PARTNERSHIP -> EmpIssuancePartnershipDetails.builder()
                             .organisationLegalStatus(OrganisationLegalStatusType.PARTNERSHIP)
-                            .mainOfficeAddress(emissionsMonitoringPlanUkEts.getOperatorDetails().getOrganisationStructure().getOrganisationLocation())
-                            .partnershipName(((PartnershipOrganisation) emissionsMonitoringPlanUkEts.getOperatorDetails().getOrganisationStructure()).getPartnershipName())
+                            .mainOfficeAddress(requestActionDTO.getOrganisationStructure().getOrganisationLocation())
+                            .partnershipName(((PartnershipOrganisation) requestActionDTO.getOrganisationStructure()).getPartnershipName())
                             .build();
                 };
 
         EmpIssuanceRegistryIntegrationRequestActionPayload payload =
                 EmpIssuanceRegistryIntegrationRequestActionPayload.builder()
-                        .operatorDetails(aviationOperatorDetails)
-                        .organisationDetails(aviationOrganisationDetails)
+                        .operatorDetails(empIssuanceOperatorDetails)
+                        .organisationDetails(empIssuanceOrganisationDetails)
                         .payloadType(RequestActionPayloadType.EMP_ISSUANCE_UKETS_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD)
                         .build();
 
-        if (!ObjectUtils.isEmpty(aviationAccountCreatedRegistryEvent.getAppUser())) {
-            requestService.addActionToRequest(request,payload,RequestActionType.EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY,aviationAccountCreatedRegistryEvent.getAppUser().getUserId());
-        }
-        else {
-            requestService.addSystemActionToRequest(request,payload,RequestActionType.EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY);
-        }
+        requestService.addSystemActionToRequest(request,payload,RequestActionType.EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY);
     }
 }

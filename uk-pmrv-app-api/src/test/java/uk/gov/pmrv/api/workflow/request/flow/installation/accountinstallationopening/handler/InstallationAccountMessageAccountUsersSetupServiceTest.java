@@ -6,9 +6,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.netz.api.notificationapi.system.SystemNotificationInfo;
-import uk.gov.pmrv.api.notification.system.SystemNotificationProcessAndSendService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.pmrv.api.notification.message.domain.SystemMessageNotificationInfo;
+import uk.gov.pmrv.api.notification.message.service.SystemMessageNotificationService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -20,6 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
+import static uk.gov.pmrv.api.notification.message.domain.enumeration.SystemMessageNotificationType.ACCOUNT_USERS_SETUP;
 
 @ExtendWith(MockitoExtension.class)
 class InstallationAccountMessageAccountUsersSetupServiceTest {
@@ -31,7 +31,7 @@ class InstallationAccountMessageAccountUsersSetupServiceTest {
     private RequestService requestService;
 
     @Mock
-    private SystemNotificationProcessAndSendService systemMessageNotificationService;
+    private SystemMessageNotificationService systemMessageNotificationService;
 
     @Test
     void executeTest() {
@@ -46,9 +46,9 @@ class InstallationAccountMessageAccountUsersSetupServiceTest {
             .competentAuthority(ca)
             .payload(InstallationAccountOpeningRequestPayload.builder().operatorAssignee(assignee).build())
             .build();
-        final SystemNotificationInfo msgInfo = SystemNotificationInfo.builder()
-            .template(PmrvNotificationTemplateName.ACCOUNT_USERS_SETUP.getName())
-            .parameters(Map.of("accountId", accountId))
+        final SystemMessageNotificationInfo msgInfo = SystemMessageNotificationInfo.builder()
+            .messageType(ACCOUNT_USERS_SETUP)
+            .messageParameters(Map.of("accountId", accountId))
             .accountId(accountId)
             .receiver(assignee)
             .build();
@@ -59,6 +59,6 @@ class InstallationAccountMessageAccountUsersSetupServiceTest {
         installationAccountMessageAccountUsersSetupService.execute(requestId);
 
         // Verify
-        verify(systemMessageNotificationService, times(1)).processAndSend(msgInfo);
+        verify(systemMessageNotificationService, times(1)).generateAndSendNotificationSystemMessage(msgInfo);
     }
 }

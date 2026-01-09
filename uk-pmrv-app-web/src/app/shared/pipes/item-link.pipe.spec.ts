@@ -1441,13 +1441,6 @@ describe('ItemLinkPipe', () => {
       expectedPath: ['/tasks', taskId, 'hseti', 'peer-review-wait'],
     },
 
-    //WASTE_QDR
-    {
-      requestType: 'WASTE_QDR',
-      taskType: 'WASTE_QDR_APPLICATION_SUBMIT',
-      expectedPath: ['/tasks', taskId, 'waste-qdr', 'submit'],
-    },
-
     // NULL
     {
       requestType: null,

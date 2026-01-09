@@ -82,7 +82,6 @@ class EmpControllerTest {
 
     @Test
     void generateGetEmpAttachmentToken() throws Exception {
-    	setupAppUser();
         String empId = "1";
         UUID attachmentUuid = UUID.randomUUID();
         FileToken expectedToken = FileToken.builder().token("token").build();
@@ -102,9 +101,11 @@ class EmpControllerTest {
 
     @Test
     void generateGetEmpAttachmentToken_forbidden() throws Exception {
-    	AppUser authUser = setupAppUser();
         Long empId = 1L;
         UUID attachmentUuid = UUID.randomUUID();
+        AppUser authUser = AppUser.builder().userId("userId").build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(authUser, "generateGetEmpAttachmentToken", String.valueOf(empId), null, null);
@@ -119,7 +120,6 @@ class EmpControllerTest {
 
     @Test
     void generateGetEmpDocumentToken() throws Exception {
-    	setupAppUser();
         String empId = "1";
         UUID documentUuid = UUID.randomUUID();
         FileToken expectedToken = FileToken.builder().token("token").build();
@@ -139,9 +139,11 @@ class EmpControllerTest {
 
     @Test
     void generateGetEmpDocumentToken_forbidden() throws Exception {
-    	AppUser authUser = setupAppUser();
         Long empId = 1L;
         UUID documentUuid = UUID.randomUUID();
+        AppUser authUser = AppUser.builder().userId("userId").build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(authUser, "generateGetEmpDocumentToken", String.valueOf(empId), null, null);
@@ -153,11 +155,5 @@ class EmpControllerTest {
 
         verifyNoInteractions(empDocumentService);
     }
-    
-    private AppUser setupAppUser() {
-		AppUser user = AppUser.builder().userId("authId").build();
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-		return user;
-	}
 
 }

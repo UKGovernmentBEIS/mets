@@ -10,9 +10,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.netz.api.common.exception.BusinessException;
-import uk.gov.netz.integration.model.account.AccountDetailsMessage;
-import uk.gov.netz.integration.model.account.AccountOpeningEvent;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.pmrv.api.integration.registry.accountcreated.aviation.request.AviationAccountCreatedRegistryDTO;
+import uk.gov.pmrv.api.integration.registry.accountcreated.aviation.request.AviationAccountCreatedRegistryDetails;
 import uk.gov.pmrv.api.integration.registry.accountcreated.aviation.request.AviationEmpApprovedSendToRegistryProducer;
 
 import static org.junit.Assert.assertThrows;
@@ -36,7 +36,7 @@ class AviationEmpApprovedSendToRegistryProducerTest {
     private static final String TOPIC = "account-created-topic";
 
     @Mock
-    private KafkaTemplate<String, AccountOpeningEvent> aviationAccountCreatedKafkaTemplate;
+    private KafkaTemplate<String, AviationAccountCreatedRegistryDTO> aviationAccountCreatedKafkaTemplate;
 
     @BeforeEach
     void injectTopicName() {
@@ -46,42 +46,42 @@ class AviationEmpApprovedSendToRegistryProducerTest {
     @Test
     public void produce() {
 
-        AccountOpeningEvent event = mock(AccountOpeningEvent.class);
-        AccountDetailsMessage details = mock(AccountDetailsMessage.class);
-        when(event.getAccountDetails()).thenReturn(details);
+        AviationAccountCreatedRegistryDTO dto = mock(AviationAccountCreatedRegistryDTO.class);
+        AviationAccountCreatedRegistryDetails details = mock(AviationAccountCreatedRegistryDetails.class);
+        when(dto.getAccountCreatedRegistryDetails()).thenReturn(details);
         when(details.getEmitterId()).thenReturn("12345");
 
-        producer.produce(event);
+        producer.produce(dto);
 
         ArgumentCaptor<String> topicCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> keyCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<AccountOpeningEvent> valueCaptor = ArgumentCaptor.forClass(AccountOpeningEvent.class);
+        ArgumentCaptor<AviationAccountCreatedRegistryDTO> valueCaptor = ArgumentCaptor.forClass(AviationAccountCreatedRegistryDTO.class);
 
         verify(aviationAccountCreatedKafkaTemplate).send(topicCaptor.capture(), keyCaptor.capture(), valueCaptor.capture());
         verifyNoMoreInteractions(aviationAccountCreatedKafkaTemplate);
 
         assertEquals(TOPIC, topicCaptor.getValue(), "Topic name should match injected value");
         assertEquals("12345", keyCaptor.getValue(), "Key should be the emitterId");
-        assertSame(event, valueCaptor.getValue());
+        assertSame(dto, valueCaptor.getValue());
 
     }
 
     @Test
     void produce_wrapsKafkaErrorsInBusinessException() {
 
-        AccountOpeningEvent dto = mock(AccountOpeningEvent.class);
-        AccountDetailsMessage details = mock(AccountDetailsMessage.class);
-        when(dto.getAccountDetails()).thenReturn(details);
+        AviationAccountCreatedRegistryDTO dto = mock(AviationAccountCreatedRegistryDTO.class);
+        AviationAccountCreatedRegistryDetails details = mock(AviationAccountCreatedRegistryDetails.class);
+        when(dto.getAccountCreatedRegistryDetails()).thenReturn(details);
         when(details.getEmitterId()).thenReturn("12345");
 
         doThrow(new RuntimeException("broker down"))
                 .when(aviationAccountCreatedKafkaTemplate)
-                .send(anyString(), anyString(), any(AccountOpeningEvent.class));
+                .send(anyString(), anyString(), any(AviationAccountCreatedRegistryDTO.class));
 
         BusinessException ex = assertThrows(BusinessException.class, () -> producer.produce(dto));
 
         assertEquals(
-                MetsErrorCode.INTEGRATION_REGISTRY_ACCOUNT_KAFKA_QUEUE_CONNECTION_ISSUE,
+                MetsErrorCode.INTEGRATION_REGISTRY_ACCOUNT_CREATE_KAFKA_QUEUE_CONNECTION_ISSUE,
                 ex.getErrorCode(),
                 "Error code should match mapping on failure"
         );

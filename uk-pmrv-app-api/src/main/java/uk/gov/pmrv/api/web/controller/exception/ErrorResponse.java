@@ -16,6 +16,9 @@ public class ErrorResponse {
     /** The error message */
     private String message;
 
+    /** Whether the error is security related */
+    private Boolean security;
+
     /** The error message */
     private Object [] data;
 }

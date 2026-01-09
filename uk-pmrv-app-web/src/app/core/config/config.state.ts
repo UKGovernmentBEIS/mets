@@ -6,7 +6,6 @@ export const FEATURES = [
   'corsia3yearOffsettingEnabled',
   'bdrEnabled',
   'wastePermitEnabled',
-  'wasteQdrEnabled',
 ] as const;
 export type FeatureName = (typeof FEATURES)[number];
 export type FeaturesConfig = { [key in FeatureName]?: boolean };

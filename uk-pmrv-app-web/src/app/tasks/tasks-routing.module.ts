@@ -151,10 +151,6 @@ const routes: Routes = [
         loadChildren: () => import('./hseti/hseti.module').then((m) => m.HseTiModule),
       },
       {
-        path: 'waste-qdr',
-        loadChildren: () => import('./waste-qdr/waste-qdr.module').then((m) => m.WasteQdrModule),
-      },
-      {
         path: 'cancel',
         loadChildren: () => import('../cancel-task/cancel-task.module').then((m) => m.CancelTaskModule),
       },

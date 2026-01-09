@@ -189,7 +189,6 @@ class NotificationTemplateControllerTest {
 
     @Test
     void getNotificationTemplateById() throws Exception {
-    	setupAppUser();
         Long notificationTemplateId = 1L;
         String notificationTemplateName = "notif_template_name";
 
@@ -233,7 +232,6 @@ class NotificationTemplateControllerTest {
 
     @Test
     void updateNotificationTemplate() throws Exception {
-    	setupAppUser();
         long notificationTemplateId = 1L;
         NotificationTemplateUpdateDTO notificationTemplateUpdateDTO = NotificationTemplateUpdateDTO.builder()
             .subject("subject")
@@ -277,10 +275,4 @@ class NotificationTemplateControllerTest {
 
         verifyNoInteractions(notificationTemplateUpdateService);
     }
-    
-    private AppUser setupAppUser() {
-		AppUser user = AppUser.builder().userId("authId").build();
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-		return user;
-	}
 }

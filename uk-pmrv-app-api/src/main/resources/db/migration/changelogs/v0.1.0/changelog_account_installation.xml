@@ -86,15 +86,5 @@
             </dropColumn>
         </rollback>
     </changeSet>
-    <changeSet id="0_1_0_ACCOUNT_INSTALLATION_ADD_FIRST_YEAR_OF_REGISTRY_REPORTING_OBLIGATION_COLUMN" author="P63757">
-        <sql>
-            ALTER TABLE account_installation ADD COLUMN IF NOT EXISTS registry_reporting_first_year INTEGER;
-        </sql>
-        <rollback>
-            <dropColumn tableName="account_installation">
-                <column name="registry_reporting_first_year"/>
-            </dropColumn>
-        </rollback>
-    </changeSet>
 
 </databaseChangeLog>

@@ -17,7 +17,6 @@ import { AviationVirRequestMetadata, RequestInfoDTO, RequestTaskActionProcessDTO
           <li *ngFor="let action of allActions$ | async">
             <a [routerLink]="action.link" [fragment]="action.fragment" govukLink>{{ action.text }}</a>
           </li>
-          <ng-content />
         </ul>
       </nav>
     </aside>

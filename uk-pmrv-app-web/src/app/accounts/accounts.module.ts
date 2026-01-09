@@ -14,7 +14,7 @@ import { DetailsComponent } from './details/details.component';
 import { AddressComponent } from './edit/address/address.component';
 import { FaStatusComponent } from './edit/fa-status/fa-status.component';
 import { NameComponent } from './edit/name/name.component';
-import { AccountEditReportingFirstYearComponent } from './edit/reporting-first-year/reporting-first-year.component';
+import { RegistryIdComponent } from './edit/registry-id/registry-id.component';
 import { SiteNameComponent } from './edit/site-name/site-name.component';
 import { SopIdComponent } from './edit/sop-id/sop-id.component';
 import { TriggerAirComponent } from './trigger-air/trigger-air.component';
@@ -24,11 +24,7 @@ import { AerMarkAsNotRequiredComponent } from './workflows/aer-mark-as-not-requi
 import { AerReinitializeComponent } from './workflows/aer-reinitialize/aer-reinitialize.component';
 import { AlrMarkAsNotRequiredComponent } from './workflows/alr-mark-as-not-required/alr-mark-as-not-required.component';
 
-const standaloneComponents: Type<any>[] = [
-  AccountEditReportingFirstYearComponent,
-  InspectionsComponent,
-  TriggerHseTiComponent,
-];
+const standaloneComponents: Type<any>[] = [InspectionsComponent, TriggerHseTiComponent];
 
 @NgModule({
   declarations: [
@@ -42,6 +38,7 @@ const standaloneComponents: Type<any>[] = [
     FaStatusComponent,
     NameComponent,
     NoteFileDownloadComponent,
+    RegistryIdComponent,
     SiteNameComponent,
     SopIdComponent,
     TriggerAirComponent,

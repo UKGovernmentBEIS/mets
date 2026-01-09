@@ -1,14 +1,10 @@
-import { provideHttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, provideRouter, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import { firstValueFrom, Observable, of } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 
-import { mockClass, MockType } from '@testing';
-
-import { InstallationAccountViewService } from 'pmrv-api';
-
-import { mockedAccountPermit } from '../../../../accounts/testing/mock-data';
 import { PermitIssuanceStore } from '../../../../permit-issuance/store/permit-issuance.store';
 import { PermitApplicationState } from '../../../store/permit-application.state';
 import { PermitApplicationStore } from '../../../store/permit-application.store';
@@ -19,7 +15,6 @@ describe('OfficialNoticeGuard', () => {
   let guard: OfficialNoticeGuard;
   let router: Router;
   let store: PermitApplicationStore<PermitApplicationState>;
-  let accountViewService: MockType<InstallationAccountViewService>;
 
   const activatedRouteSnapshot = new ActivatedRouteSnapshot();
   activatedRouteSnapshot.params = { taskId: 276 };
@@ -28,24 +23,15 @@ describe('OfficialNoticeGuard', () => {
   };
 
   describe('permit issuance', () => {
-    accountViewService = mockClass(InstallationAccountViewService);
-    accountViewService.getInstallationAccountById.mockReturnValue(
-      of({
-        ...mockedAccountPermit,
-        account: { ...mockedAccountPermit.account, emissionTradingScheme: 'UK_ETS_INSTALLATIONS' },
-      }),
-    );
     beforeEach(() => {
       TestBed.configureTestingModule({
+        imports: [RouterTestingModule, HttpClientTestingModule],
         providers: [
-          provideRouter([]),
-          provideHttpClient(),
           OfficialNoticeGuard,
           {
             provide: PermitApplicationStore,
             useExisting: PermitIssuanceStore,
           },
-          { provide: InstallationAccountViewService, useValue: accountViewService },
         ],
       });
       guard = TestBed.inject(OfficialNoticeGuard);

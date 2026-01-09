@@ -75,7 +75,6 @@ class RequestActionAttachmentControllerTest {
 
     @Test
     void generateRequestActionGetFileAttachmentToken() throws Exception {
-    	setupAppUser();
         Long requestActionId = 1L;
         UUID attachmentUuid = UUID.randomUUID();
         FileToken expectedToken = FileToken.builder().token("token").build();
@@ -94,10 +93,11 @@ class RequestActionAttachmentControllerTest {
 
     @Test
     void generateRequestActionGetFileAttachmentToken_forbidden() throws Exception {
-    	AppUser appUser = setupAppUser();
         Long requestActionId = 1L;
         UUID attachmentUuid = UUID.randomUUID();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(appUser, "generateRequestActionGetFileAttachmentToken", String.valueOf(requestActionId), null, null);
@@ -109,10 +109,4 @@ class RequestActionAttachmentControllerTest {
 
         verifyNoInteractions(requestActionAttachmentService);
     }
-    
-    private AppUser setupAppUser() {
-		AppUser user = AppUser.builder().userId("authId").build();
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-		return user;
-	}
 }

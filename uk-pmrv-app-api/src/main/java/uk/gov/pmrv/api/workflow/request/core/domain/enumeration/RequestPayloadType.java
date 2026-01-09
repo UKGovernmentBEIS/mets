@@ -32,7 +32,6 @@ public enum RequestPayloadType {
     BDR_REQUEST_PAYLOAD,
     PERMANENT_CESSATION_REQUEST_PAYLOAD,
     ALR_REQUEST_PAYLOAD,
-    WASTE_QDR_REQUEST_PAYLOAD,
 
 
     // Aviation related request payload types

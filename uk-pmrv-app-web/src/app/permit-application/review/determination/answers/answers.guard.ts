@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
-import { combineLatest, map, Observable, switchMap } from 'rxjs';
-
-import { InstallationAccountViewService } from 'pmrv-api';
+import { map, Observable } from 'rxjs';
 
 import { PermitApplicationState } from '../../../store/permit-application.state';
 import { PermitApplicationStore } from '../../../store/permit-application.store';
@@ -13,22 +11,17 @@ export class AnswersGuard {
   constructor(
     private readonly store: PermitApplicationStore<PermitApplicationState>,
     private readonly router: Router,
-    private readonly installationAccountViewService: InstallationAccountViewService,
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return this.store.pipe(
-      map((state) => state.accountId),
-      switchMap((accountId) =>
-        combineLatest([this.store, this.installationAccountViewService.getInstallationAccountById(accountId)]),
-      ),
-      map(([storeState, result]) => {
+      map((storeState) => {
         const wizardUrl = `/${this.store.urlRequestType}/${route.paramMap.get('taskId')}/review/determination`;
 
         return (
           (storeState.reviewSectionsCompleted?.[route.data.statusKey] &&
             this.router.parseUrl(wizardUrl.concat('/summary'))) ||
-          this.store.isDeterminationWizardComplete(result.account.emissionTradingScheme) ||
+          this.store.isDeterminationWizardComplete() ||
           this.router.parseUrl(`/${this.store.urlRequestType}/${route.paramMap.get('taskId')}/review/determination`)
         );
       }),

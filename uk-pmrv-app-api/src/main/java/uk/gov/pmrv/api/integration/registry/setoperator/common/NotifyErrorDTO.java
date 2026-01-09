@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
-import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 
 @Data
 @Builder
@@ -15,11 +12,9 @@ import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 public class NotifyErrorDTO {
 
     private String correlationId;
-    private OperatorUpdateEventOutcome outcome;
-    private OperatorUpdateEvent event;
+    private SetOperatorIdEventOutcome outcome;
+    private SetOperatorIdResponseEvent event;
     private String service;
-    private CompetentAuthorityEnum authority;
-    private String accountName;
 
 
 }

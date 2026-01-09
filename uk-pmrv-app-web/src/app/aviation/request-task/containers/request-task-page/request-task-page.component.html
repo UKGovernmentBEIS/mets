@@ -5,18 +5,21 @@
 
       <app-task-header-info
         [assignee]="vm.requestTask.assigneeFullName"
-        [daysRemaining]="vm.requestTask.daysRemaining"></app-task-header-info>
+        [daysRemaining]="vm.requestTask.daysRemaining"
+      ></app-task-header-info>
     </app-page-heading>
 
     <ng-container *ngIf="vm.showDeadlineMessage">
       <ng-container [ngSwitch]="vm.requestTask.type">
         <ng-container
           *ngSwitchCase="'EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT'"
-          [ngTemplateOutlet]="uketsApplicationDeadlineMsg"></ng-container>
+          [ngTemplateOutlet]="uketsApplicationDeadlineMsg"
+        ></ng-container>
 
         <ng-container
           *ngSwitchCase="'EMP_ISSUANCE_CORSIA_APPLICATION_SUBMIT'"
-          [ngTemplateOutlet]="corsiaApplicationDeadlineMsg"></ng-container>
+          [ngTemplateOutlet]="corsiaApplicationDeadlineMsg"
+        ></ng-container>
       </ng-container>
     </ng-container>
 
@@ -32,7 +35,8 @@
         (click)="notifyOperator(vm.requestTask.type)"
         govukButton
         title="Notify Operator of decision"
-        type="button">
+        type="button"
+      >
         Notify Operator of decision
       </button>
 
@@ -41,7 +45,8 @@
         (click)="sendPeerReview(vm.requestTask.type)"
         govukButton
         title="Send for peer review"
-        type="button">
+        type="button"
+      >
         Send for peer review
       </button>
 
@@ -50,7 +55,8 @@
         (click)="returnForAmends(vm.requestTask.type)"
         govukButton
         title="Return for changes"
-        type="button">
+        type="button"
+      >
         Return for changes
       </button>
 
@@ -59,7 +65,8 @@
         (click)="completeReport()"
         govukButton
         title="Complete Report"
-        type="button">
+        type="button"
+      >
         Complete Report
       </button>
     </div>
@@ -79,7 +86,8 @@
           [hideSubmit]="true"
           (submitApplication)="onSubmit()"
           submitLabel="Submit"
-          [hideCancel]="true"></app-task-list>
+          [hideCancel]="true"
+        ></app-task-list>
       </ng-container>
     </ng-container>
 
@@ -92,7 +100,8 @@
         <app-timeline-item
           *ngFor="let action of vm.timeline"
           [action]="action"
-          [link]="action | timelineItemLink: false : true"></app-timeline-item>
+          [link]="action | timelineItemLink: false : true"
+        ></app-timeline-item>
       </app-timeline>
     </ng-container>
   </div>
@@ -103,17 +112,16 @@
       [taskId$]="vm.taskId$"
       [allowedActions$]="vm.relatedActions$"
       [requestInfo$]="vm.requestInfo$"
-      baseUrl="/aviation">
-      <li *ngIf="isManualPushToRegistryAvailable$ | async">
-        <a [routerLink]="'registry/manual-account-opening'" govukLink>Integration with registry</a>
-      </li>
-    </app-related-actions>
+      baseUrl="/aviation"
+    ></app-related-actions>
     <app-preview-documents
       [taskId]="vm.taskId$ | async"
       [previewDocuments]="vm.previewDocuments"
       [decisionNotification]="vm.decisionNotification"
       linkFontSize="govuk-!-font-size-16"
-      *ngIf="vm.previewDocuments"></app-preview-documents>
+      *ngIf="vm.previewDocuments"
+    >
+    </app-preview-documents>
   </div>
 </div>
 
@@ -127,8 +135,7 @@
     </p>
 
     <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
-      <strong>For commercial aircraft operators</strong>
-      (both points apply)
+      <strong>For commercial aircraft operators</strong> (both points apply)
     </p>
 
     <ul>

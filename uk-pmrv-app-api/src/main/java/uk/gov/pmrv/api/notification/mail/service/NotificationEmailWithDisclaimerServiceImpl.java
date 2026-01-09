@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.notificationapi.mail.config.property.NotificationProperties;
 import uk.gov.netz.api.notificationapi.mail.service.SendEmailService;
-import uk.gov.netz.api.notificationapi.domain.NotificationContent;
+import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
 import uk.gov.pmrv.api.notification.template.service.NotificationTemplateProcessService;
 
 /**

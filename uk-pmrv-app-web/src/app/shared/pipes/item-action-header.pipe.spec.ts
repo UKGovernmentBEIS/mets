@@ -785,15 +785,6 @@ describe('ItemActionHeaderPipe', () => {
     ).toEqual('Recalled by John Bolt');
   });
 
-  it('should return manual account sent to registry', () => {
-    expect(
-      pipe.transform({
-        ...baseRequestAction,
-        type: 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY',
-      }),
-    ).toEqual('Information sent to registry by John Bolt');
-  });
-
   it('should return Non compliance', () => {
     expect(
       pipe.transform({

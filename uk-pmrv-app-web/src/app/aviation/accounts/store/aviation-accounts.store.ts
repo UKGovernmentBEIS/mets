@@ -156,29 +156,22 @@ export class AviationAccountsStore extends Store<AviationAccountsState> {
     const existingAccount = this.getState().currentAccount.account.aviationAccount;
     const accountToUpdate: {
       name: string;
+      registryId: number;
       sopId: number;
       crcoCode: string;
+      commencementDate: string;
       location: any;
-    } = (({ name, sopId, crcoCode, location }) => ({
+    } = (({ name, registryId, sopId, crcoCode, commencementDate, location }) => ({
       name,
+      registryId: registryId ? +registryId : null,
       sopId: sopId ? +sopId : null,
       crcoCode,
+      commencementDate,
       location,
     }))(existingAccount);
 
     return this.aviationAccountUpdateService
       .updateAviationAccount(this.getState().currentAccount.account.aviationAccount.id, accountToUpdate, 'response')
-      .pipe(this.pendingRequestService.trackRequest());
-  }
-
-  editAccountCommencementDate(): Observable<HttpResponse<void>> {
-    const existingAccount = this.getState().currentAccount.account.aviationAccount;
-    const accountToUpdate: {
-      commencementDate: string;
-    } = (({ commencementDate }) => ({ commencementDate }))(existingAccount);
-
-    return this.aviationAccountUpdateService
-      .updateCommencementDate1(this.getState().currentAccount.account.aviationAccount.id, accountToUpdate, 'response')
       .pipe(this.pendingRequestService.trackRequest());
   }
 

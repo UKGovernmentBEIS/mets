@@ -16,7 +16,6 @@ import { Observable } from 'rxjs';
 
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
-import { AccountUpdateCommencementDateDTO } from '../model/accountUpdateCommencementDateDTO';
 import { AviationAccountUpdateDTO } from '../model/aviationAccountUpdateDTO';
 import { BASE_PATH } from '../variables';
 
@@ -160,97 +159,6 @@ export class AviationAccountUpdateService {
     return this.httpClient.post<any>(
       `${this.configuration.basePath}/v1.0/aviation/accounts/${encodeURIComponent(String(id))}`,
       aviationAccountUpdateDTO,
-      {
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: headers,
-        observe: observe,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
-   * Update and Validate the commencement date of the account
-   * @param id The account id
-   * @param accountUpdateCommencementDateDTO
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public updateCommencementDate1(
-    id: number,
-    accountUpdateCommencementDateDTO: AccountUpdateCommencementDateDTO,
-  ): Observable<any>;
-  public updateCommencementDate1(
-    id: number,
-    accountUpdateCommencementDateDTO: AccountUpdateCommencementDateDTO,
-    observe: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpResponse<any>>;
-  public updateCommencementDate1(
-    id: number,
-    accountUpdateCommencementDateDTO: AccountUpdateCommencementDateDTO,
-    observe: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpEvent<any>>;
-  public updateCommencementDate1(
-    id: number,
-    accountUpdateCommencementDateDTO: AccountUpdateCommencementDateDTO,
-    observe: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<any>;
-  public updateCommencementDate1(
-    id: number,
-    accountUpdateCommencementDateDTO: AccountUpdateCommencementDateDTO,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<any> {
-    if (id === null || id === undefined) {
-      throw new Error('Required parameter id was null or undefined when calling updateCommencementDate1.');
-    }
-    if (accountUpdateCommencementDateDTO === null || accountUpdateCommencementDateDTO === undefined) {
-      throw new Error(
-        'Required parameter accountUpdateCommencementDateDTO was null or undefined when calling updateCommencementDate1.',
-      );
-    }
-
-    let headers = this.defaultHeaders;
-
-    // authentication (bearerAuth) required
-    const credential = this.configuration.lookupCredential('bearerAuth');
-    if (credential) {
-      headers = headers.set('Authorization', 'Bearer ' + credential);
-    }
-
-    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (httpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (httpHeaderAcceptSelected !== undefined) {
-      headers = headers.set('Accept', httpHeaderAcceptSelected);
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = ['application/json'];
-    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      headers = headers.set('Content-Type', httpContentTypeSelected);
-    }
-
-    let responseType_: 'text' | 'json' = 'json';
-    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
-      responseType_ = 'text';
-    }
-
-    return this.httpClient.post<any>(
-      `${this.configuration.basePath}/v1.0/aviation/accounts/${encodeURIComponent(String(id))}/commencement-date`,
-      accountUpdateCommencementDateDTO,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

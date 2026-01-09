@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.alr.service;
 
+import java.time.Year;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +20,7 @@ public class ALRDueDateServiceTest {
 
     @Test
     void generateDueDate() {
-        Date requireDate = DateUtils.atEndOfDay(LocalDate.of(2025, 3, 31));
+        Date requireDate = DateUtils.atEndOfDay(LocalDate.of(Year.now().getValue(), 3, 31));
         Date dueDate = service.generateDueDate();
 
         assertThat(dueDate).isEqualTo(requireDate);

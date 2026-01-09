@@ -13,7 +13,6 @@ import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplate
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
@@ -35,8 +34,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.any;
 
 @ExtendWith(MockitoExtension.class)
 class PermitIssuanceOfficialNoticeServiceTest {
@@ -63,7 +60,7 @@ class PermitIssuanceOfficialNoticeServiceTest {
     private OfficialNoticeSendService officialNoticeSendService;
 
     @Mock
-    private InstallationAccountRegistryEventPublisherService installationAccountRegistryEventPublisherService;
+    private PermitIssuanceRegistryEventPublisherService permitIssuanceRegistryEventPublisherService;
     
     @Mock
     private RegistryConfig registryConfig;
@@ -375,47 +372,6 @@ class PermitIssuanceOfficialNoticeServiceTest {
         verify(requestService, times(1)).findRequestById(requestId);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(officialNoticeSendService, times(1)).sendOfficialNotice(List.of(officialDocFileInfoDTO), request, decisionRecipientsEmails, List.of("registry@email"));
-    }
-
-    @Test
-    void sendOfficialNotice_whenPermitTransferB_doesNotPublishEvent() {
-        // given
-        String requestId = "2";
-
-        DecisionNotification decisionNotification = DecisionNotification.builder()
-                .operators(Set.of("operatorUser"))
-                .signatory("signatoryUser")
-                .build();
-
-        FileInfoDTO officialDocFileInfoDTO = FileInfoDTO.builder().name("official.doc").build();
-
-        PermitIssuanceRequestPayload payload = PermitIssuanceRequestPayload.builder()
-                .decisionNotification(decisionNotification)
-                .officialNotice(officialDocFileInfoDTO)
-                .build();
-
-        Request request = Request.builder()
-                .id(requestId)
-                .type(RequestType.PERMIT_TRANSFER_B)
-                .payload(payload)
-                .accountId(20L)
-                .build();
-
-        List<String> decisionRecipientsEmails = List.of("operator2@email");
-
-        when(requestService.findRequestById(requestId)).thenReturn(request);
-        when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(decisionRecipientsEmails);
-        when(registryConfig.getEmail()).thenReturn("registry@email");
-
-        // when
-        officialNoticeService.sendOfficialNotice(requestId);
-
-        // then
-        verify(requestService, times(1)).findRequestById(requestId);
-        verify(installationAccountRegistryEventPublisherService, never())
-                .publishRegistryEvent(any(), any(), any());
-        verify(officialNoticeSendService, times(1))
-                .sendOfficialNotice(List.of(officialDocFileInfoDTO), request, decisionRecipientsEmails, List.of("registry@email"));
     }
 
     private FileInfoDTO buildOfficialFileInfo() {

@@ -42,7 +42,6 @@ export interface InstallationAccountDTO {
     | 'AWAITING_TRANSFER'
     | 'TRANSFERRED';
   siteName: string;
-  registryReportingFirstYear?: number;
   emitterType?: 'WASTE' | 'GHGE' | 'HSE';
   installationCategory?: 'A_LOW_EMITTER' | 'A' | 'B' | 'C' | 'N_A';
   applicationType?: 'NEW_PERMIT' | 'TRANSFER';

@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, combineLatest, filter, first, map, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
 
+import { BackLinkService } from '@shared/back-link/back-link.service';
+
 import { GovukValidators } from 'govuk-components';
 
-import { InstallationAccountPermitDTO, InstallationAccountUpdateService } from 'pmrv-api';
+import { InstallationAccountDTO, InstallationAccountPermitDTO, InstallationAccountUpdateService } from 'pmrv-api';
 
 @Component({
   selector: 'app-site-name',
@@ -28,7 +30,7 @@ import { InstallationAccountPermitDTO, InstallationAccountUpdateService } from '
 
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SiteNameComponent {
+export class SiteNameComponent implements OnInit {
   account$ = (
     this.route.data as Observable<{
       accountPermit: InstallationAccountPermitDTO;
@@ -40,7 +42,7 @@ export class SiteNameComponent {
     map((account) =>
       this.fb.group({
         siteName: [
-          account?.siteName,
+          (account as InstallationAccountDTO)?.siteName,
           [
             GovukValidators.required('Enter site name'),
             GovukValidators.maxLength(255, 'The site name should not be more than 255 characters'),
@@ -56,7 +58,12 @@ export class SiteNameComponent {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly accountUpdateService: InstallationAccountUpdateService,
+    private readonly backLinkService: BackLinkService,
   ) {}
+
+  ngOnInit() {
+    this.backLinkService.show();
+  }
 
   onSubmit(): void {
     combineLatest([this.form$, this.account$])

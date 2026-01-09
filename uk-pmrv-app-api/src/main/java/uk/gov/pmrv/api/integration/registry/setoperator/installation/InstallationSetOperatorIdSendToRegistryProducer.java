@@ -8,8 +8,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
-import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.pmrv.api.integration.registry.setoperator.common.SetOperatorIdEventOutcome;
 
 @Log4j2
 @Service
@@ -20,15 +20,15 @@ public class InstallationSetOperatorIdSendToRegistryProducer {
     @Value("${kafka.installation.operator-identifier-response.topic}")
     private String topicName;
 
-    private final KafkaTemplate<String, OperatorUpdateEventOutcome> installationSetOperatorIdKafkaTemplate;
+    private final KafkaTemplate<String, SetOperatorIdEventOutcome> installationSetOperatorIdKafkaTemplate;
 
     @Transactional
-    public void produce(OperatorUpdateEventOutcome eventOutcome) {
+    public void produce(SetOperatorIdEventOutcome eventOutcome) {
         try {
             installationSetOperatorIdKafkaTemplate.send(topicName, String.valueOf(eventOutcome.getEvent().getEmitterId()), eventOutcome);
         } catch (Exception e) {
             log.error("Error when kafka producing: {}", e.getMessage());
-            throw new BusinessException(MetsErrorCode.INTEGRATION_REGISTRY_ACCOUNT_KAFKA_QUEUE_CONNECTION_ISSUE,
+            throw new BusinessException(MetsErrorCode.INTEGRATION_REGISTRY_ACCOUNT_CREATE_KAFKA_QUEUE_CONNECTION_ISSUE,
                     eventOutcome);
         }
     }

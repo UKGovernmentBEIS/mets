@@ -8,11 +8,11 @@ import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
-import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.BusinessOrganisationDetails;
-import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.IndividualOrganisationDetails;
-import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountRegistryIntegrationRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.RegistryIntegrationActivePermit;
-import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.RegistryIntegrationOrganizationDetails;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.BusinessOrganisationDetails;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.IndividualOrganisationDetails;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceActivePermit;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceOrganizationDetails;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceRegistryIntegrationRequestActionPayload;
 
 @Service
 @RequiredArgsConstructor
@@ -23,17 +23,17 @@ public class PermitIssuanceRegistryIntegrationAddRequestActionService {
     public void addRequestAction(final String requestId, InstallationAccountCreatedRequestActionDTO account) {
         Request request = requestService.findRequestById(requestId);
 
-        RegistryIntegrationActivePermit registryIntegrationActivePermit =
-                RegistryIntegrationActivePermit.builder()
+        PermitIssuanceActivePermit permitIssuanceActivePermit =
+                PermitIssuanceActivePermit.builder()
                         .emitterId(account.getEmitterId())
                         .permitId(account.getPermitId())
                         .installationName(account.getInstallationName())
                         .operatorName(account.getLegalEntityDTO().getName())
-                        .regulator(account.getCompetentAuthority().getCode())
+                        .regulator(account.getCompetentAuthority())
                         .regulatedActivitiesStartDate(account.getCommencementDate())
                         .build();
 
-        RegistryIntegrationOrganizationDetails registryIntegrationOrganizationDetails =
+        PermitIssuanceOrganizationDetails permitIssuanceOrganizationDetails=
                 switch (account.getLegalEntityDTO().getType()) {
                      case SOLE_TRADER -> IndividualOrganisationDetails.builder()
                              .organisationLegalStatus(LegalEntityType.SOLE_TRADER)
@@ -60,10 +60,10 @@ public class PermitIssuanceRegistryIntegrationAddRequestActionService {
                 };
 
 
-        InstallationAccountRegistryIntegrationRequestActionPayload payload =
-                InstallationAccountRegistryIntegrationRequestActionPayload.builder()
-                        .activePermit(registryIntegrationActivePermit)
-                        .organizationDetails(registryIntegrationOrganizationDetails)
+        PermitIssuanceRegistryIntegrationRequestActionPayload payload =
+                PermitIssuanceRegistryIntegrationRequestActionPayload.builder()
+                        .activePermit(permitIssuanceActivePermit)
+                        .organizationDetails(permitIssuanceOrganizationDetails)
                         .payloadType(RequestActionPayloadType.PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD)
                         .build();
 

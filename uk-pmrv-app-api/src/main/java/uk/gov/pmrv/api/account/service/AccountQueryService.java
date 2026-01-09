@@ -14,7 +14,6 @@ import uk.gov.pmrv.api.account.transform.AccountMapper;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -122,19 +121,4 @@ public class AccountQueryService implements AccountAuthorityInfoProvider {
     public Optional<Account> getAccountByRegistryId(Integer registryId) {
         return accountRepository.findAccountByRegistryId(registryId);
     }
-    
-    @Override
-	public Set<Long> findAccountIdsByVerificationBodyId(Long verificationBodyId) {
-		return new HashSet<>(accountRepository.findAllIdsByVerificationBody(verificationBodyId));
-	}
-    
-    @Override
-    public Set<CompetentAuthorityEnum> findCAByIdIn(Set<Long> accountIds){
-    	return accountRepository.findCAByIdIn(accountIds);
-    }
-    
-    @Override
-	public Optional<Long> getThirdPartyDataProviderId(Long accountId) {
-		return Optional.ofNullable(getAccountById(accountId).getThirdPartyDataProviderId());
-	}
 }

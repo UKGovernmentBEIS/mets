@@ -167,8 +167,6 @@ class VerifierUserInvitationServiceTest {
             .authorityStatus(AuthorityStatus.ACTIVE)
             .userId("userId")
             .build();
-        
-        AppUser currentUser = AppUser.builder().userId("userId").build();
 
         VerifierUserDTO verifierUser = VerifierUserDTO.builder()
             .email(userEmail)
@@ -178,19 +176,19 @@ class VerifierUserInvitationServiceTest {
 		InvitedUserInfoDTO expectedInvitedUserInfo = InvitedUserInfoDTO.builder().email(userEmail)
 				.invitationStatus(UserInvitationStatus.ALREADY_REGISTERED).build();
 
-        when(verifierUserTokenVerificationService.verifyInvitationToken(invitationToken, currentUser)).thenReturn(authorityInfo);
+        when(verifierUserTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken)).thenReturn(authorityInfo);
         when(userAuthService.hasUserPassword(authorityInfo.getUserId())).thenReturn(true);
         when(verifierUserAuthService.getVerifierUserById(authorityInfo.getUserId())).thenReturn(verifierUser);
 
-        InvitedUserInfoDTO actualInvitedUserInfo = verifierUserInvitationService.acceptInvitation(invitationToken, currentUser);
+        InvitedUserInfoDTO actualInvitedUserInfo = verifierUserInvitationService.acceptInvitation(invitationToken);
 
         assertEquals(expectedInvitedUserInfo, actualInvitedUserInfo);
 
-        verify(verifierUserTokenVerificationService, times(1)).verifyInvitationToken(invitationToken, currentUser);
+        verify(verifierUserTokenVerificationService, times(1)).verifyInvitationTokenForPendingAuthority(invitationToken);
         verify(verifierUserAuthService, times(1)).getVerifierUserById(authorityInfo.getUserId());
         verify(userAuthService, times(1)).hasUserPassword(authorityInfo.getUserId());
         verify(verifierUserActivateService, times(1))
-				.acceptAuthorityForRegisteredVerifierInvitedUser(invitationToken, currentUser);
+				.acceptAuthorityForRegisteredVerifierInvitedUser(invitationToken);
     }
     
     @Test
@@ -202,8 +200,6 @@ class VerifierUserInvitationServiceTest {
             .authorityStatus(AuthorityStatus.ACTIVE)
             .userId("userId")
             .build();
-        
-        AppUser currentUser = AppUser.builder().userId("userId").build();
 
         VerifierUserDTO verifierUser = VerifierUserDTO.builder()
             .email(userEmail)
@@ -213,19 +209,19 @@ class VerifierUserInvitationServiceTest {
 		InvitedUserInfoDTO expectedInvitedUserInfo = InvitedUserInfoDTO.builder().email(userEmail)
 				.invitationStatus(UserInvitationStatus.ALREADY_REGISTERED_SET_PASSWORD_ONLY).build();
 
-        when(verifierUserTokenVerificationService.verifyInvitationToken(invitationToken, currentUser)).thenReturn(authorityInfo);
+        when(verifierUserTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken)).thenReturn(authorityInfo);
         when(userAuthService.hasUserPassword(authorityInfo.getUserId())).thenReturn(false);
         when(verifierUserAuthService.getVerifierUserById(authorityInfo.getUserId())).thenReturn(verifierUser);
 
-        InvitedUserInfoDTO actualInvitedUserInfo = verifierUserInvitationService.acceptInvitation(invitationToken, currentUser);
+        InvitedUserInfoDTO actualInvitedUserInfo = verifierUserInvitationService.acceptInvitation(invitationToken);
 
         assertEquals(expectedInvitedUserInfo, actualInvitedUserInfo);
 
-        verify(verifierUserTokenVerificationService, times(1)).verifyInvitationToken(invitationToken, currentUser);
+        verify(verifierUserTokenVerificationService, times(1)).verifyInvitationTokenForPendingAuthority(invitationToken);
         verify(verifierUserAuthService, times(1)).getVerifierUserById(authorityInfo.getUserId());
         verify(userAuthService, times(1)).hasUserPassword(authorityInfo.getUserId());
         verify(verifierUserActivateService, never())
-				.acceptAuthorityForRegisteredVerifierInvitedUser(invitationToken, currentUser);
+				.acceptAuthorityForRegisteredVerifierInvitedUser(invitationToken);
     }
     
     @Test
@@ -237,8 +233,6 @@ class VerifierUserInvitationServiceTest {
             .authorityStatus(AuthorityStatus.PENDING)
             .userId("userId")
             .build();
-        
-        AppUser currentUser = AppUser.builder().userId("userId").build();
 
         VerifierUserDTO verifierUser = VerifierUserDTO.builder()
             .email(userEmail)
@@ -248,14 +242,14 @@ class VerifierUserInvitationServiceTest {
 		InvitedUserInfoDTO expectedInvitedUserInfo = InvitedUserInfoDTO.builder().email(userEmail)
 				.invitationStatus(UserInvitationStatus.PENDING_TO_REGISTERED_SET_PASSWORD_ONLY).build();
 
-        when(verifierUserTokenVerificationService.verifyInvitationToken(invitationToken, currentUser)).thenReturn(authorityInfo);
+        when(verifierUserTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken)).thenReturn(authorityInfo);
         when(verifierUserAuthService.getVerifierUserById(authorityInfo.getUserId())).thenReturn(verifierUser);
 
-        InvitedUserInfoDTO actualInvitedUserInfo = verifierUserInvitationService.acceptInvitation(invitationToken, currentUser);
+        InvitedUserInfoDTO actualInvitedUserInfo = verifierUserInvitationService.acceptInvitation(invitationToken);
 
         assertEquals(expectedInvitedUserInfo, actualInvitedUserInfo);
 
-        verify(verifierUserTokenVerificationService, times(1)).verifyInvitationToken(invitationToken, currentUser);
+        verify(verifierUserTokenVerificationService, times(1)).verifyInvitationTokenForPendingAuthority(invitationToken);
         verify(verifierUserAuthService, times(1)).getVerifierUserById(authorityInfo.getUserId());
         verifyNoInteractions(verifierUserActivateService);
     }

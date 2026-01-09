@@ -5,8 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
 import uk.gov.netz.api.authorization.core.service.AuthorityService;
@@ -33,51 +31,24 @@ class UserInvitationTokenVerificationServiceTest {
     private JwtTokenService jwtTokenService;
 
     @Mock
-    private AuthorityService<?> authorityService;
+    private AuthorityService authorityService;
 
     @Test
-    void verifyInvitationToken() {
+    void verifyInvitationTokenForPendingAuthority() {
         String invitationToken = "invitationToken";
         JwtTokenAction jwtTokenAction = JwtTokenAction.OPERATOR_INVITATION;
         String authorityUuid = "authorityUuid";
-        String user = "user";
         AuthorityInfoDTO authorityInfo = AuthorityInfoDTO.builder()
             .id(1L)
-            .userId(user)
+            .userId("user")
             .authorityStatus(AuthorityStatus.PENDING)
             .accountId(1L)
             .build();
-        AppUser currentUser = AppUser.builder().userId(user).build();
 
         when(jwtTokenService.resolveTokenActionClaim(invitationToken, jwtTokenAction)).thenReturn(authorityUuid);
         when(authorityService.findAuthorityByUuidAndStatusPending(authorityUuid)).thenReturn(Optional.of(authorityInfo));
 
-        AuthorityInfoDTO result = userInvitationTokenVerificationService.verifyInvitationToken(invitationToken, jwtTokenAction, currentUser);
-
-        assertThat(result).isEqualTo(authorityInfo);
-
-        verify(jwtTokenService, times(1)).resolveTokenActionClaim(invitationToken, jwtTokenAction);
-        verify(authorityService, times(1)).findAuthorityByUuidAndStatusPending(authorityUuid);
-    }
-    
-    @Test
-    void verifyInvitationToken_unauthenticated_user() {
-        String invitationToken = "invitationToken";
-        JwtTokenAction jwtTokenAction = JwtTokenAction.OPERATOR_INVITATION;
-        String authorityUuid = "authorityUuid";
-        String user = "user";
-        AuthorityInfoDTO authorityInfo = AuthorityInfoDTO.builder()
-            .id(1L)
-            .userId(user)
-            .authorityStatus(AuthorityStatus.PENDING)
-            .accountId(1L)
-            .build();
-        AppUser currentUser = null;
-
-        when(jwtTokenService.resolveTokenActionClaim(invitationToken, jwtTokenAction)).thenReturn(authorityUuid);
-        when(authorityService.findAuthorityByUuidAndStatusPending(authorityUuid)).thenReturn(Optional.of(authorityInfo));
-
-        AuthorityInfoDTO result = userInvitationTokenVerificationService.verifyInvitationToken(invitationToken, jwtTokenAction, currentUser);
+        AuthorityInfoDTO result = userInvitationTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken, jwtTokenAction);
 
         assertThat(result).isEqualTo(authorityInfo);
 
@@ -86,9 +57,7 @@ class UserInvitationTokenVerificationServiceTest {
     }
 
     @Test
-    void verifyInvitationToken_authority_not_found() {
-    	String user = "user";
-    	AppUser currentUser = AppUser.builder().userId(user).build();
+    void verifyInvitationTokenForPendingAuthority_authority_not_found() {
         String invitationToken = "invitationToken";
         JwtTokenAction jwtTokenAction = JwtTokenAction.OPERATOR_INVITATION;
         String authorityUuid = "authorityUuid";
@@ -99,36 +68,11 @@ class UserInvitationTokenVerificationServiceTest {
 
         //invoke
         BusinessException ex = assertThrows(BusinessException.class, () ->
-            userInvitationTokenVerificationService.verifyInvitationToken(invitationToken, jwtTokenAction, currentUser));
+            userInvitationTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken, jwtTokenAction));
 
         assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.INVALID_TOKEN);
 
         verify(jwtTokenService, times(1)).resolveTokenActionClaim(invitationToken, jwtTokenAction);
         verify(authorityService, times(1)).findAuthorityByUuidAndStatusPending(authorityUuid);
     }
-    
-    @Test
-	void verifyInvitationToken_not_the_current_user() {
-    	String invitationToken = "invitationToken";
-        JwtTokenAction jwtTokenAction = JwtTokenAction.OPERATOR_INVITATION;
-        String authorityUuid = "authorityUuid";
-        String user = "user";
-        AuthorityInfoDTO authorityInfo = AuthorityInfoDTO.builder()
-            .id(1L)
-            .userId("anotheruser")
-            .authorityStatus(AuthorityStatus.PENDING)
-            .accountId(1L)
-            .build();
-        AppUser currentUser = AppUser.builder().userId(user).build();
-        
-        when(jwtTokenService.resolveTokenActionClaim(invitationToken, jwtTokenAction)).thenReturn(authorityUuid);
-        when(authorityService.findAuthorityByUuidAndStatusPending(authorityUuid)).thenReturn(Optional.of(authorityInfo));
-        
-		BusinessException ex = assertThrows(BusinessException.class,
-				() -> userInvitationTokenVerificationService.verifyInvitationToken(invitationToken, jwtTokenAction, currentUser));
-		assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.INVALID_TOKEN);
-		
-		verify(jwtTokenService, times(1)).resolveTokenActionClaim(invitationToken, jwtTokenAction);
-        verify(authorityService, times(1)).findAuthorityByUuidAndStatusPending(authorityUuid);
-	}
 }

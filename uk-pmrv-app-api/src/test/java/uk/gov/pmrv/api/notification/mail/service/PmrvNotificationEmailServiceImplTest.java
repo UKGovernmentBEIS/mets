@@ -14,7 +14,7 @@ import uk.gov.netz.api.notificationapi.mail.domain.EmailRecipients;
 import uk.gov.netz.api.notificationapi.mail.service.SendEmailService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
-import uk.gov.netz.api.notificationapi.domain.NotificationContent;
+import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.notification.template.service.NotificationTemplateProcessService;
 

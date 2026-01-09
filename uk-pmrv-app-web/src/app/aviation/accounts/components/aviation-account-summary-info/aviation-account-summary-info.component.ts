@@ -13,5 +13,4 @@ export class AviationAccountSummaryInfoComponent {
   @Input() withRegistryId: boolean;
   @Input() editable = true;
   @Input() isAddressEditable = true;
-  @Input() editModeEnabled = false;
 }

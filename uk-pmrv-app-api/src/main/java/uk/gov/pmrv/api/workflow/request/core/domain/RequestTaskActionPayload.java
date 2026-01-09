@@ -168,7 +168,6 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirSaveAppl
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirSaveRespondToRegulatorCommentsRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirSaveReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirSubmitRespondToRegulatorCommentsRequestTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRApplicationSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesWithdrawalCloseApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesWithdrawalSaveApplicationRequestTaskActionPayload;
@@ -388,16 +387,15 @@ import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RfiSubmitRequestTaskActi
     @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD"),
 
 
-    @JsonSubTypes.Type(value = HSETIApplicationSaveRequestTaskActionPayload.class, name = "HSE_TI_APPLICATION_SAVE_PAYLOAD"),
+        @JsonSubTypes.Type(value = HSETIApplicationSaveRequestTaskActionPayload.class, name = "HSE_TI_APPLICATION_SAVE_PAYLOAD"),
     @JsonSubTypes.Type(value = HSETIApplicationRegulatorReviewSaveTaskActionPayload.class, name = "HSE_TI_REGULATOR_REVIEW_SAVE_PAYLOAD"),
     @JsonSubTypes.Type(value = HSETIApplicationAmendsSaveRequestTaskActionPayload.class, name = "HSE_TI_APPLICATION_AMENDS_SAVE_PAYLOAD"),
     @JsonSubTypes.Type(value = HSETIApplicationAmendsSubmitRequestTaskActionPayload.class, name = "HSE_TI_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD"),
     @JsonSubTypes.Type(value = HSETIApplicationSaveRegulatorReviewGroupDecisionRequestTaskActionPayload.class, name = "HSE_TI_SAVE_REGULATOR_REVIEW_GROUP_DECISION_PAYLOAD"),
     @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "HSE_TI_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
+
     @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "HSE_TI_REQUEST_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "HSE_TI_PEER_REVIEW_DECISION_PAYLOAD"),
-
-    @JsonSubTypes.Type(value = WasteQDRApplicationSaveRequestTaskActionPayload.class, name = "WASTE_QDR_APPLICATION_SAVE_PAYLOAD"),
 
     @JsonSubTypes.Type(value = RequestTaskActionEmptyPayload.class, name = "EMPTY_PAYLOAD"),
 

@@ -77,7 +77,6 @@ class DocumentTemplateFileControllerTest {
 
     @Test
     void generateGetDocumentTemplateFileToken() throws Exception {
-    	setupAppUser();
         Long documentTemplateId = 1L;
         UUID fileUuid = UUID.randomUUID();
         FileToken fileToken = FileToken.builder().token("token").tokenExpirationMinutes(10L).build();
@@ -98,10 +97,11 @@ class DocumentTemplateFileControllerTest {
 
     @Test
     void generateGetDocumentTemplateFileToken_forbidden() throws Exception {
-    	AppUser appUser = setupAppUser();
         Long documentTemplateId = 1L;
         UUID fileUuid = UUID.randomUUID();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(appUser, "generateGetDocumentTemplateFileToken", String.valueOf(documentTemplateId), null, null);
@@ -113,10 +113,4 @@ class DocumentTemplateFileControllerTest {
 
         verifyNoInteractions(documentTemplateFileService);
     }
-    
-    private AppUser setupAppUser() {
-		AppUser user = AppUser.builder().userId("authId").build();
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-		return user;
-	}
 }

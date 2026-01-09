@@ -53,7 +53,6 @@
             </ng-container>
           </dd>
         </div>
-
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Site name</dt>
           <dd govukSummaryListRowValue>{{ account.siteName }}</dd>
@@ -63,27 +62,6 @@
             </ng-container>
           </dd>
         </div>
-
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>First year of Registry reporting obligation</dt>
-          <dd govukSummaryListRowValue>{{ account.registryReportingFirstYear }}</dd>
-          <dd govukSummaryListRowActions>
-            <ng-container
-              *ngIf="
-                roleType === 'REGULATOR' &&
-                canChangeByStatus(account.status) &&
-                canChangeFirstYearByStatus(account.status)
-              ">
-              <a
-                govukLink
-                hidden-text="first year of Registry reporting obligation"
-                routerLink="edit/reporting-first-year">
-                Change
-              </a>
-            </ng-container>
-          </dd>
-        </div>
-
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Start date of regulated activities</dt>
           <dd govukSummaryListRowValue>{{ account.commencementDate | govukDate }}</dd>
@@ -93,13 +71,15 @@
             </ng-container>
           </dd>
         </div>
-
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>UK ETS Registry ID</dt>
           <dd govukSummaryListRowValue>{{ account.registryId }}</dd>
-          <dd govukSummaryListRowActions></dd>
+          <dd govukSummaryListRowActions>
+            <ng-container *ngIf="roleType === 'REGULATOR' && canChangeByStatus(account.status)">
+              <a govukLink hidden-text="UK ETS Registry ID" routerLink="edit/registry-id">Change</a>
+            </ng-container>
+          </dd>
         </div>
-
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>SOP ID</dt>
           <dd govukSummaryListRowValue>{{ account.sopId }}</dd>
@@ -109,37 +89,31 @@
             </ng-container>
           </dd>
         </div>
-
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Installation Emitter Type</dt>
           <dd govukSummaryListRowValue>{{ permitTypeMap?.[account.emitterType] }}</dd>
           <dd govukSummaryListRowActions></dd>
         </div>
-
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Installation Category</dt>
           <dd govukSummaryListRowValue>{{ account.installationCategory | installationCategory }}</dd>
           <dd govukSummaryListRowActions></dd>
         </div>
-
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Subsistence category</dt>
           <dd govukSummaryListRowValue>{{ account.subsistenceCategory }}</dd>
           <dd govukSummaryListRowActions></dd>
         </div>
-
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Application type</dt>
           <dd govukSummaryListRowValue>{{ account.applicationType | applicationType }}</dd>
           <dd govukSummaryListRowActions></dd>
         </div>
-
         <div govukSummaryListRow *ngIf="account.transferCode">
           <dt govukSummaryListRowKey>Transfer code</dt>
           <dd govukSummaryListRowValue>{{ account.transferCode }}</dd>
           <dd govukSummaryListRowActions></dd>
         </div>
-
         <div govukSummaryListRow>
           <ng-container *ngIf="account.location.type === 'ONSHORE'; else offshoreDetails">
             <dt govukSummaryListRowKey>Installation address</dt>
@@ -173,7 +147,6 @@
             </ng-container>
           </dd>
         </div>
-
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Received free allocation?</dt>
           <dd govukSummaryListRowValue>{{ account.faStatus ? 'Yes' : 'No' }}</dd>
@@ -247,7 +220,6 @@
               {{ companiesHouse?.name }}
             </dd>
           </div>
-
           <div govukSummaryListRow>
             <dt govukSummaryListRowKey>Legal status</dt>
             <dd govukSummaryListRowValue>{{ account.legalEntity.type | legalEntityType }}</dd>
@@ -297,7 +269,6 @@
               <div>{{ companiesHouse?.address?.country }}</div>
             </dd>
           </div>
-
           <ng-container *ngIf="account.legalEntity.holdingCompany as hc; else noHoldingCompanyTpl">
             <div govukSummaryListRow>
               <dt govukSummaryListRowKey>Holding company name</dt>
@@ -309,7 +280,6 @@
               </dd>
               <dd govukSummaryListRowValue></dd>
             </div>
-
             <div govukSummaryListRow *ngIf="hc.registrationNumber">
               <dt govukSummaryListRowKey>Holding company registration number</dt>
               <dd govukSummaryListRowValue>{{ hc.registrationNumber }}</dd>
@@ -325,7 +295,6 @@
                 class="govuk-!-padding-left-3"
                 *ngIf="roleType === 'REGULATOR' && showCompaniesHouse()"></dd>
             </div>
-
             <div govukSummaryListRow *ngIf="hc.address">
               <dt govukSummaryListRowKey>Holding company address</dt>
               <dd govukSummaryListRowValue>

@@ -21,7 +21,6 @@ import { ActivationDateComponent as DeterminationActivationDateComponent } from 
 import { AnswersComponent as DeterminationAnswersComponent } from './determination/answers/answers.component';
 import { DeterminationComponent } from './determination/determination.component';
 import { EmissionsComponent as DeterminationAnnualEmissionsComponent } from './determination/emissions/emissions.component';
-import { FirstYearComponent } from './determination/first-year/first-year.component';
 import { OfficialNoticeComponent as DeterminationOfficialNoticeComponent } from './determination/official-notice/official-notice.component';
 import { ReasonComponent as DeterminationReasonComponent } from './determination/reason/reason.component';
 import { SummaryComponent as DeterminationSummaryComponent } from './determination/summary/summary.component';
@@ -57,7 +56,6 @@ import { UncertaintyAnalysisComponent } from './uncertainty-analysis/uncertainty
     DeterminationReasonComponent,
     DeterminationSummaryComponent,
     FallbackComponent,
-    FirstYearComponent,
     FuelsComponent,
     InherentCO2Component,
     ManagementProceduresComponent,

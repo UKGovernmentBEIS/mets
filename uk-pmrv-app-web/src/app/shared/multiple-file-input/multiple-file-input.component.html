@@ -4,28 +4,24 @@
     [headerSize]="headerSize"
     (fileDelete)="onFileDeleteClick($event)"
     [files]="uploadedFiles$ | async"
-    [isDisabled]="isDisabled"></app-file-upload-list>
+    [isDisabled]="isDisabled"
+  ></app-file-upload-list>
 
   <div class="moj-multi-file-upload__upload">
     <div class="govuk-form-group">
       <span [class]="'govuk-label govuk-label--' + headerSize" id="{{ 'l.' + id }}">{{ label }}</span>
-
-      <div class="govuk-hint">
-        <ng-container *ngTemplateOutlet="customHintTemplate ? customHintTemplate : defaultHintTemplate"></ng-container>
-      </div>
-      <ng-template #defaultHintTemplate>
-        <span [id]="id + '-hint-file-size'" class="govuk-hint">
-          Your document must be a DOC, DOCX, XLS, XLSX, PPT, PPTX, VSD, VSDX, JPG, JPEG, PDF, PNG, TIF, TXT, DIB, BMP or
-          CSV file, no more than 20MB.
-        </span>
-        <span *ngIf="hint" [id]="id + '-hint'" class="govuk-hint">{{ hint }}</span>
-      </ng-template>
+      <span [id]="id + '-hint-file-size'" class="govuk-hint">
+        Your document must be a DOC, DOCX, XLS, XLSX, PPT, PPTX, VSD, VSDX, JPG, JPEG, PDF, PNG, TIF, TXT, DIB, BMP or
+        CSV file, no more than 20MB.
+      </span>
+      <span *ngIf="hint" [id]="id + '-hint'" class="govuk-hint">{{ hint }}</span>
       <div
         (dragleave)="onDragLeave()"
         (dragover)="onDragOver($event)"
         (drop)="onDrop($event)"
         [class.moj-multi-file-upload--dragover]="isDraggedOver"
-        class="moj-multi-file-upload__dropzone">
+        class="moj-multi-file-upload__dropzone"
+      >
         <input
           #input
           (blur)="onFileBlur()"
@@ -39,13 +35,15 @@
           [attr.aria-labelledby]="'l.' + id + ' ld.' + id"
           class="govuk-file-upload moj-multi-file-upload__input"
           multiple
-          type="file" />
+          type="file"
+        />
         <p class="govuk-body">{{ dropzoneHintText }}</p>
         <label
           [class.govuk-button--disabled]="isDisabled"
           [for]="id"
           id="{{ 'ld.' + id }}"
-          class="govuk-button govuk-button--secondary">
+          class="govuk-button govuk-button--secondary"
+        >
           {{ dropzoneButtonText }}
         </label>
         <div aria-live="polite" class="govuk-visually-hidden" role="status">{{ uploadStatusText$ | async }}</div>

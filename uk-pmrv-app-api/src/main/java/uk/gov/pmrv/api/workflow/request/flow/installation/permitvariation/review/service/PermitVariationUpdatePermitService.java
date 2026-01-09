@@ -44,8 +44,7 @@ public class PermitVariationUpdatePermitService {
 		installationAccountUpdateService.updateAccountUponPermitVariationGranted(
 				accountId,
 				emitterType,
-				permitContainer.getPermit().getEstimatedAnnualEmissions().getQuantity(),
-				permitContainer.getFirstYearOfReportingObligation());
+				permitContainer.getPermit().getEstimatedAnnualEmissions().getQuantity());
 	}
 	
 }

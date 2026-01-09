@@ -714,17 +714,6 @@ export class ItemLinkPipe implements PipeTransform {
         }
       }
 
-      case 'WASTE_QDR': {
-        switch (value?.taskType) {
-          case 'WASTE_QDR_APPLICATION_SUBMIT':
-            return [routerLooks + 'tasks', value.taskId, 'waste-qdr', 'submit'];
-
-          default: {
-            return ['.'];
-          }
-        }
-      }
-
       default:
         return ['.'];
     }

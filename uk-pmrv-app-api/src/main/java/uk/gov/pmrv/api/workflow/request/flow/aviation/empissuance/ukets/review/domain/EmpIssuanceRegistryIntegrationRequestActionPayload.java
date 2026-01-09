@@ -14,6 +14,6 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 @EqualsAndHashCode(callSuper = true)
 public class EmpIssuanceRegistryIntegrationRequestActionPayload extends RequestActionPayload {
 
-    private AviationOperatorDetails operatorDetails;
-    private AviationOrganisationDetails organisationDetails;
+    private EmpIssuanceOperatorDetails operatorDetails;
+    private EmpIssuanceOrganisationDetails organisationDetails;
 }

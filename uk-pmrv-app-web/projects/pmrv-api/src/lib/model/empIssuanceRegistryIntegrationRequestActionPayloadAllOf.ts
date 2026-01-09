@@ -9,12 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AviationIndividualCompanyDetails } from './aviationIndividualCompanyDetails';
-import { AviationLimitedCompanyDetails } from './aviationLimitedCompanyDetails';
-import { AviationOperatorDetails } from './aviationOperatorDetails';
-import { AviationPartnershipDetails } from './aviationPartnershipDetails';
+import { EmpIssuanceIndividualCompanyDetails } from './empIssuanceIndividualCompanyDetails';
+import { EmpIssuanceLimitedCompanyDetails } from './empIssuanceLimitedCompanyDetails';
+import { EmpIssuanceOperatorDetails } from './empIssuanceOperatorDetails';
+import { EmpIssuancePartnershipDetails } from './empIssuancePartnershipDetails';
 
 export interface EmpIssuanceRegistryIntegrationRequestActionPayloadAllOf {
-  operatorDetails?: AviationOperatorDetails;
-  organisationDetails?: AviationIndividualCompanyDetails | AviationLimitedCompanyDetails | AviationPartnershipDetails;
+  operatorDetails?: EmpIssuanceOperatorDetails;
+  organisationDetails?:
+    | EmpIssuanceIndividualCompanyDetails
+    | EmpIssuanceLimitedCompanyDetails
+    | EmpIssuancePartnershipDetails;
 }

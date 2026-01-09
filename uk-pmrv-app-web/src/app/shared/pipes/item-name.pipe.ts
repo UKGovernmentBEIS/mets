@@ -2,12 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { ItemDTO } from 'pmrv-api';
 
-import { QuarterNamePipe } from './quarter-name.pipe';
-
 @Pipe({ name: 'itemName' })
 export class ItemNamePipe implements PipeTransform {
-  private readonly quarterNamePipe = new QuarterNamePipe();
-
   transform(value: ItemDTO['taskType'], year?: string | number, customField?: boolean | string): string {
     switch (value) {
       // common
@@ -590,10 +586,6 @@ export class ItemNamePipe implements PipeTransform {
         return `${this.hsetiYearTransform(String(year))} HSE target increase sent to peer reviewer`;
       case 'HSE_TI_APPLICATION_PEER_REVIEW':
         return `Peer review ${this.hsetiYearTransform(String(year))} HSE target increase application`;
-
-      //WASTE_QDR
-      case 'WASTE_QDR_APPLICATION_SUBMIT':
-        return `Complete ${this.quarterNamePipe.transform(customField as any)} ${year} quarterly data report`;
 
       default:
         return null;

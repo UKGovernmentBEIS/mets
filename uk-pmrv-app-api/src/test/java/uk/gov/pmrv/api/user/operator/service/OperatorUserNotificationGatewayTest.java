@@ -34,6 +34,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -238,13 +239,15 @@ class OperatorUserNotificationGatewayTest {
         String installationName = "installationName";
 
         NewUserActivated operator1 = NewUserActivated.builder().userId("operator1").roleCode(AuthorityConstants.OPERATOR_ROLE_CODE).build();
+        NewUserActivated operator2 = NewUserActivated.builder().userId("operator2").roleCode(AuthorityConstants.OPERATOR_ROLE_CODE).build();
         NewUserActivated emitter1 = NewUserActivated.builder().userId("emitter1").accountId(accountId)
                 .roleCode(AuthorityConstants.EMITTER_CONTACT).build();
+        NewUserActivated emitter2 = NewUserActivated.builder().userId("emitter2").accountId(accountId)
+                .roleCode(AuthorityConstants.EMITTER_CONTACT).build();
 
-        List<NewUserActivated> activatedOperators = List.of(operator1, emitter1);
+        List<NewUserActivated> activatedOperators = List.of(operator1, operator2, emitter1, emitter2);
 
         when(accountQueryService.getAccountName(accountId)).thenReturn(installationName);
-        when(roleService.getRoleByCode(AuthorityConstants.OPERATOR_ROLE_CODE)).thenReturn(RoleDTO.builder().name("op").build());
 
         // Invoke
         operatorUserNotificationGateway.notifyUsersUpdateStatus(activatedOperators);
@@ -253,11 +256,43 @@ class OperatorUserNotificationGatewayTest {
         verify(userNotificationService, times(1))
                 .notifyEmitterContactAccountActivation(emitter1.getUserId(), installationName);
         verify(userNotificationService, times(1))
-                .notifyUserAccountActivation(operator1.getUserId(), "op");
+                .notifyEmitterContactAccountActivation(emitter2.getUserId(), installationName);
+        verify(userNotificationService, times(1))
+                .notifyUserAccountActivation(operator1.getUserId(), "Operator");
+        verify(userNotificationService, times(1))
+                .notifyUserAccountActivation(operator2.getUserId(), "Operator");
+        verify(accountQueryService, times(2))
+                .getAccountName(accountId);
+        verifyNoMoreInteractions(userNotificationService, accountQueryService);
+    }
+
+    @Test
+    void notifyUsersUpdateStatus_with_exception() {
+        Long accountId = 1L;
+        String installationName = "installationName";
+
+        NewUserActivated operator1 = NewUserActivated.builder().userId("operator1").roleCode(AuthorityConstants.OPERATOR_ROLE_CODE).build();
+        NewUserActivated operator2 = NewUserActivated.builder().userId("operator2").roleCode(AuthorityConstants.OPERATOR_ROLE_CODE).build();
+        NewUserActivated emitter1 = NewUserActivated.builder().userId("emitter1").accountId(accountId)
+                .roleCode(AuthorityConstants.EMITTER_CONTACT).build();
+
+        List<NewUserActivated> activatedOperators = List.of(emitter1, operator1, operator2);
+
+        when(accountQueryService.getAccountName(accountId))
+                .thenThrow(NullPointerException.class);
+
+        // Invoke
+        operatorUserNotificationGateway.notifyUsersUpdateStatus(activatedOperators);
+
+        // Verify
+        verify(userNotificationService, never())
+                .notifyEmitterContactAccountActivation(emitter1.getUserId(), installationName);
+        verify(userNotificationService, times(1))
+                .notifyUserAccountActivation(operator1.getUserId(), "Operator");
+        verify(userNotificationService, times(1))
+                .notifyUserAccountActivation(operator2.getUserId(), "Operator");
         verify(accountQueryService, times(1))
                 .getAccountName(accountId);
-        verify(roleService, times(1))
-        	.getRoleByCode(AuthorityConstants.OPERATOR_ROLE_CODE);
         verifyNoMoreInteractions(userNotificationService, accountQueryService);
     }
 

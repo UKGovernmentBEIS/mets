@@ -6,7 +6,6 @@ import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/re
 import { UrlRequestType } from '@shared/types/url-request-type';
 
 import {
-  InstallationAccountDTO,
   Permit,
   PermitContainer,
   PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload,
@@ -145,9 +144,7 @@ export abstract class PermitApplicationStore<T extends PermitApplicationState> e
   abstract getDeterminationHeaderHint(): string;
   abstract getDeterminationGrantText(): string;
   abstract isDeterminationTypeApplicable(): boolean;
-  abstract isDeterminationWizardComplete(
-    emissionTradingScheme?: InstallationAccountDTO['emissionTradingScheme'],
-  ): boolean;
+  abstract isDeterminationWizardComplete(): boolean;
 
   getDeterminationType$(): Observable<string> {
     return this.pipe(

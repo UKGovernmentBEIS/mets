@@ -17,13 +17,12 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-
-import uk.gov.netz.api.common.config.KeycloakProperties;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.api.token.JwtProperties;
+import uk.gov.pmrv.api.user.core.config.KeycloakProperties;
 import uk.gov.pmrv.api.user.core.domain.enumeration.KeycloakUserAttributes;
 import uk.gov.pmrv.api.user.core.domain.model.UserDetails;
 import uk.gov.pmrv.api.user.core.domain.model.UserDetailsRequest;
@@ -65,7 +64,7 @@ class AuthServiceTest {
     private Keycloak keycloakAdminClient;
 
     @Mock
-    private KeycloakUserCustomClient keycloakCustomClient;
+    private KeycloakCustomClient keycloakCustomClient;
 
     @Mock
     private KeycloakProperties keycloakProperties;

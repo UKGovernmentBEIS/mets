@@ -57,7 +57,6 @@ describe('SummaryDetailsComponent', () => {
           type: 'GRANTED',
           reason: 'requirements are fulfilled',
           activationDate: new Date('2030-01-01T00:00:00Z').toISOString(),
-          firstYearOfReportingObligation: 2022,
         },
       });
     });
@@ -75,8 +74,6 @@ describe('SummaryDetailsComponent', () => {
         'Change',
         '1 Jan 2030',
         'Change',
-        '2022',
-        'Change',
       ]);
     });
   });
@@ -93,7 +90,6 @@ describe('SummaryDetailsComponent', () => {
         determination: {
           reason: 'requirements are fulfilled',
           activationDate: new Date('2030-01-01T00:00:00Z').toISOString(),
-          firstYearOfReportingObligation: 2022,
           reasonTemplate: 'WHERE_OPERATOR_FAILED_TO_APPLY_IN_ACCORDANCE_WITH_CONDITIONS',
           logChanges: 'logChanges',
         },
@@ -111,8 +107,6 @@ describe('SummaryDetailsComponent', () => {
         'requirements are fulfilled',
         'Change',
         '1 Jan 2030',
-        'Change',
-        '2022',
         'Change',
         'Where the operator failed to apply in accordance with conditions',
         'Change',

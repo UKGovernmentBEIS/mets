@@ -1,14 +1,10 @@
-import { provideHttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, provideRouter, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import { firstValueFrom, Observable, of } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 
-import { mockClass, MockType } from '@testing';
-
-import { InstallationAccountViewService } from 'pmrv-api';
-
-import { mockedAccountPermit } from '../../../../accounts/testing/mock-data';
 import { PermitIssuanceStore } from '../../../../permit-issuance/store/permit-issuance.store';
 import { PermitVariationStore } from '../../../../permit-variation/store/permit-variation.store';
 import {
@@ -24,7 +20,6 @@ describe('EmissionsGuard', () => {
   let guard: EmissionsGuard;
   let router: Router;
   let store: PermitApplicationStore<PermitApplicationState>;
-  let accountViewService: MockType<InstallationAccountViewService>;
 
   const activatedRouteSnapshot = new ActivatedRouteSnapshot();
   activatedRouteSnapshot.params = { taskId: mockReviewState.requestTaskId };
@@ -33,24 +28,15 @@ describe('EmissionsGuard', () => {
   };
 
   describe('permit issuance', () => {
-    accountViewService = mockClass(InstallationAccountViewService);
-    accountViewService.getInstallationAccountById.mockReturnValue(
-      of({
-        ...mockedAccountPermit,
-        account: { ...mockedAccountPermit.account, emissionTradingScheme: 'UK_ETS_INSTALLATIONS' },
-      }),
-    );
     beforeEach(() => {
       TestBed.configureTestingModule({
+        imports: [RouterTestingModule, HttpClientTestingModule],
         providers: [
-          provideRouter([]),
-          provideHttpClient(),
           EmissionsGuard,
           {
             provide: PermitApplicationStore,
             useExisting: PermitIssuanceStore,
           },
-          { provide: InstallationAccountViewService, useValue: accountViewService },
         ],
       });
       guard = TestBed.inject(EmissionsGuard);
@@ -143,25 +129,15 @@ describe('EmissionsGuard', () => {
   });
 
   describe('permit variation', () => {
-    accountViewService = mockClass(InstallationAccountViewService);
-    accountViewService.getInstallationAccountById.mockReturnValue(
-      of({
-        ...mockedAccountPermit,
-        account: { ...mockedAccountPermit.account, emissionTradingScheme: 'UK_ETS_INSTALLATIONS' },
-      }),
-    );
-
     beforeEach(() => {
       TestBed.configureTestingModule({
+        imports: [RouterTestingModule, HttpClientTestingModule],
         providers: [
-          provideRouter([]),
-          provideHttpClient(),
           EmissionsGuard,
           {
             provide: PermitApplicationStore,
             useExisting: PermitVariationStore,
           },
-          { provide: InstallationAccountViewService, useValue: accountViewService },
         ],
       });
       guard = TestBed.inject(EmissionsGuard);

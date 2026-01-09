@@ -242,51 +242,6 @@ class AccountQueryServiceTest {
         assertEquals(EmissionTradingScheme.UK_ETS_AVIATION, accountEmissionTradingScheme);
         verify(accountRepository, times(1)).findById(accountId);
     }
-    
-    @Test
-    void getThirdPartyDataProviderId() {
-        final Long accountId = 1L;
-        final Long thirdPartyDataProviderId = 2L;
-        Account account = Mockito.mock(Account.class);
-
-        when(account.getThirdPartyDataProviderId()).thenReturn(thirdPartyDataProviderId);
-        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
-
-        //assert
-        Optional<Long> accountThirdPartyDataProvider = accountQueryService.getThirdPartyDataProviderId(accountId);
-
-        assertThat(accountThirdPartyDataProvider).isPresent();
-        assertEquals(thirdPartyDataProviderId, accountThirdPartyDataProvider.get());
-        verify(accountRepository, times(1)).findById(accountId);
-    }
-    
-    @Test
-    void getThirdPartyDataProviderId_empty() {
-        final Long accountId = 1L;
-        
-        Account account = Mockito.mock(Account.class);
-
-        when(account.getThirdPartyDataProviderId()).thenReturn(null);
-        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
-
-        Optional<Long> accountThirdPartyDataProvider = accountQueryService.getThirdPartyDataProviderId(accountId);
-
-        assertThat(accountThirdPartyDataProvider).isEmpty();
-        verify(accountRepository, times(1)).findById(accountId);
-    }
-
-    @Test
-    void getThirdPartyDataProviderId_account_not_found() {
-        final Long accountId = 1L;
-
-        when(accountRepository.findById(accountId)).thenReturn(Optional.empty());
-
-        BusinessException be = assertThrows(BusinessException.class, () ->
-                accountQueryService.getThirdPartyDataProviderId(accountId));
-
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.RESOURCE_NOT_FOUND);
-        verify(accountRepository, times(1)).findById(accountId);
-    }
 
     public enum TestAccountStatus implements AccountStatus {
         TEST_ACCOUNT_STATUS

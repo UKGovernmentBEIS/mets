@@ -12,8 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-
-import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.security.AppSecurityComponent;
@@ -175,9 +173,6 @@ class OperatorUserRegistrationControllerTest {
     
     @Test
     void acceptInvitation() throws Exception {
-    	AppUser currentUser = AppUser.builder().userId("authId").build();
-    	when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
-    	
     	TokenDTO tokenDTO = new TokenDTO();
     	tokenDTO.setToken("token");
 
@@ -189,7 +184,7 @@ class OperatorUserRegistrationControllerTest {
             .invitationStatus(UserInvitationStatus.ACCEPTED)
             .build();
 
-    	when(operatorUserAcceptInvitationService.acceptInvitation(tokenDTO.getToken(), currentUser))
+    	when(operatorUserAcceptInvitationService.acceptInvitation(tokenDTO.getToken()))
     		.thenReturn(operatorInvitedUserInfo);
 
         mockMvc.perform(MockMvcRequestBuilders.post(USER_CONTROLLER_PATH + ACCEPT_INVITATION_PATH)
@@ -202,60 +197,51 @@ class OperatorUserRegistrationControllerTest {
             .andExpect(jsonPath("$.roleCode").value(operatorInvitedUserInfo.getRoleCode()))
             .andExpect(jsonPath("$.invitationStatus").value(operatorInvitedUserInfo.getInvitationStatus().name()));
 
-        verify(operatorUserAcceptInvitationService, times(1)).acceptInvitation(tokenDTO.getToken(), currentUser);
+        verify(operatorUserAcceptInvitationService, times(1)).acceptInvitation(tokenDTO.getToken());
     }
 
     @Test
     void acceptAuthorityAndEnableInvitedUserWithCredentials() throws Exception {
-    	AppUser currentUser = AppUser.builder().userId("authId").build();
-    	when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
-    	
-        OperatorUserRegistrationWithCredentialsDTO operatorUserRegistrationWithCredentialsDTO = OperatorUserRegistrationWithCredentialsDTO.builder()
+        OperatorUserRegistrationWithCredentialsDTO user = OperatorUserRegistrationWithCredentialsDTO.builder()
                 .emailToken("token").firstName("fn").lastName("ln").build();
         OperatorUserDTO userDTO = OperatorUserDTO.builder().email("email").firstName("fn").lastName("ln").build();
 
-        when(operatorUserActivationService.acceptAuthorityAndEnableInvitedUserWithCredentials(operatorUserRegistrationWithCredentialsDTO, currentUser)).thenReturn(userDTO);
+        when(operatorUserActivationService.acceptAuthorityAndEnableInvitedUserWithCredentials(user)).thenReturn(userDTO);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put(USER_CONTROLLER_PATH + ENABLE_WITH_CREDENTIALS_FROM_INVITATION)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(operatorUserRegistrationWithCredentialsDTO)))
+                        .content(mapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("fn"))
                 .andExpect(jsonPath("$.lastName").value("ln"))
                 .andExpect(jsonPath("$.email").value("email"));
 
-        verify(operatorUserActivationService, times(1)).acceptAuthorityAndEnableInvitedUserWithCredentials(operatorUserRegistrationWithCredentialsDTO, currentUser);
+        verify(operatorUserActivationService, times(1)).acceptAuthorityAndEnableInvitedUserWithCredentials(user);
     }
 
     @Test
     void acceptAuthorityAndEnableInvitedUser() throws Exception {
-    	AppUser currentUser = AppUser.builder().userId("authId").build();
-    	when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
-    	
-        OperatorUserRegistrationDTO operatorUserRegistrationDTO = OperatorUserRegistrationDTO.builder()
+        OperatorUserRegistrationDTO user = OperatorUserRegistrationDTO.builder()
             .emailToken("token").firstName("fn").lastName("ln").build();
         OperatorUserDTO userDTO = OperatorUserDTO.builder().email("email").firstName("fn").lastName("ln").build();
 
-        when(operatorUserActivationService.acceptAuthorityAndEnableInvitedUser(operatorUserRegistrationDTO, currentUser)).thenReturn(userDTO);
+        when(operatorUserActivationService.acceptAuthorityAndEnableInvitedUser(user)).thenReturn(userDTO);
 
         mockMvc.perform(
             MockMvcRequestBuilders.put(USER_CONTROLLER_PATH + ENABLE_NO_CREDENTIALS_FROM_INVITATION)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(operatorUserRegistrationDTO)))
+                .content(mapper.writeValueAsString(user)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.firstName").value("fn"))
             .andExpect(jsonPath("$.lastName").value("ln"))
             .andExpect(jsonPath("$.email").value("email"));
 
-        verify(operatorUserActivationService, times(1)).acceptAuthorityAndEnableInvitedUser(operatorUserRegistrationDTO, currentUser);
+        verify(operatorUserActivationService, times(1)).acceptAuthorityAndEnableInvitedUser(user);
     }
     
     @Test
     void acceptAuthorityAndSetCredentialsToUser() throws Exception {
-    	AppUser currentUser = AppUser.builder().userId("authId").build();
-    	when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
-    	
         InvitedUserCredentialsDTO operatorUser = InvitedUserCredentialsDTO.builder()
             .invitationToken("token")
             .password("password")
@@ -267,6 +253,6 @@ class OperatorUserRegistrationControllerTest {
                 .content(mapper.writeValueAsString(operatorUser)))
             .andExpect(status().isNoContent());
 
-        verify(operatorUserActivationService, times(1)).acceptAuthorityAndSetCredentialsToUser(operatorUser, currentUser);
+        verify(operatorUserActivationService, times(1)).acceptAuthorityAndSetCredentialsToUser(operatorUser);
     }
 }

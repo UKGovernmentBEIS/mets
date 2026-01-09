@@ -93,7 +93,6 @@ class AviationReportingDataControllerTest {
     
     @Test
     void getReportedAirport() throws Exception {
-    	setupAppUser();
         AviationRptAirportsYearDTO airportsYearDTO  = AviationRptAirportsYearDTO.builder().icaos(Set.of("LEPA", "EGLL")).year(Year.of(2022)).build();
         AviationRptAirportsDTO airport1 = AviationRptAirportsDTO.builder()
             .icao("LEPA")
@@ -124,9 +123,10 @@ class AviationReportingDataControllerTest {
 
     @Test
     void getReportedAirports_forbidden() throws Exception {
-    	AppUser appUser = setupAppUser();
+        AppUser appUser = AppUser.builder().build();
         AviationRptAirportsYearDTO airportsYearDTO  = AviationRptAirportsYearDTO.builder().icaos(Set.of("LEPA", "EGLL")).year(Year.of(2022)).build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
             .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -139,10 +139,4 @@ class AviationReportingDataControllerTest {
 
         verifyNoInteractions(aviationRptAirportsService);
     }
-    
-    private AppUser setupAppUser() {
-		AppUser user = AppUser.builder().userId("authId").build();
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-		return user;
-	}
 }

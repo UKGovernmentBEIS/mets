@@ -5,8 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.Authority;
 import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
@@ -59,24 +57,22 @@ class RegulatorUserActivateServiceTest {
             .competentAuthority(CompetentAuthorityEnum.ENGLAND)
             .userId("userId")
             .build();
-        
-        AppUser currentUser = AppUser.builder().userId("userId").build();
 
         final UserInfoDTO invitee = UserInfoDTO.builder().firstName("invitee").email("email").build();
         final UserInfoDTO inviter = UserInfoDTO.builder().firstName("inviter").build();
 
-        when(regulatorUserTokenVerificationService.verifyInvitationToken(
-        		invitedUserCredentialsDTO.getInvitationToken(), currentUser))
+        when(regulatorUserTokenVerificationService.verifyInvitationTokenForPendingAuthority(
+        		invitedUserCredentialsDTO.getInvitationToken()))
             .thenReturn(authorityInfo);
         when(regulatorAuthorityService.acceptAuthority(1L)).thenReturn(
             Authority.builder().userId("userId").createdBy("creator").build());
         when(userAuthService.getUserByUserId("userId")).thenReturn(invitee);
         when(userAuthService.getUserByUserId("creator")).thenReturn(inviter);
 
-        regulatorUserAcceptInvitationService.acceptAuthorityAndActivateInvitedUser(invitedUserCredentialsDTO, currentUser);
+        regulatorUserAcceptInvitationService.acceptAuthorityAndActivateInvitedUser(invitedUserCredentialsDTO);
 
         verify(regulatorUserTokenVerificationService, times(1))
-            .verifyInvitationToken(invitedUserCredentialsDTO.getInvitationToken(), currentUser);
+            .verifyInvitationTokenForPendingAuthority(invitedUserCredentialsDTO.getInvitationToken());
         verify(regulatorUserRegisterValidationService, times(1)).validate(authorityInfo.getUserId(), authorityInfo.getCompetentAuthority());
         verify(regulatorAuthorityService, times(1)).acceptAuthority(authorityInfo.getId());
         verify(userRoleTypeService, times(1)).createUserRoleTypeOrThrowExceptionIfExists(authorityInfo.getUserId(), RoleTypeConstants.REGULATOR);
@@ -97,20 +93,18 @@ class RegulatorUserActivateServiceTest {
 
         final UserInfoDTO invitee = UserInfoDTO.builder().firstName("invitee").email("email").build();
         final UserInfoDTO inviter = UserInfoDTO.builder().firstName("inviter").build();
-        
-        AppUser currentUser = AppUser.builder().userId("userId").build();
 
-		when(regulatorUserTokenVerificationService.verifyInvitationToken("token", currentUser))
+		when(regulatorUserTokenVerificationService.verifyInvitationTokenForPendingAuthority("token"))
 				.thenReturn(authorityInfo);
         when(regulatorAuthorityService.acceptAuthority(1L)).thenReturn(
             Authority.builder().userId("userId").createdBy("creator").build());
         when(userAuthService.getUserByUserId("userId")).thenReturn(invitee);
         when(userAuthService.getUserByUserId("creator")).thenReturn(inviter);
 
-        regulatorUserAcceptInvitationService.acceptAuthorityForRegisteredRegulatorInvitedUser("token", currentUser);
+        regulatorUserAcceptInvitationService.acceptAuthorityForRegisteredRegulatorInvitedUser("token");
 
         verify(regulatorUserTokenVerificationService, times(1))
-            .verifyInvitationToken("token", currentUser);
+            .verifyInvitationTokenForPendingAuthority("token");
         verify(regulatorAuthorityService, times(1)).acceptAuthority(authorityInfo.getId());
         verify(userRoleTypeService, times(1)).createUserRoleTypeOrThrowExceptionIfExists(authorityInfo.getUserId(), RoleTypeConstants.REGULATOR);
         verify(userAuthService, times(1)).getUserByUserId("userId");

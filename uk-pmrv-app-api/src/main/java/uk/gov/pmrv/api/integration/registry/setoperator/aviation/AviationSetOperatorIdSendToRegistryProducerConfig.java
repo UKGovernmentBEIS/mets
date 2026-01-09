@@ -8,21 +8,21 @@ import org.springframework.kafka.core.KafkaTemplate;
 import uk.gov.netz.api.kafka.producer.KafkaCorrelationHeaderProducerInterceptor;
 import uk.gov.netz.api.kafka.producer.KafkaCorrelationParentHeaderProducerInterceptor;
 import uk.gov.netz.api.kafka.producer.NetzKafkaProducerFactory;
-import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 import uk.gov.pmrv.api.integration.registry.common.AviationProducerConfigProperties;
+import uk.gov.pmrv.api.integration.registry.setoperator.common.SetOperatorIdEventOutcome;
 
 @Configuration
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "registry.integration.set.operator.id.enabled", havingValue = "true", matchIfMissing = false)
 public class AviationSetOperatorIdSendToRegistryProducerConfig {
 
-    private final NetzKafkaProducerFactory<String, OperatorUpdateEventOutcome> netzKafkaProducerFactory;
+    private final NetzKafkaProducerFactory<String, SetOperatorIdEventOutcome> netzKafkaProducerFactory;
     private final AviationProducerConfigProperties aviationProducerConfigProperties;
 
     @Bean
-    KafkaTemplate<String, OperatorUpdateEventOutcome> aviationSetOperatorIdKafkaTemplate(
-            KafkaCorrelationHeaderProducerInterceptor<String, OperatorUpdateEventOutcome> correlationHeaderInterceptor,
-            KafkaCorrelationParentHeaderProducerInterceptor<String, OperatorUpdateEventOutcome> correlationParentHeaderInterceptor) {
+    KafkaTemplate<String, SetOperatorIdEventOutcome> aviationSetOperatorIdKafkaTemplate(
+            KafkaCorrelationHeaderProducerInterceptor<String, SetOperatorIdEventOutcome> correlationHeaderInterceptor,
+            KafkaCorrelationParentHeaderProducerInterceptor<String, SetOperatorIdEventOutcome> correlationParentHeaderInterceptor) {
         return netzKafkaProducerFactory.createKafkaTemplate(aviationProducerConfigProperties);
     }
 

@@ -459,8 +459,6 @@ describe('TaskTypeToBreadcrumbPipe', () => {
     expect(pipe.transform('HSE_TI_WAIT_FOR_PEER_REVIEW')).toEqual('Peer review HSE target increase application');
     expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW')).toEqual('Peer review HSE target increase application');
 
-    expect(pipe.transform('WASTE_QDR_APPLICATION_SUBMIT')).toEqual('Complete quarterly data report');
-
     expect(pipe.transform(null)).toBeNull();
   });
 });

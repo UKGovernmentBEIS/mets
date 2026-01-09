@@ -31,10 +31,9 @@ import { AddressComponent } from './edit/address/address.component';
 import { CommencementDateComponent } from './edit/commencement-date/commencement-date.component';
 import { FaStatusComponent } from './edit/fa-status/fa-status.component';
 import { NameComponent } from './edit/name/name.component';
-import { AccountEditReportingFirstYearComponent } from './edit/reporting-first-year/reporting-first-year.component';
+import { RegistryIdComponent } from './edit/registry-id/registry-id.component';
 import { SiteNameComponent } from './edit/site-name/site-name.component';
 import { SopIdComponent } from './edit/sop-id/sop-id.component';
-import { FirstYearStatusGuard } from './guards/first-year-status.guard';
 import { TriggerAirComponent } from './trigger-air/trigger-air.component';
 import { TriggerDoalComponent } from './trigger-doal/trigger-doal.component';
 import { TriggerHseTiComponent } from './trigger-hseti/trigger-hseti.component';
@@ -152,6 +151,17 @@ const routes: Routes = [
             canDeactivate: [PendingRequestGuard],
           },
           {
+            path: 'registry-id',
+            data: {
+              pageTitle: 'Edit UK ETS Registry ID',
+              roleTypeGuards: 'REGULATOR',
+              breadcrumb: ({ accountPermit }) => `Edit ${accountPermit.account.name} UK ETS Registry ID`,
+            },
+            component: RegistryIdComponent,
+            canActivate: [RoleTypeGuard, AccountStatusGuard],
+            canDeactivate: [PendingRequestGuard],
+          },
+          {
             path: 'sop-id',
             data: {
               pageTitle: 'Edit SOP ID',
@@ -171,18 +181,6 @@ const routes: Routes = [
             },
             component: SiteNameComponent,
             canActivate: [RoleTypeGuard, AccountStatusGuard],
-            canDeactivate: [PendingRequestGuard],
-          },
-          {
-            path: 'reporting-first-year',
-            data: {
-              pageTitle: 'Edit first year of Registry reporting obligation',
-              roleTypeGuards: 'REGULATOR',
-              breadcrumb: ({ accountPermit }) =>
-                `Edit ${accountPermit.account.name} first year of Registry reporting obligation`,
-            },
-            component: AccountEditReportingFirstYearComponent,
-            canActivate: [RoleTypeGuard, AccountStatusGuard, FirstYearStatusGuard],
             canDeactivate: [PendingRequestGuard],
           },
           {

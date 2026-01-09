@@ -183,8 +183,6 @@ const requestTaskEditActionsMap: Partial<
     'HSE_TI_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR',
     'HSE_TI_UPLOAD_ATTACHMENT',
   ],
-
-  WASTE_QDR_APPLICATION_SUBMIT: ['WASTE_QDR_SAVE_APPLICATION'],
 };
 
 @Injectable({ providedIn: 'root' })

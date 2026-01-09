@@ -1,15 +1,10 @@
 package uk.gov.pmrv.api.account.installation.service;
 
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.HoldingCompany;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
@@ -23,7 +18,6 @@ import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateFaStatusDTO;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateRegistryReportingFirstYearDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.TransferCodeStatus;
@@ -31,7 +25,7 @@ import uk.gov.pmrv.api.account.installation.repository.InstallationAccountReposi
 import uk.gov.pmrv.api.account.service.LegalEntityValidationService;
 import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -64,14 +58,6 @@ class InstallationAccountUpdateServiceTest {
     @Mock
     private InstallationAccountRepository installationAccountRepository;
 
-    private Validator validator;
-
-    @BeforeEach
-    void setUp() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
-    }
-
     @Test
     void updateAccountSiteName() {
         Long accountId = 1L;
@@ -84,6 +70,21 @@ class InstallationAccountUpdateServiceTest {
         service.updateAccountSiteName(accountId, newSiteName);
 
         assertThat(account.getSiteName()).isEqualTo(newSiteName);
+        verify(installationAccountQueryService, times(1)).getAccountById(accountId);
+    }
+
+    @Test
+    void updateAccountRegistryId() {
+        Long accountId = 1L;
+        Integer newRegistryId = 1234568;
+
+        InstallationAccount account = InstallationAccount.builder().id(accountId).registryId(1234567).build();
+
+        when(installationAccountQueryService.getAccountById(accountId)).thenReturn(account);
+
+        service.updateAccountRegistryId(accountId, newRegistryId);
+
+        assertThat(account.getRegistryId()).isEqualTo(newRegistryId);
         verify(installationAccountQueryService, times(1)).getAccountById(accountId);
     }
 
@@ -146,7 +147,7 @@ class InstallationAccountUpdateServiceTest {
 
         when(installationAccountQueryService.getAccountById(accountId)).thenReturn(account);
 
-        service.updateAccountUponPermitGranted(accountId, emitterType, BigDecimal.valueOf(40000),null);
+        service.updateAccountUponPermitGranted(accountId, emitterType, BigDecimal.valueOf(40000));
 
         assertEquals(emitterType, account.getEmitterType());
         assertEquals(installationCategory, account.getInstallationCategory());
@@ -168,7 +169,7 @@ class InstallationAccountUpdateServiceTest {
 
         when(installationAccountQueryService.getAccountById(accountId)).thenReturn(account);
 
-        service.updateAccountUponPermitVariationGranted(accountId, emitterType, BigDecimal.valueOf(40000),null);
+        service.updateAccountUponPermitVariationGranted(accountId, emitterType, BigDecimal.valueOf(40000));
 
         assertEquals(EmitterType.HSE, account.getEmitterType());
         assertEquals(installationCategory, account.getInstallationCategory());
@@ -190,7 +191,7 @@ class InstallationAccountUpdateServiceTest {
 
         when(installationAccountQueryService.getAccountById(accountId)).thenReturn(account);
 
-        service.updateAccountUponPermitVariationRegulatorLedSubmit(accountId, emitterType, BigDecimal.valueOf(40000),null);
+        service.updateAccountUponPermitVariationRegulatorLedSubmit(accountId, emitterType, BigDecimal.valueOf(40000));
 
         assertEquals(EmitterType.GHGE, account.getEmitterType());
         assertEquals(installationCategory, account.getInstallationCategory());
@@ -314,21 +315,17 @@ class InstallationAccountUpdateServiceTest {
     @Test
     void updateAccountUponTransferBGranted() {
         Long accountId = 1L;
-        Long accountAid = 2L;
         EmitterType emitterType = EmitterType.GHGE;
         InstallationCategory installationCategory = InstallationCategory.A;
-        Integer registryReportingFirstYear = 2022;
 
         InstallationAccount account = InstallationAccount.builder().id(accountId)
             .emitterType(EmitterType.HSE)
             .installationCategory(InstallationCategory.B)
-            .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
             .build();
 
         when(installationAccountQueryService.getAccountById(accountId)).thenReturn(account);
-        when(installationAccountQueryService.getRegistryReportingFirstYear(accountAid)).thenReturn(registryReportingFirstYear);
 
-        service.updateAccountUponTransferBGranted(accountId, emitterType, accountAid,BigDecimal.valueOf(40000));
+        service.updateAccountUponTransferBGranted(accountId, emitterType, BigDecimal.valueOf(40000));
 
         assertEquals(EmitterType.GHGE, account.getEmitterType());
         assertEquals(installationCategory, account.getInstallationCategory());
@@ -378,37 +375,6 @@ class InstallationAccountUpdateServiceTest {
         service.updateCommencementDate(accountId, updateCommencementDateDTO);
 
         assertThat(account.getCommencementDate()).isEqualTo(updateCommencementDateDTO.getCommencementDate());
-        verify(installationAccountQueryService, times(1)).getAccountById(accountId);
-    }
-
-    @Test
-    void updateRegistryReportingFirstYear_fail() {
-        Long accountId = 1L;
-        int firstYear = 2020;
-        InstallationAccount account = InstallationAccount.builder().id(accountId).build();
-        AccountUpdateRegistryReportingFirstYearDTO accountUpdateRegistryReportingFirstYearDTO =
-                AccountUpdateRegistryReportingFirstYearDTO.builder()
-                        .registryReportingFirstYear(firstYear).build();
-        when(installationAccountQueryService.getAccountById(accountId)).thenReturn(account);
-
-        service.updateRegistryReportingFirstYear(accountId, accountUpdateRegistryReportingFirstYearDTO);
-
-        assertThat(validator.validate(accountUpdateRegistryReportingFirstYearDTO)).hasSize(1);
-    }
-
-    @Test
-    void updateRegistryReportingFirstYear_success() {
-        Long accountId = 1L;
-        int firstYear = LocalDate.now().getYear();
-        InstallationAccount account = InstallationAccount.builder().id(accountId).build();
-        AccountUpdateRegistryReportingFirstYearDTO accountUpdateRegistryReportingFirstYearDTO =
-                AccountUpdateRegistryReportingFirstYearDTO.builder()
-                        .registryReportingFirstYear(firstYear).build();
-        when(installationAccountQueryService.getAccountById(accountId)).thenReturn(account);
-
-        service.updateRegistryReportingFirstYear(accountId, accountUpdateRegistryReportingFirstYearDTO);
-
-        assertThat(account.getRegistryReportingFirstYear()).isEqualTo(accountUpdateRegistryReportingFirstYearDTO.getRegistryReportingFirstYear());
         verify(installationAccountQueryService, times(1)).getAccountById(accountId);
     }
 }

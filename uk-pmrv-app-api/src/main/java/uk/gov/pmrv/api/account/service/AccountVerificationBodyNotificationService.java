@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
 import uk.gov.netz.api.authorization.verifier.service.VerifierAuthorityQueryService;
-import uk.gov.netz.api.notificationapi.system.SystemNotificationInfo;
 import uk.gov.pmrv.api.account.domain.Account;
-import uk.gov.pmrv.api.notification.system.SystemNotificationProcessAndSendService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.pmrv.api.notification.message.domain.SystemMessageNotificationInfo;
+import uk.gov.pmrv.api.notification.message.domain.enumeration.SystemMessageNotificationType;
+import uk.gov.pmrv.api.notification.message.service.SystemMessageNotificationService;
 
 import java.util.List;
 import java.util.Map;
@@ -17,14 +17,14 @@ import java.util.Set;
 @Service
 public class AccountVerificationBodyNotificationService {
     
-    private final SystemNotificationProcessAndSendService systemMessageNotificationService;
+    private final SystemMessageNotificationService systemMessageNotificationService;
     private final VerifierAuthorityQueryService verifierAuthorityQueryService;
     private final OperatorAuthorityQueryService operatorAuthorityQueryService;
 
     public void notifyUsersForVerificationBodyApppointment(Long verificationBodyId, Account account) {
         List<String> verifierAdmins = verifierAuthorityQueryService.findVerifierAdminsByVerificationBody(verificationBodyId);
         verifierAdmins
-            .forEach(ver -> systemMessageNotificationService.processAndSend(
+            .forEach(ver -> systemMessageNotificationService.generateAndSendNotificationSystemMessage(
                     createNewVerificationBodyInstallationSystemMessage(account, ver)));
     }
     
@@ -33,15 +33,15 @@ public class AccountVerificationBodyNotificationService {
             .forEach(acc -> {
                 List<String> operatorAdmins = operatorAuthorityQueryService.findActiveOperatorAdminUsersByAccount(acc.getId());
                 operatorAdmins.forEach(op ->
-                        systemMessageNotificationService.processAndSend(
+                        systemMessageNotificationService.generateAndSendNotificationSystemMessage(
                             createVerifierNoLongerAvailableSystemMessage(acc, op)));
             });
     }
     
-    private SystemNotificationInfo createNewVerificationBodyInstallationSystemMessage(Account account, String verifierAdmin) {
-        return SystemNotificationInfo.builder()
-        		.template(PmrvNotificationTemplateName.NEW_VERIFICATION_BODY_EMITTER.getName())
-                .parameters(Map.of(
+    private SystemMessageNotificationInfo createNewVerificationBodyInstallationSystemMessage(Account account, String verifierAdmin) {
+        return SystemMessageNotificationInfo.builder()
+                .messageType(SystemMessageNotificationType.NEW_VERIFICATION_BODY_EMITTER)
+                .messageParameters(Map.of(
                         "emitterName", account.getName(),
                         "emitterId", account.getEmitterId()))
                 .accountId(account.getId())
@@ -49,11 +49,11 @@ public class AccountVerificationBodyNotificationService {
                 .build();
     }
     
-    private SystemNotificationInfo createVerifierNoLongerAvailableSystemMessage(
+    private SystemMessageNotificationInfo createVerifierNoLongerAvailableSystemMessage(
             Account account, String operatorAdmin) {
-        return SystemNotificationInfo.builder()
-        		.template(PmrvNotificationTemplateName.VERIFIER_NO_LONGER_AVAILABLE.getName())
-                .parameters(Map.of("accountId", account.getId()))
+        return SystemMessageNotificationInfo.builder()
+                .messageType(SystemMessageNotificationType.VERIFIER_NO_LONGER_AVAILABLE)
+                .messageParameters(Map.of("accountId", account.getId()))
                 .accountId(account.getId())
                 .receiver(operatorAdmin)
                 .build();

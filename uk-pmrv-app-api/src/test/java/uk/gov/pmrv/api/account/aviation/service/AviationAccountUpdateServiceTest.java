@@ -12,7 +12,6 @@ import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus
 import uk.gov.pmrv.api.account.domain.LocationOnShoreState;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
@@ -57,16 +56,19 @@ class AviationAccountUpdateServiceTest {
         String emitterId = "emitterId";
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         Long sopId = 1L;
+        Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
         AppUser appUser = AppUser.builder().userId("userId").build();
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
-                sopId, crcoCode, commencementDate);
+                sopId, registryId, crcoCode, commencementDate);
 
         String newAccountName = "newAccountName";
         Long newSopId = 2L;
+        Integer newRegistryId = 2;
         String newCrcoCode = "newCrcoCode";
+        LocalDate newCommencementDate = LocalDate.now().plusDays(1);
         LocationOnShoreStateDTO locationDTO = LocationOnShoreStateDTO.builder()
                 .city("city")
                 .country("GR")
@@ -86,7 +88,7 @@ class AviationAccountUpdateServiceTest {
                 .build();
 
         AviationAccountUpdateDTO accountUpdateDTO =
-                createAccountUpdateDTO(newAccountName, newSopId, newCrcoCode, locationDTO);
+                createAccountUpdateDTO(newAccountName, newSopId, newRegistryId, newCrcoCode, newCommencementDate, locationDTO);
 
         when(aviationAccountQueryService.getAccountById(accountId)).thenReturn(account);
         when(aviationAccountQueryService.isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(false);
@@ -97,7 +99,9 @@ class AviationAccountUpdateServiceTest {
 
         assertThat(account.getName()).isEqualTo(newAccountName);
         assertThat(account.getCrcoCode()).isEqualTo(newCrcoCode);
+        assertThat(account.getRegistryId()).isEqualTo(newRegistryId);
         assertThat(account.getSopId()).isEqualTo(newSopId);
+        assertThat(account.getCommencementDate()).isEqualTo(newCommencementDate);
         assertThat(account.getLocation()).isEqualTo(location);
         verify(aviationAccountQueryService, times(1)).getAccountById(accountId);
         verify(aviationAccountQueryService, times(1)).isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId);
@@ -113,12 +117,13 @@ class AviationAccountUpdateServiceTest {
         String emitterId = "emitterId";
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         Long sopId = 1L;
+        Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
         AppUser appUser = AppUser.builder().userId("userId").build();
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
-                sopId, crcoCode, commencementDate);
+                sopId, registryId, crcoCode, commencementDate);
         account.setLocation(LocationOnShoreState.builder()
                 .address(AddressState.builder()
                         .city("city")
@@ -131,7 +136,9 @@ class AviationAccountUpdateServiceTest {
 
         String newAccountName = "newAccountName";
         Long newSopId = 2L;
+        Integer newRegistryId = 2;
         String newCrcoCode = "newCrcoCode";
+        LocalDate newCommencementDate = LocalDate.now().plusDays(1);
         LocationOnShoreStateDTO locationDTO = LocationOnShoreStateDTO.builder()
                 .city("cityNew")
                 .country("GR")
@@ -151,7 +158,7 @@ class AviationAccountUpdateServiceTest {
                 .build();
 
         AviationAccountUpdateDTO accountUpdateDTO =
-                createAccountUpdateDTO(newAccountName, newSopId, newCrcoCode, locationDTO);
+                createAccountUpdateDTO(newAccountName, newSopId, newRegistryId, newCrcoCode, newCommencementDate, locationDTO);
 
         when(aviationAccountQueryService.getAccountById(accountId)).thenReturn(account);
         when(aviationAccountQueryService.isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(false);
@@ -162,7 +169,9 @@ class AviationAccountUpdateServiceTest {
 
         assertThat(account.getName()).isEqualTo(newAccountName);
         assertThat(account.getCrcoCode()).isEqualTo(newCrcoCode);
+        assertThat(account.getRegistryId()).isEqualTo(newRegistryId);
         assertThat(account.getSopId()).isEqualTo(newSopId);
+        assertThat(account.getCommencementDate()).isEqualTo(newCommencementDate);
         assertThat(account.getLocation()).isEqualTo(location);
         verify(aviationAccountQueryService, times(1)).getAccountById(accountId);
         verify(aviationAccountQueryService, times(1)).isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId);
@@ -178,19 +187,22 @@ class AviationAccountUpdateServiceTest {
         String emitterId = "emitterId";
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         Long sopId = 1L;
+        Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
         AppUser appUser = AppUser.builder().userId("userId").build();
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
-                sopId, crcoCode, commencementDate);
+                sopId, registryId, crcoCode, commencementDate);
 
         String newAccountName = "newAccountName";
         Long newSopId = 2L;
+        Integer newRegistryId = 2;
         String newCrcoCode = "newCrcoCode";
+        LocalDate newCommencementDate = LocalDate.now().plusDays(1);
 
         AviationAccountUpdateDTO accountUpdateDTO =
-                createAccountUpdateDTO(newAccountName, newSopId, newCrcoCode, null);
+                createAccountUpdateDTO(newAccountName, newSopId, newRegistryId, newCrcoCode, newCommencementDate, null);
 
         when(aviationAccountQueryService.getAccountById(accountId)).thenReturn(account);
         when(aviationAccountQueryService.isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(true);
@@ -207,34 +219,6 @@ class AviationAccountUpdateServiceTest {
     }
 
     @Test
-    void updateAviationAccount_validateCommencementDate() {
-
-        Long accountId = 1L;
-        String accountName = "accountName";
-        String emitterId = "emitterId";
-        EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
-        Long sopId = 1L;
-        String crcoCode = "crcoCode";
-        LocalDate commencementDate = LocalDate.of(2020,1,1);
-
-        AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme, sopId, crcoCode, commencementDate);
-
-        AccountUpdateCommencementDateDTO accountUpdateCommencementDateDTO = AccountUpdateCommencementDateDTO
-                .builder()
-                .commencementDate(commencementDate).build();
-
-        when(aviationAccountQueryService.getAccountById(accountId)).thenReturn(account);
-
-        BusinessException businessException = assertThrows(BusinessException.class,
-                () -> aviationAccountUpdateService.updateAndValidateAccountCommencementDate(accountId, accountUpdateCommencementDateDTO));
-
-        verify(aviationAccountQueryService, times(1)).getAccountById(accountId);
-        assertEquals(MetsErrorCode.AVIATION_COMMENCEMENT_DATE_NOT_BEFORE_2021_NOT_AFTER_CURRENT_YEAR, businessException.getErrorCode());
-        verify(locationMapper, never()).toLocation(any());
-    }
-
-
-    @Test
     void updateAviationAccountWithExistingCrcoCode() {
 
         Long accountId = 1L;
@@ -242,19 +226,22 @@ class AviationAccountUpdateServiceTest {
         String emitterId = "emitterId";
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         Long sopId = 1L;
+        Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
         AppUser appUser = AppUser.builder().userId("userId").build();
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
-                sopId, crcoCode, commencementDate);
+                sopId, registryId, crcoCode, commencementDate);
 
         String newAccountName = "newAccountName";
         Long newSopId = 2L;
+        Integer newRegistryId = 2;
         String newCrcoCode = "newCrcoCode";
+        LocalDate newCommencementDate = LocalDate.now().plusDays(1);
 
         AviationAccountUpdateDTO accountUpdateDTO =
-                createAccountUpdateDTO(newAccountName, newSopId, newCrcoCode, null);
+                createAccountUpdateDTO(newAccountName, newSopId, newRegistryId, newCrcoCode, newCommencementDate, null);
 
         when(aviationAccountQueryService.getAccountById(accountId)).thenReturn(account);
         when(aviationAccountQueryService.isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(false);
@@ -270,6 +257,44 @@ class AviationAccountUpdateServiceTest {
         verify(locationMapper, never()).toLocation(any());
     }
 
+    @Test
+    void updateAviationAccountWithCorsiaAndRegistryId() {
+
+        Long accountId = 1L;
+        String accountName = "accountName";
+        String emitterId = "emitterId";
+        EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.CORSIA;
+        Long sopId = 1L;
+        Integer registryId = 1;
+        String crcoCode = "crcoCode";
+        LocalDate commencementDate = LocalDate.now();
+        AppUser appUser = AppUser.builder().userId("userId").build();
+
+        AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
+                sopId, registryId, crcoCode, commencementDate);
+
+        String newAccountName = "newAccountName";
+        Long newSopId = 2L;
+        Integer newRegistryId = 2;
+        String newCrcoCode = "newCrcoCode";
+        LocalDate newCommencementDate = LocalDate.now().plusDays(1);
+
+        AviationAccountUpdateDTO accountUpdateDTO =
+                createAccountUpdateDTO(newAccountName, newSopId, newRegistryId, newCrcoCode, newCommencementDate, null);
+
+        when(aviationAccountQueryService.getAccountById(accountId)).thenReturn(account);
+        when(aviationAccountQueryService.isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(false);
+        when(aviationAccountQueryService.isExistingCrcoCode(newCrcoCode, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(false);
+
+        BusinessException businessException = assertThrows(BusinessException.class,
+                () -> aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, appUser));
+
+        verify(aviationAccountQueryService, times(1)).getAccountById(accountId);
+        verify(aviationAccountQueryService, times(1)).isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId);
+        verify(aviationAccountQueryService, times(1)).isExistingCrcoCode(newCrcoCode, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId);
+        assertEquals(MetsErrorCode.REGISTRY_ID_SUBMITTED_ONLY_FOR_UK_ETS_AVIATION_ACCOUNTS, businessException.getErrorCode());
+        verify(locationMapper, never()).toLocation(any());
+    }
     
     @Test
     void updateAviationAccountWithUKETSAndNoRegistryId() {
@@ -279,19 +304,22 @@ class AviationAccountUpdateServiceTest {
         String emitterId = "emitterId";
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         Long sopId = 1L;
+        Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
         AppUser appUser = AppUser.builder().userId("userId").build();
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
-                sopId, crcoCode, commencementDate);
+                sopId, registryId, crcoCode, commencementDate);
 
         String newAccountName = "newAccountName";
         Long newSopId = 2L;
+        Integer newRegistryId = null;
         String newCrcoCode = "newCrcoCode";
+        LocalDate newCommencementDate = LocalDate.now().plusDays(1);
 
         AviationAccountUpdateDTO accountUpdateDTO =
-                createAccountUpdateDTO(newAccountName, newSopId, newCrcoCode, null);
+                createAccountUpdateDTO(newAccountName, newSopId, newRegistryId, newCrcoCode, newCommencementDate, null);
 
         when(aviationAccountQueryService.getAccountById(accountId)).thenReturn(account);
         when(aviationAccountQueryService.isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(false);
@@ -301,7 +329,9 @@ class AviationAccountUpdateServiceTest {
 
         assertThat(account.getName()).isEqualTo(newAccountName);
         assertThat(account.getCrcoCode()).isEqualTo(newCrcoCode);
+        assertThat(account.getRegistryId()).isEqualTo(newRegistryId);
         assertThat(account.getSopId()).isEqualTo(newSopId);
+        assertThat(account.getCommencementDate()).isEqualTo(newCommencementDate);
         assertThat(account.getLocation()).isNull();
         verify(aviationAccountQueryService, times(1)).getAccountById(accountId);
         verify(aviationAccountQueryService, times(1)).isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId);
@@ -316,6 +346,7 @@ class AviationAccountUpdateServiceTest {
         String emitterId = "emitterId";
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         Long sopId = 1L;
+        Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
         AppUser user = AppUser
@@ -328,7 +359,7 @@ class AviationAccountUpdateServiceTest {
         String reason = "closure reason";
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
-                sopId, crcoCode, commencementDate);
+                sopId, registryId, crcoCode, commencementDate);
 
         when(aviationAccountQueryService.getAccountById(accountId)).thenReturn(account);
 
@@ -473,7 +504,7 @@ class AviationAccountUpdateServiceTest {
 	}
 
     private AviationAccount createAccount(Long accountId, String accountName, String emitterId, EmissionTradingScheme emissionTradingScheme,
-                                          Long sopId, String crcoCode, LocalDate commencementDate) {
+                                          Long sopId, Integer registryId, String crcoCode, LocalDate commencementDate) {
         return AviationAccount.builder()
                 .id(accountId)
                 .name(accountName)
@@ -485,16 +516,19 @@ class AviationAccountUpdateServiceTest {
                 .commencementDate(commencementDate)
                 .verificationBodyId(1L)
                 .sopId(sopId)
+                .registryId(registryId)
                 .crcoCode(crcoCode)
                 .build();
     }
 
-    private AviationAccountUpdateDTO createAccountUpdateDTO(String name, Long sopId, String crcoCode,
-                                                            LocationOnShoreStateDTO location) {
+    private AviationAccountUpdateDTO createAccountUpdateDTO(String name, Long sopId, Integer registryId, String crcoCode,
+                                                            LocalDate commencementDate, LocationOnShoreStateDTO location) {
         return AviationAccountUpdateDTO.builder()
                 .name(name)
                 .sopId(sopId)
+                .registryId(registryId)
                 .crcoCode(crcoCode)
+                .commencementDate(commencementDate)
                 .location(location)
                 .build();
     }

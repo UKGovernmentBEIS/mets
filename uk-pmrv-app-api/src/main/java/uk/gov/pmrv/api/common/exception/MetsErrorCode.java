@@ -17,12 +17,11 @@ public enum MetsErrorCode implements NetzErrorCode {
     LEGAL_ENTITY_ALREADY_EXISTS("ACCOUNT1002", HttpStatus.BAD_REQUEST, "Legal entity name already exists"),
 
     CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT("ACCOUNT1012", HttpStatus.BAD_REQUEST, "Central route charges office number already related with another account"),
+    REGISTRY_ID_SUBMITTED_ONLY_FOR_UK_ETS_AVIATION_ACCOUNTS("ACCOUNT1013", HttpStatus.BAD_REQUEST, "Registry Id is only submitted when emission trading scheme of the account is UK ETS Aviation"),
 
     AVIATION_ACCOUNT_REPORTING_STATUS_NOT_CHANGED("ACCOUNT1014", HttpStatus.BAD_REQUEST, "Aviation account reporting status is not changed"),
     AVIATION_ACCOUNT_LOCATION_NOT_EXIST("ACCOUNT1015", HttpStatus.NOT_FOUND, "Aviation Account location doesn't exist"),
     INVALID_ACCOUNT_TYPE("ACCOUNT1016", HttpStatus.BAD_REQUEST, "Invalid account type"),
-
-    AVIATION_COMMENCEMENT_DATE_NOT_BEFORE_2021_NOT_AFTER_CURRENT_YEAR("ACCOUNT1017", HttpStatus.BAD_REQUEST, "Commencement date must be between 2021 and the current year"),
 
     /** Codes for notification errors. */
     INVALID_DOCUMENT_TEMPLATE_FOR_REQUEST_TASK("NOTIF1005", HttpStatus.BAD_REQUEST,"Document template does not match request task type"),
@@ -69,9 +68,6 @@ public enum MetsErrorCode implements NetzErrorCode {
     INVALID_ALR_ARTICLE_REASONS("ALR1003", HttpStatus.BAD_REQUEST, "Proceed to authority determination article reasons are not valid"),
     INVALID_ALR_PRELIMINARY_ALLOCATIONS("ALR1004", HttpStatus.BAD_REQUEST, "Preliminary allocations submitted are not valid"),
     ALR_MUST_UNDERGO_VERIFICATION("ALR1005", HttpStatus.BAD_REQUEST, "ALR must undergo verification"),
-
-    /** Code for WasteQDR. */
-    WASTE_QDR_CREATION_NOT_ALLOWED("WQDR1000", HttpStatus.BAD_REQUEST, "Waste QDR creation is not allowed"),
 
 
     /** Codes for AER. */
@@ -122,12 +118,7 @@ public enum MetsErrorCode implements NetzErrorCode {
     INTEGRATION_REGISTRY_EMISSIONS_AVIATION_REPORTING_PERIOD_TO_NOT_FOUND("INTREGEMISSIONSAVUKETS1005", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send emissions to ETS Registry because no configuration for the aer.aviation.reporting-period.to property has been found"),
     INTEGRATION_REGISTRY_EMISSIONS_AVIATION_AER_NOT_FOUND("INTREGEMISSIONSAVUKETS1006", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send emissions to ETS Registry because no aer request has been found"),
     INTEGRATION_REGISTRY_EMISSIONS_KAFKA_QUEUE_CONNECTION_ISSUE("INTREGEMISSIONSINSTAVUKETS1007", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send emissions to ETS Registry because kafka message queue is not available"),
-    INTEGRATION_REGISTRY_ACCOUNT_KAFKA_QUEUE_CONNECTION_ISSUE("INTREGACCOUNTCREATEUKETS1000", HttpStatus.INTERNAL_SERVER_ERROR,"Cannot send created account to ETS Registry because kafka message queue is not available"),
-    INTEGRATION_REGISTRY_ACCOUNT_CREATE_REGISTRY_ID_EXISTENCE("INTREGACCOUNTCREATEUKETS1001",HttpStatus.INTERNAL_SERVER_ERROR,"Cannot send created aviation account to ETS Registry because the registry id already exists"),
-
-    GHGE_REGISTRY_REPORTING_FIRST_YEAR_EMPTY_VALUE("REPFIRSTEMPTY1000",HttpStatus.BAD_REQUEST,"The value registry reporting first year cannot be empty for an account with a ghge permit type"),
-    REGISTRY_REPORTING_FIRST_YEAR_INVALID_ACCOUNT_STATUS("REPFIRSTINVACCOUNT1000",HttpStatus.BAD_REQUEST,"Invalid account status for the update of the registry reporting first year value"),
-    REGISTRY_REPORTING_FIRST_YEAR_INVALID_EMISSIONS("REPFIRSTINVEMISSIONS1000",HttpStatus.BAD_REQUEST,"Invalid value for registry reporting first year. The year cannot be later than the first year of reported emissions")
+    INTEGRATION_REGISTRY_ACCOUNT_CREATE_KAFKA_QUEUE_CONNECTION_ISSUE("INTREGACCOUNTCREATEUKETS1000", HttpStatus.INTERNAL_SERVER_ERROR,"Cannot send created account to ETS Registry because kafka message queue is not available")
     ;
 
     /** The error code. */

@@ -14,7 +14,6 @@ public class NotifyRegistryUtils {
     public static String MISSING_REGISTRY_ID_ERROR_MESSAGE = "No Registry ID exists in METS account";
     public static String OPERATOR_ID_INTEGRATION_POINT_KEY = "set-operator-id";
     public static String ACCOUNT_CREATED_INTEGRATION_POINT_KEY = "account-created";
-    public static String ACCOUNT_UPDATED_INTEGRATION_POINT_KEY = "account-updated";
     public static String AVIATION_SERVICE_KEY = "Aviation";
     public static String INSTALLATION_SERVICE_KEY = "Installation";
 
@@ -35,24 +34,8 @@ public class NotifyRegistryUtils {
         };
     }
 
-    public static CompetentAuthorityEnum toCompetentAuthorityFromCode(String competentAuthorityCode) {
-        if(ObjectUtils.isEmpty(competentAuthorityCode)) {
-            return null;
-        }
-
-        return switch (competentAuthorityCode) {
-            case "EA" -> CompetentAuthorityEnum.ENGLAND;
-            case "DAERA" -> CompetentAuthorityEnum.NORTHERN_IRELAND;
-            case "OPRED" -> CompetentAuthorityEnum.OPRED;
-            case "SEPA" -> CompetentAuthorityEnum.SCOTLAND;
-            case "NRW" -> CompetentAuthorityEnum.WALES;
-            default -> throw new IllegalStateException("Unexpected value: " + competentAuthorityCode);
-        };
-
-    }
-
     public static String replaceGBCountryCode(String country) {
-        List<String> gbCountryCodes = Arrays.asList("GB-ENG", "GB-NIR", "GB-SCT", "GB-WLS", "GB");
+        List<String> gbCountryCodes = Arrays.asList("GB-ENG", "GB-NIR", "GB-SCT", "GB-WLS");
         if (ObjectUtils.isEmpty(country)) {return country;}
         if (gbCountryCodes.contains(country)) {return "UK";}
         return country;

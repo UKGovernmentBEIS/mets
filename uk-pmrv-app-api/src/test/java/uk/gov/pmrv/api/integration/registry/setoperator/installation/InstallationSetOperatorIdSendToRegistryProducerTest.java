@@ -9,9 +9,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.netz.api.common.exception.BusinessException;
-import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
-import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.pmrv.api.integration.registry.setoperator.common.SetOperatorIdEventOutcome;
+import uk.gov.pmrv.api.integration.registry.setoperator.common.SetOperatorIdResponseEvent;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,7 +27,7 @@ class InstallationSetOperatorIdSendToRegistryProducerTest {
     private InstallationSetOperatorIdSendToRegistryProducer producer;
 
     @Mock
-    private KafkaTemplate<String, OperatorUpdateEventOutcome> installationSetOperatorIdKafkaTemplate;
+    private KafkaTemplate<String, SetOperatorIdEventOutcome> installationSetOperatorIdKafkaTemplate;
 
     @BeforeEach
     void setUp() {
@@ -37,8 +37,8 @@ class InstallationSetOperatorIdSendToRegistryProducerTest {
     @Test
     void produce_whenCalled_sendsToKafkaTemplate() {
         final String emitterId = "1";
-        final OperatorUpdateEventOutcome eventOutcome = OperatorUpdateEventOutcome.builder()
-                .event(OperatorUpdateEvent.builder().emitterId(emitterId).build())
+        final SetOperatorIdEventOutcome eventOutcome = SetOperatorIdEventOutcome.builder()
+                .event(SetOperatorIdResponseEvent.builder().emitterId(emitterId).build())
                 .build();
 
         producer.produce(eventOutcome);
@@ -50,8 +50,8 @@ class InstallationSetOperatorIdSendToRegistryProducerTest {
     @Test
     void produce_whenKafkaTemplateThrowsException_throwsBusinessException() {
         final String emitterId = "2";
-        final OperatorUpdateEventOutcome eventOutcome = OperatorUpdateEventOutcome.builder()
-                .event(OperatorUpdateEvent.builder().emitterId(emitterId).build())
+        final SetOperatorIdEventOutcome eventOutcome = SetOperatorIdEventOutcome.builder()
+                .event(SetOperatorIdResponseEvent.builder().emitterId(emitterId).build())
                 .build();
 
         doThrow(new RuntimeException("Kafka connection error"))
@@ -63,7 +63,7 @@ class InstallationSetOperatorIdSendToRegistryProducerTest {
         );
 
         assertThat(businessException.getErrorCode())
-                .isEqualTo(MetsErrorCode.INTEGRATION_REGISTRY_ACCOUNT_KAFKA_QUEUE_CONNECTION_ISSUE);
+                .isEqualTo(MetsErrorCode.INTEGRATION_REGISTRY_ACCOUNT_CREATE_KAFKA_QUEUE_CONNECTION_ISSUE);
         assertThat(businessException.getData()).isEqualTo(new Object[]{eventOutcome});
 
         verify(installationSetOperatorIdKafkaTemplate, times(1))

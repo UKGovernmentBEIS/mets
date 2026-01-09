@@ -16,7 +16,9 @@ import { LocationOnShoreStateDTO } from './locationOnShoreStateDTO';
  */
 export interface AviationAccountUpdateDTO {
   name: string;
+  registryId?: number;
   sopId?: number;
   crcoCode: string;
+  commencementDate: string;
   location?: LocationOnShoreStateDTO;
 }

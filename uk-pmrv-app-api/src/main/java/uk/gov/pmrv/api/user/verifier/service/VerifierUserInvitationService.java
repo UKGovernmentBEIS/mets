@@ -69,8 +69,8 @@ public class VerifierUserInvitationService {
     }
 
     @Transactional
-    public InvitedUserInfoDTO acceptInvitation(String invitationToken, AppUser currentUser) {
-        final AuthorityInfoDTO authorityInfo = verifierUserTokenVerificationService.verifyInvitationToken(invitationToken, currentUser);
+    public InvitedUserInfoDTO acceptInvitation(String invitationToken) {
+        final AuthorityInfoDTO authorityInfo = verifierUserTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken);
 
         final VerifierUserDTO verifierUser = verifierUserAuthService.getVerifierUserById(authorityInfo.getUserId());
         
@@ -80,7 +80,7 @@ public class VerifierUserInvitationService {
         if(BooleanUtils.isTrue(verifierUser.getEnabled())) {
         	if(userAuthService.hasUserPassword(authorityInfo.getUserId())) {
 				// accept authority
-        		verifierUserActivateService.acceptAuthorityForRegisteredVerifierInvitedUser(invitationToken, currentUser);
+        		verifierUserActivateService.acceptAuthorityForRegisteredVerifierInvitedUser(invitationToken);
                 return InvitedUserInfoDTO.builder().email(verifierUser.getEmail())
     					.invitationStatus(UserInvitationStatus.ALREADY_REGISTERED).build();
             } else {

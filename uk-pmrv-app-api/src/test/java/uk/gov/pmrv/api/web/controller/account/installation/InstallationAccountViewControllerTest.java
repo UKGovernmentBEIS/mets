@@ -80,8 +80,8 @@ class InstallationAccountViewControllerTest {
 
     @Test
     void getInstallationAccountById() throws Exception {
-    	setupAppUser();
         final Long accountId = 1L;
+        final AppUser user = AppUser.builder().userId("userId").build();
         final InstallationAccountPermitDTO installationAccountPermitDTO =
         		InstallationAccountPermitDTO.builder()
         		.account(InstallationAccountDTO.builder()
@@ -91,6 +91,7 @@ class InstallationAccountViewControllerTest {
         				.id("permitId")
         				.build())
                 .build();
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(orchestrator.getAccountWithPermit(accountId)).thenReturn(installationAccountPermitDTO);
 
         mockMvc.perform(
@@ -107,8 +108,10 @@ class InstallationAccountViewControllerTest {
 
     @Test
     void getInstallationAccountById_account_forbidden() throws Exception {
-    	AppUser user = setupAppUser();
         final long invalidAccountId = 1L;
+        final AppUser user = AppUser.builder().userId("userId").build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(user, "getInstallationAccountById", Long.toString(invalidAccountId), null, null);
@@ -124,8 +127,10 @@ class InstallationAccountViewControllerTest {
 
     @Test
     void getInstallationAccountById_account_not_found() throws Exception {
-    	setupAppUser();
         final Long invalidAccountId = 1L;
+        final AppUser user = AppUser.builder().userId("userId").build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(orchestrator.getAccountWithPermit(invalidAccountId))
             .thenThrow(new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
 
@@ -140,16 +145,17 @@ class InstallationAccountViewControllerTest {
 
     @Test
     void getInstallationAccountHeaderInfoById() throws Exception {
-    	setupAppUser();
         Long accountId = 1L;
         String accountName = "accountName";
         InstallationAccountStatus accountStatus = InstallationAccountStatus.LIVE;
+        AppUser user = AppUser.builder().userId("userId").build();
         InstallationAccountHeaderInfoDTO accountHeaderInfo =
             InstallationAccountHeaderInfoDTO.builder()
                 .name(accountName)
                 .status(accountStatus)
                 .id(accountId)
                 .build();
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(orchestrator.getAccountHeaderInfoWithPermitId(accountId)).thenReturn(Optional.of(accountHeaderInfo));
 
         mockMvc.perform(
@@ -167,8 +173,10 @@ class InstallationAccountViewControllerTest {
 
     @Test
     void getInstallationAccountHeaderInfoById_forbidden() throws Exception {
-    	AppUser user = setupAppUser();
         String accountId = "1";
+        AppUser user = AppUser.builder().userId("userId").build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(user, "getInstallationAccountHeaderInfoById", accountId, null, null);
@@ -181,11 +189,5 @@ class InstallationAccountViewControllerTest {
 
         verifyNoInteractions(orchestrator);
     }
-    
-    private AppUser setupAppUser() {
-		AppUser user = AppUser.builder().userId("authId").build();
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-		return user;
-	}
 
 }

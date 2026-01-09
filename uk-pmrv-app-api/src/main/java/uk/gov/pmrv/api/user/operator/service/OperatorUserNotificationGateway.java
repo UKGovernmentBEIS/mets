@@ -142,14 +142,12 @@ public class OperatorUserNotificationGateway {
     public void notifyUsersUpdateStatus(List<NewUserActivated> activatedOperators) {
         activatedOperators.forEach(user -> {
             try{
-            	final String roleCode = user.getRoleCode();
-                if(AuthorityConstants.EMITTER_CONTACT.equals(roleCode)){
+                if(AuthorityConstants.EMITTER_CONTACT.equals(user.getRoleCode())){
                     String installationName = accountQueryService.getAccountName(user.getAccountId());
                     userNotificationService.notifyEmitterContactAccountActivation(user.getUserId(), installationName);
                 }
                 else{
-                	RoleDTO roleDTO = roleService.getRoleByCode(roleCode);
-                    userNotificationService.notifyUserAccountActivation(user.getUserId(), roleDTO.getName());
+                    userNotificationService.notifyUserAccountActivation(user.getUserId(), "Operator");
                 }
             } catch (Exception ex){
                 log.error("Exception during sending email for update operator status:", ex);

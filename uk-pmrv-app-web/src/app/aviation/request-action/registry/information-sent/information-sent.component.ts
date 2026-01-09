@@ -2,8 +2,6 @@ import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
-import { CommonActionsStore } from '@actions/store/common-actions.store';
-import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PipesModule } from '@shared/pipes/pipes.module';
 import { SharedModule } from '@shared/shared.module';
 
@@ -25,6 +23,7 @@ import { OperatorDetailsLegalStatusTypePipe } from '../../../shared/pipes/operat
 import { RegistryActionService } from '../core/registry.service';
 
 interface ViewModel {
+  header: string;
   expectedActionType: Array<RequestActionDTO['type']>;
   operatorDetails: EmpIssuanceOperatorDetails;
   organizationDetails: Partial<
@@ -53,6 +52,7 @@ export class InformationSentToRegistryComponent {
     const organizationDetails = payload.organisationDetails;
 
     return {
+      header: 'Information sent to registry by system',
       expectedActionType: [this.requestActionType()],
       operatorDetails,
       organizationDetails,
@@ -62,11 +62,5 @@ export class InformationSentToRegistryComponent {
     };
   });
 
-  action$ = this.commonActionsStore.requestAction$;
-
-  constructor(
-    private readonly registryActionService: RegistryActionService,
-    private readonly commonActionsStore: CommonActionsStore,
-    readonly pendingRequest: PendingRequestService,
-  ) {}
+  constructor(private readonly registryActionService: RegistryActionService) {}
 }

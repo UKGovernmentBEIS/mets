@@ -1937,19 +1937,6 @@ public enum RequestTaskType {
         }
     },
 
-    /**
-     * WASTE_QDR
-     */
-    WASTE_QDR_APPLICATION_SUBMIT(true, RequestType.WASTE_QDR, RequestExpirationType.WASTEQDR) {
-        @Override
-        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
-            return List.of(
-                    RequestTaskActionType.WASTE_QDR_SAVE_APPLICATION,
-                    RequestTaskActionType.WASTE_QDR_UPLOAD_ATTACHMENT
-            );
-        }
-    },
-
     /*
      **************************************************** AVIATION ****************************************************
      */
@@ -2203,8 +2190,7 @@ public enum RequestTaskType {
                 RequestTaskActionType.EMP_ISSUANCE_UKETS_REVIEW_RETURN_FOR_AMENDS,
                 RequestTaskActionType.RFI_SUBMIT,
                 RequestTaskActionType.RFI_UPLOAD_ATTACHMENT,
-                RequestTaskActionType.RDE_SUBMIT,
-                RequestTaskActionType.EMP_ISSUANCE_UKETS_MANUAL_ACCOUNT_OPENING_REGISTRY
+                RequestTaskActionType.RDE_SUBMIT
             );
         }
     },

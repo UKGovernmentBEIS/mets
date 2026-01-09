@@ -5,8 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
 import uk.gov.netz.api.token.JwtTokenAction;
@@ -34,13 +32,11 @@ class RegulatorUserTokenVerificationServiceTest {
             .authorityStatus(AuthorityStatus.PENDING)
             .accountId(1L)
             .build();
-        
-        AppUser currentUser = AppUser.builder().userId("user").build();
 
-        when(userInvitationTokenVerificationService.verifyInvitationToken(invitationToken, tokenAction, currentUser))
+        when(userInvitationTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken, tokenAction))
             .thenReturn(authorityInfo);
 
-        AuthorityInfoDTO actual = regulatorUserTokenVerificationService.verifyInvitationToken(invitationToken, currentUser);
+        AuthorityInfoDTO actual = regulatorUserTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken);
 
         assertEquals(authorityInfo, actual);
 

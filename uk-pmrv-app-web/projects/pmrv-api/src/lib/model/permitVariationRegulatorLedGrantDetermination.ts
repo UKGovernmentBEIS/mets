@@ -13,7 +13,6 @@
 export interface PermitVariationRegulatorLedGrantDetermination {
   reason: string;
   activationDate: string;
-  firstYearOfReportingObligation?: number;
   annualEmissionsTargets?: { [key: string]: string };
   logChanges: string;
   reasonTemplate:

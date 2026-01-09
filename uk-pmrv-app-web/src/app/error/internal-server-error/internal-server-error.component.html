@@ -15,14 +15,6 @@
     <a [routerLink]="['/contact-us']" govukLink class="govuk-!-font-weight-bold">UK ETS reporting helpdesk</a>
     for assistance.
   </p>
-} @else if (errorCode === genericServiceErrorCode.INTREGACCOUNTCREATEUKETS1001) {
-  <app-page-heading size="xl">Sorry, the service could not send information to registry</app-page-heading>
-  <p class="govuk-body">This account is already associated with a UK ETS Registry ID</p>
-  <p class="govuk-body">
-    Contact
-    <a [routerLink]="['/contact-us']" govukLink class="govuk-!-font-weight-bold">UK ETS reporting helpdesk</a>
-    for assistance.
-  </p>
 } @else {
   <app-page-heading size="xl">Sorry, there is a problem with the service</app-page-heading>
 

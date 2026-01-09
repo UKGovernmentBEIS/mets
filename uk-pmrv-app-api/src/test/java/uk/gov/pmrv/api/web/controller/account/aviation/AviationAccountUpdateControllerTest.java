@@ -35,6 +35,8 @@ import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.controller.utils.TestConstrainValidatorFactory;
 
+import java.time.LocalDate;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
@@ -113,7 +115,9 @@ class AviationAccountUpdateControllerTest {
         AviationAccountUpdateDTO aviationAccountUpdateDTO = AviationAccountUpdateDTO.builder()
                 .name("name")
                 .sopId(1L)
+                .registryId(1000001)
                 .crcoCode("crco code")
+                .commencementDate(LocalDate.now())
                 .build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
@@ -136,7 +140,9 @@ class AviationAccountUpdateControllerTest {
         AviationAccountUpdateDTO aviationAccountUpdateDTO = AviationAccountUpdateDTO.builder()
                 .name("name")
                 .sopId(1L)
+                .registryId(1000001)
                 .crcoCode("crco code")
+                .commencementDate(LocalDate.now())
                 .build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);

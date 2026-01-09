@@ -92,12 +92,6 @@ public interface AccountRepository extends JpaRepository<Account, Long>, Account
         + "from Account acc "
         + "where acc.verificationBodyId = :vbId")
     List<Long> findAllIdsByVerificationBody(Long vbId);
-    
-    @Transactional(readOnly = true)
-    @Query("select acc.competentAuthority "
-            + "from Account acc "
-            + "where acc.id in (:accountIds) ")
-    Set<CompetentAuthorityEnum> findCAByIdIn(Set<Long> accountIds);
 
     @Transactional(readOnly = true)
     @Query("select acc.competentAuthority "

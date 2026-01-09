@@ -1,14 +1,10 @@
-import { provideHttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, provideRouter, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import { firstValueFrom, Observable, of } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 
-import { mockClass, MockType } from '@testing';
-
-import { InstallationAccountViewService } from 'pmrv-api';
-
-import { mockedAccountPermit } from '../../../../accounts/testing/mock-data';
 import { PermitVariationStore } from '../../../store/permit-variation.store';
 import { mockPermitVariationRegulatorLedPayload } from '../../../testing/mock';
 import { ReasonTemplateGuard } from './reason-template.guard';
@@ -17,7 +13,6 @@ describe('ReasonTemplateGuard', () => {
   let guard: ReasonTemplateGuard;
   let router: Router;
   let store: PermitVariationStore;
-  let accountViewService: MockType<InstallationAccountViewService>;
 
   const activatedRouteSnapshot = new ActivatedRouteSnapshot();
   activatedRouteSnapshot.params = { taskId: mockPermitVariationRegulatorLedPayload.requestTaskId };
@@ -26,20 +21,8 @@ describe('ReasonTemplateGuard', () => {
   };
 
   beforeEach(() => {
-    accountViewService = mockClass(InstallationAccountViewService);
-    accountViewService.getInstallationAccountById.mockReturnValue(
-      of({
-        ...mockedAccountPermit,
-        account: { ...mockedAccountPermit.account, emissionTradingScheme: 'UK_ETS_INSTALLATIONS' },
-      }),
-    );
-
     TestBed.configureTestingModule({
-      providers: [
-        provideRouter([]),
-        provideHttpClient(),
-        { provide: InstallationAccountViewService, useValue: accountViewService },
-      ],
+      imports: [RouterTestingModule, HttpClientTestingModule],
     });
     guard = TestBed.inject(ReasonTemplateGuard);
     router = TestBed.inject(Router);

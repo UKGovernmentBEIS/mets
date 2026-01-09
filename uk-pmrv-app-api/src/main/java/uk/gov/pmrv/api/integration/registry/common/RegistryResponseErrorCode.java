@@ -4,18 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum RegistryResponseErrorCode {
-
-    ERROR_0101("ERROR_0101", "Data outside expected format"),
-    ERROR_0102("ERROR_0102", "Emitter ID already exists in Registry"),
-    ERROR_0103("ERROR_0103", "Mandatory field is not provided"),
-    ERROR_0104("ERROR_0104", "CRN or Justification not provided"),
-    ERROR_0105("ERROR_0105", "Permit/EMP ID already exists in Registry"),
-    ERROR_0107("ERROR_0107", "Country Code does not exist"),
-    ERROR_0108("ERROR_0108", "Regulator value does not exist"),
-    ERROR_0109("ERROR_0109", "Account Holder Type does not exist"),
-    ERROR_0111("ERROR_0111", "First Year Verified Emissions (FYVE) value is before 2021"),
-    ERROR_0112("ERROR_0112", "Activity type does not exist"),
-    ERROR_0113("ERROR_0113", "Invalid account type"),
     ERROR_0200("ERROR_0200", "Internal Server Error"),
     ERROR_0201("ERROR_0201", "Data validation error"),
     ERROR_0202("ERROR_0202", "Emitter ID does not exist in METS"),

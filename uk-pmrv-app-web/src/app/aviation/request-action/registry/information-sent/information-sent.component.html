@@ -3,7 +3,7 @@
 
   <ng-template #actionContainer>
     <app-base-action-container-component
-      [header]="action$ | async | itemActionHeader"
+      [header]="vm.header"
       [customContentTemplate]="customContentTemplate"
       [expectedActionType]="vm.expectedActionType"></app-base-action-container-component>
   </ng-template>
@@ -16,7 +16,7 @@
         <dd govukSummaryListRowValue>{{ vm.operatorDetails.emitterId }}</dd>
         <dd govukSummaryListRowActions></dd>
       </div>
-      <div govukSummaryListRow *ngIf="vm.operatorDetails?.emissionsPlanId">
+      <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Emission plan ID</dt>
         <dd govukSummaryListRowValue>{{ vm.operatorDetails.emissionsPlanId }}</dd>
         <dd govukSummaryListRowActions></dd>
@@ -33,7 +33,7 @@
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Regulator</dt>
-        <dd govukSummaryListRowValue>{{ vm.operatorDetails.regulator }}</dd>
+        <dd govukSummaryListRowValue>{{ vm.operatorDetails.regulator | competentAuthority }}</dd>
         <dd govukSummaryListRowActions></dd>
       </div>
     </dl>
@@ -42,7 +42,7 @@
       <h2 class="govuk-heading-m">Organisation details</h2>
       <dl govuk-summary-list>
         <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Organisation legal status</dt>
+          <dt govukSummaryListRowKey>What is the legal status of your organisation?</dt>
           <dd govukSummaryListRowValue>
             {{ organisationStructure.organisationLegalStatus | operatorDetailsLegalStatusType }}
           </dd>

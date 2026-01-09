@@ -82,7 +82,6 @@ export class ErrorCodes {
   static NOTFOUND1001 = 'NOTFOUND1001';
   static ACCOUNT1001 = 'ACCOUNT1001';
   static HSETI1001 = 'HSETI1001';
-  static REPFIRSTINVEMISSIONS1000 = 'REPFIRSTINVEMISSIONS1000';
 }
 
 export interface BadRequest extends HttpErrorResponse {

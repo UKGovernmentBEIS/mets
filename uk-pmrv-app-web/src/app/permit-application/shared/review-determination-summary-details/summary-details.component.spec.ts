@@ -53,7 +53,6 @@ describe('SummaryDetailsComponent', () => {
           type: 'GRANTED',
           reason: 'requirements are fulfilled',
           activationDate: new Date('2030-01-01T00:00:00Z').toISOString(),
-          firstYearOfReportingObligation: 2022,
         },
       });
     });
@@ -70,8 +69,6 @@ describe('SummaryDetailsComponent', () => {
         'requirements are fulfilled',
         'Change',
         '1 Jan 2030',
-        'Change',
-        '2022',
         'Change',
       ]);
     });

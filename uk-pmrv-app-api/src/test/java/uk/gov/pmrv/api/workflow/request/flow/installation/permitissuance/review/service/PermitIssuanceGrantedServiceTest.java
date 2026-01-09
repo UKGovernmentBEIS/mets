@@ -5,8 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
+import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountUpdateService;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.permit.domain.Permit;
@@ -21,6 +21,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.DeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceGrantDetermination;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.PermitIssuanceGrantedService;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -89,7 +90,7 @@ class PermitIssuanceGrantedServiceTest {
         verify(requestService, times(1)).findRequestById(requestId);
         verify(permitService, times(1)).submitPermit(permitContainer, request.getAccountId());
         verify(installationAccountUpdateService, times(1))
-            .updateAccountUponPermitGranted(request.getAccountId(), EmitterType.HSE, estimatedAnnualEmissions,null);
+            .updateAccountUponPermitGranted(request.getAccountId(), EmitterType.HSE, estimatedAnnualEmissions);
         verify(installationOperatorDetailsQueryService, times(1)).getInstallationOperatorDetails(accountId);
     }
 }

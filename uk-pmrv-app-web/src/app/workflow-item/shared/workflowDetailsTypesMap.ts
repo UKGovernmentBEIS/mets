@@ -36,5 +36,4 @@ export const workflowDetailsTypesMap: Partial<Record<RequestDetailsDTO['requestT
   AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING: '3-year period offsetting requirements',
   AVIATION_DOE_CORSIA: 'estimation of emissions',
   ALR: 'activity level report',
-  WASTE_QDR: 'emission factors report',
 };

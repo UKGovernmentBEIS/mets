@@ -22,13 +22,6 @@ public interface PermitDeterminableMapper {
             permitContainer.setAnnualEmissionsTargets(((GrantDetermination) permitDeterminatablePayload.getDetermination()).getAnnualEmissionsTargets());
         }
     }
-
-    default <T extends Determinateable> void setFirstYearOfReportingObligation(@MappingTarget PermitContainer permitContainer, PermitPayloadDeterminateable<T> permitDeterminatablePayload) {
-        if(permitDeterminatablePayload.getDetermination() != null &&
-                DeterminationType.GRANTED == permitDeterminatablePayload.getDetermination().getType()) {
-            permitContainer.setFirstYearOfReportingObligation(((GrantDetermination) permitDeterminatablePayload.getDetermination()).getFirstYearOfReportingObligation());
-        }
-    }
     
     
 }

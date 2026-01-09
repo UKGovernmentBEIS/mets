@@ -39,8 +39,6 @@ public class PermitContainer {
 
     private LocalDate activationDate;
 
-    private Integer firstYearOfReportingObligation;
-
     /**
      * A sortedMap that holds the holds the annual emission targets of the installation that the permit is issued about.
      * Map keys represent the years (e.g 2022) for which the emission targets are set, whereas value are the targets itself.

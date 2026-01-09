@@ -30,9 +30,6 @@ import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
-import uk.gov.netz.api.referencedata.domain.Country;
-import uk.gov.netz.api.referencedata.service.CountryService;
-import uk.gov.netz.api.referencedata.service.CountryValidator;
 import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
 import uk.gov.netz.api.security.AuthorizedAspect;
@@ -43,18 +40,16 @@ import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateFaStatusDTO;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateInstallationNameDTO;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateSiteNameDTO;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateSopIdDTO;
+import uk.gov.pmrv.api.account.installation.domain.dto.*;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountUpdateService;
 import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
+import uk.gov.netz.api.referencedata.domain.Country;
+import uk.gov.netz.api.referencedata.service.CountryService;
+import uk.gov.netz.api.referencedata.service.CountryValidator;
 import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.controller.utils.TestConstrainValidatorFactory;
-import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountPermitCommandOrchestrator;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -93,9 +88,6 @@ class InstallationAccountUpdateControllerTest {
     @Mock
     private CountryService countryService;
 
-    @Mock
-    private InstallationAccountPermitCommandOrchestrator installationAccountPermitCommandOrchestrator;
-
     private final ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -126,9 +118,11 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountSiteName() throws Exception {
-    	setupAppUser();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateSiteNameDTO siteNameDTO = AccountUpdateSiteNameDTO.builder().siteName("newSiteName").build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -142,10 +136,11 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountSiteName_forbidden() throws Exception {
-    	AppUser user = setupAppUser();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateSiteNameDTO siteNameDTO = AccountUpdateSiteNameDTO.builder().siteName("newSiteName").build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(user, "updateInstallationAccountSiteName", String.valueOf(accountId), null, null);
@@ -162,11 +157,52 @@ class InstallationAccountUpdateControllerTest {
     }
 
     @Test
+    void updateAccountRegistryId() throws Exception {
+        AppUser user = AppUser.builder().build();
+        Long accountId = 1L;
+        AccountUpdateRegistryIdDTO registryIdDTO = AccountUpdateRegistryIdDTO.builder().registryId(1234567).build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                    .post(CONTROLLER_PATH + "/" + accountId + "/registry-id")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(registryIdDTO)))
+            .andExpect(status().isNoContent());
+
+        verify(installationAccountUpdateService, times(1)).updateAccountRegistryId(accountId, registryIdDTO.getRegistryId());
+    }
+
+    @Test
+    void updateAccountRegistryId_forbidden() throws Exception {
+        AppUser user = AppUser.builder().build();
+        Long accountId = 1L;
+        AccountUpdateRegistryIdDTO registryIdDTO = AccountUpdateRegistryIdDTO.builder().registryId(1234567).build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
+            .when(appUserAuthorizationService)
+            .authorize(user, "updateInstallationAccountRegistryId", String.valueOf(accountId), null, null);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                    .post(CONTROLLER_PATH + "/" + accountId + "/registry-id")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(registryIdDTO)))
+            .andExpect(status().isForbidden());
+
+        verify(installationAccountUpdateService, never())
+            .updateAccountRegistryId(Mockito.anyLong(), Mockito.anyInt());
+    }
+
+    @Test
     void updateAccountSopId() throws Exception {
-    	setupAppUser();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateSopIdDTO sopIdDTO = AccountUpdateSopIdDTO.builder().sopId(1234567899L).build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -180,10 +216,11 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountSopId_forbidden() throws Exception {
-    	AppUser user = setupAppUser();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateSopIdDTO sopIdDTO = AccountUpdateSopIdDTO.builder().sopId(1234567899L).build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(user, "updateInstallationAccountSopId", String.valueOf(accountId), null, null);
@@ -195,16 +232,19 @@ class InstallationAccountUpdateControllerTest {
                     .content(objectMapper.writeValueAsString(sopIdDTO)))
             .andExpect(status().isForbidden());
 
+        verify(installationAccountUpdateService, never())
+            .updateAccountRegistryId(Mockito.anyLong(), Mockito.anyInt());
     }
 
     @Test
     void updateAccountAddress() throws Exception {
-    	setupAppUser();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         LocationOnShoreDTO address =
             LocationOnShoreDTO.builder().type(LocationType.ONSHORE).gridReference("te12345").address(AddressDTO.builder()
                 .city("city").country("GR").line1("line1").line2("line2").postcode("postcode").build()).build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(countryService.getReferenceData()).thenReturn(List.of(Country.builder().code("GR").build()));
 
         mockMvc.perform(
@@ -220,12 +260,13 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountAddress_forbidden() throws Exception {
-    	AppUser user = setupAppUser();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         LocationOnShoreDTO address =
             LocationOnShoreDTO.builder().type(LocationType.ONSHORE).gridReference("te12345").address(AddressDTO.builder()
                 .city("city").country("GR").line1("line1").line2("line2").postcode("postcode").build()).build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(countryService.getReferenceData()).thenReturn(List.of(Country.builder().code("GR").build()));
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
@@ -244,7 +285,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountLegalEntity() throws Exception {
-    	setupAppUser();
+        final var user = AppUser.builder().build();
         final var accountId = 1L;
         final var legalEntityDTO = LegalEntityDTO.builder()
             .name("TEST_LE")
@@ -270,6 +311,7 @@ class InstallationAccountUpdateControllerTest {
             )
             .build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(countryService.getReferenceData()).thenReturn(List.of(Country.builder().code("GR").build()));
 
         mockMvc.perform(
@@ -285,11 +327,12 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateInstallationName() throws Exception {
-    	setupAppUser();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateInstallationNameDTO installationNameDTO = AccountUpdateInstallationNameDTO.builder()
             .installationName("newInstallationName").build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -304,11 +347,12 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateInstallationName_forbidden() throws Exception {
-    	AppUser user = setupAppUser();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateInstallationNameDTO installationNameDTO = AccountUpdateInstallationNameDTO.builder()
             .installationName("newInstallationName").build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(user, "updateInstallationName", String.valueOf(accountId), null, null);
@@ -326,7 +370,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateFreeAllocationStatus() throws Exception {
-        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService,installationAccountPermitCommandOrchestrator);
+        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService);
         setupRoleBasedAuthentication(controller);
         final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         Long accountId = 1L;
@@ -349,7 +393,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateFreeAllocationStatus_forbidden() throws Exception {
-        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService,installationAccountPermitCommandOrchestrator);
+        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService);
         setupRoleBasedAuthentication(controller);
         final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER).build();
         long accountId = 1L;
@@ -375,7 +419,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateCommencementDate() throws Exception {
-        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService,installationAccountPermitCommandOrchestrator);
+        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService);
         setupRoleBasedAuthentication(controller);
         final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         Long accountId = 1L;
@@ -399,7 +443,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateCommencementDate_forbidden() throws Exception {
-        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService,installationAccountPermitCommandOrchestrator);
+        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService);
         setupRoleBasedAuthentication(controller);
         final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER).build();
         long accountId = 1L;
@@ -465,10 +509,4 @@ class InstallationAccountUpdateControllerTest {
 
         objectMapper = new ObjectMapper();
     }
-    
-    private AppUser setupAppUser() {
-		AppUser user = AppUser.builder().userId("authId").build();
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-		return user;
-	}
 }

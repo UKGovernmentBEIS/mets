@@ -9,10 +9,10 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.netz.api.notificationapi.domain.NotificationContent;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
 import uk.gov.pmrv.api.notification.template.domain.NotificationTemplate;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.notification.template.repository.NotificationTemplateRepository;
@@ -86,7 +86,7 @@ public class NotificationTemplateProcessService {
                                             Map<String, Object> model) {
         String result;
         try {
-            freemarkerConfig.setSetting("number_format", "computer");
+
             Template template = new Template(templateName, new StringReader(text), freemarkerConfig);
             result = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
         } catch (IOException | TemplateException e) {

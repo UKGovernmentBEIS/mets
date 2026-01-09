@@ -181,7 +181,6 @@ class DocumentTemplateControllerTest {
 
     @Test
     void getDocumentTemplateById() throws Exception {
-    	setupAppUser();
         Long documentTemplateId = 1L;
         String documentTemplateName = "document_template_name";
 
@@ -283,11 +282,5 @@ class DocumentTemplateControllerTest {
                     result.getResolvedException() instanceof MissingServletRequestPartException))
             .andExpect(status().isBadRequest());
     }
-    
-    private AppUser setupAppUser() {
-		AppUser user = AppUser.builder().userId("authId").build();
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-		return user;
-	}
 
 }

@@ -62,11 +62,12 @@ export class AircraftTypesDataPageComponent implements OnInit, OnDestroy {
     map((isCorsia) => (isCorsia ? 'CORSIA' : 'UK ETS')),
   );
   showNotification = signal(false);
-  firstTimeUploaded = signal(true);
+  aviationAerAircraftDataDetails =
+    this.store.aerDelegate.payload.aer?.aviationAerAircraftData?.aviationAerAircraftDataDetails ||
+    ([] as Array<AviationAerAircraftDataDetails>);
 
   private subscription: Subscription;
   private statusSubscription: Subscription;
-  private aircraftData: AviationAerAircraftDataDetails[] = this.form.get('aviationAerAircraftDataDetails').value || [];
 
   constructor(
     @Inject(TASK_FORM_PROVIDER) private formProvider: AircraftTypesDataFormProvider,
@@ -183,8 +184,6 @@ export class AircraftTypesDataPageComponent implements OnInit, OnDestroy {
             if (!this.formProvider.getAircraftDataDetailsControl().errors) {
               this.parsedData = tempData;
               this.showNotification.set(true);
-              this.firstTimeUploaded.set(this.aircraftData.length === 0);
-              this.aircraftData = tempData;
             } else {
               this.wizardStep.isSummaryDisplayedSubject.next(true);
               this.parsedData = null;

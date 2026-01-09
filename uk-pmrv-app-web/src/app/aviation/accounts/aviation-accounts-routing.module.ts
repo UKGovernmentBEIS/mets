@@ -29,7 +29,6 @@ import {
   CreateAviationAccountSuccessComponent,
   CreateAviationAccountSummaryComponent,
   EditAviationAccountComponent,
-  EditCommencementDateAviationAccountComponent,
   ViewAviationAccountComponent,
 } from './containers';
 import { EditReportingStatusComponent } from './containers/edit-reporting-status';
@@ -134,16 +133,6 @@ const routes: Routes = [
             path: 'edit',
             data: { pageTitle: 'Account', breadcrumb: 'Edit account' },
             component: EditAviationAccountComponent,
-            canActivate: [EditAviationAccountGuard],
-            canDeactivate: [PendingRequestGuard, EditAviationAccountGuard],
-          },
-          {
-            path: 'edit-commencement-date',
-            data: {
-              pageTitle: 'Account - first year of reporting obligation',
-              breadcrumb: 'Edit first year of reporting obligation account',
-            },
-            component: EditCommencementDateAviationAccountComponent,
             canActivate: [EditAviationAccountGuard],
             canDeactivate: [PendingRequestGuard, EditAviationAccountGuard],
           },

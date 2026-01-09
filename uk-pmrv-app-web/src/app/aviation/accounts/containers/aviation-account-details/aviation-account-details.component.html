@@ -2,7 +2,8 @@
   <app-aviation-account-closed
     id="aviation-account-closed"
     [accountInfo]="accountInfo$ | async"
-    *ngIf="(accountInfo$ | async).status === 'CLOSED'"></app-aviation-account-closed>
+    *ngIf="(accountInfo$ | async).status === 'CLOSED'"
+  ></app-aviation-account-closed>
 
   <div class="live-account-content" *ngIf="accountEmp$ | async as accountEmp">
     <h2 class="govuk-heading-m">Active emissions plan</h2>
@@ -15,14 +16,16 @@
             <a
               [routerLink]="['file-download', 'document', accountEmp.id, accountEmp.fileDocument?.uuid]"
               govukLink
-              target="_blank">
+              target="_blank"
+            >
               {{ accountEmp.fileDocument?.name }}
             </a>
           </p>
           <details
             *ngIf="(accountEmp.empAttachments | keyvalue).length > 0"
             class="govuk-details"
-            data-module="govuk-details">
+            data-module="govuk-details"
+          >
             <summary class="govuk-details__summary">
               <span>Attached documents</span>
             </summary>
@@ -32,7 +35,8 @@
                   <a
                     [routerLink]="['file-download', 'attachment', accountEmp.id, empAttachments.key]"
                     govukLink
-                    target="_blank">
+                    target="_blank"
+                  >
                     {{ empAttachments.value }}
                   </a>
                 </li>
@@ -54,12 +58,11 @@
     <app-aviation-account-summary-info
       [summaryInfo]="accountInfo$ | async"
       [editable]="(userRoleType$ | async) === 'REGULATOR' && (accountInfo$ | async).status !== 'CLOSED'"
-      [editModeEnabled]="true"
-      [withRegistryId]="
-        (accountInfo$ | async)?.emissionTradingScheme === 'UK_ETS_AVIATION'
-      "></app-aviation-account-summary-info>
+      [withRegistryId]="(accountInfo$ | async)?.emissionTradingScheme === 'UK_ETS_AVIATION'"
+    ></app-aviation-account-summary-info>
   </div>
   <app-account-reporting-status
     [userRoleType]="userRoleType$ | async"
-    [accountInfo]="accountInfo$ | async"></app-account-reporting-status>
+    [accountInfo]="accountInfo$ | async"
+  ></app-account-reporting-status>
 </ng-container>

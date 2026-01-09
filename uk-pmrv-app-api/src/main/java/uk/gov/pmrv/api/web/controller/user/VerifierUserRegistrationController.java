@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.user.core.domain.dto.InvitedUserCredentialsDTO;
 import uk.gov.pmrv.api.user.core.domain.dto.InvitedUserInfoDTO;
 import uk.gov.pmrv.api.user.core.domain.dto.TokenDTO;
@@ -45,10 +43,9 @@ public class VerifierUserRegistrationController {
     @ApiResponse(responseCode = "400", description = SwaggerApiInfo.ACCEPT_VERIFIER_USER_INVITATION_BAD_REQUEST ,content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     public ResponseEntity<InvitedUserInfoDTO> acceptVerifierInvitation(
-            @RequestBody @Valid @Parameter(description = "The invitation token", required = true) TokenDTO invitationTokenDTO,
-            @Parameter(hidden = true) AppUser currentUser) {
+            @RequestBody @Valid @Parameter(description = "The invitation token", required = true) TokenDTO invitationTokenDTO) {
         log.debug("Call to acceptVerifierInvitation: {}", invitationTokenDTO);
-        return new ResponseEntity<>(verifierUserInvitationService.acceptInvitation(invitationTokenDTO.getToken(), currentUser), HttpStatus.OK);
+        return new ResponseEntity<>(verifierUserInvitationService.acceptInvitation(invitationTokenDTO.getToken()), HttpStatus.OK);
     }
 
     @PutMapping(path = "/accept-authority-and-activate-verifier-user-from-invitation")
@@ -59,10 +56,9 @@ public class VerifierUserRegistrationController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     public ResponseEntity<Void> acceptAuthorityAndActivateVerifierUserFromInvite(
             @RequestBody @Valid @Parameter(description = "The verifier user", required = true)
-                    InvitedUserCredentialsDTO invitedUserCredentialsDTO,
-            @Parameter(hidden = true) AppUser currentUser) {
+                    InvitedUserCredentialsDTO invitedUserCredentialsDTO) {
         log.debug("Call to acceptAuthorityAndActivateVerifierUserFromInvite: {}", invitedUserCredentialsDTO);
-        verifierUserActivateService.acceptAuthorityAndActivateInvitedUser(invitedUserCredentialsDTO, currentUser);
+        verifierUserActivateService.acceptAuthorityAndActivateInvitedUser(invitedUserCredentialsDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     

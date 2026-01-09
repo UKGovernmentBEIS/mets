@@ -14,7 +14,6 @@ export interface PermitVariationGrantDetermination {
   type?: 'GRANTED' | 'REJECTED' | 'COMPLETED' | 'DEEMED_WITHDRAWN';
   reason: string;
   activationDate: string;
-  firstYearOfReportingObligation?: number;
   annualEmissionsTargets?: { [key: string]: string };
   logChanges: string;
 }

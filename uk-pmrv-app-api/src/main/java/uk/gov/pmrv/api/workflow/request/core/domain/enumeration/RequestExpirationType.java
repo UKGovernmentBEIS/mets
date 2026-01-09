@@ -22,7 +22,6 @@ public enum RequestExpirationType {
     BDR("bdr"),
     ALR("alr"),
     HSETI("hseti"),
-    WASTEQDR("wasteqdr"),
 
     AVIATION_AER("aviationAer"),
     AVIATION_VIR("aviationVir"),

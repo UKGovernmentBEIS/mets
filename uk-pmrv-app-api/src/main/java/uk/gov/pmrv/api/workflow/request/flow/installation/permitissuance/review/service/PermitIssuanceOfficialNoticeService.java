@@ -13,7 +13,6 @@ import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplate
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
@@ -37,7 +36,7 @@ public class PermitIssuanceOfficialNoticeService {
     private final DocumentFileGeneratorService documentFileGeneratorService;
     private final OfficialNoticeSendService officialNoticeSendService;
     private final RegistryConfig registryConfig;
-    private final InstallationAccountRegistryEventPublisherService installationAccountRegistryEventPublisherService;
+    private final PermitIssuanceRegistryEventPublisherService permitIssuanceRegistryEventPublisherService;
 
     @Transactional
     public CompletableFuture<FileInfoDTO> generateGrantedOfficialNotice(final String requestId) {
@@ -120,10 +119,7 @@ public class PermitIssuanceOfficialNoticeService {
             List.of(requestPayload.getOfficialNotice(), requestPayload.getPermitDocument()) :
             List.of(requestPayload.getOfficialNotice());
 
-        if (!RequestType.PERMIT_TRANSFER_B.equals(request.getType())) {
-            installationAccountRegistryEventPublisherService.publishRegistryEvent(requestPayload, requestId,
-                request.getAccountId());
-        }
+        permitIssuanceRegistryEventPublisherService.publishRegistryEvent(requestPayload,requestId,request.getAccountId());
 
 		officialNoticeSendService.sendOfficialNotice(attachments, request,
 				decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification()),

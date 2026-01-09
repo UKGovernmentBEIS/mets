@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.dto.AccountSearchCriteria;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountSearchResults;
@@ -23,6 +22,7 @@ import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.account.service.VerifierAccountAccessByAccountTypeService;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,10 +109,6 @@ public class InstallationAccountQueryService {
         return accountQueryService.isLegalEntityUnused(legalEntityId);
     }
 
-    public Integer getRegistryReportingFirstYear(Long accountId) {
-        return installationAccountRepository.findRegistryReportingFirstYearById(accountId);
-    }
-
     public boolean transferCodeExists(final String transferCode) {
         return installationAccountRepository.existsByTransferCode(transferCode);
     }
@@ -151,6 +147,4 @@ public class InstallationAccountQueryService {
         return installationAccountRepository.findAccountWithLocAndLeWithLocById(accountId)
             .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
     }
-
-
 }

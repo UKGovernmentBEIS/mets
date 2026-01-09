@@ -114,7 +114,6 @@ class ReportingDataControllerTest {
 
     @Test
     void getInventoryDataExistenceByYear_national() throws Exception {
-    	setupAppUser();
         final Year year = Year.of(2023);
         final InventoryDataYearExistenceDTO inventoryDataYearExistence = InventoryDataYearExistenceDTO.builder()
                 .year(year)
@@ -142,7 +141,6 @@ class ReportingDataControllerTest {
 
     @Test
     void getInventoryDataExistenceByYear_regional() throws Exception {
-    	setupAppUser();
         final Year year = Year.of(2023);
         final InventoryDataYearExistenceDTO inventoryDataYearExistence = InventoryDataYearExistenceDTO.builder()
                 .year(year)
@@ -170,7 +168,6 @@ class ReportingDataControllerTest {
 
     @Test
     void getChargingZonesByPostCode() throws Exception {
-    	setupAppUser();
         String code = "A2 2";
         ChargingZoneDTO chargingZoneDTO = ChargingZoneDTO.builder().code("EA").name("Eastern").build();
         List<ChargingZoneDTO> chargingZones = List.of(chargingZoneDTO);
@@ -194,8 +191,10 @@ class ReportingDataControllerTest {
 
     @Test
     void getChargingZonesByPostCode_forbidden() throws Exception {
-    	AppUser appUser = setupAppUser();
         String code = "A2 2";
+        AppUser appUser = AppUser.builder().build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
             .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -211,7 +210,6 @@ class ReportingDataControllerTest {
 
     @Test
     void getRegionalEmissionCalculationParameters() throws Exception {
-    	setupAppUser();
         Year year = Year.of(2021);
         String chargingZoneCode = "SE";
         RegionalInventoryEmissionCalculationParamsDTO regionalEmissionCalculationParameters =
@@ -245,7 +243,6 @@ class ReportingDataControllerTest {
 
     @Test
     void getRegionalEmissionCalculationParameters_not_found() throws Exception {
-    	setupAppUser();
         Year year = Year.of(2021);
         String chargingZoneCode = "SE";
 
@@ -263,9 +260,11 @@ class ReportingDataControllerTest {
 
     @Test
     void getRegionalEmissionCalculationParameters_forbidden() throws Exception {
-    	AppUser appUser = setupAppUser();
         Year year = Year.of(2021);
         String chargingZoneCode = "SE";
+        AppUser appUser = AppUser.builder().build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
             .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -282,7 +281,6 @@ class ReportingDataControllerTest {
 
     @Test
     void getNationalInventoryData() throws Exception {
-    	setupAppUser();
         Year year = Year.of(2021);
         NationalInventoryDataDTO nationalInventoryData = NationalInventoryDataDTO.builder()
             .sectors(Set.of(NationalInventoryDataDTO.Sector.builder()
@@ -319,8 +317,10 @@ class ReportingDataControllerTest {
 
     @Test
     void getNationalInventoryData_forbidden() throws Exception {
-    	AppUser appUser = setupAppUser();
         Year year = Year.of(2021);
+        AppUser appUser = AppUser.builder().build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
             .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -336,7 +336,6 @@ class ReportingDataControllerTest {
 
     @Test
     void getCalculationParameterTypesBySourceStreamType() throws Exception {
-    	setupAppUser();
         SourceStreamType sourceStreamType = SourceStreamType.REFINERIES_MASS_BALANCE;
         List<CalculationParameterMeasurementUnits> measurementUnitsCombinations = List.of(
             CalculationParameterMeasurementUnits.builder()
@@ -371,9 +370,10 @@ class ReportingDataControllerTest {
 
     @Test
     void getCalculationParameterTypesBySourceStreamType_forbidden() throws Exception {
-    	AppUser appUser = setupAppUser();
         SourceStreamType sourceStreamType = SourceStreamType.REFINERIES_MASS_BALANCE;
+        AppUser appUser = AppUser.builder().build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
             .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -386,10 +386,4 @@ class ReportingDataControllerTest {
 
         verifyNoInteractions(calculationParametersInfoService);
     }
-    
-    private AppUser setupAppUser() {
-		AppUser user = AppUser.builder().userId("authId").build();
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-		return user;
-	}
 }

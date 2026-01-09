@@ -12,15 +12,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-
-import uk.gov.netz.api.authorization.core.domain.AppUser;
-import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.pmrv.api.user.core.domain.dto.InvitedUserCredentialsDTO;
 import uk.gov.pmrv.api.user.core.domain.dto.InvitedUserInfoDTO;
 import uk.gov.pmrv.api.user.core.domain.dto.TokenDTO;
 import uk.gov.pmrv.api.user.verifier.service.VerifierUserActivateService;
 import uk.gov.pmrv.api.user.verifier.service.VerifierUserInvitationService;
-import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 
 import static org.mockito.Mockito.times;
@@ -40,9 +36,6 @@ class VerifierUserRegistrationControllerTest {
 
     @InjectMocks
     private VerifierUserRegistrationController controller;
-    
-    @Mock
-    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private VerifierUserInvitationService verifierUserInvitationService;
@@ -61,7 +54,6 @@ class VerifierUserRegistrationControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
             .setValidator(validator)
             .setControllerAdvice(new ExceptionControllerAdvice())
-            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .build();
     }
 
@@ -70,12 +62,9 @@ class VerifierUserRegistrationControllerTest {
         String email = "email";
         TokenDTO tokenDTO = TokenDTO.builder().token("token").build();
         InvitedUserInfoDTO invitedUserInfo = InvitedUserInfoDTO.builder().email(email).build();
-        
-        AppUser currentUser = AppUser.builder().userId("authId").build();
-    	when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
         // Mock
-        when(verifierUserInvitationService.acceptInvitation(tokenDTO.getToken(), currentUser)).thenReturn(invitedUserInfo);
+        when(verifierUserInvitationService.acceptInvitation(tokenDTO.getToken())).thenReturn(invitedUserInfo);
 
         // Invoke
         mockMvc.perform(
@@ -92,9 +81,6 @@ class VerifierUserRegistrationControllerTest {
             .invitationToken("token")
             .password("password")
             .build();
-        
-        AppUser currentUser = AppUser.builder().userId("authId").build();
-    	when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
         // Invoke
         mockMvc.perform(
@@ -103,7 +89,7 @@ class VerifierUserRegistrationControllerTest {
                 .content(objectMapper.writeValueAsString(invitedUserCredentialsDTO)))
             .andExpect(status().isNoContent());
 
-        verify(verifierUserActivateService, times(1)).acceptAuthorityAndActivateInvitedUser(invitedUserCredentialsDTO, currentUser);
+        verify(verifierUserActivateService, times(1)).acceptAuthorityAndActivateInvitedUser(invitedUserCredentialsDTO);
     }
     
 }

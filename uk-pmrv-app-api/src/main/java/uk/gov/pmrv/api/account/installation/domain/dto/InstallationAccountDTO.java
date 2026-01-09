@@ -33,8 +33,6 @@ public class InstallationAccountDTO extends AccountDTO {
     @NotBlank
     private String siteName;
 
-    private Integer registryReportingFirstYear;
-
     private EmitterType emitterType;
 
     private InstallationCategory installationCategory;

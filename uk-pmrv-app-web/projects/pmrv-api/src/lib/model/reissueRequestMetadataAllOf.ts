@@ -42,7 +42,6 @@ export interface ReissueRequestMetadataAllOf {
     | 'BDR'
     | 'PERMANENT_CESSATION'
     | 'ALR'
-    | 'WASTE_QDR'
     | 'AVIATION_ACCOUNT_CLOSURE'
     | 'AVIATION_NON_COMPLIANCE'
     | 'EMP_BATCH_REISSUE'

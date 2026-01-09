@@ -5,4 +5,3 @@ export * from './view-aviation-account';
 export * from './aviation-account-details';
 export * from './edit-aviation-account';
 export * from './account-reporting-status-history';
-export * from './edit-commencement-date-aviation-account';

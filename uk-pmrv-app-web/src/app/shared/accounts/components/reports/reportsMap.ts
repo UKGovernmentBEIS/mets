@@ -9,7 +9,6 @@ export const reportsTypesMap: Record<string, Record<string, RequestDetailsDTO['r
     'Determine emissions': ['DRE'],
     'Emissions report': ['AER'],
     'Verifier improvement': ['VIR'],
-    'Waste voluntary quarterly report': ['WASTE_QDR'],
   },
   AVIATION: {
     'Annual emissions': ['AVIATION_AER_UKETS', 'AVIATION_AER_CORSIA'],
@@ -35,7 +34,6 @@ export const reportsTypesTagsMap: Record<string, any> = {
   AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING: '3 year offsetting requirements',
   AVIATION_DOE_CORSIA: 'estimation of emissions',
   ALR: 'activity level report',
-  WASTE_QDR: 'emission factors report',
 };
 
 export const reportsStatusesMap: Record<string, Partial<Record<RequestDetailsDTO['requestStatus'], string>>> = {

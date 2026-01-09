@@ -101,7 +101,7 @@ class InstallationAccountControllerTest {
 
 	@Test
 	void getCurrentUserAccounts() throws Exception {
-		AppUser user = setupAppUser();
+		final AppUser user = AppUser.builder().userId("userId").build();
 		final AccountSearchCriteria criteria = AccountSearchCriteria.builder()
                     .term("key")
                     .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build()).build();
@@ -112,6 +112,7 @@ class InstallationAccountControllerTest {
                         new AccountSearchResultsInfoDTO(2L, "account2", "EM00010", InstallationAccountStatus.LIVE.name(), "lename2"));
 		final AccountSearchResults results = AccountSearchResults.builder().accounts(accounts).total(2L).build();
 
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 		when(installationAccountQueryService.getAccountsByUserAndSearchCriteria(user, criteria)).thenReturn(results);
 
 		mockMvc.perform(MockMvcRequestBuilders
@@ -134,11 +135,12 @@ class InstallationAccountControllerTest {
 
     @Test
     void getCurrentUserAccounts_forbidden() throws Exception {
-    	AppUser user = setupAppUser();
+        final AppUser user = AppUser.builder().userId("userId").build();
         final AccountSearchCriteria criteria = AccountSearchCriteria.builder()
                 .term("key")
                 .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build()).build();
 
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
             .evaluate(user, new String[]{OPERATOR, REGULATOR, VERIFIER});
@@ -157,6 +159,7 @@ class InstallationAccountControllerTest {
 	@ParameterizedTest
 	@MethodSource("provideAccountNames")
 	void isExistingLegalEntityName(String accountName, boolean exists) throws Exception {
+
 		when(accountQueryService.isExistingActiveAccountName(accountName, null)).thenReturn(exists);
 
 		mockMvc.perform(MockMvcRequestBuilders.get(ACCOUNT_CONTROLLER_PATH + "/name")
@@ -171,6 +174,7 @@ class InstallationAccountControllerTest {
 	@ParameterizedTest
 	@MethodSource("provideAccountNamesAndAccountIds")
 	void isExistingAcountNameWithAccountId(String accountName, boolean exists, Long accountId) throws Exception {
+
 		when(accountQueryService.isExistingActiveAccountName(accountName, accountId)).thenReturn(exists);
 
 		mockMvc.perform(MockMvcRequestBuilders.get(ACCOUNT_CONTROLLER_PATH + "/name")
@@ -199,11 +203,5 @@ class InstallationAccountControllerTest {
 				Arguments.of("account%25", true, 1L),
 				Arguments.of("account%2Fname", true, 1L),
 				Arguments.of("account%5Cname", true, 1L));
-	}
-	
-	private AppUser setupAppUser() {
-		AppUser user = AppUser.builder().userId("authId").build();
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-		return user;
 	}
 }

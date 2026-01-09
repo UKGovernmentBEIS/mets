@@ -74,8 +74,6 @@ class SourceStreamCategoriesControllerTest {
 
     @Test
     void getSourceStreamCategories() throws Exception {
-    	AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         MvcResult mvcResult = mockMvc.perform(
                         MockMvcRequestBuilders.get("/v1.0/source-stream-categories"))
                 .andExpect(status().isOk()).andReturn();

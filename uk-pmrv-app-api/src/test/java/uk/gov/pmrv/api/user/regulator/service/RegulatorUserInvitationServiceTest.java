@@ -120,8 +120,6 @@ class RegulatorUserInvitationServiceTest {
             .authorityStatus(AuthorityStatus.PENDING)
             .userId("userId")
             .build();
-        
-        AppUser currentUser = AppUser.builder().userId("userId").build();
 
         RegulatorUserDTO regulatorUser = RegulatorUserDTO.builder()
             .email(userEmail)
@@ -132,20 +130,20 @@ class RegulatorUserInvitationServiceTest {
         		.invitationStatus(UserInvitationStatus.ALREADY_REGISTERED)
         		.build();
 
-		when(regulatorUserTokenVerificationService.verifyInvitationToken(invitationToken, currentUser))
+		when(regulatorUserTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken))
 				.thenReturn(authorityInfo);
 		when(userAuthService.hasUserPassword(authorityInfo.getUserId())).thenReturn(true);
         when(regulatorUserAuthService.getRegulatorUserById(authorityInfo.getUserId())).thenReturn(regulatorUser);
 
-        InvitedUserInfoDTO actualInvitedUserInfo = service.acceptInvitation(invitationToken, currentUser);
+        InvitedUserInfoDTO actualInvitedUserInfo = service.acceptInvitation(invitationToken);
 
         assertEquals(expectedInvitedUserInfo, actualInvitedUserInfo);
 
-        verify(regulatorUserTokenVerificationService, times(1)).verifyInvitationToken(invitationToken, currentUser);
+        verify(regulatorUserTokenVerificationService, times(1)).verifyInvitationTokenForPendingAuthority(invitationToken);
         verify(regulatorUserAuthService, times(1)).getRegulatorUserById(authorityInfo.getUserId());
         verify(userAuthService, times(1)).hasUserPassword(authorityInfo.getUserId());
 		verify(regulatorUserActivateService, times(1))
-				.acceptAuthorityForRegisteredRegulatorInvitedUser(invitationToken, currentUser);
+				.acceptAuthorityForRegisteredRegulatorInvitedUser(invitationToken);
     }
     
     @Test
@@ -157,8 +155,6 @@ class RegulatorUserInvitationServiceTest {
             .authorityStatus(AuthorityStatus.PENDING)
             .userId("userId")
             .build();
-        
-        AppUser currentUser = AppUser.builder().userId("userId").build();
 
         RegulatorUserDTO regulatorUser = RegulatorUserDTO.builder()
             .email(userEmail)
@@ -169,20 +165,20 @@ class RegulatorUserInvitationServiceTest {
         		.invitationStatus(UserInvitationStatus.ALREADY_REGISTERED_SET_PASSWORD_ONLY)
         		.build();
 
-		when(regulatorUserTokenVerificationService.verifyInvitationToken(invitationToken, currentUser))
+		when(regulatorUserTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken))
 				.thenReturn(authorityInfo);
 		when(userAuthService.hasUserPassword(authorityInfo.getUserId())).thenReturn(false);
         when(regulatorUserAuthService.getRegulatorUserById(authorityInfo.getUserId())).thenReturn(regulatorUser);
 
-        InvitedUserInfoDTO actualInvitedUserInfo = service.acceptInvitation(invitationToken, currentUser);
+        InvitedUserInfoDTO actualInvitedUserInfo = service.acceptInvitation(invitationToken);
 
         assertEquals(expectedInvitedUserInfo, actualInvitedUserInfo);
 
-        verify(regulatorUserTokenVerificationService, times(1)).verifyInvitationToken(invitationToken, currentUser);
+        verify(regulatorUserTokenVerificationService, times(1)).verifyInvitationTokenForPendingAuthority(invitationToken);
         verify(regulatorUserAuthService, times(1)).getRegulatorUserById(authorityInfo.getUserId());
         verify(userAuthService, times(1)).hasUserPassword(authorityInfo.getUserId());
 		verify(regulatorUserActivateService, never())
-				.acceptAuthorityForRegisteredRegulatorInvitedUser(invitationToken, currentUser);
+				.acceptAuthorityForRegisteredRegulatorInvitedUser(invitationToken);
     }
     
     @Test
@@ -196,8 +192,6 @@ class RegulatorUserInvitationServiceTest {
             .userId("userId")
             .build();
 
-        AppUser currentUser = AppUser.builder().userId("userId").build();
-        
         RegulatorUserDTO regulatorUser = RegulatorUserDTO.builder()
             .email(userEmail)
             .enabled(false)
@@ -207,14 +201,14 @@ class RegulatorUserInvitationServiceTest {
         		.invitationStatus(UserInvitationStatus.PENDING_TO_REGISTERED_SET_PASSWORD_ONLY)
         		.build();
 
-        when(regulatorUserTokenVerificationService.verifyInvitationToken(invitationToken, currentUser)).thenReturn(authorityInfo);
+        when(regulatorUserTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken)).thenReturn(authorityInfo);
         when(regulatorUserAuthService.getRegulatorUserById(authorityInfo.getUserId())).thenReturn(regulatorUser);
 
-        InvitedUserInfoDTO actualInvitedUserInfo = service.acceptInvitation(invitationToken, currentUser);
+        InvitedUserInfoDTO actualInvitedUserInfo = service.acceptInvitation(invitationToken);
 
         assertEquals(expectedInvitedUserInfo, actualInvitedUserInfo);
 
-        verify(regulatorUserTokenVerificationService, times(1)).verifyInvitationToken(invitationToken, currentUser);
+        verify(regulatorUserTokenVerificationService, times(1)).verifyInvitationTokenForPendingAuthority(invitationToken);
         verify(regulatorUserAuthService, times(1)).getRegulatorUserById(authorityInfo.getUserId());
 		verify(regulatorUserRegisterValidationService, times(1)).validate(authorityInfo.getUserId(),
 				authorityInfo.getCompetentAuthority());

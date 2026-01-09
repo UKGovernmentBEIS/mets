@@ -8,7 +8,6 @@ import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/re
 import { UrlRequestType } from '@shared/types/url-request-type';
 
 import {
-  InstallationAccountDTO,
   Permit,
   PermitAcceptedVariationDecisionDetails,
   PermitContainer,
@@ -170,12 +169,10 @@ export class PermitVariationStore extends PermitApplicationStore<PermitVariation
     return !this.isVariationRegulatorLedRequest;
   }
 
-  override isDeterminationWizardComplete(
-    emissionTradingScheme?: InstallationAccountDTO['emissionTradingScheme'],
-  ): boolean {
+  override isDeterminationWizardComplete(): boolean {
     const state = this.getState();
     if (state.determination?.type === 'GRANTED' || !this.isDeterminationTypeApplicable()) {
-      return this.isGrantWizardComplete(state, emissionTradingScheme);
+      return this.isGrantWizardComplete(state);
     } else if (state.determination?.type === 'REJECTED') {
       return this.isRejectWizardComplete(state.determination);
     } else if (state.determination?.type === 'DEEMED_WITHDRAWN') {
@@ -184,22 +181,14 @@ export class PermitVariationStore extends PermitApplicationStore<PermitVariation
     return false;
   }
 
-  private isGrantWizardComplete(
-    state: PermitVariationState,
-    emissionTradingScheme?: InstallationAccountDTO['emissionTradingScheme'],
-  ): boolean {
+  private isGrantWizardComplete(state: PermitVariationState): boolean {
     return (
       !!state?.determination?.reason &&
       !!state?.determination?.activationDate &&
       (state.permitType === 'GHGE' || state.permitType === 'WASTE' || isHSEAnnualEmissionTargetsCompleted(state)) &&
       (!getVariationRequestTaskTypes().includes(state.requestTaskType) || !!state?.determination?.logChanges) &&
       (!isVariationRegulatorLedRequestTask(this.getState().requestTaskType) ||
-        isVariationReasonTemplateCompleted(state.determination)) &&
-      (state.permitType === 'GHGE' &&
-      (state.originalPermitContainer?.permitType === 'HSE' || state.originalPermitContainer?.permitType === 'WASTE') &&
-      emissionTradingScheme === 'UK_ETS_INSTALLATIONS'
-        ? !!state?.determination?.firstYearOfReportingObligation
-        : true)
+        isVariationReasonTemplateCompleted(state.determination))
     );
   }
 

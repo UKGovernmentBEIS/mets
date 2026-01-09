@@ -28,7 +28,6 @@ public enum RequestCreateActionType {
     BDR(RequestType.BDR),
     PERMANENT_CESSATION(RequestType.PERMANENT_CESSATION),
     ALR(RequestType.ALR),
-    WASTE_QDR(RequestType.WASTE_QDR),
 
     EMP_BATCH_REISSUE(RequestType.EMP_BATCH_REISSUE),
     AVIATION_ACCOUNT_CLOSURE(RequestType.AVIATION_ACCOUNT_CLOSURE),

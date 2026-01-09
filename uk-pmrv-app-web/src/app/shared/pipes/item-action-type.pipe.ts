@@ -36,11 +36,8 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'PERMIT_ISSUANCE_RECALLED_FROM_AMENDS':
         return 'Permit application recalled';
       case 'PERMIT_ISSUANCE_ACCOUNT_CREATED_SENT_TO_REGISTRY':
-        return 'Information sent to registry by system';
-      case 'PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY':
-        return 'Information sent to registry by system';
       case 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY':
-        return 'Information sent to registry';
+        return 'Information sent to registry by system';
 
       case 'PERMIT_SURRENDER_APPLICATION_CANCELLED':
         return 'Surrender request cancelled';

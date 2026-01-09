@@ -141,7 +141,6 @@ class RoleControllerTest {
 
     @Test
     void getRegulatorRoles() throws Exception {
-    	setupAppUser();
         RegulatorRolePermissionsDTO regulatorRolePermissionsDTO =
             buildRolePermissionsDTO("code1", Map.of(MANAGE_USERS_AND_CONTACTS, RegulatorPermissionLevel.NONE));
 
@@ -159,7 +158,6 @@ class RoleControllerTest {
 
     @Test
     void getVerifierRoleCodes() throws Exception {
-    	setupAppUser();
         List<RoleDTO> verifierRoles = List.of(buildRole("verifier_code1"), buildRole("verifier_code2"));
 
         when(roleService.getVerifierRoleCodes()).thenReturn(verifierRoles);
@@ -201,11 +199,5 @@ class RoleControllerTest {
             .code(code)
             .build();
     }
-    
-    private AppUser setupAppUser() {
-		AppUser user = AppUser.builder().userId("authId").build();
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-		return user;
-	}
 
 }

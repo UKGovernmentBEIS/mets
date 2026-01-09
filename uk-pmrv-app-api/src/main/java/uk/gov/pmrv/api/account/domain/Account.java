@@ -140,9 +140,6 @@ public abstract class Account {
 
     @Column(name = "verification_body_id")
     private Long verificationBodyId;
-    
-    @Column(name = "third_party_data_provider_id")
-    private Long thirdPartyDataProviderId;
 
     @Builder.Default
     @ElementCollection

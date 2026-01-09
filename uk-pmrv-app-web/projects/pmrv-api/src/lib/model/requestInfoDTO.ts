@@ -34,7 +34,6 @@ import { PermitTransferBRequestMetadata } from './permitTransferBRequestMetadata
 import { PermitVariationRequestMetadata } from './permitVariationRequestMetadata';
 import { ReissueRequestMetadata } from './reissueRequestMetadata';
 import { VirRequestMetadata } from './virRequestMetadata';
-import { WasteQDRRequestMetaData } from './wasteQDRRequestMetaData';
 
 export interface RequestInfoDTO {
   id?: string;
@@ -65,7 +64,6 @@ export interface RequestInfoDTO {
     | 'BDR'
     | 'PERMANENT_CESSATION'
     | 'ALR'
-    | 'WASTE_QDR'
     | 'AVIATION_ACCOUNT_CLOSURE'
     | 'AVIATION_NON_COMPLIANCE'
     | 'EMP_BATCH_REISSUE'
@@ -108,8 +106,7 @@ export interface RequestInfoDTO {
     | PermitTransferBRequestMetadata
     | PermitVariationRequestMetadata
     | ReissueRequestMetadata
-    | VirRequestMetadata
-    | WasteQDRRequestMetaData;
+    | VirRequestMetadata;
   paymentCompleted?: boolean;
   paymentAmount?: string;
 }
