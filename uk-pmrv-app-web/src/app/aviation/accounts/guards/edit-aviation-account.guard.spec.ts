@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -31,6 +32,7 @@ describe('EditAviationAccountGuard -> canActivate', () => {
         { provide: AviationAccountUpdateService, useValue: mockClass(AviationAccountUpdateService) },
         { provide: AviationAccountsService, useValue: accountsService },
         { provide: PendingRequestService, useValue: pendingRequestService },
+        provideHttpClient(),
       ],
     });
 

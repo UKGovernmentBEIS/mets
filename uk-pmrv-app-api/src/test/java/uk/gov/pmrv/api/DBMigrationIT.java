@@ -151,6 +151,27 @@ class DBMigrationIT extends AbstractContainerBaseTest {
         }
     }
 
+    @Test
+    public void consultantRoleHasAppropriatePermissions() {
+        try (Connection conn = getConnection()) {
+            PreparedStatement stm = conn.prepareStatement("""
+                 with consultant_permissions as (select distinct (rp."permission") 
+                                     from au_role r join au_role_permission rp on r.id = rp.role_id where r.code like '%consultant%'),
+                 operator_permissions as (select distinct (rp."permission")
+                              from au_role r join au_role_permission rp on r.id = rp.role_id where r.code like '%operator%')
+                 select permission from operator_permissions 
+                       where permission not in (select permission from consultant_permissions) 
+                        and permission not in ('PERM_INSTALLATION_ACCOUNT_OPENING_ARCHIVE_EXECUTE_TASK', 'PERM_ACCOUNT_USERS_EDIT');
+            """);
+
+            ResultSet rs = stm.executeQuery();
+            assertThat(rs.next()).isFalse();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     private Connection getConnection() {
         try {

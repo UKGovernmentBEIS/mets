@@ -65,6 +65,7 @@ import { OverallDecisionTypePipe } from './overall-decision-type.pipe';
 import { CessationScopePipePipe } from './permanent-cessation/cessation-scope.pipe.pipe';
 import { PermitTransferPartyPipe } from './permit-transfer-party.pipe';
 import { PfcCalculationMethodPipe } from './pfc-calculation-method.pipe';
+import { QuarterNamePipe } from './quarter-name.pipe';
 import { ReviewBdrAlrGroupDecisionPipe } from './review-bdr-alr-group-decision.pipe';
 import { SnakeToKebabPipe } from './snake-to-kebab.pipe';
 import { SubInstallationTypePipe } from './sub-installation-type.pipe';
@@ -79,6 +80,7 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
   imports: [
     CessationScopePipePipe,
     OverallDecisionTypePipe,
+    QuarterNamePipe,
     ReviewBdrAlrGroupDecisionPipe,
     StatusApplicationTypePipe,
     TaskTypeToBreadcrumbPipe,
@@ -203,6 +205,7 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
     PfcCalculationMethodPipe,
     PhoneNumberPipe,
     PrtrActivityItemNamePipe,
+    QuarterNamePipe,
     RegulatedActivitiesSortPipe,
     RegulatedActivityTypePipe,
     ReportingTypePipe,

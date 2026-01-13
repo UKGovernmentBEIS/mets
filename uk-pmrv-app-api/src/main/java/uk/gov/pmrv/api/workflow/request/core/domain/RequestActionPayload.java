@@ -96,6 +96,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRRegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRVerificationReturnedToOperatorRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationCompletedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationAcceptedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationAcceptedWithCorrectionsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationClosedRequestActionPayload;
@@ -118,7 +119,6 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationGrantedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationRejectedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationReturnedForAmendsRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.submit.domain.PermitIssuanceApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationReviewSubmittedDecisionRequestActionPayload;
@@ -174,7 +174,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PermitIssuanceApplicationRejectedRequestActionPayload.class, value = "PERMIT_ISSUANCE_APPLICATION_REJECTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitIssuanceApplicationReturnedForAmendsRequestActionPayload.class, value = "PERMIT_ISSUANCE_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitIssuanceApplicationSubmittedRequestActionPayload.class, value = "PERMIT_ISSUANCE_APPLICATION_SUBMITTED_PAYLOAD"),
-                @DiscriminatorMapping(schema = PermitIssuanceRegistryIntegrationRequestActionPayload.class, value = "PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD"),
+                @DiscriminatorMapping(schema = InstallationAccountRegistryIntegrationRequestActionPayload.class, value = "PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "PERMIT_SURRENDER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitSurrenderApplicationDeemedWithdrawnRequestActionPayload.class, value = "PERMIT_SURRENDER_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD"),
@@ -205,6 +205,8 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "PERMIT_VARIATION_PEER_REVIEW_DECISION_REGULATOR_LED_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitVariationApplicationReturnedForAmendsRequestActionPayload.class, value = "PERMIT_VARIATION_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitVariationApplicationRegulatorLedApprovedRequestActionPayload.class, value = "PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD"),
+                @DiscriminatorMapping(schema = InstallationAccountRegistryIntegrationRequestActionPayload.class, value = "PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD"),
+
 
                 @DiscriminatorMapping(schema = PermitTransferAApplicationSubmittedRequestActionPayload.class, value = "PERMIT_TRANSFER_A_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitTransferAApplicationDeterminedRequestActionPayload.class, value = "PERMIT_TRANSFER_A_APPLICATION_GRANTED_PAYLOAD"),
@@ -407,7 +409,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = PermitIssuanceApplicationRejectedRequestActionPayload.class, name = "PERMIT_ISSUANCE_APPLICATION_REJECTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitIssuanceApplicationReturnedForAmendsRequestActionPayload.class, name = "PERMIT_ISSUANCE_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitIssuanceApplicationSubmittedRequestActionPayload.class, name = "PERMIT_ISSUANCE_APPLICATION_SUBMITTED_PAYLOAD"),
-        @JsonSubTypes.Type(value = PermitIssuanceRegistryIntegrationRequestActionPayload.class, name = "PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD"),
+        @JsonSubTypes.Type(value = InstallationAccountRegistryIntegrationRequestActionPayload.class, name = "PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD"),
 
 
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "PERMIT_SURRENDER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
@@ -439,6 +441,8 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "PERMIT_VARIATION_PEER_REVIEW_DECISION_REGULATOR_LED_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitVariationApplicationReturnedForAmendsRequestActionPayload.class, name = "PERMIT_VARIATION_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitVariationApplicationRegulatorLedApprovedRequestActionPayload.class, name = "PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD"),
+        @JsonSubTypes.Type(value = InstallationAccountRegistryIntegrationRequestActionPayload.class, name = "PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD"),
+
 
         @JsonSubTypes.Type(value = PermitTransferAApplicationSubmittedRequestActionPayload.class, name = "PERMIT_TRANSFER_A_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitTransferAApplicationDeterminedRequestActionPayload.class, name = "PERMIT_TRANSFER_A_APPLICATION_GRANTED_PAYLOAD"),

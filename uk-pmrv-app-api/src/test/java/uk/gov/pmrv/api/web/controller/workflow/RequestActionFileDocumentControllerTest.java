@@ -75,6 +75,7 @@ class RequestActionFileDocumentControllerTest {
 
     @Test
     void generateRequestActionGetFileFileDocumentToken() throws Exception {
+    	setupAppUser();
         Long requestActionId = 1L;
         UUID fileDocumentUuid = UUID.randomUUID();
         FileToken expectedToken = FileToken.builder().token("token").build();
@@ -93,11 +94,9 @@ class RequestActionFileDocumentControllerTest {
 
     @Test
     void generateRequestActionGetFileFileDocumentToken_forbidden() throws Exception {
+    	AppUser appUser = setupAppUser();
         Long requestActionId = 1L;
         UUID fileDocumentUuid = UUID.randomUUID();
-        AppUser appUser = AppUser.builder().userId("userId").build();
-
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(appUser, "generateRequestActionGetFileDocumentToken", String.valueOf(requestActionId), null, null);
@@ -109,4 +108,10 @@ class RequestActionFileDocumentControllerTest {
 
         verifyNoInteractions(requestActionFileDocumentService);
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 }

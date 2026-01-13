@@ -1,13 +1,15 @@
 package uk.gov.pmrv.api.notification.template.service;
 
+import freemarker.template.Configuration;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
+import uk.gov.netz.api.notificationapi.domain.NotificationContent;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.notification.template.domain.NotificationTemplate;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.notification.template.repository.NotificationTemplateRepository;
@@ -33,6 +35,17 @@ class NotificationTemplateProcessServiceTest {
 
     @Mock
     private NotificationTemplateRepository notificationTemplateRepository;
+
+    @Mock
+    private Configuration freemarkerConfig;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        freemarkerConfig = new Configuration(Configuration.VERSION_2_3_32);
+        freemarkerConfig.setSetting("number_format", "computer");
+        freemarkerConfig.setDefaultEncoding("UTF-8");
+        service = new NotificationTemplateProcessService(freemarkerConfig, notificationTemplateRepository);
+    }
 
     @Test
     void processMessageNotificationTemplate() {

@@ -1,0 +1,39 @@
+<ng-container *ngIf="requestMetadata() as metadata">
+  <app-waste-qdr-task returnLink="../" [breadcrumb]="true">
+    <app-wizard-step
+      (formSubmit)="onSubmit()"
+      [formGroup]="form"
+      caption="Quarterly data report"
+      heading="Will you provide a quarterly data report for {{ metadata.quarter | quarterName }} {{ metadata.year }}?"
+      submitText="Continue"
+      [hideSubmit]="!isEditable()">
+      <div class="govuk-body govuk-!-width-three-quarters">
+        <div class="govuk-body">
+          Taking part in the voluntary MRV-only period will allow operators to provide data in relation to their
+          installation which will be used to support policy decisions on MRV methodologies. This data is necessary to
+          facilitate the development and testing of granular emissions factors to support the pass through of ETS costs
+          from waste incinerators to their customers.
+        </div>
+
+        <div class="govuk-body">If you choose yes, you will:</div>
+
+        <ul class="govuk-list govuk-list--number">
+          <li>Download the quarterly report template.</li>
+          <li>Fill it in as best you can.</li>
+          <li>Upload it with any supporting files, such as CEMS raw data or C14 raw data.</li>
+        </ul>
+
+        <div formControlName="reportProvided" govuk-radio>
+          <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+          <govuk-radio-option [value]="false" label="No">
+            <ng-container govukConditionalContent>
+              <h2 class="govuk-heading-s">Provide a reason for not submitting a quarterly report</h2>
+
+              <div govuk-textarea formControlName="reasonForUnprovided" [maxLength]="10000"></div>
+            </ng-container>
+          </govuk-radio-option>
+        </div>
+      </div>
+    </app-wizard-step>
+  </app-waste-qdr-task>
+</ng-container>

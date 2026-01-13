@@ -53,7 +53,8 @@ public class InstallationOnsiteInspectionSubmittedDocumentTemplateWorkflowParams
         Map<String, Object> params = installationOnsiteInspectionSubmittedDocumentTemplateWorkflowParamsProvider.constructParams(payload,requestId);
 
         verify(installationInspectionSubmittedDocumentTemplateWorkflowCommonParamsProvider, times(1)).constructParams(payload.getInstallationInspection());
-        assertThat(params).containsEntry("inspectionDate","5 December 2024");
+        assertThat(params).containsEntry("inspectionDate", LocalDate.of(2024, 12, 5)
+            .format(InstallationInspectionSubmittedDocumentTemplateWorkflowCommonParamsProvider.FORMATTER));
     }
 
     @Test
@@ -80,7 +81,8 @@ public class InstallationOnsiteInspectionSubmittedDocumentTemplateWorkflowParams
         Map<String, Object> params = installationOnsiteInspectionSubmittedDocumentTemplateWorkflowParamsProvider.constructParamsFromOnsiteInspectionSubmitRequestTaskPayload(payload, requestPayload, requestId);
 
         verify(installationInspectionSubmittedDocumentTemplateWorkflowCommonParamsProvider, times(1)).constructParams(payload.getInstallationInspection());
-        assertThat(params).containsEntry("inspectionDate","5 December 2024");
+        assertThat(params).containsEntry("inspectionDate", LocalDate.of(2024, 12, 5)
+            .format(InstallationInspectionSubmittedDocumentTemplateWorkflowCommonParamsProvider.FORMATTER));
 
     }
 

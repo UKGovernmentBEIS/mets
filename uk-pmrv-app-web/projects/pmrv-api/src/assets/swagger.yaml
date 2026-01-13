@@ -2024,24 +2024,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  type: string
-                  format: decimal
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  type: string
-                  format: decimal
   /v1.0/regulator-users:
     post:
       tags:
@@ -2844,12 +2832,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /v1.0/installation/accounts/{id}/registry-id:
+  /v1.0/installation/accounts/{id}/registry-reporting-first-year:
     post:
       tags:
         - Installation account update
-      summary: Update the uk ets registry id of the account
-      operationId: updateInstallationAccountRegistryId
+      summary: >-
+        Update the first year of registry reporting obligation field of the
+        account
+      operationId: updateRegistryReportingFirstYear
       parameters:
         - name: id
           in: path
@@ -2862,7 +2852,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AccountUpdateRegistryIdDTO'
+              $ref: '#/components/schemas/AccountUpdateRegistryReportingFirstYearDTO'
         required: true
       responses:
         '200':
@@ -3384,6 +3374,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/aviation/accounts/{id}/commencement-date:
+    post:
+      tags:
+        - Aviation account update
+      summary: Update and Validate the commencement date of the account
+      operationId: updateCommencementDate_1
+      parameters:
+        - name: id
+          in: path
+          description: The account id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateCommencementDateDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /v1.0/aviation/accounts/reporting-status-history/{accountId}:
     post:
       tags:
@@ -3814,22 +3845,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/AviationReportableEmissionsDTO'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/AviationReportableEmissionsDTO'
   /v1.0/aviation-reporting-data/airports:
     post:
       tags:
@@ -4962,6 +4983,7 @@ paths:
                     - ALR_WAIT_FOR_AUTHORITY_REVIEW
                     - ALR_APPLICATION_PEER_REVIEW
                     - ALR_WAIT_FOR_PEER_REVIEW
+                    - WASTE_QDR_APPLICATION_SUBMIT
                     - AVIATION_ACCOUNT_CLOSURE_SUBMIT
                     - AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT
                     - AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE
@@ -5181,6 +5203,7 @@ paths:
               - BDR
               - PERMANENT_CESSATION
               - ALR
+              - WASTE_QDR
               - AVIATION_ACCOUNT_CLOSURE
               - AVIATION_NON_COMPLIANCE
               - EMP_BATCH_REISSUE
@@ -5295,6 +5318,7 @@ paths:
               - BDR
               - PERMANENT_CESSATION
               - ALR
+              - WASTE_QDR
               - AVIATION_ACCOUNT_CLOSURE
               - AVIATION_NON_COMPLIANCE
               - EMP_BATCH_REISSUE
@@ -5401,6 +5425,7 @@ paths:
               - BDR
               - PERMANENT_CESSATION
               - ALR
+              - WASTE_QDR
               - AVIATION_ACCOUNT_CLOSURE
               - AVIATION_NON_COMPLIANCE
               - EMP_BATCH_REISSUE
@@ -6043,6 +6068,7 @@ paths:
               - ALR_WAIT_FOR_AUTHORITY_REVIEW
               - ALR_APPLICATION_PEER_REVIEW
               - ALR_WAIT_FOR_PEER_REVIEW
+              - WASTE_QDR_APPLICATION_SUBMIT
               - AVIATION_ACCOUNT_CLOSURE_SUBMIT
               - AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT
               - AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE
@@ -6349,6 +6375,7 @@ paths:
                     - BDR
                     - PERMANENT_CESSATION
                     - ALR
+                    - WASTE_QDR
                     - AVIATION_ACCOUNT_CLOSURE
                     - AVIATION_NON_COMPLIANCE
                     - EMP_BATCH_REISSUE
@@ -6404,33 +6431,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
   /v1.0/requests/available-workflows/permit/{accountId}:
     get:
       tags:
@@ -6460,33 +6472,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
   /v1.0/request-notes/{requestId}/files:
     get:
       tags:
@@ -7899,6 +7896,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/aviation/registry/manual-push/{requestId}:
+    get:
+      tags:
+        - aviation-account-creation-registry-controller
+      summary: >-
+        Check if the account connected to the provided request can be sent to
+        registry
+      operationId: isManualPushToRegistryAvailable
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
   /v1.0/aviation/accounts/reporting-status-history/history:
     get:
       tags:
@@ -8039,6 +8057,46 @@ paths:
                 type: boolean
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/aviation/account/{requestId}/registry-view:
+    get:
+      tags:
+        - Aviation account view
+      summary: >-
+        Get the account information that will be sent to registry for a manual
+        account creation
+      operationId: getAviationAccountViewForRegistry
+      parameters:
+        - name: requestId
+          in: path
+          description: The request id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AviationAccountHeaderInfoDTO'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
@@ -10129,7 +10187,6 @@ components:
       required:
         - hasEnergyCrf
         - hasIndustrialCrf
-        - hasWasteCrf
         - id
         - type
       type: object
@@ -11334,8 +11391,8 @@ components:
           type: integer
           format: int32
         sectorGrowth:
-          type: string
-          format: decimal
+          type: number
+          format: double
         calculatedAnnualOffsetting:
           type: integer
           format: int32
@@ -22071,6 +22128,9 @@ components:
         activationDate:
           type: string
           format: date
+        firstYearOfReportingObligation:
+          type: integer
+          format: int32
         annualEmissionsTargets:
           type: object
           additionalProperties:
@@ -22974,6 +23034,9 @@ components:
         activationDate:
           type: string
           format: date
+        firstYearOfReportingObligation:
+          type: integer
+          format: int32
         annualEmissionsTargets:
           type: object
           additionalProperties:
@@ -23044,6 +23107,9 @@ components:
         activationDate:
           type: string
           format: date
+        firstYearOfReportingObligation:
+          type: integer
+          format: int32
         annualEmissionsTargets:
           type: object
           additionalProperties:
@@ -24652,6 +24718,8 @@ components:
             - ALR_SAVE_AUTHORITY_RESPONSE
             - ALR_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT
             - ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
+            - WASTE_QDR_SAVE_APPLICATION
+            - WASTE_QDR_UPLOAD_ATTACHMENT
             - EMP_ISSUANCE_UKETS_SAVE_APPLICATION
             - EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION
             - EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT
@@ -24666,6 +24734,7 @@ components:
             - EMP_ISSUANCE_UKETS_SAVE_APPLICATION_AMEND
             - EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION_AMEND
             - EMP_ISSUANCE_UKETS_RECALL_FROM_AMENDS
+            - EMP_ISSUANCE_UKETS_MANUAL_ACCOUNT_OPENING_REGISTRY
             - EMP_VARIATION_UKETS_SAVE_APPLICATION
             - EMP_VARIATION_UKETS_SAVE_APPLICATION_REGULATOR_LED
             - EMP_VARIATION_UKETS_SUBMIT_APPLICATION
@@ -25127,6 +25196,8 @@ components:
             - $ref: '#/components/schemas/VirSaveReviewRequestTaskActionPayload'
             - $ref: >-
                 #/components/schemas/VirSubmitRespondToRegulatorCommentsRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/WasteQDRApplicationSaveRequestTaskActionPayload
             - $ref: >-
                 #/components/schemas/WithholdingOfAllowancesSaveApplicationRequestTaskActionPayload
             - $ref: >-
@@ -26438,6 +26509,36 @@ components:
             - SIMPLIFIED_LABORATORY_ANALYSES_SECTION_62
             - CONSTANT_VALUES_STANDARD_SUPPLIER
             - CONSTANT_VALUES_SCIENTIFIC_EVIDENCE
+    WasteQDR:
+      type: object
+      properties:
+        reportProvided:
+          type: boolean
+        reasonForUnprovided:
+          type: string
+        report:
+          type: string
+          format: uuid
+        notes:
+          type: string
+        supportingFiles:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+    WasteQDRApplicationSaveRequestTaskActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            qdr:
+              $ref: '#/components/schemas/WasteQDR'
+            wasteQDRSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
     WithholdingAllowancesNotice:
       required:
         - withholdingOfAllowancesComment
@@ -26855,6 +26956,8 @@ components:
             - ALR_SAVE_AUTHORITY_RESPONSE
             - ALR_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT
             - ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
+            - WASTE_QDR_SAVE_APPLICATION
+            - WASTE_QDR_UPLOAD_ATTACHMENT
             - EMP_ISSUANCE_UKETS_SAVE_APPLICATION
             - EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION
             - EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT
@@ -26869,6 +26972,7 @@ components:
             - EMP_ISSUANCE_UKETS_SAVE_APPLICATION_AMEND
             - EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION_AMEND
             - EMP_ISSUANCE_UKETS_RECALL_FROM_AMENDS
+            - EMP_ISSUANCE_UKETS_MANUAL_ACCOUNT_OPENING_REGISTRY
             - EMP_VARIATION_UKETS_SAVE_APPLICATION
             - EMP_VARIATION_UKETS_SAVE_APPLICATION_REGULATOR_LED
             - EMP_VARIATION_UKETS_SUBMIT_APPLICATION
@@ -27213,6 +27317,7 @@ components:
             - BDR
             - PERMANENT_CESSATION
             - ALR
+            - WASTE_QDR
             - EMP_BATCH_REISSUE
             - AVIATION_ACCOUNT_CLOSURE
             - EMP_VARIATION_UKETS
@@ -27287,6 +27392,7 @@ components:
               - BDR
               - PERMANENT_CESSATION
               - ALR
+              - WASTE_QDR
               - AVIATION_ACCOUNT_CLOSURE
               - AVIATION_NON_COMPLIANCE
               - EMP_BATCH_REISSUE
@@ -27383,6 +27489,7 @@ components:
             - BDR
             - PERMANENT_CESSATION
             - ALR
+            - WASTE_QDR
             - AVIATION_ACCOUNT_CLOSURE
             - AVIATION_NON_COMPLIANCE
             - EMP_BATCH_REISSUE
@@ -27850,6 +27957,7 @@ components:
                 - BDR
                 - PERMANENT_CESSATION
                 - ALR
+                - WASTE_QDR
                 - AVIATION_ACCOUNT_CLOSURE
                 - AVIATION_NON_COMPLIANCE
                 - EMP_BATCH_REISSUE
@@ -27901,6 +28009,7 @@ components:
             - BDR
             - PERMANENT_CESSATION
             - ALR
+            - WASTE_QDR
             - AVIATION_ACCOUNT_CLOSURE
             - AVIATION_NON_COMPLIANCE
             - EMP_BATCH_REISSUE
@@ -27962,6 +28071,7 @@ components:
             - $ref: '#/components/schemas/PermitVariationRequestMetadata'
             - $ref: '#/components/schemas/ReissueRequestMetadata'
             - $ref: '#/components/schemas/VirRequestMetadata'
+            - $ref: '#/components/schemas/WasteQDRRequestMetaData'
     RequestDetailsSearchResults:
       type: object
       properties:
@@ -27994,6 +28104,7 @@ components:
             - BDR
             - PERMANENT_CESSATION
             - ALR
+            - WASTE_QDR
             - REISSUE
             - AVIATION_AER
             - AVIATION_AER_CORSIA
@@ -28023,6 +28134,7 @@ components:
           BDR: '#/components/schemas/BDRRequestMetadata'
           ALR: '#/components/schemas/ALRRequestMetaData'
           HSE_TI: '#/components/schemas/HSETIRequestMetadata'
+          WASTE_QDR: '#/components/schemas/WasteQDRRequestMetaData'
           AVIATION_AER: '#/components/schemas/AviationAerRequestMetadata'
           AVIATION_AER_CORSIA_ANNUAL_OFFSETTING: >-
             #/components/schemas/AviationAerCorsiaAnnualOffsettingRequestMetadata
@@ -28053,6 +28165,25 @@ components:
               items:
                 type: string
                 format: date-time
+    WasteQDRRequestMetaData:
+      required:
+        - quarter
+        - year
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestMetadata'
+        - type: object
+          properties:
+            year:
+              type: integer
+              format: int16
+            quarter:
+              type: string
+              enum:
+                - Q1
+                - Q2
+                - Q3
+                - Q4
     RequestNoteRequest:
       required:
         - note
@@ -28519,15 +28650,14 @@ components:
           minLength: 0
           type: string
       description: The site name
-    AccountUpdateRegistryIdDTO:
+    AccountUpdateRegistryReportingFirstYearDTO:
       type: object
       properties:
-        registryId:
-          maximum: 9999999
-          minimum: 1000000
+        registryReportingFirstYear:
+          minimum: 2021
           type: integer
           format: int32
-      description: The registry id
+      description: The first year of registry reporting obligation field
     AccountUpdateInstallationNameDTO:
       required:
         - installationName
@@ -28677,7 +28807,6 @@ components:
       description: The aviation account creation dto
     AviationAccountUpdateDTO:
       required:
-        - commencementDate
         - crcoCode
         - name
       type: object
@@ -28686,11 +28815,6 @@ components:
           maxLength: 255
           minLength: 0
           type: string
-        registryId:
-          maximum: 9999999
-          minimum: 1000000
-          type: integer
-          format: int32
         sopId:
           maximum: 9999999999
           minimum: 0
@@ -28700,9 +28824,6 @@ components:
           maxLength: 255
           minLength: 0
           type: string
-        commencementDate:
-          type: string
-          format: date
         location:
           $ref: '#/components/schemas/LocationOnShoreStateDTO'
       description: The aviation account fields
@@ -29252,11 +29373,11 @@ components:
     MiReportSearchResult:
       type: object
       properties:
+        miReportType:
+          type: string
         id:
           type: integer
           format: int32
-        miReportType:
-          type: string
     ItemDTO:
       type: object
       properties:
@@ -29294,6 +29415,7 @@ components:
             - BDR
             - PERMANENT_CESSATION
             - ALR
+            - WASTE_QDR
             - AVIATION_ACCOUNT_CLOSURE
             - AVIATION_NON_COMPLIANCE
             - EMP_BATCH_REISSUE
@@ -29516,6 +29638,7 @@ components:
             - ALR_WAIT_FOR_AUTHORITY_REVIEW
             - ALR_APPLICATION_PEER_REVIEW
             - ALR_WAIT_FOR_PEER_REVIEW
+            - WASTE_QDR_APPLICATION_SUBMIT
             - AVIATION_ACCOUNT_CLOSURE_SUBMIT
             - AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT
             - AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE
@@ -33098,6 +33221,9 @@ components:
         activationDate:
           type: string
           format: date
+        firstYearOfReportingObligation:
+          type: integer
+          format: int32
         annualEmissionsTargets:
           type: object
           additionalProperties:
@@ -34017,6 +34143,7 @@ components:
             - BDR
             - PERMANENT_CESSATION
             - ALR
+            - WASTE_QDR
             - AVIATION_ACCOUNT_CLOSURE
             - AVIATION_NON_COMPLIANCE
             - EMP_BATCH_REISSUE
@@ -34072,6 +34199,7 @@ components:
             - $ref: '#/components/schemas/PermitVariationRequestMetadata'
             - $ref: '#/components/schemas/ReissueRequestMetadata'
             - $ref: '#/components/schemas/VirRequestMetadata'
+            - $ref: '#/components/schemas/WasteQDRRequestMetaData'
         paymentCompleted:
           type: boolean
         paymentAmount:
@@ -34283,6 +34411,7 @@ components:
             - ALR_WAIT_FOR_AUTHORITY_REVIEW
             - ALR_APPLICATION_PEER_REVIEW
             - ALR_WAIT_FOR_PEER_REVIEW
+            - WASTE_QDR_APPLICATION_SUBMIT
             - AVIATION_ACCOUNT_CLOSURE_SUBMIT
             - AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT
             - AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE
@@ -34604,6 +34733,7 @@ components:
                 #/components/schemas/VirApplicationRespondToRegulatorCommentsRequestTaskPayload
             - $ref: '#/components/schemas/VirApplicationReviewRequestTaskPayload'
             - $ref: '#/components/schemas/VirApplicationSubmitRequestTaskPayload'
+            - $ref: '#/components/schemas/WasteQDRApplicationSubmitRequestTaskPayload'
             - $ref: >-
                 #/components/schemas/WithholdingOfAllowancesApplicationPeerReviewRequestTaskPayload
             - $ref: >-
@@ -34895,6 +35025,8 @@ components:
               - ALR_SAVE_AUTHORITY_RESPONSE
               - ALR_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT
               - ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
+              - WASTE_QDR_SAVE_APPLICATION
+              - WASTE_QDR_UPLOAD_ATTACHMENT
               - EMP_ISSUANCE_UKETS_SAVE_APPLICATION
               - EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION
               - EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT
@@ -34909,6 +35041,7 @@ components:
               - EMP_ISSUANCE_UKETS_SAVE_APPLICATION_AMEND
               - EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION_AMEND
               - EMP_ISSUANCE_UKETS_RECALL_FROM_AMENDS
+              - EMP_ISSUANCE_UKETS_MANUAL_ACCOUNT_OPENING_REGISTRY
               - EMP_VARIATION_UKETS_SAVE_APPLICATION
               - EMP_VARIATION_UKETS_SAVE_APPLICATION_REGULATOR_LED
               - EMP_VARIATION_UKETS_SUBMIT_APPLICATION
@@ -35200,6 +35333,7 @@ components:
             - ALR_WAIT_FOR_AUTHORITY_REVIEW_PAYLOAD
             - ALR_WAIT_FOR_PEER_REVIEW_PAYLOAD
             - ALR_APPLICATION_PEER_REVIEW_PAYLOAD
+            - WASTE_QDR_SUBMIT_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_REVIEW_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW_PAYLOAD
@@ -35472,6 +35606,7 @@ components:
             #/components/schemas/ALRApplicationRegulatorReviewSubmitRequestTaskPayload
           ALR_WAIT_FOR_PEER_REVIEW_PAYLOAD: >-
             #/components/schemas/ALRApplicationRegulatorReviewSubmitRequestTaskPayload
+          WASTE_QDR_SUBMIT_PAYLOAD: '#/components/schemas/WasteQDRApplicationSubmitRequestTaskPayload'
           EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT_PAYLOAD: >-
             #/components/schemas/EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload
           EMP_ISSUANCE_UKETS_APPLICATION_REVIEW_PAYLOAD: >-
@@ -35776,6 +35911,24 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/VerifierComment'
+    WasteQDRApplicationSubmitRequestTaskPayload:
+      required:
+        - qdr
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskPayload'
+        - type: object
+          properties:
+            qdr:
+              $ref: '#/components/schemas/WasteQDR'
+            wasteQDRSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            wasteQDRAttachments:
+              type: object
+              additionalProperties:
+                type: string
     WithholdingOfAllowancesApplicationPeerReviewRequestTaskPayload:
       required:
         - withholdingOfAllowances
@@ -35938,6 +36091,7 @@ components:
               - BDR
               - PERMANENT_CESSATION
               - ALR
+              - WASTE_QDR
               - AVIATION_ACCOUNT_CLOSURE
               - AVIATION_NON_COMPLIANCE
               - EMP_BATCH_REISSUE
@@ -36057,6 +36211,7 @@ components:
             - PERMIT_VARIATION_APPLICATION_AMENDS_SUBMITTED
             - PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED
             - PERMIT_VARIATION_RECALLED_FROM_AMENDS
+            - PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY
             - PERMIT_TRANSFER_A_APPLICATION_SUBMITTED
             - PERMIT_TRANSFER_A_APPLICATION_GRANTED
             - PERMIT_TRANSFER_A_APPLICATION_REJECTED
@@ -37374,6 +37529,63 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             officialNotice:
               $ref: '#/components/schemas/FileInfoDTO'
+    AviationIndividualCompanyDetails:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/AviationOrganisationDetails'
+        - type: object
+          properties:
+            fullName:
+              type: string
+            address:
+              oneOf:
+                - $ref: '#/components/schemas/LocationDTO'
+                - $ref: '#/components/schemas/LocationOffShoreDTO'
+                - $ref: '#/components/schemas/LocationOnShoreDTO'
+                - $ref: '#/components/schemas/LocationOnShoreStateDTO'
+    AviationLimitedCompanyDetails:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/AviationOrganisationDetails'
+        - type: object
+          properties:
+            companyRegistrationNumber:
+              type: string
+            registeredAddress:
+              oneOf:
+                - $ref: '#/components/schemas/LocationDTO'
+                - $ref: '#/components/schemas/LocationOffShoreDTO'
+                - $ref: '#/components/schemas/LocationOnShoreDTO'
+                - $ref: '#/components/schemas/LocationOnShoreStateDTO'
+    AviationOrganisationDetails:
+      type: object
+      properties:
+        organisationLegalStatus:
+          type: string
+          enum:
+            - LIMITED_COMPANY
+            - INDIVIDUAL
+            - PARTNERSHIP
+      discriminator:
+        propertyName: organisationLegalStatus
+        mapping:
+          LIMITED_COMPANY: '#/components/schemas/AviationLimitedCompanyDetails'
+          INDIVIDUAL: '#/components/schemas/AviationIndividualCompanyDetails'
+          PARTNERSHIP: '#/components/schemas/AviationPartnershipDetails'
+    AviationPartnershipDetails:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/AviationOrganisationDetails'
+        - type: object
+          properties:
+            partnershipName:
+              type: string
+            mainOfficeAddress:
+              oneOf:
+                - $ref: '#/components/schemas/LocationDTO'
+                - $ref: '#/components/schemas/LocationOffShoreDTO'
+                - $ref: '#/components/schemas/LocationOnShoreDTO'
+                - $ref: '#/components/schemas/LocationOnShoreStateDTO'
     AviationVirApplicationRespondedToRegulatorCommentsRequestActionPayload:
       required:
         - operatorImprovementFollowUpResponse
@@ -37656,7 +37868,7 @@ components:
     BusinessOrganisationDetails:
       type: object
       allOf:
-        - $ref: '#/components/schemas/PermitIssuanceOrganizationDetails'
+        - $ref: '#/components/schemas/RegistryIntegrationOrganizationDetails'
         - type: object
           properties:
             registeredAddress:
@@ -37932,83 +38144,6 @@ components:
               type: object
               additionalProperties:
                 type: string
-    EmpIssuanceIndividualCompanyDetails:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/EmpIssuanceOrganisationDetails'
-        - type: object
-          properties:
-            fullName:
-              type: string
-            address:
-              oneOf:
-                - $ref: '#/components/schemas/LocationDTO'
-                - $ref: '#/components/schemas/LocationOffShoreDTO'
-                - $ref: '#/components/schemas/LocationOnShoreDTO'
-                - $ref: '#/components/schemas/LocationOnShoreStateDTO'
-    EmpIssuanceLimitedCompanyDetails:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/EmpIssuanceOrganisationDetails'
-        - type: object
-          properties:
-            companyRegistrationNumber:
-              type: string
-            registeredAddress:
-              oneOf:
-                - $ref: '#/components/schemas/LocationDTO'
-                - $ref: '#/components/schemas/LocationOffShoreDTO'
-                - $ref: '#/components/schemas/LocationOnShoreDTO'
-                - $ref: '#/components/schemas/LocationOnShoreStateDTO'
-    EmpIssuanceOperatorDetails:
-      type: object
-      properties:
-        emitterId:
-          type: string
-        emissionsPlanId:
-          type: string
-        operatorName:
-          type: string
-        firstKnownAviationActivity:
-          type: string
-          format: date
-        regulator:
-          type: string
-          enum:
-            - ENGLAND
-            - NORTHERN_IRELAND
-            - OPRED
-            - SCOTLAND
-            - WALES
-    EmpIssuanceOrganisationDetails:
-      type: object
-      properties:
-        organisationLegalStatus:
-          type: string
-          enum:
-            - LIMITED_COMPANY
-            - INDIVIDUAL
-            - PARTNERSHIP
-      discriminator:
-        propertyName: organisationLegalStatus
-        mapping:
-          LIMITED_COMPANY: '#/components/schemas/EmpIssuanceLimitedCompanyDetails'
-          INDIVIDUAL: '#/components/schemas/EmpIssuanceIndividualCompanyDetails'
-          PARTNERSHIP: '#/components/schemas/EmpIssuancePartnershipDetails'
-    EmpIssuancePartnershipDetails:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/EmpIssuanceOrganisationDetails'
-        - type: object
-          properties:
-            partnershipName:
-              type: string
-            mainOfficeAddress:
-              oneOf:
-                - $ref: '#/components/schemas/LocationDTO'
-                - $ref: '#/components/schemas/LocationOffShoreDTO'
-                - $ref: '#/components/schemas/LocationOnShoreDTO'
-                - $ref: '#/components/schemas/LocationOnShoreStateDTO'
     EmpIssuanceRegistryIntegrationRequestActionPayload:
       type: object
       allOf:
@@ -38016,12 +38151,12 @@ components:
         - type: object
           properties:
             operatorDetails:
-              $ref: '#/components/schemas/EmpIssuanceOperatorDetails'
+              $ref: '#/components/schemas/AviationOperatorDetails'
             organisationDetails:
               oneOf:
-                - $ref: '#/components/schemas/EmpIssuanceIndividualCompanyDetails'
-                - $ref: '#/components/schemas/EmpIssuanceLimitedCompanyDetails'
-                - $ref: '#/components/schemas/EmpIssuancePartnershipDetails'
+                - $ref: '#/components/schemas/AviationIndividualCompanyDetails'
+                - $ref: '#/components/schemas/AviationLimitedCompanyDetails'
+                - $ref: '#/components/schemas/AviationPartnershipDetails'
     EmpIssuanceUkEtsApplicationAmendsSubmittedRequestActionPayload:
       required:
         - emissionsMonitoringPlan
@@ -38639,7 +38774,7 @@ components:
     IndividualOrganisationDetails:
       type: object
       allOf:
-        - $ref: '#/components/schemas/PermitIssuanceOrganizationDetails'
+        - $ref: '#/components/schemas/RegistryIntegrationOrganizationDetails'
         - type: object
           properties:
             operatorAddress:
@@ -38783,6 +38918,18 @@ components:
                 - REJECTED
             reason:
               type: string
+    InstallationAccountRegistryIntegrationRequestActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            activePermit:
+              $ref: '#/components/schemas/RegistryIntegrationActivePermit'
+            organizationDetails:
+              oneOf:
+                - $ref: '#/components/schemas/BusinessOrganisationDetails'
+                - $ref: '#/components/schemas/IndividualOrganisationDetails'
     InstallationInspectionApplicationSubmittedRequestActionPayload:
       required:
         - decisionNotification
@@ -39404,28 +39551,6 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             cessationOfficialNotice:
               $ref: '#/components/schemas/FileInfoDTO'
-    PermitIssuanceActivePermit:
-      type: object
-      properties:
-        emitterId:
-          type: string
-        permitId:
-          type: string
-        installationName:
-          type: string
-        operatorName:
-          type: string
-        regulator:
-          type: string
-          enum:
-            - ENGLAND
-            - NORTHERN_IRELAND
-            - OPRED
-            - SCOTLAND
-            - WALES
-        regulatedActivitiesStartDate:
-          type: string
-          format: date
     PermitIssuanceApplicationDeemedWithdrawnRequestActionPayload:
       required:
         - decisionNotification
@@ -39566,33 +39691,6 @@ components:
                 type: array
                 items:
                   type: boolean
-    PermitIssuanceOrganizationDetails:
-      type: object
-      properties:
-        organisationLegalStatus:
-          type: string
-          enum:
-            - LIMITED_COMPANY
-            - PARTNERSHIP
-            - SOLE_TRADER
-            - OTHER
-      discriminator:
-        propertyName: organisationLegalStatus
-        mapping:
-          SOLE_TRADER: '#/components/schemas/IndividualOrganisationDetails'
-          LIMITED_COMPANY: '#/components/schemas/BusinessOrganisationDetails'
-          PARTNERSHIP: '#/components/schemas/BusinessOrganisationDetails'
-          OTHER: '#/components/schemas/BusinessOrganisationDetails'
-    PermitIssuanceRegistryIntegrationRequestActionPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            activePermit:
-              $ref: '#/components/schemas/PermitIssuanceActivePermit'
-            organizationDetails:
-              $ref: '#/components/schemas/PermitIssuanceOrganizationDetails'
     PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload:
       required:
         - officialNotice
@@ -40321,6 +40419,39 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             officialDocument:
               $ref: '#/components/schemas/FileInfoDTO'
+    RegistryIntegrationActivePermit:
+      type: object
+      properties:
+        emitterId:
+          type: string
+        permitId:
+          type: string
+        installationName:
+          type: string
+        operatorName:
+          type: string
+        regulator:
+          type: string
+        regulatedActivitiesStartDate:
+          type: string
+          format: date
+    RegistryIntegrationOrganizationDetails:
+      type: object
+      properties:
+        organisationLegalStatus:
+          type: string
+          enum:
+            - LIMITED_COMPANY
+            - PARTNERSHIP
+            - SOLE_TRADER
+            - OTHER
+      discriminator:
+        propertyName: organisationLegalStatus
+        mapping:
+          SOLE_TRADER: '#/components/schemas/IndividualOrganisationDetails'
+          LIMITED_COMPANY: '#/components/schemas/BusinessOrganisationDetails'
+          PARTNERSHIP: '#/components/schemas/BusinessOrganisationDetails'
+          OTHER: '#/components/schemas/BusinessOrganisationDetails'
     ReissueCompletedRequestActionPayload:
       required:
         - document
@@ -40411,6 +40542,7 @@ components:
             - PERMIT_VARIATION_APPLICATION_AMENDS_SUBMITTED
             - PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED
             - PERMIT_VARIATION_RECALLED_FROM_AMENDS
+            - PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY
             - PERMIT_TRANSFER_A_APPLICATION_SUBMITTED
             - PERMIT_TRANSFER_A_APPLICATION_GRANTED
             - PERMIT_TRANSFER_A_APPLICATION_REJECTED
@@ -40829,6 +40961,8 @@ components:
             - $ref: >-
                 #/components/schemas/InstallationAccountOpeningDecisionRequestActionPayload
             - $ref: >-
+                #/components/schemas/InstallationAccountRegistryIntegrationRequestActionPayload
+            - $ref: >-
                 #/components/schemas/InstallationInspectionApplicationSubmittedRequestActionPayload
             - $ref: >-
                 #/components/schemas/InstallationInspectionOperatorRespondedRequestActionPayload
@@ -40872,8 +41006,6 @@ components:
                 #/components/schemas/PermitIssuanceApplicationReturnedForAmendsRequestActionPayload
             - $ref: >-
                 #/components/schemas/PermitIssuanceApplicationSubmittedRequestActionPayload
-            - $ref: >-
-                #/components/schemas/PermitIssuanceRegistryIntegrationRequestActionPayload
             - $ref: >-
                 #/components/schemas/PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload
             - $ref: >-
@@ -40969,6 +41101,7 @@ components:
             - BDR
             - PERMANENT_CESSATION
             - ALR
+            - WASTE_QDR
             - AVIATION_ACCOUNT_CLOSURE
             - AVIATION_NON_COMPLIANCE
             - EMP_BATCH_REISSUE
@@ -41043,6 +41176,7 @@ components:
               PERMIT_VARIATION_PEER_REVIEW_DECISION_REGULATOR_LED_SUBMITTED_PAYLOAD
             - PERMIT_VARIATION_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD
             - PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD
+            - PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD
             - PERMIT_TRANSFER_A_APPLICATION_SUBMITTED_PAYLOAD
             - PERMIT_TRANSFER_A_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD
             - PERMIT_TRANSFER_A_APPLICATION_GRANTED_PAYLOAD
@@ -41229,7 +41363,7 @@ components:
           PERMIT_ISSUANCE_APPLICATION_SUBMITTED_PAYLOAD: >-
             #/components/schemas/PermitIssuanceApplicationSubmittedRequestActionPayload
           PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD: >-
-            #/components/schemas/PermitIssuanceRegistryIntegrationRequestActionPayload
+            #/components/schemas/InstallationAccountRegistryIntegrationRequestActionPayload
           PERMIT_SURRENDER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
           PERMIT_SURRENDER_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD: >-
             #/components/schemas/PermitSurrenderApplicationDeemedWithdrawnRequestActionPayload
@@ -41275,6 +41409,8 @@ components:
             #/components/schemas/PermitVariationApplicationReturnedForAmendsRequestActionPayload
           PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD: >-
             #/components/schemas/PermitVariationApplicationRegulatorLedApprovedRequestActionPayload
+          PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD: >-
+            #/components/schemas/InstallationAccountRegistryIntegrationRequestActionPayload
           PERMIT_TRANSFER_A_APPLICATION_SUBMITTED_PAYLOAD: >-
             #/components/schemas/PermitTransferAApplicationSubmittedRequestActionPayload
           PERMIT_TRANSFER_A_APPLICATION_GRANTED_PAYLOAD: >-
@@ -42119,6 +42255,9 @@ components:
           maxLength: 255
           minLength: 0
           type: string
+        registryReportingFirstYear:
+          type: integer
+          format: int32
         emitterType:
           type: string
           enum:
@@ -42363,6 +42502,29 @@ components:
         total:
           type: integer
           format: int64
+    AviationAccountHeaderInfoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+            - NEW
+            - LIVE
+            - CLOSED
+        emissionTradingScheme:
+          type: string
+          enum:
+            - UK_ETS_INSTALLATIONS
+            - EU_ETS_INSTALLATIONS
+            - UK_ETS_AVIATION
+            - CORSIA
+        empId:
+          type: string
     AviationAccountDTO:
       required:
         - accountType
@@ -42462,29 +42624,6 @@ components:
             type: string
         fileDocument:
           $ref: '#/components/schemas/FileInfoDTO'
-    AviationAccountHeaderInfoDTO:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        status:
-          type: string
-          enum:
-            - NEW
-            - LIVE
-            - CLOSED
-        emissionTradingScheme:
-          type: string
-          enum:
-            - UK_ETS_INSTALLATIONS
-            - EU_ETS_INSTALLATIONS
-            - UK_ETS_AVIATION
-            - CORSIA
-        empId:
-          type: string
     RoleDTO:
       type: object
       properties:

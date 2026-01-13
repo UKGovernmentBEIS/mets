@@ -3,6 +3,8 @@ package uk.gov.pmrv.api.user.operator.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.user.core.domain.enumeration.UserInvitationStatus;
@@ -23,9 +25,9 @@ public class OperatorUserAcceptInvitationService {
     private final OperatorRoleCodeAcceptInvitationServiceDelegator operatorRoleCodeAcceptInvitationServiceDelegator;
 
     @Transactional
-    public OperatorInvitedUserInfoDTO acceptInvitation(String invitationToken) {
+    public OperatorInvitedUserInfoDTO acceptInvitation(String invitationToken, AppUser currentUser) {
         final AuthorityInfoDTO authorityInfo =
-            operatorUserTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken);
+            operatorUserTokenVerificationService.verifyInvitationToken(invitationToken, currentUser);
 
         operatorUserRegisterValidationService.validateRegisterForAccount(authorityInfo.getUserId(), authorityInfo.getAccountId());
         

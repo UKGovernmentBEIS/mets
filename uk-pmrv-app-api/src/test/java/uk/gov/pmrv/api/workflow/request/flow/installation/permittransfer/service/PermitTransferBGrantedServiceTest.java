@@ -1,11 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,7 +21,14 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.DeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceGrantDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.PermitTransferBGrantedService;
+
+import java.math.BigDecimal;
+import java.util.Set;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PermitTransferBGrantedServiceTest {
@@ -55,6 +56,8 @@ class PermitTransferBGrantedServiceTest {
         final String operator = "operator";
         final String signatory = "signatory";
         final Long accountId = 2L;
+        final Long accountAid = 3L;
+        final String relatedRequestId = "relatedRequestId";
         final BigDecimal estimatedAnnualEmissions = BigDecimal.valueOf(50000);
         final Permit permit = Permit.builder()
             .estimatedAnnualEmissions(EstimatedAnnualEmissions.builder().quantity(estimatedAnnualEmissions).build())
@@ -72,6 +75,7 @@ class PermitTransferBGrantedServiceTest {
             .decisionNotification(decisionNotification)
             .determination(determination)
             .regulatorReviewer("reviewer")
+            .relatedRequestId(relatedRequestId)
             .build();
         final Request request = Request.builder()
             .id(requestId)
@@ -87,13 +91,17 @@ class PermitTransferBGrantedServiceTest {
         when(requestService.findRequestById(requestId)).thenReturn(request);
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(request.getAccountId())).thenReturn(
             installationOperatorDetails);
+        Request relatedRequest = mock(Request.class);
+        when(relatedRequest.getAccountId()).thenReturn(accountAid);
+        when(requestService.findRequestById(relatedRequestId)).thenReturn(relatedRequest);
+
 
         service.grant(requestId);
 
         verify(requestService, times(1)).findRequestById(requestId);
         verify(permitService, times(1)).submitPermit(permitContainer, request.getAccountId());
         verify(installationAccountUpdateService, times(1))
-            .updateAccountUponTransferBGranted(request.getAccountId(), EmitterType.HSE, estimatedAnnualEmissions);
+            .updateAccountUponTransferBGranted(request.getAccountId(), EmitterType.HSE, accountAid,estimatedAnnualEmissions);
         verify(installationOperatorDetailsQueryService, times(1)).getInstallationOperatorDetails(accountId);
     }
 }

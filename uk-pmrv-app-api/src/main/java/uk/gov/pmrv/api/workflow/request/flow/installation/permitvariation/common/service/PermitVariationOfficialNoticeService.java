@@ -6,10 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
@@ -18,6 +18,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateOfficialNoticeParamsProvider;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.InstallationAccountRegistryEventPublisherService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
 
 import java.util.List;
@@ -33,7 +34,9 @@ public class PermitVariationOfficialNoticeService {
     private final DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
     private final DocumentFileGeneratorService documentFileGeneratorService;
     private final OfficialNoticeSendService officialNoticeSendService;
-    
+    private final InstallationAccountRegistryEventPublisherService installationAccountRegistryEventPublisherService;
+
+
     @Transactional
     public CompletableFuture<FileInfoDTO> generateGrantedOfficialNotice(final String requestId) {
         final Request request = requestService.findRequestById(requestId);
@@ -111,6 +114,9 @@ public class PermitVariationOfficialNoticeService {
         final List<FileInfoDTO> attachments = requestPayload.getPermitDocument() != null ? 
                 List.of(requestPayload.getOfficialNotice(), requestPayload.getPermitDocument()) :
                 List.of(requestPayload.getOfficialNotice());
+
+        installationAccountRegistryEventPublisherService.publishVariationRegistryEvent(requestPayload,requestId,request.getAccountId());
+
         officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails);
     }
     

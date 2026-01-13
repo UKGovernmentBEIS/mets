@@ -9,10 +9,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
 import uk.gov.netz.api.authorization.verifier.service.VerifierAuthorityQueryService;
+import uk.gov.netz.api.notificationapi.system.SystemNotificationInfo;
 import uk.gov.pmrv.api.account.domain.Account;
-import uk.gov.pmrv.api.notification.message.domain.SystemMessageNotificationInfo;
-import uk.gov.pmrv.api.notification.message.domain.enumeration.SystemMessageNotificationType;
-import uk.gov.pmrv.api.notification.message.service.SystemMessageNotificationService;
+import uk.gov.pmrv.api.notification.system.SystemNotificationProcessAndSendService;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,7 @@ class AccountVerificationBodyNotificationServiceTest {
     private AccountVerificationBodyNotificationService service;
     
     @Mock
-    private SystemMessageNotificationService systemMessageNotificationService;
+    private SystemNotificationProcessAndSendService systemMessageNotificationService;
     
     @Mock
     private VerifierAuthorityQueryService verifierAuthorityQueryService;
@@ -57,13 +57,13 @@ class AccountVerificationBodyNotificationServiceTest {
         service.notifyUsersForVerificationBodyApppointment(verificationBodyId, account);
         
         verify(verifierAuthorityQueryService, times(1)).findVerifierAdminsByVerificationBody(verificationBodyId);
-        ArgumentCaptor<SystemMessageNotificationInfo> messageCaptor = ArgumentCaptor.forClass(SystemMessageNotificationInfo.class);
-        verify(systemMessageNotificationService, times(1)).generateAndSendNotificationSystemMessage(messageCaptor.capture());
-        SystemMessageNotificationInfo message = messageCaptor.getValue();
-        assertThat(message.getMessageType()).isEqualTo(SystemMessageNotificationType.NEW_VERIFICATION_BODY_EMITTER);
+        ArgumentCaptor<SystemNotificationInfo> messageCaptor = ArgumentCaptor.forClass(SystemNotificationInfo.class);
+        verify(systemMessageNotificationService, times(1)).processAndSend(messageCaptor.capture());
+        SystemNotificationInfo message = messageCaptor.getValue();
+        assertThat(message.getTemplate()).isEqualTo(PmrvNotificationTemplateName.NEW_VERIFICATION_BODY_EMITTER.getName());
         assertThat(message.getAccountId()).isEqualTo(account.getId());
         assertThat(message.getReceiver()).isEqualTo(verifierAdmin);
-        assertThat(message.getMessageParameters())
+        assertThat(message.getParameters())
                         .containsExactlyInAnyOrderEntriesOf(Map.of(
                                 "emitterName", account.getName(),
                                 "emitterId", account.getEmitterId()));
@@ -85,13 +85,13 @@ class AccountVerificationBodyNotificationServiceTest {
         
         verify(operatorAuthorityQueryService, times(1)).findActiveOperatorAdminUsersByAccount(accountId);
         
-        ArgumentCaptor<SystemMessageNotificationInfo> messageCaptor = ArgumentCaptor.forClass(
-            SystemMessageNotificationInfo.class);
-        verify(systemMessageNotificationService, times(1)).generateAndSendNotificationSystemMessage(messageCaptor.capture());
-        SystemMessageNotificationInfo message = messageCaptor.getValue();
-        assertThat(message.getMessageType()).isEqualTo(SystemMessageNotificationType.VERIFIER_NO_LONGER_AVAILABLE);
+        ArgumentCaptor<SystemNotificationInfo> messageCaptor = ArgumentCaptor.forClass(
+        		SystemNotificationInfo.class);
+        verify(systemMessageNotificationService, times(1)).processAndSend(messageCaptor.capture());
+        SystemNotificationInfo message = messageCaptor.getValue();
+        assertThat(message.getTemplate()).isEqualTo(PmrvNotificationTemplateName.VERIFIER_NO_LONGER_AVAILABLE.getName());
         assertThat(message.getReceiver()).isEqualTo(operatorAdmin);
-        assertThat(message.getMessageParameters())
+        assertThat(message.getParameters())
         .containsExactlyInAnyOrderEntriesOf(Map.of(
                 "accountId", account.getId()));
     }

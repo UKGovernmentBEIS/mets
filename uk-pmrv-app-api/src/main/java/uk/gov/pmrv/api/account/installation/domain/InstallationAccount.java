@@ -88,6 +88,9 @@ public class InstallationAccount extends Account {
     @NotBlank
     private String siteName;
 
+    @Column(name = "registry_reporting_first_year")
+    private Integer registryReportingFirstYear;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "emitter_type")
     private EmitterType emitterType;

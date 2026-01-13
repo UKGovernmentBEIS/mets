@@ -19,7 +19,7 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { AccountUpdateCommencementDateDTO } from '../model/accountUpdateCommencementDateDTO';
 import { AccountUpdateFaStatusDTO } from '../model/accountUpdateFaStatusDTO';
 import { AccountUpdateInstallationNameDTO } from '../model/accountUpdateInstallationNameDTO';
-import { AccountUpdateRegistryIdDTO } from '../model/accountUpdateRegistryIdDTO';
+import { AccountUpdateRegistryReportingFirstYearDTO } from '../model/accountUpdateRegistryReportingFirstYearDTO';
 import { AccountUpdateSiteNameDTO } from '../model/accountUpdateSiteNameDTO';
 import { AccountUpdateSopIdDTO } from '../model/accountUpdateSopIdDTO';
 import { LegalEntityDTO } from '../model/legalEntityDTO';
@@ -471,97 +471,6 @@ export class InstallationAccountUpdateService {
   }
 
   /**
-   * Update the uk ets registry id of the account
-   * @param id The account id
-   * @param accountUpdateRegistryIdDTO
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public updateInstallationAccountRegistryId(
-    id: number,
-    accountUpdateRegistryIdDTO: AccountUpdateRegistryIdDTO,
-  ): Observable<any>;
-  public updateInstallationAccountRegistryId(
-    id: number,
-    accountUpdateRegistryIdDTO: AccountUpdateRegistryIdDTO,
-    observe: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpResponse<any>>;
-  public updateInstallationAccountRegistryId(
-    id: number,
-    accountUpdateRegistryIdDTO: AccountUpdateRegistryIdDTO,
-    observe: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpEvent<any>>;
-  public updateInstallationAccountRegistryId(
-    id: number,
-    accountUpdateRegistryIdDTO: AccountUpdateRegistryIdDTO,
-    observe: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<any>;
-  public updateInstallationAccountRegistryId(
-    id: number,
-    accountUpdateRegistryIdDTO: AccountUpdateRegistryIdDTO,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<any> {
-    if (id === null || id === undefined) {
-      throw new Error('Required parameter id was null or undefined when calling updateInstallationAccountRegistryId.');
-    }
-    if (accountUpdateRegistryIdDTO === null || accountUpdateRegistryIdDTO === undefined) {
-      throw new Error(
-        'Required parameter accountUpdateRegistryIdDTO was null or undefined when calling updateInstallationAccountRegistryId.',
-      );
-    }
-
-    let headers = this.defaultHeaders;
-
-    // authentication (bearerAuth) required
-    const credential = this.configuration.lookupCredential('bearerAuth');
-    if (credential) {
-      headers = headers.set('Authorization', 'Bearer ' + credential);
-    }
-
-    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (httpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (httpHeaderAcceptSelected !== undefined) {
-      headers = headers.set('Accept', httpHeaderAcceptSelected);
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = ['application/json'];
-    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      headers = headers.set('Content-Type', httpContentTypeSelected);
-    }
-
-    let responseType_: 'text' | 'json' = 'json';
-    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
-      responseType_ = 'text';
-    }
-
-    return this.httpClient.post<any>(
-      `${this.configuration.basePath}/v1.0/installation/accounts/${encodeURIComponent(String(id))}/registry-id`,
-      accountUpdateRegistryIdDTO,
-      {
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: headers,
-        observe: observe,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
    * Update the site name of the account
    * @param id The account id
    * @param accountUpdateSiteNameDTO
@@ -821,6 +730,100 @@ export class InstallationAccountUpdateService {
     return this.httpClient.post<any>(
       `${this.configuration.basePath}/v1.0/installation/accounts/${encodeURIComponent(String(id))}/name`,
       accountUpdateInstallationNameDTO,
+      {
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Update the first year of registry reporting obligation field of the account
+   * @param id The account id
+   * @param accountUpdateRegistryReportingFirstYearDTO
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public updateRegistryReportingFirstYear(
+    id: number,
+    accountUpdateRegistryReportingFirstYearDTO: AccountUpdateRegistryReportingFirstYearDTO,
+  ): Observable<any>;
+  public updateRegistryReportingFirstYear(
+    id: number,
+    accountUpdateRegistryReportingFirstYearDTO: AccountUpdateRegistryReportingFirstYearDTO,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<any>>;
+  public updateRegistryReportingFirstYear(
+    id: number,
+    accountUpdateRegistryReportingFirstYearDTO: AccountUpdateRegistryReportingFirstYearDTO,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<any>>;
+  public updateRegistryReportingFirstYear(
+    id: number,
+    accountUpdateRegistryReportingFirstYearDTO: AccountUpdateRegistryReportingFirstYearDTO,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any>;
+  public updateRegistryReportingFirstYear(
+    id: number,
+    accountUpdateRegistryReportingFirstYearDTO: AccountUpdateRegistryReportingFirstYearDTO,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling updateRegistryReportingFirstYear.');
+    }
+    if (
+      accountUpdateRegistryReportingFirstYearDTO === null ||
+      accountUpdateRegistryReportingFirstYearDTO === undefined
+    ) {
+      throw new Error(
+        'Required parameter accountUpdateRegistryReportingFirstYearDTO was null or undefined when calling updateRegistryReportingFirstYear.',
+      );
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      headers = headers.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.post<any>(
+      `${this.configuration.basePath}/v1.0/installation/accounts/${encodeURIComponent(String(id))}/registry-reporting-first-year`,
+      accountUpdateRegistryReportingFirstYearDTO,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

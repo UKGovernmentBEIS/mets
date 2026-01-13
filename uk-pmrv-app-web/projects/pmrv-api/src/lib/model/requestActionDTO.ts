@@ -94,6 +94,7 @@ import { HSETIRegulatorReviewReturnedForAmendsRequestActionPayload } from './hSE
 import { InstallationAccountOpeningApplicationSubmittedRequestActionPayload } from './installationAccountOpeningApplicationSubmittedRequestActionPayload';
 import { InstallationAccountOpeningApprovedRequestActionPayload } from './installationAccountOpeningApprovedRequestActionPayload';
 import { InstallationAccountOpeningDecisionRequestActionPayload } from './installationAccountOpeningDecisionRequestActionPayload';
+import { InstallationAccountRegistryIntegrationRequestActionPayload } from './installationAccountRegistryIntegrationRequestActionPayload';
 import { InstallationInspectionApplicationSubmittedRequestActionPayload } from './installationInspectionApplicationSubmittedRequestActionPayload';
 import { InstallationInspectionOperatorRespondedRequestActionPayload } from './installationInspectionOperatorRespondedRequestActionPayload';
 import { NerApplicationAcceptedRequestActionPayload } from './nerApplicationAcceptedRequestActionPayload';
@@ -119,7 +120,6 @@ import { PermitIssuanceApplicationGrantedRequestActionPayload } from './permitIs
 import { PermitIssuanceApplicationRejectedRequestActionPayload } from './permitIssuanceApplicationRejectedRequestActionPayload';
 import { PermitIssuanceApplicationReturnedForAmendsRequestActionPayload } from './permitIssuanceApplicationReturnedForAmendsRequestActionPayload';
 import { PermitIssuanceApplicationSubmittedRequestActionPayload } from './permitIssuanceApplicationSubmittedRequestActionPayload';
-import { PermitIssuanceRegistryIntegrationRequestActionPayload } from './permitIssuanceRegistryIntegrationRequestActionPayload';
 import { PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload } from './permitNotificationApplicationReviewCompletedDecisionRequestActionPayload';
 import { PermitNotificationApplicationReviewSubmittedDecisionRequestActionPayload } from './permitNotificationApplicationReviewSubmittedDecisionRequestActionPayload';
 import { PermitNotificationApplicationSubmittedRequestActionPayload } from './permitNotificationApplicationSubmittedRequestActionPayload';
@@ -217,6 +217,7 @@ export interface RequestActionDTO {
     | 'PERMIT_VARIATION_APPLICATION_AMENDS_SUBMITTED'
     | 'PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED'
     | 'PERMIT_VARIATION_RECALLED_FROM_AMENDS'
+    | 'PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY'
     | 'PERMIT_TRANSFER_A_APPLICATION_SUBMITTED'
     | 'PERMIT_TRANSFER_A_APPLICATION_GRANTED'
     | 'PERMIT_TRANSFER_A_APPLICATION_REJECTED'
@@ -559,6 +560,7 @@ export interface RequestActionDTO {
     | InstallationAccountOpeningApplicationSubmittedRequestActionPayload
     | InstallationAccountOpeningApprovedRequestActionPayload
     | InstallationAccountOpeningDecisionRequestActionPayload
+    | InstallationAccountRegistryIntegrationRequestActionPayload
     | InstallationInspectionApplicationSubmittedRequestActionPayload
     | InstallationInspectionOperatorRespondedRequestActionPayload
     | NerApplicationAcceptedRequestActionPayload
@@ -584,7 +586,6 @@ export interface RequestActionDTO {
     | PermitIssuanceApplicationRejectedRequestActionPayload
     | PermitIssuanceApplicationReturnedForAmendsRequestActionPayload
     | PermitIssuanceApplicationSubmittedRequestActionPayload
-    | PermitIssuanceRegistryIntegrationRequestActionPayload
     | PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload
     | PermitNotificationApplicationReviewSubmittedDecisionRequestActionPayload
     | PermitNotificationApplicationSubmittedRequestActionPayload
@@ -649,6 +650,7 @@ export interface RequestActionDTO {
     | 'BDR'
     | 'PERMANENT_CESSATION'
     | 'ALR'
+    | 'WASTE_QDR'
     | 'AVIATION_ACCOUNT_CLOSURE'
     | 'AVIATION_NON_COMPLIANCE'
     | 'EMP_BATCH_REISSUE'

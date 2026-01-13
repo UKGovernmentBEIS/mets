@@ -22,7 +22,6 @@ public class ErrorUtil {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
-                .security(errorCode.isSecurity())
                 .data(data)
                 .build();
 

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountIdAndNameAndLegalEntityNameDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
@@ -12,7 +13,6 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccou
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.TransferCodeStatus;
 import uk.gov.pmrv.api.account.repository.AccountBaseRepository;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +35,10 @@ public interface InstallationAccountRepository extends AccountBaseRepository<Ins
 
     @Transactional(readOnly = true)
     List<InstallationAccount> findAllByStatusIs(InstallationAccountStatus status);
+
+	@Transactional(readOnly = true)
+	@Query("SELECT a.registryReportingFirstYear FROM InstallationAccount a WHERE a.id = :id")
+	Integer findRegistryReportingFirstYearById(Long id);
 
     @Transactional(readOnly = true)
     boolean existsByTransferCode(String transferCode);

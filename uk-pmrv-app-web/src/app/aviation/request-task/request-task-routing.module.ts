@@ -30,6 +30,7 @@ import { canCancelTask } from './guards/cancel-task.guard';
 import { CompleteReportGuard } from './guards/complete-report-page.guard';
 import { RecallReportFromVerifierGuard } from './guards/recall-report-from-verifier.guard';
 import { VerifierReturnGuard } from './guards/verifier-return.guard';
+import { ManualAccountOpeningComponent } from './registry/manual-account-opening/manual-account-opening.component';
 
 const routes: Routes = [
   {
@@ -229,6 +230,15 @@ const routes: Routes = [
               import(
                 '@aviation/request-task/aer-corsia-3year-period-offsetting/aer-corsia-3year-period-offsetting.routes'
               ).then((r) => r.AER_CORSIA_3YEAR_PERIOD_OFFSETTING_ROUTES),
+          },
+          {
+            path: 'manual-push-to-registry',
+            data: { pageTitle: 'Send information to the registry', breadcrumb: true },
+            component: ManualAccountOpeningComponent,
+          },
+          {
+            path: 'registry',
+            loadChildren: () => import('./registry/registry.routes').then((r) => r.REGISTRY_TASKS_ROUTES),
           },
           {
             path: '',

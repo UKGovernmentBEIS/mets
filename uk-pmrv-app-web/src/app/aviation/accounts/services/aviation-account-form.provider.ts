@@ -1,13 +1,24 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  UntypedFormGroup,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 
 import { distinctUntilChanged, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 
 import { getLocationOnShoreFormGroup } from '@aviation/shared/components/location-state-form/location-state-form.util';
+import { endOfYear, isWithinInterval, startOfDay } from 'date-fns';
 
 import { GovukValidators } from 'govuk-components';
 
 import { AviationAccountCreationDTO, AviationAccountsService, LocationOnShoreStateDTO } from 'pmrv-api';
+
+import { AviationAccountsStore } from '../store';
 
 export interface AviationAccountFormModel {
   name: FormControl<string | null>;
@@ -15,7 +26,6 @@ export interface AviationAccountFormModel {
   sopId: FormControl<number | null>;
   crcoCode: FormControl<string | null>;
   commencementDate: FormControl<string | null>;
-  registryId?: FormControl<string | null>;
   id?: FormControl<number | null>;
   hasContactAddress?: FormControl<boolean[] | null>;
   location?: FormGroup<Record<keyof LocationOnShoreStateDTO, FormControl>>;
@@ -29,6 +39,7 @@ export class AviationAccountFormProvider {
   constructor(
     private fb: FormBuilder,
     private accountsService: AviationAccountsService,
+    private readonly store: AviationAccountsStore,
   ) {}
 
   resetForm(initialValue?: AviationAccountCreationDTO): void {
@@ -49,19 +60,25 @@ export class AviationAccountFormProvider {
 
   get formValue(): AviationAccountCreationDTO {
     return {
-      ...this._form.value,
-      sopId: +this._form.value.sopId || null,
+      ...this._form?.value,
+      sopId: +this._form?.value.sopId || null,
     } as AviationAccountCreationDTO;
   }
 
-  addFieldsForEdit() {
-    this._form.addControl(
-      'registryId',
-      new FormControl(null, [GovukValidators.minMaxRangeNumberValidator(1000000, 9999999, 'Enter a 7 digit number')]),
-    );
+  modifyFieldsForEdit() {
     this._form.addControl('id', new FormControl<number | null>(null));
     this._form.addControl('hasContactAddress', new FormControl<boolean[] | null>(null));
     this._form.addControl('location', getLocationOnShoreFormGroup());
+    this._form.removeControl('commencementDate', { emitEvent: false });
+  }
+
+  getCommencementDateFormControl(editModeEnabled?: boolean) {
+    return new FormControl<string | null>(null, {
+      validators: [
+        GovukValidators.required('Enter the first year of reporting obligation'),
+        this.commencementDateValidator(editModeEnabled),
+      ],
+    });
   }
 
   private buildForm(): FormGroup<AviationAccountFormModel> {
@@ -82,9 +99,7 @@ export class AviationAccountFormProvider {
         crcoCode: new FormControl<string | null>(null, {
           validators: GovukValidators.required('Enter the Central Route Charges Office number'),
         }),
-        commencementDate: new FormControl<string | null>(null, {
-          validators: GovukValidators.required('Enter the date of first known aviation activity'),
-        }),
+        commencementDate: this.getCommencementDateFormControl(),
       },
       {
         updateOn: 'change',
@@ -137,6 +152,27 @@ export class AviationAccountFormProvider {
       });
 
     return this._form;
+  }
+
+  private commencementDateValidator(editModeEnabled = false): ValidatorFn {
+    return (group: UntypedFormGroup): ValidationErrors => {
+      const stateCommencementDate = this.store.getState().currentAccount.account?.aviationAccount?.commencementDate;
+      const commencementDate = new Date(group.value);
+      const minDate = startOfDay(new Date('2021'));
+      const maxDate = endOfYear(
+        new Date(
+          editModeEnabled
+            ? new Date(stateCommencementDate).getFullYear().toString()
+            : new Date().getFullYear().toString(),
+        ),
+      );
+
+      return isWithinInterval(commencementDate, { start: minDate, end: maxDate })
+        ? null
+        : {
+            invalidCommencementDate: `The year must be after or equal to 2021 and it cannot be later than ${editModeEnabled ? 'previously set' : 'current year'}`,
+          };
+    };
   }
 
   private get nameCtrl(): AbstractControl {

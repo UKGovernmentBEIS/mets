@@ -160,7 +160,7 @@ class RequestControllerTest {
 
     @Test
     void processRequestCreateAction() throws Exception {
-        AppUser appUser = AppUser.builder().userId("id").build();
+    	AppUser appUser = setupAppUser();
         InstallationAccountOpeningSubmitApplicationCreateActionPayload payload = InstallationAccountOpeningSubmitApplicationCreateActionPayload.builder()
             .payloadType(RequestCreateActionPayloadType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION_PAYLOAD)
             .accountPayload(InstallationAccountPayload.builder()
@@ -199,7 +199,6 @@ class RequestControllerTest {
                 .build();
 
         when(countryService.getReferenceData()).thenReturn(List.of(Country.builder().code("GR").build()));
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(requestCreateActionResourceTypeDelegator.getResourceTypeHandler(RequestCreateActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION)).thenReturn(handler);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -215,7 +214,7 @@ class RequestControllerTest {
     
     @Test
     void processRequestCreateAction_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().userId("id").build();
+    	AppUser appUser = setupAppUser();
         InstallationAccountOpeningSubmitApplicationCreateActionPayload payload = InstallationAccountOpeningSubmitApplicationCreateActionPayload.builder()
             .payloadType(RequestCreateActionPayloadType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION_PAYLOAD)
             .accountPayload(InstallationAccountPayload.builder()
@@ -244,7 +243,6 @@ class RequestControllerTest {
                 .requestCreateActionPayload(payload)
                 .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(countryService.getReferenceData()).thenReturn(List.of(Country.builder().code("GR").build()));
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
@@ -263,6 +261,7 @@ class RequestControllerTest {
 
     @Test
     void getRequestDetailsById() throws Exception {
+    	setupAppUser();
         final String requestId = "1";
         AerRequestMetadata metadata = AerRequestMetadata.builder()
                 .type(RequestMetadataType.AER).emissions(BigDecimal.valueOf(10000)).build();
@@ -286,10 +285,8 @@ class RequestControllerTest {
 
     @Test
     void getRequestDetailsById_forbidden() throws Exception {
+    	AppUser appUser = setupAppUser();
         final String requestId = "1";
-        AppUser appUser = AppUser.builder().userId("id").build();
-
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(appUser, "getRequestDetailsById", requestId, null, null);
@@ -305,6 +302,7 @@ class RequestControllerTest {
 
     @Test
     void getRequestDetailsByResource() throws Exception {
+    	setupAppUser();
         Long accountId = 1L;
         final String requestId = "1";
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
@@ -337,8 +335,8 @@ class RequestControllerTest {
 
     @Test
     void getRequestDetailsByResource_forbidden() throws Exception {
+    	AppUser user = setupAppUser();
         Long accountId = 1L;
-        AppUser user = AppUser.builder().userId("user").build();
         
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
         		.resourceId(String.valueOf(accountId))
@@ -346,7 +344,6 @@ class RequestControllerTest {
         		.paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
         		.category(RequestHistoryCategory.PERMIT).build();
         
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(user, "getRequestDetailsByResource", String.valueOf(accountId), ResourceType.ACCOUNT, null);
@@ -445,4 +442,10 @@ class RequestControllerTest {
         validatorFactoryBean.afterPropertiesSet();
         return validatorFactoryBean;
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 }

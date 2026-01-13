@@ -55,9 +55,9 @@ public class RegulatorUserInvitationService {
     }
 
     @Transactional
-    public InvitedUserInfoDTO acceptInvitation(String invitationToken) {
+    public InvitedUserInfoDTO acceptInvitation(String invitationToken, AppUser currentUser) {
 		final AuthorityInfoDTO authorityInfo = regulatorUserTokenVerificationService
-				.verifyInvitationTokenForPendingAuthority(invitationToken);
+				.verifyInvitationToken(invitationToken, currentUser);
 		final RegulatorUserDTO regulatorUser = regulatorUserAuthService.getRegulatorUserById(authorityInfo.getUserId());
 		
 		regulatorUserRegisterValidationService.validate(authorityInfo.getUserId(),
@@ -66,7 +66,7 @@ public class RegulatorUserInvitationService {
 		if(BooleanUtils.isTrue(regulatorUser.getEnabled())) {
 			if(userAuthService.hasUserPassword(authorityInfo.getUserId())) {
 				// accept authority
-				regulatorUserActivateService.acceptAuthorityForRegisteredRegulatorInvitedUser(invitationToken);
+				regulatorUserActivateService.acceptAuthorityForRegisteredRegulatorInvitedUser(invitationToken, currentUser);
                 return InvitedUserInfoDTO.builder().email(regulatorUser.getEmail())
     					.invitationStatus(UserInvitationStatus.ALREADY_REGISTERED).build();
             } else {

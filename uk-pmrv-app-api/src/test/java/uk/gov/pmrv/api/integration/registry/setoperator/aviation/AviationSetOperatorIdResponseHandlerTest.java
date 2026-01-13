@@ -6,16 +6,18 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.integration.model.error.IntegrationEventError;
+import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
+import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
+import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
+import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.integration.registry.common.RegistryResponseErrorCode;
 import uk.gov.pmrv.api.integration.registry.setoperator.common.NotifyErrorDTO;
 import uk.gov.pmrv.api.integration.registry.setoperator.common.OperatorIdErrorNotifierService;
 import uk.gov.pmrv.api.integration.registry.setoperator.common.OperatorIdEventOutcomeService;
-import uk.gov.pmrv.api.integration.registry.setoperator.common.RegistryIntegrationEventError;
-import uk.gov.pmrv.api.integration.registry.setoperator.common.SetOperatorIdEventOutcome;
-import uk.gov.pmrv.api.integration.registry.setoperator.common.SetOperatorIdResponseEvent;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,23 +41,26 @@ class AviationSetOperatorIdResponseHandlerTest {
     @Mock
     private OperatorIdErrorNotifierService operatorIdErrorNotifierService;
 
+    @Mock
+    private AccountQueryService accountQueryService;
+
     @Test
     void handleResponse_whenOutcomeIsSuccess_thenProducesOutcome() {
 
         final String correlationId = "1";
-        final SetOperatorIdResponseEvent event = SetOperatorIdResponseEvent.builder()
+        final OperatorUpdateEvent event = OperatorUpdateEvent.builder()
                 .emitterId("1")
-                .operatorId(1)
+                .operatorId(1L)
                 .build();
-        final SetOperatorIdEventOutcome expectedOutcome = SetOperatorIdEventOutcome.builder()
+        final OperatorUpdateEventOutcome expectedOutcome = OperatorUpdateEventOutcome.builder()
                 .event(event)
                 .build();
 
-        when(operatorIdEventOutcomeService.getOperatorIdEventOutcome(event)).thenReturn(expectedOutcome);
+        when(operatorIdEventOutcomeService.getAviationOperatorIdEventOutcome(event)).thenReturn(expectedOutcome);
 
         aviationSetOperatorIdResponseHandler.handleResponse(event, correlationId);
 
-        verify(operatorIdEventOutcomeService, times(1)).getOperatorIdEventOutcome(event);
+        verify(operatorIdEventOutcomeService, times(1)).getAviationOperatorIdEventOutcome(event);
         verify(registryProducer, times(1)).produce(expectedOutcome);
         verify(operatorIdErrorNotifierService, never()).notifyAuthority(any(NotifyErrorDTO.class));
     }
@@ -64,24 +69,26 @@ class AviationSetOperatorIdResponseHandlerTest {
     void handleResponse_whenServiceThrowsException_thenProducesErrorOutcome() {
 
         final String correlationId = "1";
-        final SetOperatorIdResponseEvent event = SetOperatorIdResponseEvent.builder()
+        final OperatorUpdateEvent event = OperatorUpdateEvent.builder()
                 .emitterId("1")
-                .operatorId(1)
-                .regulator(CompetentAuthorityEnum.ENGLAND)
+                .operatorId(1L)
+                .regulator("EA")
                 .build();
-        final ArgumentCaptor<SetOperatorIdEventOutcome> outcomeCaptor = ArgumentCaptor.forClass(SetOperatorIdEventOutcome.class);
+        final ArgumentCaptor<OperatorUpdateEventOutcome> outcomeCaptor = ArgumentCaptor.forClass(OperatorUpdateEventOutcome.class);
 
-        when(operatorIdEventOutcomeService.getOperatorIdEventOutcome(event)).thenThrow(new RuntimeException("Service failure"));
+        when(operatorIdEventOutcomeService.getAviationOperatorIdEventOutcome(event)).thenThrow(new RuntimeException("Service failure"));
+        when(accountQueryService.getAccountByEmitterId(any())).thenReturn(Optional.empty());
+
 
         aviationSetOperatorIdResponseHandler.handleResponse(event, correlationId);
 
-        verify(operatorIdEventOutcomeService, times(1)).getOperatorIdEventOutcome(event);
+        verify(operatorIdEventOutcomeService, times(1)).getAviationOperatorIdEventOutcome(event);
         verify(registryProducer, times(1)).produce(outcomeCaptor.capture());
         verify(operatorIdErrorNotifierService, times(1)).notifyAuthority(any(NotifyErrorDTO.class));
 
-        final SetOperatorIdEventOutcome capturedOutcome = outcomeCaptor.getValue();
-        final RegistryIntegrationEventError expectedError = RegistryIntegrationEventError.builder()
-                .error(RegistryResponseErrorCode.ERROR_0200)
+        final OperatorUpdateEventOutcome capturedOutcome = outcomeCaptor.getValue();
+        final IntegrationEventErrorDetails expectedError = IntegrationEventErrorDetails.builder()
+                .error(IntegrationEventError.ERROR_0200)
                 .errorMessage(RegistryResponseErrorCode.ERROR_0200.getDescription())
                 .build();
 

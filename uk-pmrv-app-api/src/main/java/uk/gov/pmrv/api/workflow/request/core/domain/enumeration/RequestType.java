@@ -44,7 +44,7 @@ public enum RequestType {
     BDR("PROCESS_BDR","Baseline Data Report",RequestHistoryCategory.REPORTING,AccountType.INSTALLATION,true,true,ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER)),
     PERMANENT_CESSATION("PROCESS_PERMANENT_CESSATION", "Permanent Cessation", RequestHistoryCategory.PERMIT, AccountType.INSTALLATION, true, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR)),
     ALR("PROCESS_ALR", "Activity Level Report", RequestHistoryCategory.REPORTING, AccountType.INSTALLATION, true, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER)),
-
+    WASTE_QDR("PROCESS_WASTE_QDR","Waste Quarterly Supplementary Data Report", RequestHistoryCategory.REPORTING, AccountType.INSTALLATION, true, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR)),
 
     // AVIATION UKETS + CORSIA types
     AVIATION_ACCOUNT_CLOSURE("PROCESS_AVIATION_ACCOUNT_CLOSURE", "Aviation Account Closure", RequestHistoryCategory.PERMIT, AccountType.AVIATION, false, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR)),

@@ -7,6 +7,7 @@ import { BehaviorSubject, combineLatest, map, of, shareReplay, switchMap, takeUn
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AuthStore, selectUserRoleType } from '@core/store/auth';
 import { BackLinkService } from '@shared/back-link/back-link.service';
+import { QuarterNamePipe } from '@shared/pipes/quarter-name.pipe';
 
 import {
   RequestActionInfoDTO,
@@ -33,11 +34,12 @@ import { WorkflowItemAbstractComponent } from './workflow-item-abstract.componen
   providers: [DestroySubject],
 })
 export class WorkflowItemComponent extends WorkflowItemAbstractComponent implements OnInit {
+  private readonly quarterNamePipe = new QuarterNamePipe();
+
   currentTab$ = new BehaviorSubject<string>(null);
-
   isAviation = this.router.url.includes('/aviation/');
-
   navigationState = { returnUrl: this.router.url };
+
   readonly workflowStatusesTagMap = statusesTagMap;
   readonly workflowDetailsTypesMap = workflowDetailsTypesMap;
 
@@ -48,7 +50,12 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
 
   readonly title$ = this.requestInfo$.pipe(
     map((requestInfo) =>
-      (requestInfo.requestMetadata as any)?.isFinal ? 'Final year' : ((requestInfo.requestMetadata as any)?.year ?? ''),
+      (
+        `${this.quarterNamePipe.transform((requestInfo.requestMetadata as any)?.quarter ?? '')} ` +
+        ((requestInfo.requestMetadata as any)?.isFinal
+          ? 'Final year'
+          : ((requestInfo.requestMetadata as any)?.year ?? ''))
+      ).trim(),
     ),
   );
   readonly requestType$ = this.requestInfo$.pipe(map((requestInfo) => requestInfo?.requestType));

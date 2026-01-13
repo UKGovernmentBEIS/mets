@@ -138,6 +138,7 @@ class AviationReportingControllerTest {
 
     @Test
     void getTotalEmissionsUkEts() throws Exception {
+    	setupAppUser();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
         AviationAerTotalEmissions expectedResponse = AviationAerTotalEmissions.builder()
                 .numFlightsCoveredByUkEts(30)
@@ -160,10 +161,9 @@ class AviationReportingControllerTest {
 
     @Test
     void getTotalEmissionsUkEts_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().build();
+    	AppUser appUser = setupAppUser();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
                 .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -179,6 +179,7 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateStandardFuelsTotalEmissions() throws Exception {
+    	setupAppUser();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
         final List<StandardFuelsTotalEmissions> standardFuelsTotalEmissions = List.of(StandardFuelsTotalEmissions.builder()
                 .fuelType(AviationAerUkEtsFuelType.AVIATION_GASOLINE)
@@ -206,10 +207,9 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateStandardFuelsTotalEmissions_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().build();
+    	AppUser appUser = setupAppUser();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
                 .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -225,6 +225,7 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateAerodromePairsTotalEmissions() throws Exception {
+    	setupAppUser();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
         final List<AerodromePairsTotalEmissions> aerodromePairsTotalEmissions = List.of(AerodromePairsTotalEmissions.builder()
                 .departureAirport(AviationRptAirportsDTO.builder()
@@ -264,10 +265,9 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateAerodromePairsTotalEmissions_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().build();
+    	AppUser appUser = setupAppUser();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
                 .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -283,6 +283,7 @@ class AviationReportingControllerTest {
 
     @Test
     void getDomesticFlightsEmissionsUkEts() throws Exception {
+    	setupAppUser();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
 
         List<AviationAerDomesticFlightsEmissionsDetails> domesticFlightsEmissionsDetails = List.of(
@@ -346,10 +347,9 @@ class AviationReportingControllerTest {
 
     @Test
     void getDomesticFlightsEmissionsUkEts_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().build();
+    	AppUser appUser = setupAppUser();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
                 .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -365,6 +365,7 @@ class AviationReportingControllerTest {
 
     @Test
     void getNonDomesticFlightsEmissionsUkEts() throws Exception {
+    	setupAppUser();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
 
         List<AviationAerNonDomesticFlightsEmissionsDetails> nonDomesticFlightsEmissionsDetails = List.of(
@@ -432,10 +433,9 @@ class AviationReportingControllerTest {
 
     @Test
     void getNonDomesticFlightsEmissionsUkEts_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().build();
+    	AppUser appUser = setupAppUser();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
                 .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -451,6 +451,7 @@ class AviationReportingControllerTest {
 
     @Test
     void getTotalEmissionsCorsia() throws Exception {
+    	setupAppUser();
         AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO =
                 this.createCorsiaEmissionCalculationDTO();
         AviationAerCorsiaTotalEmissions expectedResponse = AviationAerCorsiaTotalEmissions.builder()
@@ -482,10 +483,9 @@ class AviationReportingControllerTest {
 
     @Test
     void getTotalEmissionsCorsia_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().build();
+    	AppUser appUser = setupAppUser();
         AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTO();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
                 .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -501,6 +501,7 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateAerodromePairsTotalEmissionsCorsia() throws Exception {
+    	setupAppUser();
         AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO
                 = this.createCorsiaEmissionCalculationDTO();
 
@@ -572,10 +573,9 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateAerodromePairsTotalEmissionsCorsia_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().build();
+    	AppUser appUser = setupAppUser();
         AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTO();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
                 .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -591,6 +591,7 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateStandardFuelsTotalEmissionsCorsia() throws Exception {
+    	setupAppUser();
         AviationAerCorsiaEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTOWithoutYear();
         final List<AviationAerCorsiaStandardFuelsTotalEmissions> standardFuelsTotalEmissions = List.of(AviationAerCorsiaStandardFuelsTotalEmissions.builder()
                 .fuelType(AviationAerCorsiaFuelType.AVIATION_GASOLINE)
@@ -616,10 +617,9 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateStandardFuelsTotalEmissionsCorsia_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().build();
+    	AppUser appUser = setupAppUser();
         AviationAerCorsiaEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTO();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
                 .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -635,6 +635,7 @@ class AviationReportingControllerTest {
 
     @Test
     void getCorsiaFlightsEmissions() throws Exception {
+    	setupAppUser();
         AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createInternationalFlightsEmissionsCalculationDTO();
 
         List<AviationAerCorsiaInternationalFlightsEmissionsDetails> corsiaFlightsEmissionsDetails = List.of(
@@ -686,10 +687,9 @@ class AviationReportingControllerTest {
 
     @Test
     void getCorsiaFlightsEmissions_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().build();
+    	AppUser appUser = setupAppUser();
         AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createInternationalFlightsEmissionsCalculationDTO();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
             .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
@@ -836,4 +836,10 @@ class AviationReportingControllerTest {
                 .build();
 
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 }

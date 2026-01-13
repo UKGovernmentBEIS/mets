@@ -13,6 +13,7 @@ import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountUpdateDTO;
 import uk.gov.pmrv.api.account.domain.Location;
 import uk.gov.pmrv.api.account.domain.LocationOnShoreState;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
+import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
 import uk.gov.pmrv.api.account.service.validator.AccountStatus;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
@@ -21,6 +22,7 @@ import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -36,13 +38,10 @@ public class AviationAccountUpdateService {
         AviationAccount account = aviationAccountQueryService.getAccountById(accountId);
         validateAccountNameUniqueness(aviationAccountUpdateDTO.getName(), account.getCompetentAuthority(), account.getEmissionTradingScheme(), account.getId());
         validateCrcoCodeUniqueness(aviationAccountUpdateDTO.getCrcoCode(), account.getCompetentAuthority(), account.getEmissionTradingScheme(), account.getId());
-        validateEmissionTradingSchemeRegistryId(account, aviationAccountUpdateDTO.getRegistryId());
 
         account.setName(aviationAccountUpdateDTO.getName());
-        account.setRegistryId(aviationAccountUpdateDTO.getRegistryId());
         account.setSopId(aviationAccountUpdateDTO.getSopId());
         account.setCrcoCode(aviationAccountUpdateDTO.getCrcoCode());
-        account.setCommencementDate(aviationAccountUpdateDTO.getCommencementDate());
 
         // Set location
         if(aviationAccountUpdateDTO.getLocation() != null) {
@@ -83,6 +82,35 @@ public class AviationAccountUpdateService {
         updateNameAndLocation(accountId, name, accountContactLocationDTO);
     }
 
+    @Transactional
+    public void closeAviationAccount(Long accountId, AppUser user, String reason) {
+        AviationAccount account = aviationAccountQueryService.getAccountById(accountId);
+        account.setClosureReason(reason);
+        account.setClosingDate(LocalDateTime.now());
+        account.setClosedBy(user.getUserId());
+        account.setClosedByName(user.getFullName());
+
+        aviationAccountStatusService.handleCloseAccount(accountId);
+
+    }
+
+    @Transactional
+    public void updateAndValidateAccountCommencementDate(Long accountId, AccountUpdateCommencementDateDTO commencementDateDTO) {
+        AviationAccount account = aviationAccountQueryService.getAccountById(accountId);
+        int year = commencementDateDTO.getCommencementDate().getYear();
+        int currentYear = LocalDate.now().getYear();
+
+        if (year < 2021 || year > currentYear) {
+            throw new BusinessException(
+                    MetsErrorCode.AVIATION_COMMENCEMENT_DATE_NOT_BEFORE_2021_NOT_AFTER_CURRENT_YEAR,
+                    commencementDateDTO,
+                    account.getCompetentAuthority(),
+                    account.getEmissionTradingScheme()
+            );
+        }
+        account.setCommencementDate(commencementDateDTO.getCommencementDate());
+    }
+
 	private void updateNameAndLocation(Long accountId, String name, LocationOnShoreStateDTO accountContactLocationDTO) {
 		AviationAccount account = aviationAccountQueryService.getAccountById(accountId);
         validateAccountNameUniqueness(name, account.getCompetentAuthority(), account.getEmissionTradingScheme(), account.getId());
@@ -105,24 +133,5 @@ public class AviationAccountUpdateService {
                     crcoCode, competentAuthority, emissionTradingScheme);
         }
     }
-
-    private void validateEmissionTradingSchemeRegistryId(AviationAccount account, Integer registryId) {
-        if (!EmissionTradingScheme.UK_ETS_AVIATION.equals(account.getEmissionTradingScheme()) && registryId != null) {
-            throw new BusinessException(MetsErrorCode.REGISTRY_ID_SUBMITTED_ONLY_FOR_UK_ETS_AVIATION_ACCOUNTS,
-                    account.getName(), account.getRegistryId(), account.getCompetentAuthority(), account.getEmissionTradingScheme());
-        }
-    }
-
-    @Transactional
-	public void closeAviationAccount(Long accountId, AppUser user, String reason) {
-		AviationAccount account = aviationAccountQueryService.getAccountById(accountId);
-        account.setClosureReason(reason);
-        account.setClosingDate(LocalDateTime.now());
-        account.setClosedBy(user.getUserId());
-        account.setClosedByName(user.getFullName());
-
-        aviationAccountStatusService.handleCloseAccount(accountId);
-		
-	}
 
 }

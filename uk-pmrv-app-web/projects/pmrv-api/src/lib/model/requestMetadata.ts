@@ -28,6 +28,7 @@ export interface RequestMetadata {
     | 'BDR'
     | 'PERMANENT_CESSATION'
     | 'ALR'
+    | 'WASTE_QDR'
     | 'REISSUE'
     | 'AVIATION_AER'
     | 'AVIATION_AER_CORSIA'

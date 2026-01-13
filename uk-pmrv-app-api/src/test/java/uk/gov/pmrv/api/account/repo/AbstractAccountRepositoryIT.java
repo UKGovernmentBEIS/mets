@@ -165,6 +165,22 @@ public abstract class AbstractAccountRepositoryIT extends AbstractContainerBaseT
         assertThat(result).extracting(Account::getId)
             .containsExactlyInAnyOrder(account1.getId(), account2.getId());
     }
+    
+    @Test
+    void findCAByIdIn() {
+    	createAccount(1L, "account1", CompetentAuthorityEnum.ENGLAND, 1L, "leName1",
+                LegalEntityStatus.ACTIVE, EmissionTradingScheme.UK_ETS_INSTALLATIONS, buildHoldingCompany());
+    	createAccount(2L, "account2", CompetentAuthorityEnum.ENGLAND, 1L, "leName2",
+                LegalEntityStatus.ACTIVE, EmissionTradingScheme.UK_ETS_INSTALLATIONS, buildHoldingCompany());
+    	createAccount(3L, "account3", CompetentAuthorityEnum.SCOTLAND, 1L, "leName3",
+                LegalEntityStatus.ACTIVE, EmissionTradingScheme.UK_ETS_INSTALLATIONS, buildHoldingCompany());
+    	createAccount(4L, "account4", CompetentAuthorityEnum.SCOTLAND, 1L, "leName4",
+                LegalEntityStatus.ACTIVE, EmissionTradingScheme.UK_ETS_INSTALLATIONS, buildHoldingCompany());
+
+        final Set<CompetentAuthorityEnum> actual = repo.findCAByIdIn(Set.of(1L, 2L, 3L, 4L));
+        assertThat(actual)
+                .containsExactlyInAnyOrder(CompetentAuthorityEnum.ENGLAND, CompetentAuthorityEnum.SCOTLAND);
+    }
 
     private Account createAccount(Long id, String accountName, CompetentAuthorityEnum ca, Long vbId,
                                   String leName, LegalEntityStatus leStatus,

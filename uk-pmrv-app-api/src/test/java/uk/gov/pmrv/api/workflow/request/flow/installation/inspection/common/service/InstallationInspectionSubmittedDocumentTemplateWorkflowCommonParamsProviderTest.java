@@ -40,7 +40,8 @@ public class InstallationInspectionSubmittedDocumentTemplateWorkflowCommonParams
         Map<String, Object> expectedParams = Map.of("additionalInformation", "Test additional information",
                 "followupActions", List.of(FollowUpAction.builder().followUpActionType(FollowUpActionType.MISSTATEMENT).explanation("Test").build(),
                         FollowUpAction.builder().followUpActionType(FollowUpActionType.NON_COMPLIANCE).explanation("Test 1").build()),
-                "responseDeadline","10 September 2025",
+                "responseDeadline",LocalDate.of(2025, 9, 10)
+                .format(InstallationInspectionSubmittedDocumentTemplateWorkflowCommonParamsProvider.FORMATTER),
                "followUpActionsRequired", true,
                 "followUpActionsOmissionJustification", "Test justification");
 

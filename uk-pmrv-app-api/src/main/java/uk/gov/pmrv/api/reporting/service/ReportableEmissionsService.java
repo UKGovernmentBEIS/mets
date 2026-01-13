@@ -1,22 +1,22 @@
 package uk.gov.pmrv.api.reporting.service;
 
-import java.math.BigDecimal;
-import java.time.Year;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.reporting.domain.InstallationReportableEmissionsUpdatedEvent;
 import uk.gov.pmrv.api.reporting.domain.ReportableEmissionsEntity;
 import uk.gov.pmrv.api.reporting.domain.ReportableEmissionsSaveParams;
 import uk.gov.pmrv.api.reporting.repository.ReportableEmissionsRepository;
 import uk.gov.pmrv.api.reporting.transform.AccountEmissionsMapper;
+
+import java.math.BigDecimal;
+import java.time.Year;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +31,10 @@ public class ReportableEmissionsService {
         return reportableEmissionsRepository
                 .findAllByAccountIdAndYearIn(accountId, years).stream()
                 .collect(Collectors.toMap(ReportableEmissionsEntity::getYear, ReportableEmissionsEntity::getReportableEmissions));
+    }
+
+    public List<ReportableEmissionsEntity> getReportableEmissionsByAccountId(Long accountId) {
+        return reportableEmissionsRepository.findAllByAccountId(accountId);
     }
 
     @Transactional

@@ -551,6 +551,9 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
       case 'ALR_APPLICATION_PEER_REVIEW':
         return 'Activity level report peer review';
 
+      case 'WASTE_QDR_APPLICATION_SUBMIT':
+        return 'Complete quarterly data report';
+
       default:
         return null;
     }

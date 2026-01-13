@@ -138,6 +138,14 @@
             insert into configuration(key, value, type) values ('ui.features.co2-venting.permit-workflows.enabled', false, 'BOOLEAN');
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_add_configuration_ui.features.wasteQdrEnabled" author="dridakisc@unisystems.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('ui.features.wasteQdrEnabled', false, 'BOOLEAN');
+        </sql>
+        <rollback>
+            delete from configuration where key = 'ui.features.wasteQdrEnabled';
+        </rollback>
+    </changeSet>
     <changeSet id="0_2_0_add_configuration_waste.aer.enable.flag" author="alekopoulosd@unisystems.gr">
         <sql>
             insert into configuration(key, value, type) values ('waste.aer.enable.flag', false, 'BOOLEAN');

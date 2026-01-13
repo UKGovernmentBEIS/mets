@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,6 @@ import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueChangesDetails;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueFilters;
-import uk.gov.pmrv.api.workflow.request.flow.common.reissue.mapper.BatchReissueChangesDetailsDeserializer;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueChangesDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueFilters;
 
@@ -25,7 +23,6 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.P
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@JsonDeserialize(using = BatchReissueChangesDetailsDeserializer.class)
 public class BatchReissueSubmittedRequestActionPayload extends RequestActionPayload {
 
 	@NotBlank

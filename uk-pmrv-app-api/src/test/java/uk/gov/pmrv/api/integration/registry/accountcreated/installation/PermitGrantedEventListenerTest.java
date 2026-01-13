@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import uk.gov.pmrv.api.integration.registry.accountcreated.installation.request.PermitGrantedEventListener;
-import uk.gov.pmrv.api.integration.registry.accountcreated.installation.request.PermitGrantedNotifyRegistryService;
-import uk.gov.pmrv.api.permit.domain.event.PermitGrantedEvent;
+import uk.gov.pmrv.api.integration.registry.accountcreated.installation.request.InstallationAccountCreatedEventListener;
+import uk.gov.pmrv.api.integration.registry.accountcreated.installation.request.InstallationAccountCreatedNotifyRegistryService;
+import uk.gov.pmrv.api.integration.registry.accountcreated.installation.request.InstallationAccountCreatedRegistryEvent;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -14,22 +14,22 @@ import static org.mockito.Mockito.verify;
 public class PermitGrantedEventListenerTest {
 
     @Mock
-    private PermitGrantedNotifyRegistryService permitGrantedNotifyRegistryService;
+    private InstallationAccountCreatedNotifyRegistryService installationAccountCreatedNotifyRegistryService;
 
-    private PermitGrantedEventListener permitGrantedEventListener;
+    private InstallationAccountCreatedEventListener installationAccountCreatedEventListener;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        permitGrantedEventListener = new PermitGrantedEventListener(permitGrantedNotifyRegistryService);
+        installationAccountCreatedEventListener = new InstallationAccountCreatedEventListener(installationAccountCreatedNotifyRegistryService);
     }
 
     @Test
     public void testPermitGrantedEvent() {
-        PermitGrantedEvent permitGrantedEvent = PermitGrantedEvent.builder().accountId(1L)
+        InstallationAccountCreatedRegistryEvent permitGrantedEvent = InstallationAccountCreatedRegistryEvent.builder().accountId(1L)
                 .requestId("request1").build();
 
-        permitGrantedEventListener.handle(permitGrantedEvent);
-        verify(permitGrantedNotifyRegistryService, times(1)).notifyRegistry(permitGrantedEvent);
+        installationAccountCreatedEventListener.handle(permitGrantedEvent);
+        verify(installationAccountCreatedNotifyRegistryService, times(1)).notifyRegistry(permitGrantedEvent);
     }
 }

@@ -23,6 +23,7 @@ import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/re
 import { UrlRequestType } from '@shared/types/url-request-type';
 
 import {
+  InstallationAccountDTO,
   PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload,
   PermitTransferBDetailsConfirmationReviewDecision,
   PermitTransferBSaveDetailsConfirmationReviewGroupDecisionRequestTaskActionPayload,
@@ -135,6 +136,17 @@ export class PermitTransferStore extends PermitIssuanceStore<PermitTransferState
           return resolveDeterminationStatus(state);
         }
       }),
+    );
+  }
+
+  isGrantWizardComplete(
+    state: PermitTransferState,
+    emissionTradingScheme?: InstallationAccountDTO['emissionTradingScheme'],
+  ): boolean {
+    return (
+      !!state?.determination?.reason &&
+      !!state?.determination?.activationDate &&
+      (state.permitType === 'GHGE' || state.permitType === 'WASTE' || this.isHSEAnnualEmissionTargetsCompleted(state))
     );
   }
 

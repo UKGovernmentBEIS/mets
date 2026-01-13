@@ -6,6 +6,7 @@ import {
   OnInit,
   Optional,
   Self,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
@@ -48,6 +49,7 @@ export class MultipleFileInputComponent implements ControlValueAccessor, OnInit 
   @Input() dropzoneHintText = 'Drag and drop files here or';
   @Input() dropzoneButtonText = 'Choose files';
   @Input() baseDownloadUrl: string;
+  @Input() customHintTemplate: TemplateRef<any>;
   @ViewChild('input') fileInput: ElementRef<HTMLInputElement>;
 
   uploadStatusText$ = new Subject<string>();

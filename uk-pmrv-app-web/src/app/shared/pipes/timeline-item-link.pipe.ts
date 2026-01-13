@@ -31,7 +31,7 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'PERMIT_ISSUANCE_RECALLED_FROM_AMENDS':
         return null;
       case 'PERMIT_ISSUANCE_ACCOUNT_CREATED_SENT_TO_REGISTRY':
-      case 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY':
+      case 'PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY':
         return [routerLooks + 'actions', value.id, 'registry', 'information-sent'];
       case 'PERMIT_SURRENDER_APPLICATION_CANCELLED':
         return null;
@@ -296,6 +296,10 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEWER_ACCEPTED':
       case 'EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEWER_REJECTED':
         return isWorkflow ? [routerLooks + 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
+      case 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY':
+        return isWorkflow
+          ? [routerLooks + 'actions', value.id, 'registry', 'information-sent']
+          : [routerLooks + 'aviation', 'actions', value.id, 'registry', 'information-sent'];
 
       case 'NON_COMPLIANCE_APPLICATION_CLOSED':
         return isAviation

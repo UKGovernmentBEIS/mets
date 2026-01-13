@@ -11,28 +11,31 @@
 
         <kafka.version>3.7.1</kafka.version>
         <guava.version>33.3.1-jre</guava.version>
-        <commons-csv.version>1.12.0</commons-csv.version>
+        <commons-csv.version>1.14.0</commons-csv.version>
+        <commons-text.version>1.14.0</commons-text.version>
         <sshd-sftp.version>2.14.0</sshd-sftp.version>
 
         <netz.restlogging.version>1.4.0</netz.restlogging.version>
         <netz.restclient.version>1.0.0</netz.restclient.version>
-        <netz.common.version>1.12.0</netz.common.version>
-        <netz.authorization.version>1.7.0</netz.authorization.version>
+        <netz.common.version>1.15.0</netz.common.version>
+        <netz.authorization.version>1.9.0</netz.authorization.version>
         <netz.competentauthority.version>1.3.0</netz.competentauthority.version>
         <netz.companieshouse.version>1.4.0</netz.companieshouse.version>
-        <netz.security.version>1.4.0</netz.security.version>
+        <netz.security.version>1.5.0</netz.security.version>
         <netz.security-camunda-admin.version>1.1.0</netz.security-camunda-admin.version>
         <netz.configuration.version>1.3.0</netz.configuration.version>
-        <netz.kafka.version>1.2.0</netz.kafka.version>
+        <netz.kafka.version>1.3.0</netz.kafka.version>
         <netz.token.version>1.2.0</netz.token.version>
-        <netz.files.version>1.4.0</netz.files.version>
+        <netz.files.version>1.5.0</netz.files.version>
         <netz.alert.version>1.1.0</netz.alert.version>
         <netz.referencedata.version>1.3.0</netz.referencedata.version>
         <netz.mireports.version>1.4.0</netz.mireports.version>
         <netz.userinfoapi.version>1.1.0</netz.userinfoapi.version>
         <netz.terms.version>1.1.0</netz.terms.version>
-        <netz.notificationapi.version>1.1.0</netz.notificationapi.version>
+        <netz.notificationapi.version>1.2.0</netz.notificationapi.version>
         <netz.feedback.version>1.2.0</netz.feedback.version>
+        <netz.third-party-data-provider.version>1.0.0</netz.third-party-data-provider.version>
+        <netz.common.integration.model.version>1.7.0</netz.common.integration.model.version>
 
         <apt-maven-plugin.version>1.1.3</apt-maven-plugin.version>
 
@@ -52,7 +55,7 @@
     <parent>
         <groupId>uk.gov.netz</groupId>
         <artifactId>uk-netz-app-api-parent</artifactId>
-        <version>1.3.0</version>
+        <version>1.7.0</version>
     </parent>
 
     <dependencies>
@@ -195,6 +198,11 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${commons-text.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -395,6 +403,16 @@
             <groupId>uk.gov.netz</groupId>
             <artifactId>uk-netz-app-api-feedback</artifactId>
             <version>${netz.feedback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-third-party-data-provider</artifactId>
+            <version>${netz.third-party-data-provider.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-common-integration-model</artifactId>
+            <version>${netz.common.integration.model.version}</version>
         </dependency>
 
         <!-- Test dependencies -->

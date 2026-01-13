@@ -44,6 +44,7 @@ public class PermitVariationUpdatePermitRegulatorLedService {
 		installationAccountUpdateService.updateAccountUponPermitVariationRegulatorLedSubmit(
 				accountId,
 				emitterType,
-				permitContainer.getPermit().getEstimatedAnnualEmissions().getQuantity());
+				permitContainer.getPermit().getEstimatedAnnualEmissions().getQuantity(),
+				permitContainer.getFirstYearOfReportingObligation());
 	}
 }

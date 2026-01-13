@@ -1,9 +1,9 @@
 <govuk-notification-banner *ngIf="showNotification()" type="success">
   <h1 class="govuk-notification-banner__heading">
     {{
-      aggregatedEmissionDataDetails.length > 0
-        ? 'The aggregated consumption and flight data file has been replaced successfully.'
-        : 'The aggregated consumption and flight data file has been uploaded successfully.'
+      firstTimeUploaded()
+        ? 'The aggregated consumption and flight data file has been uploaded successfully.'
+        : 'The aggregated consumption and flight data file has been replaced successfully.'
     }}
   </h1>
 </govuk-notification-banner>

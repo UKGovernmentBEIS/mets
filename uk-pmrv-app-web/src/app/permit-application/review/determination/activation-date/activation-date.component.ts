@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, map, switchMap, take } from 'rxjs';
+import { filter, first, map, switchMap, take } from 'rxjs';
+
+import { InstallationAccountViewService } from 'pmrv-api';
 
 import { PendingRequestService } from '../../../../core/guards/pending-request.service';
 import { PendingRequest } from '../../../../core/interfaces/pending-request.interface';
@@ -38,12 +41,22 @@ export class ActivationDateComponent implements PendingRequest {
   determination$ = this.store.getDeterminationType$();
   determinationHeader = this.store.getDeterminationHeader();
 
+  private readonly emissionsTradingSchemeSignal = toSignal(
+    this.store.pipe(
+      map((state) => state.accountId),
+      filter((id) => id !== null && id !== undefined),
+      switchMap((accountId) => this.installationAccountViewService.getInstallationAccountById(accountId)),
+      map((result) => result.account.emissionTradingScheme),
+    ),
+  );
+
   constructor(
     @Inject(PERMIT_TASK_FORM) readonly form: UntypedFormGroup,
     readonly store: PermitApplicationStore<PermitApplicationState>,
     readonly pendingRequest: PendingRequestService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly installationAccountViewService: InstallationAccountViewService,
   ) {}
 
   onContinue(): void {
@@ -77,12 +90,24 @@ export class ActivationDateComponent implements PendingRequest {
     }
   }
   private getNextStepUrl(state: PermitApplicationState): string {
-    return state.permitType === 'HSE'
-      ? 'emissions'
-      : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_REVIEW'
-        ? 'log-changes'
-        : state.requestTaskType === 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'
-          ? 'reason-template'
-          : 'answers';
+    const emissionsTradingScheme = this.emissionsTradingSchemeSignal();
+
+    return (state.permitType === 'GHGE' &&
+      state.requestTaskType === 'PERMIT_ISSUANCE_APPLICATION_REVIEW' &&
+      emissionsTradingScheme === 'UK_ETS_INSTALLATIONS') ||
+      ((state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_REVIEW' ||
+        state.requestTaskType === 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT') &&
+        state.permitType === 'GHGE' &&
+        emissionsTradingScheme === 'UK_ETS_INSTALLATIONS' &&
+        (state?.['originalPermitContainer']?.permitType === 'HSE' ||
+          state?.['originalPermitContainer']?.permitType === 'WASTE'))
+      ? 'first-year'
+      : state.permitType === 'HSE'
+        ? 'emissions'
+        : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_REVIEW'
+          ? 'log-changes'
+          : state.requestTaskType === 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'
+            ? 'reason-template'
+            : 'answers';
   }
 }

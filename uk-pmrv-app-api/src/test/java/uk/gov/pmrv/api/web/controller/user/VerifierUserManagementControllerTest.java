@@ -91,13 +91,12 @@ class VerifierUserManagementControllerTest {
     
     @Test
     void getVerifierUserById() throws Exception {
+    	AppUser user = setupAppUser();
         final String userId = "userId";
-        AppUser user = AppUser.builder().userId("currentuser").build();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().firstName("fName")
                 .lastName("lName").email("email").build();
 
         // Mock
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(verifierUserManagementService.getVerifierUserById(user, userId)).thenReturn(verifierUserDTO);
 
         // Invoke
@@ -116,11 +115,10 @@ class VerifierUserManagementControllerTest {
 
     @Test
     void getVerifierUserById_forbidden() throws Exception {
+    	AppUser user = setupAppUser();
         final String userId = "userId";
-        AppUser user = AppUser.builder().userId("currentuser").build();
 
         // Mock
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(user, "getVerifierUserById");
@@ -138,13 +136,10 @@ class VerifierUserManagementControllerTest {
 
     @Test
     void updateVerifierUserById() throws Exception {
+    	AppUser user = setupAppUser();
         final String userId = "userId";
-        AppUser user = AppUser.builder().userId("currentuser").build();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().firstName("fName")
                 .lastName("lName").email("email").build();
-
-        // Mock
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         // Invoke
         mockMvc.perform(
@@ -163,13 +158,12 @@ class VerifierUserManagementControllerTest {
 
     @Test
     void updateVerifierUserById_forbidden() throws Exception {
+    	AppUser user = setupAppUser();
         final String userId = "userId";
-        AppUser user = AppUser.builder().userId("currentuser").build();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().firstName("fName")
                 .lastName("lName").email("email").build();
 
         // Mock
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(user, "updateVerifierUserById");
@@ -188,6 +182,7 @@ class VerifierUserManagementControllerTest {
 
     @Test
     void updateCurrentVerifierUser() throws Exception {
+    	setupAppUser();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().firstName("fName")
                 .lastName("lName").email("email").build();
 
@@ -208,12 +203,11 @@ class VerifierUserManagementControllerTest {
 
     @Test
     void updateCurrentVerifierUser_forbidden() throws Exception {
-        AppUser user = AppUser.builder().userId("currentuser").build();
+    	AppUser user = setupAppUser();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().firstName("fName")
                 .lastName("lName").email("email").build();
 
         // Mock
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
                 .evaluate(user, new String[] {RoleTypeConstants.VERIFIER});
@@ -232,11 +226,8 @@ class VerifierUserManagementControllerTest {
     
     @Test
     void resetVerifier2Fa() throws Exception {
+    	AppUser user = setupAppUser();
         final String userId = "userId";
-        AppUser user = AppUser.builder().userId("authId").build();
-
-        // Mock
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         // Invoke
         mockMvc.perform(
@@ -250,11 +241,10 @@ class VerifierUserManagementControllerTest {
 
     @Test
     void resetVerifier2Fa_forbidden() throws Exception {
+    	AppUser user = setupAppUser();
         final String userId = "userId";
-        AppUser user = AppUser.builder().userId("authId").build();
 
         // Mock
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(user, "resetVerifier2Fa");
@@ -269,4 +259,10 @@ class VerifierUserManagementControllerTest {
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(verifierUserManagementService, never()).resetVerifier2Fa(any(), anyString());
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("currentuser").build();
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 }

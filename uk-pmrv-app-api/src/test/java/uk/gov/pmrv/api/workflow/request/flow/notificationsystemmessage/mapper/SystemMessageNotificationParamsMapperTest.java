@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
-import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
+import uk.gov.netz.api.notificationapi.domain.NotificationContent;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;

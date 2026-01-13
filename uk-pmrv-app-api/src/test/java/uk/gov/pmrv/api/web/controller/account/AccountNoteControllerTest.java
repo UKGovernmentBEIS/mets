@@ -165,10 +165,8 @@ class AccountNoteControllerTest {
 
     @Test
     void getAccountNotes_forbidden() throws Exception {
+    	AppUser user = setupAppUser();
 
-        final AppUser user = AppUser.builder().userId("userId").build();
-
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(user, "getNotesByAccountId", Long.toString(1L), null, null);
@@ -230,8 +228,7 @@ class AccountNoteControllerTest {
 
     @Test
     void uploadAccountNoteFile() throws Exception {
-        
-        final AppUser authUser = AppUser.builder().userId("id").build();
+    	AppUser authUser = setupAppUser();
         final String noteName = "file";
         final String noteOriginalFileName = "filename.txt";
         final String noteContentType = "text/plain";
@@ -248,7 +245,6 @@ class AccountNoteControllerTest {
         final UUID noteUuid = UUID.randomUUID();
         final Long accountId = 1L;
 
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         when(fileNoteService.uploadAccountFile(authUser.getUserId(), fileDTO, accountId))
             .thenReturn(FileUuidDTO.builder().uuid(noteUuid.toString()).build());
 
@@ -265,12 +261,10 @@ class AccountNoteControllerTest {
 
     @Test
     void uploadAccountNoteFile_forbidden() throws Exception {
-
-        final AppUser authUser = AppUser.builder().userId("id").build();
+    	AppUser authUser = setupAppUser();
 
         final MockMultipartFile noteFile = new MockMultipartFile("file", "filename.txt", "text/plain", "content".getBytes());
        
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(authUser, "uploadAccountNoteFile", "1", null, null);
@@ -309,7 +303,6 @@ class AccountNoteControllerTest {
 
     @Test
     void updateAccountNote_forbidden() throws Exception {
-
         final AppUser user = AppUser.builder()
             .roleType(RoleTypeConstants.REGULATOR)
             .build();
@@ -335,7 +328,6 @@ class AccountNoteControllerTest {
 
     @Test
     void deleteAccountNote() throws Exception {
-
         final AppUser user = AppUser.builder()
             .roleType(RoleTypeConstants.REGULATOR)
             .build();
@@ -350,7 +342,7 @@ class AccountNoteControllerTest {
 
     @Test
     void generateGetPermitDocumentToken() throws Exception {
-        
+    	setupAppUser();
         final Long noteId = 1L;
         final UUID documentUuid = UUID.randomUUID();
         final FileToken expectedToken = FileToken.builder().token("token").build();
@@ -366,4 +358,10 @@ class AccountNoteControllerTest {
 
         verify(accountNoteService, times(1)).generateGetFileNoteToken(noteId, documentUuid);
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 }

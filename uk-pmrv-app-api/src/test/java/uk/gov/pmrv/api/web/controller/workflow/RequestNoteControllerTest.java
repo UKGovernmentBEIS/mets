@@ -204,8 +204,7 @@ class RequestNoteControllerTest {
 
     @Test
     void uploadRequestNoteFile() throws Exception {
-
-        final AppUser authUser = AppUser.builder().userId("id").build();
+    	AppUser authUser = setupAppUser();
         final String noteName = "file";
         final String noteOriginalFileName = "filename.txt";
         final String noteContentType = "text/plain";
@@ -222,7 +221,6 @@ class RequestNoteControllerTest {
         final UUID noteUuid = UUID.randomUUID();
         final String requestId = "reqId";
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         when(fileNoteService.uploadRequestFile(authUser.getUserId(), fileDTO, requestId))
             .thenReturn(FileUuidDTO.builder().uuid(noteUuid.toString()).build());
 
@@ -239,12 +237,10 @@ class RequestNoteControllerTest {
 
     @Test
     void uploadRequestNoteFile_forbidden() throws Exception {
-
-        final AppUser authUser = AppUser.builder().userId("id").build();
+    	AppUser authUser = setupAppUser();
 
         final MockMultipartFile noteFile = new MockMultipartFile("file", "filename.txt", "text/plain", "content".getBytes());
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(authUser, "uploadRequestNoteFile", "reqId", null, null);
@@ -324,7 +320,7 @@ class RequestNoteControllerTest {
     
     @Test
     void generateGetFileNoteToken() throws Exception {
-
+    	setupAppUser();
         final String requestId = "requestId";
         final UUID documentUuid = UUID.randomUUID();
         final FileToken expectedToken = FileToken.builder().token("token").build();
@@ -340,4 +336,10 @@ class RequestNoteControllerTest {
 
         verify(requestNoteService, times(1)).generateGetFileNoteToken(requestId, documentUuid);
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 }

@@ -92,7 +92,8 @@ class OperatorUserManagementControllerTest {
 
 	@Test
 	void getOperatorUserById() throws Exception {
-		AppUser user = AppUser.builder().userId("authId").build();
+		setupAppUser();
+		
 		String userId = "userId";
 		OperatorUserDTO operatorUserDTO = OperatorUserDTO.builder()
 				.firstName("fn")
@@ -100,7 +101,6 @@ class OperatorUserManagementControllerTest {
 				.email("email")
 				.build();
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 		when(operatorUserManagementService.getOperatorUserByAccountAndId(1L, userId))
 				.thenReturn(operatorUserDTO);
 
@@ -118,11 +118,11 @@ class OperatorUserManagementControllerTest {
 
 	@Test
 	void getOperatorUserById_forbidden() throws Exception {
-		AppUser user = AppUser.builder().userId("authId").build();
+		AppUser user = setupAppUser();
+		
 		String userId = "userId";
 		Long accountId = 1L;
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(user, "getOperatorUserById", accountId.toString(), null, null);
@@ -137,6 +137,8 @@ class OperatorUserManagementControllerTest {
 
     @Test
 	void updateCurrentOperatorUser() throws Exception {
+    	setupAppUser();
+    	
 		OperatorUserDTO operatorUserDTO = OperatorUserDTO.builder()
 				.firstName("fn")
 				.lastName("ln")
@@ -159,13 +161,14 @@ class OperatorUserManagementControllerTest {
 	@Test
 	void updateCurrentOperatorUser_forbidden() throws Exception {
 		AppUser user = AppUser.builder().userId("authId").roleType(RoleTypeConstants.REGULATOR).build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		
 		OperatorUserDTO operatorUserDTO = OperatorUserDTO.builder()
 				.firstName("fn")
 				.lastName("ln")
 				.email("email")
 				.build();
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
             .evaluate(user, new String[] {RoleTypeConstants.OPERATOR});
@@ -181,7 +184,8 @@ class OperatorUserManagementControllerTest {
 
 	@Test
 	void updateOperatorUserById() throws Exception {
-		AppUser user = AppUser.builder().userId("authId").build();
+		setupAppUser();
+		
 		String userId = "userId";
 		OperatorUserDTO operatorUserDTO = OperatorUserDTO.builder()
 				.firstName("fn")
@@ -189,7 +193,6 @@ class OperatorUserManagementControllerTest {
 				.email("email")
 				.build();
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
 		//invoke
 		mockMvc.perform(
@@ -207,7 +210,7 @@ class OperatorUserManagementControllerTest {
 
 	@Test
 	void updateOperatorUserById_forbidden() throws Exception {
-		AppUser user = AppUser.builder().userId("authId").build();
+		AppUser user = setupAppUser();
 		String userId = "userId";
 		OperatorUserDTO operatorUserDTO = OperatorUserDTO.builder()
 				.firstName("fn")
@@ -216,7 +219,6 @@ class OperatorUserManagementControllerTest {
 				.build();
 		Long accountId = 1L;
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(user, "updateOperatorUserById", accountId.toString(), null, null);
@@ -233,10 +235,9 @@ class OperatorUserManagementControllerTest {
 	
 	@Test
 	void resetOperator2Fa() throws Exception {
-		AppUser user = AppUser.builder().userId("authId").build();
+		setupAppUser();
 		String userId = "userId";
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
 		mockMvc.perform(
 				MockMvcRequestBuilders.patch(BASE_PATH + "/account/" + 1L + "/" + userId + "/reset-2fa"))
@@ -247,11 +248,10 @@ class OperatorUserManagementControllerTest {
 
 	@Test
 	void resetOperator2Fa_forbidden() throws Exception {
-		AppUser user = AppUser.builder().userId("authId").build();
+		AppUser user = setupAppUser();
 		String userId = "userId";
 		Long accountId = 1L;
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(user, "resetOperator2Fa", accountId.toString(), null, null);
@@ -261,6 +261,12 @@ class OperatorUserManagementControllerTest {
 				.andExpect(status().isForbidden());
 
 		verify(operatorUserManagementService, never()).resetOperator2Fa( anyLong(), anyString());
+	}
+	
+	private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
 	}
 
 }

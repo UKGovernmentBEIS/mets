@@ -26,6 +26,7 @@ import { AnswersComponent } from './determination/answers/answers.component';
 import { AnswersGuard } from './determination/answers/answers.guard';
 import { EmissionsComponent } from './determination/emissions/emissions.component';
 import { EmissionsGuard } from './determination/emissions/emissions.guard';
+import { FirstYearComponent } from './determination/first-year/first-year.component';
 import { OfficialNoticeComponent } from './determination/official-notice/official-notice.component';
 import { OfficialNoticeGuard } from './determination/official-notice/official-notice.guard';
 import { ReasonComponent } from './determination/reason/reason.component';
@@ -146,6 +147,13 @@ export const routes: PermitRoute[] = [
         path: 'activation-date',
         data: { pageTitle: 'Overall decision activation date' },
         component: ActivationDateComponent,
+        canActivate: [ActivationDateGuard],
+        canDeactivate: [PendingRequestGuard],
+      },
+      {
+        path: 'first-year',
+        data: { pageTitle: 'First year of Registry reporting Obligation' },
+        component: FirstYearComponent,
         canActivate: [ActivationDateGuard],
         canDeactivate: [PendingRequestGuard],
       },

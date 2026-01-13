@@ -13,6 +13,7 @@ import uk.gov.pmrv.api.account.domain.dto.LocationDTO;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateFaStatusDTO;
+import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateRegistryReportingFirstYearDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.TransferCodeStatus;
 import uk.gov.pmrv.api.account.installation.repository.InstallationAccountRepository;
@@ -21,10 +22,10 @@ import uk.gov.pmrv.api.account.service.LegalEntityValidationService;
 import uk.gov.pmrv.api.account.service.validator.AccountStatus;
 import uk.gov.pmrv.api.account.transform.HoldingCompanyMapper;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.domain.transform.AddressMapper;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -48,13 +49,6 @@ public class InstallationAccountUpdateService {
 
     @Transactional
     @AccountStatus(expression = "{#status != 'UNAPPROVED' && #status != 'DENIED'}")
-    public void updateAccountRegistryId(Long accountId, Integer registryId) {
-        InstallationAccount account = installationAccountQueryService.getAccountById(accountId);
-        account.setRegistryId(registryId);
-    }
-
-    @Transactional
-    @AccountStatus(expression = "{#status != 'UNAPPROVED' && #status != 'DENIED'}")
     public void updateAccountSopId(Long accountId, Long sopId) {
         InstallationAccount account = installationAccountQueryService.getAccountById(accountId);
         account.setSopId(sopId);
@@ -69,32 +63,44 @@ public class InstallationAccountUpdateService {
     }
 
     @Transactional
-    public void updateAccountUponPermitGranted(Long accountId, EmitterType emitterType, BigDecimal estimatedAnnualEmissions) {
+    public void updateAccountUponPermitGranted(Long accountId, EmitterType emitterType, BigDecimal estimatedAnnualEmissions, Integer registryReportingFirstYear) {
         InstallationAccount account = installationAccountQueryService.getAccountById(accountId);
         account.setEmitterType(emitterType);
         account.setInstallationCategory(InstallationCategoryMapper.getInstallationCategory(emitterType, estimatedAnnualEmissions));
+        account.setRegistryReportingFirstYear(registryReportingFirstYear);
 
         installationAccountStatusService.handlePermitGranted(accountId);
     }
 
     @Transactional
-    public void updateAccountUponPermitVariationGranted(Long accountId, EmitterType emitterType, BigDecimal estimatedAnnualEmissions) {
+    public void updateAccountUponPermitVariationGranted(Long accountId, EmitterType emitterType, BigDecimal estimatedAnnualEmissions, Integer registryReportingFirstYear) {
         InstallationAccount account = installationAccountQueryService.getAccountById(accountId);
         account.setInstallationCategory(InstallationCategoryMapper.getInstallationCategory(emitterType, estimatedAnnualEmissions));
+        if(EmitterType.GHGE.equals(emitterType) && registryReportingFirstYear!=null) {
+            account.setRegistryReportingFirstYear(registryReportingFirstYear);
+        }
     }
 
     @Transactional
-    public void updateAccountUponPermitVariationRegulatorLedSubmit(Long accountId, EmitterType emitterType, BigDecimal estimatedAnnualEmissions) {
+    public void updateAccountUponPermitVariationRegulatorLedSubmit(Long accountId, EmitterType emitterType,
+                                                                   BigDecimal estimatedAnnualEmissions,Integer registryReportingFirstYear) {
         InstallationAccount account = installationAccountQueryService.getAccountById(accountId);
         account.setEmitterType(emitterType);
         account.setInstallationCategory(InstallationCategoryMapper.getInstallationCategory(emitterType, estimatedAnnualEmissions));
+        if(EmitterType.GHGE.equals(emitterType) && registryReportingFirstYear!=null) {
+            account.setRegistryReportingFirstYear(registryReportingFirstYear);
+        }
     }
 
     @Transactional
-    public void updateAccountUponTransferBGranted(Long accountId, EmitterType emitterType, BigDecimal estimatedAnnualEmissions) {
+    public void updateAccountUponTransferBGranted(Long accountId, EmitterType emitterType, Long accountAid,BigDecimal estimatedAnnualEmissions) {
         InstallationAccount account = installationAccountQueryService.getAccountById(accountId);
         account.setEmitterType(emitterType);
         account.setInstallationCategory(InstallationCategoryMapper.getInstallationCategory(emitterType, estimatedAnnualEmissions));
+        if(EmitterType.GHGE.equals(emitterType) && EmissionTradingScheme.UK_ETS_INSTALLATIONS.equals(account.getEmissionTradingScheme())) {
+            Integer registryReportingFirstYear = installationAccountQueryService.getRegistryReportingFirstYear(accountAid);
+            account.setRegistryReportingFirstYear(registryReportingFirstYear);
+        }
 
         installationAccountStatusService.handleTransferBGranted(accountId);
     }
@@ -161,5 +167,11 @@ public class InstallationAccountUpdateService {
     public void updateCommencementDate(Long accountId, AccountUpdateCommencementDateDTO commencementDateDTO) {
         InstallationAccount account = installationAccountQueryService.getAccountById(accountId);
         account.setCommencementDate(commencementDateDTO.getCommencementDate());
+    }
+
+    @Transactional
+    public void updateRegistryReportingFirstYear(Long accountId, AccountUpdateRegistryReportingFirstYearDTO accountUpdateRegistryReportingFirstYearDTO) {
+        InstallationAccount account = installationAccountQueryService.getAccountById(accountId);
+        account.setRegistryReportingFirstYear(accountUpdateRegistryReportingFirstYearDTO.getRegistryReportingFirstYear());
     }
 }

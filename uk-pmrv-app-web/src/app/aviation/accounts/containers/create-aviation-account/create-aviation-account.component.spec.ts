@@ -28,7 +28,7 @@ describe('AccountComponent', () => {
     emissionTradingScheme: 'CORSIA' as AviationAccountCreationDTO['emissionTradingScheme'],
     sopId: null,
     crcoCode: 'TESTCRCO',
-    commencementDate: 'TEST_DATE',
+    commencementDate: '2022-11-11',
   };
 
   const accountsService: Partial<AviationAccountsService> = {

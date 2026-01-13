@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@WebEndpoint(id = "mmp-migration-docs-upload")
+@WebEndpoint(id = "mmpMigrationDocsUpload")
 @RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class MmpDocumentMigrationService {

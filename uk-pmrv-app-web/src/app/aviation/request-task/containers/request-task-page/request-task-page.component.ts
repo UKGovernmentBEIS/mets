@@ -2,15 +2,17 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, first, iif, map, Observable, of, switchMap } from 'rxjs';
 
 import { isAllSectionsApproved } from '@aviation/request-task/aer/shared/util/aer.util';
+import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { hasRelatedViewActions } from '@shared/components/related-actions/request-task-allowed-actions.map';
 import { DocumentFilenameAndDocumentType } from '@shared/interfaces/previewDocumentFilenameAndDocumentType';
 import { TaskSection } from '@shared/task-list/task-list.interface';
 
 import {
+  AviationAccountCreationRegistryControllerService,
   DecisionNotification,
   ItemDTO,
   RequestActionInfoDTO,
@@ -60,6 +62,7 @@ interface ViewModel {
   isCompleteReportDisplayed: boolean;
   decisionNotification: DecisionNotification;
   previewDocuments: DocumentFilenameAndDocumentType[];
+  isManualPushToRegistryAvailable: boolean;
 }
 
 @Component({
@@ -122,11 +125,15 @@ export class RequestTaskPageComponent implements OnInit {
     }),
   );
 
+  isManualPushToRegistryAvailable$ = new BehaviorSubject<boolean>(false);
+
   constructor(
     private readonly store: RequestTaskStore,
     protected readonly router: Router,
     protected readonly route: ActivatedRoute,
     private titleService: Title,
+    private readonly aviationAccountCreationRegistryService: AviationAccountCreationRegistryControllerService,
+    readonly pendingRequest: PendingRequestService,
   ) {}
 
   ngOnInit(): void {
@@ -145,6 +152,27 @@ export class RequestTaskPageComponent implements OnInit {
         map((rti) => getRequestTaskHeaderForTaskType(rti.requestTask.type, rti.requestInfo.requestMetadata)),
       )
       .subscribe((title) => this.titleService.setTitle(title));
+
+    combineLatest([
+      this.store.pipe(requestTaskQuery.selectRequestTaskItem),
+      this.store.pipe(requestTaskQuery.selectRelatedActions),
+    ])
+      .pipe(
+        first(),
+        switchMap(([requestTask, relatedActions]) =>
+          iif(
+            () =>
+              requestTask.requestTask.type === 'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW' &&
+              relatedActions.includes('EMP_ISSUANCE_UKETS_MANUAL_ACCOUNT_OPENING_REGISTRY'),
+            this.aviationAccountCreationRegistryService.isManualPushToRegistryAvailable(requestTask.requestInfo.id),
+            of(false),
+          ),
+        ),
+        this.pendingRequest.trackRequest(),
+      )
+      .subscribe((access: boolean) => {
+        this.isManualPushToRegistryAvailable$.next(access);
+      });
   }
 
   onSubmit() {

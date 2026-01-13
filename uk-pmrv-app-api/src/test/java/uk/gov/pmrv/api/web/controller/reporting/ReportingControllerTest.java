@@ -105,6 +105,7 @@ class ReportingControllerTest {
 
     @Test
     void calculateEmissions() throws Exception {
+    	setupAppUser();
         BigDecimal reportableEmissions = BigDecimal.valueOf(10001.105);
         BigDecimal sustainableBiomassEmissions = BigDecimal.valueOf(923.09);
         EmissionsCalculationParamsDTO calculationParams = EmissionsCalculationParamsDTO.builder()
@@ -132,6 +133,7 @@ class ReportingControllerTest {
 
     @Test
     void calculateMeasurementCO2Emissions() throws Exception {
+    	setupAppUser();
         BigDecimal reportableEmissions = BigDecimal.valueOf(10001.105);
         BigDecimal sustainableBiomassEmissions = BigDecimal.valueOf(923.09);
         MeasurementEmissionsCalculationParamsDTO measurementCO2EmissionsCalculationParamsDTO =
@@ -170,6 +172,7 @@ class ReportingControllerTest {
 
     @Test
     void calculateMeasurementN2OEmissions() throws Exception {
+    	setupAppUser();
         BigDecimal reportableEmissions = BigDecimal.valueOf(10001.105);
         BigDecimal sustainableBiomassEmissions = BigDecimal.valueOf(923.09);
         MeasurementEmissionsCalculationParamsDTO measurementN2OEmissionsCalculationParamsDTO =
@@ -208,6 +211,7 @@ class ReportingControllerTest {
 
     @Test
     void calculatePfcEmissions() throws Exception {
+    	setupAppUser();
         PfcEmissionsCalculationParamsDTO pfcEmissionsCalculationParamsDTO = PfcEmissionsCalculationParamsDTO.builder()
             .calculationMethod(PFCCalculationMethod.SLOPE)
             .totalPrimaryAluminium(BigDecimal.ONE)
@@ -351,4 +355,10 @@ class ReportingControllerTest {
 
         verifyNoInteractions(pfcEmissionsCalculationService);
     }
+    
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
 }

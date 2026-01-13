@@ -5,10 +5,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { SharedModule } from '@shared/shared.module';
-import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
+import { ActivatedRouteStub, BasePage, mockClass, MockType } from '@testing';
 
-import { RequestTaskAttachmentsHandlingService, TasksService } from 'pmrv-api';
+import { InstallationAccountViewService, RequestTaskAttachmentsHandlingService, TasksService } from 'pmrv-api';
 
+import { mockedAccountPermit } from '../../../../accounts/testing/mock-data';
 import { PermitIssuanceStore } from '../../../../permit-issuance/store/permit-issuance.store';
 import { PermitVariationStore } from '../../../../permit-variation/store/permit-variation.store';
 import {
@@ -29,6 +30,8 @@ describe('ActivationDateComponent', () => {
   let store: PermitApplicationStore<PermitApplicationState>;
   let component: ActivationDateComponent;
   let fixture: ComponentFixture<ActivationDateComponent>;
+  let accountViewService: MockType<InstallationAccountViewService>;
+
   const route = new ActivatedRouteStub({}, {}, { statusKey: 'determination' });
 
   const tasksService = mockClass(TasksService);
@@ -73,6 +76,14 @@ describe('ActivationDateComponent', () => {
 
   describe('permit issuance', () => {
     beforeEach(async () => {
+      accountViewService = mockClass(InstallationAccountViewService);
+      accountViewService.getInstallationAccountById.mockReturnValue(
+        of({
+          ...mockedAccountPermit,
+          account: { ...mockedAccountPermit.account, emissionTradingScheme: 'UK_ETS_INSTALLATIONS' },
+        }),
+      );
+
       await TestBed.configureTestingModule({
         imports: [RouterTestingModule, SharedModule, SharedPermitModule],
         declarations: [ActivationDateComponent],
@@ -84,14 +95,15 @@ describe('ActivationDateComponent', () => {
             provide: PermitApplicationStore,
             useExisting: PermitIssuanceStore,
           },
+          { provide: InstallationAccountViewService, useValue: accountViewService },
         ],
       }).compileComponents();
     });
 
-    describe('for activation date input', () => {
+    describe('for activation date input WITH REPORTING FIRST YEAR', () => {
       beforeEach(() => {
         store = TestBed.inject(PermitApplicationStore);
-        store.setState(mockState);
+        store.setState({ ...mockState, requestTaskType: 'PERMIT_ISSUANCE_APPLICATION_REVIEW' });
       });
       beforeEach(createComponent);
 
@@ -120,12 +132,20 @@ describe('ActivationDateComponent', () => {
         expect(page.errorSummary).toBeFalsy();
         expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
 
-        expect(navigateSpy).toHaveBeenCalledWith(['../answers'], { relativeTo: route });
+        expect(navigateSpy).toHaveBeenCalledWith(['../first-year'], { relativeTo: route });
       });
     });
   });
 
   describe('permit variation', () => {
+    accountViewService = mockClass(InstallationAccountViewService);
+    accountViewService.getInstallationAccountById.mockReturnValue(
+      of({
+        ...mockedAccountPermit,
+        account: { ...mockedAccountPermit.account, emissionTradingScheme: 'UK_ETS_INSTALLATIONS' },
+      }),
+    );
+
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         imports: [RouterTestingModule, SharedModule, SharedPermitModule],
@@ -138,11 +158,12 @@ describe('ActivationDateComponent', () => {
             provide: PermitApplicationStore,
             useExisting: PermitVariationStore,
           },
+          { provide: InstallationAccountViewService, useValue: accountViewService },
         ],
       }).compileComponents();
     });
 
-    describe('for variation task activation date', () => {
+    describe('for variation task activation date WITHOUT REPORTING FIRST YEAR', () => {
       beforeEach(() => {
         store = TestBed.inject(PermitApplicationStore);
         store.setState({
@@ -182,6 +203,51 @@ describe('ActivationDateComponent', () => {
         );
 
         expect(navigateSpy).toHaveBeenCalledWith(['../log-changes'], { relativeTo: route });
+      });
+    });
+
+    describe('for variation task activation date WITH REPORTING FIRST YEAR', () => {
+      beforeEach(() => {
+        store = TestBed.inject(PermitApplicationStore);
+        store.setState({
+          ...mockPermitVariationReviewOperatorLedPayload,
+          requestTaskType: 'PERMIT_VARIATION_APPLICATION_REVIEW',
+          determination: {
+            type: 'GRANTED',
+            reason: 'reason',
+          },
+          originalPermitContainer: { permitType: 'HSE' },
+          reviewSectionsCompleted: { determination: false },
+        } as any);
+      });
+      beforeEach(createComponent);
+
+      it('should submit a valid variation form', () => {
+        tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
+        const navigateSpy = jest.spyOn(router, 'navigate');
+
+        page.activationDateYear = new Date().getFullYear() + 1 + '';
+        page.activationDateMonth = '1';
+        page.activationDateDay = '1';
+        page.submitButton.click();
+        fixture.detectChanges();
+
+        expect(page.errorSummary).toBeFalsy();
+        expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
+        expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith(
+          mockVariationDeterminationPostBuild(
+            {
+              type: 'GRANTED',
+              reason: 'reason',
+              activationDate: new Date(`${new Date().getFullYear() + 1}-01-01T00:00:00.000Z`),
+            },
+            {
+              determination: false,
+            },
+          ),
+        );
+
+        expect(navigateSpy).toHaveBeenCalledWith(['../first-year'], { relativeTo: route });
       });
     });
 
@@ -229,7 +295,55 @@ describe('ActivationDateComponent', () => {
       });
     });
 
-    describe('for variation regulator led task activation date', () => {
+    describe('for variation regulator led task activation date WITH REPORTING FIRST YEAR', () => {
+      beforeEach(() => {
+        store = TestBed.inject(PermitApplicationStore);
+        (store as PermitVariationStore).setState({
+          ...mockPermitVariationRegulatorLedPayload,
+          requestTaskType: 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT',
+          permitVariationDetails: {
+            reason: 'reason',
+            modifications: [{ type: 'CALCULATION_TO_MEASUREMENT_METHODOLOGIES' }],
+          },
+          permitVariationDetailsCompleted: true,
+          determination: {
+            reason: 'reason',
+          },
+          originalPermitContainer: { permitType: 'HSE' },
+          reviewSectionsCompleted: { determination: false },
+        } as any);
+      });
+      beforeEach(createComponent);
+
+      it('should submit a valid variation form and redirect to first year reporting', () => {
+        tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
+        const navigateSpy = jest.spyOn(router, 'navigate');
+
+        page.activationDateYear = new Date().getFullYear() + 1 + '';
+        page.activationDateMonth = '1';
+        page.activationDateDay = '1';
+        page.submitButton.click();
+        fixture.detectChanges();
+
+        expect(page.errorSummary).toBeFalsy();
+        expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
+        expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith(
+          mockVariationRegulatorLedDeterminationPostBuild(
+            {
+              reason: 'reason',
+              activationDate: new Date(`${new Date().getFullYear() + 1}-01-01T00:00:00.000Z`),
+            },
+            {
+              determination: false,
+            },
+          ),
+        );
+
+        expect(navigateSpy).toHaveBeenCalledWith(['../first-year'], { relativeTo: route });
+      });
+    });
+
+    describe('for variation regulator led task activation date WITHOUT REPORTING FIRST YEAR', () => {
       beforeEach(() => {
         store = TestBed.inject(PermitApplicationStore);
         (store as PermitVariationStore).setState({

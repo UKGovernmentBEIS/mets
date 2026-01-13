@@ -17,20 +17,26 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
 import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmpDetailsDTO;
+import uk.gov.pmrv.api.integration.registry.accountcreated.aviation.request.AviationAccountRegistryIntegrationPreviewService;
+import uk.gov.pmrv.api.integration.registry.accountcreated.aviation.request.AviationAccountRegistryViewDTO;
 import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.dto.AviationAccountEmpDTO;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.dto.AviationAccountHeaderInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.service.AviationAccountEmpQueryOrchestrator;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.AviationOperatorDetails;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -61,6 +67,12 @@ class AviationAccountViewControllerTest {
     @Mock
     private AppUserAuthorizationService appUserAuthorizationService;
 
+    @Mock
+    private RoleAuthorizationService roleAuthorizationService;
+
+    @Mock
+    private AviationAccountRegistryIntegrationPreviewService aviationAccountRegistryIntegrationPreviewService;
+
     private AuthorizationAspectUserResolver authorizationAspectUserResolver;
 
     private MockMvc mockMvc;
@@ -72,9 +84,12 @@ class AviationAccountViewControllerTest {
     public void setUp() {
         authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
         AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
+
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(aspect);
+        aspectJProxyFactory.addAspect(authorizedRoleAspect);
 
         DefaultAopProxyFactory proxyFactory = new DefaultAopProxyFactory();
         AopProxy aopProxy = proxyFactory.createAopProxy(aspectJProxyFactory);
@@ -90,9 +105,9 @@ class AviationAccountViewControllerTest {
 
     @Test
     void getInstallationAccountById() throws Exception {
+    	AppUser user = setupAppUser();
         final Long accountId = 1L;
         final String empId = "empId";
-        final AppUser user = AppUser.builder().userId("userId").build();
         final AviationAccountEmpDTO aviationAccountEmpDTO =
                 AviationAccountEmpDTO.builder()
                         .aviationAccount(AviationAccountDTO.builder()
@@ -102,7 +117,6 @@ class AviationAccountViewControllerTest {
                                 .id(empId)
                                 .build())
                         .build();
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(orchestrator.getAviationAccountWithEMP(accountId, user)).thenReturn(aviationAccountEmpDTO);
 
         mockMvc.perform(
@@ -119,10 +133,9 @@ class AviationAccountViewControllerTest {
 
     @Test
     void getInstallationAccountById_account_forbidden() throws Exception {
+        AppUser user = setupAppUser();
         final long invalidAccountId = 1L;
-        final AppUser user = AppUser.builder().userId("userId").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(appUserAuthorizationService)
                 .authorize(user, "getAviationAccountById", Long.toString(invalidAccountId), null, null);
@@ -138,10 +151,9 @@ class AviationAccountViewControllerTest {
 
     @Test
     void getInstallationAccountById_account_not_found() throws Exception {
+    	AppUser user = setupAppUser();
         final Long invalidAccountId = 1L;
-        final AppUser user = AppUser.builder().userId("userId").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(orchestrator.getAviationAccountWithEMP(invalidAccountId, user))
                 .thenThrow(new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
 
@@ -156,6 +168,7 @@ class AviationAccountViewControllerTest {
 
     @Test
     void getAviationAccountHeaderInfoById() throws Exception {
+    	setupAppUser();
         Long accountId = 1L;
         AviationAccountHeaderInfoDTO accountHeaderInfo = AviationAccountHeaderInfoDTO.builder()
             .id(accountId)
@@ -190,10 +203,9 @@ class AviationAccountViewControllerTest {
 
     @Test
     void getAviationAccountHeaderInfoById_forbidden() throws Exception {
+    	AppUser user = setupAppUser();
         Long accountId = 1L;
-        AppUser user = AppUser.builder().build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
             .authorize(user, "getAviationAccountHeaderInfoById", Long.toString(accountId), null, null);
@@ -206,4 +218,74 @@ class AviationAccountViewControllerTest {
 
         verifyNoInteractions(orchestrator);
     }
+
+    @Test
+    void getAviationAccountViewForRegistry() throws Exception {
+    	final AppUser user = AppUser.builder()
+    			.userId("userId")
+                .roleType(RoleTypeConstants.REGULATOR)
+                .build();
+    	when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+    	
+        String requestId = "1";
+        AviationAccountRegistryViewDTO aviationAccountRegistryViewDTO = AviationAccountRegistryViewDTO.builder()
+                .operatorDetails(AviationOperatorDetails.builder()
+                        .emitterId("1")
+                        .regulator("EA")
+                        .operatorName("operatorName")
+                        .build())
+                .build();
+
+        when(aviationAccountRegistryIntegrationPreviewService.getAviationAccountRegistryView(requestId)).thenReturn(aviationAccountRegistryViewDTO);
+
+
+        AviationAccountRegistryViewDTO expected = AviationAccountRegistryViewDTO.builder()
+                .operatorDetails(AviationOperatorDetails.builder()
+                        .emitterId("1")
+                        .regulator("EA")
+                        .operatorName("operatorName")
+                        .build())
+                .build();
+
+        MvcResult mvcResult = mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get(CONTROLLER_PATH + "/" + requestId + "/registry-view")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        AviationAccountRegistryViewDTO actualResult =
+                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), AviationAccountRegistryViewDTO.class);
+
+
+        assertEquals(expected, actualResult);
+
+        verify(aviationAccountRegistryIntegrationPreviewService, times(1)).getAviationAccountRegistryView(requestId);
+    }
+
+    @Test
+    void getAviationAccountViewForRegistry_forbidden() throws Exception {
+        String requestId = "1";
+        final AppUser user = AppUser.builder()
+                .roleType(RoleTypeConstants.OPERATOR)
+                .build();
+
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
+                .when(roleAuthorizationService)
+                .evaluate(user, new String[] {RoleTypeConstants.REGULATOR});
+
+        mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/" + requestId + "/registry-view")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(aviationAccountRegistryIntegrationPreviewService);
+    }
+
+    private AppUser setupAppUser() {
+		AppUser user = AppUser.builder().userId("authId").build();
+		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+		return user;
+	}
+
 }

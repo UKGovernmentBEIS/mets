@@ -187,6 +187,7 @@ export class ItemActionHeaderPipe implements PipeTransform {
       case 'EMP_VARIATION_CORSIA_APPLICATION_RETURNED_FOR_AMENDS':
       case 'EMP_ISSUANCE_CORSIA_APPLICATION_SUBMITTED':
       case 'EMP_ISSUANCE_CORSIA_RECALLED_FROM_AMENDS':
+      case 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
       case 'NON_COMPLIANCE_APPLICATION_SUBMITTED':

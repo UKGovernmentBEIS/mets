@@ -7,11 +7,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.integration.model.IntegrationEventOutcome;
+import uk.gov.netz.integration.model.error.IntegrationEventError;
+import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
+import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
+import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.integration.registry.accountcreated.common.validation.SetOperatorIdResponseValidator;
-import uk.gov.pmrv.api.integration.registry.common.RegistryResponseErrorCode;
-import uk.gov.pmrv.api.integration.registry.common.RegistryResponseStatus;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,41 +41,41 @@ class OperatorIdEventOutcomeServiceTest {
     private SetOperatorIdResponseValidator setOperatorIdResponseValidator;
 
     @Test
-    void getOperatorIdEventOutcome_whenValidationSucceedsAndAccountExists_setsRegistryIdAndReturnsSuccessOutcome() {
+    void getAviationOperatorIdEventOutcome_whenValidationSucceedsAndAccountExists_setsRegistryIdAndReturnsSuccessOutcome() {
         final String emitterId = "1";
-        final int operatorId = 1;
-        final SetOperatorIdResponseEvent event = SetOperatorIdResponseEvent.builder()
+        final Long operatorId = 1L;
+        final OperatorUpdateEvent event = OperatorUpdateEvent.builder()
                 .emitterId(emitterId)
                 .operatorId(operatorId)
                 .build();
         final Account mockAccount = mock(Account.class);
 
-        when(setOperatorIdResponseValidator.validate(event)).thenReturn(Collections.emptyList());
+        when(setOperatorIdResponseValidator.validateAviation(event)).thenReturn(Collections.emptyList());
         when(accountRepository.findAccountByEmitterId(emitterId)).thenReturn(Optional.of(mockAccount));
 
-        SetOperatorIdEventOutcome result = service.getOperatorIdEventOutcome(event);
+        OperatorUpdateEventOutcome result = service.getAviationOperatorIdEventOutcome(event);
 
-        assertThat(result.getOutcome()).isEqualTo(RegistryResponseStatus.SUCCESS);
+        assertThat(result.getOutcome()).isEqualTo(IntegrationEventOutcome.SUCCESS);
         assertThat(result.getErrors()).isEmpty();
 
         verify(accountRepository, times(1)).findAccountByEmitterId(emitterId);
-        verify(mockAccount, times(1)).setRegistryId(operatorId);
+        verify(mockAccount, times(1)).setRegistryId(operatorId.intValue());
         verify(accountRepository, times(1)).save(mockAccount);
     }
 
     @Test
-    void getOperatorIdEventOutcome_whenValidationFails_returnsErrorOutcome() {
+    void getAviationOperatorIdEventOutcome_whenValidationFails_returnsErrorOutcome() {
         final String emitterId = "2";
-        final SetOperatorIdResponseEvent event = SetOperatorIdResponseEvent.builder().emitterId(emitterId).build();
-        final List<RegistryIntegrationEventError> validationErrors = List.of(
-                RegistryIntegrationEventError.builder().error(RegistryResponseErrorCode.ERROR_0201).build()
+        final OperatorUpdateEvent event = OperatorUpdateEvent.builder().emitterId(emitterId).build();
+        final List<IntegrationEventErrorDetails> validationErrors = List.of(
+                IntegrationEventErrorDetails.builder().error(IntegrationEventError.ERROR_0201).build()
         );
 
-        when(setOperatorIdResponseValidator.validate(event)).thenReturn(validationErrors);
+        when(setOperatorIdResponseValidator.validateAviation(event)).thenReturn(validationErrors);
 
-        SetOperatorIdEventOutcome result = service.getOperatorIdEventOutcome(event);
+        OperatorUpdateEventOutcome result = service.getAviationOperatorIdEventOutcome(event);
 
-        assertThat(result.getOutcome()).isEqualTo(RegistryResponseStatus.ERROR);
+        assertThat(result.getOutcome()).isEqualTo(IntegrationEventOutcome.ERROR);
         assertThat(result.getErrors()).isEqualTo(validationErrors);
 
         verify(accountRepository, never()).findAccountByEmitterId(emitterId);
@@ -80,15 +83,15 @@ class OperatorIdEventOutcomeServiceTest {
     }
 
     @Test
-    void getOperatorIdEventOutcome_whenValidationSucceedsAndAccountMissing_throwsBusinessException() {
+    void getInstallationOperatorIdEventOutcome_whenValidationSucceedsAndAccountMissing_throwsBusinessException() {
         final String emitterId = "3";
-        final SetOperatorIdResponseEvent event = SetOperatorIdResponseEvent.builder().emitterId(emitterId).build();
+        final OperatorUpdateEvent event = OperatorUpdateEvent.builder().emitterId(emitterId).build();
 
-        when(setOperatorIdResponseValidator.validate(event)).thenReturn(Collections.emptyList());
+        when(setOperatorIdResponseValidator.validateInstallation(event)).thenReturn(Collections.emptyList());
         when(accountRepository.findAccountByEmitterId(emitterId)).thenReturn(Optional.empty());
 
         BusinessException exception = assertThrows(BusinessException.class, () ->
-                service.getOperatorIdEventOutcome(event)
+                service.getInstallationOperatorIdEventOutcome(event)
         );
 
         assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.RESOURCE_NOT_FOUND);

@@ -5,6 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.user.core.domain.enumeration.UserInvitationStatus;
@@ -44,6 +46,7 @@ class OperatorUserAcceptInvitationServiceTest {
     void acceptInvitation() {
         String invitationToken = "token";
         String userId = "userId";
+        AppUser currentUser = AppUser.builder().userId(userId).build();
         Long accountId = 1L;
         String authorityRoleCode = "roleCode";
         String accountInstallationName = "accountInstallationName";
@@ -53,7 +56,7 @@ class OperatorUserAcceptInvitationServiceTest {
         UserInvitationStatus userInvitationStatus = UserInvitationStatus.ACCEPTED;
 
 
-        when(operatorUserTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken)).thenReturn(authorityInfo);
+        when(operatorUserTokenVerificationService.verifyInvitationToken(invitationToken, currentUser)).thenReturn(authorityInfo);
         when(operatorUserAuthService.getOperatorUserById(authorityInfo.getUserId())).thenReturn(operatorUser);
         when(accountQueryService.getAccountName(authorityInfo.getAccountId())).thenReturn(accountInstallationName);
         when(operatorUserAcceptInvitationMapper.toOperatorUserWithAuthorityDTO(operatorUser, authorityInfo, accountInstallationName))
@@ -61,10 +64,10 @@ class OperatorUserAcceptInvitationServiceTest {
         when(operatorRoleCodeAcceptInvitationServiceDelegator.acceptInvitation(operatorUserAcceptInvitation, authorityInfo.getCode()))
             .thenReturn(userInvitationStatus);
 
-        operatorUserAcceptInvitationService.acceptInvitation(invitationToken);
+        operatorUserAcceptInvitationService.acceptInvitation(invitationToken, currentUser);
 
         verify(operatorUserTokenVerificationService, times(1))
-            .verifyInvitationTokenForPendingAuthority(invitationToken);
+            .verifyInvitationToken(invitationToken, currentUser);
         verify(operatorUserRegisterValidationService, times(1)).validateRegisterForAccount(userId, authorityInfo.getAccountId());
         verify(operatorUserAuthService, times(1)).getOperatorUserById(userId);
         verify(accountQueryService, times(1)).getAccountName(accountId);

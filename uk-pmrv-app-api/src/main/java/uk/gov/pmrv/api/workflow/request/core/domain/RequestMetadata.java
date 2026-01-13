@@ -34,6 +34,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRRequestMetaData;
 
 @Schema(
         discriminatorMapping = {
@@ -53,6 +54,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirRequestM
                 @DiscriminatorMapping(schema = BDRRequestMetadata.class, value = "BDR"),
                 @DiscriminatorMapping(schema = ALRRequestMetaData.class, value = "ALR"),
                 @DiscriminatorMapping(schema = HSETIRequestMetadata.class, value = "HSE_TI"),
+                @DiscriminatorMapping(schema = WasteQDRRequestMetaData.class, value = "WASTE_QDR"),
 
                 // Aviation related request metadata
                 @DiscriminatorMapping(schema = AviationAerRequestMetadata.class, value = "AVIATION_AER"),
@@ -84,6 +86,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirRequestM
         @JsonSubTypes.Type(value = BDRRequestMetadata.class, name = "BDR"),
         @JsonSubTypes.Type(value = ALRRequestMetaData.class, name = "ALR"),
         @JsonSubTypes.Type(value = HSETIRequestMetadata.class, name = "HSE_TI"),
+        @JsonSubTypes.Type(value = WasteQDRRequestMetaData.class, name = "WASTE_QDR"),
 
         // Aviation related request metadata
         @JsonSubTypes.Type(value = AviationAerRequestMetadata.class, name = "AVIATION_AER"),

@@ -44,6 +44,9 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('PERMIT_ISSUANCE_ACCOUNT_CREATED_SENT_TO_REGISTRY')).toEqual(
       'Information sent to registry by system',
     );
+    expect(pipe.transform('PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY')).toEqual(
+      'Information sent to registry by system',
+    );
 
     expect(pipe.transform('PERMIT_SURRENDER_APPLICATION_CANCELLED')).toEqual('Surrender request cancelled');
     expect(pipe.transform('PERMIT_SURRENDER_APPLICATION_PEER_REVIEWER_ACCEPTED')).toEqual(
@@ -277,6 +280,10 @@ describe('ItemActionTypePipe', () => {
     );
     expect(pipe.transform('EMP_ISSUANCE_CORSIA_APPLICATION_APPROVED')).toEqual('Approved');
     expect(pipe.transform('EMP_ISSUANCE_CORSIA_APPLICATION_DEEMED_WITHDRAWN')).toEqual('Withdrawn');
+
+    expect(pipe.transform('EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY')).toEqual(
+      'Information sent to registry',
+    );
 
     expect(pipe.transform('NON_COMPLIANCE_APPLICATION_SUBMITTED')).toEqual('Non-compliance details provided');
     expect(pipe.transform('NON_COMPLIANCE_APPLICATION_CLOSED')).toEqual('Non Compliance closed');

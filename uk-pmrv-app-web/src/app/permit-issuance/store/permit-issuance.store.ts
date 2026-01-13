@@ -8,6 +8,7 @@ import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/re
 import { UrlRequestType } from '@shared/types/url-request-type';
 
 import {
+  InstallationAccountDTO,
   Permit,
   PermitContainer,
   PermitIssuanceDeemedWithdrawnDetermination,
@@ -116,10 +117,12 @@ export class PermitIssuanceStore<
     return false;
   }
 
-  override isDeterminationWizardComplete(): boolean {
+  override isDeterminationWizardComplete(
+    emissionTradingScheme?: InstallationAccountDTO['emissionTradingScheme'],
+  ): boolean {
     const state = this.getState();
     if (state.determination?.type === 'GRANTED') {
-      return this.isGrantWizardComplete(state);
+      return this.isGrantWizardComplete(state, emissionTradingScheme);
     } else if (state.determination?.type === 'REJECTED') {
       return this.isRejectWizardComplete(state.determination);
     } else if (state.determination?.type === 'DEEMED_WITHDRAWN') {
@@ -319,11 +322,19 @@ export class PermitIssuanceStore<
       );
   }
 
-  isGrantWizardComplete(state: PermitIssuanceState): boolean {
+  isGrantWizardComplete(
+    state: PermitIssuanceState,
+    emissionTradingScheme?: InstallationAccountDTO['emissionTradingScheme'],
+  ): boolean {
     return (
       !!state?.determination?.reason &&
       !!state?.determination?.activationDate &&
-      (state.permitType === 'GHGE' || state.permitType === 'WASTE' || this.isHSEAnnualEmissionTargetsCompleted(state))
+      (state.permitType === 'GHGE' ||
+        state.permitType === 'WASTE' ||
+        this.isHSEAnnualEmissionTargetsCompleted(state)) &&
+      (state.permitType === 'GHGE' && emissionTradingScheme === 'UK_ETS_INSTALLATIONS'
+        ? !!state?.determination?.firstYearOfReportingObligation
+        : true)
     );
   }
 

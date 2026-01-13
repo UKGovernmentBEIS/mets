@@ -1,17 +1,7 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
@@ -28,6 +18,15 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationGrantDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationRegulatorLedGrantDetermination;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 class PermitVariationMapperTest {
 
 	private final PermitVariationMapper mapper = Mappers.getMapper(PermitVariationMapper.class);
@@ -43,6 +42,7 @@ class PermitVariationMapperTest {
     			.permit(Permit.builder()
     					.abbreviations(Abbreviations.builder().exist(true).build())
     					.build())
+				.originalPermitContainer(PermitContainer.builder().build())
     			.permitVariationDetails(PermitVariationDetails.builder().reason("reason").build())
     			.permitAttachments(Map.of(attachment1, "att1"))
     			.determination(PermitVariationGrantDetermination.builder()
@@ -79,7 +79,8 @@ class PermitVariationMapperTest {
     			.permit(Permit.builder()
     					.abbreviations(Abbreviations.builder().exist(true).build())
     					.build())
-    			.permitVariationDetails(PermitVariationDetails.builder().reason("reason").build())
+				.originalPermitContainer(PermitContainer.builder().build())
+				.permitVariationDetails(PermitVariationDetails.builder().reason("reason").build())
     			.permitAttachments(Map.of(attachment1, "att1"))
     			.determinationRegulatorLed(PermitVariationRegulatorLedGrantDetermination.builder()
     					.logChanges("logChanges")
@@ -121,6 +122,8 @@ class PermitVariationMapperTest {
     			.determinationRegulatorLed(PermitVariationRegulatorLedGrantDetermination.builder()
     					.activationDate(LocalDate.now().plusDays(1))
     					.annualEmissionsTargets(annualEmissionsTargets)
+						.firstYearOfReportingObligation(2025)
+						.type(DeterminationType.GRANTED)
     					.build())
     			.build();
     	
@@ -137,6 +140,7 @@ class PermitVariationMapperTest {
     			.permitAttachments(Map.of(attachment1, "att1"))
     			.activationDate(LocalDate.now().plusDays(1))
     			.annualEmissionsTargets(annualEmissionsTargets)
+				.firstYearOfReportingObligation(2025)
     			.build());
     }
     

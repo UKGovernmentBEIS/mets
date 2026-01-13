@@ -13,6 +13,5 @@
 export interface ErrorResponse {
   code?: string;
   message?: string;
-  security?: boolean;
   data?: Array<object>;
 }

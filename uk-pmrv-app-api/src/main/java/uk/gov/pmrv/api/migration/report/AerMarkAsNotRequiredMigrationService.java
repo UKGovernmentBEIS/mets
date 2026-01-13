@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@WebEndpoint(id = "aer-mark-as-not-required")
+@WebEndpoint(id = "aerMarkAsNotRequired")
 @ConditionalOnAvailableEndpoint(endpoint = AerMarkAsNotRequiredMigrationService.class)
 @RequiredArgsConstructor
 @Log4j2

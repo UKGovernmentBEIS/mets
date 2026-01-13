@@ -10,6 +10,6 @@ import { existingControlContainer } from '@shared/providers/control-container.fa
 })
 export class AviationAccountFormComponent {
   @Input() withEmissionTradingScheme = true;
-  @Input() withRegistryId = false;
   @Input() withLocation = false;
+  @Input() editModeEnabled = false;
 }
