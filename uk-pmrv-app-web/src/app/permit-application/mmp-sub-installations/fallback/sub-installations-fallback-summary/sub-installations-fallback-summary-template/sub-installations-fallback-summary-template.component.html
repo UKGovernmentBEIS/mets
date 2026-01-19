@@ -7,14 +7,22 @@
           <dt govukSummaryListRowKey>Sub-installation type</dt>
           <dd govukSummaryListRowValue>{{ data.subInstallationType | subInstallationType }}</dd>
           <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-            <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+            <a govukLink [routerLink]="['..']" [state]="{ changing: true }" hidden-text="sub-installation type">
+              Change
+            </a>
           </dd>
         </div>
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Describe the system boundaries of this sub-installation</dt>
           <dd govukSummaryListRowValue class="pre-wrap">{{ data.description }}</dd>
           <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-            <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+            <a
+              govukLink
+              [routerLink]="['..']"
+              [state]="{ changing: true }"
+              hidden-text="description the system boundaries of this sub-installation">
+              Change
+            </a>
           </dd>
         </div>
 
@@ -25,7 +33,13 @@
               [files]="store.getDownloadUrlFiles((vm$ | async)?.supportingFiles)"></app-summary-download-files>
           </dd>
           <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-            <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+            <a
+              govukLink
+              [routerLink]="['..']"
+              [state]="{ changing: true }"
+              hidden-text="sub-installation details supporting files">
+              Change
+            </a>
           </dd>
         </div>
       </dl>
@@ -50,7 +64,13 @@
               </p>
             </dd>
             <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-              <a govukLink [routerLink]="'../annual-activity-levels-heat'" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="'../annual-activity-levels-heat'"
+                [state]="{ changing: true }"
+                hidden-text="annual activity levels data source">
+                Change
+              </a>
             </dd>
           </div>
         </ng-container>
@@ -73,7 +93,13 @@
               </p>
             </dd>
             <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-              <a govukLink [routerLink]="['../annual-activity-levels-fuel']" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="['../annual-activity-levels-fuel']"
+                [state]="{ changing: true }"
+                hidden-text="annual activity levels data source">
+                Change
+              </a>
             </dd>
           </div>
         </ng-container>
@@ -85,7 +111,8 @@
             <a
               govukLink
               [routerLink]="[routerLinkAnnual(data.annualLevel?.annualLevelType)]"
-              [state]="{ changing: true }">
+              [state]="{ changing: true }"
+              hidden-text="annual activity levels description of methodology applied for each data source">
               Change
             </a>
           </dd>
@@ -108,7 +135,8 @@
               <a
                 govukLink
                 [routerLink]="[routerLinkAnnual(data.annualLevel?.annualLevelType)]"
-                [state]="{ changing: true }">
+                [state]="{ changing: true }"
+                hidden-text="if the hierarchical order has been followed, annual activity levels">
                 Change
               </a>
             </dd>
@@ -123,7 +151,8 @@
               <a
                 govukLink
                 [routerLink]="[routerLinkAnnual(data.annualLevel?.annualLevelType)]"
-                [state]="{ changing: true }">
+                [state]="{ changing: true }"
+                hidden-text="annual activity levels details on any deviation from the hierarchy">
                 Change
               </a>
             </dd>
@@ -137,7 +166,8 @@
             <a
               govukLink
               [routerLink]="[routerLinkAnnual(data.annualLevel?.annualLevelType)]"
-              [state]="{ changing: true }">
+              [state]="{ changing: true }"
+              hidden-text="description of the methodology used for keeping track of the products produced">
               Change
             </a>
           </dd>
@@ -153,7 +183,8 @@
             <a
               govukLink
               [routerLink]="[routerLinkAnnual(data.annualLevel?.annualLevelType)]"
-              [state]="{ changing: true }">
+              [state]="{ changing: true }"
+              hidden-text="annual activity levels supporting files">
               Change
             </a>
           </dd>
@@ -169,7 +200,13 @@
               {{ data?.directlyAttributableEmissions.attribution }}
             </dd>
             <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-              <a govukLink [routerLink]="['../directly-attributable-emissions']" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="['../directly-attributable-emissions']"
+                [state]="{ changing: true }"
+                hidden-text="attribution of directly attributable emissions">
+                Change
+              </a>
             </dd>
           </div>
 
@@ -182,7 +219,13 @@
                 "></app-summary-download-files>
             </dd>
             <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-              <a govukLink [routerLink]="['../directly-attributable-emissions']" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="['../directly-attributable-emissions']"
+                [state]="{ changing: true }"
+                hidden-text="directly attributable emissions supporting files">
+                Change
+              </a>
             </dd>
           </div>
         </dl>
@@ -191,17 +234,26 @@
       <ng-container *ngIf="data?.fuelInputAndRelevantEmissionFactor">
         <h2 class="govuk-heading-m">Fuel input and relevant emission factor</h2>
         <dl govuk-summary-list [hasBorders]="true" [class.govuk-!-margin-bottom-0]="isPreview">
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>Is fuel input relevant for this sub-installation?</dt>
-            <dd govukSummaryListRowValue>
-              {{ data?.fuelInputAndRelevantEmissionFactor?.['exists'] ? 'Yes' : 'No' }}
-            </dd>
-            <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-              <a govukLink [routerLink]="['../fuel-input-relevant-emission-factor']" [state]="{ changing: true }">
-                Change
-              </a>
-            </dd>
-          </div>
+          @if (
+            data?.fuelInputAndRelevantEmissionFactor?.['exists'] !== null &&
+            data?.fuelInputAndRelevantEmissionFactor?.['exists'] !== undefined
+          ) {
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Is fuel input relevant for this sub-installation?</dt>
+              <dd govukSummaryListRowValue>
+                {{ data?.fuelInputAndRelevantEmissionFactor?.['exists'] ? 'Yes' : 'No' }}
+              </dd>
+              <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
+                <a
+                  govukLink
+                  [routerLink]="['../fuel-input-relevant-emission-factor']"
+                  [state]="{ changing: true }"
+                  hidden-text="fuel input and relevant emission factor">
+                  Change
+                </a>
+              </dd>
+            </div>
+          }
 
           @if (
             data?.fuelInputAndRelevantEmissionFactor?.['exists'] === true ||
@@ -209,13 +261,17 @@
               data.subInstallationType
             )
           ) {
-            <div govukSummaryListRow *ngIf="data?.fuelInputAndRelevantEmissionFactor?.['exists']">
+            <div govukSummaryListRow>
               <dt govukSummaryListRowKey>Is there any fuel input from waste gases?</dt>
               <dd govukSummaryListRowValue>
                 {{ data?.fuelInputAndRelevantEmissionFactor?.['wasteGasesInput'] ? 'Yes' : 'No' }}
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../fuel-input-relevant-emission-factor']" [state]="{ changing: true }">
+                <a
+                  govukLink
+                  [routerLink]="['../fuel-input-relevant-emission-factor']"
+                  [state]="{ changing: true }"
+                  hidden-text="if there is any fuel input from waste gases">
                   Change
                 </a>
               </dd>
@@ -266,7 +322,11 @@
                 </p>
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../fuel-input-relevant-emission-factor']" [state]="{ changing: true }">
+                <a
+                  govukLink
+                  [routerLink]="['../fuel-input-relevant-emission-factor']"
+                  [state]="{ changing: true }"
+                  hidden-text="fuel input and relevant emission factor data source">
                   Change
                 </a>
               </dd>
@@ -278,7 +338,11 @@
                 {{ data?.fuelInputAndRelevantEmissionFactor.methodologyAppliedDescription }}
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../fuel-input-relevant-emission-factor']" [state]="{ changing: true }">
+                <a
+                  govukLink
+                  [routerLink]="['../fuel-input-relevant-emission-factor']"
+                  [state]="{ changing: true }"
+                  hidden-text="fuel input and relevant emission factor description of methodology applied for each data source">
                   Change
                 </a>
               </dd>
@@ -297,7 +361,11 @@
                 </ng-container>
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../fuel-input-relevant-emission-factor']" [state]="{ changing: true }">
+                <a
+                  govukLink
+                  [routerLink]="['../fuel-input-relevant-emission-factor']"
+                  [state]="{ changing: true }"
+                  hidden-text="if the hierarchical order has been followed, fuel input and relevant emission factor">
                   Change
                 </a>
               </dd>
@@ -311,7 +379,11 @@
                 }}
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../fuel-input-relevant-emission-factor']" [state]="{ changing: true }">
+                <a
+                  govukLink
+                  [routerLink]="['../fuel-input-relevant-emission-factor']"
+                  [state]="{ changing: true }"
+                  hidden-text="fuel input and relevant emission factor details on any deviation from the hierarchy">
                   Change
                 </a>
               </dd>
@@ -328,7 +400,11 @@
                   "></app-summary-download-files>
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../fuel-input-relevant-emission-factor']" [state]="{ changing: true }">
+                <a
+                  govukLink
+                  [routerLink]="['../fuel-input-relevant-emission-factor']"
+                  [state]="{ changing: true }"
+                  hidden-text="fuel input and relevant emission factor supporting files">
                   Change
                 </a>
               </dd>
@@ -346,7 +422,13 @@
               {{ data?.measurableHeat?.measurableHeatProduced?.['produced'] ? 'Yes' : 'No' }}
             </dd>
             <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-              <a govukLink [routerLink]="['../measurable-heat-produced']" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="['../measurable-heat-produced']"
+                [state]="{ changing: true }"
+                hidden-text="if measurable heat is produced at this sub-installation">
+                Change
+              </a>
             </dd>
           </div>
           @if (data?.measurableHeat?.measurableHeatProduced?.produced === true) {
@@ -366,7 +448,13 @@
                 </p>
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-produced']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-produced']"
+                  [state]="{ changing: true }"
+                  hidden-text="measurable heat produced data source">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -376,7 +464,13 @@
                 {{ data?.measurableHeat?.measurableHeatProduced?.methodologyAppliedDescription }}
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-produced']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-produced']"
+                  [state]="{ changing: true }"
+                  hidden-text="measurable heat produced description of methodology applied for each data source">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -393,7 +487,13 @@
                 </ng-container>
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-produced']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-produced']"
+                  [state]="{ changing: true }"
+                  hidden-text="if the hierarchical order has been followed, measurable heat produced">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -406,7 +506,13 @@
                 }}
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-produced']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-produced']"
+                  [state]="{ changing: true }"
+                  hidden-text="measurable heat produced details on any deviation from the hierarchy">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -419,7 +525,13 @@
                   "></app-summary-download-files>
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-produced']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-produced']"
+                  [state]="{ changing: true }"
+                  hidden-text="measurable heat produced supporting files">
+                  Change
+                </a>
               </dd>
             </div>
           }
@@ -442,7 +554,13 @@
               }
             </dd>
             <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-              <a govukLink [routerLink]="['../measurable-heat-imported']" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="['../measurable-heat-imported']"
+                [state]="{ changing: true }"
+                hidden-text="if any measurable heat is imported to this sub-installation">
+                Change
+              </a>
             </dd>
           </div>
 
@@ -591,7 +709,13 @@
               </dd>
 
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-imported']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-imported']"
+                  [state]="{ changing: true }"
+                  hidden-text="measurable heat imported data source">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -601,7 +725,13 @@
                 {{ data?.measurableHeat?.measurableHeatImported?.methodologyAppliedDescription }}
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-imported']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-imported']"
+                  [state]="{ changing: true }"
+                  hidden-text="measurable heat imported description of methodology applied for each data source">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -618,7 +748,13 @@
                 </ng-container>
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-imported']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-imported']"
+                  [state]="{ changing: true }"
+                  hidden-text="if the hierarchical order has been followed, measurable heat imported">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -631,7 +767,13 @@
                 }}
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-imported']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-imported']"
+                  [state]="{ changing: true }"
+                  hidden-text="measurable heat imported details on any deviation from the hierarchy">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -643,7 +785,13 @@
                 {{ data?.measurableHeat?.measurableHeatImported?.methodologyDeterminationEmissionDescription }}
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-imported']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-imported']"
+                  [state]="{ changing: true }"
+                  hidden-text="description of the methodology for determination of the relevant attributable emission factors">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -656,7 +804,13 @@
                   "></app-summary-download-files>
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-imported']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-imported']"
+                  [state]="{ changing: true }"
+                  hidden-text="measurable heat imported supporting files">
+                  Change
+                </a>
               </dd>
             </div>
           </ng-container>
@@ -672,7 +826,13 @@
               {{ data?.measurableHeat?.measurableHeatExported?.measurableHeatExported === true ? 'Yes' : 'No' }}
             </dd>
             <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-              <a govukLink [routerLink]="['../measurable-heat-exported']" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="['../measurable-heat-exported']"
+                [state]="{ changing: true }"
+                hidden-text="any measurable heat is exported from this sub-installation">
+                Change
+              </a>
             </dd>
           </div>
 
@@ -699,7 +859,13 @@
                 </p>
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-exported']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-exported']"
+                  [state]="{ changing: true }"
+                  hidden-text="measurable heat exported data source">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -709,7 +875,13 @@
                 {{ data?.measurableHeat?.measurableHeatExported?.methodologyAppliedDescription }}
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-exported']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-exported']"
+                  [state]="{ changing: true }"
+                  hidden-text="measurable heat exported description of methodology applied for each data source">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -726,7 +898,13 @@
                 </ng-container>
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-exported']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-exported']"
+                  [state]="{ changing: true }"
+                  hidden-text="if the hierarchical order has been followed, measurable heat exported">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -739,7 +917,13 @@
                 }}
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-exported']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-exported']"
+                  [state]="{ changing: true }"
+                  hidden-text="measurable heat exported details on any deviation from the hierarchy">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -751,7 +935,13 @@
                 {{ data?.measurableHeat?.measurableHeatExported?.methodologyDeterminationEmissionDescription }}
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-exported']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-exported']"
+                  [state]="{ changing: true }"
+                  hidden-text="description of the methodology for determination of the relevant attributable emission factors">
+                  Change
+                </a>
               </dd>
             </div>
 
@@ -764,7 +954,13 @@
                   "></app-summary-download-files>
               </dd>
               <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-                <a govukLink [routerLink]="['../measurable-heat-exported']" [state]="{ changing: true }">Change</a>
+                <a
+                  govukLink
+                  [routerLink]="['../measurable-heat-exported']"
+                  [state]="{ changing: true }"
+                  hidden-text="measurable heat exported supporting files">
+                  Change
+                </a>
               </dd>
             </div>
           </ng-container>

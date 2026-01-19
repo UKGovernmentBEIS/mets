@@ -17,6 +17,7 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccou
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.integration.registry.accountupdated.installation.request.InstallationAccountUpdatedAddRequestActionService;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.dto.PermitDetailsDTO;
@@ -30,8 +31,8 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionTyp
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.BusinessOrganisationDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.IndividualOrganisationDetails;
-import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountRegistryIntegrationRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.RegistryIntegrationActivePermit;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountUpdatedRegistryIntegrationRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.RegistryIntegrationAccountUpdateActivePermit;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -66,26 +67,24 @@ public class InstallationAccountUpdatedAddRequestActionServiceTest {
 
         verify(requestService).findRequestById(requestId);
 
-        ArgumentCaptor<InstallationAccountRegistryIntegrationRequestActionPayload> payloadCaptor =
-                ArgumentCaptor.forClass(InstallationAccountRegistryIntegrationRequestActionPayload.class);
+        ArgumentCaptor<InstallationAccountUpdatedRegistryIntegrationRequestActionPayload> payloadCaptor =
+                ArgumentCaptor.forClass(InstallationAccountUpdatedRegistryIntegrationRequestActionPayload.class);
         verify(requestService).addSystemActionToRequest(
                 org.mockito.ArgumentMatchers.eq(request),
                 payloadCaptor.capture(),
                 org.mockito.ArgumentMatchers.eq(RequestActionType.PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY)
         );
 
-        InstallationAccountRegistryIntegrationRequestActionPayload payload = payloadCaptor.getValue();
+        InstallationAccountUpdatedRegistryIntegrationRequestActionPayload payload = payloadCaptor.getValue();
         assertNotNull(payload);
         assertEquals(RequestActionPayloadType.PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD, payload.getPayloadType());
 
-        RegistryIntegrationActivePermit activePermit = payload.getActivePermit();
+        RegistryIntegrationAccountUpdateActivePermit activePermit = payload.getActivePermit();
         assertNotNull(activePermit);
-        assertEquals("emitterId", activePermit.getEmitterId());
         assertEquals("permitId", activePermit.getPermitId());
         assertEquals("Installation Name", activePermit.getInstallationName());
         assertEquals("Operator Name", activePermit.getOperatorName());
-        assertNotNull(activePermit.getRegulatedActivitiesStartDate());
-        assertEquals("EA", activePermit.getRegulator());
+        assertNotNull(activePermit.getFirstYearOfReportingObligation());
 
         IndividualOrganisationDetails organizationDetails = (IndividualOrganisationDetails) payload.getOrganizationDetails();
         assertNotNull(organizationDetails);
@@ -108,15 +107,15 @@ public class InstallationAccountUpdatedAddRequestActionServiceTest {
 
         verify(requestService).findRequestById(requestId);
 
-        ArgumentCaptor<InstallationAccountRegistryIntegrationRequestActionPayload> payloadCaptor =
-                ArgumentCaptor.forClass(InstallationAccountRegistryIntegrationRequestActionPayload.class);
+        ArgumentCaptor<InstallationAccountUpdatedRegistryIntegrationRequestActionPayload> payloadCaptor =
+                ArgumentCaptor.forClass(InstallationAccountUpdatedRegistryIntegrationRequestActionPayload.class);
         verify(requestService).addSystemActionToRequest(
                 org.mockito.ArgumentMatchers.eq(request),
                 payloadCaptor.capture(),
                 org.mockito.ArgumentMatchers.eq(RequestActionType.PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY)
         );
 
-        InstallationAccountRegistryIntegrationRequestActionPayload payload = payloadCaptor.getValue();
+        InstallationAccountUpdatedRegistryIntegrationRequestActionPayload payload = payloadCaptor.getValue();
         assertNotNull(payload);
 
         BusinessOrganisationDetails organizationDetails = (BusinessOrganisationDetails) payload.getOrganizationDetails();
@@ -141,15 +140,15 @@ public class InstallationAccountUpdatedAddRequestActionServiceTest {
 
         installationAccountUpdatedAddRequestActionService.addRequestAction(requestId, installationAccountPermitDTO, permitContainer);
 
-        ArgumentCaptor<InstallationAccountRegistryIntegrationRequestActionPayload> payloadCaptor =
-                ArgumentCaptor.forClass(InstallationAccountRegistryIntegrationRequestActionPayload.class);
+        ArgumentCaptor<InstallationAccountUpdatedRegistryIntegrationRequestActionPayload> payloadCaptor =
+                ArgumentCaptor.forClass(InstallationAccountUpdatedRegistryIntegrationRequestActionPayload.class);
         verify(requestService).addSystemActionToRequest(
                 org.mockito.ArgumentMatchers.eq(request),
                 payloadCaptor.capture(),
                 org.mockito.ArgumentMatchers.eq(RequestActionType.PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY)
         );
 
-        InstallationAccountRegistryIntegrationRequestActionPayload payload = payloadCaptor.getValue();
+        InstallationAccountUpdatedRegistryIntegrationRequestActionPayload payload = payloadCaptor.getValue();
         BusinessOrganisationDetails organizationDetails = (BusinessOrganisationDetails) payload.getOrganizationDetails();
         assertNull(organizationDetails.getCompanyRegistrationNumber());
         assertEquals("No reference number reason", organizationDetails.getJustification());
@@ -167,15 +166,15 @@ public class InstallationAccountUpdatedAddRequestActionServiceTest {
 
         installationAccountUpdatedAddRequestActionService.addRequestAction(requestId, installationAccountPermitDTO, permitContainer);
 
-        ArgumentCaptor<InstallationAccountRegistryIntegrationRequestActionPayload> payloadCaptor =
-                ArgumentCaptor.forClass(InstallationAccountRegistryIntegrationRequestActionPayload.class);
+        ArgumentCaptor<InstallationAccountUpdatedRegistryIntegrationRequestActionPayload> payloadCaptor =
+                ArgumentCaptor.forClass(InstallationAccountUpdatedRegistryIntegrationRequestActionPayload.class);
         verify(requestService).addSystemActionToRequest(
                 org.mockito.ArgumentMatchers.eq(request),
                 payloadCaptor.capture(),
                 org.mockito.ArgumentMatchers.eq(RequestActionType.PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY)
         );
 
-        InstallationAccountRegistryIntegrationRequestActionPayload payload = payloadCaptor.getValue();
+        InstallationAccountUpdatedRegistryIntegrationRequestActionPayload payload = payloadCaptor.getValue();
         BusinessOrganisationDetails organizationDetails = (BusinessOrganisationDetails) payload.getOrganizationDetails();
         assertNotNull(organizationDetails);
         assertEquals(LegalEntityType.PARTNERSHIP, organizationDetails.getOrganisationLegalStatus());
@@ -194,15 +193,15 @@ public class InstallationAccountUpdatedAddRequestActionServiceTest {
 
         installationAccountUpdatedAddRequestActionService.addRequestAction(requestId, installationAccountPermitDTO, permitContainer);
 
-        ArgumentCaptor<InstallationAccountRegistryIntegrationRequestActionPayload> payloadCaptor =
-                ArgumentCaptor.forClass(InstallationAccountRegistryIntegrationRequestActionPayload.class);
+        ArgumentCaptor<InstallationAccountUpdatedRegistryIntegrationRequestActionPayload> payloadCaptor =
+                ArgumentCaptor.forClass(InstallationAccountUpdatedRegistryIntegrationRequestActionPayload.class);
         verify(requestService).addSystemActionToRequest(
                 org.mockito.ArgumentMatchers.eq(request),
                 payloadCaptor.capture(),
                 org.mockito.ArgumentMatchers.eq(RequestActionType.PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY)
         );
 
-        InstallationAccountRegistryIntegrationRequestActionPayload payload = payloadCaptor.getValue();
+        InstallationAccountUpdatedRegistryIntegrationRequestActionPayload payload = payloadCaptor.getValue();
         BusinessOrganisationDetails organizationDetails = (BusinessOrganisationDetails) payload.getOrganizationDetails();
         assertNotNull(organizationDetails);
         assertEquals(LegalEntityType.OTHER, organizationDetails.getOrganisationLegalStatus());
@@ -224,6 +223,7 @@ public class InstallationAccountUpdatedAddRequestActionServiceTest {
                 .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
                 .competentAuthority(CompetentAuthorityEnum.ENGLAND)
                 .commencementDate(LocalDate.now())
+                .registryReportingFirstYear(2025)
                 .legalEntity(LegalEntityDTO.builder()
                         .name("entityName")
                         .type(legalEntityType)

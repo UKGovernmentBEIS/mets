@@ -26,6 +26,7 @@ import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AER_
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AER_APPLICATION_REVIEW_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AIR_APPLICATION_REVIEW_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AIR_APPLICATION_REVIEW_VIEW_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_ALR_APPLICATION_BULK_DOWNLOAD;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AVIATION_ACCOUNT_CLOSURE_SUBMIT_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AVIATION_ACCOUNT_CLOSURE_SUBMIT_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AVIATION_AER_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT_EXECUTE_TASK;
@@ -141,9 +142,12 @@ import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_HSE_
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_HSE_TI_APPLICATION_PEER_REVIEW_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_HSE_TI_APPLICATION_PEER_REVIEW_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_ALR_APPLICATION_MARK_NOT_REQUIRED_EXECUTE_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.AVIATION_ACCOUNT_CLOSURE;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.AVIATION_AER_3YEAR_PERIOD_OFFSETTING;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.AVIATION_AER_ANNUAL_OFFSETTING;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_ALR;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_AER;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_ALR;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING;
@@ -202,6 +206,7 @@ import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermis
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_ALR_REVIEW;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_ALR;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_HSE_TI_REVIEW;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_WASTE_QDR_REVIEW;
 
 @Component
 public class PmrvRegulatorPermissionsAdapter extends AbstarctRegulatorPermissionsAdapter implements InitializingBean {
@@ -671,6 +676,19 @@ public class PmrvRegulatorPermissionsAdapter extends AbstarctRegulatorPermission
         permissionGroupLevelsConfig
                 .put(new RegulatorPermissionGroupLevel(MARK_NOT_REQUIRED_ALR, EXECUTE),
                         List.of(PERM_ALR_APPLICATION_MARK_NOT_REQUIRED_EXECUTE_TASK));
+        permissionGroupLevelsConfig.put(new RegulatorPermissionGroupLevel(BULK_DOWNLOAD_ALR, NONE),
+                List.of());
+        permissionGroupLevelsConfig.put(new RegulatorPermissionGroupLevel(BULK_DOWNLOAD_ALR, EXECUTE),
+                List.of(PERM_ALR_APPLICATION_BULK_DOWNLOAD));
+
+        //WASTE QDR
+        permissionGroupLevelsConfig.put(new RegulatorPermissionGroupLevel(SUBMIT_WASTE_QDR_REVIEW, NONE), List.of());
+        permissionGroupLevelsConfig.put(new RegulatorPermissionGroupLevel(SUBMIT_WASTE_QDR_REVIEW, VIEW_ONLY),
+                List.of(PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK));
+        permissionGroupLevelsConfig
+                .put(new RegulatorPermissionGroupLevel(SUBMIT_WASTE_QDR_REVIEW, EXECUTE),
+                        List.of(PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK, PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK));
+
 
 
         // REVIEW_EMP_APPLICATION

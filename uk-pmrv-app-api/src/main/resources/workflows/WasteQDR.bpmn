@@ -1,124 +1,404 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_180mckp" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_180mckp" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.34.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
   <bpmn:process id="PROCESS_WASTE_QDR" name="Waste Quarterly Supplementary Data Report" isExecutable="true" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="StartEvent_1">
-      <bpmn:outgoing>Flow_0fbon3a</bpmn:outgoing>
+    <bpmn:subProcess id="Activity_1ihtsb4">
+      <bpmn:incoming>Flow_1p8ieoh</bpmn:incoming>
+      <bpmn:outgoing>Flow_1vwolto</bpmn:outgoing>
+      <bpmn:startEvent id="StartEvent_1">
+        <bpmn:outgoing>Flow_0fbon3a</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:userTask id="WASTE_QDR_APPLICATION_SUBMIT" name="Operator: Submit Waste QDR">
+        <bpmn:incoming>Flow_0bw05ja</bpmn:incoming>
+        <bpmn:outgoing>Flow_18orts4</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:parallelGateway id="Gateway_1s9ig9k">
+        <bpmn:incoming>Flow_0fbon3a</bpmn:incoming>
+        <bpmn:outgoing>Flow_0bw05ja</bpmn:outgoing>
+        <bpmn:outgoing>Flow_0hgqa3x</bpmn:outgoing>
+      </bpmn:parallelGateway>
+      <bpmn:serviceTask id="Activity_12wrn87" name="Calculate expiration reminders" camunda:delegateExpression="#{calculateWasteQDRExpirationRemindersHandler}">
+        <bpmn:incoming>Flow_0hgqa3x</bpmn:incoming>
+        <bpmn:outgoing>Flow_0o0o02r</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:intermediateCatchEvent id="Event_1tffvym" name="Waste QDR First&#10;Reminder Timer">
+        <bpmn:incoming>Flow_0o0o02r</bpmn:incoming>
+        <bpmn:outgoing>Flow_081fqr3</bpmn:outgoing>
+        <bpmn:timerEventDefinition id="TimerEventDefinition_03dk26d">
+          <bpmn:timeDate xsi:type="bpmn:tFormalExpression">${wasteqdrFirstReminderDate}</bpmn:timeDate>
+        </bpmn:timerEventDefinition>
+      </bpmn:intermediateCatchEvent>
+      <bpmn:serviceTask id="Activity_0a4azox" name="Handle First reminder date reached" camunda:delegateExpression="#{wasteQDRFirstReminderDateReachedHandler}">
+        <bpmn:incoming>Flow_081fqr3</bpmn:incoming>
+        <bpmn:outgoing>Flow_1yw7al1</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:intermediateCatchEvent id="Event_1tg1ag5" name="Waste QDR Second&#10;Reminder Timer">
+        <bpmn:incoming>Flow_1yw7al1</bpmn:incoming>
+        <bpmn:outgoing>Flow_18gp27s</bpmn:outgoing>
+        <bpmn:timerEventDefinition id="TimerEventDefinition_0o1zwq8">
+          <bpmn:timeDate xsi:type="bpmn:tFormalExpression">${wasteqdrSecondReminderDate}</bpmn:timeDate>
+        </bpmn:timerEventDefinition>
+      </bpmn:intermediateCatchEvent>
+      <bpmn:serviceTask id="Activity_0rlkmgz" name="Handle Second reminder date reached" camunda:delegateExpression="#{wasteQDRSecondReminderDateReachedHandler}">
+        <bpmn:incoming>Flow_18gp27s</bpmn:incoming>
+        <bpmn:outgoing>Flow_0oj80pw</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:endEvent id="Event_1v1n4jt">
+        <bpmn:incoming>Flow_0oj80pw</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_0fbon3a" sourceRef="StartEvent_1" targetRef="Gateway_1s9ig9k" />
+      <bpmn:sequenceFlow id="Flow_0bw05ja" sourceRef="Gateway_1s9ig9k" targetRef="WASTE_QDR_APPLICATION_SUBMIT" />
+      <bpmn:sequenceFlow id="Flow_0hgqa3x" sourceRef="Gateway_1s9ig9k" targetRef="Activity_12wrn87" />
+      <bpmn:sequenceFlow id="Flow_0o0o02r" sourceRef="Activity_12wrn87" targetRef="Event_1tffvym" />
+      <bpmn:sequenceFlow id="Flow_081fqr3" sourceRef="Event_1tffvym" targetRef="Activity_0a4azox" />
+      <bpmn:sequenceFlow id="Flow_1yw7al1" sourceRef="Activity_0a4azox" targetRef="Event_1tg1ag5" />
+      <bpmn:sequenceFlow id="Flow_18gp27s" sourceRef="Event_1tg1ag5" targetRef="Activity_0rlkmgz" />
+      <bpmn:sequenceFlow id="Flow_0oj80pw" sourceRef="Activity_0rlkmgz" targetRef="Event_1v1n4jt" />
+      <bpmn:endEvent id="Event_1uays7c">
+        <bpmn:incoming>Flow_18orts4</bpmn:incoming>
+        <bpmn:terminateEventDefinition id="TerminateEventDefinition_157ibno" />
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_18orts4" sourceRef="WASTE_QDR_APPLICATION_SUBMIT" targetRef="Event_1uays7c" />
+    </bpmn:subProcess>
+    <bpmn:startEvent id="Event_1nvc5tl">
+      <bpmn:outgoing>Flow_1p8ieoh</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="WASTE_QDR_APPLICATION_SUBMIT" name="Operator: Submit Waste QDR">
-      <bpmn:incoming>Flow_0bw05ja</bpmn:incoming>
-    </bpmn:userTask>
-    <bpmn:parallelGateway id="Gateway_1s9ig9k">
-      <bpmn:incoming>Flow_0fbon3a</bpmn:incoming>
-      <bpmn:outgoing>Flow_0bw05ja</bpmn:outgoing>
-      <bpmn:outgoing>Flow_0hgqa3x</bpmn:outgoing>
-    </bpmn:parallelGateway>
-    <bpmn:sequenceFlow id="Flow_0fbon3a" sourceRef="StartEvent_1" targetRef="Gateway_1s9ig9k" />
-    <bpmn:sequenceFlow id="Flow_0bw05ja" sourceRef="Gateway_1s9ig9k" targetRef="WASTE_QDR_APPLICATION_SUBMIT" />
-    <bpmn:serviceTask id="Activity_12wrn87" name="Calculate expiration reminders" camunda:delegateExpression="#{calculateWasteQDRExpirationRemindersHandler}">
-      <bpmn:incoming>Flow_0hgqa3x</bpmn:incoming>
-      <bpmn:outgoing>Flow_0o0o02r</bpmn:outgoing>
+    <bpmn:sequenceFlow id="Flow_1p8ieoh" sourceRef="Event_1nvc5tl" targetRef="Activity_1ihtsb4" />
+    <bpmn:exclusiveGateway id="Gateway_07ni6lf" name="what is the review outcome?">
+      <bpmn:incoming>Flow_0yz6hf6</bpmn:incoming>
+      <bpmn:outgoing>Flow_0gmwhjb</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0fuyg1u</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Activity_0kcfnzs" name="Update Workflow status to COMPLETED" camunda:delegateExpression="#{requestUpdateStatusHandler}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="requestStatus">COMPLETED</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0lfxp0v</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tpa5qa</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0hgqa3x" sourceRef="Gateway_1s9ig9k" targetRef="Activity_12wrn87" />
-    <bpmn:intermediateCatchEvent id="Event_1tffvym" name="Waste QDR First&#10;Reminder Timer">
-      <bpmn:incoming>Flow_0o0o02r</bpmn:incoming>
-      <bpmn:outgoing>Flow_081fqr3</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_03dk26d">
-        <bpmn:timeDate xsi:type="bpmn:tFormalExpression">${wasteqdrFirstReminderDate}</bpmn:timeDate>
-      </bpmn:timerEventDefinition>
-    </bpmn:intermediateCatchEvent>
-    <bpmn:sequenceFlow id="Flow_0o0o02r" sourceRef="Activity_12wrn87" targetRef="Event_1tffvym" />
-    <bpmn:serviceTask id="Activity_0a4azox" name="Handle First reminder date reached" camunda:delegateExpression="#{wasteQDRFirstReminderDateReachedHandler}">
-      <bpmn:incoming>Flow_081fqr3</bpmn:incoming>
-      <bpmn:outgoing>Flow_1yw7al1</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_081fqr3" sourceRef="Event_1tffvym" targetRef="Activity_0a4azox" />
-    <bpmn:intermediateCatchEvent id="Event_1tg1ag5" name="Waste QDR Second&#10;Reminder Timer">
-      <bpmn:incoming>Flow_1yw7al1</bpmn:incoming>
-      <bpmn:outgoing>Flow_18gp27s</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_0o1zwq8">
-        <bpmn:timeDate xsi:type="bpmn:tFormalExpression">${wasteqdrSecondReminderDate}</bpmn:timeDate>
-      </bpmn:timerEventDefinition>
-    </bpmn:intermediateCatchEvent>
-    <bpmn:sequenceFlow id="Flow_1yw7al1" sourceRef="Activity_0a4azox" targetRef="Event_1tg1ag5" />
-    <bpmn:serviceTask id="Activity_0rlkmgz" name="Handle Second reminder date reached" camunda:delegateExpression="#{wasteQDRSecondReminderDateReachedHandler}">
-      <bpmn:incoming>Flow_18gp27s</bpmn:incoming>
-      <bpmn:outgoing>Flow_0oj80pw</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_18gp27s" sourceRef="Event_1tg1ag5" targetRef="Activity_0rlkmgz" />
-    <bpmn:endEvent id="Event_1v1n4jt">
-      <bpmn:incoming>Flow_0oj80pw</bpmn:incoming>
+    <bpmn:sequenceFlow id="Flow_0tpa5qa" sourceRef="Activity_0kcfnzs" targetRef="Event_0zf07qq" />
+    <bpmn:endEvent id="Event_0zf07qq">
+      <bpmn:incoming>Flow_0tpa5qa</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_0th7887" />
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0oj80pw" sourceRef="Activity_0rlkmgz" targetRef="Event_1v1n4jt" />
+    <bpmn:sequenceFlow id="Flow_0lfxp0v" sourceRef="Activity_0crsaty" targetRef="Activity_0kcfnzs" />
+    <bpmn:serviceTask id="Activity_0crsaty" name="Add Completed Request Action" camunda:delegateExpression="#{wasteQDRCompletedAddRequestActionHandler}">
+      <bpmn:incoming>Flow_00lvgcp</bpmn:incoming>
+      <bpmn:outgoing>Flow_0lfxp0v</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_00lvgcp" sourceRef="Activity_0ze26wi" targetRef="Activity_0crsaty" />
+    <bpmn:serviceTask id="Activity_0ze26wi" name="Handle Waste QDR Completed" camunda:delegateExpression="#{wasteQDRCompletedHandler}">
+      <bpmn:incoming>Flow_0fuyg1u</bpmn:incoming>
+      <bpmn:outgoing>Flow_00lvgcp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0yz6hf6" sourceRef="Activity_022qszp" targetRef="Gateway_07ni6lf" />
+    <bpmn:sequenceFlow id="Flow_1vwolto" sourceRef="Activity_1ihtsb4" targetRef="Activity_022qszp" />
+    <bpmn:subProcess id="Activity_022qszp">
+      <bpmn:incoming>Flow_1vwolto</bpmn:incoming>
+      <bpmn:incoming>Flow_1gu227j</bpmn:incoming>
+      <bpmn:outgoing>Flow_0yz6hf6</bpmn:outgoing>
+      <bpmn:startEvent id="Event_1jghzfr">
+        <bpmn:outgoing>Flow_1nbqsgj</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:userTask id="WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT" name="Regulator:&#10;Review application">
+        <bpmn:incoming>Flow_0b7w5gd</bpmn:incoming>
+        <bpmn:outgoing>Flow_06ges4t</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:parallelGateway id="Gateway_0q67ah4">
+        <bpmn:incoming>Flow_1nbqsgj</bpmn:incoming>
+        <bpmn:outgoing>Flow_0b7w5gd</bpmn:outgoing>
+        <bpmn:outgoing>Flow_0s9wbg0</bpmn:outgoing>
+      </bpmn:parallelGateway>
+      <bpmn:endEvent id="Event_1eufa8f">
+        <bpmn:incoming>Flow_06ges4t</bpmn:incoming>
+        <bpmn:terminateEventDefinition id="TerminateEventDefinition_1ujgqgj" />
+      </bpmn:endEvent>
+      <bpmn:endEvent id="Event_1g07v6p">
+        <bpmn:incoming>Flow_1mnkxp9</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1nbqsgj" sourceRef="Event_1jghzfr" targetRef="Gateway_0q67ah4" />
+      <bpmn:sequenceFlow id="Flow_0b7w5gd" sourceRef="Gateway_0q67ah4" targetRef="WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT" />
+      <bpmn:userTask id="WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW" name="Operator:&#10;Wait for regulator review">
+        <bpmn:incoming>Flow_0s9wbg0</bpmn:incoming>
+        <bpmn:outgoing>Flow_1mnkxp9</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:sequenceFlow id="Flow_0s9wbg0" sourceRef="Gateway_0q67ah4" targetRef="WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW" />
+      <bpmn:sequenceFlow id="Flow_1mnkxp9" sourceRef="WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW" targetRef="Event_1g07v6p" />
+      <bpmn:sequenceFlow id="Flow_06ges4t" sourceRef="WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT" targetRef="Event_1eufa8f" />
+    </bpmn:subProcess>
+    <bpmn:subProcess id="Activity_0ahurmt">
+      <bpmn:incoming>Flow_0gmwhjb</bpmn:incoming>
+      <bpmn:outgoing>Flow_1gu227j</bpmn:outgoing>
+      <bpmn:startEvent id="Event_1q0ntyd">
+        <bpmn:outgoing>Flow_0kvdft6</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:userTask id="WASTE_QDR_WAIT_FOR_AMENDS" name="Regulator: Wait for amends">
+        <bpmn:incoming>Flow_1u0eup1</bpmn:incoming>
+        <bpmn:outgoing>Flow_0m8stf8</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:endEvent id="Event_0b8va0c">
+        <bpmn:incoming>Flow_0m8stf8</bpmn:incoming>
+        <bpmn:incoming>Flow_0o2rah8</bpmn:incoming>
+        <bpmn:terminateEventDefinition id="TerminateEventDefinition_1kdo54u" />
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_0m8stf8" sourceRef="WASTE_QDR_WAIT_FOR_AMENDS" targetRef="Event_0b8va0c" />
+      <bpmn:sequenceFlow id="Flow_0kvdft6" sourceRef="Event_1q0ntyd" targetRef="Gateway_0xitmto" />
+      <bpmn:sequenceFlow id="Flow_1u0eup1" sourceRef="Gateway_0xitmto" targetRef="WASTE_QDR_WAIT_FOR_AMENDS" />
+      <bpmn:sequenceFlow id="Flow_1mv366k" sourceRef="Gateway_0xitmto" targetRef="WASTE_QDR_APPLICATION_AMENDS_SUBMIT" />
+      <bpmn:userTask id="WASTE_QDR_APPLICATION_AMENDS_SUBMIT" name="Operator: Submit Waste QDR amends">
+        <bpmn:incoming>Flow_1mv366k</bpmn:incoming>
+        <bpmn:outgoing>Flow_0o2rah8</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:sequenceFlow id="Flow_0o2rah8" name="send for regulator review" sourceRef="WASTE_QDR_APPLICATION_AMENDS_SUBMIT" targetRef="Event_0b8va0c">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${wasteQDROutcome=='SUBMITTED_TO_REGULATOR'}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:parallelGateway id="Gateway_0xitmto">
+        <bpmn:incoming>Flow_0kvdft6</bpmn:incoming>
+        <bpmn:outgoing>Flow_1u0eup1</bpmn:outgoing>
+        <bpmn:outgoing>Flow_1mv366k</bpmn:outgoing>
+      </bpmn:parallelGateway>
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_0gmwhjb" name="amends needed" sourceRef="Gateway_07ni6lf" targetRef="Activity_0ahurmt">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${wasteQdrReviewOutcome=='AMENDS_NEEDED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0fuyg1u" name="submitted" sourceRef="Gateway_07ni6lf" targetRef="Activity_0ze26wi">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${wasteQdrReviewOutcome=='COMPLETED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1gu227j" sourceRef="Activity_0ahurmt" targetRef="Activity_022qszp" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PROCESS_WASTE_QDR">
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="179" y="249" width="36" height="36" />
+      <bpmndi:BPMNShape id="Activity_1ihtsb4_di" bpmnElement="Activity_1ihtsb4" isExpanded="true">
+        <dc:Bounds x="370" y="80" width="1270" height="503" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1h1eabe_di" bpmnElement="Gateway_1s9ig9k">
-        <dc:Bounds x="305" y="242" width="50" height="50" />
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="419" y="309" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0mmff07_di" bpmnElement="WASTE_QDR_APPLICATION_SUBMIT">
-        <dc:Bounds x="460" y="80" width="100" height="80" />
+        <dc:Bounds x="700" y="140" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1h1eabe_di" bpmnElement="Gateway_1s9ig9k">
+        <dc:Bounds x="545" y="302" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_12wrn87_di" bpmnElement="Activity_12wrn87">
-        <dc:Bounds x="460" y="340" width="100" height="80" />
+        <dc:Bounds x="700" y="400" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1tffvym_di" bpmnElement="Event_1tffvym">
-        <dc:Bounds x="662" y="362" width="36" height="36" />
+        <dc:Bounds x="902" y="422" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="642" y="406" width="83" height="27" />
+          <dc:Bounds x="882" y="466" width="83" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0a4azox_di" bpmnElement="Activity_0a4azox">
-        <dc:Bounds x="770" y="340" width="100" height="80" />
+        <dc:Bounds x="1010" y="400" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1tg1ag5_di" bpmnElement="Event_1tg1ag5">
-        <dc:Bounds x="962" y="362" width="36" height="36" />
+        <dc:Bounds x="1202" y="422" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="942" y="406" width="80" height="40" />
+          <dc:Bounds x="1182" y="466" width="80" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0rlkmgz_di" bpmnElement="Activity_0rlkmgz">
-        <dc:Bounds x="1070" y="340" width="100" height="80" />
+        <dc:Bounds x="1310" y="400" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1v1n4jt_di" bpmnElement="Event_1v1n4jt">
-        <dc:Bounds x="1262" y="362" width="36" height="36" />
+        <dc:Bounds x="1502" y="422" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0vu59p2" bpmnElement="Event_1uays7c">
+        <dc:Bounds x="1502" y="162" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0fbon3a_di" bpmnElement="Flow_0fbon3a">
-        <di:waypoint x="215" y="267" />
-        <di:waypoint x="305" y="267" />
+        <di:waypoint x="455" y="327" />
+        <di:waypoint x="545" y="327" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0bw05ja_di" bpmnElement="Flow_0bw05ja">
-        <di:waypoint x="330" y="242" />
-        <di:waypoint x="330" y="120" />
-        <di:waypoint x="460" y="120" />
+        <di:waypoint x="570" y="302" />
+        <di:waypoint x="570" y="180" />
+        <di:waypoint x="700" y="180" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0hgqa3x_di" bpmnElement="Flow_0hgqa3x">
-        <di:waypoint x="330" y="292" />
-        <di:waypoint x="330" y="380" />
-        <di:waypoint x="460" y="380" />
+        <di:waypoint x="570" y="352" />
+        <di:waypoint x="570" y="440" />
+        <di:waypoint x="700" y="440" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0o0o02r_di" bpmnElement="Flow_0o0o02r">
-        <di:waypoint x="560" y="380" />
-        <di:waypoint x="662" y="380" />
+        <di:waypoint x="800" y="440" />
+        <di:waypoint x="902" y="440" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_081fqr3_di" bpmnElement="Flow_081fqr3">
-        <di:waypoint x="698" y="380" />
-        <di:waypoint x="770" y="380" />
+        <di:waypoint x="938" y="440" />
+        <di:waypoint x="1010" y="440" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1yw7al1_di" bpmnElement="Flow_1yw7al1">
-        <di:waypoint x="870" y="380" />
-        <di:waypoint x="962" y="380" />
+        <di:waypoint x="1110" y="440" />
+        <di:waypoint x="1202" y="440" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_18gp27s_di" bpmnElement="Flow_18gp27s">
-        <di:waypoint x="998" y="380" />
-        <di:waypoint x="1070" y="380" />
+        <di:waypoint x="1238" y="440" />
+        <di:waypoint x="1310" y="440" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0oj80pw_di" bpmnElement="Flow_0oj80pw">
-        <di:waypoint x="1170" y="380" />
-        <di:waypoint x="1262" y="380" />
+        <di:waypoint x="1410" y="440" />
+        <di:waypoint x="1502" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18orts4_di" bpmnElement="Flow_18orts4">
+        <di:waypoint x="800" y="180" />
+        <di:waypoint x="1502" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BPMNShape_1worgbc" bpmnElement="Event_1nvc5tl">
+        <dc:Bounds x="152" y="314" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_07ni6lf_di" bpmnElement="Gateway_07ni6lf" isMarkerVisible="true">
+        <dc:Bounds x="2545" y="275" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2528" y="238" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_001d78o_di" bpmnElement="Activity_0kcfnzs">
+        <dc:Bounds x="3170" y="260" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0hf75f9_di" bpmnElement="Event_0zf07qq">
+        <dc:Bounds x="3372" y="282" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0jcehi3_di" bpmnElement="Activity_0crsaty">
+        <dc:Bounds x="2960" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1878fzm_di" bpmnElement="Activity_0ze26wi">
+        <dc:Bounds x="2750" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0m3huld" bpmnElement="Activity_022qszp" isExpanded="true">
+        <dc:Bounds x="1800" y="80" width="650" height="470" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1jghzfr_di" bpmnElement="Event_1jghzfr">
+        <dc:Bounds x="1840" y="312" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0t2u8m6_di" bpmnElement="WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT">
+        <dc:Bounds x="2000" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0q67ah4_di" bpmnElement="Gateway_0q67ah4">
+        <dc:Bounds x="1905" y="305" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1eufa8f_di" bpmnElement="Event_1eufa8f">
+        <dc:Bounds x="2282" y="422" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_07434s5_di" bpmnElement="Event_1g07v6p">
+        <dc:Bounds x="2282" y="152" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0ihjj3n" bpmnElement="WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW">
+        <dc:Bounds x="2000" y="130" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1nbqsgj_di" bpmnElement="Flow_1nbqsgj">
+        <di:waypoint x="1876" y="330" />
+        <di:waypoint x="1905" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0b7w5gd_di" bpmnElement="Flow_0b7w5gd">
+        <di:waypoint x="1930" y="355" />
+        <di:waypoint x="1930" y="440" />
+        <di:waypoint x="2000" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0s9wbg0_di" bpmnElement="Flow_0s9wbg0">
+        <di:waypoint x="1930" y="305" />
+        <di:waypoint x="1930" y="170" />
+        <di:waypoint x="2000" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1mnkxp9_di" bpmnElement="Flow_1mnkxp9">
+        <di:waypoint x="2100" y="170" />
+        <di:waypoint x="2282" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06ges4t_di" bpmnElement="Flow_06ges4t">
+        <di:waypoint x="2100" y="440" />
+        <di:waypoint x="2282" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0ahurmt_di" bpmnElement="Activity_0ahurmt" isExpanded="true">
+        <dc:Bounds x="2520" y="530" width="690" height="300" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1q0ntyd_di" bpmnElement="Event_1q0ntyd">
+        <dc:Bounds x="2542" y="602" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0mqo1a6_di" bpmnElement="WASTE_QDR_WAIT_FOR_AMENDS">
+        <dc:Bounds x="2780" y="720" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0warxrt_di" bpmnElement="Event_0b8va0c">
+        <dc:Bounds x="3092" y="662" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0aq32g9_di" bpmnElement="WASTE_QDR_APPLICATION_AMENDS_SUBMIT">
+        <dc:Bounds x="2780" y="580" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_10kp8hf_di" bpmnElement="Gateway_0xitmto">
+        <dc:Bounds x="2655" y="595" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0m8stf8_di" bpmnElement="Flow_0m8stf8">
+        <di:waypoint x="2880" y="760" />
+        <di:waypoint x="3110" y="760" />
+        <di:waypoint x="3110" y="698" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kvdft6_di" bpmnElement="Flow_0kvdft6">
+        <di:waypoint x="2578" y="620" />
+        <di:waypoint x="2655" y="620" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1u0eup1_di" bpmnElement="Flow_1u0eup1">
+        <di:waypoint x="2680" y="645" />
+        <di:waypoint x="2680" y="760" />
+        <di:waypoint x="2780" y="760" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1mv366k_di" bpmnElement="Flow_1mv366k">
+        <di:waypoint x="2705" y="620" />
+        <di:waypoint x="2780" y="620" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0o2rah8_di" bpmnElement="Flow_0o2rah8">
+        <di:waypoint x="2880" y="620" />
+        <di:waypoint x="3110" y="620" />
+        <di:waypoint x="3110" y="662" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2946" y="586" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1p8ieoh_di" bpmnElement="Flow_1p8ieoh">
+        <di:waypoint x="188" y="332" />
+        <di:waypoint x="370" y="332" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tpa5qa_di" bpmnElement="Flow_0tpa5qa">
+        <di:waypoint x="3270" y="300" />
+        <di:waypoint x="3372" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lfxp0v_di" bpmnElement="Flow_0lfxp0v">
+        <di:waypoint x="3060" y="300" />
+        <di:waypoint x="3170" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00lvgcp_di" bpmnElement="Flow_00lvgcp">
+        <di:waypoint x="2850" y="300" />
+        <di:waypoint x="2960" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yz6hf6_di" bpmnElement="Flow_0yz6hf6">
+        <di:waypoint x="2450" y="300" />
+        <di:waypoint x="2545" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vwolto_di" bpmnElement="Flow_1vwolto">
+        <di:waypoint x="1640" y="332" />
+        <di:waypoint x="1800" y="332" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0gmwhjb_di" bpmnElement="Flow_0gmwhjb">
+        <di:waypoint x="2570" y="325" />
+        <di:waypoint x="2570" y="530" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2580" y="428" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fuyg1u_di" bpmnElement="Flow_0fuyg1u">
+        <di:waypoint x="2595" y="300" />
+        <di:waypoint x="2750" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2649" y="282" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gu227j_di" bpmnElement="Flow_1gu227j">
+        <di:waypoint x="2520" y="710" />
+        <di:waypoint x="2125" y="710" />
+        <di:waypoint x="2125" y="550" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

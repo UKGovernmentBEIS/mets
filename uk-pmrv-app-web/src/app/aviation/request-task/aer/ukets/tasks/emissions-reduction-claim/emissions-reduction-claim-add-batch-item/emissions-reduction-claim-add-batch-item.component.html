@@ -3,8 +3,7 @@
   [formGroup]="form"
   heading="Add a sustainable aviation fuel purchase"
   submitText="Continue"
-  [hideSubmit]="false"
->
+  [hideSubmit]="false">
   <div class="govuk-!-width-two-thirds">
     <p class="govuk-body">Provide information for each batch of sustainable aviation fuel included in your claim.</p>
   </div>
@@ -25,21 +24,18 @@
     hint="If you are converting from volume to mass, please ensure that the density figure used is correct at 15° Celsius."
     suffix="tonnes"
     widthClass="govuk-!-width-one-third"
-    class="govuk-!-width-two-thirds"
-  ></div>
+    class="govuk-!-width-two-thirds"></div>
 
   <h2 class="govuk-heading-s govuk-!-width-two-thirds">
     What evidence do you have that proves this batch meets the sustainability criteria set out in the UK ETS Order?
   </h2>
   <div govuk-radio formControlName="sustainabilityCriteriaEvidenceType" class="govuk-!-width-two-thirds">
     <govuk-radio-option
-      label="Screenshot from the RTFO registry"
-      value="SCREENSHOT_FROM_RTFO_REGISTRY"
-    ></govuk-radio-option>
+      label="Screenshot from a national mandate registry"
+      value="SCREENSHOT_FROM_RTFO_REGISTRY"></govuk-radio-option>
     <govuk-radio-option
       label="Voluntary certification scheme marking (for example, ISCC)"
-      value="VOLUNTARY_CERTIFICATION_SCHEME_MARKING"
-    ></govuk-radio-option>
+      value="VOLUNTARY_CERTIFICATION_SCHEME_MARKING"></govuk-radio-option>
     <govuk-radio-option label="Fuel supplier report" value="FUEL_SUPPLIER_REPORT"></govuk-radio-option>
     or
     <govuk-radio-option label="Other evidence" value="OTHER" [divider]="true">
@@ -47,8 +43,7 @@
         <div
           formControlName="otherSustainabilityCriteriaEvidenceDescription"
           govuk-text-input
-          label="Description"
-        ></div>
+          label="Description"></div>
       </ng-container>
     </govuk-radio-option>
   </div>
@@ -68,8 +63,7 @@
       [baseDownloadUrl]="downloadUrl"
       listTitle="Files added"
       [label]="null"
-      formControlName="evidenceFiles"
-    ></app-multiple-file-input>
+      formControlName="evidenceFiles"></app-multiple-file-input>
   </div>
 </app-wizard-step>
 <app-return-to-link></app-return-to-link>

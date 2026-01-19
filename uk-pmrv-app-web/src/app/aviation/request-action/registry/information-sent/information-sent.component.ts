@@ -14,6 +14,7 @@ import {
   EmpIssuanceOrganisationDetails,
   EmpIssuancePartnershipDetails,
   EmpIssuanceRegistryIntegrationRequestActionPayload,
+  EmpVariationRegistryIntegrationRequestActionPayload,
   LocationDTO,
   LocationOffShoreDTO,
   LocationOnShoreDTO,
@@ -44,7 +45,9 @@ interface ViewModel {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InformationSentToRegistryComponent {
-  payload = this.registryActionService.payload as Signal<EmpIssuanceRegistryIntegrationRequestActionPayload>;
+  payload = this.registryActionService.payload as Signal<
+    EmpIssuanceRegistryIntegrationRequestActionPayload | EmpVariationRegistryIntegrationRequestActionPayload
+  >;
   private readonly requestActionType = this.registryActionService.requestActionType;
 
   vm: Signal<ViewModel> = computed(() => {

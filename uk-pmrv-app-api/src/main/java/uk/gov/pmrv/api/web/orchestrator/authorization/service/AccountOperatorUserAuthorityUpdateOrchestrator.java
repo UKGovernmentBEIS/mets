@@ -25,6 +25,7 @@ public class AccountOperatorUserAuthorityUpdateOrchestrator {
     public void updateAccountOperatorAuthorities(List<AccountOperatorAuthorityUpdateDTO> accountOperatorAuthorities,
                                                  Map<AccountContactType, String> updatedContactTypes, Long accountId) {
 
+
         List<NewUserActivated> activatedOperators = operatorAuthorityUpdateService
                 .updateAccountOperatorAuthorities(accountOperatorAuthorities, accountId);
 
@@ -34,4 +35,6 @@ public class AccountOperatorUserAuthorityUpdateOrchestrator {
             operatorUserNotificationGateway.notifyUsersUpdateStatus(activatedOperators);
         }
     }
+
+
 }

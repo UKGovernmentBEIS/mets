@@ -3,11 +3,11 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -17,6 +17,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
+
+import static uk.gov.pmrv.api.common.exception.MetsErrorCode.AVIATION_AER_REPORTING_STATUS_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -37,12 +39,17 @@ public class AviationAerCreationService {
         validateReportingYearUniqueness(accountId, reportingYear);
 
         AviationAccountInfoDTO accountInfo = aviationAccountQueryService.getAviationAccountInfoDTOById(accountId);
+        AviationAccountReportingStatusType reportingStatusType = accountInfo.getReportingStatus();
+        if(reportingStatusType==null) {
+            throw new BusinessException(AVIATION_AER_REPORTING_STATUS_NOT_FOUND,
+                    String.format("Unable to find reporting status for account %s and year %s",accountId,reportingYear.getValue()));
+        }
 
         //create
         Request createdRequest = createRequestAviationAer(accountId, accountInfo.getEmissionTradingScheme(), reportingYear);
 
         //PMRV-6545 - if the account for which the aer is created is not required to report then created request will be marked as exempted
-        if(AviationAccountReportingStatus.REQUIRED_TO_REPORT != accountInfo.getReportingStatus()) {
+        if(AviationAccountReportingStatusType.REQUIRED_TO_REPORT != accountInfo.getReportingStatus()) {
             aviationAerReportingObligationService.markAsExempt(createdRequest, null);
         }
     }

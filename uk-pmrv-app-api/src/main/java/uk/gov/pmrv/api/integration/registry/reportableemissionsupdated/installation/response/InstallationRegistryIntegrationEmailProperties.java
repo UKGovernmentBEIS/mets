@@ -14,7 +14,8 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "installation.registry.integration.error.handle")
 @ConditionalOnExpression("'${registry.integration.emissions.updated.enabled:false}' == 'true' or " +
         "'${registry.integration.set.operator.id.enabled:false}' == 'true' or " +
-        "'${registry.integration.account.creation.enabled:false}' == 'true'")
+        "'${registry.integration.account.creation.enabled:false}' == 'true' or " +
+        "'${registry.integration.account.update.enabled:false}' == 'true'")
 public class InstallationRegistryIntegrationEmailProperties {
 
     @NotNull

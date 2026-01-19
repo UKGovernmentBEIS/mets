@@ -63,7 +63,7 @@ class VerifierRequestTaskDefaultAssignmentServiceTest {
 
         // Verify
         verify(userRoleTypeService, times(1)).isUserVerifier(verifier);
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, verifier);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, verifier, RoleTypeConstants.VERIFIER);
         verifyNoMoreInteractions(requestTaskAssignmentService);
         verifyNoInteractions(requestReleaseService);
     }
@@ -91,7 +91,7 @@ class VerifierRequestTaskDefaultAssignmentServiceTest {
 
         // Verify
         verify(userRoleTypeService, times(1)).isUserVerifier(verifier);
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, vbSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, vbSiteContact, RoleTypeConstants.VERIFIER);
         verifyNoMoreInteractions(requestTaskAssignmentService);
         verifyNoInteractions(requestReleaseService);
     }
@@ -113,14 +113,14 @@ class VerifierRequestTaskDefaultAssignmentServiceTest {
         when(userRoleTypeService.isUserVerifier(verifier)).thenReturn(false);
         when(accountVbSiteContactService.getVBSiteContactByAccount(requestTask.getRequest().getAccountId()))
                 .thenReturn(Optional.of(vbSiteContact));
-        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, vbSiteContact);
+        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, vbSiteContact, RoleTypeConstants.VERIFIER);
 
         // Invoke
         verifierRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
 
         // Verify
         verify(userRoleTypeService, times(1)).isUserVerifier(verifier);
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, vbSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, vbSiteContact, RoleTypeConstants.VERIFIER);
         verifyNoMoreInteractions(requestTaskAssignmentService);
         verify(requestReleaseService, times(1)).releaseRequest(requestTask);
     }
@@ -166,7 +166,7 @@ class VerifierRequestTaskDefaultAssignmentServiceTest {
                 .build();
 
         when(userRoleTypeService.isUserVerifier(verifier)).thenReturn(true);
-        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, verifier);
+        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, verifier, RoleTypeConstants.VERIFIER);
         when(accountVbSiteContactService.getVBSiteContactByAccount(requestTask.getRequest().getAccountId()))
                 .thenReturn(Optional.of(vbSiteContact));
 
@@ -175,8 +175,8 @@ class VerifierRequestTaskDefaultAssignmentServiceTest {
 
         // Verify
         verify(userRoleTypeService, times(1)).isUserVerifier(verifier);
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, verifier);
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, vbSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, verifier, RoleTypeConstants.VERIFIER);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, vbSiteContact, RoleTypeConstants.VERIFIER);
         verifyNoMoreInteractions(requestTaskAssignmentService);
         verifyNoInteractions(requestReleaseService);
     }

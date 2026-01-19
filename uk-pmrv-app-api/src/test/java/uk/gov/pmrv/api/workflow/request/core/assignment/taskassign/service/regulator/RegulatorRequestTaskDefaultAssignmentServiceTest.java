@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessCheckedException;
 import uk.gov.pmrv.api.account.service.AccountCaSiteContactService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.requestassign.RequestReleaseService;
@@ -65,7 +66,7 @@ class RegulatorRequestTaskDefaultAssignmentServiceTest {
         regulatorRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
 
         verify(userRoleTypeService, times(1)).isUserRegulator(requestRegulatorPeerReviewer);
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, requestRegulatorPeerReviewer);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, requestRegulatorPeerReviewer, RoleTypeConstants.REGULATOR);
         verifyNoInteractions(accountCaSiteContactService, requestReleaseService);
     }
 
@@ -86,15 +87,15 @@ class RegulatorRequestTaskDefaultAssignmentServiceTest {
         RequestTask requestTask = RequestTask.builder().request(request).type(PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW).build();
 
         when(userRoleTypeService.isUserRegulator(requestRegulatorPeerReviewer)).thenReturn(true);
-        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, requestRegulatorPeerReviewer);
+        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, requestRegulatorPeerReviewer, RoleTypeConstants.REGULATOR);
         when(accountCaSiteContactService.findCASiteContactByAccount(request.getAccountId())).thenReturn(Optional.of(caSiteContact));
 
         regulatorRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
 
         verify(userRoleTypeService, times(1)).isUserRegulator(requestRegulatorPeerReviewer);
         verify(accountCaSiteContactService, times(1)).findCASiteContactByAccount(request.getAccountId());
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, requestRegulatorPeerReviewer);
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, requestRegulatorPeerReviewer, RoleTypeConstants.REGULATOR);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact, RoleTypeConstants.REGULATOR);
         verifyNoInteractions(requestReleaseService);
     }
 
@@ -117,7 +118,7 @@ class RegulatorRequestTaskDefaultAssignmentServiceTest {
         regulatorRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
 
         verify(accountCaSiteContactService, times(1)).findCASiteContactByAccount(request.getAccountId());
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact, RoleTypeConstants.REGULATOR);
         verifyNoMoreInteractions(requestTaskAssignmentService);
         verifyNoInteractions(userRoleTypeService, requestReleaseService);
     }
@@ -145,7 +146,7 @@ class RegulatorRequestTaskDefaultAssignmentServiceTest {
 
         verify(userRoleTypeService, times(1)).isUserRegulator(requestRegulatorPeerReviewer);
         verify(accountCaSiteContactService, times(1)).findCASiteContactByAccount(request.getAccountId());
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact, RoleTypeConstants.REGULATOR);
         verifyNoInteractions(requestReleaseService);
     }
 
@@ -213,7 +214,7 @@ class RegulatorRequestTaskDefaultAssignmentServiceTest {
         regulatorRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
 
         verify(userRoleTypeService, times(1)).isUserRegulator(requestRegulatorAssignee);
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, requestRegulatorAssignee);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, requestRegulatorAssignee, RoleTypeConstants.REGULATOR);
         verifyNoInteractions(accountCaSiteContactService, requestReleaseService);
     }
 
@@ -234,15 +235,15 @@ class RegulatorRequestTaskDefaultAssignmentServiceTest {
         RequestTask requestTask = RequestTask.builder().request(request).type(PERMIT_ISSUANCE_APPLICATION_REVIEW).build();
 
         when(userRoleTypeService.isUserRegulator(requestRegulatorAssignee)).thenReturn(true);
-        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, requestRegulatorAssignee);
+        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, requestRegulatorAssignee, RoleTypeConstants.REGULATOR);
         when(accountCaSiteContactService.findCASiteContactByAccount(request.getAccountId())).thenReturn(Optional.of(caSiteContact));
 
         regulatorRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
 
         verify(userRoleTypeService, times(1)).isUserRegulator(requestRegulatorAssignee);
         verify(accountCaSiteContactService, times(1)).findCASiteContactByAccount(request.getAccountId());
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, requestRegulatorAssignee);
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, requestRegulatorAssignee, RoleTypeConstants.REGULATOR);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact, RoleTypeConstants.REGULATOR);
         verifyNoInteractions(requestReleaseService);
     }
 
@@ -265,7 +266,7 @@ class RegulatorRequestTaskDefaultAssignmentServiceTest {
         regulatorRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
 
         verify(accountCaSiteContactService, times(1)).findCASiteContactByAccount(request.getAccountId());
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact, RoleTypeConstants.REGULATOR);
         verifyNoMoreInteractions(requestTaskAssignmentService);
         verifyNoInteractions(userRoleTypeService, requestReleaseService);
     }
@@ -293,7 +294,7 @@ class RegulatorRequestTaskDefaultAssignmentServiceTest {
 
         verify(userRoleTypeService, times(1)).isUserRegulator(requestRegulatorAssignee);
         verify(accountCaSiteContactService, times(1)).findCASiteContactByAccount(request.getAccountId());
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact, RoleTypeConstants.REGULATOR);
         verifyNoMoreInteractions(requestTaskAssignmentService);
         verifyNoInteractions(requestReleaseService);
     }
@@ -335,11 +336,11 @@ class RegulatorRequestTaskDefaultAssignmentServiceTest {
         RequestTask requestTask = RequestTask.builder().request(request).type(PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW).build();
 
         when(accountCaSiteContactService.findCASiteContactByAccount(request.getAccountId())).thenReturn(Optional.of(caSiteContact));
-        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, caSiteContact);
+        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, caSiteContact, RoleTypeConstants.REGULATOR);
 
         regulatorRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
 
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact, RoleTypeConstants.REGULATOR);
         verify(accountCaSiteContactService, times(1)).findCASiteContactByAccount(request.getAccountId());
         verify(requestReleaseService, times(1)).releaseRequest(requestTask);
         verifyNoInteractions(userRoleTypeService);

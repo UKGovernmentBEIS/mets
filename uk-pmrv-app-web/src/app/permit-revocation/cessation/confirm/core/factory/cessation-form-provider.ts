@@ -67,7 +67,7 @@ const setValidators = (key: string): MessageValidatorFn[] => {
     case 'annualReportableEmissions':
       return [
         GovukValidators.required('Enter the annual reportable emissions'),
-        GovukValidators.min(0.1, 'Annual reportable emissions tonnes of CO2e must be between 0 and 99,999,999.99'),
+        GovukValidators.min(0, 'Annual reportable emissions tonnes of CO2e must be between 0 and 99,999,999.99'),
         GovukValidators.max(
           99999999.999,
           'Annual reportable emissions tonnes of CO2e must be between 0 and 99,999,999.99',

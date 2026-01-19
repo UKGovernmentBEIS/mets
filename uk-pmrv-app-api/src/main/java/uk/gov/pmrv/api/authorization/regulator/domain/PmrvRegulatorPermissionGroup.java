@@ -77,6 +77,10 @@ public class PmrvRegulatorPermissionGroup {
     public static final String SUBMIT_ALR_REVIEW = "SUBMIT_ALR_REVIEW";
     public static final String PEER_REVIEW_ALR = "PEER_REVIEW_ALR";
     public static final String MARK_NOT_REQUIRED_ALR = "MARK_NOT_REQUIRED_ALR";
+    public static final String BULK_DOWNLOAD_ALR = "BULK_DOWNLOAD_ALR";
+
+    //Waste QDR
+    public static final String SUBMIT_WASTE_QDR_REVIEW = "SUBMIT_WASTE_QDR_REVIEW";
 
 
     //Aviation related permission groups

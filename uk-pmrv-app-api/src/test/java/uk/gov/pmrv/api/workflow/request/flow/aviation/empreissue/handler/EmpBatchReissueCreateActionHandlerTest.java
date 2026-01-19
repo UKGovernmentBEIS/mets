@@ -8,7 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.authorization.core.domain.AppAuthority;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -62,7 +62,7 @@ class EmpBatchReissueCreateActionHandlerTest {
 		EmpBatchReissueChangesDetails changes = EmpBatchReissueChangesDetails.builder().changes(List.of("change1", "change2")).build();
     	EmpBatchReissueFilters filters = EmpBatchReissueFilters.builder()
 				.emissionTradingSchemes(Set.of(EmissionTradingScheme.UK_ETS_AVIATION))
-				.reportingStatuses(Set.of(AviationAccountReportingStatus.REQUIRED_TO_REPORT))
+				.reportingStatuses(Set.of(AviationAccountReportingStatusType.REQUIRED_TO_REPORT))
 				.build();
     	BatchReissueRequestCreateActionPayload payload = BatchReissueRequestCreateActionPayload.builder()
     			.payloadType(RequestCreateActionPayloadType.EMP_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD)

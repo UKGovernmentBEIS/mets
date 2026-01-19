@@ -1,6 +1,7 @@
 package uk.gov.pmrv.api.account.aviation.repo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -8,21 +9,19 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountSearchResults;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountSearchResultsInfoDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.repository.impl.AviationAccountCustomRepositoryImpl;
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
 import uk.gov.pmrv.api.account.domain.dto.AccountSearchCriteria;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.Address;
-import uk.gov.netz.api.common.domain.PagingRequest;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -186,7 +185,6 @@ class AviationAccountCustomRepositoryIT extends AbstractContainerBaseTest {
                 .competentAuthority(ca)
                 .verificationBodyId(verificationBodyId)
                 .status(status)
-                .reportingStatus(AviationAccountReportingStatus.REQUIRED_TO_REPORT)
                 .location(
                         LocationOnShore.builder()
                                 .gridReference("grid")

@@ -1,19 +1,5 @@
 package uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.request;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.Year;
-import java.time.format.DateTimeParseException;
-import java.util.Map;
-import java.util.Optional;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,13 +7,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
-
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.configuration.domain.ConfigurationDTO;
 import uk.gov.netz.api.configuration.service.ConfigurationService;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationReportableEmissionsEntity;
@@ -42,6 +27,20 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.service.AviationAerRequestQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.common.domain.AviationAerUkEtsRequestPayload;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Year;
+import java.time.format.DateTimeParseException;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
 
 @ExtendWith(MockitoExtension.class)
 class AviationReportableEmissionsNotifyRegistryServiceTest {
@@ -494,7 +493,7 @@ class AviationReportableEmissionsNotifyRegistryServiceTest {
 				.id(accountId)
 				.registryId(registryId)
 				.emissionTradingScheme(EmissionTradingScheme.UK_ETS_AVIATION)
-				.reportingStatus(AviationAccountReportingStatus.REQUIRED_TO_REPORT)
+				.reportingStatus(AviationAccountReportingStatusType.REQUIRED_TO_REPORT)
 				.competentAuthority(ENGLAND)
 				.build();
 	}

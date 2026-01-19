@@ -16,8 +16,8 @@ import { Observable } from 'rxjs';
 
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
+import { InstallationAccountDetailsDTO } from '../model/installationAccountDetailsDTO';
 import { InstallationAccountHeaderInfoDTO } from '../model/installationAccountHeaderInfoDTO';
-import { InstallationAccountPermitDTO } from '../model/installationAccountPermitDTO';
 import { BASE_PATH } from '../variables';
 
 @Injectable({
@@ -88,25 +88,25 @@ export class InstallationAccountViewService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getInstallationAccountById(id: number): Observable<InstallationAccountPermitDTO>;
+  public getInstallationAccountById(id: number): Observable<InstallationAccountDetailsDTO>;
   public getInstallationAccountById(
     id: number,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpResponse<InstallationAccountPermitDTO>>;
+  ): Observable<HttpResponse<InstallationAccountDetailsDTO>>;
   public getInstallationAccountById(
     id: number,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpEvent<InstallationAccountPermitDTO>>;
+  ): Observable<HttpEvent<InstallationAccountDetailsDTO>>;
   public getInstallationAccountById(
     id: number,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<InstallationAccountPermitDTO>;
+  ): Observable<InstallationAccountDetailsDTO>;
   public getInstallationAccountById(
     id: number,
     observe: any = 'body',
@@ -140,7 +140,7 @@ export class InstallationAccountViewService {
       responseType_ = 'text';
     }
 
-    return this.httpClient.get<InstallationAccountPermitDTO>(
+    return this.httpClient.get<InstallationAccountDetailsDTO>(
       `${this.configuration.basePath}/v1.0/installation/account/${encodeURIComponent(String(id))}`,
       {
         responseType: <any>responseType_,

@@ -11,7 +11,11 @@
     [hideSubmit]="(store.isEditable$ | async) === false">
     <div class="govuk-body govuk-!-width-three-quarters">
       <h2 class="govuk-heading-s">Physical part of the installation or unit</h2>
-      <div govuk-text-input formControlName="itemName"></div>
+      <div
+        govuk-text-input
+        formControlName="itemName"
+        label="Physical part of the installation or unit"
+        [isLabelHidden]="true"></div>
 
       <h2 class="govuk-heading-s">Choose the relevant sub-installations</h2>
 

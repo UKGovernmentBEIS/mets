@@ -15,5 +15,6 @@
  */
 export interface AviationAccountReportingStatusHistoryCreationDTO {
   status: 'REQUIRED_TO_REPORT' | 'EXEMPT_COMMERCIAL' | 'EXEMPT_NON_COMMERCIAL';
+  year: number;
   reason: string;
 }

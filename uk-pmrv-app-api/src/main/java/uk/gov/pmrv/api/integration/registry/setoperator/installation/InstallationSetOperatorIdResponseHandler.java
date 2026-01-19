@@ -51,11 +51,6 @@ public class InstallationSetOperatorIdResponseHandler {
                 log.error(REQUEST_LOG_FORMAT, NotifyRegistryUtils.INSTALLATION_SERVICE_KEY, event.getEmitterId(),
                         NotifyRegistryUtils.OPERATOR_ID_INTEGRATION_POINT_KEY, "Unable to set the operator id from registry " + event);
             }
-            else {
-                log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.INSTALLATION_SERVICE_KEY, event.getEmitterId(),
-                        NotifyRegistryUtils.OPERATOR_ID_INTEGRATION_POINT_KEY, "Operator Id received from registry " + event);
-            }
-
         }
         catch(Exception ex) {
             NotifyErrorDTO notifyErrorDTO = NotifyErrorDTO.builder()

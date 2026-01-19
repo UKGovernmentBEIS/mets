@@ -25,7 +25,7 @@
       @if (form.get('exists')?.value === true || !isHeatProductBenchmarkType()) {
         <div
           formControlName="wasteGasesInput"
-          legend="Is fuel input relevant for this sub-installation?"
+          legend="Is there any fuel input from waste gases?"
           legendSize="medium"
           govuk-radio>
           <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>

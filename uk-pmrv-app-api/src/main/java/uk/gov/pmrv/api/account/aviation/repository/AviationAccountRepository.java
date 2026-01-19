@@ -2,12 +2,13 @@ package uk.gov.pmrv.api.account.aviation.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountIdAndNameDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.repository.AccountBaseRepository;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
@@ -29,6 +30,10 @@ public interface AviationAccountRepository extends AccountBaseRepository<Aviatio
     @Transactional(readOnly = true)
     List<AviationAccount> findAllByEmissionTradingSchemeAndStatusInAndMigratedAccountIdNotNull(
     		EmissionTradingScheme scheme, List<AviationAccountStatus> accountStatuses);
+
+    @Transactional(readOnly = true)
+    @Query("SELECT a.id FROM AviationAccount a WHERE a.status IN :statuses")
+    List<Long> findIdsByStatusIn(@Param("statuses") List<AviationAccountStatus> accountStatuses);
     
     @Transactional(readOnly = true)
     List<AviationAccount> findByEmissionTradingSchemeAndStatusInAndMigratedAccountIdIn(
@@ -45,6 +50,8 @@ public interface AviationAccountRepository extends AccountBaseRepository<Aviatio
     
     @Transactional(readOnly = true)
     boolean existsByCrcoCodeAndCompetentAuthorityAndEmissionTradingSchemeAndIdNot(String crcoCode, CompetentAuthorityEnum ca, EmissionTradingScheme ets, Long accountId);
+
+    boolean existsByIdAndRegistryIdIsNotNull(Long id);
     
     /**
      * @param competentAuthority must not be null
@@ -53,15 +60,26 @@ public interface AviationAccountRepository extends AccountBaseRepository<Aviatio
      * @param reportingStatuses Must not be null. if empty, no filtering is applied on the field
      */
 	@Transactional(readOnly = true)
-	@Query(value = "select acc.id as accountId, acc.name as accountName "
-			+ "from account acc "
-			+ "inner join account_aviation acc_av on acc_av.id = acc.id "
-			+ "where acc.competent_authority = :#{#competentAuthority.name()} "
-			+ "and (:#{#statuses.size() == 0} = true or acc_av.status in :#{#statuses.![name()]}) "
-			+ "and (:#{#emissionTradingSchemes.size() == 0} = true or acc.emission_trading_scheme in :#{#emissionTradingSchemes.![name()]}) "
-			+ "and (:#{#reportingStatuses.size() == 0} = true or acc_av.reporting_status in :#{#reportingStatuses.![name()]}) ", nativeQuery = true)
+    @Query(value = "SELECT acc.id as accountId, acc.name as accountName "
+            + "FROM account acc "
+            + "INNER JOIN account_aviation acc_av ON acc_av.id = acc.id "
+            + "WHERE acc.competent_authority = :#{#competentAuthority.name()} "
+            + "AND (:#{#statuses.size() == 0} = true OR acc_av.status IN :#{#statuses.![name()]}) "
+            + "AND (:#{#emissionTradingSchemes.size() == 0} = true OR acc.emission_trading_scheme IN :#{#emissionTradingSchemes.![name()]}) "
+            + "AND (:#{#reportingStatuses.size() == 0} = true OR EXISTS ("
+            + "    SELECT 1 FROM account_aviation_reporting_status rs "
+            + "    WHERE rs.account_id = acc_av.id "
+            + "    AND rs.status IN :#{#reportingStatuses.![name()]} "
+            + "    AND ("
+            + "        rs.year = EXTRACT(YEAR FROM CURRENT_DATE) - 1 "
+            + "        OR (rs.year = EXTRACT(YEAR FROM CURRENT_DATE) AND NOT EXISTS ("
+            + "            SELECT 1 FROM account_aviation_reporting_status rs_sub "
+            + "            WHERE rs_sub.account_id = acc_av.id AND rs_sub.year = EXTRACT(YEAR FROM CURRENT_DATE) - 1"
+            + "        ))"
+            + "    )"
+            + "))", nativeQuery = true)
 	Set<AviationAccountIdAndNameDTO> findAllByCAAndStatusesAndEmissionTradingSchemesAndReportingStatuses(
 			CompetentAuthorityEnum competentAuthority, Set<AviationAccountStatus> statuses,
-			Set<EmissionTradingScheme> emissionTradingSchemes, Set<AviationAccountReportingStatus> reportingStatuses);
+			Set<EmissionTradingScheme> emissionTradingSchemes, Set<AviationAccountReportingStatusType> reportingStatuses);
 
 }

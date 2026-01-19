@@ -42,7 +42,10 @@ public class WasteQDRApplicationSubmitRequestTaskPayload extends RequestTaskPayl
         return Stream.of(
                         this.getWasteQDRAttachments().keySet(),
                         this.getQdr().getSupportingFiles(),
-                        Set.of(this.getQdr().getReport()))
+                        this.getQdr().getReport() != null
+                                ? Set.of(this.getQdr().getReport())
+                                : Set.<UUID>of()
+                )
                 .flatMap(Set::stream)
                 .collect(Collectors.toSet());
     }

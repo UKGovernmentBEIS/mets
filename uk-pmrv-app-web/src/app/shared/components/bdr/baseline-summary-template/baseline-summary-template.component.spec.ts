@@ -64,16 +64,16 @@ describe('BaselineSummaryTemplateComponent', () => {
     expect(page.pageContents).toEqual([
       'Uploaded supporting files',
       '100.png  200.png',
-      'Change',
+      'Change supporting files',
       'Are you applying for free allocation?',
       'No',
-      'Change',
+      'Change  decision for free allocation',
       'Are you applying for HSE or USE status?',
       'Yes, I am applying for HSE status',
-      'Change',
+      'Change  decision for HSE or USE status',
       'I confirm that the information provided in this submission is correct to the best of my knowledge.',
       'Yes',
-      'Change',
+      'Change  information confirmation',
     ]);
   });
 });

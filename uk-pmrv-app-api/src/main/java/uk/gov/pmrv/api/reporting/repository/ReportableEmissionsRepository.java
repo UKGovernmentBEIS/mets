@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.reporting.repository;
 
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,4 +20,6 @@ public interface ReportableEmissionsRepository extends JpaRepository<ReportableE
     List<ReportableEmissionsEntity> findAllByAccountIdAndYearIn(Long accountId, Set<Year> years);
 
     List<ReportableEmissionsEntity> findAllByAccountId(Long accountId);
+
+    boolean existsByAccountIdAndYear(@NotNull Long accountId, @NotNull Year year);
 }

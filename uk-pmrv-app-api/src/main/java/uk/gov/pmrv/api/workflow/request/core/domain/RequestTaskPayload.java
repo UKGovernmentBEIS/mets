@@ -67,6 +67,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationWaitForRegulatorReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalAuthorityResponseRequestTaskPayload;
@@ -113,6 +114,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.returnofallowances.dom
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirApplicationRespondToRegulatorCommentsRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRApplicationAmendsSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRApplicationRegulatorReviewSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesApplicationPeerReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesApplicationSubmitRequestTaskPayload;
@@ -267,6 +270,8 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "BDR_APPLICATION_PEER_REVIEW_PAYLOAD"),
                 @DiscriminatorMapping(schema = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
+                @DiscriminatorMapping(schema = BDRS2ApplicationSubmitRequestTaskPayload.class, value = "BDRS2_APPLICATION_SUBMIT_PAYLOAD"),
+
                 @DiscriminatorMapping(schema = HSETIApplicationSubmitRequestTaskPayload.class, value = "HSE_TI_APPLICATION_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = HSETIApplicationWaitForRegulatorReviewRequestTaskPayload.class, value = "HSE_TI_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD"),
@@ -291,9 +296,9 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = ALRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "ALR_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = WasteQDRApplicationSubmitRequestTaskPayload.class, value = "WASTE_QDR_SUBMIT_PAYLOAD"),
-
-
-
+                @DiscriminatorMapping(schema = WasteQDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = WasteQDRApplicationAmendsSubmitRequestTaskPayload.class, value = "WASTE_QDR_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = WasteQDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "WASTE_QDR_WAIT_FOR_AMENDS_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload.class, value = "EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = EmpIssuanceUkEtsApplicationReviewRequestTaskPayload.class, value = "EMP_ISSUANCE_UKETS_APPLICATION_REVIEW_PAYLOAD"),
@@ -501,6 +506,8 @@ import java.util.UUID;
     @JsonSubTypes.Type(value = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "BDR_APPLICATION_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
+    @JsonSubTypes.Type(value = BDRS2ApplicationSubmitRequestTaskPayload.class, name = "BDRS2_APPLICATION_SUBMIT_PAYLOAD"),
+
     @JsonSubTypes.Type(value = HSETIApplicationSubmitRequestTaskPayload.class, name = "HSE_TI_APPLICATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = HSETIApplicationWaitForRegulatorReviewRequestTaskPayload.class, name = "HSE_TI_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD"),
@@ -510,7 +517,7 @@ import java.util.UUID;
     @JsonSubTypes.Type(value = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "HSE_TI_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
 
-        @JsonSubTypes.Type(value = PermanentCessationApplicationSubmitRequestTaskPayload.class, name = "PERMANENT_CESSATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = PermanentCessationApplicationSubmitRequestTaskPayload.class, name = "PERMANENT_CESSATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = PermanentCessationApplicationSubmitRequestTaskPayload.class, name = "PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = PermanentCessationApplicationSubmitRequestTaskPayload.class, name = "PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
@@ -524,12 +531,13 @@ import java.util.UUID;
     @JsonSubTypes.Type(value = ALRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "ALR_APPLICATION_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = ALRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "ALR_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
-        @JsonSubTypes.Type(value = WasteQDRApplicationSubmitRequestTaskPayload.class, name = "WASTE_QDR_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = WasteQDRApplicationSubmitRequestTaskPayload.class, name = "WASTE_QDR_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = WasteQDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = WasteQDRApplicationAmendsSubmitRequestTaskPayload.class, name = "WASTE_QDR_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = WasteQDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "WASTE_QDR_WAIT_FOR_AMENDS_PAYLOAD"),
 
 
-
-
-        @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationReviewRequestTaskPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationReviewRequestTaskPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationReviewRequestTaskPayload.class, name = "EMP_ISSUANCE_UKETS_WAIT_FOR_PEER_REVIEW_PAYLOAD"),

@@ -32,7 +32,7 @@ export class DeterminationGuard {
             (!this.store.isDeterminationTypeApplicable() && this.router.parseUrl(wizardUrl.concat('/reason'))) ||
             (storeState.reviewSectionsCompleted?.[route.data.statusKey] &&
               this.router.parseUrl(wizardUrl.concat('/summary'))) ||
-            (this.store.isDeterminationWizardComplete(result.account.emissionTradingScheme) &&
+            (this.store.isDeterminationWizardComplete(result?.accountPermitDto?.account.emissionTradingScheme) &&
               this.router.parseUrl(wizardUrl.concat('/answers'))) ||
             true
           );

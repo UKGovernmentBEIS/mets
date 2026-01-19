@@ -34,7 +34,7 @@ public class RequestTaskAssignmentService {
      * @param userId the user id
      * @throws BusinessCheckedException when user is not eligible to be assigned to task
      */
-    public void assignToUser(RequestTask requestTask, String userId) throws BusinessCheckedException {
+    public void assignToUser(RequestTask requestTask, String userId, String role) throws BusinessCheckedException {
         if(!requestTaskAssignmentValidationService.hasUserPermissionsToBeAssignedToTask(requestTask, userId)){
             log.error("User '{}' has not the appropriate permission to be assigned to task '{}'",
                 () -> userId, requestTask::getId);
@@ -52,7 +52,7 @@ public class RequestTaskAssignmentService {
         //notify user by email
         boolean sendEmailNotification = Optional.ofNullable(requestTask.getPayload()).map(RequestTaskPayload::isSendEmailNotification).orElse(true);
         if (sendEmailNotification) {
-            emailNotificationAssignedTaskService.sendEmailToRecipient(userId, requestTask.getType());
+            emailNotificationAssignedTaskService.sendEmailToRecipient(userId, requestTask, role);
         }
     }
 

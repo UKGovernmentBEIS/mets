@@ -1,0 +1,14 @@
+<ng-container *ngIf="vm() as vm">
+  <div class="govuk-!-width-two-thirds">
+    <app-action-task [header]="vm.header" [breadcrumb]="true">
+      <h2 app-summary-header class="govuk-heading-m">Quarterly data report</h2>
+      <app-waste-qdr-summary-template
+        [reportProvided]="vm.reportProvided"
+        [quartelyTitle]="vm.quartelyTitle"
+        [qdrReport]="vm.qdrReport"
+        [notes]="vm.notes"
+        [reasonForUnprovided]="vm.reasonForUnprovided"
+        [supportingFiles]="vm.supportingFiles"></app-waste-qdr-summary-template>
+    </app-action-task>
+  </div>
+</ng-container>

@@ -86,12 +86,8 @@ class EmpIssuanceReviewManualRegistryAccountOpeningEventActionHandlerTest {
         assertEquals(accountId, published.getAccountId());
         assertEquals(emp, published.getEmissionsMonitoringPlan());
 
-        verify(addRequestActionService).addRequestAction(dtoCaptor.capture());
-        AviationAccountCreatedRegistryEvent dto = dtoCaptor.getValue();
-        assertEquals(requestId, dto.getRequestId());
-        assertEquals(appUser, dto.getAppUser());
 
-        verifyNoMoreInteractions(publisher, addRequestActionService);
+        verifyNoMoreInteractions(publisher);
     }
 
     @Test

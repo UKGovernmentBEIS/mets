@@ -25,6 +25,7 @@ import uk.gov.pmrv.api.account.aviation.service.AviationAccountUpdateService;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
+import uk.gov.pmrv.api.web.orchestrator.account.aviation.service.AviationAccountEmpCommandOrchestrator;
 
 import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.FORBIDDEN;
@@ -41,6 +42,7 @@ import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.UPDATE_AVIATION_ACCOU
 public class AviationAccountUpdateController {
 
     private final AviationAccountUpdateService aviationAccountUpdateService;
+    private final AviationAccountEmpCommandOrchestrator aviationAccountEmpCommandOrchestrator;
 
     @PostMapping
     @Operation(summary = "Update the aviation account")
@@ -68,7 +70,7 @@ public class AviationAccountUpdateController {
     public ResponseEntity<Void> updateCommencementDate(
             @PathVariable("id") @Parameter(description = "The account id", required = true) Long accountId,
             @RequestBody @Valid @Parameter(description = "The commencement date", required = true) AccountUpdateCommencementDateDTO commencementDateDTO) {
-        aviationAccountUpdateService.updateAndValidateAccountCommencementDate(accountId, commencementDateDTO);
+        aviationAccountEmpCommandOrchestrator.updateAccountCommencementDate(accountId, commencementDateDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

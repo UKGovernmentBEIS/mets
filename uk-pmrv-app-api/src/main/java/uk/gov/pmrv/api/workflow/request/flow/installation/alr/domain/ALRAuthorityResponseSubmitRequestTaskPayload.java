@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
-import java.util.Collections;
+import java.util.HashSet;
 
 
 @Data
@@ -48,13 +48,16 @@ public class ALRAuthorityResponseSubmitRequestTaskPayload extends RequestTaskPay
 
     @Override
     public Set<UUID> getReferencedAttachmentIds() {
-        if(this.getAuthorityReviewOutcome() != null && this.getAuthorityReviewOutcome().getAuthorityResponse() !=null
+
+        Set<UUID> documents = new HashSet<>();
+        documents.add(this.getAuthorityReviewOutcome().getAlr().getAlrFile());
+        documents.addAll(this.getAttachments().keySet());
+        if (this.getAuthorityReviewOutcome() != null && this.getAuthorityReviewOutcome().getAuthorityResponse() != null
                 && (this.getAuthorityReviewOutcome().getAuthorityResponse().getType().equals(DoalAuthorityResponseType.VALID) ||
                 this.getAuthorityReviewOutcome().getAuthorityResponse().getType().equals(DoalAuthorityResponseType.VALID_WITH_CORRECTIONS))) {
-            Set<UUID> documents = ((ALRGrantAuthorityResponse) this.getAuthorityReviewOutcome().getAuthorityResponse()).getDocuments();
-            return documents != null ? documents : Collections.emptySet();
+            documents.addAll(((ALRGrantAuthorityResponse) this.getAuthorityReviewOutcome().getAuthorityResponse()).getDocuments());
         }
 
-        return Collections.emptySet();
+        return documents;
     }
 }

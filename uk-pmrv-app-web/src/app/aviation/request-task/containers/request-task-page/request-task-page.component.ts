@@ -162,7 +162,8 @@ export class RequestTaskPageComponent implements OnInit {
         switchMap(([requestTask, relatedActions]) =>
           iif(
             () =>
-              requestTask.requestTask.type === 'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW' &&
+              (requestTask.requestTask.type === 'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW' ||
+                requestTask.requestTask.type === 'EMP_ISSUANCE_UKETS_WAIT_FOR_AMENDS') &&
               relatedActions.includes('EMP_ISSUANCE_UKETS_MANUAL_ACCOUNT_OPENING_REGISTRY'),
             this.aviationAccountCreationRegistryService.isManualPushToRegistryAvailable(requestTask.requestInfo.id),
             of(false),

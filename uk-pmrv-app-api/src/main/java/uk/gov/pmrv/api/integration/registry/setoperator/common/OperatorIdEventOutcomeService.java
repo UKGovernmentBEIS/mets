@@ -3,6 +3,7 @@ package uk.gov.pmrv.api.integration.registry.setoperator.common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
@@ -12,16 +13,19 @@ import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
 import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
 import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 import uk.gov.pmrv.api.account.domain.Account;
+import uk.gov.pmrv.api.account.domain.event.AccountContactRegistryEvent;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.integration.registry.accountcreated.common.validation.SetOperatorIdResponseValidator;
-import uk.gov.pmrv.api.integration.registry.accountupdated.installation.InstallationAccountUpdatedNotifyRegistryService;
-import uk.gov.pmrv.api.integration.registry.accountupdated.installation.InstallationAccountUpdatedRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.accountupdated.aviation.request.AviationAccountUpdatedRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.accountupdated.installation.request.InstallationAccountUpdatedRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
 import uk.gov.pmrv.api.integration.registry.common.RegistryResponseErrorCode;
+import uk.gov.pmrv.api.integration.registry.setoperator.aviation.AviationSetOperatorIdExemptStatusUpdateService;
 
 import java.util.List;
-import java.util.Optional;
 
 import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
+import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.REQUEST_LOG_FORMAT;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +35,9 @@ public class OperatorIdEventOutcomeService {
 
     private final AccountRepository accountRepository;
     private final SetOperatorIdResponseValidator setOperatorIdResponseValidator;
-    private final Optional<InstallationAccountUpdatedNotifyRegistryService> registryService;
+    private final AviationSetOperatorIdExemptStatusUpdateService aviationSetOperatorIdExemptStatusUpdateService;
+    private final ApplicationEventPublisher publisher;
+
 
     @Transactional
     public OperatorUpdateEventOutcome getAviationOperatorIdEventOutcome(OperatorUpdateEvent event) {
@@ -43,7 +49,11 @@ public class OperatorIdEventOutcomeService {
             account.setRegistryId(event.getOperatorId().intValue());
             accountRepository.save(account);
             eventOutcome.setOutcome(IntegrationEventOutcome.SUCCESS);
-
+            log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.AVIATION_SERVICE_KEY, event.getEmitterId(),
+                    NotifyRegistryUtils.OPERATOR_ID_INTEGRATION_POINT_KEY, "Operator Id received from registry " + event);
+            publisher.publishEvent(AviationAccountUpdatedRegistryEvent.builder().accountId(account.getId()).build());
+            publisher.publishEvent(AccountContactRegistryEvent.builder().accountId(account.getId()).build());
+            aviationSetOperatorIdExemptStatusUpdateService.notifyRegistryWithExemptStatuses(account);
         }
         else {
             eventOutcome.setOutcome(IntegrationEventOutcome.ERROR);
@@ -61,10 +71,11 @@ public class OperatorIdEventOutcomeService {
             account.setRegistryId(event.getOperatorId().intValue());
             accountRepository.save(account);
             eventOutcome.setOutcome(IntegrationEventOutcome.SUCCESS);
-            registryService.ifPresent(service ->
-                    service.notifyRegistry(InstallationAccountUpdatedRegistryEvent.builder()
-                            .accountId(account.getId()).build())
-            );
+            log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.INSTALLATION_SERVICE_KEY, event.getEmitterId(),
+                    NotifyRegistryUtils.OPERATOR_ID_INTEGRATION_POINT_KEY, "Operator Id received from registry " + event);
+            publisher.publishEvent(InstallationAccountUpdatedRegistryEvent.builder().accountId(account.getId()).build());
+            publisher.publishEvent(AccountContactRegistryEvent.builder().accountId(account.getId()).build());
+
         }
         else {
             eventOutcome.setOutcome(IntegrationEventOutcome.ERROR);

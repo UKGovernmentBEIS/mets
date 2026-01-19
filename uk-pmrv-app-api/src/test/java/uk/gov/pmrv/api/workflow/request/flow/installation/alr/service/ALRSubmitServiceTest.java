@@ -11,6 +11,7 @@ import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
+import uk.gov.pmrv.api.account.fileattachment.service.AccountFileAttachmentService;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.allowance.domain.enums.SubInstallationName;
@@ -69,6 +70,9 @@ public class ALRSubmitServiceTest {
     private RequestService requestService;
 
     @Mock
+    private AccountFileAttachmentService accountFileAttachmentService;
+
+    @Mock
     private InstallationOperatorDetailsQueryService installationOperatorDetailsQueryService;
 
     @Mock
@@ -122,6 +126,7 @@ public class ALRSubmitServiceTest {
                 .payloadType(RequestPayloadType.ALR_REQUEST_PAYLOAD)
                 .verificationReport(report)
                 .verificationAttachments(verificationAttachments)
+                .reportingYear(Year.of(2025))
                 .build();
 
         Request request = buildRequest(payload);
@@ -143,6 +148,7 @@ public class ALRSubmitServiceTest {
                         .verificationReport(report)
                         .verificationAttachments(verificationAttachments)
                         .alrFileVersion(2)
+                        .reportingYear(Year.of(2025))
                         .build())
                 .metadata(ALRRequestMetaData.builder().type(RequestMetadataType.ALR).build())
                 .build();
@@ -177,7 +183,8 @@ public class ALRSubmitServiceTest {
         final AppUser appUser = AppUser.builder().userId("userId").build();
         final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
 
-        ALR alr = ALR.builder().build();
+        UUID alrFileId = UUID.randomUUID();
+        ALR alr = ALR.builder().alrFile(alrFileId).build();
 
         ALRVerificationReport alrVerificationReport = ALRVerificationReport.builder()
                 .verificationData(ALRVerificationData
@@ -193,6 +200,7 @@ public class ALRSubmitServiceTest {
                 .payload(ALRRequestPayload.builder()
                         .payloadType(RequestPayloadType.ALR_REQUEST_PAYLOAD)
                         .verificationReport(alrVerificationReport)
+                        .reportingYear(Year.of(2025))
                         .build())
                 .metadata(ALRRequestMetaData.builder()
                         .type(RequestMetadataType.ALR)
@@ -218,6 +226,7 @@ public class ALRSubmitServiceTest {
                         .verificationPerformed(true)
                         .verificationReport(alrVerificationReport)
                         .alrFileVersion(2)
+                        .reportingYear(Year.of(2025))
                         .build())
                 .metadata(ALRRequestMetaData.builder()
                         .type(RequestMetadataType.ALR)
@@ -307,7 +316,8 @@ public class ALRSubmitServiceTest {
 
     @Test
     void submitALR_requestPayloadIsNull_incrementFileVersion() {
-        ALR alr = ALR.builder().build();
+        UUID alrFileId = UUID.randomUUID();
+        ALR alr = ALR.builder().alrFile(alrFileId).build();
         ALRVerificationReport report = buildVerificationReport();
         ALRRequestPayload requestPayload = buildRequestPayload(null, report, false);
         Request request = buildRequest(requestPayload);
@@ -327,7 +337,7 @@ public class ALRSubmitServiceTest {
 
         service.submitALR(requestPayload, requestTask, appUser,
                 RequestActionType.ALR_APPLICATION_SENT_TO_VERIFIER,
-                requestActionPayload, taskPayload.getAlrSectionsCompleted());
+                requestActionPayload, taskPayload.getAlrSectionsCompleted(), false);
 
         verify(requestService).addActionToRequest(request, requestActionPayload,
                 RequestActionType.ALR_APPLICATION_SENT_TO_VERIFIER, appUser.getUserId());
@@ -362,7 +372,7 @@ public class ALRSubmitServiceTest {
 
         service.submitALR(requestPayload, requestTask, appUser,
                 RequestActionType.ALR_APPLICATION_SENT_TO_VERIFIER,
-                requestActionPayload, taskPayload.getAlrSectionsCompleted());
+                requestActionPayload, taskPayload.getAlrSectionsCompleted(), false);
 
         verify(requestService).addActionToRequest(request, requestActionPayload,
                 RequestActionType.ALR_APPLICATION_SENT_TO_VERIFIER, appUser.getUserId());
@@ -410,7 +420,7 @@ public class ALRSubmitServiceTest {
 
         service.submitALR(requestPayload, requestTask, appUser,
                 RequestActionType.ALR_APPLICATION_SENT_TO_VERIFIER,
-                requestActionPayload, taskPayload.getAlrSectionsCompleted());
+                requestActionPayload, taskPayload.getAlrSectionsCompleted(), false);
 
         verify(requestService).addActionToRequest(request, requestActionPayload,
                 RequestActionType.ALR_APPLICATION_SENT_TO_VERIFIER, appUser.getUserId());
@@ -456,7 +466,7 @@ public class ALRSubmitServiceTest {
 
         service.submitALR(requestPayload, requestTask, appUser,
                 RequestActionType.ALR_APPLICATION_SENT_TO_VERIFIER,
-                requestActionPayload, taskPayload.getAlrSectionsCompleted());
+                requestActionPayload, taskPayload.getAlrSectionsCompleted(), false);
 
         verify(requestService).addActionToRequest(request, requestActionPayload,
                 RequestActionType.ALR_APPLICATION_SENT_TO_VERIFIER, appUser.getUserId());
@@ -702,6 +712,7 @@ public class ALRSubmitServiceTest {
                 .alr(alr)
                 .verificationPerformed(performed)
                 .verificationReport(report)
+                .reportingYear(Year.of(2025))
                 .verificationAttachments(Map.of(verificationAttachmentId, "test"))
                 .alrFileVersion(1)
                 .build();

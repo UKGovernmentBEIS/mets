@@ -11,12 +11,17 @@ import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingExemptEvent;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingRequiredEvent;
+import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusHistory;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountReportingStatusHistoryCreationDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.service.validator.AccountStatus;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.pmrv.api.integration.registry.exemptstatus.aviation.request.AviationAccountExemptFlagEvent;
+
+import java.time.LocalDateTime;
+import java.time.Year;
 
 import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
@@ -25,7 +30,7 @@ import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 @RequiredArgsConstructor
 public class AviationAccountReportingStatusHistoryCreationService {
 
-    private final AviationAccountRepository aviationAccountRepository;
+	private final AviationAccountRepository aviationAccountRepository;
     private final ApplicationEventPublisher publisher;
 
 	@Transactional
@@ -33,40 +38,58 @@ public class AviationAccountReportingStatusHistoryCreationService {
 	public void submitReportingStatus(Long accountId,
 			@Valid AviationAccountReportingStatusHistoryCreationDTO reportingStatusHistoryCreationDTO,
 									  AppUser appUser) {
-		final AviationAccount aviationAccount = aviationAccountRepository.findById(accountId)
-				.orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
 
-		final AviationAccountReportingStatus currentReportingStatus = aviationAccount.getReportingStatus();
-		final AviationAccountReportingStatus newReportingStatus = reportingStatusHistoryCreationDTO.getStatus();
+		AviationAccount account = aviationAccountRepository.findAviationAccountById(accountId).orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
 
-		if (newReportingStatus != currentReportingStatus) {
-			aviationAccount.setReportingStatus(newReportingStatus);
-			aviationAccount.addReportingStatusHistory(AviationAccountReportingStatusHistory.builder()
+		AviationAccountReportingStatus accountReportingStatus = account.getReportingStatusByYear(reportingStatusHistoryCreationDTO.getYear())
+			.orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
+
+		final AviationAccountReportingStatusType newReportingStatus = reportingStatusHistoryCreationDTO.getStatus();
+
+		if (!accountReportingStatus.getStatus().equals(newReportingStatus)) {
+
+			final AviationAccountReportingStatusType currentReportingStatus = accountReportingStatus.getStatus();
+			LocalDateTime currentDateTime = LocalDateTime.now();
+
+			account.addReportingStatusHistory(AviationAccountReportingStatusHistory.builder()
 					.status(reportingStatusHistoryCreationDTO.getStatus())
+					.submissionDate(currentDateTime)
 					.reason(reportingStatusHistoryCreationDTO.getReason())
 					.submitterId(appUser.getUserId())
-					.submitterName(appUser.getFullName()).build());
-			
-			publishReportingStatusChangedEvent(accountId, currentReportingStatus, newReportingStatus,
-					appUser.getUserId());
+					.submitterName(appUser.getFullName())
+					.year(reportingStatusHistoryCreationDTO.getYear())
+					.build());
+			accountReportingStatus.setStatus(reportingStatusHistoryCreationDTO.getStatus());
+			accountReportingStatus.setReason(reportingStatusHistoryCreationDTO.getReason());
+
+			if(Year.now().getValue() > reportingStatusHistoryCreationDTO.getYear().getValue()) {
+				publishReportingStatusChangedEvent(account, currentReportingStatus, newReportingStatus,
+						appUser.getUserId(),reportingStatusHistoryCreationDTO.getYear());
+			}
+			publisher.publishEvent(AviationAccountExemptFlagEvent.builder().accountId(account.getId())
+					.registryId(account.getRegistryId())
+					.isExempt(!reportingStatusHistoryCreationDTO.getStatus()
+                            .equals(AviationAccountReportingStatusType.REQUIRED_TO_REPORT))
+					.year(reportingStatusHistoryCreationDTO.getYear()).build());
 		} else {
 			throw new BusinessException(MetsErrorCode.AVIATION_ACCOUNT_REPORTING_STATUS_NOT_CHANGED, accountId,
 					reportingStatusHistoryCreationDTO.getStatus());
 		}
 	}
 
-	private void publishReportingStatusChangedEvent(Long accountId,
-			AviationAccountReportingStatus currentReportingStatus, AviationAccountReportingStatus newReportingStatus,
-			String submitterId) {
+	private void publishReportingStatusChangedEvent(AviationAccount account,
+                                                    AviationAccountReportingStatusType currentReportingStatus, AviationAccountReportingStatusType newReportingStatus,
+                                                    String submitterId,Year year) {
         //if change from REQUIRED_TO_REPORT to any other ReportingStatus (EXEMPT_COMMERCIAL or EXEMPT_NON_COMMERCIAL)
-		if (AviationAccountReportingStatus.REQUIRED_TO_REPORT == currentReportingStatus) {
-			publisher.publishEvent(AviationAccountReportingExemptEvent.builder().accountId(accountId)
-					.submitterId(submitterId).build());
+		if (AviationAccountReportingStatusType.REQUIRED_TO_REPORT == currentReportingStatus) {
+			publisher.publishEvent(AviationAccountReportingExemptEvent.builder().accountId(account.getId())
+					.year(year).submitterId(submitterId).build());
 		}
 
-		if (AviationAccountReportingStatus.REQUIRED_TO_REPORT == newReportingStatus) {
-			publisher.publishEvent(AviationAccountReportingRequiredEvent.builder().accountId(accountId)
-					.submitterId(submitterId).build());
+		if (AviationAccountReportingStatusType.REQUIRED_TO_REPORT == newReportingStatus) {
+			publisher.publishEvent(AviationAccountReportingRequiredEvent.builder().accountId(account.getId())
+					.year(year).submitterId(submitterId).build());
 		}
     }
+
 }

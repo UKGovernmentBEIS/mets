@@ -2,7 +2,9 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingExemptEvent;
+import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingRequiredEvent;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.aviationreporting.common.service.AviationReportableEmissionsService;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
@@ -17,6 +19,7 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.common.domain.Aviation
 
 import java.time.Year;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -28,27 +31,28 @@ public class AviationAerReportingObligationService {
     private final AviationReportableEmissionsService aviationReportableEmissionsService;
     private final StartProcessRequestService startProcessRequestService;
 
-    public void markAsExempt(Long accountId, String submitterId) {
-        Year reportingYear = Year.now().minusYears(1);
+    public void markAsExempt(AviationAccountReportingExemptEvent event) {
         List<String> aviationAerRequestTypes = List.of(RequestType.AVIATION_AER_UKETS.name(), RequestType.AVIATION_AER_CORSIA.name());
 
         List<Request> aviationAerRequests = requestRepository
-            .findAllByAccountIdAndTypeInAndMetadataYear(accountId, aviationAerRequestTypes, reportingYear.getValue());
+            .findAllByAccountIdAndTypeInAndMetadataYear(event.getAccountId(), aviationAerRequestTypes, event.getYear().getValue());
 
         aviationAerRequests.forEach(request -> {
             if (RequestStatus.IN_PROGRESS.equals(request.getStatus())) {
-                markAsExempt(request, submitterId);
+                markAsExempt(request, event.getSubmitterId());
             } else {
                 //mark emissions for aer request as exempted
                 ((AviationAerRequestMetadata) request.getMetadata()).setExempted(true);
             }
 
             //mark emissions derived from dre requests as exempted
-            updateDreEmissionsExemptedFlag(accountId, reportingYear, true);
+            updateDreEmissionsExemptedFlag(event.getAccountId(), event.getYear(), true);
         });
 
+        cancelInProgressDoeAndDre(event.getAccountId(), event.getSubmitterId());
+
         //reportable emissions for the reporting year here marked as exempted
-        aviationReportableEmissionsService.updateReportableEmissionsExemptedFlag(accountId, reportingYear, true);
+        aviationReportableEmissionsService.updateReportableEmissionsExemptedFlag(event.getAccountId(), event.getYear(), true);
     }
 
     public void markAsExempt(Request request, String submitterId) {
@@ -65,19 +69,33 @@ public class AviationAerReportingObligationService {
         ((AviationAerRequestMetadata) request.getMetadata()).setExempted(true);
     }
 
-    public void revertExemption(Long accountId, String submitterId) {
-        Year reportingYear = Year.now().minusYears(1);
+    public void revertExemption(AviationAccountReportingRequiredEvent event) {
         List<String> aviationAerRequestTypes = List.of(RequestType.AVIATION_AER_UKETS.name(), RequestType.AVIATION_AER_CORSIA.name());
         List<Request> aviationAerRequests = requestRepository
-            .findAllByAccountIdAndTypeInAndMetadataYear(accountId, aviationAerRequestTypes, reportingYear.getValue());
+            .findAllByAccountIdAndTypeInAndMetadataYear(event.getAccountId(), aviationAerRequestTypes, event.getYear().getValue());
 
         aviationAerRequests.forEach(request -> {
             if(RequestStatus.EXEMPT.equals(request.getStatus())) {
-                revertExemptRequest(request, submitterId);
+                revertExemptRequest(request, event.getSubmitterId());
             } else {
                 revertNonExemptRequest(request);
             }
         });
+    }
+
+    private void cancelInProgressDoeAndDre(Long accountId,String submitterId) {
+        List<Request> doeRequests = requestRepository.findByAccountIdAndTypeInAndStatus(accountId, Set.of(RequestType.AVIATION_DOE_CORSIA), RequestStatus.IN_PROGRESS);
+        List<Request> dreRequests = requestRepository.findByAccountIdAndTypeInAndStatus(accountId, Set.of(RequestType.AVIATION_DRE_UKETS), RequestStatus.IN_PROGRESS);
+        for (Request doeRequest : doeRequests) {
+            workflowService.deleteProcessInstance(doeRequest.getProcessInstanceId(), "Reporting year marked as exempt");
+            requestService.updateRequestStatus(doeRequest.getId(), RequestStatus.CANCELLED);
+            requestService.addActionToRequest(doeRequest,null,RequestActionType.AVIATION_DOE_CORSIA_SUBMIT_CANCELLED,submitterId);
+        }
+        for (Request dreRequest : dreRequests) {
+            workflowService.deleteProcessInstance(dreRequest.getProcessInstanceId(), "Reporting year marked as exempt");
+            requestService.updateRequestStatus(dreRequest.getId(), RequestStatus.CANCELLED);
+            requestService.addActionToRequest(dreRequest,null,RequestActionType.AVIATION_DRE_APPLICATION_CANCELLED,submitterId);
+        }
     }
 
     private void revertExemptRequest(Request request, String submitterId) {
@@ -101,7 +119,7 @@ public class AviationAerReportingObligationService {
 
     /**
      * Perform actions needed when the reporting status of the account linked to the provided request turns to
-     * {@link AviationAccountReportingStatus#REQUIRED_TO_REPORT} and the request has already been finalized,
+     * {@link AviationAccountReportingStatusType#REQUIRED_TO_REPORT} and the request has already been finalized,
      * i.e. request status is {@link RequestStatus#COMPLETED} or {@link RequestStatus#CANCELLED}.
      * @param request {@link Request}
      */

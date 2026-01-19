@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.domain.dto.AccountDTO;
 
@@ -22,10 +21,6 @@ public class AviationAccountDTO extends AccountDTO {
 
     private String crcoCode;
 
-    private AviationAccountReportingStatus reportingStatus;
-
-    private String reportingStatusReason;
-    
     private String closureReason;
     
     private String closedByName;

@@ -5,6 +5,7 @@ import { AviationAccountReportingStatusHistoryDTO } from 'pmrv-api';
 @Component({
   selector: 'app-account-reporting-status-history-list',
   templateUrl: './account-reporting-status-history-list.component.html',
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountReportingStatusHistoryListComponent {

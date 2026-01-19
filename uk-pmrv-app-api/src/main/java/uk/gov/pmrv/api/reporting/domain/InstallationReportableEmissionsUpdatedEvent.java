@@ -7,5 +7,4 @@ import uk.gov.pmrv.api.common.reporting.domain.ReportableEmissionsUpdatedEvent;
 @SuperBuilder
 @Getter
 public class InstallationReportableEmissionsUpdatedEvent extends ReportableEmissionsUpdatedEvent {
-    private boolean isFromAerMarkedAsNotRequired;
 }

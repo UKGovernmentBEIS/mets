@@ -11,7 +11,13 @@
         </dt>
         <dd govukSummaryListRowValue class="pre-wrap"></dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink [routerLink]="baseLink + 'delete/' + i" *ngIf="isEditable">Remove</a>
+          <a
+            govukLink
+            [routerLink]="baseLink + 'delete/' + i"
+            *ngIf="isEditable"
+            [hidden-text]="connection?.installationOrEntityName">
+            Remove
+          </a>
         </dd>
       </div>
 
@@ -19,49 +25,49 @@
         <dt govukSummaryListRowKey>Type of entity</dt>
         <dd govukSummaryListRowValue class="pre-wrap">{{ connection.entityType | entityType }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink [routerLink]="baseLink + i + ''">Change</a>
+          <a govukLink [routerLink]="baseLink + i + ''" hidden-text="type of entity">Change</a>
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Type of connection</dt>
         <dd govukSummaryListRowValue class="pre-wrap">{{ connection.connectionType | connectionType }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink [routerLink]="baseLink + i + ''">Change</a>
+          <a govukLink [routerLink]="baseLink + i + ''" hidden-text="type of connection">Change</a>
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Flow direction</dt>
         <dd govukSummaryListRowValue class="pre-wrap">{{ connection.flowDirection | flowDirectionType }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink [routerLink]="baseLink + i + ''">Change</a>
+          <a govukLink [routerLink]="baseLink + i + ''" hidden-text="flow direction">Change</a>
         </dd>
       </div>
       <div govukSummaryListRow *ngIf="connection.installationId">
         <dt govukSummaryListRowKey>Installation ID used in the registry</dt>
         <dd govukSummaryListRowValue class="pre-wrap">{{ connection.installationId }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink [routerLink]="baseLink + i + ''">Change</a>
+          <a govukLink [routerLink]="baseLink + i + ''" hidden-text="installation ID used in the registry">Change</a>
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Name of contact person</dt>
         <dd govukSummaryListRowValue class="pre-wrap">{{ connection.contactPersonName }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink [routerLink]="baseLink + i + ''">Change</a>
+          <a govukLink [routerLink]="baseLink + i + ''" hidden-text="name of contact person">Change</a>
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Email address</dt>
         <dd govukSummaryListRowValue class="pre-wrap">{{ connection.emailAddress }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink [routerLink]="baseLink + i + ''">Change</a>
+          <a govukLink [routerLink]="baseLink + i + ''" hidden-text="email address">Change</a>
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Phone number</dt>
         <dd govukSummaryListRowValue class="pre-wrap">{{ connection.phoneNumber }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink [routerLink]="baseLink + i + ''">Change</a>
+          <a govukLink [routerLink]="baseLink + i + ''" hidden-text="phone number">Change</a>
         </dd>
       </div>
     </dl>

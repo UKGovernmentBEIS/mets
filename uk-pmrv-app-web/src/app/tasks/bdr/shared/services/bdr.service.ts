@@ -115,8 +115,8 @@ export class BdrService extends TasksHelperService {
 
   installationAccount = toSignal(this.installationAccountId$, { initialValue: null });
   installationName = computed(() =>
-    this.installationAccount()?.account.name
-      ? this.stripSpecialChars(this.installationAccount()?.account.name)
+    this.installationAccount()?.accountPermitDto?.account.name
+      ? this.stripSpecialChars(this.installationAccount()?.accountPermitDto?.account.name)
       : 'Unknown',
   );
 

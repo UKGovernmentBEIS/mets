@@ -14,6 +14,6 @@ public class AviationAccountReportingExemptEventListener {
 
     @EventListener(AviationAccountReportingExemptEvent.class)
     public void onAviationAccountReportingExemptEvent(AviationAccountReportingExemptEvent event) {
-        aviationAerReportingObligationService.markAsExempt(event.getAccountId(), event.getSubmitterId());
+        aviationAerReportingObligationService.markAsExempt(event);
     }
 }

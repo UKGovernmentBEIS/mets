@@ -14,7 +14,6 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActio
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.AviationAccountCreatedRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceUkEtsApplicationReviewRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.service.EmpIssuanceRegistryIntegrationAddRequestActionService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestTaskActionEmptyPayload;
 
@@ -30,7 +29,6 @@ public class EmpIssuanceReviewManualRegistryAccountOpeningEventActionHandler imp
     private final RequestTaskService requestTaskService;
     private final AviationAccountRegistryManualPushAvailabilityService availabilityService;
     private final ApplicationEventPublisher publisher;
-    private final EmpIssuanceRegistryIntegrationAddRequestActionService addRequestActionService;
 
 
     @Override
@@ -43,7 +41,7 @@ public class EmpIssuanceReviewManualRegistryAccountOpeningEventActionHandler imp
         Boolean available = availabilityService.isManualPushAvailable(requestId);
 
         if(!available) {
-            log.error(REQUEST_LOG_FORMAT, NotifyRegistryUtils.INSTALLATION_SERVICE_KEY, requestTask.getRequest().getAccountId(),
+            log.error(REQUEST_LOG_FORMAT, NotifyRegistryUtils.AVIATION_SERVICE_KEY, requestTask.getRequest().getAccountId(),
                     NotifyRegistryUtils.ACCOUNT_CREATED_INTEGRATION_POINT_KEY,
                     "Cannot send created aviation account to ETS Registry because the registry id already exists");
             throw new BusinessException(MetsErrorCode.INTEGRATION_REGISTRY_ACCOUNT_CREATE_REGISTRY_ID_EXISTENCE,
@@ -56,8 +54,6 @@ public class EmpIssuanceReviewManualRegistryAccountOpeningEventActionHandler imp
                 .emissionsMonitoringPlan(requestTaskPayload.getEmissionsMonitoringPlan()).appUser(appUser).build();
 
         publisher.publishEvent(aviationAccountCreatedRegistryEvent);
-
-        addRequestActionService.addRequestAction(aviationAccountCreatedRegistryEvent);
 
     }
 

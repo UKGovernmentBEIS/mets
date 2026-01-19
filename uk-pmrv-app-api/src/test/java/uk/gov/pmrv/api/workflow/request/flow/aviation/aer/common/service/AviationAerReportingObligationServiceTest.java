@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingExemptEvent;
+import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingRequiredEvent;
 import uk.gov.pmrv.api.aviationreporting.common.service.AviationReportableEmissionsService;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
@@ -21,6 +23,7 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.common.domain.Aviation
 import java.math.BigDecimal;
 import java.time.Year;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -92,7 +95,9 @@ class AviationAerReportingObligationServiceTest {
         assertFalse(((AviationDreRequestMetadata)dreRequest.getMetadata()).isExempted());
 
         //invoke
-        aerReportingObligationService.markAsExempt(accountId, submitterId);
+        aerReportingObligationService.markAsExempt(AviationAccountReportingExemptEvent.builder().accountId(accountId)
+                .submitterId(submitterId).year(reportingYear).build());
+
 
         //verify
 
@@ -148,7 +153,8 @@ class AviationAerReportingObligationServiceTest {
         assertFalse(((AviationDreRequestMetadata)dreRequest.getMetadata()).isExempted());
 
         //invoke
-        aerReportingObligationService.markAsExempt(accountId, submitterId);
+        aerReportingObligationService.markAsExempt(AviationAccountReportingExemptEvent.builder().accountId(accountId)
+                .submitterId(submitterId).year(reportingYear).build());
 
         //verify
 
@@ -172,17 +178,33 @@ class AviationAerReportingObligationServiceTest {
         List<String> aviationAerRequestTypes = List.of(RequestType.AVIATION_AER_UKETS.name(), RequestType.AVIATION_AER_CORSIA.name());
 
         when(requestRepository
-            .findAllByAccountIdAndTypeInAndMetadataYear(accountId, aviationAerRequestTypes, reportingYear.getValue()))
-            .thenReturn(List.of());
+                .findAllByAccountIdAndTypeInAndMetadataYear(accountId, aviationAerRequestTypes, reportingYear.getValue()))
+                .thenReturn(List.of());
 
-        //invoke
-        aerReportingObligationService.markAsExempt(accountId, submitterId);
+        when(requestRepository.findByAccountIdAndTypeInAndStatus(accountId, Set.of(RequestType.AVIATION_DOE_CORSIA), RequestStatus.IN_PROGRESS))
+                .thenReturn(List.of());
 
-        //verify
+        when(requestRepository.findByAccountIdAndTypeInAndStatus(accountId, Set.of(RequestType.AVIATION_DRE_UKETS), RequestStatus.IN_PROGRESS))
+                .thenReturn(List.of());
+
+        aerReportingObligationService.markAsExempt(AviationAccountReportingExemptEvent.builder()
+                .accountId(accountId)
+                .submitterId(submitterId)
+                .year(reportingYear)
+                .build());
+
         verify(requestRepository, times(1))
-            .findAllByAccountIdAndTypeInAndMetadataYear(accountId, aviationAerRequestTypes, reportingYear.getValue());
+                .findAllByAccountIdAndTypeInAndMetadataYear(accountId, aviationAerRequestTypes, reportingYear.getValue());
+
+        verify(requestRepository, times(1))
+                .findByAccountIdAndTypeInAndStatus(accountId, Set.of(RequestType.AVIATION_DOE_CORSIA), RequestStatus.IN_PROGRESS);
+
+        verify(requestRepository, times(1))
+                .findByAccountIdAndTypeInAndStatus(accountId, Set.of(RequestType.AVIATION_DRE_UKETS), RequestStatus.IN_PROGRESS);
+
         verify(aviationReportableEmissionsService, times(1))
-            .updateReportableEmissionsExemptedFlag(accountId, reportingYear, true);
+                .updateReportableEmissionsExemptedFlag(accountId, reportingYear, true);
+
         verifyNoMoreInteractions(requestRepository);
         verifyNoInteractions(workflowService, requestService);
     }
@@ -248,7 +270,8 @@ class AviationAerReportingObligationServiceTest {
         assertTrue(((AviationDreRequestMetadata)dreRequest.getMetadata()).isExempted());
 
         //invoke
-        aerReportingObligationService.revertExemption(accountId, submitterId);
+        aerReportingObligationService.revertExemption(AviationAccountReportingRequiredEvent.builder()
+                .accountId(accountId).submitterId(submitterId).year(reportingYear).build());
 
         //verify
 
@@ -304,7 +327,8 @@ class AviationAerReportingObligationServiceTest {
         assertTrue(((AviationDreRequestMetadata)dreRequest.getMetadata()).isExempted());
 
         //invoke
-        aerReportingObligationService.revertExemption(accountId, submitterId);
+        aerReportingObligationService.revertExemption(AviationAccountReportingRequiredEvent.builder()
+                .accountId(accountId).submitterId(submitterId).year(reportingYear).build());
 
         //verify
 
@@ -333,7 +357,8 @@ class AviationAerReportingObligationServiceTest {
             .thenReturn(List.of());
 
         //invoke
-        aerReportingObligationService.revertExemption(accountId, submitterId);
+        aerReportingObligationService.revertExemption(AviationAccountReportingRequiredEvent.builder()
+                .accountId(accountId).submitterId(submitterId).year(reportingYear).build());
 
         //verify
 

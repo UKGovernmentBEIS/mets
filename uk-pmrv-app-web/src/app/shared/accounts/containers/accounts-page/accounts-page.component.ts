@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AbstractControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, distinctUntilChanged, map, Observable, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, switchMap, takeUntil } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { selectUserRoleType, UserState } from '@core/store/auth';
@@ -39,6 +39,8 @@ interface ViewModel {
   providers: [DestroySubject],
 })
 export class AccountsPageComponent implements OnInit {
+  resultsReturnedSubject = new BehaviorSubject('');
+
   vm$: Observable<ViewModel> = combineLatest([
     this.authStore.pipe(selectUserRoleType),
     this.store.pipe(selectSearchTerm),
@@ -119,6 +121,14 @@ export class AccountsPageComponent implements OnInit {
           this.store.setSearchTerm(term);
         }
       });
+
+    this.store
+      .pipe(
+        selectAccounts,
+        map((res) => res.length),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((count) => this.announceCount(count));
   }
 
   onPageChange(page: number) {
@@ -154,5 +164,17 @@ export class AccountsPageComponent implements OnInit {
 
   private get termCtrl(): AbstractControl {
     return this.searchForm && this.searchForm.get('term');
+  }
+
+  private announceCount(count: number): void {
+    const msg = this.buildResultsMessage(count);
+    this.resultsReturnedSubject.next('');
+    setTimeout(() => this.resultsReturnedSubject.next(msg), 50);
+  }
+
+  private buildResultsMessage(count: number): string {
+    if (count === 0) return 'No results returned.';
+    if (count === 1) return '1 result returned.';
+    return `${count} results returned.`;
   }
 }

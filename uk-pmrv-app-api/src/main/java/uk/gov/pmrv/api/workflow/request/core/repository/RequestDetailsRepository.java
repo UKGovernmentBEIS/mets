@@ -2,12 +2,16 @@ package uk.gov.pmrv.api.workflow.request.core.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Repository;
 
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.domain.QAuthorizationRule;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.core.domain.QRequest;
@@ -27,8 +31,9 @@ public class RequestDetailsRepository {
     @PersistenceContext
     private EntityManager entityManager;
     
-    public RequestDetailsSearchResults findRequestDetailsBySearchCriteria(RequestSearchCriteria criteria) {
+    public RequestDetailsSearchResults findRequestDetailsBySearchCriteria(RequestSearchCriteria criteria, AppUser appUser) {
         QRequest request = QRequest.request;
+        QAuthorizationRule authorizationRule = QAuthorizationRule.authorizationRule;
 
         JPAQuery<RequestDetailsDTO> query = new JPAQuery<>(entityManager);
 
@@ -51,6 +56,8 @@ public class RequestDetailsRepository {
         }
         
         whereClause.and(request.type.in(requestTypesFilteredByResourceType));
+        // Filter request types based on authorization rules for this role
+        whereClause.and(request.type.stringValue().in(constructUserGrantedRequestsSubquery(authorizationRule, appUser.getRoleType())));
         
         if(!criteria.getRequestStatuses().isEmpty()) {
             whereClause.and(request.status.in(criteria.getRequestStatuses()));
@@ -102,4 +109,12 @@ public class RequestDetailsRepository {
 
         return Optional.ofNullable(jpaQuery.fetchFirst());
     }
+    
+    private JPQLQuery<String> constructUserGrantedRequestsSubquery(QAuthorizationRule authorizationRule,
+			String roleType) {
+    	return JPAExpressions.select(authorizationRule.resourceSubType).distinct()
+				.from(authorizationRule)
+				.where(authorizationRule.resourceType.eq(ResourceType.REQUEST)
+						.and(authorizationRule.roleType.eq(roleType)));
+	}
 }

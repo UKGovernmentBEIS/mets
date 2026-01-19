@@ -1,15 +1,19 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
+import uk.gov.pmrv.api.account.service.AccountQueryService;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.integration.registry.accountupdated.aviation.request.AviationAccountUpdatedRegistryEvent;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.domain.EmpVariationUkEtsRequestPayload;
@@ -33,6 +37,9 @@ public class EmpVariationUkEtsOfficialNoticeService {
     private final DocumentFileGeneratorService documentFileGeneratorService;
     private final DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
     private final OfficialNoticeSendService officialNoticeSendService;
+    private final AccountQueryService accountQueryService;
+    private final ApplicationEventPublisher publisher;
+
 
     @Transactional
     public CompletableFuture<FileInfoDTO> generateApprovedOfficialNotice(final String requestId) {
@@ -123,6 +130,9 @@ public class EmpVariationUkEtsOfficialNoticeService {
         final List<FileInfoDTO> attachments = requestPayload.getEmpDocument() != null ? 
                 List.of(requestPayload.getOfficialNotice(), requestPayload.getEmpDocument()) :
                 List.of(requestPayload.getOfficialNotice());
+
+        sendAviationAccountUpdateNotification(request.getAccountId(),requestId);
+
         officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails);
     }
     
@@ -169,4 +179,11 @@ public class EmpVariationUkEtsOfficialNoticeService {
 				.toRecipientEmail(serviceContact.getEmail())
 				.ccRecipientsEmails(ccRecipientsEmails).build());
 		}
+
+    private void sendAviationAccountUpdateNotification(Long accountId,String requestId) {
+        EmissionTradingScheme emissionTradingScheme = accountQueryService.getAccountEmissionTradingScheme(accountId);
+        if(EmissionTradingScheme.UK_ETS_AVIATION.equals(emissionTradingScheme)) {
+            publisher.publishEvent(AviationAccountUpdatedRegistryEvent.builder().accountId(accountId).requestId(requestId).build());
+        }
+    }
 }

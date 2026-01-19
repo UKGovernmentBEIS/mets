@@ -10,7 +10,13 @@
       </dt>
       <dd govukSummaryListRowValue>{{ monitoringMethodologyPlans.exist ? 'Yes' : 'No' }}</dd>
       <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+        <a
+          govukLink
+          [routerLink]="['..']"
+          [state]="{ changing: true }"
+          hidden-text="if you are providing a monitoring methodology plan as part of your permit application">
+          Change
+        </a>
       </dd>
     </div>
   </dl>
@@ -26,7 +32,9 @@
           <app-summary-download-files [files]="store.getDownloadUrlFiles(files$ | async)"></app-summary-download-files>
         </dd>
         <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
-          <a govukLink [routerLink]="['..', 'upload-file']" [state]="{ changing: true }">Change</a>
+          <a govukLink [routerLink]="['..', 'upload-file']" [state]="{ changing: true }" hidden-text="uploaded files">
+            Change
+          </a>
         </dd>
       </div>
     </dl>

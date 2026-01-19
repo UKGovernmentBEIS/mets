@@ -38,6 +38,20 @@
         <dd govukSummaryListRowActions></dd>
       </div>
     </dl>
+
+    <ng-container *ngIf="latestALRFile$ | async as latestALRFile">
+      <h2 class="govuk-heading-m">Related files</h2>
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Latest ALR</dt>
+          <dd govukSummaryListRowValue *ngIf="(account$ | async).id as accountId">
+            <a [routerLink]="['details', accountId, 'attachment', latestALRFile?.uuid]" govukLink target="_blank">
+              {{ latestALRFile?.name }}
+            </a>
+          </dd>
+        </div>
+      </dl>
+    </ng-container>
   </ng-container>
 
   <ng-container *ngIf="userRoleType$ | async as roleType">

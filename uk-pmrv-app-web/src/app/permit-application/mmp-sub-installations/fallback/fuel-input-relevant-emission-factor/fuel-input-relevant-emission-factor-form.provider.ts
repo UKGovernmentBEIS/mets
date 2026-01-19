@@ -33,6 +33,11 @@ export const fuelInputRelevantEmissionFactorAddFormFactory = {
     const heatFAExists = (faFactor as FuelInputAndRelevantEmissionFactorHeatFA)?.exists;
     const isHeatFAExists = heatFAExists === true;
 
+    const wasteGasesInputCtrl = fb.control(faFactor?.wasteGasesInput ?? null, {
+      validators: GovukValidators.required('Select yes if there is input from waste gases'),
+      updateOn: 'change',
+    });
+
     const formGroup = fb.group(
       {
         ...(isHeatFA
@@ -50,13 +55,7 @@ export const fuelInputRelevantEmissionFactorAddFormFactory = {
           : {}),
         ...(isHeatFAExists || !isHeatFA
           ? {
-              wasteGasesInput: [
-                faFactor?.wasteGasesInput ?? null,
-                {
-                  validators: GovukValidators.required('Select yes if there is input from waste gases'),
-                  updateOn: 'change',
-                },
-              ],
+              wasteGasesInput: wasteGasesInputCtrl,
             }
           : { wasteGasesInput: null }),
       },
@@ -88,7 +87,6 @@ export const fuelInputRelevantEmissionFactorAddFormFactory = {
 
     const dataSourcesFormGroup = () => {
       const dataSources = faFactor?.dataSources;
-
       formGroup.addControl(
         'dataSources',
         fb.array(
@@ -233,11 +231,16 @@ export const fuelInputRelevantEmissionFactorAddFormFactory = {
 
     formGroup?.controls?.exists?.valueChanges?.subscribe((val) => {
       if (val) {
+        if (!formGroup.contains('wasteGasesInput')) {
+          formGroup.addControl('wasteGasesInput', wasteGasesInputCtrl);
+        }
+
         dataSourcesFormGroup();
         methodologyAppliedDescriptionForm();
         formGroup.addControl('hierarchicalOrder', hierarchicalOrderFormGroup);
         supportingFilesForm();
       } else {
+        formGroup.removeControl('wasteGasesInput');
         formGroup.removeControl('dataSources');
         formGroup.removeControl('methodologyAppliedDescription');
         formGroup.removeControl('hierarchicalOrder');
@@ -246,7 +249,7 @@ export const fuelInputRelevantEmissionFactorAddFormFactory = {
       formGroup.updateValueAndValidity();
     });
 
-    formGroup?.controls?.wasteGasesInput?.valueChanges?.subscribe((val) => {
+    wasteGasesInputCtrl?.valueChanges?.subscribe((val) => {
       if (val) {
         ((formGroup.get('dataSources') as FormArray).controls as FormGroup[])?.forEach((control, index) => {
           control.addControl(
@@ -320,7 +323,7 @@ export const fuelInputRelevantEmissionFactorAddFormFactory = {
     if (isHeatFA) {
       formGroup.controls.exists.updateValueAndValidity({ emitEvent: true });
     }
-    formGroup.controls.wasteGasesInput.updateValueAndValidity({ emitEvent: true });
+    formGroup.controls?.wasteGasesInput?.updateValueAndValidity({ emitEvent: true });
     formGroup.controls?.hierarchicalOrder?.updateValueAndValidity({ emitEvent: true });
 
     return formGroup;

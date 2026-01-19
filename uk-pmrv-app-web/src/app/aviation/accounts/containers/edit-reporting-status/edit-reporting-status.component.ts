@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 
@@ -18,13 +18,11 @@ interface FormModel {
 @Component({
   selector: 'app-edit-reporting-status',
   templateUrl: './edit-reporting-status.component.html',
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })
 export class EditReportingStatusComponent {
-  private currentStatus = this.store.getState().currentAccount.account.aviationAccount.reportingStatus;
-  private currentReason = this.store.getState().currentAccount.account.aviationAccount.reportingStatusReason;
-
   statusOptions: GovukSelectOption[] = [
     {
       text: 'Required to report',
@@ -39,36 +37,33 @@ export class EditReportingStatusComponent {
       value: 'EXEMPT_NON_COMMERCIAL',
     },
   ];
+
+  private readonly store = inject(AviationAccountsStore);
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  public readonly currentStatus = this.store.getState().currentAccount?.reportingStatus?.currentStatus;
+  public readonly upsertStatus = this.store.getState().currentAccount?.reportingStatus?.upsertStatus;
+
   maxReasonLength = 2000;
   form: FormGroup<FormModel> = this.fb.group<FormModel>({
-    status: new FormControl(this.currentStatus ?? null, {
-      validators: [this.validateStatusChanged(this.currentStatus)],
+    status: new FormControl(this.currentStatus?.status ?? null, {
+      validators: [this.validateStatusChanged(this.currentStatus?.status)],
     }),
-    reason: new FormControl(this.currentReason ?? null, {
+    reason: new FormControl(this.upsertStatus?.reason, {
       validators: [
         GovukValidators.required('Enter a reason'),
-        GovukValidators.maxLength(
-          this.maxReasonLength,
-          `The reason should not be more than ${this.maxReasonLength} characters`,
-        ),
+        GovukValidators.maxLength(this.maxReasonLength, `Enter up to ${this.maxReasonLength} characters`),
       ],
     }),
   });
 
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly store: AviationAccountsStore,
-    private readonly router: Router,
-  ) {}
-
   onSubmit() {
-    if (this.form.valid) {
-      this.store
-        .editReportingStatus(this.form.value as AviationAccountReportingStatusHistoryCreationDTO)
-        .subscribe(() => {
-          this.router.navigate(['aviation/accounts', this.store.getState().currentAccount.account.aviationAccount.id]);
-        });
-    }
+    this.store.editReportingStatus({
+      ...this.form.value,
+      year: +this.currentStatus.year,
+    } as AviationAccountReportingStatusHistoryCreationDTO);
+    this.router.navigate(['./summary'], { relativeTo: this.activatedRoute });
   }
 
   private validateStatusChanged(

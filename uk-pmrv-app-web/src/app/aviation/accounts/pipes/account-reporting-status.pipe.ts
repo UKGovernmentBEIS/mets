@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { AviationAccountDetails } from '../store/aviation-accounts.state';
+import { AviationAccountReportingStatusHistoryDTO } from 'pmrv-api';
 
 const REPORTING_STATUS_MAP = {
   EXEMPT_COMMERCIAL: 'Exempt (commercial)',
@@ -13,7 +13,7 @@ const REPORTING_STATUS_MAP = {
   pure: true,
 })
 export class AccountReportingStatusPipe implements PipeTransform {
-  transform(value: AviationAccountDetails['reportingStatus']): string | null {
+  transform(value: AviationAccountReportingStatusHistoryDTO['status']): string | null {
     if (value == null) {
       return null;
     }

@@ -13,6 +13,6 @@
 export interface AviationAerCorsiaAnnualOffsetting {
   schemeYear: number;
   totalChapter: number;
-  sectorGrowth: number;
+  sectorGrowth: string;
   calculatedAnnualOffsetting?: number;
 }

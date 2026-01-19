@@ -7,7 +7,7 @@ import { AttachedFile } from '@shared/types/attached-file.type';
 import { WasteQdrService } from '@tasks/waste-qdr/core';
 import { WasteQdrTaskComponent } from '@tasks/waste-qdr/shared';
 
-import { WasteQDR } from 'pmrv-api';
+import { WasteQDR, WasteQDRApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 interface ViewModel {
   isEditable: boolean;
@@ -26,7 +26,7 @@ interface ViewModel {
 })
 export class WasteQdrSummaryComponent {
   isEditable = this.wasteQdrService.isEditable;
-  payload = this.wasteQdrService.payload;
+  payload = this.wasteQdrService.payload as Signal<WasteQDRApplicationSubmitRequestTaskPayload>;
 
   vm: Signal<ViewModel> = computed(() => {
     const isEditable = this.isEditable();

@@ -1,16 +1,11 @@
-<div
-  #container
-  *ngIf="errorList$ | async as errorList"
-  aria-labelledby="error-summary-title"
-  class="govuk-error-summary"
-  role="alert"
-  tabindex="-1"
->
-  <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
-  <div class="govuk-error-summary__body">
-    <ul class="govuk-list govuk-error-summary__list">
-      <ng-container *ngTemplateOutlet="subControlErrors; context: { controlError: errorList }" />
-    </ul>
+<div #container *ngIf="errorList$ | async as errorList" class="govuk-error-summary" tabindex="-1">
+  <div role="alert">
+    <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+    <div class="govuk-error-summary__body">
+      <ul class="govuk-list govuk-error-summary__list">
+        <ng-container *ngTemplateOutlet="subControlErrors; context: { controlError: errorList }" />
+      </ul>
+    </div>
   </div>
 </div>
 
@@ -23,8 +18,7 @@
       [state]="{ scrollSkip: true }"
       [replaceUrl]="true"
       queryParamsHandling="preserve"
-      routerLink="."
-    >
+      routerLink=".">
       {{ selfError.value }}
     </a>
   </li>

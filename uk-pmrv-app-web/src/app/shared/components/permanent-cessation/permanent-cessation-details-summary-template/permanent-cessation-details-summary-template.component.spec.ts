@@ -59,22 +59,22 @@ describe('PermanentCessationDetailsSummaryTemplateComponent', () => {
     expect(page.pageContents).toEqual([
       'Describe the cessation of regulated activities',
       'Description',
-      'Change',
+      'Change  cessation of regulated activities description',
       'Supporting documents',
       '100.png  200.png',
-      'Change',
+      'Change supporting documents',
       'Date of cessation',
       '18 Mar 2025',
-      'Change',
+      'Change date of cessation',
       'Scope of the cessation',
       'Whole installation, including any sub-installations',
-      'Change',
+      'Change scope of the cessation',
       'Additional details to be included in the notice document',
       'Additional details',
-      'Change',
+      'Change  additional details to be included in the notice document',
       'Regulator comments (optional)',
       'Regulator comments',
-      'Change',
+      'Change  regulator comments (optional)',
     ]);
   });
 });

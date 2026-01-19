@@ -531,6 +531,10 @@ export class ItemNamePipe implements PipeTransform {
       case 'BDR_WAIT_FOR_PEER_REVIEW':
         return `${year} baseline data report sent to peer reviewer`;
 
+      // BDRS2
+      case 'BDRS2_APPLICATION_SUBMIT':
+        return `Complete ${customField} stage 2 baseline data report`;
+
       //DOE
       case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
         return `Estimate ${year} emissions`;
@@ -594,6 +598,14 @@ export class ItemNamePipe implements PipeTransform {
       //WASTE_QDR
       case 'WASTE_QDR_APPLICATION_SUBMIT':
         return `Complete ${this.quarterNamePipe.transform(customField as any)} ${year} quarterly data report`;
+      case 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW':
+        return `${this.quarterNamePipe.transform(customField as any)} ${year} quarterly data report sent to regulator`;
+      case 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+        return `Review ${this.quarterNamePipe.transform(customField as any)} ${year} quarterly data report`;
+      case 'WASTE_QDR_WAIT_FOR_AMENDS':
+        return `${this.quarterNamePipe.transform(customField as any)} ${year} quarterly data report returned to operator`;
+      case 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT':
+        return `Amend ${this.quarterNamePipe.transform(customField as any)} ${year} quarterly data report`;
 
       default:
         return null;

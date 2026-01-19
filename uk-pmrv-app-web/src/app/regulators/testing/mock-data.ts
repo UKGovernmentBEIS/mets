@@ -135,6 +135,8 @@ export const mockRegulatorUser: {
       MARK_NOT_REQUIRED_ALR: 'NONE',
       SUBMIT_HSE_TI_REVIEW: 'NONE',
       PEER_REVIEW_HSE_TI: 'NONE',
+      SUBMIT_WASTE_QDR_REVIEW: 'NONE',
+      BULK_DOWNLOAD_ALR: 'NONE',
     },
   },
 };
@@ -205,6 +207,8 @@ export const mockRegulatorRolePermissions = [
   'MARK_NOT_REQUIRED_ALR',
   'SUBMIT_HSE_TI_REVIEW',
   'PEER_REVIEW_HSE_TI',
+  'SUBMIT_WASTE_QDR_REVIEW',
+  'BULK_DOWNLOAD_ALR',
 ];
 
 export const mockRegulatorBasePermissions = [
@@ -277,6 +281,8 @@ export const mockRegulatorBasePermissions = [
       MARK_NOT_REQUIRED_ALR: 'NONE',
       SUBMIT_HSE_TI_REVIEW: 'NONE',
       PEER_REVIEW_HSE_TI: 'NONE',
+      SUBMIT_WASTE_QDR_REVIEW: 'NONE',
+      BULK_DOWNLOAD_ALR: 'NONE',
     },
   },
   {
@@ -348,6 +354,8 @@ export const mockRegulatorBasePermissions = [
       MARK_NOT_REQUIRED_ALR: 'NONE',
       SUBMIT_HSE_TI_REVIEW: 'NONE',
       PEER_REVIEW_HSE_TI: 'NONE',
+      SUBMIT_WASTE_QDR_REVIEW: 'NONE',
+      BULK_DOWNLOAD_ALR: 'NONE',
     },
   },
   {
@@ -419,6 +427,8 @@ export const mockRegulatorBasePermissions = [
       MARK_NOT_REQUIRED_ALR: 'NONE',
       SUBMIT_HSE_TI_REVIEW: 'NONE',
       PEER_REVIEW_HSE_TI: 'NONE',
+      SUBMIT_WASTE_QDR_REVIEW: 'NONE',
+      BULK_DOWNLOAD_ALR: 'NONE',
     },
   },
   {
@@ -490,6 +500,8 @@ export const mockRegulatorBasePermissions = [
       MARK_NOT_REQUIRED_ALR: 'NONE',
       SUBMIT_HSE_TI_REVIEW: 'EXECUTE',
       PEER_REVIEW_HSE_TI: 'EXECUTE',
+      SUBMIT_WASTE_QDR_REVIEW: 'EXECUTE',
+      BULK_DOWNLOAD_ALR: 'EXECUTE',
     },
   },
   {
@@ -561,6 +573,8 @@ export const mockRegulatorBasePermissions = [
       MARK_NOT_REQUIRED_ALR: 'NONE',
       SUBMIT_HSE_TI_REVIEW: 'EXECUTE',
       PEER_REVIEW_HSE_TI: 'EXECUTE',
+      SUBMIT_WASTE_QDR_REVIEW: 'EXECUTE',
+      BULK_DOWNLOAD_ALR: 'EXECUTE',
     },
   },
 ];
@@ -630,4 +644,6 @@ export const mockRegulatorPermissionGroups = {
   MARK_NOT_REQUIRED_ALR: ['NONE', 'EXECUTE'],
   SUBMIT_HSE_TI_REVIEW: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
   PEER_REVIEW_HSE_TI: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
+  SUBMIT_WASTE_QDR_REVIEW: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
+  BULK_DOWNLOAD_ALR: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
 };

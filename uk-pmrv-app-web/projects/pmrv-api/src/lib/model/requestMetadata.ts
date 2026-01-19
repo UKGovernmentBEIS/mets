@@ -26,6 +26,7 @@ export interface RequestMetadata {
     | 'INSTALLATION_INSPECTION'
     | 'HSE_TI'
     | 'BDR'
+    | 'BDRS2'
     | 'PERMANENT_CESSATION'
     | 'ALR'
     | 'WASTE_QDR'

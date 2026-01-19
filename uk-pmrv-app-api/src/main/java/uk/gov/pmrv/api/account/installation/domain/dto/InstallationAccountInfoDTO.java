@@ -9,6 +9,7 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccou
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
 @Data
 @AllArgsConstructor
@@ -27,4 +28,5 @@ public class InstallationAccountInfoDTO {
     private String transferCode;
     private Boolean faStatus;
     private String emitterId;
+    private EmissionTradingScheme emissionTradingScheme;
 }

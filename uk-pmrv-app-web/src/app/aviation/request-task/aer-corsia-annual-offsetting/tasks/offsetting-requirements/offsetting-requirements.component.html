@@ -3,10 +3,10 @@
   [formGroup]="form"
   [heading]="heading"
   [caption]="form.value.schemeYear + ' offsetting requirements'"
-  submitText="Continue"
->
+  submitText="Continue">
   <div class="govuk-body">
-    Scheme year <br />
+    Scheme year
+    <br />
     {{ form.value.schemeYear }}
   </div>
 
@@ -15,8 +15,7 @@
     govuk-text-input
     inputType="number"
     label="Total Chapter 3 State Emissions (tCO2)"
-    widthClass="govuk-!-width-one-quarter"
-  ></div>
+    widthClass="govuk-!-width-one-quarter"></div>
 
   <div
     formControlName="sectorGrowth"
@@ -24,11 +23,11 @@
     inputType="number"
     label="Sector Growth Value"
     widthClass="govuk-!-width-one-quarter"
-    suffix="%"
-  ></div>
+    suffix="%"></div>
 
-  <div class="govuk-body">
-    Calculated annual offsetting requirements <br />
+  <div class="govuk-body" aria-atomic="true" aria-live="polite">
+    Calculated annual offsetting requirements
+    <br />
     @if (form.value.calculatedAnnualOffsetting !== null) {
       {{ form.value.calculatedAnnualOffsetting }}
     } @else {

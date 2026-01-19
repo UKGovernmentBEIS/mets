@@ -35,7 +35,7 @@ public class OperatorRequestTaskDefaultAssignmentService implements UserRoleRequ
 
         if(!ObjectUtils.isEmpty(requestAssignee) && userRoleTypeService.isUserOperator(requestAssignee)){
             try {
-                requestTaskAssignmentService.assignToUser(requestTask, requestAssignee);
+                requestTaskAssignmentService.assignToUser(requestTask, requestAssignee, getRoleType());
             } catch (BusinessCheckedException e) {
                 assignTaskToAccountPrimaryContactOrReleaseRequest(requestTask);
             }
@@ -51,7 +51,7 @@ public class OperatorRequestTaskDefaultAssignmentService implements UserRoleRequ
         accountPrimaryContactOptional.ifPresentOrElse(
             primaryContact -> {
                 try {
-                    requestTaskAssignmentService.assignToUser(requestTask, primaryContact);
+                    requestTaskAssignmentService.assignToUser(requestTask, primaryContact, getRoleType());
                 } catch (BusinessCheckedException e) {
                     requestReleaseService.releaseRequest(requestTask);
                 }

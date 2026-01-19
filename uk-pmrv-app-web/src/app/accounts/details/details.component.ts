@@ -14,6 +14,7 @@ import {
   CompanyProfileDTO,
   InstallationAccountDTO,
   InstallationAccountPermitDTO,
+  InstallationAccountViewService,
 } from 'pmrv-api';
 
 import { accountFinalStatuses, accountFirstYearStatuses } from '../core/accountFinalStatuses';
@@ -34,8 +35,14 @@ export class DetailsComponent implements OnInit {
     }>
   ).pipe(map((data) => data?.accountPermit));
 
-  permit$ = this.accountPermit$.pipe(map((accountPermit) => accountPermit.permit));
-  account$ = this.accountPermit$.pipe(map((accountPermit) => accountPermit.account));
+  permit$ = this.accountPermit$.pipe(map((accountPermit) => accountPermit?.permit));
+  account$ = this.accountPermit$.pipe(map((accountPermit) => accountPermit?.account));
+
+  accountDetails$ = this.accountPermit$.pipe(
+    switchMap((accountPermit) => this.accountViewService.getInstallationAccountById(accountPermit?.account?.id)),
+  );
+
+  latestALRFile$ = this.accountDetails$.pipe(map((accountDetails) => accountDetails?.latestAlrFile));
 
   userRoleType$ = this.authStore.pipe(selectUserRoleType, takeUntil(this.destroy$));
 
@@ -68,6 +75,7 @@ export class DetailsComponent implements OnInit {
     private readonly destroy$: DestroySubject,
     private readonly companyInformationService: CompanyInformationService,
     private readonly fb: UntypedFormBuilder,
+    private readonly accountViewService: InstallationAccountViewService,
   ) {}
 
   ngOnInit(): void {

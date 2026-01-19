@@ -17,6 +17,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.EntityManager;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.domain.AuthorizationRule;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.netz.api.common.domain.PagingRequest;
@@ -44,14 +46,21 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
     
     @Test
     void findRequestDetailsBySearchCriteria_with_category_criteria_only() {
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.INSTALLATION_ACCOUNT_OPENING.name(), "requestAccessHandler", null, "REGULATOR");
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.PERMIT_ISSUANCE.name(), "requestAccessHandler", null, "REGULATOR");
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.PERMIT_REISSUE.name(), "requestAccessHandler", null, "REGULATOR");
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.PERMIT_SURRENDER.name(), "requestAccessHandler", null, "OPERATOR");
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.SYSTEM_MESSAGE_NOTIFICATION.name(), "requestAccessHandler", null, "REGULATOR");
+    	
         Long accountId = 1L;
         Request request1 = createRequest(accountId, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND);
         Request request2 = createRequest(accountId, RequestType.PERMIT_ISSUANCE, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND);
+        createRequest(accountId, RequestType.PERMIT_SURRENDER, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND);
         createRequest(accountId, RequestType.SYSTEM_MESSAGE_NOTIFICATION, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND);
         createRequest(2L, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND);
         createRequest(accountId, RequestType.PERMIT_REISSUE, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND);
         Request request3 = createRequest(accountId, RequestType.PERMIT_REISSUE, RequestStatus.COMPLETED, CompetentAuthorityEnum.ENGLAND);
-
+        
         flushAndClear();
         
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
@@ -61,7 +70,9 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
                 .category(RequestHistoryCategory.PERMIT)
                 .build();
         
-        RequestDetailsSearchResults results = repo.findRequestDetailsBySearchCriteria(criteria);
+        AppUser user = AppUser.builder().roleType("REGULATOR").build();
+        
+        RequestDetailsSearchResults results = repo.findRequestDetailsBySearchCriteria(criteria, user);
         
         RequestDetailsDTO expectedWorkflowResult1 = new RequestDetailsDTO(request1.getId(), request1.getType(), request1.getStatus(), request1.getCreationDate(), null);
         RequestDetailsDTO expectedWorkflowResult2 = new RequestDetailsDTO(request2.getId(), request2.getType(), request2.getStatus(), request2.getCreationDate(), null);
@@ -75,6 +86,10 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
     
     @Test
     void findRequestDetailsBySearchCriteria_with_category_and_status_criteria_only() {
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.INSTALLATION_ACCOUNT_OPENING.name(), "requestAccessHandler", null, "REGULATOR");
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.PERMIT_ISSUANCE.name(), "requestAccessHandler", null, "REGULATOR");
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.PERMIT_REISSUE.name(), "requestAccessHandler", null, "REGULATOR");
+    	
         Long accountId = 1L;
         Request request1 = createRequest(accountId, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND);
         createRequest(accountId, RequestType.PERMIT_ISSUANCE, RequestStatus.COMPLETED, CompetentAuthorityEnum.ENGLAND);
@@ -92,7 +107,8 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
                 .requestStatuses(Set.of(RequestStatus.IN_PROGRESS))
                 .build();
         
-        RequestDetailsSearchResults results = repo.findRequestDetailsBySearchCriteria(criteria);
+        AppUser user = AppUser.builder().roleType("REGULATOR").build();
+        RequestDetailsSearchResults results = repo.findRequestDetailsBySearchCriteria(criteria, user);
         
         RequestDetailsDTO expectedWorkflowResult1 = new RequestDetailsDTO(request1.getId(), request1.getType(), request1.getStatus(), request1.getCreationDate(), null);
         
@@ -105,6 +121,9 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
     
     @Test
     void findRequestDetailsBySearchCriteria_filter_with_category_and_request_types_criteria_only() {
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.INSTALLATION_ACCOUNT_OPENING.name(), "requestAccessHandler", null, "REGULATOR");
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.PERMIT_ISSUANCE.name(), "requestAccessHandler", null, "REGULATOR");
+    	
         Long accountId = 1L;
         Request request1 = createRequest(accountId, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND);
         createRequest(accountId, RequestType.PERMIT_ISSUANCE, RequestStatus.COMPLETED, CompetentAuthorityEnum.ENGLAND);
@@ -120,7 +139,8 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
                 .requestTypes(Set.of(RequestType.INSTALLATION_ACCOUNT_OPENING))
                 .build();
         
-        RequestDetailsSearchResults results = repo.findRequestDetailsBySearchCriteria(criteria);
+        AppUser user = AppUser.builder().roleType("REGULATOR").build();
+        RequestDetailsSearchResults results = repo.findRequestDetailsBySearchCriteria(criteria, user);
         
         RequestDetailsDTO expectedWorkflowResult1 = new RequestDetailsDTO(request1.getId(), request1.getType(), request1.getStatus(), request1.getCreationDate(), null);
         
@@ -133,6 +153,11 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
     
     @Test
     void findRequestDetailsBySearchCriteria_for_competent_authority() {
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.PERMIT_BATCH_REISSUE.name(), "requestAccessHandler", null, "REGULATOR");
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.INSTALLATION_ACCOUNT_OPENING.name(), "requestAccessHandler", null, "REGULATOR");
+    	createAuthorizationRuleForRequest("REQUEST", RequestType.SYSTEM_MESSAGE_NOTIFICATION.name(), "requestAccessHandler", null, "REGULATOR");
+    	
+    	
         Request request1 = createRequest(1L, RequestType.PERMIT_BATCH_REISSUE, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND);
         Request request2 = createRequest(2L, RequestType.PERMIT_BATCH_REISSUE, RequestStatus.COMPLETED, CompetentAuthorityEnum.ENGLAND);
         createRequest(3L, RequestType.PERMIT_BATCH_REISSUE, RequestStatus.COMPLETED, CompetentAuthorityEnum.NORTHERN_IRELAND);
@@ -149,7 +174,8 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
                 .requestTypes(Set.of(RequestType.PERMIT_BATCH_REISSUE))
                 .build();
         
-        RequestDetailsSearchResults results = repo.findRequestDetailsBySearchCriteria(criteria);
+        AppUser user = AppUser.builder().roleType("REGULATOR").build();
+        RequestDetailsSearchResults results = repo.findRequestDetailsBySearchCriteria(criteria, user);
         
         RequestDetailsDTO expectedWorkflowResult1 = new RequestDetailsDTO(request1.getId(), request1.getType(), request1.getStatus(), request1.getCreationDate(), null);
         RequestDetailsDTO expectedWorkflowResult2 = new RequestDetailsDTO(request2.getId(), request2.getType(), request2.getStatus(), request2.getCreationDate(), null);
@@ -206,6 +232,18 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
 
         return request;
     }
+    
+	protected AuthorizationRule createAuthorizationRuleForRequest(String resourceType, String resourceSubType, String handler, String scope, String roleType) {
+		AuthorizationRule rule = AuthorizationRule.builder()
+                .resourceType(resourceType)
+                .resourceSubType(resourceSubType)
+                .handler(handler)
+                .scope(scope)
+                .roleType(roleType)
+                .build();
+		entityManager.persist(rule);
+		return rule;
+	}
     
     private void flushAndClear() {
         entityManager.flush();

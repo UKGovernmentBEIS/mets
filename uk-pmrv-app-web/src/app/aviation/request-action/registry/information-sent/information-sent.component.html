@@ -11,11 +11,20 @@
   <ng-template #customContentTemplate>
     <h2 class="govuk-heading-m">Operator details</h2>
     <dl govuk-summary-list>
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Emitter ID</dt>
-        <dd govukSummaryListRowValue>{{ vm.operatorDetails.emitterId }}</dd>
-        <dd govukSummaryListRowActions></dd>
-      </div>
+      @if (vm.operatorDetails?.emitterId) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Emitter ID</dt>
+          <dd govukSummaryListRowValue>{{ vm.operatorDetails.emitterId }}</dd>
+          <dd govukSummaryListRowActions></dd>
+        </div>
+      } @else if ($any(vm.operatorDetails).registryId) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>UK ETS Registry ID</dt>
+          <dd govukSummaryListRowValue>{{ $any(vm.operatorDetails).registryId }}</dd>
+          <dd govukSummaryListRowActions></dd>
+        </div>
+      }
+
       <div govukSummaryListRow *ngIf="vm.operatorDetails?.emissionsPlanId">
         <dt govukSummaryListRowKey>Emission plan ID</dt>
         <dd govukSummaryListRowValue>{{ vm.operatorDetails.emissionsPlanId }}</dd>
@@ -26,12 +35,21 @@
         <dd govukSummaryListRowValue>{{ vm.operatorDetails.operatorName }}</dd>
         <dd govukSummaryListRowActions></dd>
       </div>
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>First known aviation activity</dt>
-        <dd govukSummaryListRowValue>{{ vm.operatorDetails.firstKnownAviationActivity | govukDate }}</dd>
-        <dd govukSummaryListRowActions></dd>
-      </div>
-      <div govukSummaryListRow>
+      @if (vm.operatorDetails.firstKnownAviationActivity) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>First known aviation activity</dt>
+          <dd govukSummaryListRowValue>{{ vm.operatorDetails.firstKnownAviationActivity | govukDate }}</dd>
+          <dd govukSummaryListRowActions></dd>
+        </div>
+      } @else if ($any(vm.operatorDetails).firstYearOfReportingObligation) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>First year of reporting obligation</dt>
+          <dd govukSummaryListRowValue>{{ $any(vm.operatorDetails).firstYearOfReportingObligation }}</dd>
+          <dd govukSummaryListRowActions></dd>
+        </div>
+      }
+
+      <div govukSummaryListRow *ngIf="vm.operatorDetails.regulator">
         <dt govukSummaryListRowKey>Regulator</dt>
         <dd govukSummaryListRowValue>{{ vm.operatorDetails.regulator }}</dd>
         <dd govukSummaryListRowActions></dd>

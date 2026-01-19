@@ -11,9 +11,9 @@
  */
 import { BusinessOrganisationDetails } from './businessOrganisationDetails';
 import { IndividualOrganisationDetails } from './individualOrganisationDetails';
-import { RegistryIntegrationActivePermit } from './registryIntegrationActivePermit';
+import { RegistryIntegrationAccountCreateActivePermit } from './registryIntegrationAccountCreateActivePermit';
 
 export interface InstallationAccountRegistryIntegrationRequestActionPayloadAllOf {
-  activePermit?: RegistryIntegrationActivePermit;
+  activePermit?: RegistryIntegrationAccountCreateActivePermit;
   organizationDetails?: BusinessOrganisationDetails | IndividualOrganisationDetails;
 }

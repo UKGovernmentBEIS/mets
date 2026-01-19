@@ -51,7 +51,8 @@ class RequestNoteAuthorityInfoQueryServiceTest {
         final RequestAuthorityInfoDTO requestInfoDTO = service.getRequestNoteInfo(noteId);
 
         final RequestAuthorityInfoDTO expectedRequestInfoDTO = RequestAuthorityInfoDTO.builder()
-            .authorityInfo(ResourceAuthorityInfo.builder()
+        		.type(RequestType.INSTALLATION_ACCOUNT_OPENING.name())
+        		.authorityInfo(ResourceAuthorityInfo.builder()
                             .requestResources(Map.of(
                                     ResourceType.ACCOUNT, "2",
                                     ResourceType.CA, ENGLAND.name()))

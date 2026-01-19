@@ -1,15 +1,20 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <app-wizard-step [formGroup]="form" heading="Edit reporting status" (formSubmit)="onSubmit()">
+    <app-wizard-step
+      [formGroup]="form"
+      [heading]="'Edit ' + currentStatus?.year + ' reporting status'"
+      (formSubmit)="onSubmit()">
+      @if (currentStatus?.isReported && currentStatus.status === 'REQUIRED_TO_REPORT') {
+        <govuk-warning-text>Emissions have already been reported for the selected year.</govuk-warning-text>
+      }
       <div
         govuk-select
         widthClass="govuk-!-width-full"
         [options]="statusOptions"
         label="Reporting status"
-        formControlName="status"
-      ></div>
+        formControlName="status"></div>
       <div govuk-textarea [maxLength]="maxReasonLength" label="Reason" formControlName="reason"></div>
     </app-wizard-step>
-    <a govukLink [routerLink]="['../']">Return to account</a>
+    <a govukLink [routerLink]="['../..']">Return to account</a>
   </div>
 </div>

@@ -35,4 +35,7 @@
 	<include file="changelog_batch_variation.xml" relativeToChangelogFile="true" />
 	<include file="changelog_netz_account.xml" relativeToChangelogFile="true" />
 	<include file="changelog_non_compliance.xml" relativeToChangelogFile="true" />
+    <include file="changelog_account_file_attachment.xml" relativeToChangelogFile="true"/>
+    <include file="changelog_reporting_2025.xml" relativeToChangelogFile="true" />
+	<include file="changelog_account_aviation_data_migration.xml" relativeToChangelogFile="true" />
 </databaseChangeLog>

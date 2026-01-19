@@ -50,14 +50,13 @@ public class AerMarkNotRequiredActionHandler {
                 appUser.getUserId());
 
         AerRequestMetadata requestMetadata = (AerRequestMetadata) request.getMetadata();
-        requestMetadata.setEmissions(new BigDecimal(0));
+        requestMetadata.setEmissions(null);
 
         ReportableEmissionsSaveParams emissionsSaveParams = ReportableEmissionsSaveParams.builder()
                         .accountId(request.getAccountId())
                         .year(requestMetadata.getYear())
-                        .reportableEmissions(new BigDecimal(0))
+                        .reportableEmissions(null)
                         .isFromDre(false)
-                        .isFromAerMarkedAsNotRequired(true)
                         .isFromRegulator(true)
                         .build();
 

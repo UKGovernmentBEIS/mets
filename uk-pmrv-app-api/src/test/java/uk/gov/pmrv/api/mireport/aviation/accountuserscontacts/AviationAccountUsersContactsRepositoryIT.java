@@ -15,7 +15,6 @@ import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
@@ -83,7 +82,6 @@ class AviationAccountUsersContactsRepositoryIT extends AbstractContainerBaseTest
             .id(accountId)
             .name("name")
             .status(AviationAccountStatus.LIVE)
-            .reportingStatus(AviationAccountReportingStatus.REQUIRED_TO_REPORT)
             .accountType(AccountType.AVIATION)
             .competentAuthority(CompetentAuthorityEnum.WALES)
             .emissionTradingScheme(EmissionTradingScheme.UK_ETS_AVIATION)

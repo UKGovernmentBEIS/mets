@@ -25,9 +25,11 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.security.Authorized;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountReportingStatusHistoryCreationDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountReportingStatusHistoryListResponse;
+import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountReportingStatusListResponse;
 import uk.gov.pmrv.api.account.aviation.service.reportingstatus.AviationAccountReportingStatusHistoryCreationService;
 import uk.gov.pmrv.api.account.aviation.service.reportingstatus.AviationAccountReportingStatusHistoryQueryService;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
+import uk.gov.pmrv.api.web.orchestrator.account.aviation.service.AviationAccountReportingStatusQueryOrchestrator;
 
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.FORBIDDEN;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
@@ -47,6 +49,8 @@ public class AviationAccountReportingStatusHistoryController {
 
     private final AviationAccountReportingStatusHistoryCreationService creationService;
 
+    private final AviationAccountReportingStatusQueryOrchestrator aviationAccountReportingStatusQueryOrchestrator;
+
     @GetMapping("/history")
     @Operation(summary = "Get reporting status history list for an aviation account")
     @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AviationAccountReportingStatusHistoryListResponse.class))})
@@ -58,6 +62,19 @@ public class AviationAccountReportingStatusHistoryController {
             @RequestParam("page") @Parameter(description = "The page number starting from zero") @Min(value = 0, message = "{parameter.page.typeMismatch}") @NotNull(message = "{parameter.page.typeMismatch}") Integer page,
             @RequestParam("size") @Parameter(description = "The page size") @Min(value = 1, message = "{parameter.pageSize.typeMismatch}") @NotNull(message = "{parameter.pageSize.typeMismatch}") Integer pageSize) {
         return new ResponseEntity<>(queryService.getReportingStatusHistoryListResponse(accountId, page, pageSize), HttpStatus.OK);
+    }
+
+    @GetMapping("/{accountId}")
+    @Operation(summary = "Get the reporting status history list for an account for all reporting years")
+    @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AviationAccountReportingStatusListResponse.class))})
+    @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @Authorized(resourceId = "#accountId")
+    public ResponseEntity<AviationAccountReportingStatusListResponse> getAllReportingStatuses(
+            @PathVariable("accountId") @Parameter(description = "The account id", required = true) Long accountId,
+            @RequestParam("page") @Parameter(description = "The page number starting from zero") @Min(value = 0, message = "{parameter.page.typeMismatch}") @NotNull(message = "{parameter.page.typeMismatch}") Integer page,
+            @RequestParam("size") @Parameter(description = "The page size") @Min(value = 1, message = "{parameter.pageSize.typeMismatch}") @NotNull(message = "{parameter.pageSize.typeMismatch}") Integer pageSize) {
+        return new ResponseEntity<>(aviationAccountReportingStatusQueryOrchestrator.getAviationAccountReportingStatuses(accountId, page, pageSize), HttpStatus.OK);
     }
 
     @PostMapping("/{accountId}")

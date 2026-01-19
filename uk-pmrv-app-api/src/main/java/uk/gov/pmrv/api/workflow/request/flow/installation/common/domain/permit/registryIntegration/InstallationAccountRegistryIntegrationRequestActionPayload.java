@@ -15,7 +15,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 @SuperBuilder
 public class InstallationAccountRegistryIntegrationRequestActionPayload extends RequestActionPayload {
 
-    private RegistryIntegrationActivePermit activePermit;
+    private RegistryIntegrationAccountCreateActivePermit activePermit;
     private RegistryIntegrationOrganizationDetails organizationDetails;
 
 }

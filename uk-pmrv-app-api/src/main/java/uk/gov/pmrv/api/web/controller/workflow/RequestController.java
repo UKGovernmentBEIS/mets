@@ -91,8 +91,9 @@ public class RequestController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceType="#criteria.resourceType", resourceId = "#criteria.resourceId")
     public ResponseEntity<RequestDetailsSearchResults> getRequestDetailsByResource(
-            @RequestBody @Valid @Parameter(description = "The search criteria", required = true) RequestSearchCriteria criteria){
-        return new ResponseEntity<>(requestQueryService.findRequestDetailsBySearchCriteria(criteria), HttpStatus.OK);
+            @RequestBody @Valid @Parameter(description = "The search criteria", required = true) RequestSearchCriteria criteria,
+            @Parameter(hidden = true) AppUser user){
+        return new ResponseEntity<>(requestQueryService.findRequestDetailsBySearchCriteria(criteria, user), HttpStatus.OK);
     }
 
 

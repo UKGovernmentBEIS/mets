@@ -18,6 +18,7 @@ import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
 import { AviationAccountReportingStatusHistoryCreationDTO } from '../model/aviationAccountReportingStatusHistoryCreationDTO';
 import { AviationAccountReportingStatusHistoryListResponse } from '../model/aviationAccountReportingStatusHistoryListResponse';
+import { AviationAccountReportingStatusListResponse } from '../model/aviationAccountReportingStatusListResponse';
 import { BASE_PATH } from '../variables';
 
 @Injectable({
@@ -80,6 +81,105 @@ export class AviationAccountReportingStatusService {
       throw Error('key may not be null if value is not object or array');
     }
     return httpParams;
+  }
+
+  /**
+   * Get the reporting status history list for an account for all reporting years
+   * @param accountId The account id
+   * @param page The page number starting from zero
+   * @param size The page size
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getAllReportingStatuses(
+    accountId: number,
+    page: number,
+    size: number,
+  ): Observable<AviationAccountReportingStatusListResponse>;
+  public getAllReportingStatuses(
+    accountId: number,
+    page: number,
+    size: number,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<AviationAccountReportingStatusListResponse>>;
+  public getAllReportingStatuses(
+    accountId: number,
+    page: number,
+    size: number,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<AviationAccountReportingStatusListResponse>>;
+  public getAllReportingStatuses(
+    accountId: number,
+    page: number,
+    size: number,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<AviationAccountReportingStatusListResponse>;
+  public getAllReportingStatuses(
+    accountId: number,
+    page: number,
+    size: number,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (accountId === null || accountId === undefined) {
+      throw new Error('Required parameter accountId was null or undefined when calling getAllReportingStatuses.');
+    }
+    if (page === null || page === undefined) {
+      throw new Error('Required parameter page was null or undefined when calling getAllReportingStatuses.');
+    }
+    if (size === null || size === undefined) {
+      throw new Error('Required parameter size was null or undefined when calling getAllReportingStatuses.');
+    }
+
+    let queryParameters = new HttpParams({ encoder: this.encoder });
+    if (page !== undefined && page !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>page, 'page');
+    }
+    if (size !== undefined && size !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>size, 'size');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.get<AviationAccountReportingStatusListResponse>(
+      `${this.configuration.basePath}/v1.0/aviation/accounts/reporting-status-history/${encodeURIComponent(String(accountId))}`,
+      {
+        params: queryParameters,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
   }
 
   /**

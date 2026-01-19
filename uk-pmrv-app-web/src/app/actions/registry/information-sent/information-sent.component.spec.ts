@@ -47,7 +47,8 @@ describe('InformationSentToRegistryComponent', () => {
             installationName: 'operator 36 onshore',
             operatorName: 'operator36',
             regulator: 'EA',
-            regulatedActivitiesStartDate: '2023-01-01',
+            firstYearOfReportingObligation: 2022,
+            regulatedActivity: ['AMMONIA_PRODUCTION'],
           },
           organizationDetails: {
             organisationLegalStatus: 'LIMITED_COMPANY',
@@ -75,15 +76,16 @@ describe('InformationSentToRegistryComponent', () => {
   });
 
   it('should show summary details', () => {
-    expect(page.heading).toEqual('Information sent to registry by system');
-    expect(page.summaryListValues).toHaveLength(9);
+    expect(page.heading).toEqual('Information sent to Registry by system');
+    expect(page.summaryListValues).toHaveLength(10);
     expect(page.summaryListValues).toEqual([
       ['Emitter ID', 'EM00206'],
       ['Permit ID', 'UK-E-IN-00206'],
       ['Installation name', 'operator 36 onshore'],
       ['Operator name', 'operator36'],
       ['Regulator', 'EA'],
-      ['Start date of regulated activities', '1 Jan 2023'],
+      ['First year of Registry reporting obligation', '2022'],
+      ['Regulated activity', 'Ammonia production'],
       ['Organisation legal status', 'Limited Company'],
       ['Company registration number', '11112233'],
       ['Registered address', '108 Navigation Walk , 23232442124'],

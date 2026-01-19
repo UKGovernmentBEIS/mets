@@ -81,6 +81,7 @@ import { EmpVariationCorsiaApplicationRegulatorLedApprovedRequestActionPayload }
 import { EmpVariationCorsiaApplicationRejectedRequestActionPayload } from './empVariationCorsiaApplicationRejectedRequestActionPayload';
 import { EmpVariationCorsiaApplicationReturnedForAmendsRequestActionPayload } from './empVariationCorsiaApplicationReturnedForAmendsRequestActionPayload';
 import { EmpVariationCorsiaApplicationSubmittedRequestActionPayload } from './empVariationCorsiaApplicationSubmittedRequestActionPayload';
+import { EmpVariationRegistryIntegrationRequestActionPayload } from './empVariationRegistryIntegrationRequestActionPayload';
 import { EmpVariationUkEtsApplicationAmendsSubmittedRequestActionPayload } from './empVariationUkEtsApplicationAmendsSubmittedRequestActionPayload';
 import { EmpVariationUkEtsApplicationApprovedRequestActionPayload } from './empVariationUkEtsApplicationApprovedRequestActionPayload';
 import { EmpVariationUkEtsApplicationDeemedWithdrawnRequestActionPayload } from './empVariationUkEtsApplicationDeemedWithdrawnRequestActionPayload';
@@ -95,6 +96,7 @@ import { InstallationAccountOpeningApplicationSubmittedRequestActionPayload } fr
 import { InstallationAccountOpeningApprovedRequestActionPayload } from './installationAccountOpeningApprovedRequestActionPayload';
 import { InstallationAccountOpeningDecisionRequestActionPayload } from './installationAccountOpeningDecisionRequestActionPayload';
 import { InstallationAccountRegistryIntegrationRequestActionPayload } from './installationAccountRegistryIntegrationRequestActionPayload';
+import { InstallationAccountUpdatedRegistryIntegrationRequestActionPayload } from './installationAccountUpdatedRegistryIntegrationRequestActionPayload';
 import { InstallationInspectionApplicationSubmittedRequestActionPayload } from './installationInspectionApplicationSubmittedRequestActionPayload';
 import { InstallationInspectionOperatorRespondedRequestActionPayload } from './installationInspectionOperatorRespondedRequestActionPayload';
 import { NerApplicationAcceptedRequestActionPayload } from './nerApplicationAcceptedRequestActionPayload';
@@ -153,6 +155,10 @@ import { RfiSubmittedRequestActionPayload } from './rfiSubmittedRequestActionPay
 import { VirApplicationRespondedToRegulatorCommentsRequestActionPayload } from './virApplicationRespondedToRegulatorCommentsRequestActionPayload';
 import { VirApplicationReviewedRequestActionPayload } from './virApplicationReviewedRequestActionPayload';
 import { VirApplicationSubmittedRequestActionPayload } from './virApplicationSubmittedRequestActionPayload';
+import { WasteQDRApplicationAmendsSubmittedRequestActionPayload } from './wasteQDRApplicationAmendsSubmittedRequestActionPayload';
+import { WasteQDRApplicationCompletedRequestActionPayload } from './wasteQDRApplicationCompletedRequestActionPayload';
+import { WasteQDRApplicationSubmittedRequestActionPayload } from './wasteQDRApplicationSubmittedRequestActionPayload';
+import { WasteQDRRegulatorReviewReturnedForAmendsRequestActionPayload } from './wasteQDRRegulatorReviewReturnedForAmendsRequestActionPayload';
 import { WithholdingOfAllowancesApplicationClosedRequestActionPayload } from './withholdingOfAllowancesApplicationClosedRequestActionPayload';
 import { WithholdingOfAllowancesApplicationSubmittedRequestActionPayload } from './withholdingOfAllowancesApplicationSubmittedRequestActionPayload';
 import { WithholdingOfAllowancesApplicationWithdrawnRequestActionPayload } from './withholdingOfAllowancesApplicationWithdrawnRequestActionPayload';
@@ -382,6 +388,10 @@ export interface RequestActionDTO {
     | 'HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED'
     | 'HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED'
     | 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED'
+    | 'WASTE_QDR_APPLICATION_SUBMITTED'
+    | 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS'
+    | 'WASTE_QDR_APPLICATION_COMPLETED'
+    | 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED'
     | 'REQUEST_TERMINATED'
     | 'VERIFICATION_STATEMENT_CANCELLED'
     | 'EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED'
@@ -406,6 +416,7 @@ export interface RequestActionDTO {
     | 'EMP_VARIATION_UKETS_APPLICATION_RETURNED_FOR_AMENDS'
     | 'EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMITTED'
     | 'EMP_VARIATION_UKETS_RECALLED_FROM_AMENDS'
+    | 'EMP_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY'
     | 'AVIATION_AER_UKETS_APPLICATION_SENT_TO_VERIFIER'
     | 'AVIATION_AER_UKETS_APPLICATION_SUBMITTED'
     | 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED'
@@ -547,6 +558,7 @@ export interface RequestActionDTO {
     | EmpVariationCorsiaApplicationRejectedRequestActionPayload
     | EmpVariationCorsiaApplicationReturnedForAmendsRequestActionPayload
     | EmpVariationCorsiaApplicationSubmittedRequestActionPayload
+    | EmpVariationRegistryIntegrationRequestActionPayload
     | EmpVariationUkEtsApplicationAmendsSubmittedRequestActionPayload
     | EmpVariationUkEtsApplicationApprovedRequestActionPayload
     | EmpVariationUkEtsApplicationDeemedWithdrawnRequestActionPayload
@@ -561,6 +573,7 @@ export interface RequestActionDTO {
     | InstallationAccountOpeningApprovedRequestActionPayload
     | InstallationAccountOpeningDecisionRequestActionPayload
     | InstallationAccountRegistryIntegrationRequestActionPayload
+    | InstallationAccountUpdatedRegistryIntegrationRequestActionPayload
     | InstallationInspectionApplicationSubmittedRequestActionPayload
     | InstallationInspectionOperatorRespondedRequestActionPayload
     | NerApplicationAcceptedRequestActionPayload
@@ -619,6 +632,10 @@ export interface RequestActionDTO {
     | VirApplicationRespondedToRegulatorCommentsRequestActionPayload
     | VirApplicationReviewedRequestActionPayload
     | VirApplicationSubmittedRequestActionPayload
+    | WasteQDRApplicationAmendsSubmittedRequestActionPayload
+    | WasteQDRApplicationCompletedRequestActionPayload
+    | WasteQDRApplicationSubmittedRequestActionPayload
+    | WasteQDRRegulatorReviewReturnedForAmendsRequestActionPayload
     | WithholdingOfAllowancesApplicationClosedRequestActionPayload
     | WithholdingOfAllowancesApplicationSubmittedRequestActionPayload
     | WithholdingOfAllowancesApplicationWithdrawnRequestActionPayload;
@@ -648,6 +665,7 @@ export interface RequestActionDTO {
     | 'INSTALLATION_AUDIT'
     | 'HSE_TI'
     | 'BDR'
+    | 'BDRS2'
     | 'PERMANENT_CESSATION'
     | 'ALR'
     | 'WASTE_QDR'

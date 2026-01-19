@@ -22,4 +22,6 @@ public class EmpVariationUkEtsApplicationSubmitRequestTaskPayload extends EmpVar
 	@Builder.Default
 	private Map<String, Boolean> reviewSectionsCompleted = new HashMap<>();
 
+	private boolean isHideEmpApplicationTimeframe;
+
 }

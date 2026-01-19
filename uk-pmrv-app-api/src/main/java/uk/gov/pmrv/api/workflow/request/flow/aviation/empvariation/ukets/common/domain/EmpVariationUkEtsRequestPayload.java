@@ -93,5 +93,7 @@ public class EmpVariationUkEtsRequestPayload extends RequestPayload
     private FileInfoDTO officialNotice;
     
     private FileInfoDTO empDocument;
+
+	private boolean isHideEmpApplicationTimeframe;
 	
 }

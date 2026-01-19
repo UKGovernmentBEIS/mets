@@ -42,9 +42,10 @@ const step2 = (permitCessation: PermitCessation, allowancesSurrenderRequired?: b
   allowancesSurrenderRequired ? !!permitCessation?.allowancesSurrenderDate : !!permitCessation?.determinationOutcome;
 const step3 = (permitCessation: PermitCessation, allowancesSurrenderRequired?: boolean): boolean =>
   allowancesSurrenderRequired
-    ? !!permitCessation?.numberOfSurrenderAllowances
+    ? !!permitCessation?.numberOfSurrenderAllowances || permitCessation?.numberOfSurrenderAllowances === 0
     : !!permitCessation?.determinationOutcome;
-const step4 = (permitCessation: PermitCessation): boolean => !!permitCessation?.annualReportableEmissions;
+const step4 = (permitCessation: PermitCessation): boolean =>
+  !!permitCessation?.annualReportableEmissions || permitCessation?.annualReportableEmissions === '0';
 const step5 = (permitCessation: PermitCessation): boolean => permitCessation?.subsistenceFeeRefunded !== undefined;
 const step6 = (permitCessation: PermitCessation): boolean => !!permitCessation?.noticeType;
 const step7 = (permitCessation: PermitCessation): boolean => !!permitCessation?.notes;

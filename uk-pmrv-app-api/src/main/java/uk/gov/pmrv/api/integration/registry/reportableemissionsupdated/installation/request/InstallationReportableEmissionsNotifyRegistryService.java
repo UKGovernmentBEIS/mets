@@ -24,6 +24,7 @@ import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountInfoDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.common.reporting.domain.ReportableEmissionsUpdatedEvent;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.installation.response.InstallationRegistryIntegrationEmailProperties;
@@ -62,10 +63,6 @@ class InstallationReportableEmissionsNotifyRegistryService {
 
 	@Transactional
 	public void notifyRegistry(InstallationReportableEmissionsUpdatedEvent event) {
-
-		if (event.isFromAerMarkedAsNotRequired()) {
-			return;
-		}
 
 		Long accountId = event.getAccountId();
 		final InstallationAccountInfoDTO account = installationAccountQueryService.getInstallationAccountInfoDTOById(accountId);
@@ -119,7 +116,10 @@ class InstallationReportableEmissionsNotifyRegistryService {
 	}
 
 	private boolean accountConditionsAreSatisfied(AerRequestPayload aerRequestPayload, InstallationAccountInfoDTO account){
-		if (!aerRequestPayload.getPermitOriginatedData().getPermitType().equals(PermitType.GHGE)) {
+		PermitType permitType = aerRequestPayload.getPermitOriginatedData().getPermitType();
+		EmissionTradingScheme scheme = account.getEmissionTradingScheme();
+
+		if (permitType != PermitType.GHGE) {
 			log.info(REQUEST_LOG_FORMAT,
 				SERVICE_KEY,
 				account.getId(),
@@ -127,7 +127,14 @@ class InstallationReportableEmissionsNotifyRegistryService {
 				"Emissions updated are not sent to ETS Registry because account is not of type GHGE");
 			return false;
 		}
-
+		if (scheme != EmissionTradingScheme.UK_ETS_INSTALLATIONS) {
+			log.info(REQUEST_LOG_FORMAT,
+					SERVICE_KEY,
+					account.getId(),
+					INTEGRATION_POINT_KEY,
+					"Emissions updated are not sent to ETS Registry because emission trading scheme is not UK ETS");
+			return false;
+		}
 		return true;
 	}
 
@@ -137,6 +144,11 @@ class InstallationReportableEmissionsNotifyRegistryService {
 
 		boolean isVerificationPerformed = aerRequestPayload.isVerificationPerformed();
 		RequestType initiatorRequestType = aerRequestMetadata.getInitiatorRequest().getType();
+
+		if ((initiatorRequestType.equals(RequestType.AER) || initiatorRequestType.equals(RequestType.PERMIT_REVOCATION) || initiatorRequestType.equals(RequestType.PERMIT_SURRENDER))
+			&& event.isFromRegulator() && event.getReportableEmissions() == null) { // mark as not required case
+			return true;
+		}
 
 		if (!isVerificationPerformed && !event.isFromRegulator()) {
 			log.info(REQUEST_LOG_FORMAT,
@@ -155,9 +167,8 @@ class InstallationReportableEmissionsNotifyRegistryService {
 			return false;
 		}
 
-
 		if (initiatorRequestType.equals(RequestType.AER)) {
-            return reportingPeriodConditionsAreSatisfied(event);
+			return reportingPeriodConditionsAreSatisfied(event);
 		} else if (initiatorRequestType.equals(RequestType.PERMIT_REVOCATION) || initiatorRequestType.equals(RequestType.PERMIT_SURRENDER)) {
 			return true;
 		} else {
@@ -207,10 +218,10 @@ class InstallationReportableEmissionsNotifyRegistryService {
 					SERVICE_KEY,
 					event.getAccountId(),
 					INTEGRATION_POINT_KEY,
-					"Cannot send emissions to ETS Registry because no configuration for the aer.installation.reporting-period.from property has been found");
+					"Cannot send emissions to ETS Registry because no configuration for the aer.installation.reporting-period.to property has been found");
 
 			throw new BusinessException(
-					MetsErrorCode.INTEGRATION_REGISTRY_EMISSIONS_INSTALLATION_REPORTING_PERIOD_FROM_NOT_FOUND,
+					MetsErrorCode.INTEGRATION_REGISTRY_EMISSIONS_INSTALLATION_REPORTING_PERIOD_TO_NOT_FOUND,
 					event);
 		}
 
@@ -247,18 +258,20 @@ class InstallationReportableEmissionsNotifyRegistryService {
 			return;
 		}
 
-		BigDecimal roundedEmissions = event.getReportableEmissions().setScale(0, RoundingMode.HALF_UP);
-		String reportableEmissions;
-		// In case reportableEmissions cannot fit in a long type (as per registry's type) log an error but send emissions anyway
-		try {
-			reportableEmissions = String.valueOf(roundedEmissions.longValueExact());
-		} catch (ArithmeticException e) {
-			reportableEmissions = roundedEmissions.toString();
-			log.error(REQUEST_LOG_FORMAT,
-				SERVICE_KEY,
-				event.getAccountId(),
-				INTEGRATION_POINT_KEY,
-				"Emissions value overflow " + reportableEmissions);
+		String reportableEmissions = null;
+		if (event.getReportableEmissions() != null) {
+			BigDecimal roundedEmissions = event.getReportableEmissions().setScale(0, RoundingMode.HALF_UP);
+			// In case reportableEmissions cannot fit in a long type (as per registry's type) log an error but send emissions anyway
+			try {
+				reportableEmissions = String.valueOf(roundedEmissions.longValueExact());
+			} catch (ArithmeticException e) {
+				reportableEmissions = roundedEmissions.toString();
+				log.error(REQUEST_LOG_FORMAT,
+					SERVICE_KEY,
+					event.getAccountId(),
+					INTEGRATION_POINT_KEY,
+					"Emissions value overflow " + reportableEmissions);
+			}
 		}
 
 		final AccountEmissionsUpdatedRequestEvent accountEmissionsUpdatedRequestEvent = AccountEmissionsUpdatedRequestEvent.builder()

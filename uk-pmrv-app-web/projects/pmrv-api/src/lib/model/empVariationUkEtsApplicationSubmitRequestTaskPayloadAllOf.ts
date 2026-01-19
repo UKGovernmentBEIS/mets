@@ -21,4 +21,5 @@ export interface EmpVariationUkEtsApplicationSubmitRequestTaskPayloadAllOf {
   empVariationDetails?: EmpVariationUkEtsDetails;
   empVariationDetailsCompleted?: boolean;
   reviewSectionsCompleted?: { [key: string]: boolean };
+  hideEmpApplicationTimeframe?: boolean;
 }

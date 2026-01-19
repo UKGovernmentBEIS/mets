@@ -6,6 +6,7 @@ import {
   OnInit,
   Optional,
   Self,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, FormGroupDirective, NgControl, NgForm, UntypedFormControl } from '@angular/forms';
@@ -35,6 +36,7 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
   @Input() showFilesizeHint = true;
   @Input() hint: string;
   @Input() accepted = '*/*';
+  @Input() customHintTemplate: TemplateRef<any>;
   @Input() downloadUrl: (uuid: string) => string | string[];
   @Input() fileNameTransformer!: (file: File | null) => File | null;
 

@@ -32,4 +32,5 @@ export interface EmpVariationUkEtsApplicationAmendsSubmitRequestTaskPayloadAllOf
   reviewAttachments?: { [key: string]: string };
   rfiAttachments?: { [key: string]: string };
   empVariationDetailsAmendCompleted?: boolean;
+  hideEmpApplicationTimeframe?: boolean;
 }

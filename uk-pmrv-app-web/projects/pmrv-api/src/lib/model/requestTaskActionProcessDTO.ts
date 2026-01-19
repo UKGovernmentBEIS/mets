@@ -62,6 +62,10 @@ import { BDRApplicationSaveRequestTaskActionPayload } from './bDRApplicationSave
 import { BDRApplicationSubmitToVerifierRequestTaskActionPayload } from './bDRApplicationSubmitToVerifierRequestTaskActionPayload';
 import { BDRApplicationVerificationReturnToOperatorRequestTaskActionPayload } from './bDRApplicationVerificationReturnToOperatorRequestTaskActionPayload';
 import { BDRApplicationVerificationSaveRequestTaskActionPayload } from './bDRApplicationVerificationSaveRequestTaskActionPayload';
+import { BDRS2ApplicationSaveRequestTaskActionPayload } from './bDRS2ApplicationSaveRequestTaskActionPayload';
+import { BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload } from './bDRS2ApplicationSubmitToVerifierRequestTaskActionPayload';
+import { BDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload } from './bDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload';
+import { BDRS2ApplicationVerificationSaveRequestTaskActionPayload } from './bDRS2ApplicationVerificationSaveRequestTaskActionPayload';
 import { BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload } from './bDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload';
 import { DoalSaveApplicationRequestTaskActionPayload } from './doalSaveApplicationRequestTaskActionPayload';
 import { DoalSaveAuthorityResponseTaskActionPayload } from './doalSaveAuthorityResponseTaskActionPayload';
@@ -176,7 +180,10 @@ import { VirSaveApplicationRequestTaskActionPayload } from './virSaveApplication
 import { VirSaveRespondToRegulatorCommentsRequestTaskActionPayload } from './virSaveRespondToRegulatorCommentsRequestTaskActionPayload';
 import { VirSaveReviewRequestTaskActionPayload } from './virSaveReviewRequestTaskActionPayload';
 import { VirSubmitRespondToRegulatorCommentsRequestTaskActionPayload } from './virSubmitRespondToRegulatorCommentsRequestTaskActionPayload';
+import { WasteQDRApplicationAmendsSaveRequestTaskActionPayload } from './wasteQDRApplicationAmendsSaveRequestTaskActionPayload';
+import { WasteQDRApplicationAmendsSubmitRequestTaskActionPayload } from './wasteQDRApplicationAmendsSubmitRequestTaskActionPayload';
 import { WasteQDRApplicationSaveRequestTaskActionPayload } from './wasteQDRApplicationSaveRequestTaskActionPayload';
+import { WasteQDRSaveReviewGroupDecisionRequestTaskActionPayload } from './wasteQDRSaveReviewGroupDecisionRequestTaskActionPayload';
 import { WithholdingOfAllowancesSaveApplicationRequestTaskActionPayload } from './withholdingOfAllowancesSaveApplicationRequestTaskActionPayload';
 import { WithholdingOfAllowancesWithdrawalCloseApplicationRequestTaskActionPayload } from './withholdingOfAllowancesWithdrawalCloseApplicationRequestTaskActionPayload';
 import { WithholdingOfAllowancesWithdrawalSaveApplicationRequestTaskActionPayload } from './withholdingOfAllowancesWithdrawalSaveApplicationRequestTaskActionPayload';
@@ -416,6 +423,10 @@ export interface RequestTaskActionProcessDTO {
     | 'BDR_REGULATOR_REVIEW_SUBMIT'
     | 'BDR_REQUEST_PEER_REVIEW'
     | 'BDR_SUBMIT_PEER_REVIEW_DECISION'
+    | 'BDRS2_SAVE_APPLICATION'
+    | 'BDRS2_UPLOAD_ATTACHMENT'
+    | 'BDRS2_SUBMIT_TO_VERIFIER'
+    | 'BDRS2_SUBMIT_TO_REGULATOR'
     | 'PERMANENT_CESSATION_CANCEL_APPLICATION'
     | 'PERMANENT_CESSATION_SAVE_APPLICATION'
     | 'PERMANENT_CESSATION_UPLOAD'
@@ -447,6 +458,13 @@ export interface RequestTaskActionProcessDTO {
     | 'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION'
     | 'WASTE_QDR_SAVE_APPLICATION'
     | 'WASTE_QDR_UPLOAD_ATTACHMENT'
+    | 'WASTE_QDR_SUBMIT_TO_REGULATOR'
+    | 'WASTE_QDR_SAVE_REVIEW_GROUP_DECISION'
+    | 'WASTE_QDR_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT'
+    | 'WASTE_QDR_REGULATOR_REVIEW_SUBMIT'
+    | 'WASTE_QDR_REGULATOR_REVIEW_RETURN_FOR_AMENDS'
+    | 'WASTE_QDR_APPLICATION_AMENDS_SAVE'
+    | 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR'
     | 'EMP_ISSUANCE_UKETS_SAVE_APPLICATION'
     | 'EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION'
     | 'EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT'
@@ -660,6 +678,10 @@ export interface RequestTaskActionProcessDTO {
     | BDRApplicationSubmitToVerifierRequestTaskActionPayload
     | BDRApplicationVerificationReturnToOperatorRequestTaskActionPayload
     | BDRApplicationVerificationSaveRequestTaskActionPayload
+    | BDRS2ApplicationSaveRequestTaskActionPayload
+    | BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload
+    | BDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload
+    | BDRS2ApplicationVerificationSaveRequestTaskActionPayload
     | BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload
     | DoalSaveApplicationRequestTaskActionPayload
     | DoalSaveAuthorityResponseTaskActionPayload
@@ -774,7 +796,10 @@ export interface RequestTaskActionProcessDTO {
     | VirSaveRespondToRegulatorCommentsRequestTaskActionPayload
     | VirSaveReviewRequestTaskActionPayload
     | VirSubmitRespondToRegulatorCommentsRequestTaskActionPayload
+    | WasteQDRApplicationAmendsSaveRequestTaskActionPayload
+    | WasteQDRApplicationAmendsSubmitRequestTaskActionPayload
     | WasteQDRApplicationSaveRequestTaskActionPayload
+    | WasteQDRSaveReviewGroupDecisionRequestTaskActionPayload
     | WithholdingOfAllowancesSaveApplicationRequestTaskActionPayload
     | WithholdingOfAllowancesWithdrawalCloseApplicationRequestTaskActionPayload
     | WithholdingOfAllowancesWithdrawalSaveApplicationRequestTaskActionPayload;

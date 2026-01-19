@@ -22,7 +22,7 @@ public enum SubInstallationName {
     DOLIME("Dolime"),
     DRIED_SECONDARY_GYPSUM("Dried secondary gypsum"),
     EAF_CARBON_STEEL("EAF carbon steel"),
-    EAF_HIGH_CARBON_STEEL("EAF high carbon steel"),
+    EAF_HIGH_CARBON_STEEL("EAF high alloy steel"),
     E_PVC("E-PVC"),
     ETHYLENE_OXIDE_ETHYLENE_GLYCOLS("Ethylene oxide / ethylene glycols"),
     FACING_BRICKS("Facing bricks"),

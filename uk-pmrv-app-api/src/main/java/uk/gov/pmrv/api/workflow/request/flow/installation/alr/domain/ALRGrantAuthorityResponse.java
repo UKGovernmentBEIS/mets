@@ -12,6 +12,7 @@ import java.time.Year;
 import java.util.UUID;
 import java.util.SortedMap;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -30,5 +31,5 @@ public class ALRGrantAuthorityResponse extends ALRAuthorityResponse {
     private SortedMap<Year, Integer> totalAllocationsPerYear = new TreeMap<>();
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Set<UUID> documents;
+    private Set<UUID> documents = new HashSet<>();
 }

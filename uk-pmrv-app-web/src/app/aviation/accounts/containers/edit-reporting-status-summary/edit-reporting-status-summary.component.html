@@ -1,0 +1,30 @@
+@if (currentState(); as currentState) {
+  <app-page-heading caption="Update reporting status">Check your answers</app-page-heading>
+  @if (currentState?.currentStatus?.isReported && currentState?.currentStatus?.status === 'REQUIRED_TO_REPORT') {
+    <govuk-warning-text>Emissions have already been reported for the selected year.</govuk-warning-text>
+  }
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Selected year</dt>
+      <dd govukSummaryListRowValue>{{ reportingYear() }}</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Change reporting status to</dt>
+      <dd govukSummaryListRowValue>{{ currentState?.upsertStatus?.status | accountReportingStatus }}</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ currentState?.upsertStatus?.reason }}</dd>
+      <dd govukSummaryListRowActions>
+        <a [routerLink]="['../']" govukLink>Change</a>
+      </dd>
+    </div>
+  </dl>
+  <button govukButton type="button" (click)="onContinue()">Confirm and complete</button>
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <a govukLink [routerLink]="['../../../']">Return to: Account details</a>
+  </div>
+}

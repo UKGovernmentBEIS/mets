@@ -5,7 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountUpdateDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
@@ -14,13 +18,10 @@ import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
-import uk.gov.netz.api.authorization.core.domain.AppUser;
-import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.AddressState;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.time.LocalDate;
 
@@ -48,6 +49,9 @@ class AviationAccountUpdateServiceTest {
 
     @Mock
     private LocationMapper locationMapper;
+
+    @Mock
+    private ApplicationEventPublisher publisher;
 
     @Test
     void updateAviationAccount() {
@@ -206,31 +210,28 @@ class AviationAccountUpdateServiceTest {
         verify(locationMapper, never()).toLocation(any());
     }
 
-    @Test
-    void updateAviationAccount_validateCommencementDate() {
 
+    @Test
+    void updateAviationAccount_commencementDate() {
         Long accountId = 1L;
         String accountName = "accountName";
         String emitterId = "emitterId";
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         Long sopId = 1L;
         String crcoCode = "crcoCode";
-        LocalDate commencementDate = LocalDate.of(2020,1,1);
+        LocalDate commencementDate = LocalDate.of(2022,1,1);
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme, sopId, crcoCode, commencementDate);
-
         AccountUpdateCommencementDateDTO accountUpdateCommencementDateDTO = AccountUpdateCommencementDateDTO
                 .builder()
                 .commencementDate(commencementDate).build();
 
         when(aviationAccountQueryService.getAccountById(accountId)).thenReturn(account);
 
-        BusinessException businessException = assertThrows(BusinessException.class,
-                () -> aviationAccountUpdateService.updateAndValidateAccountCommencementDate(accountId, accountUpdateCommencementDateDTO));
+        aviationAccountUpdateService.updateAccountCommencementDate(accountId,commencementDate);
 
         verify(aviationAccountQueryService, times(1)).getAccountById(accountId);
-        assertEquals(MetsErrorCode.AVIATION_COMMENCEMENT_DATE_NOT_BEFORE_2021_NOT_AFTER_CURRENT_YEAR, businessException.getErrorCode());
-        verify(locationMapper, never()).toLocation(any());
+
     }
 
 

@@ -90,7 +90,7 @@ class RequestTaskAssignmentServiceTest {
             .thenReturn(requestTasks);
         when(requestTaskAssignmentValidationService.hasUserPermissionsToBeAssignedToTask(requestTask1, userId)).thenReturn(true);
 
-        requestTaskAssignmentService.assignToUser(requestTaskToBeAssigned, userId);
+        requestTaskAssignmentService.assignToUser(requestTaskToBeAssigned, userId, RoleTypeConstants.REGULATOR);
 
         verify(requestTaskAssignmentValidationService, times(2))
             .hasUserPermissionsToBeAssignedToTask(any(), anyString());
@@ -99,7 +99,7 @@ class RequestTaskAssignmentServiceTest {
             .findTasksByRequestIdAndRoleType(request.getId(), userRoleType.getRoleType());
         verify(requestAssignmentService, times(1))
             .assignRequestToUser(requestTaskToBeAssigned.getRequest(), userId);
-        verify(emailNotificationAssignedTaskService, times(1)).sendEmailToRecipient(userId, RequestTaskType.PERMIT_ISSUANCE_APPLICATION_REVIEW);
+        verify(emailNotificationAssignedTaskService, times(1)).sendEmailToRecipient(userId, requestTaskToBeAssigned, RoleTypeConstants.REGULATOR);
         verifyNoMoreInteractions(requestTaskAssignmentValidationService, emailNotificationAssignedTaskService);
     }
 
@@ -117,8 +117,8 @@ class RequestTaskAssignmentServiceTest {
         when(requestTaskAssignmentValidationService.hasUserPermissionsToBeAssignedToTask(requestTask, userId))
             .thenReturn(true);
 
-        requestTaskAssignmentService.assignToUser(requestTask, userId);
-        verify(emailNotificationAssignedTaskService, times(1)).sendEmailToRecipient(userId, RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW);
+        requestTaskAssignmentService.assignToUser(requestTask, userId, RoleTypeConstants.REGULATOR);
+        verify(emailNotificationAssignedTaskService, times(1)).sendEmailToRecipient(userId, requestTask, RoleTypeConstants.REGULATOR);
 
         requestTask = RequestTask.builder()
             .type(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW)
@@ -127,7 +127,7 @@ class RequestTaskAssignmentServiceTest {
                 sendEmailNotification(false).build())
             .build();
 
-        requestTaskAssignmentService.assignToUser(requestTask, userId);
+        requestTaskAssignmentService.assignToUser(requestTask, userId, RoleTypeConstants.REGULATOR);
         verifyNoMoreInteractions(emailNotificationAssignedTaskService);
     }
 
@@ -145,11 +145,11 @@ class RequestTaskAssignmentServiceTest {
         when(requestTaskAssignmentValidationService.hasUserPermissionsToBeAssignedToTask(requestTask, userId))
             .thenReturn(true);
 
-        requestTaskAssignmentService.assignToUser(requestTask, userId);
+        requestTaskAssignmentService.assignToUser(requestTask, userId, RoleTypeConstants.REGULATOR);
 
         verify(requestTaskAssignmentValidationService, times(1))
             .hasUserPermissionsToBeAssignedToTask(requestTask, userId);
-        verify(emailNotificationAssignedTaskService, times(1)).sendEmailToRecipient(userId, RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW);
+        verify(emailNotificationAssignedTaskService, times(1)).sendEmailToRecipient(userId, requestTask, RoleTypeConstants.REGULATOR);
         verifyNoInteractions(requestAssignmentService, userRoleTypeService);
         verifyNoMoreInteractions(requestTaskAssignmentValidationService, requestTaskService,
             emailNotificationAssignedTaskService);
@@ -164,7 +164,7 @@ class RequestTaskAssignmentServiceTest {
             .thenReturn(false);
 
         assertThrows(BusinessCheckedException.class,
-            () -> requestTaskAssignmentService.assignToUser(requestTask, userId));
+            () -> requestTaskAssignmentService.assignToUser(requestTask, userId, RoleTypeConstants.REGULATOR));
 
         verify(requestTaskAssignmentValidationService, times(1))
             .hasUserPermissionsToBeAssignedToTask(requestTask, userId);

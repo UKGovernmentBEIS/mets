@@ -86,6 +86,7 @@ export class ReportsComponent extends BaseComponent implements OnInit {
 
           if (!bdrEnabled) {
             delete this.reportsTypesMap['Baseline data report'];
+            delete this.reportsTypesMap['Baseline data report (stage 2)'];
           }
 
           if (!wasteQdrEnabled) {

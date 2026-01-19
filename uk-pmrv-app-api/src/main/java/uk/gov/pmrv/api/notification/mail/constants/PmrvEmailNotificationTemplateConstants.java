@@ -16,8 +16,10 @@ public final class PmrvEmailNotificationTemplateConstants {
     public static final String ACCOUNT_APPLICATION_REJECTED_REASON = "reason";
     public static final String ACCOUNT_NAME = "accountName";
     public static final String ACCOUNT_PRIMARY_CONTACT = "accountPrimaryContact";
+    public static final String ACCOUNT_TYPE = "accountType";
     public static final String EMITTER_ID = "emitterId";
     public static final String PAYLOAD = "payload";
+    public static final String HAS_WORKFLOW_ID = "hasWorkflowId";
 
     public static final String COMPETENT_AUTHORITY_EMAIL = "competentAuthorityEmail";
     public static final String COMPETENT_AUTHORITY_NAME = "competentAuthorityName";

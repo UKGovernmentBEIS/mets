@@ -8,6 +8,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingRequiredEvent;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.service.AviationAerReportingObligationService;
 
+import java.time.Year;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -29,10 +31,11 @@ class AviationAccountReportingRequiredEventListenerTest {
         AviationAccountReportingRequiredEvent event = AviationAccountReportingRequiredEvent.builder()
             .accountId(accountId)
             .submitterId(userId)
+            .year(Year.now())
             .build();
 
         eventListener.onAviationAccountReportingRequiredEvent(event);
 
-        verify(aviationAerReportingObligationService, times(1)).revertExemption(accountId, userId);
+        verify(aviationAerReportingObligationService, times(1)).revertExemption(event);
     }
 }

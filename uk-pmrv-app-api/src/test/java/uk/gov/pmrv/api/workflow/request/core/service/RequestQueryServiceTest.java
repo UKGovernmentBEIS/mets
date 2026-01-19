@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
@@ -132,12 +133,13 @@ class RequestQueryServiceTest {
                 .total(10L)
                 .build();
 
-        when(requestDetailsRepository.findRequestDetailsBySearchCriteria(criteria)).thenReturn(expectedResults);
+        AppUser user = AppUser.builder().roleType("REGULATOR").build();
+        when(requestDetailsRepository.findRequestDetailsBySearchCriteria(criteria, user)).thenReturn(expectedResults);
 
-        RequestDetailsSearchResults actualResults = service.findRequestDetailsBySearchCriteria(criteria);
+        RequestDetailsSearchResults actualResults = service.findRequestDetailsBySearchCriteria(criteria, user);
 
         assertThat(actualResults).isEqualTo(expectedResults);
-        verify(requestDetailsRepository, times(1)).findRequestDetailsBySearchCriteria(criteria);
+        verify(requestDetailsRepository, times(1)).findRequestDetailsBySearchCriteria(criteria, user);
     }
 
     @Test

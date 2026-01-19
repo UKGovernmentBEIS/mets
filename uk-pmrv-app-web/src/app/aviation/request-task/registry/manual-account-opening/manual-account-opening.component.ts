@@ -18,9 +18,9 @@ import {
   AviationAccountViewService,
   EmpIssuanceIndividualCompanyDetails,
   EmpIssuanceLimitedCompanyDetails,
-  EmpIssuanceOperatorDetails,
   EmpIssuanceOrganisationDetails,
   EmpIssuancePartnershipDetails,
+  RegistryIntegrationAccountCreateActivePermit,
   RequestTaskActionPayload,
   TasksService,
 } from 'pmrv-api';
@@ -29,7 +29,7 @@ import { OperatorDetailsLegalStatusTypePipe } from '../../../shared/pipes/operat
 
 interface ViewModel {
   header: string;
-  operatorDetails: EmpIssuanceOperatorDetails;
+  operatorDetails: RegistryIntegrationAccountCreateActivePermit;
   organizationDetails: Partial<
     EmpIssuanceOrganisationDetails &
       EmpIssuanceIndividualCompanyDetails &
@@ -66,7 +66,7 @@ export class ManualAccountOpeningComponent implements OnInit {
   vm$: Observable<ViewModel> = combineLatest([this.aviationAccountViewForRegistry$]).pipe(
     map(([aviationAccountView]) => {
       return {
-        header: 'Send information to the registry',
+        header: 'Send information to the Registry',
         operatorDetails: aviationAccountView?.operatorDetails,
         organizationDetails: aviationAccountView?.organisationDetails,
       };

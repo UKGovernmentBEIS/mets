@@ -6,4 +6,5 @@ import lombok.experimental.UtilityClass;
 public class PmrvScope {
 
     public static final String REQUEST_MARK_NOT_REQUIRED = "REQUEST_MARK_NOT_REQUIRED";
+    public static final String ALR_BULK_DOWNLOAD = "ALR_BULK_DOWNLOAD";
 }

@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import uk.gov.pmrv.api.integration.registry.accountupdated.aviation.request.requestaction.EmpVariationRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.annualoffsetting.common.domain.AviationAerCorsiaAnnualOffsettingApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.annualoffsetting.common.domain.AviationAerCorsiaAnnualOffsettingPeerReviewDescisionActionPayload;
@@ -97,6 +98,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRRegulato
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRVerificationReturnedToOperatorRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountRegistryIntegrationRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountUpdatedRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationAcceptedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationAcceptedWithCorrectionsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationClosedRequestActionPayload;
@@ -147,6 +149,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.returnofallowances.dom
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirApplicationRespondedToRegulatorCommentsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirApplicationReviewedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRApplicationAmendsSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRApplicationCompletedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRRegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesApplicationClosedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesApplicationWithdrawnRequestActionPayload;
@@ -175,6 +181,8 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PermitIssuanceApplicationReturnedForAmendsRequestActionPayload.class, value = "PERMIT_ISSUANCE_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitIssuanceApplicationSubmittedRequestActionPayload.class, value = "PERMIT_ISSUANCE_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = InstallationAccountRegistryIntegrationRequestActionPayload.class, value = "PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD"),
+
+
 
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "PERMIT_SURRENDER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitSurrenderApplicationDeemedWithdrawnRequestActionPayload.class, value = "PERMIT_SURRENDER_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD"),
@@ -205,7 +213,8 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "PERMIT_VARIATION_PEER_REVIEW_DECISION_REGULATOR_LED_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitVariationApplicationReturnedForAmendsRequestActionPayload.class, value = "PERMIT_VARIATION_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitVariationApplicationRegulatorLedApprovedRequestActionPayload.class, value = "PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD"),
-                @DiscriminatorMapping(schema = InstallationAccountRegistryIntegrationRequestActionPayload.class, value = "PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD"),
+                @DiscriminatorMapping(schema = InstallationAccountUpdatedRegistryIntegrationRequestActionPayload.class, value = "PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD"),
+
 
 
                 @DiscriminatorMapping(schema = PermitTransferAApplicationSubmittedRequestActionPayload.class, value = "PERMIT_TRANSFER_A_APPLICATION_SUBMITTED_PAYLOAD"),
@@ -323,6 +332,11 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = HSETIRegulatorReviewReturnedForAmendsRequestActionPayload.class, value = "HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD"),
                 @DiscriminatorMapping(schema = HSETICompletedRequestActionPayload.class, value = "HSE_TI_COMPLETED_PAYLOAD"),
 
+                @DiscriminatorMapping(schema = WasteQDRApplicationSubmittedRequestActionPayload.class,value = "WASTE_QDR_APPLICATION_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = WasteQDRRegulatorReviewReturnedForAmendsRequestActionPayload.class, value = "WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD"),
+                @DiscriminatorMapping(schema = WasteQDRApplicationCompletedRequestActionPayload.class, value = "WASTE_QDR_APPLICATION_COMPLETED_PAYLOAD"),
+                @DiscriminatorMapping(schema = WasteQDRApplicationAmendsSubmittedRequestActionPayload.class, value = "WASTE_QDR_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),
+
 
                 @DiscriminatorMapping(schema = EmpIssuanceUkEtsApplicationSubmittedRequestActionPayload.class, value = "EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = EmpIssuanceUkEtsApplicationApprovedRequestActionPayload.class, value = "EMP_ISSUANCE_UKETS_APPLICATION_APPROVED_PAYLOAD"),
@@ -341,6 +355,8 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = EmpVariationUkEtsApplicationReturnedForAmendsRequestActionPayload.class, value = "EMP_VARIATION_UKETS_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
                 @DiscriminatorMapping(schema = EmpVariationUkEtsApplicationAmendsSubmittedRequestActionPayload.class, value = "EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = EmpIssuanceRegistryIntegrationRequestActionPayload.class, value = "EMP_ISSUANCE_UKETS_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD"),
+                @DiscriminatorMapping(schema = EmpVariationRegistryIntegrationRequestActionPayload.class, value = "EMP_VARIATION_UKETS_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD"),
+
 
 
                 @DiscriminatorMapping(schema = BatchReissueSubmittedRequestActionPayload.class, value = "EMP_BATCH_REISSUE_SUBMITTED_PAYLOAD"),
@@ -441,7 +457,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "PERMIT_VARIATION_PEER_REVIEW_DECISION_REGULATOR_LED_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitVariationApplicationReturnedForAmendsRequestActionPayload.class, name = "PERMIT_VARIATION_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitVariationApplicationRegulatorLedApprovedRequestActionPayload.class, name = "PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD"),
-        @JsonSubTypes.Type(value = InstallationAccountRegistryIntegrationRequestActionPayload.class, name = "PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD"),
+        @JsonSubTypes.Type(value = InstallationAccountUpdatedRegistryIntegrationRequestActionPayload.class, name = "PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD"),
 
 
         @JsonSubTypes.Type(value = PermitTransferAApplicationSubmittedRequestActionPayload.class, name = "PERMIT_TRANSFER_A_APPLICATION_SUBMITTED_PAYLOAD"),
@@ -558,6 +574,11 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = HSETIRegulatorReviewReturnedForAmendsRequestActionPayload.class, name = "HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD"),
         @JsonSubTypes.Type(value = HSETICompletedRequestActionPayload.class, name = "HSE_TI_COMPLETED_PAYLOAD"),
 
+        @JsonSubTypes.Type(value = WasteQDRApplicationSubmittedRequestActionPayload.class, name = "WASTE_QDR_APPLICATION_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = WasteQDRRegulatorReviewReturnedForAmendsRequestActionPayload.class, name = "WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD"),
+        @JsonSubTypes.Type(value = WasteQDRApplicationCompletedRequestActionPayload.class, name = "WASTE_QDR_APPLICATION_COMPLETED_PAYLOAD"),
+        @JsonSubTypes.Type(value = WasteQDRApplicationAmendsSubmittedRequestActionPayload.class, name = "WASTE_QDR_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),
+
 
         @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationSubmittedRequestActionPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationApprovedRequestActionPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_APPROVED_PAYLOAD"),
@@ -619,6 +640,9 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = EmpVariationCorsiaApplicationRegulatorLedApprovedRequestActionPayload.class, name = "EMP_VARIATION_CORSIA_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD"),
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "EMP_VARIATION_CORSIA_PEER_REVIEW_DECISION_REGULATOR_LED_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = EmpVariationCorsiaApplicationAmendsSubmittedRequestActionPayload.class, name = "EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = EmpVariationRegistryIntegrationRequestActionPayload.class, name = "EMP_VARIATION_UKETS_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD"),
+
+
 
         @JsonSubTypes.Type(value = AviationAerCorsiaApplicationSubmittedRequestActionPayload.class, name = "AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = AviationAerCorsiaApplicationSubmittedRequestActionPayload.class, name = "AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),

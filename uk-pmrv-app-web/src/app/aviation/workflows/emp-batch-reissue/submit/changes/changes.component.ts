@@ -14,7 +14,6 @@ import { EmpBatchReissueStore } from '../store/emp-batch-reissue.store';
   standalone: true,
   imports: [SharedModule],
   templateUrl: './changes.component.html',
-  styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangesComponent {

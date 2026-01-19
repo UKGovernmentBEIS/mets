@@ -18,7 +18,7 @@ describe('SummaryComponent', () => {
   let router: Router;
   let store: CommonTasksStore;
 
-  const currentState = {
+  const currentPayload = {
     qdr: {
       reportProvided: true,
       report: '22222222-2222-4222-a222-222222222222',
@@ -59,7 +59,7 @@ describe('SummaryComponent', () => {
     }).compileComponents();
 
     store = TestBed.inject(CommonTasksStore);
-    store.setState(mockWasteQdrSubmitStateBuild(currentState));
+    store.setState(mockWasteQdrSubmitStateBuild(currentPayload));
 
     fixture = TestBed.createComponent(WasteQdrSummaryComponent);
     component = fixture.componentInstance;
@@ -100,7 +100,7 @@ describe('SummaryComponent', () => {
     expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith(
       mockWasteQdrPostBuild(
         {
-          qdr: { ...currentState.qdr },
+          qdr: { ...currentPayload.qdr },
         },
         {
           qdr: true,

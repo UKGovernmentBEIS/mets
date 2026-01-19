@@ -56,7 +56,6 @@ public class EmpIssuanceRegistryEventPublisherServiceTest {
         ArgumentCaptor<AviationAccountCreatedRegistryEvent> eventCaptor = ArgumentCaptor.forClass(AviationAccountCreatedRegistryEvent.class);
         ArgumentCaptor<AviationAccountCreatedRegistryEvent> eventCaptor1 = ArgumentCaptor.forClass(AviationAccountCreatedRegistryEvent.class);
         verify(applicationEventPublisher, times(1)).publishEvent(eventCaptor.capture());
-        verify(addRequestActionService, times(1)).addRequestAction(eventCaptor1.capture());
 
         AviationAccountCreatedRegistryEvent published = eventCaptor.getValue();
         org.junit.jupiter.api.Assertions.assertEquals(requestId, published.getRequestId());

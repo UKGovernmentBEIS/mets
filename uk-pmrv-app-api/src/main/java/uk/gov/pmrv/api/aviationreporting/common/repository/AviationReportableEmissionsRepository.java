@@ -18,4 +18,6 @@ public interface AviationReportableEmissionsRepository extends JpaRepository<Avi
 
     @Transactional(readOnly = true)
     Optional<AviationReportableEmissionsEntity> findByAccountIdAndYear(Long accountId, Year year);
+
+    Boolean existsByAccountIdAndYear(Long accountId, Year year);
 }

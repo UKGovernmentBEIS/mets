@@ -51,7 +51,7 @@ public class RegulatorRequestTaskAssignmentService implements UserRoleRequestTas
 
     private void assignTaskToUser(RequestTask requestTask, String userId) {
         try {
-            requestTaskAssignmentService.assignToUser(requestTask, userId);
+            requestTaskAssignmentService.assignToUser(requestTask, userId, getRoleType());
         } catch (BusinessCheckedException e) {
             throw new BusinessException(ErrorCode.ASSIGNMENT_NOT_ALLOWED);
         }

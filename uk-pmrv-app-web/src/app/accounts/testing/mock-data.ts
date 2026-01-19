@@ -5,6 +5,7 @@ import {
   AccountOperatorsUsersAuthoritiesInfoDTO,
   AerRequestMetadata,
   AviationAccountHeaderInfoDTO,
+  InstallationAccountDetailsDTO,
   InstallationAccountDTO,
   InstallationAccountHeaderInfoDTO,
   InstallationAccountPermitDTO,
@@ -163,6 +164,11 @@ export const mockedAccountPermit: InstallationAccountPermitDTO = {
       'ec0729c1-80a5-416b-8682-9d9cfa315585': 'att2.pdf',
     },
   },
+};
+
+export const mockedAccountDetails: InstallationAccountDetailsDTO = {
+  accountPermitDto: mockedAccountPermit,
+  latestAlrFile: null,
 };
 
 export const mockedOffshoreAccount = {

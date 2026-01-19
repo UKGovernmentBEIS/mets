@@ -26,6 +26,7 @@ public enum RequestCreateActionType {
     AIR(RequestType.AIR),
     HSE_TI(RequestType.HSE_TI),
     BDR(RequestType.BDR),
+    BDRS2(RequestType.BDRS2),
     PERMANENT_CESSATION(RequestType.PERMANENT_CESSATION),
     ALR(RequestType.ALR),
     WASTE_QDR(RequestType.WASTE_QDR),

@@ -65,7 +65,7 @@ class SiteContactRequestTaskAssignmentServiceTest {
 
         verify(requestTaskRepository, times(1))
             .findByAssignee(userId);
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact, "Site Contact");
         verifyNoInteractions(requestTaskReleaseService);
     }
 
@@ -126,12 +126,12 @@ class SiteContactRequestTaskAssignmentServiceTest {
             .findContactsByAccountIdsAndContactType(Set.of(accountId), AccountContactType.CA_SITE))
             .thenReturn(List.of(accountContactInfo));
 
-        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, caSiteContact);
+        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, caSiteContact, "Site Contact");
 
         siteContactRequestTaskAssignmentService
             .assignTasksOfDeletedUserToSiteContactOrRelease(userId, AccountContactType.CA_SITE);
 
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact, "Site Contact");
         verify(requestTaskReleaseService, times(1)).releaseTaskForced(requestTask);
     }
 
@@ -154,13 +154,13 @@ class SiteContactRequestTaskAssignmentServiceTest {
             .findContactsByAccountIdsAndContactType(Set.of(accountId), AccountContactType.CA_SITE))
             .thenReturn(List.of(accountContactInfo));
         doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService)
-            .assignToUser(requestTask, caSiteContact);
+            .assignToUser(requestTask, caSiteContact, "Site Contact");
         doThrow(BusinessException.class).when(requestTaskReleaseService).releaseTaskForced(requestTask);
 
         siteContactRequestTaskAssignmentService
             .assignTasksOfDeletedUserToSiteContactOrRelease(userId, AccountContactType.CA_SITE);
 
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact, "Site Contact");
         verify(requestTaskReleaseService, times(1)).releaseTaskForced(requestTask);
     }
 }

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.2.0/changelog_account_aviation.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_0_data_migration_for_reporting_status_table" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            WITH accounts AS (
+                SELECT DISTINCT account_id FROM aviation_rpt_reportable_emissions
+                UNION
+                SELECT DISTINCT account_id FROM account_aviation_reporting_status_history
+            ),
+                 emission_bounds AS (
+                     SELECT
+                         a.account_id,
+                         MIN(e.year) AS first_emission_year
+                     FROM accounts a
+                              LEFT JOIN aviation_rpt_reportable_emissions e ON e.account_id = a.account_id
+                     GROUP BY a.account_id
+                 ),
+                 account_years AS (
+                     SELECT
+                         account_id,
+                         generate_series(
+                                 COALESCE(first_emission_year, EXTRACT(YEAR FROM CURRENT_DATE)::int),
+                                 EXTRACT(YEAR FROM CURRENT_DATE)::int
+                         ) AS year
+            FROM emission_bounds
+                ),
+                emissions_flag AS (
+            SELECT
+                ay.account_id,
+                ay.year,
+                EXISTS (
+                SELECT 1
+                FROM aviation_rpt_reportable_emissions ar
+                WHERE ar.account_id = ay.account_id
+                AND ar.year = ay.year
+                ) AS has_emissions
+            FROM account_years ay
+                ),
+                current_status AS (
+            SELECT DISTINCT ON (account_id)
+                account_id,
+                status
+            FROM account_aviation_reporting_status_history
+            ORDER BY account_id, submission_date DESC
+                ),
+                status_by_year AS (
+            SELECT
+                arsh.account_id,
+                COALESCE(arsh.year, EXTRACT(YEAR FROM arsh.submission_date)::int) AS year,
+                arsh.status,
+                ROW_NUMBER() OVER (
+                PARTITION BY arsh.account_id,
+                COALESCE(arsh.year, EXTRACT(YEAR FROM arsh.submission_date)::int)
+                ORDER BY arsh.submission_date DESC
+                ) AS rn
+            FROM account_aviation_reporting_status_history arsh
+                ),
+                final_status AS (
+            SELECT
+                ef.account_id,
+                ef.year,
+                CASE
+                -- 1.Emissions exist
+                WHEN ef.has_emissions
+                THEN 'REQUIRED_TO_REPORT'
+                -- 2. There are no emissions + current exempt
+                WHEN cs.status IN ('EXEMPT_COMMERCIAL', 'EXEMPT_NON_COMMERCIAL')
+                THEN cs.status
+                -- 3.  There are no emissions + current REQUIRED
+                ELSE COALESCE(sby.status, 'REQUIRED_TO_REPORT')
+                END AS reporting_status
+            FROM emissions_flag ef
+                JOIN current_status cs
+            ON cs.account_id = ef.account_id
+                LEFT JOIN status_by_year sby
+                ON sby.account_id = ef.account_id
+                AND sby.year = ef.year + 1
+                AND sby.rn = 1
+                )
+            INSERT INTO account_aviation_reporting_status (
+                id,
+                account_id,
+                year,
+                status
+            )
+            SELECT
+                nextval('account_aviation_reporting_status_seq'),
+                account_id,
+                year,
+                reporting_status
+            FROM final_status
+        </sql>
+        <rollback>
+            delete from account_aviation_reporting_status
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

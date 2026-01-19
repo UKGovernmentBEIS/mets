@@ -29,7 +29,7 @@ public class VerifierRequestTaskAssignmentService implements UserRoleRequestTask
     @Transactional
     public void assignTask(RequestTask requestTask, String userId) {
         try {
-            requestTaskAssignmentService.assignToUser(requestTask, userId);
+            requestTaskAssignmentService.assignToUser(requestTask, userId, getRoleType());
         } catch (BusinessCheckedException e) {
             throw new BusinessException(ErrorCode.ASSIGNMENT_NOT_ALLOWED);
         }

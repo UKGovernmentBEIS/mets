@@ -38,7 +38,7 @@ public class RegulatorRequestTaskDefaultAssignmentService implements UserRoleReq
 
         if(!ObjectUtils.isEmpty(candidateAssignee) && userRoleTypeService.isUserRegulator(candidateAssignee)) {
             try {
-                requestTaskAssignmentService.assignToUser(requestTask, candidateAssignee);
+                requestTaskAssignmentService.assignToUser(requestTask, candidateAssignee, getRoleType());
             } catch (BusinessCheckedException e) {
                 assignTaskToCASiteContactOrReleaseRequest(requestTask, isPeerReview);
             }
@@ -56,10 +56,10 @@ public class RegulatorRequestTaskDefaultAssignmentService implements UserRoleReq
                         if(isPeerReview) {
                             String firstReviewer = requestTask.getRequest().getPayload().getRegulatorReviewer();
                             if (!caSiteContactUser.equals(firstReviewer)) {
-                                requestTaskAssignmentService.assignToUser(requestTask, caSiteContactUser);
+                                requestTaskAssignmentService.assignToUser(requestTask, caSiteContactUser, getRoleType());
                             }
                         } else {
-                            requestTaskAssignmentService.assignToUser(requestTask, caSiteContactUser);
+                            requestTaskAssignmentService.assignToUser(requestTask, caSiteContactUser, getRoleType());
                         }
                     } catch (BusinessCheckedException e) {
                         log.error("Request task '{}' for regulator user will remain unassigned. Error msg : '{}'" ,

@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.Year;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,16 +42,23 @@ public class ReportableEmissionsService {
     public void saveReportableEmissions(ReportableEmissionsSaveParams params) {
         reportableEmissionsRepository.findByAccountIdAndYear(params.getAccountId(), params.getYear())
                 .ifPresentOrElse(emissionsEntity -> {
-                    if(params.isFromDre() || !emissionsEntity.isFromDre()) {
+                    if (emissionsEntity.isFromDre() && !params.isFromDre()) {
+                        return;
+                    }
+                    if (params.isFromDre() || params.getReportableEmissions() != null){
                         emissionsEntity.setFromDre(params.isFromDre());
                         emissionsEntity.setReportableEmissions(params.getReportableEmissions());
+                    } else {
+                        reportableEmissionsRepository.delete(emissionsEntity);
+                    }
+                    emissionsUpdated(params);
+                }, () -> {
+                    if (params.getReportableEmissions() != null) {
+                        ReportableEmissionsEntity newEmissionsEntity = accountEmissionsMapper
+                            .toReportableEmissionsEntity(params);
+                        reportableEmissionsRepository.save(newEmissionsEntity);
                         emissionsUpdated(params);
                     }
-                }, () -> {
-                    ReportableEmissionsEntity newEmissionsEntity = accountEmissionsMapper
-                            .toReportableEmissionsEntity(params);
-                    reportableEmissionsRepository.save(newEmissionsEntity);
-                    emissionsUpdated(params);
                 });
     }
 

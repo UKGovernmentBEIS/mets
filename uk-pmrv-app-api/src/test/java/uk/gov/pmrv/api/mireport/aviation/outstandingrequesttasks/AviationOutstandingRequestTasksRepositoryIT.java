@@ -12,7 +12,6 @@ import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.api.mireport.outstandingrequesttasks.OutstandingRegulatorRequestTasksMiReportParams;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
@@ -176,7 +175,6 @@ class AviationOutstandingRequestTasksRepositoryIT extends AbstractContainerBaseT
                 .emitterId("EM" + String.format("%05d", id))
                 .location(getLocation())
                 .crcoCode(String.valueOf(id))
-                .reportingStatus(AviationAccountReportingStatus.REQUIRED_TO_REPORT)
                 .build();
 
         entityManager.persist(account);

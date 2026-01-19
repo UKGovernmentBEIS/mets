@@ -30,6 +30,8 @@
       <div
         formControlName="emissionsAllInternationalFlights"
         govuk-text-input
+        label="Total emissions on all international flights"
+        [isLabelHidden]="true"
         class="govuk-!-width-one-third"
         suffix="tonnes CO2"></div>
     </ng-container>
@@ -58,6 +60,8 @@
       <div
         formControlName="emissionsFlightsWithOffsettingRequirements"
         govuk-text-input
+        label="Emissions from flights with offsetting requirements"
+        [isLabelHidden]="true"
         class="govuk-!-width-one-third"
         suffix="tonnes CO2"></div>
     </ng-container>
@@ -67,14 +71,17 @@
       <div
         formControlName="emissionsClaimFromCorsiaEligibleFuels"
         class="govuk-!-width-one-third"
+        label="Emissions related to a claim from CORSIA eligible fuels"
+        [isLabelHidden]="true"
         govuk-text-input
         suffix="tonnes CO2"></div>
     </ng-container>
 
-    <h2 class="govuk-heading-m govuk-!-width-two-thirds">How have you estimated or corrected the emissions?</h2>
     <div
       formControlName="calculationApproach"
       govuk-textarea
+      label="How have you estimated or corrected the emissions?"
+      labelSize="medium"
       class="govuk-!-width-two-thirds"
       [maxLength]="10000"
       hint="The operator will see this text in the notice."></div>

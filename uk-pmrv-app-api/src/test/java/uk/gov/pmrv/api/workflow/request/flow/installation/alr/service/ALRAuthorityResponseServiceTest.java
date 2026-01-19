@@ -7,6 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentStatus;
+import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentWorkflow;
+import uk.gov.pmrv.api.account.fileattachment.service.AccountFileAttachmentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
@@ -19,17 +22,16 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.NotifyOperatorForDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInfoResolver;
-import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAuthorityReviewOutcome;
-import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRAuthorityResponseSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRSaveAuthorityResponseTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAcceptedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.*;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalAuthorityResponseType;
 
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -42,6 +44,9 @@ public class ALRAuthorityResponseServiceTest {
 
     @Mock
     private RequestService requestService;
+
+    @Mock
+    private AccountFileAttachmentService accountFileAttachmentService;
 
     @Mock
     private RequestActionUserInfoResolver requestActionUserInfoResolver;
@@ -73,47 +78,72 @@ public class ALRAuthorityResponseServiceTest {
     }
 
     @Test
-    void authorityResponseNotifyOperator() {
-        final DecisionNotification decisionNotification = DecisionNotification.builder()
+    void authorityResponseNotifyOperator_validResponse_updatesPayloadAndFinalizesAttachments() {
+        // given
+        DecisionNotification decisionNotification = DecisionNotification.builder()
                 .operators(Set.of("operatorUserId"))
                 .signatory("regulatorUserId")
                 .build();
-        final NotifyOperatorForDecisionRequestTaskActionPayload taskActionPaylod =
+
+        NotifyOperatorForDecisionRequestTaskActionPayload taskActionPayload =
                 NotifyOperatorForDecisionRequestTaskActionPayload.builder()
                         .decisionNotification(decisionNotification)
                         .build();
 
-        final Map<String, Boolean> sectionsCompleted = Map.of("subtask", true);
-        final Map<UUID, String> attachments = Map.of(UUID.randomUUID(), "test.png");
+        Map<String, Boolean> sectionsCompleted = Map.of("subtask", true);
+        Map<UUID, String> attachments = Map.of(UUID.randomUUID(), "test.png");
+
+        UUID alrFileId = UUID.randomUUID();
+        ALR alr = ALR.builder().alrFile(alrFileId).build();
+
+        ALRGrantAuthorityResponse authorityResponse =
+                ALRGrantAuthorityResponse.builder()
+                        .type(DoalAuthorityResponseType.VALID)
+                        .build();
+
+        ALRApplicationAuthorityReviewOutcome outcome =
+                ALRApplicationAuthorityReviewOutcome.builder()
+                        .submissionDate(LocalDate.now())
+                        .alr(alr)
+                        .authorityResponse(authorityResponse)
+                        .build();
 
         RequestTask requestTask = RequestTask.builder()
                 .request(Request.builder()
                         .payload(ALRRequestPayload.builder()
                                 .payloadType(RequestPayloadType.ALR_REQUEST_PAYLOAD)
+                                .reportingYear(Year.of(2025))
                                 .build())
+                        .accountId(1L)
                         .build())
                 .payload(ALRAuthorityResponseSubmitRequestTaskPayload.builder()
                         .payloadType(RequestTaskPayloadType.ALR_AUTHORITY_RESPONSE_SUBMIT_PAYLOAD)
-                        .authorityReviewOutcome(ALRApplicationAuthorityReviewOutcome.builder().submissionDate(LocalDate.now()).build())
+                        .authorityReviewOutcome(outcome)
                         .authorityReviewSectionsCompleted(sectionsCompleted)
                         .alrAttachments(attachments)
                         .build())
                 .build();
 
-        final ALRRequestPayload expectedPayload = ALRRequestPayload.builder()
-                .payloadType(RequestPayloadType.ALR_REQUEST_PAYLOAD)
-                .decisionNotification(decisionNotification)
-                .authorityReviewOutcome(ALRApplicationAuthorityReviewOutcome.builder().submissionDate(LocalDate.now()).build())
-                .alrSectionsCompleted(sectionsCompleted)
-                .alrAttachments(attachments)
-                .build();
+        // when
+        service.authorityResponseNotifyOperator(requestTask, taskActionPayload);
 
-        // Invoke
-        service.authorityResponseNotifyOperator(requestTask, taskActionPaylod);
+        // then – payload mutation
+        ALRRequestPayload updatedPayload =
+                (ALRRequestPayload) requestTask.getRequest().getPayload();
 
-        // Verify
-        ALRRequestPayload updatedPayload = (ALRRequestPayload) requestTask.getRequest().getPayload();
-        Assertions.assertEquals(expectedPayload, updatedPayload);
+        assertThat(updatedPayload.getDecisionNotification()).isEqualTo(decisionNotification);
+        assertThat(updatedPayload.getAuthorityReviewOutcome()).isEqualTo(outcome);
+        assertThat(updatedPayload.getAlrSectionsCompleted()).isEqualTo(sectionsCompleted);
+        assertThat(updatedPayload.getAlrAttachments()).isEqualTo(attachments);
+        assertThat(updatedPayload.getAlr()).isEqualTo(alr);
+
+        // then – side effect
+        verify(accountFileAttachmentService)
+                .updateAccountFileAttachmentsStatusByAccountId(
+                        AccountFileAttachmentWorkflow.ALR,
+                        AccountFileAttachmentStatus.FINALIZED,
+                        1L
+                );
     }
 
     @Test

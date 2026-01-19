@@ -10,12 +10,11 @@ import { AviationAccountReportingStatusHistoryDTO, AviationAccountReportingStatu
 import {
   AviationAccountsStore,
   initialCurrentAccountState,
-  selectPage,
-  selectPageSize,
   selectReportingStatusHistory,
-  selectTotal,
+  selectReportingStatusHistoryPage,
+  selectReportingStatusHistoryPageSize,
+  selectReportingStatusHistoryTotal,
 } from '../../store';
-
 interface ViewModel {
   reportingStatusHistory: AviationAccountReportingStatusHistoryDTO[];
   total: number;
@@ -27,15 +26,16 @@ interface ViewModel {
 @Component({
   selector: 'app-account-reporting-status-history',
   templateUrl: './account-reporting-status-history.component.html',
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })
 export class AccountReportingStatusHistoryComponent implements OnInit {
   vm$: Observable<ViewModel> = combineLatest([
     this.store.pipe(selectReportingStatusHistory),
-    this.store.pipe(selectTotal),
-    this.store.pipe(selectPage),
-    this.store.pipe(selectPageSize),
+    this.store.pipe(selectReportingStatusHistoryTotal),
+    this.store.pipe(selectReportingStatusHistoryPage),
+    this.store.pipe(selectReportingStatusHistoryPageSize),
     this.route.paramMap,
   ]).pipe(
     map(([reportingStatusHistory, total, page, pageSize, params]) => ({
@@ -70,7 +70,7 @@ export class AccountReportingStatusHistoryComponent implements OnInit {
       )
       .subscribe(({ reportingStatusHistoryList, total }) => {
         this.store.setReportingStatusHistory(reportingStatusHistoryList);
-        this.store.setTotal(total);
+        this.store.setReportingStatusHistoryTotal(total);
       });
 
     this.route.queryParamMap
@@ -82,7 +82,7 @@ export class AccountReportingStatusHistoryComponent implements OnInit {
         takeUntil(this.destroy$),
       )
       .subscribe(({ page, pageSize }) => {
-        this.store.setPaging({ page, pageSize });
+        this.store.setReportingStatusHistoryPaging({ page, pageSize });
       });
   }
 

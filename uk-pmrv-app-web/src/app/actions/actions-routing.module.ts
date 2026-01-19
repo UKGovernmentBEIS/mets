@@ -144,6 +144,10 @@ const routes: Routes = [
         loadChildren: () => import('./hseti/hseti.routes').then((r) => r.HSETI_ACTION_ROUTES),
       },
       {
+        path: 'waste-qdr',
+        loadChildren: () => import('./waste-qdr/waste-qdr.routes').then((r) => r.WASTE_QDR_ACTION_ROUTES),
+      },
+      {
         path: 'registry',
         loadChildren: () => import('./registry/registry.routes').then((r) => r.REGISTRY_ACTION_ROUTES),
       },

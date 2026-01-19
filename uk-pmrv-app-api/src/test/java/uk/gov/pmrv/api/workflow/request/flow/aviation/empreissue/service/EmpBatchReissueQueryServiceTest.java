@@ -1,31 +1,30 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Map;
-import java.util.Set;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountIdAndNameDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmpAccountDTO;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.AviationAccountIdAndNameDTOImpl;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpAccountDTOImpl;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueFilters;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpReissueAccountDetails;
+
+import java.util.Map;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EmpBatchReissueQueryServiceTest {
@@ -43,7 +42,7 @@ class EmpBatchReissueQueryServiceTest {
 	void existAccountsByCAAndFilters() {
 		CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
 		Set<EmissionTradingScheme> emissionTradingSchemes = Set.of(EmissionTradingScheme.UK_ETS_AVIATION);
-		Set<AviationAccountReportingStatus> reportingStatuses = Set.of(AviationAccountReportingStatus.REQUIRED_TO_REPORT);
+		Set<AviationAccountReportingStatusType> reportingStatuses = Set.of(AviationAccountReportingStatusType.REQUIRED_TO_REPORT);
 		
 		EmpBatchReissueFilters filters = EmpBatchReissueFilters.builder()
 				.emissionTradingSchemes(emissionTradingSchemes)
@@ -73,7 +72,7 @@ class EmpBatchReissueQueryServiceTest {
 	void findAccountsByCAAndFilters() {
 		CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
 		Set<EmissionTradingScheme> emissionTradingSchemes = Set.of(EmissionTradingScheme.UK_ETS_AVIATION);
-		Set<AviationAccountReportingStatus> reportingStatuses = Set.of(AviationAccountReportingStatus.REQUIRED_TO_REPORT);
+		Set<AviationAccountReportingStatusType> reportingStatuses = Set.of(AviationAccountReportingStatusType.REQUIRED_TO_REPORT);
 		
 		EmpBatchReissueFilters filters = EmpBatchReissueFilters.builder()
 				.emissionTradingSchemes(emissionTradingSchemes)

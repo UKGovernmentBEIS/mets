@@ -9,7 +9,7 @@ import { mockClass, MockType } from '@testing';
 
 import { InstallationAccountViewService } from 'pmrv-api';
 
-import { mockedAccountPermit } from '../../accounts/testing/mock-data';
+import { mockedAccountDetails } from '../../accounts/testing/mock-data';
 import { PermitRevocationStore } from '../store/permit-revocation-store';
 import { mockTaskState } from '../testing/mock-state';
 import { NotifyOperatorGuard } from './notify-operator.guard';
@@ -27,7 +27,7 @@ describe('NotifyOperatorGuard', () => {
 
   beforeEach(() => {
     accountViewService = mockClass(InstallationAccountViewService);
-    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountPermit));
+    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountDetails));
 
     TestBed.configureTestingModule({
       providers: [

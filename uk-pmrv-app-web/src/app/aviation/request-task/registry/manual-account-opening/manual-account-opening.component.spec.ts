@@ -35,7 +35,7 @@ describe('ManualAccountOpeningComponent', () => {
         operatorDetails: {
           emitterId: 'EM00044',
           operatorName: 'Neil Case 25',
-          firstKnownAviationActivity: '1971-07-19',
+          firstYearOfReportingObligation: 2021,
           regulator: 'ENGLAND',
         },
         organisationDetails: {
@@ -108,7 +108,7 @@ describe('ManualAccountOpeningComponent', () => {
     expect(page.detailsValues).toEqual([
       ['Emitter ID', 'EM00044'],
       ['Operator name', 'Neil Case 25'],
-      ['First known aviation activity', '19 Jul 1971'],
+      ['First year of reporting obligation', '2021'],
       ['Regulator', 'ENGLAND'],
       ['Organisation legal status', 'Individual'],
       ['Full name', 'Tobias Browning'],

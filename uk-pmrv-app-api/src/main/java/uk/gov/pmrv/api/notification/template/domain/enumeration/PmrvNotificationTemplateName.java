@@ -57,11 +57,18 @@ public enum PmrvNotificationTemplateName {
     REGISTRY_INTEGRATION_RESPONSE_ERROR_INFO_TEMPLATE("Registry integration email template consume registry error info template"),
     REGISTRY_INTEGRATION_RESPONSE_ACCOUNT_OPEN_ERROR_INFO_TEMPLATE("Registry integration email template consume account open registry error info template"),
     REGISTRY_INTEGRATION_RESPONSE_ACCOUNT_OPEN_ERROR_TEMPLATE("Registry integration email template consume account open registry error template"),
+    REGISTRY_INTEGRATION_RESPONSE_ACCOUNT_UPDATE_ERROR_TEMPLATE("Registry integration email template consume account update registry error template"),
+    REGISTRY_INTEGRATION_RESPONSE_ACCOUNT_UPDATE_INFO_ERROR_TEMPLATE("Registry integration email template consume account update registry info error template"),
     REGISTRY_INTEGRATION_MISSING_REGISTRY_ID("Registry integration email template missing registry id error"),
     REGISTRY_INTEGRATION_MISSING_GHGE_HSE_FLAG("Registry integration email template missing ghge - hse flag error"),
     REGISTRY_INTEGRATION_OPERATOR_ID_FORDWAY_ACTION_TEMPLATE("Registry integration set operator id error fordway"),
     REGISTRY_INTEGRATION_OPERATOR_ID_REGULATOR_ACTION_TEMPLATE("Registry integration set operator id error regulator"),
     REGISTRY_INTEGRATION_OPERATOR_ID_REGULATOR_INFO_TEMPLATE("Registry integration set operator id error information regulator"),
+    REGISTRY_INTEGRATION_ACCOUNT_UPDATE_MISSING_REGISTRY_ID("Registry integration account update missing registry id template"),
+    REGISTRY_INTEGRATION_RESPONSE_ACCOUNT_CONTACT_ERROR_INFO_TEMPLATE("Registry integration email template consume account contact registry error info template"),
+    REGISTRY_INTEGRATION_RESPONSE_ACCOUNT_CONTACT_ERROR_ACTION_TEMPLATE("Registry integration email template consume account contact registry error action template"),
+    REGISTRY_INTEGRATION_RESPONSE_EXEMPT_FLAG_ERROR_INFO_TEMPLATE("Registry integration email template consume exempt flag registry error info template"),
+    REGISTRY_INTEGRATION_RESPONSE_EXEMPT_FLAG_ERROR_ACTION_TEMPLATE("Registry integration email template consume exempt flag registry error template"),
 
     BDR_COMPLETED("BDR completed")
     ;

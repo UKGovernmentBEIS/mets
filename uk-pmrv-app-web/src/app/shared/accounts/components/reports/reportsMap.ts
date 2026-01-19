@@ -5,6 +5,7 @@ export const reportsTypesMap: Record<string, Record<string, RequestDetailsDTO['r
     'Annual improvement': ['AIR'],
     'Activity level report': ['ALR'],
     'Baseline data report': ['BDR'],
+    'Baseline data report (stage 2)': ['BDRS2'],
     'Determination of activity level': ['DOAL'],
     'Determine emissions': ['DRE'],
     'Emissions report': ['AER'],
@@ -28,6 +29,7 @@ export const reportsTypesTagsMap: Record<string, any> = {
   DOAL: 'Determination of activity level',
   DRE: 'determination of reportable emissions',
   BDR: 'baseline data report',
+  BDRS2: 'stage 2 baseline data report',
   AVIATION_DRE_UKETS: 'determination of emissions',
   AVIATION_AER_CORSIA: 'emissions report',
   AVIATION_VIR: 'verifier improvement report',
@@ -35,7 +37,7 @@ export const reportsTypesTagsMap: Record<string, any> = {
   AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING: '3 year offsetting requirements',
   AVIATION_DOE_CORSIA: 'estimation of emissions',
   ALR: 'activity level report',
-  WASTE_QDR: 'emission factors report',
+  WASTE_QDR: 'quarterly data report',
 };
 
 export const reportsStatusesMap: Record<string, Partial<Record<RequestDetailsDTO['requestStatus'], string>>> = {

@@ -18,6 +18,7 @@ export const workflowDetailsTypesMap: Partial<Record<RequestDetailsDTO['requestT
   DOAL: 'Determination of activity level',
   NON_COMPLIANCE: 'Non-compliance',
   BDR: 'baseline data report',
+  BDRS2: 'stage 2 baseline data report',
   PERMANENT_CESSATION: 'Permanent cessation',
   EMP_ISSUANCE_UKETS: 'Emissions monitoring plan',
   EMP_ISSUANCE_CORSIA: 'Emissions monitoring plan',
@@ -36,5 +37,5 @@ export const workflowDetailsTypesMap: Partial<Record<RequestDetailsDTO['requestT
   AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING: '3-year period offsetting requirements',
   AVIATION_DOE_CORSIA: 'estimation of emissions',
   ALR: 'activity level report',
-  WASTE_QDR: 'emission factors report',
+  WASTE_QDR: 'quarterly data report',
 };

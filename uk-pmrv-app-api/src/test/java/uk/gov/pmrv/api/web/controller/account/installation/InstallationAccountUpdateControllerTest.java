@@ -54,7 +54,7 @@ import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
 import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.controller.utils.TestConstrainValidatorFactory;
-import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountPermitCommandOrchestrator;
+import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountCommandOrchestrator;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -94,7 +94,7 @@ class InstallationAccountUpdateControllerTest {
     private CountryService countryService;
 
     @Mock
-    private InstallationAccountPermitCommandOrchestrator installationAccountPermitCommandOrchestrator;
+    private InstallationAccountCommandOrchestrator installationAccountCommandOrchestrator;
 
     private final ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
@@ -326,7 +326,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateFreeAllocationStatus() throws Exception {
-        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService,installationAccountPermitCommandOrchestrator);
+        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService, installationAccountCommandOrchestrator);
         setupRoleBasedAuthentication(controller);
         final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         Long accountId = 1L;
@@ -349,7 +349,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateFreeAllocationStatus_forbidden() throws Exception {
-        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService,installationAccountPermitCommandOrchestrator);
+        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService, installationAccountCommandOrchestrator);
         setupRoleBasedAuthentication(controller);
         final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER).build();
         long accountId = 1L;
@@ -375,7 +375,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateCommencementDate() throws Exception {
-        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService,installationAccountPermitCommandOrchestrator);
+        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService, installationAccountCommandOrchestrator);
         setupRoleBasedAuthentication(controller);
         final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         Long accountId = 1L;
@@ -399,7 +399,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateCommencementDate_forbidden() throws Exception {
-        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService,installationAccountPermitCommandOrchestrator);
+        InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService, installationAccountCommandOrchestrator);
         setupRoleBasedAuthentication(controller);
         final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER).build();
         long accountId = 1L;

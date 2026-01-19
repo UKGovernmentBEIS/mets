@@ -19,6 +19,8 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.AviationAccountCreatedRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceRegistryIntegrationRequestActionPayload;
 
+import java.time.LocalDate;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -62,7 +64,7 @@ class EmpIssuanceRegistryIntegrationAddRequestActionServiceTest {
                         .appUser(appUser)
                         .build();
 
-        when(aviationAccountQueryService.getAviationAccountDTOById(1L)).thenReturn(AviationAccountDTO.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build());
+        when(aviationAccountQueryService.getAviationAccountDTOById(1L)).thenReturn(AviationAccountDTO.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).commencementDate(LocalDate.of(2025,1,1)).build());
 
         addRequestActionService.addRequestAction(aviationAccountCreatedRegistryEvent);
 
@@ -92,7 +94,7 @@ class EmpIssuanceRegistryIntegrationAddRequestActionServiceTest {
                         .emissionsMonitoringPlan(emp)
                         .build();
 
-        when(aviationAccountQueryService.getAviationAccountDTOById(1L)).thenReturn(AviationAccountDTO.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build());
+        when(aviationAccountQueryService.getAviationAccountDTOById(1L)).thenReturn(AviationAccountDTO.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).commencementDate(LocalDate.of(2025,1,1)).build());
 
 
         addRequestActionService.addRequestAction(aviationAccountCreatedRegistryEvent);

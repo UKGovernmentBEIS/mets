@@ -20,6 +20,7 @@ import { AviationDoECorsiaRequestMetadata } from './aviationDoECorsiaRequestMeta
 import { AviationDreRequestMetadata } from './aviationDreRequestMetadata';
 import { AviationVirRequestMetadata } from './aviationVirRequestMetadata';
 import { BDRRequestMetadata } from './bDRRequestMetadata';
+import { BDRS2RequestMetadata } from './bDRS2RequestMetadata';
 import { DoalRequestMetadata } from './doalRequestMetadata';
 import { DreRequestMetadata } from './dreRequestMetadata';
 import { EmpBatchReissueRequestMetadata } from './empBatchReissueRequestMetadata';
@@ -63,6 +64,7 @@ export interface RequestDetailsDTO {
     | 'INSTALLATION_AUDIT'
     | 'HSE_TI'
     | 'BDR'
+    | 'BDRS2'
     | 'PERMANENT_CESSATION'
     | 'ALR'
     | 'WASTE_QDR'
@@ -106,6 +108,7 @@ export interface RequestDetailsDTO {
     | AviationDreRequestMetadata
     | AviationVirRequestMetadata
     | BDRRequestMetadata
+    | BDRS2RequestMetadata
     | DoalRequestMetadata
     | DreRequestMetadata
     | EmpBatchReissueRequestMetadata

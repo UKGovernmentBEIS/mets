@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.files.attachments.service.FileAttachmentService;
 import uk.gov.netz.api.files.common.domain.FileStatus;
+import uk.gov.netz.api.files.common.domain.dto.FileStatusInfoDTO;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.managementprocedures.ManagementProcedures;
 import uk.gov.pmrv.api.permit.domain.monitoringreporting.MonitoringReporting;
@@ -27,14 +28,13 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.submit.
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -52,7 +52,7 @@ class RequestTaskAttachmentsUncoupleServiceTest {
     private RequestTaskService requestTaskService;
 
     @Test
-    void cleanUpAttachmentsOnTaskCompletion() {
+    void uncoupleAttachments() {
         UUID attachmentUuid = UUID.randomUUID();
         UUID unreferencedAttachmentUuid = UUID.randomUUID();
         Map<UUID, String> permitAttachments = new HashMap<>();
@@ -81,9 +81,8 @@ class RequestTaskAttachmentsUncoupleServiceTest {
 
         service.uncoupleAttachments(1L);
 
-        verify(fileAttachmentService, times(1)).updateFileAttachmentStatus(attachmentUuid.toString(), FileStatus.SUBMITTED);
-        verify(fileAttachmentService, times(1)).deletePendingFileAttachment(unreferencedAttachmentUuid.toString());
-        verify(fileAttachmentService, never()).deletePendingFileAttachment(attachmentUuid.toString());
+        verify(fileAttachmentService, times(1)).updateFileAttachmentsStatus(Set.of(attachmentUuid.toString()), FileStatus.SUBMITTED);
+        verify(fileAttachmentService, timeout(1000)).deletePendingFileAttachments(Set.of(unreferencedAttachmentUuid.toString()));
 
         assertThat(requestTask.getPayload()).isInstanceOf(PermitIssuanceApplicationSubmitRequestTaskPayload.class);
         PermitIssuanceApplicationSubmitRequestTaskPayload
@@ -92,7 +91,7 @@ class RequestTaskAttachmentsUncoupleServiceTest {
     }
 
     @Test
-    void cleanUpAttachmentsOnTaskCompletion_null_object_in_file_references() {
+    void uncoupleAttachments_null_object_in_file_references() {
         Set<UUID> siteDiagrams = new HashSet<>();
         siteDiagrams.add(null);
 
@@ -124,12 +123,12 @@ class RequestTaskAttachmentsUncoupleServiceTest {
         assertThat(payloadSaved.getPermitAttachments()).isEmpty();
 
 
-        verify(fileAttachmentService, times(1)).deletePendingFileAttachment(unreferencedAttachmentUuid.toString());
-        verify(fileAttachmentService, never()).updateFileAttachmentStatus(anyString(), any());
+        verify(fileAttachmentService, timeout(1000)).deletePendingFileAttachments(Set.of(unreferencedAttachmentUuid.toString()));
+        verify(fileAttachmentService, times(1)).updateFileAttachmentsStatus(Collections.emptySet(), FileStatus.SUBMITTED);
     }
 
     @Test
-    void cleanUpAttachmentsOnTaskCompletionForReview() {
+    void uncoupleAttachments_cleanUpAttachmentsOnTaskCompletionForReview() {
 
         final UUID referencedPermit = UUID.randomUUID();
         final UUID unreferencedPermit = UUID.randomUUID();
@@ -179,23 +178,12 @@ class RequestTaskAttachmentsUncoupleServiceTest {
             .build();
 
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
-        when(fileAttachmentService.deletePendingFileAttachment(unreferencedPermit.toString())).thenReturn(true);
-        when(fileAttachmentService.deletePendingFileAttachment(unreferencedReview.toString())).thenReturn(true);
-        when(fileAttachmentService.deletePendingFileAttachment(rfi1.toString())).thenReturn(true);
-        when(fileAttachmentService.deletePendingFileAttachment(rfi2.toString())).thenReturn(true);
 
         service.uncoupleAttachments(1L);
 
-        verify(fileAttachmentService, times(1)).updateFileAttachmentStatus(referencedPermit.toString(), FileStatus.SUBMITTED);
-        verify(fileAttachmentService, times(1)).deletePendingFileAttachment(unreferencedPermit.toString());
-        verify(fileAttachmentService, never()).deletePendingFileAttachment(referencedPermit.toString());
+        verify(fileAttachmentService, times(1)).updateFileAttachmentsStatus(Set.of(referencedPermit.toString(), referencedReview.toString()), FileStatus.SUBMITTED);
 
-        verify(fileAttachmentService, times(1)).updateFileAttachmentStatus(referencedReview.toString(), FileStatus.SUBMITTED);
-        verify(fileAttachmentService, times(1)).deletePendingFileAttachment(unreferencedReview.toString());
-        verify(fileAttachmentService, never()).deletePendingFileAttachment(referencedReview.toString());
-
-        verify(fileAttachmentService, times(1)).deletePendingFileAttachment(rfi1.toString());
-        verify(fileAttachmentService, times(1)).deletePendingFileAttachment(rfi2.toString());
+        verify(fileAttachmentService, timeout(1000)).deletePendingFileAttachments(Set.of(unreferencedPermit.toString(), unreferencedReview.toString(), rfi1.toString(), rfi2.toString()));
 
         assertThat(requestTask.getPayload()).isInstanceOf(PermitIssuanceApplicationReviewRequestTaskPayload.class);
         PermitIssuanceApplicationReviewRequestTaskPayload
@@ -208,25 +196,19 @@ class RequestTaskAttachmentsUncoupleServiceTest {
     @Test
     void deletePendingAttachments() {
 
-        final UUID referencedPermit = UUID.randomUUID();
-        final UUID unreferencedPermit = UUID.randomUUID();
-
-        final UUID referencedReview = UUID.randomUUID();
-        final UUID unreferencedReview = UUID.randomUUID();
+        final UUID attch1PersistedAndSubmitted = UUID.randomUUID();
+        final UUID attch2PersistedAndPending = UUID.randomUUID();
+        final UUID attch3Unpersisted = UUID.randomUUID();
 
         final Map<UUID, String> permitAttachments = new HashMap<>();
-        permitAttachments.put(referencedPermit, "referenced-permit");
-        permitAttachments.put(unreferencedPermit, "unreferenced-permit");
-
-        final Map<UUID, String> reviewAttachments = new HashMap<>();
-        reviewAttachments.put(referencedReview, "referenced-review");
-        reviewAttachments.put(unreferencedReview, "unreferenced-review");
+        permitAttachments.put(attch1PersistedAndSubmitted, "attch1PersistedAndSubmitted");
+        permitAttachments.put(attch2PersistedAndPending, "attch2PersistedAndPending");
+        permitAttachments.put(attch3Unpersisted, "attch3Unpersisted");
 
         final PermitIssuanceApplicationAmendsSubmitRequestTaskPayload payload =
             PermitIssuanceApplicationAmendsSubmitRequestTaskPayload.builder()
                 .payloadType(RequestTaskPayloadType.PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT_PAYLOAD)
                 .permitAttachments(permitAttachments)
-                .reviewAttachments(reviewAttachments)
                 .build();
 
         RequestTask requestTask = RequestTask.builder()
@@ -234,25 +216,26 @@ class RequestTaskAttachmentsUncoupleServiceTest {
             .type(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_SUBMIT)
             .payload(payload)
             .build();
-
+        
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
-        when(fileAttachmentService.deletePendingFileAttachment(unreferencedPermit.toString())).thenReturn(true);
-        when(fileAttachmentService.deletePendingFileAttachment(unreferencedReview.toString())).thenReturn(true);
-        when(fileAttachmentService.deletePendingFileAttachment(referencedPermit.toString())).thenReturn(false);
-        when(fileAttachmentService.deletePendingFileAttachment(referencedReview.toString())).thenReturn(false);
-
+        
+        List<FileStatusInfoDTO> persistedAttachments = List.of(
+        		FileStatusInfoDTO.builder().uuid(attch1PersistedAndSubmitted.toString()).status(FileStatus.SUBMITTED).build(),
+        		FileStatusInfoDTO.builder().uuid(attch2PersistedAndPending.toString()).status(FileStatus.PENDING).build()
+        		);
+        
+		when(fileAttachmentService.getFilesStatus(Set.of(attch1PersistedAndSubmitted.toString(),
+				attch2PersistedAndPending.toString(), attch3Unpersisted.toString())))
+			.thenReturn(persistedAttachments);
+        
         service.deletePendingAttachments(1L);
 
-        verify(fileAttachmentService, times(1)).deletePendingFileAttachment(unreferencedPermit.toString());
-        verify(fileAttachmentService, times(1)).deletePendingFileAttachment(unreferencedReview.toString());
-        verify(fileAttachmentService, times(1)).deletePendingFileAttachment(referencedPermit.toString());
-        verify(fileAttachmentService, times(1)).deletePendingFileAttachment(referencedReview.toString());
+        verify(fileAttachmentService, timeout(1000)).deleteFileAttachments(Set.of(attch2PersistedAndPending.toString()));
 
         assertThat(requestTask.getPayload()).isInstanceOf(PermitIssuanceApplicationAmendsSubmitRequestTaskPayload.class);
         PermitIssuanceApplicationAmendsSubmitRequestTaskPayload
             payloadSaved = (PermitIssuanceApplicationAmendsSubmitRequestTaskPayload) requestTask.getPayload();
-        assertThat(payloadSaved.getPermitAttachments()).containsOnlyKeys(referencedPermit);
-        assertThat(payloadSaved.getReviewAttachments()).containsOnlyKeys(referencedReview);
+        assertThat(payloadSaved.getPermitAttachments()).containsOnlyKeys(attch1PersistedAndSubmitted);
 
     }
 

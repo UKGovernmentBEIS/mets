@@ -202,4 +202,50 @@ class ReportableEmissionsServiceTest {
                 .isFromDre(true)
         		.build());
     }
+
+    @Test
+    void saveReportableEmissions_delete_entity_when_params_not_from_dre_and_reportableEmissions_null() {
+        final ReportableEmissionsSaveParams params = ReportableEmissionsSaveParams.builder()
+                .accountId(1L)
+                .year(Year.now())
+                .reportableEmissions(null)
+                .isFromDre(false)
+                .build();
+        final ReportableEmissionsEntity entity = ReportableEmissionsEntity.builder()
+                .id(100L)
+                .accountId(params.getAccountId())
+                .year(params.getYear())
+                .reportableEmissions(BigDecimal.valueOf(2000))
+                .isFromDre(false)
+                .build();
+
+        when(reportableEmissionsRepository.findByAccountIdAndYear(params.getAccountId(), params.getYear()))
+                .thenReturn(Optional.of(entity));
+
+        reportableEmissionsService.saveReportableEmissions(params);
+
+        verify(reportableEmissionsRepository, times(1)).delete(entity);
+        verify(publisher, times(1)).publishEvent(any(InstallationReportableEmissionsUpdatedEvent.class));
+    }
+
+
+    @Test
+    void saveReportableEmissions_no_entity_and_reportableEmissions_null_no_event_published() {
+        final ReportableEmissionsSaveParams params = ReportableEmissionsSaveParams.builder()
+                .accountId(1L)
+                .year(Year.now())
+                .reportableEmissions(null)
+                .isFromDre(false)
+                .build();
+
+        when(reportableEmissionsRepository.findByAccountIdAndYear(params.getAccountId(), params.getYear()))
+                .thenReturn(Optional.empty());
+
+        reportableEmissionsService.saveReportableEmissions(params);
+
+        verify(reportableEmissionsRepository, never()).save(any());
+        verify(reportableEmissionsRepository, never()).delete(any());
+        verifyNoInteractions(publisher);
+    }
+
 }

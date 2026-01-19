@@ -10,9 +10,11 @@ import {
   AddressDTO,
   BusinessOrganisationDetails,
   IndividualOrganisationDetails,
-  PermitIssuanceActivePermit,
+  InstallationAccountRegistryIntegrationRequestActionPayload,
+  InstallationAccountUpdatedRegistryIntegrationRequestActionPayload,
   PermitIssuanceOrganizationDetails,
-  PermitIssuanceRegistryIntegrationRequestActionPayload,
+  RegistryIntegrationAccountCreateActivePermit,
+  RegistryIntegrationAccountUpdateActivePermit,
   RequestActionDTO,
 } from 'pmrv-api';
 
@@ -21,7 +23,7 @@ import { RegistryActionService } from '../core/registry.service';
 interface ViewModel {
   header: string;
   expectedActionType: Array<RequestActionDTO['type']>;
-  activePermit: PermitIssuanceActivePermit;
+  activePermit: RegistryIntegrationAccountCreateActivePermit | RegistryIntegrationAccountUpdateActivePermit;
   organizationDetails: Partial<
     PermitIssuanceOrganizationDetails & IndividualOrganisationDetails & BusinessOrganisationDetails
   >;
@@ -36,7 +38,10 @@ interface ViewModel {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InformationSentToRegistryComponent {
-  payload = this.registryActionService.payload as Signal<PermitIssuanceRegistryIntegrationRequestActionPayload>;
+  payload = this.registryActionService.payload as Signal<
+    | InstallationAccountRegistryIntegrationRequestActionPayload
+    | InstallationAccountUpdatedRegistryIntegrationRequestActionPayload
+  >;
   private readonly requestActionType = this.registryActionService.requestActionType;
 
   vm: Signal<ViewModel> = computed(() => {
@@ -45,7 +50,7 @@ export class InformationSentToRegistryComponent {
     const organizationDetails = payload.organizationDetails;
 
     return {
-      header: 'Information sent to registry by system',
+      header: 'Information sent to Registry by system',
       expectedActionType: [this.requestActionType()],
       activePermit,
       organizationDetails,

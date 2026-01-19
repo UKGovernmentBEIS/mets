@@ -35,7 +35,7 @@ public class VerifierRequestTaskDefaultAssignmentService implements UserRoleRequ
 
         if(!ObjectUtils.isEmpty(requestAssignee) && userRoleTypeService.isUserVerifier(requestAssignee)){
             try {
-                requestTaskAssignmentService.assignToUser(requestTask, requestAssignee);
+                requestTaskAssignmentService.assignToUser(requestTask, requestAssignee, getRoleType());
             } catch (BusinessCheckedException e) {
                 assignTaskToSiteContact(requestTask);
             }
@@ -50,7 +50,7 @@ public class VerifierRequestTaskDefaultAssignmentService implements UserRoleRequ
                 .ifPresentOrElse(
                         vbSiteContactUserId -> {
                             try {
-                                requestTaskAssignmentService.assignToUser(requestTask, vbSiteContactUserId);
+                                requestTaskAssignmentService.assignToUser(requestTask, vbSiteContactUserId, getRoleType());
                             } catch (BusinessCheckedException e) {
                                 log.error("Request task '{}' for verifier user will remain unassigned. Error msg : '{}'" ,
                                         requestTask::getId, e::getMessage);

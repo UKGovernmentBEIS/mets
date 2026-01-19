@@ -1,23 +1,24 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivityType;
 
-import java.time.LocalDate;
+import java.util.List;
+
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegistryIntegrationActivePermit {
 
-    private String emitterId;
     private String permitId;
     private String installationName;
     private String operatorName;
-    private String regulator;
-    private LocalDate regulatedActivitiesStartDate;
+    private Integer firstYearOfReportingObligation;
+    private List<RegulatedActivityType> regulatedActivity;
 
 }

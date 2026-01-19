@@ -15,4 +15,6 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.review.
 public class EmpVariationUkEtsApplicationAmendsSubmitRequestTaskPayload extends EmpVariationUkEtsApplicationReviewRequestTaskPayload {
 
 	private Boolean empVariationDetailsAmendCompleted;
+
+	private boolean isHideEmpApplicationTimeframe;
 }

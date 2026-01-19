@@ -9,6 +9,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentStatus;
+import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentWorkflow;
+import uk.gov.pmrv.api.account.fileattachment.service.AccountFileAttachmentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -21,18 +24,15 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.NotifyOperatorForDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInfoResolver;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DateSubmittedToAuthority;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationAcceptedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalAuthority;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalAuthorityResponseRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalSaveAuthorityResponseTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.*;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalAuthorityResponseType;
 
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -45,6 +45,9 @@ class DoalAuthorityResponseServiceTest {
 
     @Mock
     private RequestService requestService;
+
+    @Mock
+    private AccountFileAttachmentService accountFileAttachmentService;
 
     @Mock
     private RequestActionUserInfoResolver requestActionUserInfoResolver;
@@ -78,29 +81,38 @@ class DoalAuthorityResponseServiceTest {
     }
 
     @Test
-    void authorityResponseNotifyOperator() {
-        final DecisionNotification decisionNotification = DecisionNotification.builder()
+    void authorityResponseNotifyOperator_validResponse_updatesPayloadAndFinalizesAttachments() {
+        // given
+        DecisionNotification decisionNotification = DecisionNotification.builder()
                 .operators(Set.of("operatorUserId"))
                 .signatory("regulatorUserId")
                 .build();
-        final NotifyOperatorForDecisionRequestTaskActionPayload taskActionPaylod =
+
+        NotifyOperatorForDecisionRequestTaskActionPayload taskActionPayload =
                 NotifyOperatorForDecisionRequestTaskActionPayload.builder()
                         .decisionNotification(decisionNotification)
                         .build();
 
-        final DoalAuthority doalAuthority = DoalAuthority.builder()
+        DoalGrantAuthorityResponse authorityResponse = DoalGrantAuthorityResponse.builder()
+                .type(DoalAuthorityResponseType.VALID)
+                .build();
+
+        DoalAuthority doalAuthority = DoalAuthority.builder()
                 .dateSubmittedToAuthority(DateSubmittedToAuthority.builder()
                         .date(LocalDate.now())
                         .build())
+                .authorityResponse(authorityResponse)
                 .build();
-        final Map<String, Boolean> sectionsCompleted = Map.of("subtask", true);
-        final Map<UUID, String> attachments = Map.of(UUID.randomUUID(), "test.png");
+
+        Map<String, Boolean> sectionsCompleted = Map.of("subtask", true);
+        Map<UUID, String> attachments = Map.of(UUID.randomUUID(), "test.png");
 
         RequestTask requestTask = RequestTask.builder()
                 .request(Request.builder()
                         .payload(DoalRequestPayload.builder()
                                 .payloadType(RequestPayloadType.DOAL_REQUEST_PAYLOAD)
                                 .build())
+                        .accountId(1L)
                         .build())
                 .payload(DoalAuthorityResponseRequestTaskPayload.builder()
                         .payloadType(RequestTaskPayloadType.DOAL_AUTHORITY_RESPONSE_PAYLOAD)
@@ -110,20 +122,25 @@ class DoalAuthorityResponseServiceTest {
                         .build())
                 .build();
 
-        final DoalRequestPayload expectedPayload = DoalRequestPayload.builder()
-                .payloadType(RequestPayloadType.DOAL_REQUEST_PAYLOAD)
-                .decisionNotification(decisionNotification)
-                .doalAuthority(doalAuthority)
-                .doalSectionsCompleted(sectionsCompleted)
-                .doalAttachments(attachments)
-                .build();
+        // when
+        service.authorityResponseNotifyOperator(requestTask, taskActionPayload);
 
-        // Invoke
-        service.authorityResponseNotifyOperator(requestTask, taskActionPaylod);
+        // then – payload mutation
+        DoalRequestPayload updatedPayload =
+                (DoalRequestPayload) requestTask.getRequest().getPayload();
 
-        // Verify
-        DoalRequestPayload updatedPayload = (DoalRequestPayload) requestTask.getRequest().getPayload();
-        Assertions.assertEquals(expectedPayload, updatedPayload);
+        assertThat(updatedPayload.getDecisionNotification()).isEqualTo(decisionNotification);
+        assertThat(updatedPayload.getDoalAuthority()).isEqualTo(doalAuthority);
+        assertThat(updatedPayload.getDoalSectionsCompleted()).isEqualTo(sectionsCompleted);
+        assertThat(updatedPayload.getDoalAttachments()).isEqualTo(attachments);
+
+        // then – side effect
+        verify(accountFileAttachmentService)
+                .updateAccountFileAttachmentsStatusByAccountId(
+                        AccountFileAttachmentWorkflow.DOAL,
+                        AccountFileAttachmentStatus.FINALIZED,
+                        1L
+                );
     }
 
     @Test

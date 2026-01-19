@@ -8,6 +8,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
 
@@ -25,7 +26,7 @@ import { UserFullNamePipe } from '../../shared/pipes/user-full-name.pipe';
 type TableData = AccountContactVbInfoDTO & { user: UserAuthorityInfoDTO };
 
 @Component({
-  selector: 'app-site-contacts',
+  selector: 'app-verifier-site-contacts',
   templateUrl: './site-contacts.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UserFullNamePipe],
@@ -41,6 +42,8 @@ export class SiteContactsComponent implements OnChanges {
   // eslint-disable-next-line @angular-eslint/no-output-native
   @Output() readonly cancel = new EventEmitter<void>();
 
+  private readonly isAviation = this.router.url.includes('/aviation/') ? '/aviation' : '';
+
   assigneeOptions: GovukSelectOption<string>[];
   tableData: TableData[];
   isSummaryDisplayed$ = new BehaviorSubject<boolean>(false);
@@ -48,7 +51,7 @@ export class SiteContactsComponent implements OnChanges {
   form = this.fb.group({ siteContacts: this.fb.array([]) });
 
   columns: GovukTableColumn<TableData>[] = [
-    { field: 'accountName', header: 'Permit holding account', isHeader: true },
+    { field: 'accountName', header: this.isAviation ? 'Account' : 'Permit holding account', isHeader: true },
     { field: 'type', header: 'Type' },
     { field: 'user', header: 'Assigned to' },
   ];
@@ -56,6 +59,7 @@ export class SiteContactsComponent implements OnChanges {
   constructor(
     private readonly fb: UntypedFormBuilder,
     private readonly fullNamePipe: UserFullNamePipe,
+    private readonly router: Router,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {

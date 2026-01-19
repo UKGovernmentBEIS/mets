@@ -233,7 +233,7 @@ const routes: Routes = [
           },
           {
             path: 'manual-push-to-registry',
-            data: { pageTitle: 'Send information to the registry', breadcrumb: true },
+            data: { pageTitle: 'Send information to the Registry', breadcrumb: true },
             component: ManualAccountOpeningComponent,
           },
           {

@@ -1,0 +1,28 @@
+<ng-container *ngIf="vm() as vm">
+  <govuk-error-summary *ngIf="displayErrorSummary$ | async" [form]="form"></govuk-error-summary>
+
+  <app-waste-qdr-task
+    returnLink="../"
+    [breadcrumb]="true"
+    heading="Changes requested by the regulator"
+    returnLinkTitle="Amend quarterly data report">
+    <h2 app-summary-header class="govuk-heading-m">Quarterly data report</h2>
+
+    <app-changes-requested-template
+      [requiredChanges]="$any(vm.decisionDetails)?.requiredChanges"
+      [reviewAttachments]="vm.regulatorReviewAttachments"
+      [downloadUrl]="vm.downloadUrl"></app-changes-requested-template>
+
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+      <div formControlName="changesRequested" govuk-checkboxes>
+        <govuk-checkbox
+          [value]="true"
+          label="I have made changes and want to mark this task as complete"></govuk-checkbox>
+      </div>
+
+      <div *ngIf="vm.isEditable" class="govuk-button-group">
+        <button appPendingButton govukButton type="submit">Confirm and complete</button>
+      </div>
+    </form>
+  </app-waste-qdr-task>
+</ng-container>

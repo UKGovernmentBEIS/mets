@@ -43,6 +43,10 @@ const routes: Routes = [
         loadChildren: () => import('./bdr/bdr.module').then((m) => m.BdrModule),
       },
       {
+        path: 'bdrs2',
+        loadChildren: () => import('./bdrs2/bdrs2.module').then((m) => m.BdrS2Module),
+      },
+      {
         path: 'permanent-cessation',
         loadChildren: () =>
           import('./permanent-cessation/permanent-cessation.module').then((m) => m.PermanentCessationModule),

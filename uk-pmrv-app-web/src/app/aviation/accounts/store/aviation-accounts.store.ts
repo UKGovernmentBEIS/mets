@@ -1,7 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, tap } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { Store } from '@core/store';
@@ -23,6 +23,7 @@ import {
   initialCreateAccountState,
   initialCurrentAccountState,
   initialState,
+  ReportingStatusListItem,
 } from './aviation-accounts.state';
 
 @Injectable()
@@ -96,6 +97,81 @@ export class AviationAccountsStore extends Store<AviationAccountsState> {
     });
   }
 
+  submitReportingStatus(
+    year: string,
+    reportingStatus: AviationAccountReportingStatusHistoryCreationDTO,
+  ): Observable<any> {
+    return this.reportingStatusService
+      .submitReportingStatus(this.getState().currentAccount.account.aviationAccount.id, {
+        ...reportingStatus,
+        year: +year,
+      })
+      .pipe(
+        this.pendingRequestService.trackRequest(),
+        switchMap(() => {
+          const { account, reportingStatus } = this.getState().currentAccount;
+          return this.reportingStatusService.getAllReportingStatuses(
+            account.aviationAccount.id,
+            0,
+            reportingStatus?.paging.pageSize,
+          );
+        }),
+        tap((res) => {
+          this.setReportingStatuses((res as any)?.reportingStatusList);
+          this.setReportingStatusTotal((res as any)?.total);
+        }),
+      );
+  }
+
+  editReportingStatus(reportingStatus: AviationAccountReportingStatusHistoryCreationDTO): void {
+    this.setState(
+      produce(this.getState(), (state) => {
+        state.currentAccount.reportingStatus.upsertStatus = reportingStatus;
+      }),
+    );
+  }
+
+  setReportingStatuses(reportingStatuses: Array<ReportingStatusListItem>) {
+    this.setState(
+      produce(this.getState(), (state) => {
+        state.currentAccount.reportingStatus.statuses = reportingStatuses;
+      }),
+    );
+  }
+
+  setReportingStatusTotal(total: number) {
+    this.setState(
+      produce(this.getState(), (state) => {
+        state.currentAccount.reportingStatus.total = total;
+      }),
+    );
+  }
+
+  setReportingStatusCurrentPage(page: number) {
+    this.setState(
+      produce(this.getState(), (state) => {
+        state.currentAccount.reportingStatus.paging.page = page;
+      }),
+    );
+  }
+
+  setCurrentStatus(currentStatus: ReportingStatusListItem) {
+    this.setState(
+      produce(this.getState(), (state) => {
+        state.currentAccount.reportingStatus.currentStatus = currentStatus;
+      }),
+    );
+  }
+
+  resetEditReportingStatus() {
+    this.setState(
+      produce(this.getState(), (state) => {
+        state.currentAccount.reportingStatus.upsertStatus = undefined;
+        state.currentAccount.reportingStatus.currentStatus = undefined;
+      }),
+    );
+  }
+
   setReportingStatusHistory(history: AviationAccountReportingStatusHistoryDTO[]) {
     const state = this.getState();
     this.setState({
@@ -110,7 +186,7 @@ export class AviationAccountsStore extends Store<AviationAccountsState> {
     });
   }
 
-  setTotal(total: number) {
+  setReportingStatusHistoryTotal(total: number) {
     const state = this.getState();
     this.setState({
       ...state,
@@ -124,7 +200,7 @@ export class AviationAccountsStore extends Store<AviationAccountsState> {
     });
   }
 
-  setPaging(paging: Paging) {
+  setReportingStatusHistoryPaging(paging: Paging) {
     const state = this.getState();
     this.setState({
       ...state,
@@ -180,21 +256,5 @@ export class AviationAccountsStore extends Store<AviationAccountsState> {
     return this.aviationAccountUpdateService
       .updateCommencementDate1(this.getState().currentAccount.account.aviationAccount.id, accountToUpdate, 'response')
       .pipe(this.pendingRequestService.trackRequest());
-  }
-
-  editReportingStatus(reportingStatus: AviationAccountReportingStatusHistoryCreationDTO): Observable<any> {
-    return this.reportingStatusService
-      .submitReportingStatus(this.getState().currentAccount.account.aviationAccount.id, reportingStatus)
-      .pipe(
-        this.pendingRequestService.trackRequest(),
-        tap(() => {
-          this.setCurrentAccount(
-            produce(this.getState().currentAccount.account, (account) => {
-              account.aviationAccount.reportingStatus = reportingStatus.status;
-              account.aviationAccount.reportingStatusReason = reportingStatus.reason;
-            }),
-          );
-        }),
-      );
   }
 }

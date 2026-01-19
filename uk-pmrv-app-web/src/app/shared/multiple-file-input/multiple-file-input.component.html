@@ -32,7 +32,6 @@
           (change)="onFileChange($event)"
           (focus)="onFileFocus()"
           [accept]="accepted"
-          [class.moj-multi-file-upload--focused]="isFocused"
           [disabled]="isDisabled"
           [id]="id"
           [name]="id"
@@ -43,6 +42,7 @@
         <p class="govuk-body">{{ dropzoneHintText }}</p>
         <label
           [class.govuk-button--disabled]="isDisabled"
+          [class.moj-multi-file-upload--focused]="isFocused"
           [for]="id"
           id="{{ 'ld.' + id }}"
           class="govuk-button govuk-button--secondary">

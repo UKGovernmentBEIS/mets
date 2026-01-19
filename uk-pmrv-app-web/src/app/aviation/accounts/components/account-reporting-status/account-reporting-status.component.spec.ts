@@ -1,34 +1,43 @@
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
-import { BasePage } from '@testing';
+import { AviationAccountsStore } from '@aviation/accounts/store';
+import { mockedAccount, mockReportingStatusResults } from '@aviation/accounts/testing/mock-data';
+import { SharedModule } from '@shared/shared.module';
+import { ActivatedRouteStub, BasePage } from '@testing';
 
 import { AccountReportingStatusPipe } from '../../pipes/account-reporting-status.pipe';
-import { mockedAccount } from '../../testing/mock-data';
 import { AccountReportingStatusComponent } from './account-reporting-status.component';
 
 describe('AccountReportingStatusComponent', () => {
   let component: AccountReportingStatusComponent;
   let fixture: ComponentFixture<AccountReportingStatusComponent>;
   let page: Page;
+  const activatedRoute = new ActivatedRouteStub();
+  let store: AviationAccountsStore;
 
   class Page extends BasePage<AccountReportingStatusComponent> {
-    get heading() {
-      return this.queryAll<HTMLHeadingElement>('h2');
+    get tierRows(): HTMLTableRowElement[] {
+      return Array.from(this.queryAll<HTMLTableRowElement>('table tbody tr'));
     }
   }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientModule],
+      providers: [provideHttpClient(), AviationAccountsStore, { provide: ActivatedRoute, useValue: activatedRoute }],
+      imports: [SharedModule, RouterLink],
       declarations: [AccountReportingStatusComponent, AccountReportingStatusPipe],
     }).compileComponents();
 
+    store = TestBed.inject(AviationAccountsStore);
+    store.setCurrentAccount(mockedAccount);
+    store.setReportingStatuses(mockReportingStatusResults);
+
+    store.setReportingStatusTotal(2);
     fixture = TestBed.createComponent(AccountReportingStatusComponent);
     component = fixture.componentInstance;
-    component.userRoleType = 'REGULATOR';
-    component.accountInfo = mockedAccount.aviationAccount;
     page = new Page(fixture);
     fixture.detectChanges();
   });
@@ -37,15 +46,12 @@ describe('AccountReportingStatusComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render the heading', () => {
-    expect(page.heading.map((el) => el.textContent.trim())).toEqual(['Reporting status']);
-  });
-
   it('should show reporting status details when existing', () => {
-    const reportingStatus = fixture.debugElement.query(By.css('#reporting-status > dd')).nativeElement;
-    const reportingReason = fixture.debugElement.query(By.css('#reporting-reason > dd')).nativeElement;
-
-    expect(reportingStatus.textContent.trim()).toStrictEqual('Exempt (commercial)');
-    expect(reportingReason.textContent.trim()).toStrictEqual('Explanation text added by the regulator');
+    const tableElement = fixture.debugElement.query(By.css('govuk-table'));
+    expect(tableElement).toBeTruthy();
+    expect(page.tierRows.map((row) => Array.from(row.cells).map((col) => col.textContent.trim()))).toEqual([
+      ['2025', 'Exempt (commercial)', 'Update status', '16 Dec 2025, 3:13pm'],
+      ['2024', 'Required to report', 'Update status', '16 Dec 2025, 2:10pm'],
+    ]);
   });
 });

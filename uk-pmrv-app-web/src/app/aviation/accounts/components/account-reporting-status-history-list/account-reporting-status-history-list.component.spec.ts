@@ -24,6 +24,10 @@ describe('AccountReportingStatusHistoryListComponent', () => {
     get reportingSubmitter() {
       return this.queryAll<HTMLLIElement>('.govuk-summary-list .reporting-submitter dd');
     }
+
+    get reportingYear() {
+      return this.queryAll<HTMLLIElement>('.govuk-summary-list .reporting-year dd');
+    }
   }
 
   beforeEach(async () => {
@@ -65,5 +69,9 @@ describe('AccountReportingStatusHistoryListComponent', () => {
       'Roy Kent',
       'Dani Rojas',
     ]);
+  });
+
+  it('should show year for each result', () => {
+    expect(page.reportingYear.map((submitter) => submitter.textContent.trim())).toEqual(['2022', '2022', '2022']);
   });
 });

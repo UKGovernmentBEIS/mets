@@ -1,17 +1,21 @@
 <div *ngFor="let historyItem of history">
   <h2 class="govuk-heading-m">{{ historyItem.submissionDate | govukDate: 'datetime' }}</h2>
   <dl govuk-summary-list>
+    <div govukSummaryListRow class="reporting-year">
+      <dt govukSummaryListRowKey>Reporting year</dt>
+      <dd govukSummaryListRowValue>{{ historyItem.year }}</dd>
+    </div>
     <div govukSummaryListRow class="reporting-status">
       <dt govukSummaryListRowKey>Reporting status</dt>
       <dd govukSummaryListRowValue>{{ historyItem.status | accountReportingStatus }}</dd>
     </div>
-    <div govukSummaryListRow class="reporting-reason pre-wrap">
+    <div govukSummaryListRow class="reporting-reason pre-wrap" *ngIf="historyItem.reason">
       <dt govukSummaryListRowKey>Reason</dt>
       <dd govukSummaryListRowValue>{{ historyItem.reason }}</dd>
     </div>
     <div govukSummaryListRow class="reporting-submitter">
       <dt govukSummaryListRowKey>Changed by</dt>
-      <dd govukSummaryListRowValue>{{ historyItem.submitterName }}</dd>
+      <dd govukSummaryListRowValue>{{ historyItem.submitterName ?? 'System' }}</dd>
     </div>
   </dl>
 </div>

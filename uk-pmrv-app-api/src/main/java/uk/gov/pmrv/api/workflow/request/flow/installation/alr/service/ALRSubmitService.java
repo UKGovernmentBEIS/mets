@@ -5,8 +5,13 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentStatus;
+import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentWorkflowSubType;
+import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentWorkflow;
+import uk.gov.pmrv.api.account.fileattachment.domain.dto.AccountFileAttachmentDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
+import uk.gov.pmrv.api.account.fileattachment.service.AccountFileAttachmentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -40,6 +45,7 @@ public class ALRSubmitService {
     private final RequestService requestService;
     private final RequestActionUserInfoResolver requestActionUserInfoResolver;
     private final InstallationOperatorDetailsQueryService installationOperatorDetailsQueryService;
+    private final AccountFileAttachmentService accountFileAttachmentService;
     private static final ALRMapper ALR_MAPPER = Mappers.getMapper(ALRMapper.class);
 
 
@@ -69,7 +75,7 @@ public class ALRSubmitService {
 
         requestPayload.setVerificationSectionsCompleted(actionPayload.getVerificationSectionsCompleted());
 
-        submitALR(requestPayload, requestTask, appUser, RequestActionType.ALR_APPLICATION_SENT_TO_VERIFIER, requestActionPayload, taskPayload.getAlrSectionsCompleted());
+        submitALR(requestPayload, requestTask, appUser, RequestActionType.ALR_APPLICATION_SENT_TO_VERIFIER, requestActionPayload, taskPayload.getAlrSectionsCompleted(), false);
     }
 
     public void submitToRegulator(RequestTask requestTask, AppUser appUser) {
@@ -81,7 +87,7 @@ public class ALRSubmitService {
 
         RequestActionPayload actionPayload = createApplicationSubmittedRequestActionPayload(requestTask, taskPayload, requestPayload, RequestActionPayloadType.ALR_APPLICATION_SUBMITTED_PAYLOAD);
 
-        submitALR(requestPayload, requestTask, appUser, RequestActionType.ALR_APPLICATION_SENT_TO_REGULATOR, actionPayload, taskPayload.getAlrSectionsCompleted());
+        submitALR(requestPayload, requestTask, appUser, RequestActionType.ALR_APPLICATION_SENT_TO_REGULATOR, actionPayload, taskPayload.getAlrSectionsCompleted(), true);
 
     }
     public void notifyOperator(RequestTask requestTask,
@@ -157,7 +163,8 @@ public class ALRSubmitService {
                           AppUser appUser,
                           RequestActionType requestActionType,
                           RequestActionPayload actionPayload,
-                          Map<String, Boolean> alrSectionsCompleted) {
+                          Map<String, Boolean> alrSectionsCompleted,
+                          boolean accountFileAttachmentSaveToggle) {
 
         final ALRApplicationSubmitRequestTaskPayload taskPayload =
                 (ALRApplicationSubmitRequestTaskPayload) requestTask.getPayload();
@@ -172,6 +179,42 @@ public class ALRSubmitService {
 
             if (shouldIncrement) {
                 alrRequestPayload.incrementAlrFileVersion();
+            }
+
+            if (accountFileAttachmentSaveToggle) {
+                accountFileAttachmentService.updateOrInsertAccountFileAttachment(AccountFileAttachmentDTO.builder()
+                        .workflow(AccountFileAttachmentWorkflow.ALR)
+                        .workflowSubtype(AccountFileAttachmentWorkflowSubType.ALR_ATTACHMENT)
+                        .originatedRequestId(requestTask.getRequest().getId())
+                        .status(AccountFileAttachmentStatus.IN_PROGRESS)
+                        .accountId(requestTask.getRequest().getAccountId())
+                        .period(alrRequestPayload.getReportingYear().toString())
+                        .fileUuid(taskAlr.getAlrFile().toString())
+                        .competentAuthority(requestTask.getRequest().getCompetentAuthority())
+                        .build());
+
+                if(alrRequestPayload.getVerificationReport() != null
+                        && alrRequestPayload.getVerificationReport().getVerificationData() != null
+                        && alrRequestPayload.getVerificationReport().getVerificationData().getOpinionStatement() != null
+                        && alrRequestPayload.getVerificationReport().getVerificationData().getOpinionStatement().getOpinionStatementFile() != null) {
+                    accountFileAttachmentService.updateOrInsertAccountFileAttachment(AccountFileAttachmentDTO.builder()
+                            .workflow(AccountFileAttachmentWorkflow.ALR)
+                            .workflowSubtype(AccountFileAttachmentWorkflowSubType.ALR_VOS)
+                            .originatedRequestId(requestTask.getRequest().getId())
+                            .status(AccountFileAttachmentStatus.IN_PROGRESS)
+                            .accountId(requestTask.getRequest().getAccountId())
+                            .period(alrRequestPayload.getReportingYear().toString())
+                            .fileUuid(
+                                    alrRequestPayload
+                                            .getVerificationReport()
+                                            .getVerificationData()
+                                            .getOpinionStatement()
+                                            .getOpinionStatementFile()
+                                            .toString()
+                            )
+                            .competentAuthority(requestTask.getRequest().getCompetentAuthority())
+                            .build());
+                }
             }
         }
 

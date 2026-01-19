@@ -5,6 +5,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.pmrv.api.integration.registry.accountupdated.installation.request.InstallationAccountUpdatedEventListener;
+import uk.gov.pmrv.api.integration.registry.accountupdated.installation.request.InstallationAccountUpdatedNotifyRegistryService;
+import uk.gov.pmrv.api.integration.registry.accountupdated.installation.request.InstallationAccountUpdatedRegistryEvent;
 
 import static org.mockito.Mockito.verify;
 

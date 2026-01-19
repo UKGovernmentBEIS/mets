@@ -148,7 +148,7 @@ public class ALRAmendsSubmitServiceTest {
 
         verify(validationService, times(1)).validateALR(requestTaskPayload.getAlr());
         verify(alrSubmitService, times(1)).createApplicationSubmittedRequestActionPayload(requestTask, requestTaskPayload, requestPayload, RequestActionPayloadType.ALR_APPLICATION_AMENDS_SUBMITTED_PAYLOAD);
-        verify(alrSubmitService, times(1)).submitALR(requestPayload,requestTask, user, RequestActionType.ALR_APPLICATION_AMENDS_SENT_TO_VERIFIER, requestActionPayload, requestTaskPayload.getAlrSectionsCompleted());
+        verify(alrSubmitService, times(1)).submitALR(requestPayload,requestTask, user, RequestActionType.ALR_APPLICATION_AMENDS_SENT_TO_VERIFIER, requestActionPayload, requestTaskPayload.getAlrSectionsCompleted(), false);
 
     }
 }

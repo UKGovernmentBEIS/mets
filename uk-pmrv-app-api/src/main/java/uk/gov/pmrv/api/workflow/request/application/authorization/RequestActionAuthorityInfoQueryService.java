@@ -23,6 +23,7 @@ public class RequestActionAuthorityInfoQueryService implements RequestActionAuth
                 .map(requestAction -> RequestActionAuthorityInfoDTO.builder()
                         .id(requestAction.getId())
                         .type(requestAction.getType().name())
+                        .requestType(requestAction.getRequest().getType().name())
                         .authorityInfo(ResourceAuthorityInfo.builder()
                                 .requestResources(requestAction.getRequest().getRequestResourcesMap())
                                 .build())

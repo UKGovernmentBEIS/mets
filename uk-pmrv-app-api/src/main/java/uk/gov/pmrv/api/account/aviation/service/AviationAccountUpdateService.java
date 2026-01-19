@@ -2,28 +2,30 @@ package uk.gov.pmrv.api.account.aviation.service;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.hibernate.Hibernate;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountUpdateDTO;
 import uk.gov.pmrv.api.account.domain.Location;
 import uk.gov.pmrv.api.account.domain.LocationOnShoreState;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
 import uk.gov.pmrv.api.account.service.validator.AccountStatus;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.time.LocalDate;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class AviationAccountUpdateService {
@@ -31,6 +33,7 @@ public class AviationAccountUpdateService {
     private final AviationAccountQueryService aviationAccountQueryService;
     private final AviationAccountStatusService aviationAccountStatusService;
     private final LocationMapper locationMapper;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     @AccountStatus(expression = "{#status != 'CLOSED'}")
@@ -95,20 +98,9 @@ public class AviationAccountUpdateService {
     }
 
     @Transactional
-    public void updateAndValidateAccountCommencementDate(Long accountId, AccountUpdateCommencementDateDTO commencementDateDTO) {
+    public void updateAccountCommencementDate(Long accountId, LocalDate commencementDate) {
         AviationAccount account = aviationAccountQueryService.getAccountById(accountId);
-        int year = commencementDateDTO.getCommencementDate().getYear();
-        int currentYear = LocalDate.now().getYear();
-
-        if (year < 2021 || year > currentYear) {
-            throw new BusinessException(
-                    MetsErrorCode.AVIATION_COMMENCEMENT_DATE_NOT_BEFORE_2021_NOT_AFTER_CURRENT_YEAR,
-                    commencementDateDTO,
-                    account.getCompetentAuthority(),
-                    account.getEmissionTradingScheme()
-            );
-        }
-        account.setCommencementDate(commencementDateDTO.getCommencementDate());
+        account.setCommencementDate(commencementDate);
     }
 
 	private void updateNameAndLocation(Long accountId, String name, LocationOnShoreStateDTO accountContactLocationDTO) {

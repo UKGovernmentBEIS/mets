@@ -98,8 +98,7 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
     ],
     [
       csvRowValidator(
-        'Each row must have 5 comma separated values, labelled ‘aerodrome of departure’, ' +
-          '‘aerodrome of arrival’, ‘fuel used’, ‘fuel consumption’, ‘number of flights',
+        'The file must have 5 comma separated values, containing ‘aerodrome of departure’, ‘aerodrome of arrival’, ‘fuel used’, ‘fuel consumption’, ‘number of flights’',
         5,
       ),
     ],

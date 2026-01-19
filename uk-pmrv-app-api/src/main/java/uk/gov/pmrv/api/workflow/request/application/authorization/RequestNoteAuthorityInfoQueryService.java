@@ -23,6 +23,7 @@ public class RequestNoteAuthorityInfoQueryService implements RequestNoteAuthorit
                 .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
 
         return RequestAuthorityInfoDTO.builder()
+        		.type(request.getType().name())
                 .authorityInfo(ResourceAuthorityInfo.builder()
                         .requestResources(request.getRequestResourcesMap())
                         .build())

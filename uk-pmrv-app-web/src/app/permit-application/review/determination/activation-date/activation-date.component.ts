@@ -46,7 +46,7 @@ export class ActivationDateComponent implements PendingRequest {
       map((state) => state.accountId),
       filter((id) => id !== null && id !== undefined),
       switchMap((accountId) => this.installationAccountViewService.getInstallationAccountById(accountId)),
-      map((result) => result.account.emissionTradingScheme),
+      map((result) => result.accountPermitDto?.account.emissionTradingScheme),
     ),
   );
 

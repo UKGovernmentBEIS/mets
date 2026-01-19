@@ -1,0 +1,21 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <app-page-heading size="xl">Bulk download of workflow files</app-page-heading>
+  </div>
+</div>
+<div class="overflow-auto overflow-auto-table govuk-!-padding-1">
+  <govuk-table
+    [columns]="tableColumns"
+    [data]="enabledWorkflows$ | async"
+    caption="Select a workflow to view the files available to download">
+    <ng-template let-column="column" let-row="row">
+      <ng-container [ngSwitch]="column.field">
+        <ng-container *ngSwitchDefault>
+          <a govukLink [routerLink]="['../bulk-downloads/', row.name.toLowerCase()]">
+            {{ row[column.field] | bulkDownloadWorkflowType }}
+          </a>
+        </ng-container>
+      </ng-container>
+    </ng-template>
+  </govuk-table>
+</div>

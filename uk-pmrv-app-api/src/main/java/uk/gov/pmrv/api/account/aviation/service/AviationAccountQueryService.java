@@ -12,7 +12,7 @@ import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountIdAndNameDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountSearchResults;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.aviation.transform.AviationAccountMapper;
@@ -59,6 +59,10 @@ public class AviationAccountQueryService {
                                       EmissionTradingScheme emissionTradingScheme) {
         return aviationAccountRepository
             .existsByCrcoCodeAndCompetentAuthorityAndEmissionTradingScheme(crcoCode, competentAuthority, emissionTradingScheme);
+    }
+
+    public boolean registryIdExistsForAccount(Long accountId) {
+        return aviationAccountRepository.existsByIdAndRegistryIdIsNotNull(accountId);
     }
 
     AviationAccount getAccountById(Long accountId) {
@@ -116,13 +120,17 @@ public class AviationAccountQueryService {
             .toList();
     }
 
+    public List<AviationAccount> getAllByAccountStatuses(List<AviationAccountStatus> accountStatuses) {
+        return aviationAccountRepository.findAllByStatusIn(accountStatuses);
+    }
+
     public boolean existsAccountById(Long accountId) {
         return aviationAccountRepository.existsById(accountId);
     }
     
 	public Set<AviationAccountIdAndNameDTO> getAllByCAAndStatusesAndEmissionTradingSchemesAndReportingStatuses(
 			CompetentAuthorityEnum ca, Set<AviationAccountStatus> statuses, Set<EmissionTradingScheme> emissionTradingSchemes,
-			Set<AviationAccountReportingStatus> reportingStatuses) {
+			Set<AviationAccountReportingStatusType> reportingStatuses) {
 		return aviationAccountRepository.findAllByCAAndStatusesAndEmissionTradingSchemesAndReportingStatuses(ca,
 				statuses == null ? Set.of() : statuses,
 				emissionTradingSchemes == null ? Set.of() : emissionTradingSchemes,

@@ -56,7 +56,12 @@ const routes: Routes = [
     canDeactivate: [AccountGuard],
     resolve: { accountPermit: AccountGuard },
     runGuardsAndResolvers: 'always',
-    data: { breadcrumb: { resolveText: ({ accountPermit }) => accountPermit.account.name, skipLink: false } },
+    data: {
+      breadcrumb: {
+        resolveText: ({ accountPermit }) => accountPermit?.account.name,
+        skipLink: false,
+      },
+    },
     children: [
       {
         path: '',
@@ -66,6 +71,10 @@ const routes: Routes = [
       },
       {
         path: 'permit/:permitId/:fileType/:uuid',
+        component: FileDownloadComponent,
+      },
+      {
+        path: 'details/:detailsAccountId/:fileType/:uuid',
         component: FileDownloadComponent,
       },
       {

@@ -29,7 +29,7 @@ public class EmpVariationUkEtsApplicationApprovedCustomMapper implements Request
         RequestActionDTO requestActionDTO = REQUEST_ACTION_MAPPER.toRequestActionDTOIgnorePayload(requestAction);
 
         EmpVariationUkEtsApplicationApprovedRequestActionPayload clonedRequestActionPayload =
-        		EMP_VARIATION_UKETS_REVIEW_REQUEST_ACTION_MAPPER.cloneApprovedPayloadIgnoreReasonAndDecisionsNotes(requestActionPayload);
+                EMP_VARIATION_UKETS_REVIEW_REQUEST_ACTION_MAPPER.cloneApprovedPayloadIgnoreReasonAndDecisionsNotes(requestActionPayload);
 
         requestActionDTO.setPayload(clonedRequestActionPayload);
 

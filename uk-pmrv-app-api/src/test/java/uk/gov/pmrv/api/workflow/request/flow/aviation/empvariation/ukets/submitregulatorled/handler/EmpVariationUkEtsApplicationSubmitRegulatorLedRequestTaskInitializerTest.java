@@ -108,6 +108,7 @@ class EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskInitializerTest {
 							.build())
 					.build())
 				.serviceContactDetails(accountInfo.getServiceContactDetails())
+				.isHideEmpApplicationTimeframe(true)
 				.empAttachments(Map.of(att1, "Att1.pdf"))
 				.build());
 	}

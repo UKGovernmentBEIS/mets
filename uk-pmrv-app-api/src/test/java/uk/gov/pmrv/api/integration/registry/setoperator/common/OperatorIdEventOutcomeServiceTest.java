@@ -2,9 +2,11 @@ package uk.gov.pmrv.api.integration.registry.setoperator.common;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.integration.model.IntegrationEventOutcome;
@@ -15,6 +17,8 @@ import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.integration.registry.accountcreated.common.validation.SetOperatorIdResponseValidator;
+import uk.gov.pmrv.api.integration.registry.accountupdated.aviation.request.AviationAccountUpdatedRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.setoperator.aviation.AviationSetOperatorIdExemptStatusUpdateService;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +42,12 @@ class OperatorIdEventOutcomeServiceTest {
     private AccountRepository accountRepository;
 
     @Mock
+    private ApplicationEventPublisher publisher;
+
+    @Mock
+    private AviationSetOperatorIdExemptStatusUpdateService aviationSetOperatorIdExemptStatusUpdateService;
+
+    @Mock
     private SetOperatorIdResponseValidator setOperatorIdResponseValidator;
 
     @Test
@@ -53,11 +63,17 @@ class OperatorIdEventOutcomeServiceTest {
         when(setOperatorIdResponseValidator.validateAviation(event)).thenReturn(Collections.emptyList());
         when(accountRepository.findAccountByEmitterId(emitterId)).thenReturn(Optional.of(mockAccount));
 
+
         OperatorUpdateEventOutcome result = service.getAviationOperatorIdEventOutcome(event);
 
         assertThat(result.getOutcome()).isEqualTo(IntegrationEventOutcome.SUCCESS);
         assertThat(result.getErrors()).isEmpty();
 
+        ArgumentCaptor<AviationAccountUpdatedRegistryEvent> eventCaptor =
+                ArgumentCaptor.forClass(AviationAccountUpdatedRegistryEvent.class);
+        verify(publisher).publishEvent(eventCaptor.capture());
+        verify(aviationSetOperatorIdExemptStatusUpdateService, times(1))
+                .notifyRegistryWithExemptStatuses(mockAccount);
         verify(accountRepository, times(1)).findAccountByEmitterId(emitterId);
         verify(mockAccount, times(1)).setRegistryId(operatorId.intValue());
         verify(accountRepository, times(1)).save(mockAccount);

@@ -1,6 +1,6 @@
-import { AviationAccountDTO } from 'pmrv-api';
+import { AviationAccountDTO, AviationAccountReportingStatusDTO } from 'pmrv-api';
 
-export const reportingStatusLabelMap: Partial<Record<AviationAccountDTO['reportingStatus'], string>> = {
+export const reportingStatusLabelMap: Partial<Record<AviationAccountReportingStatusDTO['status'], string>> = {
   REQUIRED_TO_REPORT: 'Required to report',
   EXEMPT_COMMERCIAL: 'Exempt (commercial)',
   EXEMPT_NON_COMMERCIAL: 'Exempt (non commercial)',

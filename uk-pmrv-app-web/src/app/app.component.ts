@@ -2,7 +2,7 @@ import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
-import { combineLatest, filter, map, Observable, of, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, filter, map, Observable, of, shareReplay, switchMap, take, takeUntil } from 'rxjs';
 
 import { gtagIsAvailable, toggleAnalytics } from '@core/analytics';
 import { selectIsFeatureEnabled } from '@core/config/config.selectors';
@@ -22,12 +22,15 @@ import { DocumentEventService } from '@shared/services/document-event.service';
 
 import { ScrollService } from 'govuk-components';
 
+import { BulkDownloadService } from 'pmrv-api';
+
 import { CookiesService } from './cookies/cookies.service';
 
 interface Permissions {
   showRegulators: boolean;
   showVerifiers: boolean;
   showAuthorizedOperators: boolean;
+  hasAccessBulkDownload: boolean;
 }
 
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
@@ -73,6 +76,7 @@ export class AppComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly destroy$: DestroySubject,
     private readonly cookiesService: CookiesService,
+    private readonly bulkDownloadService: BulkDownloadService,
   ) {}
 
   ngOnInit(): void {
@@ -80,46 +84,67 @@ export class AppComponent implements OnInit {
       this.currentSelection.set(domain);
     });
 
+    const hasAccessBulkDownload$: Observable<boolean> = this.bulkDownloadService
+      .hasAccessBulkDownload()
+      .pipe(shareReplay(1));
+
     this.permissions$ = combineLatest([this.isLoggedIn$, this.currentDomain$, this.switchingDomain$]).pipe(
       switchMap(([isLoggedIn, currentDomain, switchingDomain]) =>
         isLoggedIn
-          ? combineLatest([
-              this.userState$.pipe(
-                map((userState) => {
-                  return ['DISABLED', 'TEMP_DISABLED'].includes(userState?.domainsLoginStatuses?.[currentDomain]);
-                }),
-              ),
-              this.roleType$.pipe(map((role) => role === 'REGULATOR')),
-              this.roleType$.pipe(map((role) => role === 'VERIFIER')),
-              this.userState$.pipe(
-                map(
-                  (userState) =>
-                    userState !== null &&
-                    userState?.roleType === 'OPERATOR' &&
-                    userState?.domainsLoginStatuses[currentDomain] !== 'NO_AUTHORITY',
-                ),
-              ),
-              this.userState$.pipe(
-                map(
-                  (userState) =>
-                    currentDomain === 'AVIATION' &&
-                    switchingDomain === 'INSTALLATION' &&
-                    userState?.domainsLoginStatuses[switchingDomain] === 'NO_AUTHORITY',
-                ),
-              ),
-            ]).pipe(
-              map(
-                ([isDisabled, showRegulators, showVerifiers, showAuthorizedOperators, isUnauthorizedDomain]) =>
-                  !isDisabled &&
-                  !isUnauthorizedDomain &&
-                  Object.values({ showRegulators, showVerifiers, showAuthorizedOperators }).some(
-                    (permission) => !!permission,
-                  ) && {
-                    showRegulators,
-                    showVerifiers,
-                    showAuthorizedOperators,
-                  },
-              ),
+          ? this.roleType$.pipe(
+              take(1),
+              switchMap((role) => {
+                const isRegulator = role === 'REGULATOR';
+                const isAviation = currentDomain === 'AVIATION';
+
+                const hasAccessBulkDownloadForRole$ = isRegulator && !isAviation ? hasAccessBulkDownload$ : of(false);
+
+                return combineLatest([
+                  this.userState$.pipe(
+                    map((userState) =>
+                      ['DISABLED', 'TEMP_DISABLED'].includes(userState?.domainsLoginStatuses?.[currentDomain]),
+                    ),
+                  ),
+                  of(isRegulator),
+                  of(role === 'VERIFIER'),
+                  this.userState$.pipe(
+                    map(
+                      (userState) =>
+                        userState !== null &&
+                        userState?.roleType === 'OPERATOR' &&
+                        userState?.domainsLoginStatuses[currentDomain] !== 'NO_AUTHORITY',
+                    ),
+                  ),
+                  this.userState$.pipe(
+                    map(
+                      (userState) =>
+                        isAviation &&
+                        switchingDomain === 'INSTALLATION' &&
+                        userState?.domainsLoginStatuses[switchingDomain] === 'NO_AUTHORITY',
+                    ),
+                  ),
+                  hasAccessBulkDownloadForRole$,
+                ]).pipe(
+                  map(
+                    ([
+                      isDisabled,
+                      showRegulators,
+                      showVerifiers,
+                      showAuthorizedOperators,
+                      isUnauthorizedDomain,
+                      hasAccessBulkDownload,
+                    ]) =>
+                      !isDisabled &&
+                      !isUnauthorizedDomain &&
+                      Object.values({ showRegulators, showVerifiers, showAuthorizedOperators }).some(Boolean) && {
+                        showRegulators,
+                        showVerifiers,
+                        showAuthorizedOperators,
+                        hasAccessBulkDownload,
+                      },
+                  ),
+                );
+              }),
             )
           : of(null),
       ),

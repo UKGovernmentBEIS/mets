@@ -11,7 +11,7 @@ import { addDays, format, startOfDay } from 'date-fns';
 import { InstallationAccountViewService, TasksService } from 'pmrv-api';
 
 import { mockClass, MockType } from '../../../testing';
-import { mockedAccountPermit } from '../../accounts/testing/mock-data';
+import { mockedAccountDetails } from '../../accounts/testing/mock-data';
 import { PermitRevocationStore } from '../store/permit-revocation-store';
 import { TaskStatusPipe } from './task-status.pipe';
 
@@ -42,7 +42,7 @@ describe('TaskStatusPipe', () => {
 
   beforeEach(async () => {
     accountViewService = mockClass(InstallationAccountViewService);
-    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountPermit));
+    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountDetails));
 
     await TestBed.configureTestingModule({
       imports: [],

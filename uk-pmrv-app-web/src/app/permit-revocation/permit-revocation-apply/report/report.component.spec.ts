@@ -12,7 +12,7 @@ import { format, subDays } from 'date-fns';
 import { InstallationAccountViewService, TasksService } from 'pmrv-api';
 
 import { ActivatedRouteStub, BasePage, mockClass, MockType } from '../../../../testing';
-import { mockedAccountPermit } from '../../../accounts/testing/mock-data';
+import { mockedAccountDetails } from '../../../accounts/testing/mock-data';
 import { mockTaskState } from '../../testing/mock-state';
 import { ReportComponent } from './report.component';
 
@@ -102,7 +102,7 @@ describe('Report Component', () => {
 
   beforeEach(async () => {
     accountViewService = mockClass(InstallationAccountViewService);
-    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountPermit));
+    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountDetails));
 
     await TestBed.configureTestingModule({
       imports: [PermitRevocationModule, CessationModule],

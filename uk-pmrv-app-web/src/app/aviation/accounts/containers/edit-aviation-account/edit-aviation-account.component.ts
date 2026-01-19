@@ -75,11 +75,10 @@ export class EditAviationAccountComponent implements OnInit, AfterViewInit, OnDe
             this.store.setCurrentAccount(
               produce(account, (updated) => {
                 updated.aviationAccount = {
+                  ...account.aviationAccount,
                   ...this.formProvider.formValue,
                   competentAuthority: this.accountInfoData.competentAuthority,
                   accountType: this.accountInfoData.accountType,
-                  reportingStatus: account.aviationAccount.reportingStatus,
-                  reportingStatusReason: account.aviationAccount.reportingStatusReason,
                   location: this.formProvider.form.get('hasContactAddress').value.includes(true)
                     ? this.formProvider.form.get('location').value
                     : null,

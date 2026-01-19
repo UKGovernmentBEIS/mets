@@ -8,10 +8,12 @@ import uk.gov.netz.api.authorization.core.domain.AppAuthority;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
+import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusHistory;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountCreationDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
@@ -20,10 +22,11 @@ import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.MigrationHelper;
 
+import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,10 +62,6 @@ public class MigrationAviationAccountCreationService {
         	newAccount.setLocation(locationMapper.toLocation(locationDTO));
         	newAccount.setStatus(AviationAccountStatus.LIVE);
     	}
-    	// set submission date anew, since it is the date the status entry is first created 
-        // but for migrated accounts we need the date originally stored in ETSWAP
-        AviationAccountReportingStatusHistory entry = newAccount.getReportingStatusHistoryList().get(0);
-        entry.setSubmissionDate(emitter.getReportingStatusSubmissionDate());
     }
 
 	private void createNewAccount(AviationAccountCreationDTO accountDTO, AviationEmitter emitter,
@@ -78,14 +77,20 @@ public class MigrationAviationAccountCreationService {
         account.setMigratedAccountId(emitter.getFldEmitterId());
         account.setRegistryId(emitter.getFldRegistration());
         
-        final AviationAccountReportingStatus reporingStatus = AviationAccountReportingStatus.valueOf(emitter.getReportingStatus());
-        account.setReportingStatus(reporingStatus);
-        account.addReportingStatusHistory(AviationAccountReportingStatusHistory.builder()
-                .status(reporingStatus)
-                .reason(emitter.getReportingStatusReason())
-                .submitterId(authUser.getUserId())
-                .submitterName(authUser.getFullName())
-                .build());
+        final AviationAccountReportingStatusType reporingStatus = AviationAccountReportingStatusType.valueOf(emitter.getReportingStatus());
+		AviationAccountReportingStatus accountReportingStatus = AviationAccountReportingStatus.builder().year(Year.now())
+				.status(reporingStatus).build();
+		account.addReportingStatusHistory(AviationAccountReportingStatusHistory.builder()
+				.status(reporingStatus)
+				.reason(emitter.getReportingStatusReason())
+				.submitterId(authUser.getUserId())
+				.year(Year.now())
+				.submitterName(authUser.getFullName())
+				// set submission date anew, since it is the date the status entry is first created
+				// but for migrated accounts we need the date originally stored in ETSWAP
+				.submissionDate(emitter.getReportingStatusSubmissionDate())
+				.build());
+		account.addReportingStatus(accountReportingStatus);
         
         aviationAccountRepository.saveAndFlush(account);
 	}

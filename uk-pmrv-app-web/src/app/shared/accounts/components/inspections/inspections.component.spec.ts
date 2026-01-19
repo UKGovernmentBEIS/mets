@@ -10,10 +10,9 @@ import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
 
 import { RequestsService } from 'pmrv-api';
 
-import { AccountsModule } from 'src/app/accounts/accounts.module';
-import { mockedAccount, mockedAccountPermit, mockInspectionsResults } from 'src/app/accounts/testing/mock-data';
-import { SharedUserModule } from 'src/app/shared-user/shared-user.module';
-
+import { AccountsModule } from '../../../../accounts/accounts.module';
+import { mockedAccount, mockedAccountPermit, mockInspectionsResults } from '../../../../accounts/testing/mock-data';
+import { SharedUserModule } from '../../../../shared-user/shared-user.module';
 import { InspectionsComponent } from './inspections.component';
 
 describe('InspectionsComponent', () => {

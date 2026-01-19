@@ -70,8 +70,8 @@ describe('MmpInstallationDescriptionSummaryTemplateComponent', () => {
 
   it('should show summary', () => {
     expect(page.summaryListValues).toEqual([
-      ['description', 'Change'],
-      ['', 'Change'],
+      ['description', 'Change  description of the installation and its main processes'],
+      ['', 'Change  uploaded files'],
     ]);
   });
 });

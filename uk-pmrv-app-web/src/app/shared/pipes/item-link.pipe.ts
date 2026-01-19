@@ -649,6 +649,15 @@ export class ItemLinkPipe implements PipeTransform {
         }
       }
 
+      case 'BDRS2': {
+        switch (value?.taskType) {
+          case 'BDRS2_APPLICATION_SUBMIT':
+            return [routerLooks + 'tasks', value.taskId, 'bdrs2', 'submit'];
+          default:
+            return ['.'];
+        }
+      }
+
       case 'AVIATION_DOE_CORSIA': {
         switch (value?.taskType) {
           case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
@@ -717,7 +726,12 @@ export class ItemLinkPipe implements PipeTransform {
       case 'WASTE_QDR': {
         switch (value?.taskType) {
           case 'WASTE_QDR_APPLICATION_SUBMIT':
+          case 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW':
+          case 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT':
             return [routerLooks + 'tasks', value.taskId, 'waste-qdr', 'submit'];
+          case 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+          case 'WASTE_QDR_WAIT_FOR_AMENDS':
+            return [routerLooks + 'tasks', value.taskId, 'waste-qdr', 'review'];
 
           default: {
             return ['.'];

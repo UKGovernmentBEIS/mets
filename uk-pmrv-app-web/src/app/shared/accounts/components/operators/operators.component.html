@@ -239,7 +239,10 @@
               <ng-template #simpleStatus>Awaiting confirmation</ng-template>
             </ng-container>
             <ng-container *ngSwitchCase="'deleteBtn'">
-              <a [routerLink]="['users', row.userId, 'delete']" govukLink>Delete</a>
+              <a [routerLink]="['users', row.userId, 'delete']" govukLink>
+                Delete
+                <span class="govuk-visually-hidden">{{ row | userFullName }}</span>
+              </a>
             </ng-container>
             <ng-container *ngSwitchDefault formGroupName="contactTypes">
               <ng-container *ngIf="(isEditable$ | async) === true; else nonEditableContact">
@@ -252,7 +255,11 @@
                   [index]="index"
                   [isDisabled]="usersArray.at(index).get('authorityStatus').value === 'DISABLED'"
                   [value]="row.userId"
-                  app-radio-option></div>
+                  app-radio-option>
+                  <ng-container label>
+                    <span class="govuk-visually-hidden">{{ column.header }}, {{ row | userFullName }}</span>
+                  </ng-container>
+                </div>
               </ng-container>
               <ng-template #nonEditableContact>
                 <ng-container *ngIf="row.userId === contactTypes.get(column.field).value">&#10003;</ng-container>

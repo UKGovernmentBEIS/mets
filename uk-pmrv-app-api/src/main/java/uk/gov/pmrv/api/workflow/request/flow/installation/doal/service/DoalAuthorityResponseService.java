@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentStatus;
+import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentWorkflow;
+import uk.gov.pmrv.api.account.fileattachment.service.AccountFileAttachmentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -16,6 +19,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalAuthor
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalAuthorityResponseSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalSaveAuthorityResponseTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalAuthorityResponseType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.mapper.DoalMapper;
 
 import java.util.Map;
@@ -26,6 +30,7 @@ public class DoalAuthorityResponseService {
 
     private final RequestService requestService;
     private final RequestActionUserInfoResolver requestActionUserInfoResolver;
+    private final AccountFileAttachmentService accountFileAttachmentService;
     private static final DoalMapper DOAL_MAPPER = Mappers.getMapper(DoalMapper.class);
 
     @Transactional
@@ -52,6 +57,13 @@ public class DoalAuthorityResponseService {
         requestPayload.setDoalAuthority(taskPayload.getDoalAuthority());
         requestPayload.setDoalSectionsCompleted(taskPayload.getDoalSectionsCompleted());
         requestPayload.setDoalAttachments(taskPayload.getDoalAttachments());
+
+        boolean shouldUpdateAccountFileAttachmentsWithFinalizedStatus = taskPayload.getDoalAuthority().getAuthorityResponse().getType() == DoalAuthorityResponseType.VALID ||
+                taskPayload.getDoalAuthority().getAuthorityResponse().getType() == DoalAuthorityResponseType.VALID_WITH_CORRECTIONS;
+
+        if (shouldUpdateAccountFileAttachmentsWithFinalizedStatus) {
+            accountFileAttachmentService.updateAccountFileAttachmentsStatusByAccountId(AccountFileAttachmentWorkflow.DOAL, AccountFileAttachmentStatus.FINALIZED, requestTask.getRequest().getAccountId());
+        }
     }
 
     @Transactional

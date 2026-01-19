@@ -10,13 +10,14 @@ import { AuthStore } from '@core/store/auth';
 import {
   AviationAccountEmpDTO,
   AviationAccountViewService,
+  InstallationAccountDetailsDTO,
   InstallationAccountDTO,
   InstallationAccountPermitDTO,
   InstallationAccountViewService,
 } from 'pmrv-api';
 
 import { ActivatedRouteSnapshotStub, asyncData } from '../../../../../../testing';
-import { mockedAccountPermit } from '../../../../../accounts/testing/mock-data';
+import { mockedAccountDetails, mockedAccountPermit } from '../../../../../accounts/testing/mock-data';
 import { mockedAccount } from '../../../../../aviation/accounts/testing/mock-data';
 import { AccountStatusGuard } from './account-status.guard';
 
@@ -31,7 +32,7 @@ describe('AddUserGuard', () => {
     installationAccountViewService = {
       getInstallationAccountById: jest
         .fn()
-        .mockReturnValue(asyncData<InstallationAccountPermitDTO>(mockedAccountPermit)),
+        .mockReturnValue(asyncData<InstallationAccountDetailsDTO>(mockedAccountDetails)),
     };
     aviationAccountViewService = {
       getAviationAccountById: jest.fn().mockReturnValue(asyncData<AviationAccountEmpDTO>(mockedAccount)),
@@ -70,7 +71,9 @@ describe('AddUserGuard', () => {
       account: { ...mockedAccountPermit.account, status: 'UNAPPROVED' } as InstallationAccountDTO,
     };
     installationAccountViewService.getInstallationAccountById.mockReturnValue(
-      asyncData<InstallationAccountPermitDTO>(unapprovedAccountPermit),
+      asyncData<InstallationAccountDetailsDTO>({
+        accountPermitDto: unapprovedAccountPermit,
+      }),
     );
 
     expect(
@@ -86,7 +89,9 @@ describe('AddUserGuard', () => {
       account: { ...mockedAccountPermit.account, status: 'DENIED' } as InstallationAccountDTO,
     };
     installationAccountViewService.getInstallationAccountById.mockReturnValue(
-      asyncData<InstallationAccountPermitDTO>(deniedAccountPermit),
+      asyncData<InstallationAccountDetailsDTO>({
+        accountPermitDto: deniedAccountPermit,
+      }),
     );
 
     expect(

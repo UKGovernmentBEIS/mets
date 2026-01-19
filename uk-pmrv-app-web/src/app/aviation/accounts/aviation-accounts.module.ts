@@ -23,6 +23,7 @@ import {
   ViewAviationAccountComponent,
 } from './containers';
 import { EditReportingStatusComponent } from './containers/edit-reporting-status';
+import { EditReportingStatusSummaryComponent } from './containers/edit-reporting-status-summary/edit-reporting-status-summary.component';
 import {
   CreateAviationAccountGuard,
   CreateAviationAccountSuccessGuard,
@@ -52,6 +53,7 @@ import { AviationAccountsStore } from './store';
     EditAviationAccountComponent,
     EditCommencementDateAviationAccountComponent,
     EditReportingStatusComponent,
+    EditReportingStatusSummaryComponent,
     EtsNamePipe,
     ViewAviationAccountComponent,
   ],

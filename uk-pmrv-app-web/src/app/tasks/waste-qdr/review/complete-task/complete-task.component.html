@@ -1,0 +1,19 @@
+<ng-container *ngIf="!isSubmitted(); else confirmationContent">
+  <app-waste-qdr-task-common returnLink="../" [breadcrumb]="true">
+    <app-page-heading size="l">Complete quarterly data report review</app-page-heading>
+    <p class="govuk-body">
+      By selecting ‘Confirm and complete’ you confirm that the information in your review is correct to the best of your
+      knowledge.
+    </p>
+    <div class="govuk-button-group">
+      <button type="button" appPendingButton govukButton (click)="complete()">Confirm and complete</button>
+    </div>
+  </app-waste-qdr-task-common>
+</ng-container>
+
+<ng-template #confirmationContent>
+  <app-confirmation-shared
+    title="Quarterly data report review completed"
+    titleContent="Your reference is"
+    titleContentId="{{ wasteQdrService.requestId }}"></app-confirmation-shared>
+</ng-template>

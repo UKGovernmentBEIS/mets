@@ -30,6 +30,8 @@ public enum NotificationTemplateWorkflowTaskType {
 
     BDR("Submission"),
 
+    BDRS2("Submission"),
+
     HSETI("Submission"),
 
     PAYMENT("Payment"),

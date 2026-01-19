@@ -256,7 +256,12 @@ export function areTasksCompletedForNotifyVariationRegLed(
   payload: RequestTaskPayload,
   isCorsia: boolean,
 ): boolean {
-  const availableTasks = getAvailableSubTasks(allEmpApplicationTasks(taskType, false, isCorsia), payload);
+  const timeframeExists = !payload?.['hideEmpApplicationTimeframe'];
+
+  const availableTasks = getAvailableSubTasks(
+    allEmpApplicationTasks(taskType, false, isCorsia, true, timeframeExists),
+    payload,
+  );
   const allEmpTasksCompleted = empTasksCompleted(payload, availableTasks);
 
   return allEmpTasksCompleted && (payload as EmpVariationSubmitRequestTaskPayload).empVariationDetailsCompleted;
@@ -446,8 +451,14 @@ export function getEmpSections(
   isAmendsTask?: boolean,
   relatedActions?: RequestTaskItemDTO['allowedRequestTaskActions'],
   isCorsia?: boolean,
+  isVariation?: boolean,
 ): TaskSection<any>[] {
-  const availableSubTasks = getAvailableSubTasks(allEmpApplicationTasks(taskType, isAmendsTask, isCorsia), payload);
+  const timeframeExists = !payload?.['hideEmpApplicationTimeframe'];
+
+  const availableSubTasks = getAvailableSubTasks(
+    allEmpApplicationTasks(taskType, isAmendsTask, isCorsia, isVariation, timeframeExists),
+    payload,
+  );
 
   let sections: TaskSection<any>[];
 
@@ -456,7 +467,7 @@ export function getEmpSections(
     case 'EMP_VARIATION_CORSIA_APPLICATION_SUBMIT':
     case 'EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMIT':
     case 'EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMIT':
-      sections = empVariationSubmitTasks(isAmendsTask, isCorsia);
+      sections = empVariationSubmitTasks(isAmendsTask, isCorsia, timeframeExists);
       break;
 
     case 'EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT':
@@ -465,11 +476,11 @@ export function getEmpSections(
     case 'EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_PEER_REVIEW':
     case 'EMP_VARIATION_CORSIA_REGULATOR_LED_WAIT_FOR_PEER_REVIEW':
     case 'EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_PEER_REVIEW':
-      sections = empVariationSubmitRegulatorLedTasks(isAmendsTask, isCorsia);
+      sections = empVariationSubmitRegulatorLedTasks(isAmendsTask, isCorsia, timeframeExists);
       break;
 
     default:
-      sections = empApplicationSubmitTasks(isAmendsTask, isCorsia);
+      sections = empApplicationSubmitTasks(isAmendsTask, isCorsia, isVariation, timeframeExists);
   }
 
   return sections.map((section) => {
@@ -613,8 +624,9 @@ export function getEmpVariationReviewSections(
   isCorsia?: boolean,
 ): TaskSection<any>[] {
   const prefix = isCorsia ? 'emp-corsia' : 'emp';
+  const timeframeExists = !payload?.['hideEmpApplicationTimeframe'];
 
-  return empVariationReviewTask(isCorsia).map((section) => {
+  return empVariationReviewTask(isCorsia, timeframeExists).map((section) => {
     return {
       ...section,
       tasks: section.tasks
@@ -677,6 +689,8 @@ export function allEmpApplicationTasks(
   parentLink: string,
   isAmendsTask?: boolean,
   isCorsia?: boolean,
+  isVariation?: boolean,
+  showTimeframe?: boolean,
 ): TaskSection<any>[] {
   const prefix = isCorsia ? 'emp-corsia' : 'emp';
   const tasks: TaskSection<any>[] = [
@@ -784,7 +798,7 @@ export function allEmpApplicationTasks(
         },
       ],
     },
-    ...(!isCorsia
+    ...(!isCorsia && (!isVariation || (isVariation && showTimeframe))
       ? [
           {
             title: 'Application timeframe',
@@ -839,11 +853,16 @@ function isFuelConsumptionMeasuringMethod(
   );
 }
 
-export const empApplicationSubmitTasks = (isAmendsTask: boolean, isCorsia: boolean): TaskSection<any>[] => {
+export const empApplicationSubmitTasks = (
+  isAmendsTask: boolean,
+  isCorsia: boolean,
+  isVariation: boolean,
+  timeframeExists: boolean,
+): TaskSection<any>[] => {
   const prefix = isCorsia ? 'emp-corsia' : 'emp';
 
   const tasks = [
-    ...allEmpApplicationTasks('submit', false, isCorsia),
+    ...allEmpApplicationTasks('submit', false, isCorsia, isVariation, timeframeExists),
     {
       title: 'Send application',
       tasks: [
@@ -873,7 +892,11 @@ export const empApplicationSubmitTasks = (isAmendsTask: boolean, isCorsia: boole
   return tasks;
 };
 
-export const empVariationSubmitTasks = (isAmendsTask: boolean, isCorsia: boolean): TaskSection<any>[] => {
+export const empVariationSubmitTasks = (
+  isAmendsTask: boolean,
+  isCorsia: boolean,
+  timeframeExists: boolean,
+): TaskSection<any>[] => {
   const prefix = isCorsia ? 'emp-corsia' : 'emp';
 
   let tasks: TaskSection<any>[];
@@ -900,7 +923,7 @@ export const empVariationSubmitTasks = (isAmendsTask: boolean, isCorsia: boolean
           },
         ],
       },
-      ...allEmpApplicationTasks('variation', false, isCorsia),
+      ...allEmpApplicationTasks('variation', false, isCorsia, true, timeframeExists),
       {
         title: 'Send application',
         tasks: [
@@ -925,7 +948,7 @@ export const empVariationSubmitTasks = (isAmendsTask: boolean, isCorsia: boolean
           },
         ],
       },
-      ...allEmpApplicationTasks('variation', false, isCorsia),
+      ...allEmpApplicationTasks('variation', false, isCorsia, true, timeframeExists),
       {
         title: 'Send application',
         tasks: [
@@ -943,7 +966,11 @@ export const empVariationSubmitTasks = (isAmendsTask: boolean, isCorsia: boolean
   return tasks;
 };
 
-export const empVariationSubmitRegulatorLedTasks = (isAmendsTask: boolean, isCorsia: boolean): TaskSection<any>[] => {
+export const empVariationSubmitRegulatorLedTasks = (
+  isAmendsTask: boolean,
+  isCorsia: boolean,
+  timeframeExists: boolean,
+): TaskSection<any>[] => {
   const prefix = isCorsia ? 'emp-corsia' : 'emp';
   return [
     {
@@ -956,7 +983,7 @@ export const empVariationSubmitRegulatorLedTasks = (isAmendsTask: boolean, isCor
         },
       ],
     },
-    ...allEmpApplicationTasks('variation-regulator-led', isAmendsTask, isCorsia),
+    ...allEmpApplicationTasks('variation-regulator-led', isAmendsTask, isCorsia, true, timeframeExists),
   ];
 };
 export const EMP_APPLICATION_REVIEW_TASKS: TaskSection<any>[] = [
@@ -975,7 +1002,7 @@ export const EMP_APPLICATION_REVIEW_TASKS: TaskSection<any>[] = [
 ];
 
 export const EMP_CORSIA_APPLICATION_REVIEW_TASKS: TaskSection<any>[] = [
-  ...allEmpApplicationTasks('review', null, true),
+  ...allEmpApplicationTasks('review', null, true, false, false),
   {
     title: 'Decision',
     tasks: [
@@ -1000,7 +1027,7 @@ export const EMP_VARIATION_REVIEW_TASKS: TaskSection<any>[] = [
       },
     ],
   },
-  ...allEmpApplicationTasks('variation/review'),
+  ...allEmpApplicationTasks('variation/review', false, false, true),
   {
     title: 'Decision',
     tasks: [
@@ -1014,7 +1041,7 @@ export const EMP_VARIATION_REVIEW_TASKS: TaskSection<any>[] = [
   },
 ];
 
-const empVariationReviewTask = (isCorsia: boolean): TaskSection<any>[] => {
+const empVariationReviewTask = (isCorsia: boolean, timeframeExists: boolean): TaskSection<any>[] => {
   const prefix = isCorsia ? 'emp-corsia' : 'emp';
 
   return [
@@ -1028,7 +1055,7 @@ const empVariationReviewTask = (isCorsia: boolean): TaskSection<any>[] => {
         },
       ],
     },
-    ...allEmpApplicationTasks('variation/review', null, isCorsia),
+    ...allEmpApplicationTasks('variation/review', null, isCorsia, true, timeframeExists),
     {
       title: 'Decision',
       tasks: [

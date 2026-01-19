@@ -43,6 +43,13 @@ public interface InstallationAccountRepository extends AccountBaseRepository<Ins
     @Transactional(readOnly = true)
     boolean existsByTransferCode(String transferCode);
 
+    @Transactional(readOnly = true)
+    @Query("SELECT a.id FROM InstallationAccount a " +
+            "WHERE a.status = 'LIVE' " +
+            "AND a.faStatus = true " +
+            "AND a.emitterType IN ('GHGE', 'HSE')")
+    List<Long> findEligibleAccountIdsForBDRS2();
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<InstallationAccount> findAccountByTransferCodeAndTransferCodeStatus(String transferCode, TransferCodeStatus transferCodeStatus);
     

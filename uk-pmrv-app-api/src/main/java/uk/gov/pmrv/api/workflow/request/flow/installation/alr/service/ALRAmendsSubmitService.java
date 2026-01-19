@@ -58,7 +58,7 @@ public class ALRAmendsSubmitService {
 
         submitService.submitALR(requestPayload, requestTask, appUser,
                 RequestActionType.ALR_APPLICATION_AMENDS_SUBMITTED,
-                requestActionPayload, requestTaskPayload.getAlrSectionsCompleted());
+                requestActionPayload, requestTaskPayload.getAlrSectionsCompleted(), true);
     }
 
     public void sendAmendsToVerifier(ALRApplicationAmendsSubmitToVerifierRequestTaskActionPayload actionPayload,
@@ -78,6 +78,6 @@ public class ALRAmendsSubmitService {
 
         submitService.submitALR(requestPayload, requestTask, appUser,
                 RequestActionType.ALR_APPLICATION_AMENDS_SENT_TO_VERIFIER,
-                requestActionPayload, taskPayload.getAlrSectionsCompleted());
+                requestActionPayload, taskPayload.getAlrSectionsCompleted(), false);
     }
 }

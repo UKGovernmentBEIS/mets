@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityRoleDTO;
 import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.when;
 class OperatorUserManagementServiceTest {
 
 	@InjectMocks
-        private OperatorUserManagementService service;
+	private OperatorUserManagementService service;
 	
 	@Mock
 	private OperatorUserAuthService operatorUserAuthService;
@@ -39,6 +40,9 @@ class OperatorUserManagementServiceTest {
 	
 	@Mock
 	private UserSecuritySetupService userSecuritySetupService;
+
+	@Mock
+	private ApplicationEventPublisher applicationEventPublisher;
 	
 	@Test
 	void updateOperatorUser() {

@@ -20,7 +20,6 @@ import org.springframework.validation.Validator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
 import uk.gov.netz.api.authorization.operator.domain.AccountOperatorAuthorityUpdateDTO;
-import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityDeletionService;
 import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
@@ -28,6 +27,7 @@ import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
 import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
+import uk.gov.pmrv.api.account.service.PmrvOperatorAuthorityDeletionService;
 import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.AccountOperatorAuthorityUpdateWrapperDTO;
@@ -65,7 +65,7 @@ class OperatorAuthorityControllerTest {
     private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
-    private OperatorAuthorityDeletionService operatorAuthorityDeletionService;
+    private PmrvOperatorAuthorityDeletionService operatorAuthorityDeletionService;
 
     @Mock
     private AccountOperatorUserAuthorityQueryOrchestrator accountOperatorUserAuthorityQueryOrchestrator;
@@ -233,7 +233,7 @@ class OperatorAuthorityControllerTest {
             .andExpect(status().isNoContent());
 
         verify(operatorAuthorityDeletionService, times(1))
-                .deleteAccountOperatorAuthority(userId, accountId);
+                .deleteAccountOperatorAuthorityAndNotifyRegistry(userId, accountId);
     }
 
     @Test

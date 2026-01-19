@@ -20,6 +20,11 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccou
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.integration.registry.accountupdated.common.RegistryIntegrationEmailNotifierService;
+import uk.gov.pmrv.api.integration.registry.accountupdated.installation.request.InstallationAccountUpdatedAddRequestActionService;
+import uk.gov.pmrv.api.integration.registry.accountupdated.installation.request.InstallationAccountUpdatedNotifyRegistryService;
+import uk.gov.pmrv.api.integration.registry.accountupdated.installation.request.InstallationAccountUpdatedRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.accountupdated.installation.request.InstallationAccountUpdatedRegistryProducer;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitType;
@@ -29,7 +34,7 @@ import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivity;
 import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivityType;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountPermitDTO;
-import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountPermitQueryOrchestrator;
+import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountQueryOrchestrator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,7 +55,7 @@ import static org.mockito.Mockito.when;
 public class InstallationAccountUpdatedNotifyRegistryServiceTest {
 
     @Mock
-    private InstallationAccountPermitQueryOrchestrator accountQueryService;
+    private InstallationAccountQueryOrchestrator accountQueryService;
 
     @Mock
     private PermitQueryService permitQueryService;
@@ -60,6 +65,9 @@ public class InstallationAccountUpdatedNotifyRegistryServiceTest {
 
     @Mock
     private InstallationAccountUpdatedAddRequestActionService addRequestActionService;
+
+    @Mock
+    private RegistryIntegrationEmailNotifierService registryIntegrationEmailNotifierService;
 
     @InjectMocks
     private InstallationAccountUpdatedNotifyRegistryService installationAccountUpdatedNotifyRegistryService;
@@ -138,7 +146,7 @@ public class InstallationAccountUpdatedNotifyRegistryServiceTest {
 
         UpdateAccountDetailsMessage accountDetails = result.getAccountDetails();
         assertEquals("Installation Name", accountDetails.getInstallationName());
-        assertEquals("OPERATOR_HOLDING_ACCOUNT", accountDetails.getService());
+        assertEquals("OPERATOR_HOLDING_ACCOUNT", accountDetails.getAccountType());
         assertEquals("Operator Name", accountDetails.getAccountName());
         assertEquals("permitId", accountDetails.getPermitId());
         assertEquals("123", accountDetails.getRegistryId());

@@ -47,7 +47,7 @@ public class EmpIssuanceRegistryIntegrationAddRequestActionService {
                 .emitterId(accountDTO.getEmitterId())
                 .emissionsPlanId(empDetailsDTO.map(EmpDetailsDTO::getId).orElse(null))
                 .operatorName(aviationAccountCreatedRegistryEvent.getEmissionsMonitoringPlan().getOperatorDetails().getOperatorName())
-                .firstKnownAviationActivity(accountDTO.getCommencementDate())
+                .firstYearOfReportingObligation(accountDTO.getCommencementDate().getYear())
                 .regulator(accountDTO.getCompetentAuthority().getCode())
                 .build();
 

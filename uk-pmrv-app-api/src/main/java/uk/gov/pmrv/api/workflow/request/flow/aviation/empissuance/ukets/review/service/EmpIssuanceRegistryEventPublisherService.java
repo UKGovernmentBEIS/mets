@@ -17,8 +17,6 @@ public class EmpIssuanceRegistryEventPublisherService {
 
     private final ApplicationEventPublisher publisher;
 
-    private final EmpIssuanceRegistryIntegrationAddRequestActionService addRequestActionService;
-
     private final EmissionsMonitoringPlanQueryService emissionsMonitoringPlanQueryService;
 
 
@@ -35,7 +33,6 @@ public class EmpIssuanceRegistryEventPublisherService {
         if(EmpIssuanceDeterminationType.APPROVED.equals(payload.getDetermination().getType())) {
             publisher.publishEvent(aviationAccountCreatedRegistryEvent);
 
-            addRequestActionService.addRequestAction(aviationAccountCreatedRegistryEvent);
 
         }
     }

@@ -33,13 +33,18 @@ import {
   ViewAviationAccountComponent,
 } from './containers';
 import { EditReportingStatusComponent } from './containers/edit-reporting-status';
+import { EditReportingStatusSummaryComponent } from './containers/edit-reporting-status-summary/edit-reporting-status-summary.component';
 import {
   CreateAviationAccountGuard,
   CreateAviationAccountSuccessGuard,
   CreateAviationAccountSummaryGuard,
   EditAviationAccountGuard,
 } from './guards';
-import { canActivateEditReportingStatus } from './guards/account-guards';
+import {
+  canActivateEditReportingStatus,
+  canActivateEditReportingStatusSummary,
+  canDeactivateEditReportingStatus,
+} from './guards/account-guards';
 import { AviationAccountGuard } from './guards/aviation-account.guard';
 import { AviationAccountReportingStatusHistoryGuard } from './guards/aviation-account-reporting-status-history.guard';
 import { WorkflowGuard } from './guards/workflow.guard';
@@ -248,9 +253,20 @@ const routes: Routes = [
             canDeactivate: [AviationAccountReportingStatusHistoryGuard],
           },
           {
-            path: 'edit-reporting-status',
+            path: 'edit-reporting-status/:reportingYear',
+            title: 'Edit reporting status',
+            data: { breadcrumb: false, backlink: '../../' },
             canActivate: [canActivateEditReportingStatus],
-            component: EditReportingStatusComponent,
+            canDeactivate: [canDeactivateEditReportingStatus],
+            children: [
+              { path: '', component: EditReportingStatusComponent },
+              {
+                path: 'summary',
+                data: { breadcrumb: false, backlink: '../' },
+                canActivate: [canActivateEditReportingStatusSummary],
+                component: EditReportingStatusSummaryComponent,
+              },
+            ],
           },
           {
             path: 'verification-body',

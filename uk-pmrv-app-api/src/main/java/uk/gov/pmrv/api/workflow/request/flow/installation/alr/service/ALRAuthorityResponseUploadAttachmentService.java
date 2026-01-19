@@ -24,6 +24,6 @@ public class ALRAuthorityResponseUploadAttachmentService {
         final ALRAuthorityResponseSubmitRequestTaskPayload requestTaskPayload =
                 (ALRAuthorityResponseSubmitRequestTaskPayload) requestTask.getPayload();
 
-        requestTaskPayload.getAttachments().put(UUID.fromString(attachmentUuid), filename);
+        requestTaskPayload.getAlrAttachments().put(UUID.fromString(attachmentUuid), filename);
     }
 }

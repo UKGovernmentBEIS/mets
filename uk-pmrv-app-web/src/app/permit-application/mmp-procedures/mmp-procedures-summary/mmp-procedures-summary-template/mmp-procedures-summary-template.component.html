@@ -13,7 +13,13 @@
             <dt govukSummaryListRowKey>Name of the procedure</dt>
             <dd govukSummaryListRowValue>{{ procedures[procedureType]?.procedureName }}</dd>
             <dd govukSummaryListRowActions *ngIf="isEditable">
-              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="[routerLink(procedureType)]"
+                [state]="{ changing: true }"
+                [hidden-text]="labelsForHeader[procedureType] + ' name'">
+                Change
+              </a>
             </dd>
           </div>
 
@@ -21,7 +27,13 @@
             <dt govukSummaryListRowKey>Procedure reference</dt>
             <dd govukSummaryListRowValue>{{ procedures[procedureType]?.procedureReference }}</dd>
             <dd govukSummaryListRowActions *ngIf="isEditable">
-              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="[routerLink(procedureType)]"
+                [state]="{ changing: true }"
+                [hidden-text]="labelsForHeader[procedureType] + ' procedure reference'">
+                Change
+              </a>
             </dd>
           </div>
 
@@ -29,7 +41,13 @@
             <dt govukSummaryListRowKey>Diagram reference</dt>
             <dd govukSummaryListRowValue>{{ procedures[procedureType]?.diagramReference }}</dd>
             <dd govukSummaryListRowActions *ngIf="isEditable">
-              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="[routerLink(procedureType)]"
+                [state]="{ changing: true }"
+                [hidden-text]="labelsForHeader[procedureType] + ' diagram reference'">
+                Change
+              </a>
             </dd>
           </div>
 
@@ -39,7 +57,13 @@
               {{ procedures[procedureType]?.procedureDescription }}
             </dd>
             <dd govukSummaryListRowActions *ngIf="isEditable">
-              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="[routerLink(procedureType)]"
+                [state]="{ changing: true }"
+                [hidden-text]="labelsForHeader[procedureType] + ' procedure description'">
+                Change
+              </a>
             </dd>
           </div>
 
@@ -47,7 +71,13 @@
             <dt govukSummaryListRowKey>Department or role responsible for data maintenance</dt>
             <dd govukSummaryListRowValue>{{ procedures[procedureType]?.dataMaintenanceResponsibleEntity }}</dd>
             <dd govukSummaryListRowActions *ngIf="isEditable">
-              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="[routerLink(procedureType)]"
+                [state]="{ changing: true }"
+                [hidden-text]="labelsForHeader[procedureType] + ' department or role responsible for data maintenance'">
+                Change
+              </a>
             </dd>
           </div>
 
@@ -55,7 +85,13 @@
             <dt govukSummaryListRowKey>Location of records</dt>
             <dd govukSummaryListRowValue>{{ procedures[procedureType]?.locationOfRecords }}</dd>
             <dd govukSummaryListRowActions *ngIf="isEditable">
-              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="[routerLink(procedureType)]"
+                [state]="{ changing: true }"
+                [hidden-text]="labelsForHeader[procedureType] + ' location of records'">
+                Change
+              </a>
             </dd>
           </div>
 
@@ -63,7 +99,13 @@
             <dt govukSummaryListRowKey>IT system used</dt>
             <dd govukSummaryListRowValue>{{ procedures[procedureType]?.itSystemUsed }}</dd>
             <dd govukSummaryListRowActions *ngIf="isEditable">
-              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="[routerLink(procedureType)]"
+                [state]="{ changing: true }"
+                [hidden-text]="labelsForHeader[procedureType] + ' IT system used'">
+                Change
+              </a>
             </dd>
           </div>
 
@@ -71,7 +113,13 @@
             <dt govukSummaryListRowKey>List of EN or other standards applied</dt>
             <dd govukSummaryListRowValue>{{ procedures[procedureType]?.standardsAppliedList }}</dd>
             <dd govukSummaryListRowActions *ngIf="isEditable">
-              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+              <a
+                govukLink
+                [routerLink]="[routerLink(procedureType)]"
+                [state]="{ changing: true }"
+                [hidden-text]="labelsForHeader[procedureType] + ' list of EN or other standards applied'">
+                Change
+              </a>
             </dd>
           </div>
         </dl>

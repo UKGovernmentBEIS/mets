@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
+
+import java.time.Year;
 
 
 @Data
@@ -17,7 +19,10 @@ import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReport
 public class AviationAccountReportingStatusHistoryCreationDTO {
 
     @NotNull
-    private AviationAccountReportingStatus status;
+    private AviationAccountReportingStatusType status;
+
+    @NotNull
+    private Year year;
 
     @NotBlank
     @Size(max = 2000)

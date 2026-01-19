@@ -4,6 +4,8 @@ import {
   RequestDetailsSearchResults,
 } from 'pmrv-api';
 
+import { ReportingStatusListItem } from '../store';
+
 export const mockedAccount: AviationAccountEmpDTO = {
   aviationAccount: {
     accountType: 'AVIATION',
@@ -15,8 +17,6 @@ export const mockedAccount: AviationAccountEmpDTO = {
     name: 'TEST',
     sopId: 3,
     status: 'NEW',
-    reportingStatus: 'EXEMPT_COMMERCIAL',
-    reportingStatusReason: 'Explanation text added by the regulator',
   },
 };
 
@@ -47,21 +47,37 @@ export const mockReportingStatusHistoryResults: AviationAccountReportingStatusHi
     {
       status: 'REQUIRED_TO_REPORT',
       reason: 'some reason',
+      year: 2022,
       submissionDate: new Date('2022-12-12').toISOString(),
       submitterName: 'Ted Lasso',
     },
     {
       status: 'EXEMPT_COMMERCIAL',
       reason: 'another reason',
+      year: 2022,
       submissionDate: new Date('2022-11-12').toISOString(),
       submitterName: 'Roy Kent',
     },
     {
       status: 'EXEMPT_COMMERCIAL',
       reason: 'some other reason',
+      year: 2022,
       submissionDate: new Date('2022-09-12').toISOString(),
       submitterName: 'Dani Rojas',
     },
   ],
   total: 3,
 };
+
+export const mockReportingStatusResults: ReportingStatusListItem[] = [
+  {
+    status: 'EXEMPT_COMMERCIAL',
+    year: '2025',
+    lastUpdate: '2025-12-16T15:13:06.235553Z',
+  },
+  {
+    status: 'REQUIRED_TO_REPORT',
+    year: '2024',
+    lastUpdate: '2025-12-16T14:10:53.51396Z',
+  },
+];

@@ -74,7 +74,7 @@ describe('InformationSentToRegistryComponent', () => {
     });
 
     it('should show summary details', () => {
-      expect(page.heading).toEqual('Information sent to registry by system');
+      expect(page.heading).toEqual('Information sent to Registry by system');
       expect(page.summaryListValues).toHaveLength(8);
       expect(page.summaryListValues).toEqual([
         ['Emitter ID', 'EM00043'],
@@ -136,7 +136,7 @@ describe('InformationSentToRegistryComponent', () => {
     });
 
     it('should show summary details', () => {
-      expect(page.heading).toEqual('Information sent to registry by system');
+      expect(page.heading).toEqual('Information sent to Registry by system');
       expect(page.summaryListValues).toHaveLength(8);
       expect(page.summaryListValues).toEqual([
         ['Emitter ID', 'EM00043'],
@@ -199,7 +199,7 @@ describe('InformationSentToRegistryComponent', () => {
     });
 
     it('should show summary details', () => {
-      expect(page.heading).toEqual('Information sent to registry by Regulator England');
+      expect(page.heading).toEqual('Information sent to Registry by Regulator England');
       expect(page.summaryListValues).toHaveLength(8);
       expect(page.summaryListValues).toEqual([
         ['Emitter ID', 'EM00043'],
@@ -210,6 +210,66 @@ describe('InformationSentToRegistryComponent', () => {
         ['Organisation legal status', 'Partnership'],
         ['Name of partnership', 'test fullname'],
         ['Main office address', 'test test'],
+      ]);
+    });
+  });
+
+  describe('account update LIMITED_COMPANY', () => {
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [ActionSharedModule, PipesModule, SharedModule],
+      }).compileComponents();
+
+      store = TestBed.inject(CommonActionsStore);
+      store.setState({
+        storeInitialized: true,
+        action: {
+          type: 'EMP_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY',
+          requestId: '671',
+          submitter: 'system',
+          payload: {
+            payloadType: 'EMP_VARIATION_UKETS_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD',
+            operatorDetails: {
+              registryId: '1234567',
+              operatorName: 'aviation_ukets20',
+              emissionsPlanId: 'UK-E-AV-00043',
+              firstYearOfReportingObligation: '2024',
+            },
+            organisationDetails: {
+              registeredAddress: {
+                city: 'test',
+                type: 'ONSHORE_STATE',
+                line1: 'test',
+                country: 'GH',
+              },
+              organisationLegalStatus: 'LIMITED_COMPANY',
+              companyRegistrationNumber: 'test',
+            },
+          },
+        },
+      } as CommonActionsState);
+
+      fixture = TestBed.createComponent(InformationSentToRegistryComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      page = new Page(fixture);
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should show summary details', () => {
+      expect(page.heading).toEqual('Information sent to Registry by system');
+      expect(page.summaryListValues).toHaveLength(7);
+      expect(page.summaryListValues).toEqual([
+        ['UK ETS Registry ID', '1234567'],
+        ['Emission plan ID', 'UK-E-AV-00043'],
+        ['Operator name', 'aviation_ukets20'],
+        ['First year of reporting obligation', '2024'],
+        ['Organisation legal status', 'Limited company'],
+        ['Company registration number', 'test'],
+        ['Registered address', 'test test'],
       ]);
     });
   });

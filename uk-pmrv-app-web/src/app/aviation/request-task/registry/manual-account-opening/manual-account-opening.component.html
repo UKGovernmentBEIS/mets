@@ -1,5 +1,5 @@
 <ng-container *ngIf="vm$ | async as vm">
-  <app-page-heading size="l" caption="Integration with registry">
+  <app-page-heading size="l" caption="Integration with Registry">
     {{ vm.header }}
   </app-page-heading>
 
@@ -21,8 +21,8 @@
       <dd govukSummaryListRowActions></dd>
     </div>
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>First known aviation activity</dt>
-      <dd govukSummaryListRowValue>{{ operatorDetails.firstKnownAviationActivity | govukDate }}</dd>
+      <dt govukSummaryListRowKey>First year of reporting obligation</dt>
+      <dd govukSummaryListRowValue>{{ operatorDetails.firstYearOfReportingObligation }}</dd>
       <dd govukSummaryListRowActions></dd>
     </div>
     <div govukSummaryListRow>

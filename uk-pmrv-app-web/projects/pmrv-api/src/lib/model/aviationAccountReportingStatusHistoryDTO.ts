@@ -13,6 +13,7 @@
 export interface AviationAccountReportingStatusHistoryDTO {
   status?: 'REQUIRED_TO_REPORT' | 'EXEMPT_COMMERCIAL' | 'EXEMPT_NON_COMMERCIAL';
   reason?: string;
+  year?: number;
   submitterName?: string;
   submissionDate?: string;
 }

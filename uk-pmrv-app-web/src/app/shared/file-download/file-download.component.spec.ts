@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { defer, firstValueFrom, of, take } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 
 import { ActivatedRouteStub, mockClass } from '@testing';
 
@@ -10,7 +10,7 @@ import { FileAttachmentsService, RequestTaskAttachmentsHandlingService, TasksSer
 
 import { testSchedulerFactory } from '../../../testing/marble-helpers';
 import { SharedModule } from '../shared.module';
-import { FileDownloadComponent } from './file-download.component';
+import { FILE_DOWNLOAD_SCHEDULER, FileDownloadComponent } from './file-download.component';
 
 describe('FileDownloadComponent', () => {
   let component: FileDownloadComponent;
@@ -32,6 +32,7 @@ describe('FileDownloadComponent', () => {
         { provide: RequestTaskAttachmentsHandlingService, useValue: requestTaskAttachmentsHandlingService },
         { provide: TasksService, useValue: mockClass(TasksService) },
         { provide: FileAttachmentsService, useValue: { configuration: { basePath: '' } } },
+        { provide: FILE_DOWNLOAD_SCHEDULER, useValue: testSchedulerFactory() },
       ],
     }).compileComponents();
   });
@@ -48,31 +49,5 @@ describe('FileDownloadComponent', () => {
 
   it('should display the download link', async () => {
     await expect(firstValueFrom(component.url$)).resolves.toEqual('/v1.0/file-attachments/abce');
-  });
-
-  it('should refresh the download link', async () => {
-    requestTaskAttachmentsHandlingService.generateRequestTaskGetFileAttachmentToken
-      .mockClear()
-      .mockImplementation(() => {
-        let subscribes = 0;
-
-        return defer(() => {
-          subscribes += 1;
-
-          return subscribes === 1
-            ? of({ token: 'abcf', tokenExpirationMinutes: 1 })
-            : subscribes === 2
-              ? of({ token: 'abcd', tokenExpirationMinutes: 2 })
-              : of({ token: 'abce', tokenExpirationMinutes: 1 });
-        });
-      });
-
-    testSchedulerFactory().run(({ expectObservable }) =>
-      expectObservable(component.url$.pipe(take(3))).toBe('a 59s 999ms b 119s 999ms (c|)', {
-        a: '/v1.0/file-attachments/abcf',
-        b: '/v1.0/file-attachments/abcd',
-        c: '/v1.0/file-attachments/abce',
-      }),
-    );
   });
 });

@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,7 +14,7 @@ public class AviationOperatorDetails {
     private String emitterId;
     private String emissionsPlanId;
     private String operatorName;
-    private LocalDate firstKnownAviationActivity;
+    private Integer firstYearOfReportingObligation;
     private String regulator;
 
 }

@@ -1,0 +1,71 @@
+<app-bdrs2-task returnLink="../.." [returnLinkTitle]="returnLinkTitle" [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="UK Carbon Border Adjustment Mechanism (CBAM)"
+    caption="Provide the stage 2 baseline data report"
+    [hideSubmit]="(isEditable$ | async) === false"
+    [showBackLink]="true">
+    <p class="govuk-body govuk-!-width-three-quarters">
+      The UK CBAM will address greenhouse gas emissions embedded in goods of specific sectors imported into the UK,
+      establishing a carbon price on selected products produced outside the UK ETS so that their importers face a
+      similar incentive to reduce GHG emissions as those under the UK ETS. This will mitigate the risk of carbon leakage
+      in the relevant sectors and needs to be accompanied by a reduction in free allocation under the UK ETS in those
+      sectors.
+    </p>
+
+    <govuk-details summary="More information about the UK CBAM">
+      <p class="govuk-body govuk-!-width-three-quarters">
+        The CBAM will be phased in gradually and will initially apply to imports of goods from specific sectors defined
+        in
+        <a href="#" rel="noreferrer noopener" target="_blank">Reference</a>
+        . These are summarised in
+        <a href="#" rel="noreferrer noopener" target="_blank">Reference</a>
+        . The goods included are identified using the Combined Nomenclature (CN) codes.
+      </p>
+
+      <p class="govuk-body govuk-!-width-three-quarters">
+        For product benchmark sub-installations CBAM goods are defined based on the CN codes of the products, and this
+        reference should be used to identify if a specific product falls under the CBAM. The baseline data reporting
+        template will take the CBAM factor automatically into account where all goods from a product benchmark are
+        covered by the CBAM. There may be cases where CBAM and non-CBAM goods will both have the same product benchmark.
+        This can be the case where the trade classification (the CN code) does not fully correspond to technical
+        production processes, which are sometimes better reflected by the PRODCOM codes, however this is unlikely.
+      </p>
+
+      <p class="govuk-body govuk-!-width-three-quarters">
+        For fall-back sub-installations, when the heat benchmark, fuel benchmark, and/or the process emissions approach
+        are involved, the application of the CBAM factor will depend on whether the heat, fuel or process emissions are
+        associated with a process manufacturing CBAM goods. Heat exported to a non-ETS installation, where it is used to
+        produce a CBAM good, will be included in a CBAM sub-installation. Therefore, the respective CL sub-installations
+        for these 3 approaches may require an additional split to be made, to provide separate allocation calculations
+        for CBAM goods and non-CBAM goods. This will lead to additional sub-installations, resulting in up to 3 heat
+        sub-installations (CL_CBAM, CL, non-CBAM and non-CL), and similarly up to 3 fuel sub-installations and up to 3
+        process emissions sub-installations. The district heating sub-installation will not be impacted by the CBAM and
+        will remain unchanged.
+      </p>
+
+      <p class="govuk-body govuk-!-width-three-quarters">
+        For all cases, where the UK CBAM results in the splitting of any sub-installations, this must be made in the
+        baseline data report (BDR) template as appropriate. In such cases the BDR must be revised accordingly to split
+        the relevant data into the sub-installations, re-verified, and uploaded to this workflow. An updated MMP will
+        also be required in order to set out the methodology applied to determine these splits.
+      </p>
+
+      <p class="govuk-body govuk-!-width-three-quarters">
+        Where goods produced within a sub-installation are all CBAM or all non-CBAM goods then sub-installation
+        splitting is not required, and no revisions to the BDR, re-verification or updated MMP is required at this time.
+      </p>
+    </govuk-details>
+
+    <div
+      formControlName="requiresAdditionalSubInstallationSplitsForCbam"
+      govuk-radio
+      legend="Are additional sub-installation splits required because of the UK CBAM?"
+      [legendSize]="'medium'"
+      class="govuk-!-width-three-quarters">
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-bdrs2-task>

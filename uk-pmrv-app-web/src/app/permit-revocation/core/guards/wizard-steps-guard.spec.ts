@@ -11,7 +11,7 @@ import { mockClass, MockType } from '@testing';
 
 import { InstallationAccountViewService } from 'pmrv-api';
 
-import { mockedAccountPermit } from '../../../accounts/testing/mock-data';
+import { mockedAccountDetails } from '../../../accounts/testing/mock-data';
 import { WizardStepsGuard } from './wizard-steps-guard';
 describe('Wizard Steps Guard', () => {
   let router: Router;
@@ -26,7 +26,7 @@ describe('Wizard Steps Guard', () => {
 
   beforeEach(() => {
     accountViewService = mockClass(InstallationAccountViewService);
-    accountViewService.getInstallationAccountById.mockReturnValueOnce(of(mockedAccountPermit));
+    accountViewService.getInstallationAccountById.mockReturnValueOnce(of(mockedAccountDetails));
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule],

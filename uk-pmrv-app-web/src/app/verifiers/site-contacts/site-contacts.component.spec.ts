@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { SharedModule } from '@shared/shared.module';
 import { BasePage } from '@testing';
@@ -55,11 +55,11 @@ describe('SiteContactsComponent', () => {
 
   @Component({
     template: `
-      <app-site-contacts
+      <app-verifier-site-contacts
         [pageSize]="pageSize"
         [contacts]="contacts"
         [verifiers]="verifiers"
-        (siteContactChange)="siteContactChange($any($event))"></app-site-contacts>
+        (siteContactChange)="siteContactChange($any($event))"></app-verifier-site-contacts>
     `,
   })
   class TestComponent {
@@ -71,8 +71,9 @@ describe('SiteContactsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       declarations: [SiteContactsComponent, TestComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 

@@ -106,7 +106,7 @@ describe('PhysicalPartsListComponent', () => {
     expect(page.physicalPathSummaries).toHaveLength(2);
     expect(page.physicalPathSummariesTextContents).toEqual([
       [],
-      ['Test 1', 'Adipic acid  Ammonia', '', 'Remove', 'Change'],
+      ['Test 1', 'Adipic acid  Ammonia', '', 'Remove  physical part', 'Change  physical part'],
     ]);
 
     page.continueButton.click();
@@ -133,7 +133,7 @@ describe('PhysicalPartsListComponent', () => {
     expect(page.physicalPathSummaries).toHaveLength(2);
     expect(page.physicalPathSummariesTextContents).toEqual([
       [],
-      ['Test 1', 'Select at least two sub-installations', '', 'Remove', 'Change'],
+      ['Test 1', 'Select at least two sub-installations', '', 'Remove  physical part', 'Change  physical part'],
     ]);
 
     page.continueButton.click();

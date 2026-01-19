@@ -50,10 +50,10 @@ describe('OpinionStatementSummaryTemplateComponent', () => {
     expect(page.pageContents).toEqual([
       'Uploaded BDR verification opinion statement',
       '100.png  200.png',
-      'Change',
+      'Change  Uploaded BDR verification opinion statement',
       'Notes',
       'Test notes',
-      'Change',
+      'Change notes',
     ]);
   });
 });

@@ -1,3 +1,5 @@
+import { ItemActionTypePipe } from '@shared/pipes/item-action-type.pipe';
+
 import { RequestActionDTO } from 'pmrv-api';
 
 import { OperatorSubmittedComponent } from './aer/submitted/workflow-report/operator-submitted/operator-submitted.component';
@@ -26,3 +28,9 @@ export const reportComponentRequestActionTypes: {
     requestActionTypes: ['AER_APPLICATION_SENT_TO_VERIFIER', 'AER_APPLICATION_AMENDS_SENT_TO_VERIFIER'],
   },
 ];
+
+export const getActionTitle = (requestActionType: RequestActionDTO['type']): string => {
+  const itemActionTypePipe = new ItemActionTypePipe();
+
+  return itemActionTypePipe.transform(requestActionType);
+};

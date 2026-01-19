@@ -566,6 +566,10 @@ describe('ItemNamePipe', () => {
     expect(pipe.transform('BDR_WAIT_FOR_PEER_REVIEW', 2025)).toEqual('2025 baseline data report sent to peer reviewer');
     expect(pipe.transform('BDR_APPLICATION_AMENDS_SUBMIT', 2022)).toEqual('Amend 2022 baseline data report');
 
+    expect(pipe.transform('BDRS2_APPLICATION_SUBMIT', '00001', '2025')).toEqual(
+      'Complete 2025 stage 2 baseline data report',
+    );
+
     expect(pipe.transform('AVIATION_DOE_CORSIA_APPLICATION_SUBMIT', 2022)).toEqual('Estimate 2022 emissions');
     expect(pipe.transform('AVIATION_DOE_CORSIA_MAKE_PAYMENT', 2022)).toEqual('Pay 2022 emissions estimation fee');
     expect(pipe.transform('AVIATION_DOE_CORSIA_TRACK_PAYMENT', 2022)).toEqual(
@@ -694,6 +698,18 @@ describe('ItemNamePipe', () => {
 
     expect(pipe.transform('WASTE_QDR_APPLICATION_SUBMIT', 2022, 'Q1')).toEqual(
       'Complete January to March 2022 quarterly data report',
+    );
+    expect(pipe.transform('WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW', 2022, 'Q1')).toEqual(
+      'January to March 2022 quarterly data report sent to regulator',
+    );
+    expect(pipe.transform('WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT', 2022, 'Q1')).toEqual(
+      'Review January to March 2022 quarterly data report',
+    );
+    expect(pipe.transform('WASTE_QDR_WAIT_FOR_AMENDS', 2022, 'Q1')).toEqual(
+      'January to March 2022 quarterly data report returned to operator',
+    );
+    expect(pipe.transform('WASTE_QDR_APPLICATION_AMENDS_SUBMIT', 2022, 'Q1')).toEqual(
+      'Amend January to March 2022 quarterly data report',
     );
 
     expect(pipe.transform(null)).toBeNull();

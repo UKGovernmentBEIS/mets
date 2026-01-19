@@ -59,7 +59,7 @@ public class SiteContactRequestTaskAssignmentService {
     private void assignTaskToSiteContactOrRelease(RequestTask requestTask, AccountContactInfoDTO contact) {
         if (contact != null && !ObjectUtils.isEmpty(contact.getUserId())) {
             try {
-                requestTaskAssignmentService.assignToUser(requestTask, contact.getUserId());
+                requestTaskAssignmentService.assignToUser(requestTask, contact.getUserId(), "Site Contact");
             } catch (BusinessCheckedException ex) {
                 log.error("Task '{}' cannot be assigned to site contact user '{}'", requestTask::getId,
                     contact::getUserId);

@@ -28,7 +28,7 @@ export class AccountStatusGuard {
           return this.installationAccountViewService.getInstallationAccountById(accountId).pipe(
             map((account) => {
               return (
-                accountFinalStatuses((account?.account as InstallationAccountDTO)?.status) ||
+                accountFinalStatuses((account?.accountPermitDto?.account as InstallationAccountDTO)?.status) ||
                 this.router.parseUrl(`/accounts/${accountId}`)
               );
             }),

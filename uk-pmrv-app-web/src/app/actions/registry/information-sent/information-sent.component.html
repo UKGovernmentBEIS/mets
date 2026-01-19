@@ -11,11 +11,20 @@
   <ng-template #customContentTemplate>
     <h2 class="govuk-heading-m">Active permit</h2>
     <dl govuk-summary-list>
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Emitter ID</dt>
-        <dd govukSummaryListRowValue>{{ vm.activePermit.emitterId }}</dd>
-        <dd govukSummaryListRowActions></dd>
-      </div>
+      @if ($any(vm.activePermit).emitterId) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Emitter ID</dt>
+          <dd govukSummaryListRowValue>{{ $any(vm.activePermit).emitterId }}</dd>
+          <dd govukSummaryListRowActions></dd>
+        </div>
+      } @else if ($any(vm.activePermit).registryId) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>UK ETS Registry ID</dt>
+          <dd govukSummaryListRowValue>{{ $any(vm.activePermit).registryId }}</dd>
+          <dd govukSummaryListRowActions></dd>
+        </div>
+      }
+
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Permit ID</dt>
         <dd govukSummaryListRowValue>{{ vm.activePermit.permitId }}</dd>
@@ -31,14 +40,25 @@
         <dd govukSummaryListRowValue>{{ vm.activePermit.operatorName }}</dd>
         <dd govukSummaryListRowActions></dd>
       </div>
-      <div govukSummaryListRow>
+      <div govukSummaryListRow *ngIf="$any(vm.activePermit).regulator">
         <dt govukSummaryListRowKey>Regulator</dt>
-        <dd govukSummaryListRowValue>{{ vm.activePermit.regulator }}</dd>
+        <dd govukSummaryListRowValue>{{ $any(vm.activePermit).regulator }}</dd>
         <dd govukSummaryListRowActions></dd>
       </div>
       <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Start date of regulated activities</dt>
-        <dd govukSummaryListRowValue>{{ vm.activePermit.regulatedActivitiesStartDate | govukDate }}</dd>
+        <dt govukSummaryListRowKey>First year of Registry reporting obligation</dt>
+        <dd govukSummaryListRowValue>{{ vm.activePermit.firstYearOfReportingObligation }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+
+      <div govukSummaryListRow *ngIf="$any(vm.activePermit).regulatedActivity">
+        <dt govukSummaryListRowKey>Regulated activity</dt>
+        <dd govukSummaryListRowValue>
+          @for (regulatedActivity of vm.activePermit.regulatedActivity; track $index) {
+            {{ regulatedActivity | regulatedActivityType }}
+            <br />
+          }
+        </dd>
         <dd govukSummaryListRowActions></dd>
       </div>
     </dl>

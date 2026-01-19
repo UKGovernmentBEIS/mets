@@ -10,6 +10,9 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.service.AuthorityService;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.account.domain.Account;
@@ -20,9 +23,6 @@ import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.service.validator.AccountContactTypeUpdateValidator;
 import uk.gov.pmrv.api.account.service.validator.FinancialContactValidator;
 import uk.gov.pmrv.api.account.service.validator.PrimaryContactValidator;
-import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.netz.api.authorization.core.service.AuthorityService;
-import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -145,7 +145,6 @@ class AccountContactUpdateServiceTest {
         verifyNoMoreInteractions(authorityService);
         verify(financialContactValidator, times(1)).validateUpdate(expectedContactTypes, accountId);
         verify(primaryContactValidator, times(1)).validateUpdate(expectedContactTypes, accountId);
-        verifyNoInteractions(eventPublisher);
     }
 
     @Test

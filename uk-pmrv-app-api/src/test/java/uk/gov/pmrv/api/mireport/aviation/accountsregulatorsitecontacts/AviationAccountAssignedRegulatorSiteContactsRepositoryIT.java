@@ -13,7 +13,6 @@ import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
 import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
@@ -103,7 +102,6 @@ class AviationAccountAssignedRegulatorSiteContactsRepositoryIT extends AbstractC
             .id(id)
             .name(name)
             .status(status)
-            .reportingStatus(AviationAccountReportingStatus.REQUIRED_TO_REPORT)
             .accountType(AccountType.AVIATION)
             .competentAuthority(CompetentAuthorityEnum.WALES)
             .legalEntity(le)

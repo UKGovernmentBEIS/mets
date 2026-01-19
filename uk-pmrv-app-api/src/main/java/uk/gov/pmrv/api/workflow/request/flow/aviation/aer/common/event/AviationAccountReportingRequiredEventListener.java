@@ -14,6 +14,6 @@ public class AviationAccountReportingRequiredEventListener {
 
     @EventListener(AviationAccountReportingRequiredEvent.class)
     public void onAviationAccountReportingRequiredEvent(AviationAccountReportingRequiredEvent event) {
-        aviationAerReportingObligationService.revertExemption(event.getAccountId(), event.getSubmitterId());
+        aviationAerReportingObligationService.revertExemption(event);
     }
 }

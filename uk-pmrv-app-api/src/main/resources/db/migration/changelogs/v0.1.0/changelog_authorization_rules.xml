@@ -58881,4 +58881,54 @@
             </sql>
         </rollback>
     </changeSet>
+        <changeSet id="0_1_0_populate_getAllReportingStatuses_authorization_service" author="mitzelose@unisystems.gr">
+        <comment>Populate getReportingStatusHistory service</comment>
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'getAllReportingStatuses');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'getAllReportingStatuses'
+              and aur.resource_type = 'ACCOUNT'
+              and aur.resource_sub_type is null
+              and aur.handler = 'accountAccessHandler'
+              and aur.scope is null
+              and aur.role_type in ('REGULATOR','OPERATOR');
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'getReportingStatusHistory');
+
+                delete
+                from au_service
+                where name = 'getReportingStatusHistory';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_1_0_update_getAllReportingStatuses_verifier_access" author="mitzelose@unisystems.gr">
+        <sql>
+            INSERT INTO au_service_rule(service_id, rule_id)
+            SELECT aus.id, aur.id
+            FROM au_service aus
+                 CROSS JOIN au_rule aur
+            WHERE aus.name = 'getAllReportingStatuses'
+              AND aur.role_type = 'VERIFIER'
+              AND aur.resource_type = 'ACCOUNT'
+              AND aur.resource_sub_type IS NULL
+              AND aur.handler = 'accountAccessHandler'
+              AND aur.scope IS NULL
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM au_service_rule
+                WHERE service_id = (SELECT id FROM au_service WHERE name = 'getAllReportingStatuses')
+                  AND rule_id IN (SELECT id FROM au_rule WHERE role_type = 'VERIFIER');
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

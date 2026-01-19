@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.netz.api.security.Authorized;
+import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountDetailsDTO;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
 import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountHeaderInfoDTO;
-import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountPermitDTO;
-import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountPermitQueryOrchestrator;
+import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountQueryOrchestrator;
 
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.FORBIDDEN;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
@@ -34,18 +34,18 @@ import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
 @Tag(name = "Installation account view")
 public class InstallationAccountViewController {
 
-    private final InstallationAccountPermitQueryOrchestrator orchestrator;
+    private final InstallationAccountQueryOrchestrator orchestrator;
 
     @GetMapping("/{id}")
     @Operation(summary = "Get the account with the provided id")
-    @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = InstallationAccountPermitDTO.class))})
+    @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = InstallationAccountDetailsDTO.class))})
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "404", description = NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#accountId")
-    public ResponseEntity<InstallationAccountPermitDTO> getInstallationAccountById(
+    public ResponseEntity<InstallationAccountDetailsDTO> getInstallationAccountById(
             @Parameter(description = "The account id") @PathVariable("id") Long accountId) {
-        return new ResponseEntity<>(orchestrator.getAccountWithPermit(accountId), HttpStatus.OK);
+        return new ResponseEntity<>(orchestrator.getAccountDetails(accountId), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/header-info")

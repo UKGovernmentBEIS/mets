@@ -66,7 +66,7 @@ class OperatorRequestTaskAssignmentServiceTest {
         verify(requestTaskRepository, times(1))
             .findByAssigneeAndRequestAccountId(userId, accountId);
         verify(accountContactQueryService, times(1)).findPrimaryContactByAccount(accountId);
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, primaryContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, primaryContact, RoleTypeConstants.OPERATOR);
         verifyNoInteractions(requestTaskReleaseService);
     }
 
@@ -82,14 +82,14 @@ class OperatorRequestTaskAssignmentServiceTest {
             .findByAssigneeAndRequestAccountId(userId, accountId))
             .thenReturn(List.of(requestTask));
         when(accountContactQueryService.findPrimaryContactByAccount(accountId)).thenReturn(Optional.of(primaryContact));
-        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, primaryContact);
+        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, primaryContact, RoleTypeConstants.OPERATOR);
 
         operatorRequestTaskAssignmentService.assignUserTasksToAccountPrimaryContactOrRelease(userId, accountId);
 
         verify(requestTaskRepository, times(1))
             .findByAssigneeAndRequestAccountId(userId, accountId);
         verify(accountContactQueryService, times(1)).findPrimaryContactByAccount(accountId);
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, primaryContact);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, primaryContact, RoleTypeConstants.OPERATOR);
         verify(requestTaskReleaseService, times(1)).releaseTaskForced(requestTask);
     }
 
@@ -138,7 +138,7 @@ class OperatorRequestTaskAssignmentServiceTest {
 
         operatorRequestTaskAssignmentService.assignTask(requestTask, userId);
 
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, userId);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, userId, RoleTypeConstants.OPERATOR);
     }
 
     @Test
@@ -148,14 +148,14 @@ class OperatorRequestTaskAssignmentServiceTest {
         Request request = Request.builder().status(RequestStatus.IN_PROGRESS).build();
         RequestTask requestTask = RequestTask.builder().request(request).build();
 
-        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, userId);
+        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, userId, RoleTypeConstants.OPERATOR);
 
         BusinessException businessException = assertThrows(BusinessException.class,
             () -> operatorRequestTaskAssignmentService.assignTask(requestTask, userId));
 
         assertEquals(ErrorCode.ASSIGNMENT_NOT_ALLOWED, businessException.getErrorCode());
 
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, userId);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, userId, RoleTypeConstants.OPERATOR);
         verifyNoMoreInteractions(requestTaskAssignmentService);
     }
 

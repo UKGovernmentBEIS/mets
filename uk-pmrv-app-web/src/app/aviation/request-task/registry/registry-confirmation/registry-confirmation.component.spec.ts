@@ -55,6 +55,6 @@ describe('RegistryConfirmationComponent', () => {
 
   it('should show content', () => {
     expect(page.confirmationTitle).toBeTruthy();
-    expect(page.confirmationTitle.textContent.trim()).toEqual('Information sent to registry');
+    expect(page.confirmationTitle.textContent.trim()).toEqual('Information sent to Registry');
   });
 });

@@ -107,6 +107,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationReturnToOperatorRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationVerificationSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitSaveCessationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalSaveAuthorityResponseTaskActionPayload;
@@ -168,7 +172,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirSaveAppl
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirSaveRespondToRegulatorCommentsRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirSaveReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirSubmitRespondToRegulatorCommentsRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRApplicationAmendsSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRApplicationAmendsSubmitRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRApplicationSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQDRSaveReviewGroupDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesWithdrawalCloseApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesWithdrawalSaveApplicationRequestTaskActionPayload;
@@ -367,6 +374,11 @@ import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RfiSubmitRequestTaskActi
     @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "BDR_REQUEST_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "BDR_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD"),
 
+    @JsonSubTypes.Type(value = BDRS2ApplicationSaveRequestTaskActionPayload.class, name = "BDRS2_APPLICATION_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload.class, name = "BDRS2_SUBMIT_TO_VERIFIER_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRS2ApplicationVerificationSaveRequestTaskActionPayload.class, name = "BDRS2_APPLICATION_SAVE_VERIFICATION_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload.class, name = "BDRS2_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD"),
+
     @JsonSubTypes.Type(value = PermanentCessationSaveApplicationRequestTaskActionPayload.class, name = "PERMANENT_CESSATION_SAVE_APPLICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD"),
     @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "PERMANENT_CESSATION_REQUEST_PEER_REVIEW_PAYLOAD"),
@@ -398,6 +410,10 @@ import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RfiSubmitRequestTaskActi
     @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "HSE_TI_PEER_REVIEW_DECISION_PAYLOAD"),
 
     @JsonSubTypes.Type(value = WasteQDRApplicationSaveRequestTaskActionPayload.class, name = "WASTE_QDR_APPLICATION_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = WasteQDRSaveReviewGroupDecisionRequestTaskActionPayload.class, name = "WASTE_QDR_SAVE_REVIEW_GROUP_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "WASTE_QDR_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = WasteQDRApplicationAmendsSaveRequestTaskActionPayload.class, name = "WASTE_QDR_APPLICATION_AMENDS_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = WasteQDRApplicationAmendsSubmitRequestTaskActionPayload.class, name = "WASTE_QDR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD"),
 
     @JsonSubTypes.Type(value = RequestTaskActionEmptyPayload.class, name = "EMPTY_PAYLOAD"),
 

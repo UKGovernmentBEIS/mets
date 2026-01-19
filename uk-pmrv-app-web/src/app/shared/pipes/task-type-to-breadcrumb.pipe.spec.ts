@@ -460,6 +460,12 @@ describe('TaskTypeToBreadcrumbPipe', () => {
     expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW')).toEqual('Peer review HSE target increase application');
 
     expect(pipe.transform('WASTE_QDR_APPLICATION_SUBMIT')).toEqual('Complete quarterly data report');
+    expect(pipe.transform('WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW')).toEqual(
+      'Quarterly data report submitted to regulator',
+    );
+    expect(pipe.transform('WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT')).toEqual('Review quarterly data report');
+    expect(pipe.transform('WASTE_QDR_WAIT_FOR_AMENDS')).toEqual('Quarterly data report returned to operator');
+    expect(pipe.transform('WASTE_QDR_APPLICATION_AMENDS_SUBMIT')).toEqual('Amend quarterly data report');
 
     expect(pipe.transform(null)).toBeNull();
   });

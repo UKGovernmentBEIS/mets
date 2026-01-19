@@ -16,6 +16,7 @@ export class AccountGuard {
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
     return this.accountViewService.getInstallationAccountById(Number(route.paramMap.get('accountId'))).pipe(
       first(),
+      map((accountDetails) => accountDetails?.accountPermitDto),
       tap((accountPermit) => (this.accountPermit = accountPermit)),
       map((accountPermit) => !!accountPermit),
     );

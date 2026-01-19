@@ -246,6 +246,12 @@ const routes: Routes = [
               },
             ],
           },
+          {
+            path: 'bulk-downloads',
+            data: { breadcrumb: 'Bulk downloads' },
+            canActivate: [InstallationAuthGuard],
+            loadChildren: () => import('./bulk-downloads/bulk-downloads.module').then((m) => m.BulkDownloadsModule),
+          },
         ],
       },
     ],

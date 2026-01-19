@@ -536,6 +536,17 @@ describe('TimelineItemLinkPipe', () => {
     ]);
   });
 
+  it('should return link for EMP manual account sent to registration', () => {
+    requestAction.type = 'EMP_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY';
+    expect(pipe.transform(requestAction)).toEqual([
+      '/aviation',
+      'actions',
+      requestAction.id,
+      'registry',
+      'information-sent',
+    ]);
+  });
+
   it('should return link for non compliance closed', () => {
     requestAction.type = 'NON_COMPLIANCE_APPLICATION_CLOSED';
     expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'non-compliance', 'closed']);
@@ -1217,5 +1228,19 @@ describe('TimelineItemLinkPipe', () => {
 
     requestAction.type = 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED';
     expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'hseti', 'peer-review-decision']);
+  });
+
+  it('should return links for Waste QDR', () => {
+    requestAction.type = 'WASTE_QDR_APPLICATION_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'waste-qdr', 'submitted']);
+
+    requestAction.type = 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'waste-qdr', 'returned-for-amends']);
+
+    requestAction.type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'waste-qdr', 'submitted']);
+
+    requestAction.type = 'WASTE_QDR_APPLICATION_COMPLETED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'waste-qdr', 'submitted']);
   });
 });

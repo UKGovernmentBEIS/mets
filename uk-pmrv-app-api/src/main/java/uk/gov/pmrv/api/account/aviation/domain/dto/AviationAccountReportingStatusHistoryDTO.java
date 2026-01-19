@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 
 @Data
 @NoArgsConstructor
@@ -14,9 +15,11 @@ import java.time.LocalDateTime;
 @Builder
 public class AviationAccountReportingStatusHistoryDTO {
 
-    private AviationAccountReportingStatus status;
+    private AviationAccountReportingStatusType status;
 
     private String reason;
+
+    private Year year;
 
     private String submitterName;
 

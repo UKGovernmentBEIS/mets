@@ -1,0 +1,29 @@
+<app-bdrs2-task returnLink="../.." [returnLinkTitle]="returnLinkTitle" [breadcrumb]="true">
+  <div class="govuk-!-width-three-quarters">
+    <app-wizard-step
+      (formSubmit)="onContinue()"
+      [formGroup]="form"
+      heading="Details about your installation"
+      caption="Provide stage 2 baseline data report"
+      [hideSubmit]="(isEditable$ | async) === false"
+      [showBackLink]="true">
+      <div
+        formControlName="covidAdjustments"
+        govuk-radio
+        legend="Are you making COVID adjustments?"
+        legendSize="medium"
+        hint="Select yes if you made COVID adjustments in 2020, or in 2020 and 2021, and want that data to be excluded from the calculation of your historical activity level (HAL) for free allocation in the 2027 - 2030 allocation period">
+        <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+        <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+      </div>
+      <div
+        formControlName="inEiteSector"
+        govuk-radio
+        legend="Is your installation in the aluminium, cement, fertiliser, hydrogen, iron or steel sector?"
+        legendSize="medium">
+        <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+        <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+      </div>
+    </app-wizard-step>
+  </div>
+</app-bdrs2-task>

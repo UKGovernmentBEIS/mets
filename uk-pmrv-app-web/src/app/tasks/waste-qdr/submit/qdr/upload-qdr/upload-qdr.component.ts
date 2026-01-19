@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Signal } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
@@ -6,6 +6,8 @@ import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
 import { WASTE_QDR_TASK_FORM, WasteQdrService } from '@tasks/waste-qdr/core';
 import { WasteQdrTaskComponent } from '@tasks/waste-qdr/shared';
+
+import { WasteQDRApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 import { wasteQdrUploadReportFormProvider } from './upload-qdr-form.provider';
 
@@ -19,7 +21,7 @@ import { wasteQdrUploadReportFormProvider } from './upload-qdr-form.provider';
 })
 export class WasteQdrUploadQdrComponent {
   isEditable = this.wasteQdrService.isEditable;
-  payload = this.wasteQdrService.payload;
+  payload = this.wasteQdrService.payload as Signal<WasteQDRApplicationSubmitRequestTaskPayload>;
 
   constructor(
     @Inject(WASTE_QDR_TASK_FORM) readonly form: UntypedFormGroup,

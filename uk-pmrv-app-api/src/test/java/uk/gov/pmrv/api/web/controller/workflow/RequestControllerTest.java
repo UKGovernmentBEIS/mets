@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 import org.springframework.aop.framework.AopProxy;
@@ -302,7 +303,7 @@ class RequestControllerTest {
 
     @Test
     void getRequestDetailsByResource() throws Exception {
-    	setupAppUser();
+    	AppUser user = setupAppUser();
         Long accountId = 1L;
         final String requestId = "1";
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
@@ -319,7 +320,7 @@ class RequestControllerTest {
                 .total(10L)
                 .build();
 
-        when(requestQueryService.findRequestDetailsBySearchCriteria(criteria)).thenReturn(results);
+        when(requestQueryService.findRequestDetailsBySearchCriteria(criteria, user)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders.post(BASE_PATH + "/workflows")
                 .content(mapper.writeValueAsString(criteria))
@@ -330,7 +331,7 @@ class RequestControllerTest {
                 .andExpect(jsonPath("$.requestDetails[1].id").value(workflowResult2.getId()))
         ;
 
-        verify(requestQueryService, times(1)).findRequestDetailsBySearchCriteria(criteria);
+        verify(requestQueryService, times(1)).findRequestDetailsBySearchCriteria(criteria, user);
     }
 
     @Test
@@ -355,7 +356,7 @@ class RequestControllerTest {
                 .andExpect(status().isForbidden());
 
         verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(requestQueryService, never()).findRequestDetailsBySearchCriteria(any());
+        verify(requestQueryService, never()).findRequestDetailsBySearchCriteria(any(), Mockito.any(AppUser.class));
     }
 
     @Test

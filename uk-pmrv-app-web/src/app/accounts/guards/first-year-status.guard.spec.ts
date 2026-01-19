@@ -6,10 +6,10 @@ import { lastValueFrom } from 'rxjs';
 
 import { AuthStore } from '@core/store/auth';
 
-import { InstallationAccountDTO, InstallationAccountPermitDTO, InstallationAccountViewService } from 'pmrv-api';
+import { InstallationAccountDetailsDTO, InstallationAccountDTO, InstallationAccountViewService } from 'pmrv-api';
 
 import { ActivatedRouteSnapshotStub, asyncData } from '../../../testing';
-import { mockedAccountPermit } from '../../accounts/testing/mock-data';
+import { mockedAccountDetails, mockedAccountPermit } from '../../accounts/testing/mock-data';
 import { FirstYearStatusGuard } from './first-year-status.guard';
 
 describe('AddFirstYearObligationGuard', () => {
@@ -22,7 +22,7 @@ describe('AddFirstYearObligationGuard', () => {
     installationAccountViewService = {
       getInstallationAccountById: jest
         .fn()
-        .mockReturnValue(asyncData<InstallationAccountPermitDTO>(mockedAccountPermit)),
+        .mockReturnValue(asyncData<InstallationAccountDetailsDTO>(mockedAccountDetails)),
     };
 
     TestBed.configureTestingModule({
@@ -53,12 +53,14 @@ describe('AddFirstYearObligationGuard', () => {
   });
 
   it('should not be activated', async () => {
-    const newAccountPermit: InstallationAccountPermitDTO = {
-      ...mockedAccountPermit,
-      account: { ...mockedAccountPermit.account, status: 'NEW' } as InstallationAccountDTO,
+    const newAccountDetails: InstallationAccountDetailsDTO = {
+      accountPermitDto: {
+        ...mockedAccountPermit,
+        account: { ...mockedAccountPermit.account, status: 'NEW' } as InstallationAccountDTO,
+      },
     };
     installationAccountViewService.getInstallationAccountById.mockReturnValue(
-      asyncData<InstallationAccountPermitDTO>(newAccountPermit),
+      asyncData<InstallationAccountDetailsDTO>(newAccountDetails),
     );
 
     expect(

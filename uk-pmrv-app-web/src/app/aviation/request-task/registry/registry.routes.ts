@@ -6,12 +6,12 @@ import { RegistryConfirmationComponent } from './registry-confirmation/registry-
 export const REGISTRY_TASKS_ROUTES: Routes = [
   {
     path: 'manual-account-opening',
-    data: { pageTitle: 'Send information to the registry' },
+    data: { pageTitle: 'Send information to the Registry' },
     component: ManualAccountOpeningComponent,
   },
   {
     path: 'confirmation',
-    data: { pageTitle: 'Information sent to registry' },
+    data: { pageTitle: 'Information sent to Registry' },
     component: RegistryConfirmationComponent,
   },
 ];

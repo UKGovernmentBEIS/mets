@@ -45,6 +45,7 @@ class RequestAuthorityInfoQueryServiceTest {
         RequestAuthorityInfoDTO requestInfoDTO = service.getRequestInfo("1");
 
         RequestAuthorityInfoDTO expectedRequestInfoDTO = RequestAuthorityInfoDTO.builder()
+        		.type(RequestType.INSTALLATION_ACCOUNT_OPENING.name())
                 .authorityInfo(ResourceAuthorityInfo.builder()
                         .requestResources(Map.of(
                                         ResourceType.ACCOUNT, "1",

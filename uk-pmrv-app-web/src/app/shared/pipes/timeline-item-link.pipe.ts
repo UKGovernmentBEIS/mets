@@ -297,6 +297,7 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEWER_REJECTED':
         return isWorkflow ? [routerLooks + 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
       case 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY':
+      case 'EMP_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY':
         return isWorkflow
           ? [routerLooks + 'actions', value.id, 'registry', 'information-sent']
           : [routerLooks + 'aviation', 'actions', value.id, 'registry', 'information-sent'];
@@ -563,10 +564,16 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED':
       case 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED':
         return [routerLooks + 'actions', value.id, 'hseti', 'peer-review-decision'];
-
       case 'HSE_TI_APPLICATION_CANCELLED':
       case 'HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED':
         return null;
+
+      case 'WASTE_QDR_APPLICATION_SUBMITTED':
+      case 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED':
+      case 'WASTE_QDR_APPLICATION_COMPLETED':
+        return [routerLooks + 'actions', value.id, 'waste-qdr', 'submitted'];
+      case 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+        return [routerLooks + 'actions', value.id, 'waste-qdr', 'returned-for-amends'];
 
       default:
         throw new Error('Provide an action url');

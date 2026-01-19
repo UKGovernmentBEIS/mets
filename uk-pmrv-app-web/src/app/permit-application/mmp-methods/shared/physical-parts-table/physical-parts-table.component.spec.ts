@@ -80,12 +80,24 @@ describe('PhysicalPartsTableComponent', () => {
   it('should show table content', () => {
     createComponent();
 
-    expect(page.tableValues).toEqual(['Test 1', 'Adipic acid  Ammonia', '', 'Remove', 'Change']);
+    expect(page.tableValues).toEqual([
+      'Test 1',
+      'Adipic acid  Ammonia',
+      '',
+      'Remove  physical part',
+      'Change  physical part',
+    ]);
   });
 
   it('should show table content with error', () => {
     createComponent(true);
 
-    expect(page.tableValues).toEqual(['Test 1', 'Select at least two sub-installations', '', 'Remove', 'Change']);
+    expect(page.tableValues).toEqual([
+      'Test 1',
+      'Select at least two sub-installations',
+      '',
+      'Remove  physical part',
+      'Change  physical part',
+    ]);
   });
 });

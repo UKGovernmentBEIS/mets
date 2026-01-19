@@ -13,8 +13,9 @@ import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.integration.registry.accountcreated.common.RegistryRegulatedActivityType;
 import uk.gov.pmrv.api.integration.registry.accountcreated.common.validation.RegistryAccountHolderType;
 import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
+import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivity;
 import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountPermitDTO;
-import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountPermitQueryOrchestrator;
+import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountQueryOrchestrator;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.PermitIssuanceRegistryIntegrationAddRequestActionService;
 
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.RE
 @ConditionalOnProperty(name = "registry.integration.account.creation.enabled", havingValue = "true", matchIfMissing = false)
 public class InstallationAccountCreatedNotifyRegistryService {
 
-    private final InstallationAccountPermitQueryOrchestrator accountQueryService;
+    private final InstallationAccountQueryOrchestrator accountQueryService;
     private final InstallationAccountCreatedSendToRegistryProducer registryProducer;
     private final PermitIssuanceRegistryIntegrationAddRequestActionService addRequestActionService;
 
@@ -101,7 +102,8 @@ public class InstallationAccountCreatedNotifyRegistryService {
                 .installationName(installationAccountPermit.getAccount().getName())
                 .legalEntityDTO(installationAccountPermit.getAccount().getLegalEntity())
                 .competentAuthority(installationAccountPermit.getAccount().getCompetentAuthority())
-                .commencementDate(installationAccountPermit.getAccount().getCommencementDate())
+                .registryReportingFirstYear(installationAccountPermit.getAccount().getRegistryReportingFirstYear())
+                .regulatedActivityList(installationAccountPermit.getPermit().getRegulatedActivities().getRegulatedActivities().stream().map(RegulatedActivity::getType).collect(Collectors.toList()))
                 .build();
     }
 

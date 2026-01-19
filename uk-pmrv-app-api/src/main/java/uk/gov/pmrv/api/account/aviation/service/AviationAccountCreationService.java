@@ -8,19 +8,24 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountCreatedEvent;
+import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusHistory;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountCreationDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.aviation.transform.AviationAccountMapper;
 import uk.gov.pmrv.api.account.service.AccountIdentifierService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
 
 @Validated
 @Service
@@ -48,14 +53,8 @@ public class AviationAccountCreationService {
         account.setAcceptedDate(LocalDateTime.now());
         account.setCreatedDate(LocalDateTime.now());
         account.setCreatedByUserId(appUser.getUserId());
-        
-        final AviationAccountReportingStatus initialReportingStatus = AviationAccountReportingStatus.REQUIRED_TO_REPORT;
-        account.setReportingStatus(initialReportingStatus);
-        account.addReportingStatusHistory(AviationAccountReportingStatusHistory.builder()
-                .status(initialReportingStatus)
-                .submitterId(appUser.getUserId())
-                .submitterName(appUser.getFullName())
-                .build());
+
+        createAccountReportingStatus(account);
         
         aviationAccountRepository.save(account);
 
@@ -78,6 +77,38 @@ public class AviationAccountCreationService {
             throw new BusinessException(MetsErrorCode.CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT,
                 crcoCode, competentAuthority, emissionTradingScheme);
         }
+    }
+
+    private void createAccountReportingStatus(AviationAccount account) {
+
+        for (Integer year : getNumberOfReportingYears(account.getCommencementDate())) {
+            AviationAccountReportingStatus accountReportingStatus =
+                    AviationAccountReportingStatus.builder()
+                            .status(AviationAccountReportingStatusType.REQUIRED_TO_REPORT)
+                            .year(Year.of(year))
+                            .build();
+
+            account.addReportingStatusHistory(AviationAccountReportingStatusHistory.builder()
+                    .status(AviationAccountReportingStatusType.REQUIRED_TO_REPORT)
+                    .submitterId("system")
+                    .submitterName("system")
+                    .year(Year.of(year))
+                    .build());
+
+            account.addReportingStatus(accountReportingStatus);
+        }
+
+
+    }
+
+    private List<Integer> getNumberOfReportingYears(LocalDate commencementDate) {
+        List<Integer> reportingYears = new ArrayList<>();
+        int currentYear = Year.now().getValue();
+        int reportingYear = commencementDate.getYear();
+        for (int i = reportingYear; i <= currentYear; i++) {
+            reportingYears.add(i);
+        }
+        return reportingYears;
     }
 
 }

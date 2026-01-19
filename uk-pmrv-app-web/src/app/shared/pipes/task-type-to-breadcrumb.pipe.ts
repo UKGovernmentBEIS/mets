@@ -507,6 +507,9 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
       case 'BDR_APPLICATION_PEER_REVIEW':
         return `Peer review baseline data report`;
 
+      case 'BDRS2_APPLICATION_SUBMIT':
+        return 'Complete stage 2 baseline data report';
+
       case 'PERMANENT_CESSATION_APPLICATION_SUBMIT':
         return 'Complete permanent cessation';
       case 'PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW':
@@ -553,6 +556,14 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
 
       case 'WASTE_QDR_APPLICATION_SUBMIT':
         return 'Complete quarterly data report';
+      case 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW':
+        return 'Quarterly data report submitted to regulator';
+      case 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+        return 'Review quarterly data report';
+      case 'WASTE_QDR_WAIT_FOR_AMENDS':
+        return 'Quarterly data report returned to operator';
+      case 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT':
+        return 'Amend quarterly data report';
 
       default:
         return null;

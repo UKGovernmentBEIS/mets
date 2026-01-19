@@ -273,7 +273,7 @@ describe('MonitoringMethodologyPlanComponent', () => {
 
     it('should display the table preview from the methods review', () => {
       expect(page.reviewSections[3].querySelector('.govuk-summary-list').textContent.trim()).toEqual(
-        'Physical parts of the installation and units which serve more than one sub-installation  Are there any physical parts of the installation or units which serve more than one sub-installation? YesPhysical part of the installation or unitEmission sources itemName1  Aromatics  Refinery products  Adipic acid  Remove  Change  itemName2  Adipic acid  Heat benchmark not exposed to carbon leakage  Remove  Change  Add an item  Methods used to assign parts of installations and their emissions to sub-installations assignPartsData gaps and double countingMethods used for ensuring that data gaps and double counting are avoidedavoidDoubleCount',
+        'Physical parts of the installation and units which serve more than one sub-installation  Are there any physical parts of the installation or units which serve more than one sub-installation? YesPhysical part of the installation or unitEmission sources itemName1  Aromatics  Refinery products  Adipic acid  Remove  physical part Change  physical part itemName2  Adipic acid  Heat benchmark not exposed to carbon leakage  Remove  physical part Change  physical part Add an item  Methods used to assign parts of installations and their emissions to sub-installations assignPartsData gaps and double countingMethods used for ensuring that data gaps and double counting are avoidedavoidDoubleCount',
       );
     });
 

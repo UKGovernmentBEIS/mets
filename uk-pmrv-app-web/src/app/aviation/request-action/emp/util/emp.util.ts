@@ -109,8 +109,13 @@ export function getEmpApplicationSubmittedTasks(
   payload: EmpRequestActionPayload,
   regulatorViewer: boolean,
   isCorsia: boolean,
+  isVariation: boolean,
 ): TaskSection<any>[] {
   const prefix = isCorsia ? 'emp-corsia' : 'emp';
+
+  const timeframeExists =
+    payload?.['empSectionsCompleted']?.['applicationTimeframeInfo'] !== null &&
+    payload?.['empSectionsCompleted']?.['applicationTimeframeInfo'] !== undefined;
 
   return [
     [
@@ -243,7 +248,7 @@ export function getEmpApplicationSubmittedTasks(
         },
       ],
     },
-    ...(!isCorsia
+    ...(!isCorsia && (!isVariation || timeframeExists)
       ? [
           {
             title: 'Application timeframe',

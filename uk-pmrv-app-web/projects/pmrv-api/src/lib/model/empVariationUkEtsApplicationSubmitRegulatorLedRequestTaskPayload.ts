@@ -27,4 +27,5 @@ export interface EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayloa
   originalEmpContainer?: EmissionsMonitoringPlanUkEtsContainer;
   reasonRegulatorLed?: EmpVariationUkEtsRegulatorLedReason;
   reviewGroupDecisions?: { [key: string]: EmpAcceptedVariationDecisionDetails };
+  hideEmpApplicationTimeframe?: boolean;
 }

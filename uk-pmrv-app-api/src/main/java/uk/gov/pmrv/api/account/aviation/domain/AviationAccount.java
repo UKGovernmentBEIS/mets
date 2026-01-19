@@ -8,8 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.SqlResultSetMapping;
@@ -24,13 +22,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountSearchResultsInfoDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.domain.Account;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -40,10 +39,6 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "account_aviation")
-@NamedEntityGraph(name = "reporting-status-history-graph",
-        attributeNodes = {
-                @NamedAttributeNode(value = "reportingStatusHistoryList")
-        })
 @SqlResultSetMapping(
         name = AviationAccount.AVIATION_ACCOUNT_SEARCH_RESULTS_INFO_DTO_RESULT_MAPPER,
         classes = {
@@ -93,9 +88,10 @@ public class AviationAccount extends Account {
     @Column(name = "last_updated_by")
     private String updatedBy;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private AviationAccountReportingStatus reportingStatus;
+    @Builder.Default
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("year desc")
+    private List<AviationAccountReportingStatus> reportingStatusList = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -103,7 +99,17 @@ public class AviationAccount extends Account {
     private List<AviationAccountReportingStatusHistory> reportingStatusHistoryList = new ArrayList<>();
 
     public void addReportingStatusHistory(AviationAccountReportingStatusHistory reportingStatusHistory) {
-    	reportingStatusHistory.setAccount(this);
+        reportingStatusHistory.setAccount(this);
         this.reportingStatusHistoryList.add(reportingStatusHistory);
     }
+
+    public void addReportingStatus(AviationAccountReportingStatus reportingStatus) {
+        reportingStatus.setAccount(this);
+        this.reportingStatusList.add(reportingStatus);
+    }
+
+    public Optional<AviationAccountReportingStatus> getReportingStatusByYear(Year year) {
+        return this.getReportingStatusList().stream().filter(r-> r.getYear().equals(year)).findFirst();
+    }
+
 }

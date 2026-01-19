@@ -51,6 +51,8 @@ public class EmpVariationUkEtsApplicationReviewRequestTaskPayload extends EmpVar
     
     @Builder.Default
     private Map<UUID, String> rfiAttachments = new HashMap<>();
+
+    private boolean isHideEmpApplicationTimeframe;
     
     @Override
     public Map<UUID, String> getAttachments() {

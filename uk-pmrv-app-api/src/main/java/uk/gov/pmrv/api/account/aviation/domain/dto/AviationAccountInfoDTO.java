@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.domain.dto.LocationDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 @Data
 @AllArgsConstructor
@@ -26,6 +26,6 @@ public class AviationAccountInfoDTO {
     private String crcoCode;
     private LocationDTO location;
     private AviationAccountStatus status;
-    private AviationAccountReportingStatus reportingStatus;
+    private AviationAccountReportingStatusType reportingStatus;
     private String emitterId;
 }

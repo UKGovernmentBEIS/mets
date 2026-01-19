@@ -59,6 +59,10 @@ public class InstallationAccountQueryService {
             .map(InstallationAccount::getId)
             .toList();
     }
+
+    public List<Long> findEligibleAccountIdsForBDRS2() {
+        return installationAccountRepository.findEligibleAccountIdsForBDRS2();
+    }
     
 	public Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(
 			CompetentAuthorityEnum ca, Set<InstallationAccountStatus> statuses,

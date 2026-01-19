@@ -27,6 +27,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestP
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIRequestPayload;
@@ -74,6 +75,7 @@ import java.math.BigDecimal;
     @JsonSubTypes.Type(value = InstallationOnsiteInspectionRequestPayload.class, name = "INSTALLATION_ONSITE_INSPECTION_REQUEST_PAYLOAD"),
     @JsonSubTypes.Type(value = InstallationAuditRequestPayload.class, name = "INSTALLATION_AUDIT_REQUEST_PAYLOAD"),
     @JsonSubTypes.Type(value = BDRRequestPayload.class, name = "BDR_REQUEST_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRS2RequestPayload.class, name = "BDRS2_REQUEST_PAYLOAD"),
     @JsonSubTypes.Type(value = PermanentCessationRequestPayload.class, name = "PERMANENT_CESSATION_REQUEST_PAYLOAD"),
     @JsonSubTypes.Type(value = ALRRequestPayload.class, name = "ALR_REQUEST_PAYLOAD"),
     @JsonSubTypes.Type(value = HSETIRequestPayload.class, name = "HSE_TI_REQUEST_PAYLOAD"),

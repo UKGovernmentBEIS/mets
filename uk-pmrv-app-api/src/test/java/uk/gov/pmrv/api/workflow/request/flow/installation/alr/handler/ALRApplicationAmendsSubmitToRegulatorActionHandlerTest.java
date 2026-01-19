@@ -57,7 +57,7 @@ public class ALRApplicationAmendsSubmitToRegulatorActionHandlerTest {
 
         when(requestTaskService.findTaskById(taskId)).thenReturn(task);
 
-        handler.process(taskId, RequestTaskActionType.BDR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR, user, payload);
+        handler.process(taskId, RequestTaskActionType.ALR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR, user, payload);
 
         verify(requestTaskService, times(1)).findTaskById(taskId);
         verify(amendsSubmitService, times(1)).submitToRegulator(payload, task, user);

@@ -9,11 +9,16 @@
     {{ label }}
   </label>
   <span *ngIf="text" class="govuk-body">{{ text }}</span>
-  <span *ngIf="showFilesizeHint" [id]="id + '-hint-file-size'" class="govuk-hint">
-    Your document must be a DOC, DOCX, XLS, XLSX, PPT, PPTX, VSD, VSDX, JPG, JPEG, PDF, PNG, TIF, TXT, DIB, BMP or CSV
-    file, no more than 20MB.
-  </span>
-  <span *ngIf="hint" [id]="id + '-hint'" class="govuk-hint">{{ hint }}</span>
+  <div class="govuk-hint">
+    <ng-container *ngTemplateOutlet="customHintTemplate ? customHintTemplate : defaultHintTemplate"></ng-container>
+  </div>
+  <ng-template #defaultHintTemplate>
+    <span *ngIf="showFilesizeHint" [id]="id + '-hint-file-size'" class="govuk-hint">
+      Your document must be a DOC, DOCX, XLS, XLSX, PPT, PPTX, VSD, VSDX, JPG, JPEG, PDF, PNG, TIF, TXT, DIB, BMP or CSV
+      file, no more than 20MB.
+    </span>
+    <span *ngIf="hint" [id]="id + '-hint'" class="govuk-hint">{{ hint }}</span>
+  </ng-template>
   <govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="id"></govuk-error-message>
   <input
     #input

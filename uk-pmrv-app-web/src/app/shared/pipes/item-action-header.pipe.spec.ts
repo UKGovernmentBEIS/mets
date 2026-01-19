@@ -791,7 +791,7 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY',
       }),
-    ).toEqual('Information sent to registry by John Bolt');
+    ).toEqual('Information sent to Registry by John Bolt');
   });
 
   it('should return Non compliance', () => {
@@ -1614,5 +1614,33 @@ describe('ItemActionHeaderPipe', () => {
         type: 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED',
       }),
     ).toEqual('Peer review disagreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'WASTE_QDR_APPLICATION_SUBMITTED',
+      }),
+    ).toEqual('Quarterly data report submitted to regulator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS',
+      }),
+    ).toEqual('Quarterly data report returned to operator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED',
+      }),
+    ).toEqual('Changes submitted to regulator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'WASTE_QDR_APPLICATION_COMPLETED',
+      }),
+    ).toEqual('Quarterly data report reviewed by John Bolt');
   });
 });

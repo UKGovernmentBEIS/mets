@@ -7,25 +7,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountCreatedEvent;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountCreationDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.aviation.transform.AviationAccountMapper;
 import uk.gov.pmrv.api.account.service.AccountIdentifierService;
-import uk.gov.netz.api.authorization.core.domain.AppAuthority;
-import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -86,6 +84,7 @@ class AviationAccountCreationServiceTest {
                 .status(AviationAccountStatus.NEW)
                 .emitterId(emitterId)
                 .name(accountName)
+                .commencementDate(commencementDate)
                 .build();
 
         when(aviationAccountQueryService.isExistingAccountName(accountName, competentAuthority, emissionTradingScheme)).thenReturn(false);
@@ -114,7 +113,6 @@ class AviationAccountCreationServiceTest {
         assertEquals(AviationAccountStatus.NEW, accountCaptured.getStatus());
         assertEquals(emitterId, accountCaptured.getEmitterId());
         assertEquals(accountName, accountCaptured.getName());
-        assertThat(accountCaptured.getReportingStatus()).isEqualTo(AviationAccountReportingStatus.REQUIRED_TO_REPORT);
     }
 
     @Test

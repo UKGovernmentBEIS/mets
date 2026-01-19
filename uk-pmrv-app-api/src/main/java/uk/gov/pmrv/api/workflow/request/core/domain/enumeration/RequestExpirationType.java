@@ -20,6 +20,7 @@ public enum RequestExpirationType {
     INSTALLATION_AUDIT("installationAudit"),
 
     BDR("bdr"),
+    BDRS2("bdrs2"),
     ALR("alr"),
     HSETI("hseti"),
     WASTEQDR("wasteqdr"),

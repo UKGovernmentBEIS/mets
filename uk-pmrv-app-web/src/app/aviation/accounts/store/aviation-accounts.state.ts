@@ -1,6 +1,9 @@
+import { Paging } from '@shared/model';
+
 import {
   AviationAccountCreationDTO,
   AviationAccountEmpDTO,
+  AviationAccountReportingStatusHistoryCreationDTO,
   AviationAccountReportingStatusHistoryDTO,
   LegalEntityDTO,
   LocationDTO,
@@ -20,6 +23,7 @@ export interface AviationAccountsState {
 export interface CurrentAccountState {
   account: AviationAccountEmpDTO;
   reportingStatusHistory: ReportingStatusHistoryState;
+  reportingStatus: ReportingStatusState;
 }
 
 export interface ReportingStatusHistoryState {
@@ -29,6 +33,22 @@ export interface ReportingStatusHistoryState {
     page: number;
     pageSize: number;
   };
+}
+
+export interface ReportingStatusState {
+  statuses: Array<ReportingStatusListItem>;
+  currentStatus?: ReportingStatusListItem;
+  upsertStatus?: AviationAccountReportingStatusHistoryCreationDTO;
+  total: number;
+  paging: Paging;
+}
+
+export interface ReportingStatusListItem {
+  status: AviationAccountReportingStatusHistoryDTO['status'];
+  isReported?: boolean;
+  reason?: string;
+  year: string;
+  lastUpdate?: string;
 }
 
 export interface AviationAccountDetails {
@@ -45,12 +65,19 @@ export interface AviationAccountDetails {
   registryId?: number;
   sopId?: number;
   status?: 'LIVE' | 'NEW' | 'CLOSED';
-  reportingStatus?: 'EXEMPT_COMMERCIAL' | 'EXEMPT_NON_COMMERCIAL' | 'REQUIRED_TO_REPORT';
-  reportingStatusReason?: string;
   closureReason?: string;
   closedByName?: string;
   closingDate?: string;
 }
+
+export const initialReportingStatusState: ReportingStatusState = {
+  statuses: [],
+  total: 0,
+  paging: {
+    page: 1,
+    pageSize: 5,
+  },
+};
 
 export const initialCreateAccountState: CreateAccountState = {
   newAccount: null,
@@ -60,6 +87,7 @@ export const initialCreateAccountState: CreateAccountState = {
 
 export const initialCurrentAccountState: CurrentAccountState = {
   account: null,
+  reportingStatus: initialReportingStatusState,
   reportingStatusHistory: {
     history: [],
     total: 0,

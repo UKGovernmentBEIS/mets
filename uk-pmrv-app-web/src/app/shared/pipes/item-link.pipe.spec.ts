@@ -1447,6 +1447,26 @@ describe('ItemLinkPipe', () => {
       taskType: 'WASTE_QDR_APPLICATION_SUBMIT',
       expectedPath: ['/tasks', taskId, 'waste-qdr', 'submit'],
     },
+    {
+      requestType: 'WASTE_QDR',
+      taskType: 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW',
+      expectedPath: ['/tasks', taskId, 'waste-qdr', 'submit'],
+    },
+    {
+      requestType: 'WASTE_QDR',
+      taskType: 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'waste-qdr', 'review'],
+    },
+    {
+      requestType: 'WASTE_QDR',
+      taskType: 'WASTE_QDR_WAIT_FOR_AMENDS',
+      expectedPath: ['/tasks', taskId, 'waste-qdr', 'review'],
+    },
+    {
+      requestType: 'WASTE_QDR',
+      taskType: 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'waste-qdr', 'submit'],
+    },
 
     // NULL
     {

@@ -36,6 +36,7 @@ export interface AerInitiatorRequest {
     | 'INSTALLATION_AUDIT'
     | 'HSE_TI'
     | 'BDR'
+    | 'BDRS2'
     | 'PERMANENT_CESSATION'
     | 'ALR'
     | 'WASTE_QDR'

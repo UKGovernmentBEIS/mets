@@ -24,6 +24,8 @@ public class EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload ex
 	private EmissionsMonitoringPlanUkEtsContainer originalEmpContainer;
 	
 	private EmpVariationUkEtsRegulatorLedReason reasonRegulatorLed;
+
+	private boolean isHideEmpApplicationTimeframe;
 	
 	@Builder.Default
     private Map<EmpUkEtsReviewGroup, EmpAcceptedVariationDecisionDetails> reviewGroupDecisions = new EnumMap<>(EmpUkEtsReviewGroup.class);

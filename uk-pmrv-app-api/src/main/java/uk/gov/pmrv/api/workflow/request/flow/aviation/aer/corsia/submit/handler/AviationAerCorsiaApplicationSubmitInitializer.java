@@ -1,14 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.handler;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.Set;
-
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
-import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import org.springframework.util.ObjectUtils;
+import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
+import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
@@ -18,6 +15,8 @@ import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandle
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.domain.AviationAerCorsiaApplicationSubmitRequestTaskPayload;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -37,9 +36,9 @@ public class AviationAerCorsiaApplicationSubmitInitializer implements Initialize
                                     null;
 
         final AviationAccountInfoDTO aviationAccountInfoDTO = aviationAccountQueryService.getAviationAccountInfoDTOById(request.getAccountId());
-        final AviationAccountReportingStatus accountReportingStatus = aviationAccountInfoDTO.getReportingStatus();
-        boolean sendEmailNotification = !AviationAccountReportingStatus.EXEMPT_COMMERCIAL.equals(accountReportingStatus)
-            && !AviationAccountReportingStatus.EXEMPT_NON_COMMERCIAL.equals(accountReportingStatus);
+        final AviationAccountReportingStatusType accountReportingStatus = aviationAccountInfoDTO.getReportingStatus();
+        boolean sendEmailNotification = !AviationAccountReportingStatusType.EXEMPT_COMMERCIAL.equals(accountReportingStatus)
+            && !AviationAccountReportingStatusType.EXEMPT_NON_COMMERCIAL.equals(accountReportingStatus);
 
         return AviationAerCorsiaApplicationSubmitRequestTaskPayload.builder()
                 .payloadType(RequestTaskPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMIT_PAYLOAD)

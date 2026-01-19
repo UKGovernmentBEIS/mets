@@ -63,7 +63,7 @@ export class PermitRevocationStore extends Store<PermitRevocationState> {
 
   private readonly installationAccount$ = this.accountId$.pipe(
     switchMap((accountId) => this.installationAccountViewService.getInstallationAccountById(accountId)),
-    map((result) => result.account),
+    map((result) => result?.accountPermitDto?.account),
   );
 
   isFinalAlrVisible$ = this.installationAccount$.pipe(

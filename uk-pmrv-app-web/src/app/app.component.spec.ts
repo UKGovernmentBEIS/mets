@@ -2,15 +2,15 @@ import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 
 import { BREADCRUMB_ITEMS, BreadcrumbItem } from '@core/navigation/breadcrumbs';
 import { AuthStore, LoginStatus } from '@core/store/auth';
 import { SharedModule } from '@shared/shared.module';
-import { BasePage } from '@testing';
+import { BasePage, mockClass } from '@testing';
 import { KeycloakService } from 'keycloak-angular';
 
-import { UserStateDTO } from 'pmrv-api';
+import { BulkDownloadService, UserStateDTO } from 'pmrv-api';
 
 import { AppComponent } from './app.component';
 import { TimeoutModule } from './timeout/timeout.module';
@@ -31,6 +31,14 @@ describe('AppComponent', () => {
 
     fixture.detectChanges();
   };
+
+  function createComponent() {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    breadcrumbItem$ = TestBed.inject(BREADCRUMB_ITEMS);
+    page = new Page(fixture);
+    fixture.detectChanges();
+  }
 
   class Page extends BasePage<AppComponent> {
     get footer() {
@@ -57,6 +65,10 @@ describe('AppComponent', () => {
       return this.query<HTMLAnchorElement>('a[href="/workflows/batch-variations"]');
     }
 
+    get bulkDownloadsLink() {
+      return this.query<HTMLAnchorElement>('a[href="/bulk-downloads"]');
+    }
+
     get navList() {
       return this.query<HTMLDivElement>('.hmcts-primary-navigation');
     }
@@ -66,25 +78,28 @@ describe('AppComponent', () => {
     }
   }
 
+  const bulkDownloadService = mockClass(BulkDownloadService);
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, SharedModule, TimeoutModule],
       declarations: [AppComponent],
-      providers: [KeycloakService, { provide: APP_BASE_HREF, useValue: '/installation-aviation/' }],
+      providers: [
+        KeycloakService,
+        { provide: APP_BASE_HREF, useValue: '/installation-aviation/' },
+        { provide: BulkDownloadService, useValue: bulkDownloadService },
+      ],
     }).compileComponents();
-
     authStore = TestBed.inject(AuthStore);
     authStore.setIsLoggedIn(true);
     authStore.setCurrentDomain('INSTALLATION');
     authStore.setUserState({ roleType: 'OPERATOR', domainsLoginStatuses: { INSTALLATION: 'NO_AUTHORITY' } });
+
+    bulkDownloadService.hasAccessBulkDownload.mockReturnValue(of(false));
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AppComponent);
-    component = fixture.componentInstance;
-    breadcrumbItem$ = TestBed.inject(BREADCRUMB_ITEMS);
-    page = new Page(fixture);
-    fixture.detectChanges();
+    createComponent();
   });
 
   it('should create the app', () => {
@@ -232,5 +247,51 @@ describe('AppComponent', () => {
 
     setUser('OPERATOR');
     expect(page.batchVariationsLink).toBeFalsy();
+  });
+
+  it('should not render the bulk downloads link if the access api call returned false', () => {
+    setUser('OPERATOR');
+    expect(page.bulkDownloadsLink).toBeFalsy();
+
+    setUser('VERIFIER');
+    expect(page.bulkDownloadsLink).toBeFalsy();
+
+    setUser('REGULATOR');
+    expect(page.bulkDownloadsLink).toBeFalsy();
+  });
+
+  it('should render the bulk downloads link only if the user is a regulator', () => {
+    bulkDownloadService.hasAccessBulkDownload.mockReturnValue(of(true));
+
+    createComponent();
+
+    setUser('OPERATOR');
+    expect(page.bulkDownloadsLink).toBeFalsy();
+
+    setUser('VERIFIER');
+    expect(page.bulkDownloadsLink).toBeFalsy();
+
+    setUser('REGULATOR');
+    expect(page.bulkDownloadsLink).toBeTruthy();
+  });
+
+  it('should not render the bulk downloads link if aviation', () => {
+    bulkDownloadService.hasAccessBulkDownload.mockReturnValue(of(true));
+
+    createComponent();
+
+    authStore.setState({
+      ...authStore.getState(),
+      currentDomain: 'AVIATION',
+    });
+
+    setUser('REGULATOR');
+    expect(page.bulkDownloadsLink).toBeFalsy();
+
+    setUser('VERIFIER');
+    expect(page.bulkDownloadsLink).toBeFalsy();
+
+    setUser('OPERATOR');
+    expect(page.bulkDownloadsLink).toBeFalsy();
   });
 });

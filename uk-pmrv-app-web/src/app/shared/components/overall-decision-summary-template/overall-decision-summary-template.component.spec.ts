@@ -43,10 +43,10 @@ describe('OverallDecisionSummaryTemplateComponent', () => {
     expect(page.pageContents).toEqual([
       'Decision',
       'Verified as satisfactory with comments',
-      'Change',
+      'Change decision',
       'Your comments',
       'Reason',
-      'Change',
+      'Change decision reason',
     ]);
   });
 });

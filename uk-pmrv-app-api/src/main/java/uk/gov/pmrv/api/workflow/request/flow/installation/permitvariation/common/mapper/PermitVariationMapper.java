@@ -1,8 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.mapper;
 
 import org.apache.commons.lang3.ObjectUtils;
-import java.util.Set;
-import java.util.UUID;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,6 +20,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.UUID;
 
 @Mapper(componentModel = "spring", config = MapperConfig.class)
 public interface PermitVariationMapper extends PermitDeterminableMapper {

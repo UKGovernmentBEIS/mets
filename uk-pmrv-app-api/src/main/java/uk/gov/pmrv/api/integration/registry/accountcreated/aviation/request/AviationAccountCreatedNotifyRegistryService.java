@@ -3,6 +3,7 @@ package uk.gov.pmrv.api.integration.registry.accountcreated.aviation.request;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import uk.gov.netz.integration.model.account.AccountDetailsMessage;
@@ -16,10 +17,12 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.Org
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.PartnershipOrganisation;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEts;
 import uk.gov.pmrv.api.integration.registry.accountcreated.common.validation.RegistryAccountHolderType;
+import uk.gov.pmrv.api.integration.registry.accountupdated.aviation.request.AviationAccountUpdatedRegistryEvent;
 import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.dto.AviationAccountEmpDTO;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.service.AviationAccountEmpQueryOrchestrator;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.AviationAccountCreatedRegistryEvent;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.service.EmpIssuanceRegistryIntegrationAddRequestActionService;
 
 import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.REQUEST_LOG_FORMAT;
 
@@ -31,7 +34,8 @@ public class AviationAccountCreatedNotifyRegistryService {
 
     private final AviationAccountEmpQueryOrchestrator queryOrchestrator;
     private final AviationEmpApprovedSendToRegistryProducer registryProducer;
-
+    private final ApplicationEventPublisher applicationEventPublisher;
+    private final EmpIssuanceRegistryIntegrationAddRequestActionService addRequestActionService;
 
     public void notifyRegistry(AviationAccountCreatedRegistryEvent event) {
         Long accountId = event.getAccountId();
@@ -40,13 +44,17 @@ public class AviationAccountCreatedNotifyRegistryService {
         if (!ObjectUtils.isEmpty(aviationAccount.getAviationAccount().getRegistryId())) {
             log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.AVIATION_SERVICE_KEY, accountId,
                     NotifyRegistryUtils.ACCOUNT_CREATED_INTEGRATION_POINT_KEY,
-                    "Cannot send account details to registry because the registry Id already exists");
+                    "Registry ID already exists at account open. Notifying registry with account update");
+            applicationEventPublisher.publishEvent(AviationAccountUpdatedRegistryEvent.builder()
+                    .accountId(event.getAccountId()).requestId(event.getRequestId()).build());
             return;
         }
 
         AccountOpeningEvent registryData = buildAccountCreatedRegistryData(aviationAccount,event.getEmissionsMonitoringPlan());
 
         registryProducer.produce(registryData);
+
+        addRequestActionService.addRequestAction(event);
 
 
         log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.AVIATION_SERVICE_KEY, event.getAccountId(),
@@ -65,24 +73,25 @@ public class AviationAccountCreatedNotifyRegistryService {
                 .build();
 
         return AccountOpeningEvent.builder().accountType(AccountType.AIRCRAFT_OPERATOR_HOLDING_ACCOUNT).accountDetails(registryDetails)
-                .accountHolder(createRegistryHolderDetails(aviationAccount,container)).build();
+                .accountHolder(createRegistryHolderDetails(container)).build();
     }
 
-    private record OrganisationDetails(String companyRegistrationNumber, String organisationName, String individualName, Boolean crnNotExists, String justification) {}
+    private record OrganisationDetails(String companyRegistrationNumber, String accountHolderName, Boolean crnNotExists, String justification) {}
 
-    private AccountHolderMessage createRegistryHolderDetails(AviationAccountEmpDTO aviationAccount , EmissionsMonitoringPlanUkEts container) {
+    private AccountHolderMessage createRegistryHolderDetails(EmissionsMonitoringPlanUkEts container) {
         OrganisationStructure organisationStructure = container
                 .getOperatorDetails()
                 .getOrganisationStructure();
+        String operatorName = container.getOperatorDetails().getOperatorName();
 
         OrganisationDetails details = switch (organisationStructure) {
             case LimitedCompanyOrganisation limitedCompanyOrganisation ->
-                    new OrganisationDetails(limitedCompanyOrganisation.getRegistrationNumber(), aviationAccount.getAviationAccount().getName(), null,Boolean.FALSE,null);
+                    new OrganisationDetails(limitedCompanyOrganisation.getRegistrationNumber(), operatorName, Boolean.FALSE, null);
             case IndividualOrganisation individualOrganisation ->
-                    new OrganisationDetails(null, individualOrganisation.getFullName(),null , null,null);
+                    new OrganisationDetails(null, operatorName , null,null);
             case PartnershipOrganisation partnershipOrganisation ->
-                    new OrganisationDetails(null, partnershipOrganisation.getPartnershipName(), null,Boolean.TRUE,"Partnership");
-            default -> new OrganisationDetails(null, null, null,null,null);
+                    new OrganisationDetails(null, operatorName, Boolean.TRUE,"Partnership");
+            default -> new OrganisationDetails(null,  null,null,null);
         };
 
         LocationOnShoreStateDTO organisationLocation = organisationStructure.getOrganisationLocation();
@@ -90,7 +99,7 @@ public class AviationAccountCreatedNotifyRegistryService {
 
         return AccountHolderMessage.builder()
                 .accountHolderType(RegistryAccountHolderType.fromLegalStatusType(organisationStructure.getLegalStatusType()).name())
-                .name(details.organisationName())
+                .name(operatorName)
                 .crnNotExist(details.crnNotExists())
                 .crnJustification(details.justification())
                 .companyRegistrationNumber(details.companyRegistrationNumber())

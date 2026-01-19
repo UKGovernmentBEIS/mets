@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.authorization.rules.services.authorityinfo.dto.RequestActionAuthorityInfoDTO;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
@@ -54,6 +53,7 @@ class RequestActionAuthorityInfoQueryServiceTest {
 
         assertThat(requestActionInfo.getId()).isEqualTo(requestActionId);
         assertThat(requestActionInfo.getType()).isEqualTo(requestAction.getType().name());
+        assertThat(requestActionInfo.getRequestType()).isEqualTo(request.getType().name());
         assertEquals(request.getAccountId(), requestActionInfo.getAuthorityInfo().getAccountId());
         assertEquals(request.getRequestResourcesMap(), requestActionInfo.getAuthorityInfo().getRequestResources());
     }

@@ -64,19 +64,25 @@
       appNavigationLink>
       Batch variations
     </a>
+    <a
+      *ngIf="permissions.hasAccessBulkDownload"
+      [routerLink]="[(domainUrlPrefix$ | async) + '/bulk-downloads']"
+      appNavigationLink>
+      Bulk downloads
+    </a>
   </app-navigation>
 </govuk-header>
 
-<main class="govuk-width-container" id="main-content" role="main">
+<section class="govuk-width-container">
   <app-phase-bar></app-phase-bar>
   <app-incorporate-header></app-incorporate-header>
   <app-breadcrumbs></app-breadcrumbs>
   <app-identity-bar></app-identity-bar>
   <app-back-link></app-back-link>
-  <div class="govuk-main-wrapper">
-    <router-outlet appSkipLinkFocus></router-outlet>
-  </div>
-</main>
+  <main class="govuk-main-wrapper" id="main-content" role="main" tabindex="-1">
+    <router-outlet></router-outlet>
+  </main>
+</section>
 <govuk-footer crestSvg="./assets/images/govuk-crest.svg">
   <govuk-footer-meta-info>
     <a govukLink="meta" href="/privacy-notice">Privacy Notice</a>

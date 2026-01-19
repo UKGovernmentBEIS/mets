@@ -30,8 +30,6 @@ export interface AviationAccountDTO {
   registryId?: number;
   status?: 'NEW' | 'LIVE' | 'CLOSED';
   crcoCode?: string;
-  reportingStatus?: 'REQUIRED_TO_REPORT' | 'EXEMPT_COMMERCIAL' | 'EXEMPT_NON_COMMERCIAL';
-  reportingStatusReason?: string;
   closureReason?: string;
   closedByName?: string;
   closingDate?: string;

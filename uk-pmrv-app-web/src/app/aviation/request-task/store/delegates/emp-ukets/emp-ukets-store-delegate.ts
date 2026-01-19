@@ -491,7 +491,10 @@ export class EmpUkEtsStoreDelegate extends EmpStoreDelegate {
   }
 
   initializeVariationEmpSectionsCompleted() {
-    const availableSubTasks = getAvailableSubTasks(allEmpApplicationTasks('variation', false, false), this.payload);
+    const availableSubTasks = getAvailableSubTasks(
+      allEmpApplicationTasks('variation', false, false, true, !this.payload.hideEmpApplicationTimeframe),
+      this.payload,
+    );
 
     const payloadToUpdate = produce(this.payload, (draft) => {
       availableSubTasks.forEach((task) => {

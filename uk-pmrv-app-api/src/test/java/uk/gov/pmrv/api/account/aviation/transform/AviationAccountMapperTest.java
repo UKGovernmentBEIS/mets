@@ -10,7 +10,7 @@ import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusHis
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountCreationDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.domain.LocationOnShoreState;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
@@ -22,7 +22,6 @@ import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -86,7 +85,6 @@ class AviationAccountMapperTest {
                         .address(AddressState.builder().line1("line1").state("state").build())
                         .build())
     			.name("name")
-    			.reportingStatus(AviationAccountReportingStatus.REQUIRED_TO_REPORT)
     			.status(AviationAccountStatus.LIVE)
     			.build();
     	
@@ -100,7 +98,6 @@ class AviationAccountMapperTest {
     			.id(1L)
     			.location(locationMapper.toAccountLocationDTO( account.getLocation() ))
     			.name("name")
-    			.reportingStatus(AviationAccountReportingStatus.REQUIRED_TO_REPORT)
     			.status(AviationAccountStatus.LIVE)
     			.build());
     }
@@ -116,12 +113,12 @@ class AviationAccountMapperTest {
         String emitterId = "EM00010";
 
         AviationAccountReportingStatusHistory reportingStatusEntry1 = AviationAccountReportingStatusHistory.builder()
-            .status(AviationAccountReportingStatus.REQUIRED_TO_REPORT)
+            .status(AviationAccountReportingStatusType.REQUIRED_TO_REPORT)
             .submissionDate(LocalDateTime.now())
             .build();
 
         AviationAccountReportingStatusHistory reportingStatusEntry2 = AviationAccountReportingStatusHistory.builder()
-            .status(AviationAccountReportingStatus.EXEMPT_COMMERCIAL)
+            .status(AviationAccountReportingStatusType.EXEMPT_COMMERCIAL)
             .reason("reason for exempt")
             .submissionDate(LocalDateTime.now())
             .build();
@@ -134,10 +131,8 @@ class AviationAccountMapperTest {
             .commencementDate(commencementDate)
             .competentAuthority(competentAuthority)
             .status(AviationAccountStatus.NEW)
-            .reportingStatus(AviationAccountReportingStatus.EXEMPT_COMMERCIAL)
             .accountType(AccountType.AVIATION)
             .emitterId(emitterId)
-            .reportingStatusHistoryList(List.of(reportingStatusEntry2, reportingStatusEntry1))
             .location(LocationOnShoreState.builder()
                     .address(AddressState.builder().line1("line1").state("state").build())
                     .build())
@@ -152,8 +147,6 @@ class AviationAccountMapperTest {
             .competentAuthority(competentAuthority)
             .status(AviationAccountStatus.NEW)
             .accountType(AccountType.AVIATION).emitterId(emitterId)
-            .reportingStatus(AviationAccountReportingStatus.EXEMPT_COMMERCIAL)
-            .reportingStatusReason(reportingStatusEntry2.getReason())
             .location(LocationOnShoreStateDTO.builder().type(LocationType.ONSHORE_STATE).line1("line1").state("state").build())
             .build();
 
@@ -173,7 +166,7 @@ class AviationAccountMapperTest {
         String emitterId = "EM00010";
 
         AviationAccountReportingStatusHistory reportingStatusEntry = AviationAccountReportingStatusHistory.builder()
-            .status(AviationAccountReportingStatus.EXEMPT_COMMERCIAL)
+            .status(AviationAccountReportingStatusType.EXEMPT_COMMERCIAL)
             .reason("reason for exempt")
             .build();
 
@@ -185,10 +178,8 @@ class AviationAccountMapperTest {
             .commencementDate(commencementDate)
             .competentAuthority(competentAuthority)
             .status(AviationAccountStatus.NEW)
-            .reportingStatus(AviationAccountReportingStatus.EXEMPT_COMMERCIAL)
             .accountType(AccountType.AVIATION)
             .emitterId(emitterId)
-            .reportingStatusHistoryList(List.of(reportingStatusEntry))
             .build();
 
         AviationAccountDTO expected = AviationAccountDTO.builder()
@@ -201,7 +192,6 @@ class AviationAccountMapperTest {
             .status(AviationAccountStatus.NEW)
             .accountType(AccountType.AVIATION)
             .emitterId(emitterId)
-            .reportingStatus(AviationAccountReportingStatus.EXEMPT_COMMERCIAL)
             .build();
 
         AviationAccountDTO actual = aviationAccountMapper.toAviationAccountDTOIgnoreReportingStatusReason(aviationAccount);

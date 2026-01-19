@@ -7,11 +7,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -71,7 +71,7 @@ class AviationAerCreationServiceTest {
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         AviationAccountInfoDTO aviationAccountInfo = AviationAccountInfoDTO.builder()
             .emissionTradingScheme(emissionTradingScheme)
-            .reportingStatus(AviationAccountReportingStatus.REQUIRED_TO_REPORT)
+            .reportingStatus(AviationAccountReportingStatusType.REQUIRED_TO_REPORT)
             .build();
         RequestParams requestParams = RequestParams.builder().build();
 
@@ -100,7 +100,7 @@ class AviationAerCreationServiceTest {
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.CORSIA;
         AviationAccountInfoDTO aviationAccountInfo = AviationAccountInfoDTO.builder()
             .emissionTradingScheme(emissionTradingScheme)
-            .reportingStatus(AviationAccountReportingStatus.REQUIRED_TO_REPORT)
+            .reportingStatus(AviationAccountReportingStatusType.REQUIRED_TO_REPORT)
             .build();
 
         RequestParams requestParams = RequestParams.builder().build();
@@ -130,7 +130,7 @@ class AviationAerCreationServiceTest {
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         AviationAccountInfoDTO aviationAccountInfo = AviationAccountInfoDTO.builder()
             .emissionTradingScheme(emissionTradingScheme)
-            .reportingStatus(AviationAccountReportingStatus.EXEMPT_COMMERCIAL)
+            .reportingStatus(AviationAccountReportingStatusType.EXEMPT_COMMERCIAL)
             .build();
         RequestParams requestParams = RequestParams.builder().build();
         Request request = Request.builder().build();

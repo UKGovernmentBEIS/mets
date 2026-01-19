@@ -27,7 +27,7 @@ import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivities;
 import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivity;
 import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivityType;
 import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountPermitDTO;
-import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountPermitQueryOrchestrator;
+import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountQueryOrchestrator;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.PermitIssuanceRegistryIntegrationAddRequestActionService;
 
 import java.time.LocalDate;
@@ -47,7 +47,7 @@ import static org.mockito.Mockito.when;
 public class InstallationAccountCreatedNotifyRegistryServiceTest {
 
     @Mock
-    private InstallationAccountPermitQueryOrchestrator accountQueryService;
+    private InstallationAccountQueryOrchestrator accountQueryService;
 
     @Mock
     private InstallationAccountCreatedSendToRegistryProducer registryProducer;

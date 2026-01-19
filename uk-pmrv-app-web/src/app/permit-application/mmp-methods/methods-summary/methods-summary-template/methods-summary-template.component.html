@@ -23,7 +23,13 @@
           </dt>
           <dd govukSummaryListRowValue>{{ methodTask.physicalPartsAndUnitsAnswer ? 'Yes' : 'No' }}</dd>
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+            <a
+              govukLink
+              [routerLink]="['..']"
+              [state]="{ changing: true }"
+              hidden-text="if there are any physical parts of the installation or units which serve more than one sub-installation">
+              Change
+            </a>
           </dd>
         </div>
       </dl>
@@ -44,7 +50,13 @@
           </dt>
           <dd govukSummaryListRowValue class="pre-wrap">{{ methodTask.assignParts }}</dd>
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink [routerLink]="['../assign-parts']" [state]="{ changing: true }">Change</a>
+            <a
+              govukLink
+              [routerLink]="['../assign-parts']"
+              [state]="{ changing: true }"
+              hidden-text="methods used to assign parts of installations and their emissions to sub-installations">
+              Change
+            </a>
           </dd>
         </div>
       </dl>
@@ -61,7 +73,13 @@
         <dt govukSummaryListRowKey>Methods used for ensuring that data gaps and double counting are avoided</dt>
         <dd govukSummaryListRowValue class="pre-wrap">{{ methodTask.avoidDoubleCount }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink [routerLink]="['../avoid-double-count']" [state]="{ changing: true }">Change</a>
+          <a
+            govukLink
+            [routerLink]="['../avoid-double-count']"
+            [state]="{ changing: true }"
+            hidden-text="methods used for ensuring that data gaps and double counting are avoided">
+            Change
+          </a>
         </dd>
       </div>
     </dl>

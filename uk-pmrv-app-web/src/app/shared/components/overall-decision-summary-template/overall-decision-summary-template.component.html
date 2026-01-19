@@ -5,7 +5,7 @@
       {{ overallDecision.type | verificationDecisionType }}
     </dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }" hidden-text="decision">Change</a>
     </dd>
   </div>
 
@@ -21,7 +21,7 @@
       {{ overallDecision.reasons }}
     </dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }" hidden-text="decision reason">Change</a>
     </dd>
   </div>
 </dl>

@@ -359,6 +359,12 @@ export class ItemActionHeaderPipe implements PipeTransform {
       case 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
+      case 'WASTE_QDR_APPLICATION_SUBMITTED':
+      case 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+      case 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED':
+      case 'WASTE_QDR_APPLICATION_COMPLETED':
+        return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
+
       default:
         return itemActionTypePipe.transform(item.type);
     }

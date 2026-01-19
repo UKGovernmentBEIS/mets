@@ -197,4 +197,46 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="0_1_0_create_table_aviation_account_reporting_status" author="mitzelose@unisystems.gr">
+        <createTable tableName="account_aviation_reporting_status">
+            <column name="id" type="bigint" remarks="The account reporting status entry id">
+                <constraints primaryKey="true" primaryKeyName="account_aviation_reporting_status_id_pk" />
+            </column>
+            <column name="status" type="varchar(255)" remarks="The aviation account reporting status type">
+                <constraints nullable="false" />
+            </column>
+            <column name="year" type="smallint" remarks="The year dimension for the status entry">
+                <constraints nullable="false" />
+            </column>
+            <column name="reason" type="varchar" remarks="The reason text">
+            </column>
+            <column name="last_update" type="timestamp" remarks="The datetime that the entry was last updated">
+            </column>
+            <column name="account_id" type="bigint" remarks="The reference to the account that the entry belongs to">
+                <constraints foreignKeyName="account_aviation_reporting_status_account_fk" references="account_aviation(id)" nullable="false" />
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="account_aviation_reporting_status" columnNames="account_id,year" constraintName="aviation_account_reporting_status_per_year_uc"/>
+    </changeSet>
+
+    <changeSet id="0_1_0_account_aviation_reporting_status_sequence_create" author="mitzelose@unisystem.gr">
+        <createSequence sequenceName="account_aviation_reporting_status_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS account_aviation_reporting_status_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_column_reporting_status_aviation_account" author="mitzelose@unisystems.gr">
+        <dropColumn tableName="account_aviation" columnName="reporting_status" />
+    </changeSet>
+
+    <changeSet id="0_1_0_add_column_year_reporting_status_history" author="mitzelose@unisystems.gr">
+        <addColumn tableName="account_aviation_reporting_status_history">
+            <column name="year" type="int"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

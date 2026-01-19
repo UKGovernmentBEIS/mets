@@ -11,6 +11,7 @@ import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
+import uk.gov.pmrv.api.account.domain.event.AccountContactRegistryEvent;
 import uk.gov.pmrv.api.account.domain.event.FirstPrimaryContactAssignedToAccountEvent;
 import uk.gov.pmrv.api.account.domain.event.FirstServiceContactAssignedToAccountEvent;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
@@ -74,6 +75,10 @@ public class AccountContactUpdateService {
 
         String serviceContact = allContactTypes.get(AccountContactType.SERVICE);
         publishFirstServiceContactAssignedToAccountEvent(currentOperatorContacts, serviceContact, accountId);
+
+        //publish contact update to registry
+        eventPublisher.publishEvent(AccountContactRegistryEvent.builder().accountId(accountId).build());
+
     }
 
     private void publishFirstPrimaryContactAssignedToAccountEvent(Map<AccountContactType, String> currentOperatorContacts, String primaryContact, Long accountId) {

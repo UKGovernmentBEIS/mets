@@ -43,6 +43,7 @@ export interface RequestCreateActionProcessDTO {
     | 'AIR'
     | 'HSE_TI'
     | 'BDR'
+    | 'BDRS2'
     | 'PERMANENT_CESSATION'
     | 'ALR'
     | 'WASTE_QDR'

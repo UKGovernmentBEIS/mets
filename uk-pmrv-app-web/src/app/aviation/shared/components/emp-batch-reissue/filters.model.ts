@@ -1,7 +1,7 @@
-import { AviationAccountDTO } from 'pmrv-api';
+import { AviationAccountDTO, AviationAccountReportingStatusDTO } from 'pmrv-api';
 
 export interface FiltersModel {
-  reportingStatuses: AviationAccountDTO['reportingStatus'][];
+  reportingStatuses: AviationAccountReportingStatusDTO['status'][];
   emissionTradingSchemes: AviationAccountDTO['emissionTradingScheme'][];
 
   numberOfEmitters: number;

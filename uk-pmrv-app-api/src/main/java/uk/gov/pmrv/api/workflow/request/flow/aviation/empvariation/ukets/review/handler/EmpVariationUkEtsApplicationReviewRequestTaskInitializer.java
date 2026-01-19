@@ -39,7 +39,6 @@ public class EmpVariationUkEtsApplicationReviewRequestTaskInitializer implements
 	
 	@Override
 	public RequestTaskPayload initializePayload(Request request) {
-		
 		final EmpVariationUkEtsRequestPayload requestPayload = (EmpVariationUkEtsRequestPayload) request.getPayload();
 		final EmissionsMonitoringPlanUkEtsContainer originalEmpContainer = 
     			empQueryService.getEmissionsMonitoringPlanUkEtsDTOByAccountId(request.getAccountId())
@@ -71,7 +70,7 @@ public class EmpVariationUkEtsApplicationReviewRequestTaskInitializer implements
             				.build())
             		.build());
         }
-		
+		requestTaskPayload.setHideEmpApplicationTimeframe(requestPayload.isHideEmpApplicationTimeframe());
 		return requestTaskPayload;
 	}
 

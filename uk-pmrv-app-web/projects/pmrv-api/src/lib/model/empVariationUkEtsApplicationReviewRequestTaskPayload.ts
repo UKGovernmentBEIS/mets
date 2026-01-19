@@ -32,4 +32,5 @@ export interface EmpVariationUkEtsApplicationReviewRequestTaskPayload extends Re
   determination?: EmpVariationDetermination;
   reviewAttachments?: { [key: string]: string };
   rfiAttachments?: { [key: string]: string };
+  hideEmpApplicationTimeframe?: boolean;
 }

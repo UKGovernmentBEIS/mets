@@ -36,11 +36,13 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'PERMIT_ISSUANCE_RECALLED_FROM_AMENDS':
         return 'Permit application recalled';
       case 'PERMIT_ISSUANCE_ACCOUNT_CREATED_SENT_TO_REGISTRY':
-        return 'Information sent to registry by system';
+        return 'Information sent to Registry by system';
       case 'PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY':
-        return 'Information sent to registry by system';
+        return 'Information sent to Registry by system';
+      case 'EMP_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY':
+        return 'Information sent to Registry by system';
       case 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY':
-        return 'Information sent to registry';
+        return 'Information sent to Registry';
 
       case 'PERMIT_SURRENDER_APPLICATION_CANCELLED':
         return 'Surrender request cancelled';
@@ -606,6 +608,15 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'Peer review agreement submitted';
       case 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED':
         return 'Peer review disagreement submitted';
+
+      case 'WASTE_QDR_APPLICATION_SUBMITTED':
+        return 'Quarterly data report submitted to regulator';
+      case 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+        return 'Quarterly data report returned to operator';
+      case 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED':
+        return 'Changes submitted to regulator';
+      case 'WASTE_QDR_APPLICATION_COMPLETED':
+        return 'Quarterly data report reviewed';
 
       default:
         return 'Approved Application';

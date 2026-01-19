@@ -14,7 +14,6 @@ import uk.gov.netz.api.mireport.MiReportType;
 import uk.gov.netz.api.mireport.executedactions.ExecutedRequestAction;
 import uk.gov.netz.api.mireport.executedactions.ExecutedRequestActionsMiReportParams;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
@@ -186,7 +185,6 @@ class AviationExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
             .id(id)
             .name(name)
             .status(status)
-            .reportingStatus(AviationAccountReportingStatus.REQUIRED_TO_REPORT)
             .accountType(AccountType.AVIATION)
             .competentAuthority(competentAuthority)
             .legalEntity(le)

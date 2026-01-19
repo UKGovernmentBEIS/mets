@@ -24,11 +24,13 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringP
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.ActivitiesDescription;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.EmpOperatorDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.common.domain.RequestAviationAccountInfo;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.common.service.RequestAviationAccountQueryService;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.domain.EmpVariationUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.submit.domain.EmpVariationUkEtsApplicationSubmitRequestTaskPayload;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,7 +48,9 @@ class EmpVariationUkEtsApplicationSubmitInitializerTest {
 	@Test
 	void initializePayload() {
 		Long accountId = 1L;
-		Request request = Request.builder().accountId(accountId).build();
+		Request request = Request.builder()
+				.payload(EmpVariationUkEtsRequestPayload.builder().build())
+				.accountId(accountId).build();
 		
 		EmissionsMonitoringPlanUkEts emp = EmissionsMonitoringPlanUkEts
 				.builder()

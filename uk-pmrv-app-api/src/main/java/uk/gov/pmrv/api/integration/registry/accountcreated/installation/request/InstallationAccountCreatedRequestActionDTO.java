@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.integration.registry.accountcreated.common.AccountCreatedRequestActionDTO;
+import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivityType;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @SuperBuilder
@@ -19,7 +20,8 @@ public class InstallationAccountCreatedRequestActionDTO extends AccountCreatedRe
 
     private String installationName;
     private LegalEntityDTO legalEntityDTO;
-    private LocalDate commencementDate;
+    private Integer registryReportingFirstYear;
+    private List<RegulatedActivityType> regulatedActivityList;
 
 
 }

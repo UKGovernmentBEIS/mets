@@ -29,8 +29,10 @@ describe('ReasonTemplateGuard', () => {
     accountViewService = mockClass(InstallationAccountViewService);
     accountViewService.getInstallationAccountById.mockReturnValue(
       of({
-        ...mockedAccountPermit,
-        account: { ...mockedAccountPermit.account, emissionTradingScheme: 'UK_ETS_INSTALLATIONS' },
+        accountPermitDto: {
+          ...mockedAccountPermit,
+          account: { ...mockedAccountPermit.account, emissionTradingScheme: 'UK_ETS_INSTALLATIONS' },
+        },
       }),
     );
 

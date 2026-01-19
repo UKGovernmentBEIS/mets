@@ -1,11 +1,13 @@
 package uk.gov.pmrv.api.user.operator.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityRoleDTO;
 import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.account.domain.event.AccountContactRegistryEvent;
 import uk.gov.pmrv.api.user.core.service.UserSecuritySetupService;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 
@@ -19,6 +21,7 @@ public class OperatorUserManagementService {
     private final OperatorUserAuthService operatorUserAuthService;
     private final OperatorAuthorityQueryService operatorAuthorityQueryService;
     private final UserSecuritySetupService userSecuritySetupService;
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * Returns the Operator User.
@@ -49,6 +52,9 @@ public class OperatorUserManagementService {
 
         // Update user
         operatorUserAuthService.updateUser(operatorUserDTO);
+
+        //publish account contacts to registry
+        eventPublisher.publishEvent(AccountContactRegistryEvent.builder().accountId(accountId).build());
     }
     
 	public void resetOperator2Fa(Long accountId, String userId) {

@@ -11,7 +11,7 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.BusinessOrganisationDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.IndividualOrganisationDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountRegistryIntegrationRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.RegistryIntegrationActivePermit;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.RegistryIntegrationAccountCreateActivePermit;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.RegistryIntegrationOrganizationDetails;
 
 @Service
@@ -23,14 +23,15 @@ public class PermitIssuanceRegistryIntegrationAddRequestActionService {
     public void addRequestAction(final String requestId, InstallationAccountCreatedRequestActionDTO account) {
         Request request = requestService.findRequestById(requestId);
 
-        RegistryIntegrationActivePermit registryIntegrationActivePermit =
-                RegistryIntegrationActivePermit.builder()
+        RegistryIntegrationAccountCreateActivePermit registryIntegrationAccountCreateActivePermit =
+                RegistryIntegrationAccountCreateActivePermit.builder()
                         .emitterId(account.getEmitterId())
                         .permitId(account.getPermitId())
                         .installationName(account.getInstallationName())
                         .operatorName(account.getLegalEntityDTO().getName())
+                        .firstYearOfReportingObligation(account.getRegistryReportingFirstYear())
+                        .regulatedActivity(account.getRegulatedActivityList())
                         .regulator(account.getCompetentAuthority().getCode())
-                        .regulatedActivitiesStartDate(account.getCommencementDate())
                         .build();
 
         RegistryIntegrationOrganizationDetails registryIntegrationOrganizationDetails =
@@ -62,7 +63,7 @@ public class PermitIssuanceRegistryIntegrationAddRequestActionService {
 
         InstallationAccountRegistryIntegrationRequestActionPayload payload =
                 InstallationAccountRegistryIntegrationRequestActionPayload.builder()
-                        .activePermit(registryIntegrationActivePermit)
+                        .activePermit(registryIntegrationAccountCreateActivePermit)
                         .organizationDetails(registryIntegrationOrganizationDetails)
                         .payloadType(RequestActionPayloadType.PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD)
                         .build();

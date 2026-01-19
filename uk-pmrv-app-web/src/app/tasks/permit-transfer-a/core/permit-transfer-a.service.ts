@@ -35,7 +35,7 @@ export class PermitTransferAService extends TasksHelperService {
 
   private readonly installationAccount$ = this.accountId$.pipe(
     switchMap((accountId) => this.installationAccountViewService.getInstallationAccountById(accountId)),
-    map((result) => result.account),
+    map((result) => result?.accountPermitDto?.account),
   );
 
   isAlrVisible$ = this.installationAccount$.pipe(map((account) => account.faStatus && account.emitterType === 'GHGE'));

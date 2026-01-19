@@ -25,8 +25,10 @@ public class PermanentCessationSaveApplicationRequestTaskActionPayload extends R
     @Valid
     private PermanentCessation permanentCessation;
 
+    @Builder.Default
     private Map<String, Boolean> permanentCessationSectionsCompleted = new HashMap<>();
 
+    @Builder.Default
     private Map<UUID, String> permanentCessationAttachments = new HashMap<>();
 
 }

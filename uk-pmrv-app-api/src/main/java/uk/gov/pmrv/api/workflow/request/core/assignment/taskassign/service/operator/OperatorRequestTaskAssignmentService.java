@@ -36,7 +36,7 @@ public class OperatorRequestTaskAssignmentService implements UserRoleRequestTask
     @Transactional
     public void assignTask(RequestTask requestTask, String userId) {
         try {
-            requestTaskAssignmentService.assignToUser(requestTask, userId);
+            requestTaskAssignmentService.assignToUser(requestTask, userId, getRoleType());
         } catch (BusinessCheckedException e) {
             throw new BusinessException(ErrorCode.ASSIGNMENT_NOT_ALLOWED);
         }
@@ -61,7 +61,7 @@ public class OperatorRequestTaskAssignmentService implements UserRoleRequestTask
 
     private void assignTaskToAccountPrimaryContactOrRelease(RequestTask requestTask, String userId) {
         try {
-            requestTaskAssignmentService.assignToUser(requestTask, userId);
+            requestTaskAssignmentService.assignToUser(requestTask, userId, getRoleType());
         } catch (BusinessCheckedException ex) {
             log.error("Task '{}' cannot be assigned to account primary contact user '{}'", requestTask::getId, () ->userId);
             requestTaskReleaseService.releaseTaskForced(requestTask);

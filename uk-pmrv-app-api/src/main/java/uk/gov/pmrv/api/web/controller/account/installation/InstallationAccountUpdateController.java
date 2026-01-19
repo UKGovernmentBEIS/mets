@@ -31,7 +31,7 @@ import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateSopIdDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountUpdateService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountPermitCommandOrchestrator;
+import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountCommandOrchestrator;
 
 import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 
@@ -43,7 +43,7 @@ import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 public class InstallationAccountUpdateController {
 
     private final InstallationAccountUpdateService installationAccountUpdateService;
-    private final InstallationAccountPermitCommandOrchestrator installationAccountPermitCommandOrchestrator;
+    private final InstallationAccountCommandOrchestrator installationAccountCommandOrchestrator;
 
     @PostMapping("/site-name")
     @Operation(summary = "Update the site name of the account")
@@ -158,7 +158,7 @@ public class InstallationAccountUpdateController {
             @PathVariable("id") @Parameter(description = "The account id", required = true) Long accountId,
             @RequestBody @Valid @Parameter(description = "The first year of registry reporting obligation field", required = true)
             AccountUpdateRegistryReportingFirstYearDTO accountUpdateRegistryReportingFirstYearDTO) {
-        installationAccountPermitCommandOrchestrator.updateRegistryReportingFirstYear(accountId, accountUpdateRegistryReportingFirstYearDTO);
+        installationAccountCommandOrchestrator.updateRegistryReportingFirstYear(accountId, accountUpdateRegistryReportingFirstYearDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -61,6 +61,8 @@ public class EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskInitialize
 	                .empAttachments(originalEmpContainer.getEmpAttachments())
 	                .build();
 		}
+		requestPayload.setHideEmpApplicationTimeframe(true);
+		requestTaskPayload.setHideEmpApplicationTimeframe(true);
 		
 		return requestTaskPayload;
 	}

@@ -62,6 +62,10 @@ public enum MetsErrorCode implements NetzErrorCode {
     BDR_FILENAME_NOT_VALID("BDR1005", HttpStatus.BAD_REQUEST, "BDR file name is not valid"),
     BDR_REQUEST_IS_NOT_BDR("BDR1006", HttpStatus.BAD_REQUEST, "Provided request id is not of type BDR"),
 
+    /** Codes for BDRS2. */
+    BDRS2_CREATION_NOT_ALLOWED("BDRS21000", HttpStatus.BAD_REQUEST, "BDRS2 creation is not allowed"),
+    BDRS2_FILENAME_NOT_VALID("BDRS21001", HttpStatus.BAD_REQUEST, "BDRS2 file name is not valid"),
+
     /** Codes for ALR. */
     ALR_CREATION_NOT_ALLOWED("ALR1000", HttpStatus.BAD_REQUEST, "ALR creation is not allowed"),
     ALR_FILENAME_NOT_VALID("ALR1001", HttpStatus.BAD_REQUEST, "ALR file name is not valid"),
@@ -72,6 +76,7 @@ public enum MetsErrorCode implements NetzErrorCode {
 
     /** Code for WasteQDR. */
     WASTE_QDR_CREATION_NOT_ALLOWED("WQDR1000", HttpStatus.BAD_REQUEST, "Waste QDR creation is not allowed"),
+    INVALID_WASTE_QDR_REVIEW("WQDR1001", HttpStatus.BAD_REQUEST, "Invalid Waste QDR review"),
 
 
     /** Codes for AER. */
@@ -107,6 +112,7 @@ public enum MetsErrorCode implements NetzErrorCode {
     INVALID_AVIATION_AER_VERIFICATION_REPORT("AVIATIONAER1003", HttpStatus.BAD_REQUEST, "Invalid AER verification report"),
     NO_AVIATION_AER_SERVICE_FOUND("AVIATIONAER1004", HttpStatus.NOT_FOUND, "No associated Aviation AER service found"),
     INVALID_AVIATION_AER_REVIEW("AVIATIONAER1005", HttpStatus.BAD_REQUEST, "Invalid AER review"),
+    AVIATION_AER_REPORTING_STATUS_NOT_FOUND("AVIATIONAER1005", HttpStatus.NOT_FOUND, "AER reporting status not found"),
 
     /** Codes for Allowances. */
     INVALID_ALLOWANCE_ALLOCATIONS("ALLOWANCE1001", HttpStatus.BAD_REQUEST, "Invalid Allowance Allocation values"),

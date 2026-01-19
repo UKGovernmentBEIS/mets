@@ -1,0 +1,26 @@
+<ng-container *ngIf="vm() as vm">
+  <ng-container *ngIf="!isSubmitted(); else submittedTemplate" class="govuk-!-width-two-thirds">
+    <app-page-heading>Send to regulator</app-page-heading>
+
+    <p class="govuk-body">
+      Your report will be sent directly to your regulator ({{
+        wasteQdrService.competentAuthority$ | async | competentAuthority
+      }}).
+    </p>
+    <p class="govuk-body">
+      By selecting ‘Confirm and send’ you confirm that the information is correct to the best of your knowledge.
+    </p>
+
+    <div class="govuk-button-group" *ngIf="vm.isEditable">
+      <button (click)="onSubmit()" appPendingButton govukButton type="submit">Confirm and send</button>
+    </div>
+    <app-waste-qdr-return-link returnLink="../" [title]="'Complete quarterly data report'"></app-waste-qdr-return-link>
+  </ng-container>
+
+  <ng-template #submittedTemplate>
+    <app-confirmation-shared
+      [title]="'Sent to regulator for review'"
+      titleContent="Your reference number"
+      [titleContentId]="vm.requestId"></app-confirmation-shared>
+  </ng-template>
+</ng-container>

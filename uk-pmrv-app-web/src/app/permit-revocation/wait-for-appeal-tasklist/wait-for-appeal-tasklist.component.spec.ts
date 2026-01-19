@@ -9,7 +9,7 @@ import { ActivatedRouteStub, BasePage, mockClass, MockType } from '@testing';
 
 import { InstallationAccountViewService, RequestActionsService } from 'pmrv-api';
 
-import { mockedAccountPermit } from '../../accounts/testing/mock-data';
+import { mockedAccountDetails } from '../../accounts/testing/mock-data';
 import { PermitRevocationModule } from '../permit-revocation.module';
 import { PermitRevocationStore } from '../store/permit-revocation-store';
 import { mockTaskState } from '../testing/mock-state';
@@ -64,7 +64,7 @@ describe('Wait For Appeal Component', () => {
   beforeEach(async () => {
     route = new ActivatedRouteStub({ taskId: mockTaskState.requestTaskId }, null, null, null, null);
     accountViewService = mockClass(InstallationAccountViewService);
-    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountPermit));
+    accountViewService.getInstallationAccountById.mockReturnValue(of(mockedAccountDetails));
 
     await TestBed.configureTestingModule({
       imports: [PermitRevocationModule, CessationModule],

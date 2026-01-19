@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   combineLatest,
@@ -44,10 +44,12 @@ type TableData = AccountContactInfoDTO & { user: RegulatorUserAuthorityInfoDTO; 
   providers: [UserFullNamePipe, DestroySubject],
 })
 export class SiteContactsComponent implements OnInit {
+  private readonly isAviation = this.router.url.includes('/aviation/') ? '/aviation' : '';
+
   page$ = new ReplaySubject<number>(1);
   count$: Observable<number>;
   columns: GovukTableColumn<TableData>[] = [
-    { field: 'accountName', header: 'Permit holding account', isHeader: true },
+    { field: 'accountName', header: this.isAviation ? 'Account' : 'Permit holding account', isHeader: true },
     { field: 'type', header: 'Type' },
     { field: 'user', header: 'Assigned to' },
   ];
@@ -68,6 +70,7 @@ export class SiteContactsComponent implements OnInit {
     private readonly businessErrorService: BusinessErrorService,
     private readonly authStore: AuthStore,
     private readonly destroy$: DestroySubject,
+    private readonly router: Router,
   ) {}
 
   ngOnInit(): void {

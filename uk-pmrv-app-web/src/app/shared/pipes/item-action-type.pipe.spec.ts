@@ -42,10 +42,7 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('PERMIT_ISSUANCE_PEER_REVIEW_REQUESTED')).toEqual('Peer review requested');
     expect(pipe.transform('PERMIT_ISSUANCE_RECALLED_FROM_AMENDS')).toEqual('Permit application recalled');
     expect(pipe.transform('PERMIT_ISSUANCE_ACCOUNT_CREATED_SENT_TO_REGISTRY')).toEqual(
-      'Information sent to registry by system',
-    );
-    expect(pipe.transform('PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY')).toEqual(
-      'Information sent to registry by system',
+      'Information sent to Registry by system',
     );
 
     expect(pipe.transform('PERMIT_SURRENDER_APPLICATION_CANCELLED')).toEqual('Surrender request cancelled');
@@ -282,7 +279,10 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('EMP_ISSUANCE_CORSIA_APPLICATION_DEEMED_WITHDRAWN')).toEqual('Withdrawn');
 
     expect(pipe.transform('EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY')).toEqual(
-      'Information sent to registry',
+      'Information sent to Registry',
+    );
+    expect(pipe.transform('EMP_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY')).toEqual(
+      'Information sent to Registry by system',
     );
 
     expect(pipe.transform('NON_COMPLIANCE_APPLICATION_SUBMITTED')).toEqual('Non-compliance details provided');
@@ -550,6 +550,13 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED')).toEqual('Peer review requested');
     expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED')).toEqual('Peer review agreement submitted');
     expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW_REJECTED')).toEqual('Peer review disagreement submitted');
+
+    expect(pipe.transform('WASTE_QDR_APPLICATION_SUBMITTED')).toEqual('Quarterly data report submitted to regulator');
+    expect(pipe.transform('WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS')).toEqual(
+      'Quarterly data report returned to operator',
+    );
+    expect(pipe.transform('WASTE_QDR_APPLICATION_AMENDS_SUBMITTED')).toEqual('Changes submitted to regulator');
+    expect(pipe.transform('WASTE_QDR_APPLICATION_COMPLETED')).toEqual('Quarterly data report reviewed');
 
     expect(pipe.transform(undefined)).toEqual('Approved Application');
   });

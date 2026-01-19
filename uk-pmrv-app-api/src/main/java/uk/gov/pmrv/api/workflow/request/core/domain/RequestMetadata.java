@@ -23,6 +23,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestM
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRRequestMetaData;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIRequestMetadata;
@@ -52,6 +53,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQ
                 @DiscriminatorMapping(schema = AirRequestMetadata.class, value = "AIR"),
                 @DiscriminatorMapping(schema = InstallationInspectionRequestMetadata.class, value = "INSTALLATION_INSPECTION"),
                 @DiscriminatorMapping(schema = BDRRequestMetadata.class, value = "BDR"),
+                @DiscriminatorMapping(schema = BDRS2RequestMetadata.class, value = "BDRS2"),
                 @DiscriminatorMapping(schema = ALRRequestMetaData.class, value = "ALR"),
                 @DiscriminatorMapping(schema = HSETIRequestMetadata.class, value = "HSE_TI"),
                 @DiscriminatorMapping(schema = WasteQDRRequestMetaData.class, value = "WASTE_QDR"),
@@ -84,6 +86,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQ
         @JsonSubTypes.Type(value = AirRequestMetadata.class, name = "AIR"),
         @JsonSubTypes.Type(value = InstallationInspectionRequestMetadata.class, name = "INSTALLATION_INSPECTION"),
         @JsonSubTypes.Type(value = BDRRequestMetadata.class, name = "BDR"),
+        @JsonSubTypes.Type(value = BDRS2RequestMetadata.class, name = "BDRS2"),
         @JsonSubTypes.Type(value = ALRRequestMetaData.class, name = "ALR"),
         @JsonSubTypes.Type(value = HSETIRequestMetadata.class, name = "HSE_TI"),
         @JsonSubTypes.Type(value = WasteQDRRequestMetaData.class, name = "WASTE_QDR"),

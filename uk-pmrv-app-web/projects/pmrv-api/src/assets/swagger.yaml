@@ -2024,12 +2024,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  format: decimal
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  format: decimal
   /v1.0/regulator-users:
     post:
       tags:
@@ -3416,6 +3428,57 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
   /v1.0/aviation/accounts/reporting-status-history/{accountId}:
+    get:
+      tags:
+        - Aviation account reporting status
+      summary: >-
+        Get the reporting status history list for an account for all reporting
+        years
+      operationId: getAllReportingStatuses
+      parameters:
+        - name: accountId
+          in: path
+          description: The account id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: page
+          in: query
+          description: The page number starting from zero
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          description: The page size
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/AviationAccountReportingStatusListResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - Aviation account reporting status
@@ -3845,12 +3908,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/AviationReportableEmissionsDTO'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/AviationReportableEmissionsDTO'
   /v1.0/aviation-reporting-data/airports:
     post:
       tags:
@@ -4967,6 +5040,7 @@ paths:
                     - BDR_AMEND_WAIT_FOR_VERIFICATION
                     - BDR_APPLICATION_PEER_REVIEW
                     - BDR_WAIT_FOR_PEER_REVIEW
+                    - BDRS2_APPLICATION_SUBMIT
                     - PERMANENT_CESSATION_APPLICATION_SUBMIT
                     - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW
                     - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW
@@ -4984,6 +5058,10 @@ paths:
                     - ALR_APPLICATION_PEER_REVIEW
                     - ALR_WAIT_FOR_PEER_REVIEW
                     - WASTE_QDR_APPLICATION_SUBMIT
+                    - WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW
+                    - WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT
+                    - WASTE_QDR_WAIT_FOR_AMENDS
+                    - WASTE_QDR_APPLICATION_AMENDS_SUBMIT
                     - AVIATION_ACCOUNT_CLOSURE_SUBMIT
                     - AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT
                     - AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE
@@ -5167,10 +5245,10 @@ paths:
           required: true
           schema:
             type: string
+            default: NEWEST_FIRST
             enum:
               - NEWEST_FIRST
               - NEAREST_DUE_DATE
-            default: NEWEST_FIRST
         - name: requestType
           in: query
           required: false
@@ -5201,6 +5279,7 @@ paths:
               - INSTALLATION_AUDIT
               - HSE_TI
               - BDR
+              - BDRS2
               - PERMANENT_CESSATION
               - ALR
               - WASTE_QDR
@@ -5282,10 +5361,10 @@ paths:
           required: true
           schema:
             type: string
+            default: NEWEST_FIRST
             enum:
               - NEWEST_FIRST
               - NEAREST_DUE_DATE
-            default: NEWEST_FIRST
         - name: requestType
           in: query
           required: false
@@ -5316,6 +5395,7 @@ paths:
               - INSTALLATION_AUDIT
               - HSE_TI
               - BDR
+              - BDRS2
               - PERMANENT_CESSATION
               - ALR
               - WASTE_QDR
@@ -5389,10 +5469,10 @@ paths:
           required: true
           schema:
             type: string
+            default: NEWEST_FIRST
             enum:
               - NEWEST_FIRST
               - NEAREST_DUE_DATE
-            default: NEWEST_FIRST
         - name: requestType
           in: query
           required: false
@@ -5423,6 +5503,7 @@ paths:
               - INSTALLATION_AUDIT
               - HSE_TI
               - BDR
+              - BDRS2
               - PERMANENT_CESSATION
               - ALR
               - WASTE_QDR
@@ -6052,6 +6133,7 @@ paths:
               - BDR_AMEND_WAIT_FOR_VERIFICATION
               - BDR_APPLICATION_PEER_REVIEW
               - BDR_WAIT_FOR_PEER_REVIEW
+              - BDRS2_APPLICATION_SUBMIT
               - PERMANENT_CESSATION_APPLICATION_SUBMIT
               - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW
               - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW
@@ -6069,6 +6151,10 @@ paths:
               - ALR_APPLICATION_PEER_REVIEW
               - ALR_WAIT_FOR_PEER_REVIEW
               - WASTE_QDR_APPLICATION_SUBMIT
+              - WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW
+              - WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT
+              - WASTE_QDR_WAIT_FOR_AMENDS
+              - WASTE_QDR_APPLICATION_AMENDS_SUBMIT
               - AVIATION_ACCOUNT_CLOSURE_SUBMIT
               - AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT
               - AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE
@@ -6373,6 +6459,7 @@ paths:
                     - INSTALLATION_AUDIT
                     - HSE_TI
                     - BDR
+                    - BDRS2
                     - PERMANENT_CESSATION
                     - ALR
                     - WASTE_QDR
@@ -6431,18 +6518,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
   /v1.0/requests/available-workflows/permit/{accountId}:
     get:
       tags:
@@ -6472,18 +6574,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
   /v1.0/request-notes/{requestId}/files:
     get:
       tags:
@@ -7456,7 +7573,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstallationAccountPermitDTO'
+                $ref: '#/components/schemas/InstallationAccountDetailsDTO'
         '403':
           description: Forbidden
           content:
@@ -7896,6 +8013,147 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/bulk-download/workflows:
+    get:
+      tags:
+        - BulkDownload
+      summary: Retrieves the list of available workflow types for bulk download.
+      operationId: getAvailableWorkflows
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/bulk-download/workflows/{workflow}/periods:
+    get:
+      tags:
+        - BulkDownload
+      summary: >-
+        Retrieves the list of periods available for bulk download for a specific
+        workflow type.
+      operationId: getAvailablePeriods
+      parameters:
+        - name: workflow
+          in: path
+          description: The workflow name (e.g. ALR, WASTE_QDR)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/bulk-download/workflows/{workflow}/periods/{period}:
+    get:
+      tags:
+        - BulkDownload
+      summary: Downloads bulk export for the selected workflow and period
+      operationId: generateBulkDownloadExportToken
+      parameters:
+        - name: workflow
+          in: path
+          description: The workflow name (e.g. ALR, WASTE_QDR)
+          required: true
+          schema:
+            type: string
+        - name: period
+          in: path
+          description: The period (e.g. 2025, 2025 Q1)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileToken'
+  /v1.0/bulk-download/file/{token}:
+    get:
+      tags:
+        - BulkDownload
+      summary: Get the file attachment resource for the provided file attachment token
+      operationId: bulkDownloadExport
+      parameters:
+        - name: token
+          in: path
+          description: The file attachment token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/bulk-download/access:
+    get:
+      tags:
+        - BulkDownload
+      summary: Check if the regulator has access bulk download.
+      operationId: hasAccessBulkDownload
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
   /v1.0/aviation/registry/manual-push/{requestId}:
     get:
       tags:
@@ -8355,6 +8613,53 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/VerificationBodyNameInfoDTO'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/accounts/{accountId}/file-attachments:
+    get:
+      tags:
+        - AccountFileAttachment
+      summary: >-
+        Generate the token to get the file that belongs to the provided account
+        id
+      operationId: generateGetFileAccountFileAttachmentToken
+      parameters:
+        - name: accountId
+          in: path
+          description: The account id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: uuid
+          in: query
+          description: The attachment uuid
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileToken'
         '403':
           description: Forbidden
           content:
@@ -11391,8 +11696,8 @@ components:
           type: integer
           format: int32
         sectorGrowth:
-          type: number
-          format: double
+          type: string
+          format: decimal
         calculatedAnnualOffsetting:
           type: integer
           format: int32
@@ -13452,6 +13757,178 @@ components:
           BDR_DATA: '#/components/schemas/BDRBdrDataRegulatorReviewDecision'
           VERIFICATION_REPORT_DATA: >-
             #/components/schemas/BDRVerificationReportDataRegulatorReviewDecision
+    BDRS2:
+      required:
+        - bdrs2guardQuestions
+      type: object
+      properties:
+        bdrs2guardQuestions:
+          $ref: '#/components/schemas/BDRS2GuardQuestions'
+        bdrs2Files:
+          $ref: '#/components/schemas/BDRS2Files'
+        mmpFiles:
+          $ref: '#/components/schemas/BDRS2Files'
+    BDRS2ApplicationSaveRequestTaskActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            bdrs2:
+              $ref: '#/components/schemas/BDRS2'
+            bdrs2FileVersion:
+              type: integer
+              format: int32
+            bdrs2SectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+    BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            verificationSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+    BDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload:
+      required:
+        - changesRequired
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            changesRequired:
+              type: string
+    BDRS2ApplicationVerificationSaveRequestTaskActionPayload:
+      required:
+        - opinionStatement
+        - overallAssessment
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            opinionStatement:
+              $ref: '#/components/schemas/BDRS2VerificationOpinionStatement'
+            overallAssessment:
+              oneOf:
+                - $ref: >-
+                    #/components/schemas/BDRS2NotVerifiedOverallVerificationAssessment
+                - $ref: >-
+                    #/components/schemas/BDRS2VerifiedSatisfactoryOverallVerificationAssessment
+                - $ref: >-
+                    #/components/schemas/BDRS2VerifiedWithCommentsOverallVerificationAssessment
+            verificationSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+    BDRS2Files:
+      required:
+        - file
+      type: object
+      properties:
+        file:
+          type: string
+          format: uuid
+        supportingFiles:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+    BDRS2GuardQuestions:
+      required:
+        - continueApplicationForFreeAllocationType
+        - covidAdjustments
+        - inEiteSector
+      type: object
+      properties:
+        continueApplicationForFreeAllocationType:
+          type: string
+          enum:
+            - CONTINUE_AS_MAIN_SCHEME_PARTICIPANT
+            - CONTINUE_AS_HSE
+            - WITHDRAW
+        applicationWithdrawalReason:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        covidAdjustments:
+          type: boolean
+        inEiteSector:
+          type: boolean
+        requiresAdditionalSubInstallationSplitsForCbam:
+          type: boolean
+    BDRS2NotVerifiedOverallVerificationAssessment:
+      required:
+        - reasons
+        - type
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BDRS2OverallVerificationAssessment'
+        - type: object
+          properties:
+            reasons:
+              maxLength: 10000
+              minLength: 0
+              type: string
+    BDRS2OverallVerificationAssessment:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - VERIFIED_AS_SATISFACTORY
+            - VERIFIED_WITH_COMMENTS
+            - NOT_VERIFIED
+      discriminator:
+        propertyName: type
+        mapping:
+          VERIFIED_AS_SATISFACTORY: >-
+            #/components/schemas/BDRS2VerifiedSatisfactoryOverallVerificationAssessment
+          VERIFIED_WITH_COMMENTS: >-
+            #/components/schemas/BDRS2VerifiedWithCommentsOverallVerificationAssessment
+          NOT_VERIFIED: '#/components/schemas/BDRS2NotVerifiedOverallVerificationAssessment'
+    BDRS2VerificationOpinionStatement:
+      type: object
+      properties:
+        opinionStatementFiles:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+        notes:
+          type: string
+    BDRS2VerifiedSatisfactoryOverallVerificationAssessment:
+      required:
+        - type
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BDRS2OverallVerificationAssessment'
+    BDRS2VerifiedWithCommentsOverallVerificationAssessment:
+      required:
+        - reasons
+        - type
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BDRS2OverallVerificationAssessment'
+        - type: object
+          properties:
+            reasons:
+              maxLength: 10000
+              minLength: 0
+              type: string
     BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload:
       required:
         - decision
@@ -24319,6 +24796,10 @@ components:
             - BDR_REGULATOR_REVIEW_SAVE_PAYLOAD
             - BDR_REQUEST_PEER_REVIEW_PAYLOAD
             - BDR_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD
+            - BDRS2_APPLICATION_SAVE_PAYLOAD
+            - BDRS2_SUBMIT_TO_VERIFIER_PAYLOAD
+            - BDRS2_APPLICATION_SAVE_VERIFICATION_PAYLOAD
+            - BDRS2_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD
             - PERMANENT_CESSATION_SAVE_APPLICATION_PAYLOAD
             - PERMANENT_CESSATION_REQUEST_PEER_REVIEW_PAYLOAD
             - PERMANENT_CESSATION_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD
@@ -24347,6 +24828,10 @@ components:
             - HSE_TI_REQUEST_PEER_REVIEW_PAYLOAD
             - HSE_TI_PEER_REVIEW_DECISION_PAYLOAD
             - WASTE_QDR_APPLICATION_SAVE_PAYLOAD
+            - WASTE_QDR_SAVE_REVIEW_GROUP_DECISION_PAYLOAD
+            - WASTE_QDR_REGULATOR_REVIEW_SUBMIT_PAYLOAD
+            - WASTE_QDR_APPLICATION_AMENDS_SAVE_PAYLOAD
+            - WASTE_QDR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD
             - EMPTY_PAYLOAD
             - EMP_ISSUANCE_UKETS_SAVE_APPLICATION_PAYLOAD
             - EMP_ISSUANCE_UKETS_SAVE_APPLICATION_REVIEW_PAYLOAD
@@ -24689,6 +25174,10 @@ components:
             - BDR_REGULATOR_REVIEW_SUBMIT
             - BDR_REQUEST_PEER_REVIEW
             - BDR_SUBMIT_PEER_REVIEW_DECISION
+            - BDRS2_SAVE_APPLICATION
+            - BDRS2_UPLOAD_ATTACHMENT
+            - BDRS2_SUBMIT_TO_VERIFIER
+            - BDRS2_SUBMIT_TO_REGULATOR
             - PERMANENT_CESSATION_CANCEL_APPLICATION
             - PERMANENT_CESSATION_SAVE_APPLICATION
             - PERMANENT_CESSATION_UPLOAD
@@ -24720,6 +25209,13 @@ components:
             - ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
             - WASTE_QDR_SAVE_APPLICATION
             - WASTE_QDR_UPLOAD_ATTACHMENT
+            - WASTE_QDR_SUBMIT_TO_REGULATOR
+            - WASTE_QDR_SAVE_REVIEW_GROUP_DECISION
+            - WASTE_QDR_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT
+            - WASTE_QDR_REGULATOR_REVIEW_SUBMIT
+            - WASTE_QDR_REGULATOR_REVIEW_RETURN_FOR_AMENDS
+            - WASTE_QDR_APPLICATION_AMENDS_SAVE
+            - WASTE_QDR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
             - EMP_ISSUANCE_UKETS_SAVE_APPLICATION
             - EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION
             - EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT
@@ -24985,6 +25481,14 @@ components:
             - $ref: >-
                 #/components/schemas/BDRApplicationVerificationSaveRequestTaskActionPayload
             - $ref: >-
+                #/components/schemas/BDRS2ApplicationSaveRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/BDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/BDRS2ApplicationVerificationSaveRequestTaskActionPayload
+            - $ref: >-
                 #/components/schemas/BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload
             - $ref: '#/components/schemas/DoalSaveApplicationRequestTaskActionPayload'
             - $ref: '#/components/schemas/DoalSaveAuthorityResponseTaskActionPayload'
@@ -25197,7 +25701,13 @@ components:
             - $ref: >-
                 #/components/schemas/VirSubmitRespondToRegulatorCommentsRequestTaskActionPayload
             - $ref: >-
+                #/components/schemas/WasteQDRApplicationAmendsSaveRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/WasteQDRApplicationAmendsSubmitRequestTaskActionPayload
+            - $ref: >-
                 #/components/schemas/WasteQDRApplicationSaveRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/WasteQDRSaveReviewGroupDecisionRequestTaskActionPayload
             - $ref: >-
                 #/components/schemas/WithholdingOfAllowancesSaveApplicationRequestTaskActionPayload
             - $ref: >-
@@ -26527,6 +27037,34 @@ components:
           items:
             type: string
             format: uuid
+    WasteQDRApplicationAmendsSaveRequestTaskActionPayload:
+      required:
+        - qdr
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            qdr:
+              $ref: '#/components/schemas/WasteQDR'
+            wasteQDRSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+    WasteQDRApplicationAmendsSubmitRequestTaskActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            wasteQDRSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
     WasteQDRApplicationSaveRequestTaskActionPayload:
       type: object
       allOf:
@@ -26536,6 +27074,39 @@ components:
             qdr:
               $ref: '#/components/schemas/WasteQDR'
             wasteQDRSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+    WasteQDRRegulatorReviewDecisionDetails:
+      type: object
+      properties:
+        notes:
+          maxLength: 10000
+          minLength: 0
+          type: string
+    WasteQDRReviewDecision:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ACCEPTED
+            - OPERATOR_AMENDS_NEEDED
+        details:
+          $ref: '#/components/schemas/WasteQDRRegulatorReviewDecisionDetails'
+    WasteQDRSaveReviewGroupDecisionRequestTaskActionPayload:
+      required:
+        - reviewDecision
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            reviewDecision:
+              $ref: '#/components/schemas/WasteQDRReviewDecision'
+            regulatorReviewSectionsCompleted:
               type: object
               additionalProperties:
                 type: boolean
@@ -26927,6 +27498,10 @@ components:
             - BDR_REGULATOR_REVIEW_SUBMIT
             - BDR_REQUEST_PEER_REVIEW
             - BDR_SUBMIT_PEER_REVIEW_DECISION
+            - BDRS2_SAVE_APPLICATION
+            - BDRS2_UPLOAD_ATTACHMENT
+            - BDRS2_SUBMIT_TO_VERIFIER
+            - BDRS2_SUBMIT_TO_REGULATOR
             - PERMANENT_CESSATION_CANCEL_APPLICATION
             - PERMANENT_CESSATION_SAVE_APPLICATION
             - PERMANENT_CESSATION_UPLOAD
@@ -26958,6 +27533,13 @@ components:
             - ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
             - WASTE_QDR_SAVE_APPLICATION
             - WASTE_QDR_UPLOAD_ATTACHMENT
+            - WASTE_QDR_SUBMIT_TO_REGULATOR
+            - WASTE_QDR_SAVE_REVIEW_GROUP_DECISION
+            - WASTE_QDR_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT
+            - WASTE_QDR_REGULATOR_REVIEW_SUBMIT
+            - WASTE_QDR_REGULATOR_REVIEW_RETURN_FOR_AMENDS
+            - WASTE_QDR_APPLICATION_AMENDS_SAVE
+            - WASTE_QDR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
             - EMP_ISSUANCE_UKETS_SAVE_APPLICATION
             - EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION
             - EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT
@@ -27315,6 +27897,7 @@ components:
             - AIR
             - HSE_TI
             - BDR
+            - BDRS2
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
@@ -27390,6 +27973,7 @@ components:
               - INSTALLATION_AUDIT
               - HSE_TI
               - BDR
+              - BDRS2
               - PERMANENT_CESSATION
               - ALR
               - WASTE_QDR
@@ -27487,6 +28071,7 @@ components:
             - INSTALLATION_AUDIT
             - HSE_TI
             - BDR
+            - BDRS2
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
@@ -27722,6 +28307,17 @@ components:
                 - VERIFIED_AS_SATISFACTORY
                 - VERIFIED_WITH_COMMENTS
                 - NOT_VERIFIED
+    BDRS2RequestMetadata:
+      required:
+        - year
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestMetadata'
+        - type: object
+          properties:
+            year:
+              type: integer
+              format: int16
     DoalRequestMetadata:
       required:
         - year
@@ -27955,6 +28551,7 @@ components:
                 - INSTALLATION_AUDIT
                 - HSE_TI
                 - BDR
+                - BDRS2
                 - PERMANENT_CESSATION
                 - ALR
                 - WASTE_QDR
@@ -28007,6 +28604,7 @@ components:
             - INSTALLATION_AUDIT
             - HSE_TI
             - BDR
+            - BDRS2
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
@@ -28057,6 +28655,7 @@ components:
             - $ref: '#/components/schemas/AviationDreRequestMetadata'
             - $ref: '#/components/schemas/AviationVirRequestMetadata'
             - $ref: '#/components/schemas/BDRRequestMetadata'
+            - $ref: '#/components/schemas/BDRS2RequestMetadata'
             - $ref: '#/components/schemas/DoalRequestMetadata'
             - $ref: '#/components/schemas/DreRequestMetadata'
             - $ref: '#/components/schemas/EmpBatchReissueRequestMetadata'
@@ -28102,6 +28701,7 @@ components:
             - INSTALLATION_INSPECTION
             - HSE_TI
             - BDR
+            - BDRS2
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
@@ -28132,6 +28732,7 @@ components:
           AIR: '#/components/schemas/AirRequestMetadata'
           INSTALLATION_INSPECTION: '#/components/schemas/InstallationInspectionRequestMetadata'
           BDR: '#/components/schemas/BDRRequestMetadata'
+          BDRS2: '#/components/schemas/BDRS2RequestMetadata'
           ALR: '#/components/schemas/ALRRequestMetaData'
           HSE_TI: '#/components/schemas/HSETIRequestMetadata'
           WASTE_QDR: '#/components/schemas/WasteQDRRequestMetaData'
@@ -28831,6 +29432,7 @@ components:
       required:
         - reason
         - status
+        - year
       type: object
       properties:
         status:
@@ -28839,6 +29441,9 @@ components:
             - REQUIRED_TO_REPORT
             - EXEMPT_COMMERCIAL
             - EXEMPT_NON_COMMERCIAL
+        year:
+          type: integer
+          format: int16
         reason:
           maxLength: 2000
           minLength: 0
@@ -29373,11 +29978,11 @@ components:
     MiReportSearchResult:
       type: object
       properties:
-        miReportType:
-          type: string
         id:
           type: integer
           format: int32
+        miReportType:
+          type: string
     ItemDTO:
       type: object
       properties:
@@ -29413,6 +30018,7 @@ components:
             - INSTALLATION_AUDIT
             - HSE_TI
             - BDR
+            - BDRS2
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
@@ -29622,6 +30228,7 @@ components:
             - BDR_AMEND_WAIT_FOR_VERIFICATION
             - BDR_APPLICATION_PEER_REVIEW
             - BDR_WAIT_FOR_PEER_REVIEW
+            - BDRS2_APPLICATION_SUBMIT
             - PERMANENT_CESSATION_APPLICATION_SUBMIT
             - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW
             - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW
@@ -29639,6 +30246,10 @@ components:
             - ALR_APPLICATION_PEER_REVIEW
             - ALR_WAIT_FOR_PEER_REVIEW
             - WASTE_QDR_APPLICATION_SUBMIT
+            - WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW
+            - WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT
+            - WASTE_QDR_WAIT_FOR_AMENDS
+            - WASTE_QDR_APPLICATION_AMENDS_SUBMIT
             - AVIATION_ACCOUNT_CLOSURE_SUBMIT
             - AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT
             - AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE
@@ -31554,6 +32165,25 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestTaskPayload'
+    BDRS2ApplicationSubmitRequestTaskPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskPayload'
+        - type: object
+          properties:
+            bdrs2:
+              $ref: '#/components/schemas/BDRS2'
+            bdrs2SectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            bdrs2Attachments:
+              type: object
+              additionalProperties:
+                type: string
+            bdrs2FileVersion:
+              type: integer
+              format: int32
     BDRVerificationReport:
       required:
         - opinionStatement
@@ -32111,6 +32741,8 @@ components:
                 type: string
             empVariationDetailsAmendCompleted:
               type: boolean
+            hideEmpApplicationTimeframe:
+              type: boolean
     EmpVariationUkEtsApplicationReviewRequestTaskPayload:
       type: object
       allOf:
@@ -32159,6 +32791,8 @@ components:
               type: object
               additionalProperties:
                 type: string
+            hideEmpApplicationTimeframe:
+              type: boolean
     EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload:
       type: object
       allOf:
@@ -32191,6 +32825,8 @@ components:
               type: object
               additionalProperties:
                 $ref: '#/components/schemas/EmpAcceptedVariationDecisionDetails'
+            hideEmpApplicationTimeframe:
+              type: boolean
     EmpVariationUkEtsApplicationSubmitRequestTaskPayload:
       type: object
       allOf:
@@ -32219,6 +32855,8 @@ components:
               type: object
               additionalProperties:
                 type: boolean
+            hideEmpApplicationTimeframe:
+              type: boolean
     HSETIApplicationAmendsSubmitRequestTaskPayload:
       type: object
       allOf:
@@ -34141,6 +34779,7 @@ components:
             - INSTALLATION_AUDIT
             - HSE_TI
             - BDR
+            - BDRS2
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
@@ -34185,6 +34824,7 @@ components:
             - $ref: '#/components/schemas/AviationDreRequestMetadata'
             - $ref: '#/components/schemas/AviationVirRequestMetadata'
             - $ref: '#/components/schemas/BDRRequestMetadata'
+            - $ref: '#/components/schemas/BDRS2RequestMetadata'
             - $ref: '#/components/schemas/DoalRequestMetadata'
             - $ref: '#/components/schemas/DreRequestMetadata'
             - $ref: '#/components/schemas/EmpBatchReissueRequestMetadata'
@@ -34395,6 +35035,7 @@ components:
             - BDR_AMEND_WAIT_FOR_VERIFICATION
             - BDR_APPLICATION_PEER_REVIEW
             - BDR_WAIT_FOR_PEER_REVIEW
+            - BDRS2_APPLICATION_SUBMIT
             - PERMANENT_CESSATION_APPLICATION_SUBMIT
             - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW
             - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW
@@ -34412,6 +35053,10 @@ components:
             - ALR_APPLICATION_PEER_REVIEW
             - ALR_WAIT_FOR_PEER_REVIEW
             - WASTE_QDR_APPLICATION_SUBMIT
+            - WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW
+            - WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT
+            - WASTE_QDR_WAIT_FOR_AMENDS
+            - WASTE_QDR_APPLICATION_AMENDS_SUBMIT
             - AVIATION_ACCOUNT_CLOSURE_SUBMIT
             - AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT
             - AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE
@@ -34603,6 +35248,7 @@ components:
                 #/components/schemas/BDRApplicationVerificationSubmitRequestTaskPayload
             - $ref: >-
                 #/components/schemas/BDRApplicationWaitForRegulatorReviewRequestTaskPayload
+            - $ref: '#/components/schemas/BDRS2ApplicationSubmitRequestTaskPayload'
             - $ref: '#/components/schemas/DoalApplicationSubmitRequestTaskPayload'
             - $ref: '#/components/schemas/DoalAuthorityResponseRequestTaskPayload'
             - $ref: '#/components/schemas/DreApplicationSubmitRequestTaskPayload'
@@ -34733,6 +35379,10 @@ components:
                 #/components/schemas/VirApplicationRespondToRegulatorCommentsRequestTaskPayload
             - $ref: '#/components/schemas/VirApplicationReviewRequestTaskPayload'
             - $ref: '#/components/schemas/VirApplicationSubmitRequestTaskPayload'
+            - $ref: >-
+                #/components/schemas/WasteQDRApplicationAmendsSubmitRequestTaskPayload
+            - $ref: >-
+                #/components/schemas/WasteQDRApplicationRegulatorReviewSubmitRequestTaskPayload
             - $ref: '#/components/schemas/WasteQDRApplicationSubmitRequestTaskPayload'
             - $ref: >-
                 #/components/schemas/WithholdingOfAllowancesApplicationPeerReviewRequestTaskPayload
@@ -34996,6 +35646,10 @@ components:
               - BDR_REGULATOR_REVIEW_SUBMIT
               - BDR_REQUEST_PEER_REVIEW
               - BDR_SUBMIT_PEER_REVIEW_DECISION
+              - BDRS2_SAVE_APPLICATION
+              - BDRS2_UPLOAD_ATTACHMENT
+              - BDRS2_SUBMIT_TO_VERIFIER
+              - BDRS2_SUBMIT_TO_REGULATOR
               - PERMANENT_CESSATION_CANCEL_APPLICATION
               - PERMANENT_CESSATION_SAVE_APPLICATION
               - PERMANENT_CESSATION_UPLOAD
@@ -35027,6 +35681,13 @@ components:
               - ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
               - WASTE_QDR_SAVE_APPLICATION
               - WASTE_QDR_UPLOAD_ATTACHMENT
+              - WASTE_QDR_SUBMIT_TO_REGULATOR
+              - WASTE_QDR_SAVE_REVIEW_GROUP_DECISION
+              - WASTE_QDR_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT
+              - WASTE_QDR_REGULATOR_REVIEW_SUBMIT
+              - WASTE_QDR_REGULATOR_REVIEW_RETURN_FOR_AMENDS
+              - WASTE_QDR_APPLICATION_AMENDS_SAVE
+              - WASTE_QDR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
               - EMP_ISSUANCE_UKETS_SAVE_APPLICATION
               - EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION
               - EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT
@@ -35320,6 +35981,7 @@ components:
             - BDR_WAIT_FOR_AMENDS_PAYLOAD
             - BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD
             - BDR_APPLICATION_PEER_REVIEW_PAYLOAD
+            - BDRS2_APPLICATION_SUBMIT_PAYLOAD
             - PERMANENT_CESSATION_SUBMIT_PAYLOAD
             - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW_PAYLOAD
             - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_PAYLOAD
@@ -35334,6 +35996,9 @@ components:
             - ALR_WAIT_FOR_PEER_REVIEW_PAYLOAD
             - ALR_APPLICATION_PEER_REVIEW_PAYLOAD
             - WASTE_QDR_SUBMIT_PAYLOAD
+            - WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD
+            - WASTE_QDR_APPLICATION_AMENDS_SUBMIT_PAYLOAD
+            - WASTE_QDR_WAIT_FOR_AMENDS_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_REVIEW_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW_PAYLOAD
@@ -35573,6 +36238,7 @@ components:
             #/components/schemas/BDRApplicationRegulatorReviewSubmitRequestTaskPayload
           BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD: >-
             #/components/schemas/BDRApplicationRegulatorReviewSubmitRequestTaskPayload
+          BDRS2_APPLICATION_SUBMIT_PAYLOAD: '#/components/schemas/BDRS2ApplicationSubmitRequestTaskPayload'
           HSE_TI_APPLICATION_SUBMIT_PAYLOAD: '#/components/schemas/HSETIApplicationSubmitRequestTaskPayload'
           HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD: >-
             #/components/schemas/HSETIApplicationRegulatorReviewSubmitRequestTaskPayload
@@ -35607,6 +36273,12 @@ components:
           ALR_WAIT_FOR_PEER_REVIEW_PAYLOAD: >-
             #/components/schemas/ALRApplicationRegulatorReviewSubmitRequestTaskPayload
           WASTE_QDR_SUBMIT_PAYLOAD: '#/components/schemas/WasteQDRApplicationSubmitRequestTaskPayload'
+          WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD: >-
+            #/components/schemas/WasteQDRApplicationRegulatorReviewSubmitRequestTaskPayload
+          WASTE_QDR_APPLICATION_AMENDS_SUBMIT_PAYLOAD: >-
+            #/components/schemas/WasteQDRApplicationAmendsSubmitRequestTaskPayload
+          WASTE_QDR_WAIT_FOR_AMENDS_PAYLOAD: >-
+            #/components/schemas/WasteQDRApplicationRegulatorReviewSubmitRequestTaskPayload
           EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT_PAYLOAD: >-
             #/components/schemas/EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload
           EMP_ISSUANCE_UKETS_APPLICATION_REVIEW_PAYLOAD: >-
@@ -35911,6 +36583,60 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/VerifierComment'
+    WasteQDRApplicationAmendsSubmitRequestTaskPayload:
+      required:
+        - qdr
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskPayload'
+        - type: object
+          properties:
+            qdr:
+              $ref: '#/components/schemas/WasteQDR'
+            wasteQDRSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            wasteQDRAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            reviewDecision:
+              $ref: '#/components/schemas/WasteQDRReviewDecision'
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            regulatorReviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
+    WasteQDRApplicationRegulatorReviewSubmitRequestTaskPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskPayload'
+        - type: object
+          properties:
+            qdr:
+              $ref: '#/components/schemas/WasteQDR'
+            reviewDecision:
+              $ref: '#/components/schemas/WasteQDRReviewDecision'
+            wasteQDRSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            wasteQDRAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            regulatorReviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
     WasteQDRApplicationSubmitRequestTaskPayload:
       required:
         - qdr
@@ -36089,6 +36815,7 @@ components:
               - INSTALLATION_AUDIT
               - HSE_TI
               - BDR
+              - BDRS2
               - PERMANENT_CESSATION
               - ALR
               - WASTE_QDR
@@ -36376,6 +37103,10 @@ components:
             - HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED
             - HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED
             - HSE_TI_APPLICATION_PEER_REVIEW_REJECTED
+            - WASTE_QDR_APPLICATION_SUBMITTED
+            - WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS
+            - WASTE_QDR_APPLICATION_COMPLETED
+            - WASTE_QDR_APPLICATION_AMENDS_SUBMITTED
             - REQUEST_TERMINATED
             - VERIFICATION_STATEMENT_CANCELLED
             - EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED
@@ -36400,6 +37131,7 @@ components:
             - EMP_VARIATION_UKETS_APPLICATION_RETURNED_FOR_AMENDS
             - EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMITTED
             - EMP_VARIATION_UKETS_RECALLED_FROM_AMENDS
+            - EMP_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY
             - AVIATION_AER_UKETS_APPLICATION_SENT_TO_VERIFIER
             - AVIATION_AER_UKETS_APPLICATION_SUBMITTED
             - AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED
@@ -37586,6 +38318,19 @@ components:
                 - $ref: '#/components/schemas/LocationOffShoreDTO'
                 - $ref: '#/components/schemas/LocationOnShoreDTO'
                 - $ref: '#/components/schemas/LocationOnShoreStateDTO'
+    AviationUpdateOperatorDetails:
+      type: object
+      properties:
+        registryId:
+          type: integer
+          format: int32
+        firstYearOfReportingObligation:
+          type: integer
+          format: int32
+        emissionsPlanId:
+          type: string
+        operatorName:
+          type: string
     AviationVirApplicationRespondedToRegulatorCommentsRequestActionPayload:
       required:
         - operatorImprovementFollowUpResponse
@@ -38498,6 +39243,19 @@ components:
               type: object
               additionalProperties:
                 type: string
+    EmpVariationRegistryIntegrationRequestActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            operatorDetails:
+              $ref: '#/components/schemas/AviationUpdateOperatorDetails'
+            organisationDetails:
+              oneOf:
+                - $ref: '#/components/schemas/AviationIndividualCompanyDetails'
+                - $ref: '#/components/schemas/AviationLimitedCompanyDetails'
+                - $ref: '#/components/schemas/AviationPartnershipDetails'
     EmpVariationUkEtsApplicationAmendsSubmittedRequestActionPayload:
       required:
         - emissionsMonitoringPlan
@@ -38925,7 +39683,21 @@ components:
         - type: object
           properties:
             activePermit:
-              $ref: '#/components/schemas/RegistryIntegrationActivePermit'
+              $ref: >-
+                #/components/schemas/RegistryIntegrationAccountCreateActivePermit
+            organizationDetails:
+              oneOf:
+                - $ref: '#/components/schemas/BusinessOrganisationDetails'
+                - $ref: '#/components/schemas/IndividualOrganisationDetails'
+    InstallationAccountUpdatedRegistryIntegrationRequestActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            activePermit:
+              $ref: >-
+                #/components/schemas/RegistryIntegrationAccountUpdateActivePermit
             organizationDetails:
               oneOf:
                 - $ref: '#/components/schemas/BusinessOrganisationDetails'
@@ -40419,22 +41191,107 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             officialDocument:
               $ref: '#/components/schemas/FileInfoDTO'
-    RegistryIntegrationActivePermit:
+    RegistryIntegrationAccountCreateActivePermit:
       type: object
       properties:
-        emitterId:
-          type: string
         permitId:
           type: string
         installationName:
           type: string
         operatorName:
           type: string
+        firstYearOfReportingObligation:
+          type: integer
+          format: int32
+        regulatedActivity:
+          type: array
+          items:
+            type: string
+            enum:
+              - WASTE
+              - COMBUSTION
+              - UPSTREAM_GHG_REMOVAL
+              - MINERAL_OIL_REFINING
+              - COKE_PRODUCTION
+              - ORE_ROASTING_OR_SINTERING
+              - PIG_IRON_STEEL_PRODUCTION
+              - FERROUS_METALS_PRODUCTION
+              - NON_FERROUS_METALS_PRODUCTION
+              - PRIMARY_ALUMINIUM_PRODUCTION
+              - SECONDARY_ALUMINIUM_PRODUCTION
+              - CEMENT_CLINKER_PRODUCTION
+              - LIME_OR_CALCINATION_OF_DOLOMITE_OR_MAGNESITE
+              - CERAMICS_MANUFACTURING
+              - GYPSUM_OR_PLASTERBOARD_PRODUCTION
+              - GLASS_MANUFACTURING
+              - MINERAL_WOOL_MANUFACTURING
+              - PULP_PRODUCTION
+              - PAPER_OR_CARDBOARD_PRODUCTION
+              - CARBON_BLACK_PRODUCTION
+              - BULK_ORGANIC_CHEMICAL_PRODUCTION
+              - GLYOXAL_GLYOXYLIC_ACID_PRODUCTION
+              - NITRIC_ACID_PRODUCTION
+              - ADIPIC_ACID_PRODUCTION
+              - AMMONIA_PRODUCTION
+              - SODA_ASH_AND_SODIUM_BICARBONATE_PRODUCTION
+              - HYDROGEN_AND_SYNTHESIS_GAS_PRODUCTION
+              - CAPTURE_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE
+              - TRANSPORT_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE
+              - STORAGE_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE
+        emitterId:
+          type: string
         regulator:
           type: string
-        regulatedActivitiesStartDate:
+    RegistryIntegrationAccountUpdateActivePermit:
+      type: object
+      properties:
+        permitId:
           type: string
-          format: date
+        installationName:
+          type: string
+        operatorName:
+          type: string
+        firstYearOfReportingObligation:
+          type: integer
+          format: int32
+        regulatedActivity:
+          type: array
+          items:
+            type: string
+            enum:
+              - WASTE
+              - COMBUSTION
+              - UPSTREAM_GHG_REMOVAL
+              - MINERAL_OIL_REFINING
+              - COKE_PRODUCTION
+              - ORE_ROASTING_OR_SINTERING
+              - PIG_IRON_STEEL_PRODUCTION
+              - FERROUS_METALS_PRODUCTION
+              - NON_FERROUS_METALS_PRODUCTION
+              - PRIMARY_ALUMINIUM_PRODUCTION
+              - SECONDARY_ALUMINIUM_PRODUCTION
+              - CEMENT_CLINKER_PRODUCTION
+              - LIME_OR_CALCINATION_OF_DOLOMITE_OR_MAGNESITE
+              - CERAMICS_MANUFACTURING
+              - GYPSUM_OR_PLASTERBOARD_PRODUCTION
+              - GLASS_MANUFACTURING
+              - MINERAL_WOOL_MANUFACTURING
+              - PULP_PRODUCTION
+              - PAPER_OR_CARDBOARD_PRODUCTION
+              - CARBON_BLACK_PRODUCTION
+              - BULK_ORGANIC_CHEMICAL_PRODUCTION
+              - GLYOXAL_GLYOXYLIC_ACID_PRODUCTION
+              - NITRIC_ACID_PRODUCTION
+              - ADIPIC_ACID_PRODUCTION
+              - AMMONIA_PRODUCTION
+              - SODA_ASH_AND_SODIUM_BICARBONATE_PRODUCTION
+              - HYDROGEN_AND_SYNTHESIS_GAS_PRODUCTION
+              - CAPTURE_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE
+              - TRANSPORT_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE
+              - STORAGE_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE
+        registryId:
+          type: integer
+          format: int32
     RegistryIntegrationOrganizationDetails:
       type: object
       properties:
@@ -40707,6 +41564,10 @@ components:
             - HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED
             - HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED
             - HSE_TI_APPLICATION_PEER_REVIEW_REJECTED
+            - WASTE_QDR_APPLICATION_SUBMITTED
+            - WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS
+            - WASTE_QDR_APPLICATION_COMPLETED
+            - WASTE_QDR_APPLICATION_AMENDS_SUBMITTED
             - REQUEST_TERMINATED
             - VERIFICATION_STATEMENT_CANCELLED
             - EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED
@@ -40731,6 +41592,7 @@ components:
             - EMP_VARIATION_UKETS_APPLICATION_RETURNED_FOR_AMENDS
             - EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMITTED
             - EMP_VARIATION_UKETS_RECALLED_FROM_AMENDS
+            - EMP_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY
             - AVIATION_AER_UKETS_APPLICATION_SENT_TO_VERIFIER
             - AVIATION_AER_UKETS_APPLICATION_SUBMITTED
             - AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED
@@ -40936,6 +41798,8 @@ components:
             - $ref: >-
                 #/components/schemas/EmpVariationCorsiaApplicationSubmittedRequestActionPayload
             - $ref: >-
+                #/components/schemas/EmpVariationRegistryIntegrationRequestActionPayload
+            - $ref: >-
                 #/components/schemas/EmpVariationUkEtsApplicationAmendsSubmittedRequestActionPayload
             - $ref: >-
                 #/components/schemas/EmpVariationUkEtsApplicationApprovedRequestActionPayload
@@ -40962,6 +41826,8 @@ components:
                 #/components/schemas/InstallationAccountOpeningDecisionRequestActionPayload
             - $ref: >-
                 #/components/schemas/InstallationAccountRegistryIntegrationRequestActionPayload
+            - $ref: >-
+                #/components/schemas/InstallationAccountUpdatedRegistryIntegrationRequestActionPayload
             - $ref: >-
                 #/components/schemas/InstallationInspectionApplicationSubmittedRequestActionPayload
             - $ref: >-
@@ -41065,6 +41931,14 @@ components:
             - $ref: '#/components/schemas/VirApplicationReviewedRequestActionPayload'
             - $ref: '#/components/schemas/VirApplicationSubmittedRequestActionPayload'
             - $ref: >-
+                #/components/schemas/WasteQDRApplicationAmendsSubmittedRequestActionPayload
+            - $ref: >-
+                #/components/schemas/WasteQDRApplicationCompletedRequestActionPayload
+            - $ref: >-
+                #/components/schemas/WasteQDRApplicationSubmittedRequestActionPayload
+            - $ref: >-
+                #/components/schemas/WasteQDRRegulatorReviewReturnedForAmendsRequestActionPayload
+            - $ref: >-
                 #/components/schemas/WithholdingOfAllowancesApplicationClosedRequestActionPayload
             - $ref: >-
                 #/components/schemas/WithholdingOfAllowancesApplicationSubmittedRequestActionPayload
@@ -41099,6 +41973,7 @@ components:
             - INSTALLATION_AUDIT
             - HSE_TI
             - BDR
+            - BDRS2
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
@@ -41277,6 +42152,10 @@ components:
             - ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS_PAYLOAD
             - ALR_APPLICATION_REJECTED_PAYLOAD
             - ALR_APPLICATION_MARK_NOT_REQUIRED_PAYLOAD
+            - WASTE_QDR_APPLICATION_SUBMITTED_PAYLOAD
+            - WASTE_QDR_APPLICATION_COMPLETED_PAYLOAD
+            - WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD
+            - WASTE_QDR_APPLICATION_AMENDS_SUBMITTED_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_APPROVED_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD
@@ -41294,6 +42173,7 @@ components:
               EMP_VARIATION_UKETS_PEER_REVIEW_DECISION_REGULATOR_LED_SUBMITTED_PAYLOAD
             - EMP_VARIATION_UKETS_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD
             - EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD
+            - EMP_VARIATION_UKETS_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD
             - EMP_BATCH_REISSUE_SUBMITTED_PAYLOAD
             - EMP_BATCH_REISSUE_COMPLETED_PAYLOAD
             - EMP_REISSUE_COMPLETED_PAYLOAD
@@ -41410,7 +42290,7 @@ components:
           PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD: >-
             #/components/schemas/PermitVariationApplicationRegulatorLedApprovedRequestActionPayload
           PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD: >-
-            #/components/schemas/InstallationAccountRegistryIntegrationRequestActionPayload
+            #/components/schemas/InstallationAccountUpdatedRegistryIntegrationRequestActionPayload
           PERMIT_TRANSFER_A_APPLICATION_SUBMITTED_PAYLOAD: >-
             #/components/schemas/PermitTransferAApplicationSubmittedRequestActionPayload
           PERMIT_TRANSFER_A_APPLICATION_GRANTED_PAYLOAD: >-
@@ -41552,6 +42432,14 @@ components:
           HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD: >-
             #/components/schemas/HSETIRegulatorReviewReturnedForAmendsRequestActionPayload
           HSE_TI_COMPLETED_PAYLOAD: '#/components/schemas/HSETICompletedRequestActionPayload'
+          WASTE_QDR_APPLICATION_SUBMITTED_PAYLOAD: >-
+            #/components/schemas/WasteQDRApplicationSubmittedRequestActionPayload
+          WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD: >-
+            #/components/schemas/WasteQDRRegulatorReviewReturnedForAmendsRequestActionPayload
+          WASTE_QDR_APPLICATION_COMPLETED_PAYLOAD: >-
+            #/components/schemas/WasteQDRApplicationCompletedRequestActionPayload
+          WASTE_QDR_APPLICATION_AMENDS_SUBMITTED_PAYLOAD: >-
+            #/components/schemas/WasteQDRApplicationAmendsSubmittedRequestActionPayload
           EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED_PAYLOAD: >-
             #/components/schemas/EmpIssuanceUkEtsApplicationSubmittedRequestActionPayload
           EMP_ISSUANCE_UKETS_APPLICATION_APPROVED_PAYLOAD: >-
@@ -41581,6 +42469,8 @@ components:
             #/components/schemas/EmpVariationUkEtsApplicationAmendsSubmittedRequestActionPayload
           EMP_ISSUANCE_UKETS_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD: >-
             #/components/schemas/EmpIssuanceRegistryIntegrationRequestActionPayload
+          EMP_VARIATION_UKETS_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD: >-
+            #/components/schemas/EmpVariationRegistryIntegrationRequestActionPayload
           EMP_BATCH_REISSUE_SUBMITTED_PAYLOAD: '#/components/schemas/BatchReissueSubmittedRequestActionPayload'
           EMP_BATCH_REISSUE_COMPLETED_PAYLOAD: '#/components/schemas/BatchReissueCompletedRequestActionPayload'
           EMP_REISSUE_COMPLETED_PAYLOAD: '#/components/schemas/ReissueCompletedRequestActionPayload'
@@ -41846,6 +42736,77 @@ components:
               type: object
               additionalProperties:
                 $ref: '#/components/schemas/OperatorImprovementResponse'
+    WasteQDRApplicationAmendsSubmittedRequestActionPayload:
+      required:
+        - installationOperatorDetails
+        - qdr
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            qdr:
+              $ref: '#/components/schemas/WasteQDR'
+            installationOperatorDetails:
+              $ref: '#/components/schemas/InstallationOperatorDetails'
+            wasteQDRAttachments:
+              type: object
+              additionalProperties:
+                type: string
+    WasteQDRApplicationCompletedRequestActionPayload:
+      required:
+        - installationOperatorDetails
+        - qdr
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            qdr:
+              $ref: '#/components/schemas/WasteQDR'
+            installationOperatorDetails:
+              $ref: '#/components/schemas/InstallationOperatorDetails'
+            wasteQDRAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            reviewDecision:
+              $ref: '#/components/schemas/WasteQDRReviewDecision'
+            regulatorReviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
+    WasteQDRApplicationSubmittedRequestActionPayload:
+      required:
+        - installationOperatorDetails
+        - qdr
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            qdr:
+              $ref: '#/components/schemas/WasteQDR'
+            installationOperatorDetails:
+              $ref: '#/components/schemas/InstallationOperatorDetails'
+            wasteQDRAttachments:
+              type: object
+              additionalProperties:
+                type: string
+    WasteQDRRegulatorReviewReturnedForAmendsRequestActionPayload:
+      required:
+        - reviewDecision
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            reviewDecision:
+              $ref: '#/components/schemas/WasteQDRReviewDecision'
+            regulatorReviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
     WithholdingOfAllowancesApplicationClosedRequestActionPayload:
       required:
         - reason
@@ -42291,6 +43252,13 @@ components:
             - Z
         faStatus:
           type: boolean
+    InstallationAccountDetailsDTO:
+      type: object
+      properties:
+        accountPermitDto:
+          $ref: '#/components/schemas/InstallationAccountPermitDTO'
+        latestAlrFile:
+          $ref: '#/components/schemas/FileInfoDTO'
     InstallationAccountPermitDTO:
       type: object
       properties:
@@ -42476,6 +43444,36 @@ components:
             - NEW
             - LIVE
             - CLOSED
+    AviationAccountReportingStatusDTO:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+            - REQUIRED_TO_REPORT
+            - EXEMPT_COMMERCIAL
+            - EXEMPT_NON_COMMERCIAL
+        year:
+          type: integer
+          format: int16
+        lastUpdate:
+          type: string
+          format: date-time
+        isReported:
+          type: boolean
+    AviationAccountReportingStatusListResponse:
+      type: object
+      properties:
+        reportingStatusList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AviationAccountReportingStatusDTO'
+        total:
+          type: integer
+          format: int64
     AviationAccountReportingStatusHistoryDTO:
       type: object
       properties:
@@ -42487,6 +43485,9 @@ components:
             - EXEMPT_NON_COMMERCIAL
         reason:
           type: string
+        year:
+          type: integer
+          format: int16
         submitterName:
           type: string
         submissionDate:
@@ -42590,14 +43591,6 @@ components:
             - LIVE
             - CLOSED
         crcoCode:
-          type: string
-        reportingStatus:
-          type: string
-          enum:
-            - REQUIRED_TO_REPORT
-            - EXEMPT_COMMERCIAL
-            - EXEMPT_NON_COMMERCIAL
-        reportingStatusReason:
           type: string
         closureReason:
           type: string

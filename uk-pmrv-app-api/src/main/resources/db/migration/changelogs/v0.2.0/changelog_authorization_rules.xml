@@ -19250,4 +19250,1073 @@
             </sql>
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_create_rule_aviation_account_update_registry_integration_timeline_regulator_access" author="mitzelose@unisystems.gr">
+        <sql>
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'EMP_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY', 'requestActionViewHandler', 'REGULATOR');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'EMP_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type= 'REGULATOR'
+              and r.scope is null;
+
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule
+                where rule_id in (
+                select r.id
+                from au_rule r
+                where r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'EMP_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope is null);
+
+                delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'EMP_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY'
+                and handler = 'requestActionViewHandler'
+                and role_type = 'REGULATOR'
+                and scope is null;
+
+
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_waste_qdr_wait_for_regulator_review_authorization_rules_1" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW', 'requestTaskAccessHandler', 'OPERATOR', 'REQUEST_TASK_VIEW');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW', 'requestTaskAccessHandler', 'OPERATOR', 'REQUEST_TASK_EXECUTE');
+
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('assignTask', 'releaseTask', 'getTaskItemInfoById', 'getCandidateAssigneesByTaskId')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_VIEW';
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW',
+                        'REQUEST_TASK_VIEW',
+                        'PERM_WASTE_QDR_APPLICATION_SUBMIT_VIEW_TASK',
+                        'OPERATOR');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW',
+                        'REQUEST_TASK_EXECUTE',
+                        'PERM_WASTE_QDR_APPLICATION_SUBMIT_EXECUTE_TASK',
+                        'OPERATOR');
+        </sql>
+        <rollback>
+
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW'
+            and scope = 'REQUEST_TASK_EXECUTE'
+            and permission = 'PERM_WASTE_QDR_APPLICATION_SUBMIT_EXECUTE_TASK'
+            and role_type = 'OPERATOR';
+
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW'
+            and scope = 'REQUEST_TASK_VIEW'
+            and permission = 'PERM_WASTE_QDR_APPLICATION_SUBMIT_VIEW_TASK'
+            and role_type = 'OPERATOR';
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('assignTask', 'releaseTask', 'getTaskItemInfoById', 'getCandidateAssigneesByTaskId')
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope = 'REQUEST_TASK_VIEW';
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW'
+            and handler = 'requestTaskAccessHandler'
+            and role_type = 'OPERATOR'
+            and scope = 'REQUEST_TASK_EXECUTE';
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW'
+            and handler = 'requestTaskAccessHandler'
+            and role_type = 'OPERATOR'
+            and scope = 'REQUEST_TASK_VIEW';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_waste_qdr_application_submited_request_action_authorization_rules_1" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION', 'WASTE_QDR_APPLICATION_SUBMITTED','requestActionViewHandler', 'OPERATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION', 'WASTE_QDR_APPLICATION_SUBMITTED','requestActionViewHandler', 'REGULATOR');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken', 'generateRequestActionGetFileDocumentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'WASTE_QDR_APPLICATION_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope IS NULL;
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken', 'generateRequestActionGetFileDocumentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'WASTE_QDR_APPLICATION_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope IS NULL;
+        </sql>
+        <rollback>
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken', 'generateRequestActionGetFileDocumentToken')
+            and r.resource_type = 'REQUEST_ACTION'
+            and r.resource_sub_type = 'WASTE_QDR_APPLICATION_SUBMITTED'
+            and r.handler = 'requestActionViewHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope IS NULL;
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken', 'generateRequestActionGetFileDocumentToken')
+            and r.resource_type = 'REQUEST_ACTION'
+            and r.resource_sub_type = 'WASTE_QDR_APPLICATION_SUBMITTED'
+            and r.handler = 'requestActionViewHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope IS NULL;
+
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_SUBMITTED'
+            and handler = 'requestActionViewHandler'
+            and role_type = 'OPERATOR'
+            and scope IS NULL;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_SUBMITTED'
+            and handler = 'requestActionViewHandler'
+            and role_type = 'REGULATOR'
+            and scope IS NULL;
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_waste_qdr_application_regulator_review_submit_authorization_rules_1" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT', 'requestTaskAccessHandler', 'REGULATOR', 'REQUEST_TASK_VIEW');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT',
+                        'REQUEST_TASK_VIEW',
+                        'PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK',
+                        'REGULATOR');
+
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('assignTask', 'releaseTask', 'getTaskItemInfoById', 'generateRequestTaskGetFileAttachmentToken', 'getCandidateAssigneesByTaskId', 'getCandidateAssigneesByTaskType')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope = 'REQUEST_TASK_VIEW';
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT', 'requestTaskAccessHandler', 'REGULATOR', 'REQUEST_TASK_EXECUTE');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT',
+                        'REQUEST_TASK_EXECUTE',
+                        'PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK',
+                        'REGULATOR');
+
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('processRequestTaskAction', 'uploadRequestTaskAttachment')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('assignTask', 'releaseTask', 'getTaskItemInfoById', 'generateRequestTaskGetFileAttachmentToken', 'getCandidateAssigneesByTaskId', 'getCandidateAssigneesByTaskType')
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_VIEW';
+
+
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+            and scope = 'REQUEST_TASK_VIEW'
+            and permission = 'PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK'
+            and role_type = 'REGULATOR';
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+            and handler = 'requestTaskAccessHandler'
+            and role_type = 'REGULATOR'
+            and scope = 'REQUEST_TASK_VIEW';
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('processRequestTaskAction', 'uploadRequestTaskAttachment')
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+
+
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+            and scope = 'REQUEST_TASK_EXECUTE'
+            and permission = 'PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK'
+            and role_type = 'REGULATOR';
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+            and handler = 'requestTaskAccessHandler'
+            and role_type = 'REGULATOR'
+            and scope = 'REQUEST_TASK_EXECUTE';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_waste_qdr_application_completed_authorization_rules_1" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION', 'WASTE_QDR_APPLICATION_COMPLETED','requestActionViewHandler', 'OPERATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION', 'WASTE_QDR_APPLICATION_COMPLETED','requestActionViewHandler', 'REGULATOR');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'WASTE_QDR_APPLICATION_COMPLETED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope IS NULL;
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'WASTE_QDR_APPLICATION_COMPLETED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope IS NULL;
+
+        </sql>
+        <rollback>
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+            and r.resource_type = 'REQUEST_ACTION'
+            and r.resource_sub_type = 'WASTE_QDR_APPLICATION_COMPLETED'
+            and r.handler = 'requestActionViewHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope IS NULL;
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+            and r.resource_type = 'REQUEST_ACTION'
+            and r.resource_sub_type = 'WASTE_QDR_APPLICATION_COMPLETED'
+            and r.handler = 'requestActionViewHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope IS NULL;
+
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_COMPLETED'
+            and handler = 'requestActionViewHandler'
+            and role_type = 'OPERATOR'
+            and scope IS NULL;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_COMPLETED'
+            and handler = 'requestActionViewHandler'
+            and role_type = 'REGULATOR'
+            and scope IS NULL;
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_waste_qdr_wait_for_amends_authorization_rules_1" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'WASTE_QDR_WAIT_FOR_AMENDS', 'requestTaskAccessHandler', 'REGULATOR', 'REQUEST_TASK_VIEW');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'WASTE_QDR_WAIT_FOR_AMENDS', 'requestTaskAccessHandler', 'REGULATOR', 'REQUEST_TASK_EXECUTE');
+
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('assignTask', 'releaseTask', 'getTaskItemInfoById', 'getCandidateAssigneesByTaskId')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'WASTE_QDR_WAIT_FOR_AMENDS'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope = 'REQUEST_TASK_VIEW';
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'WASTE_QDR_WAIT_FOR_AMENDS',
+                        'REQUEST_TASK_VIEW',
+                        'PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK',
+                        'REGULATOR');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'WASTE_QDR_WAIT_FOR_AMENDS',
+                        'REQUEST_TASK_EXECUTE',
+                        'PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK',
+                        'REGULATOR');
+        </sql>
+        <rollback>
+
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_WAIT_FOR_AMENDS'
+            and scope = 'REQUEST_TASK_EXECUTE'
+            and permission = 'PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK'
+            and role_type = 'REGULATOR';
+
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_WAIT_FOR_AMENDS'
+            and scope = 'REQUEST_TASK_VIEW'
+            and permission = 'PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK'
+            and role_type = 'REGULATOR';
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('assignTask', 'releaseTask', 'getTaskItemInfoById', 'getCandidateAssigneesByTaskId')
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'WASTE_QDR_WAIT_FOR_AMENDS'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_VIEW';
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_WAIT_FOR_AMENDS'
+            and handler = 'requestTaskAccessHandler'
+            and role_type = 'REGULATOR'
+            and scope = 'REQUEST_TASK_EXECUTE';
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_WAIT_FOR_AMENDS'
+            and handler = 'requestTaskAccessHandler'
+            and role_type = 'REGULATOR'
+            and scope = 'REQUEST_TASK_VIEW';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_waste_qdr_return_for_amends_authorization_rules_1" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION', 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS','requestActionViewHandler', 'OPERATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION', 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS','requestActionViewHandler', 'REGULATOR');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope IS NULL;
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope IS NULL;
+
+        </sql>
+        <rollback>
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+            and r.resource_type = 'REQUEST_ACTION'
+            and r.resource_sub_type = 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS'
+            and r.handler = 'requestActionViewHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope IS NULL;
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+            and r.resource_type = 'REQUEST_ACTION'
+            and r.resource_sub_type = 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS'
+            and r.handler = 'requestActionViewHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope IS NULL;
+
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+            and resource_sub_type = 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS'
+            and handler = 'requestActionViewHandler'
+            and role_type = 'OPERATOR'
+            and scope IS NULL;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+            and resource_sub_type = 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS'
+            and handler = 'requestActionViewHandler'
+            and role_type = 'REGULATOR'
+            and scope IS NULL;
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_waste_qdr_amends_submit_authorization_rules_1" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT', 'requestTaskAccessHandler', 'OPERATOR', 'REQUEST_TASK_VIEW');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT', 'requestTaskAccessHandler', 'OPERATOR', 'REQUEST_TASK_EXECUTE');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getTaskItemInfoById', 'getCandidateAssigneesByTaskId', 'assignTask','releaseTask', 'generateRequestTaskGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_VIEW';
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('processRequestTaskAction', 'uploadRequestTaskAttachment')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_EXECUTE';
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'WASTE_QDR_APPLICATION_AMENDS_SUBMIT',
+                        'REQUEST_TASK_VIEW',
+                        'PERM_WASTE_QDR_APPLICATION_AMENDS_SUBMIT_VIEW_TASK',
+                        'OPERATOR');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'WASTE_QDR_APPLICATION_AMENDS_SUBMIT',
+                        'REQUEST_TASK_EXECUTE',
+                        'PERM_WASTE_QDR_APPLICATION_AMENDS_SUBMIT_EXECUTE_TASK',
+                        'OPERATOR');
+        </sql>
+        <rollback>
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT'
+            and scope = 'REQUEST_TASK_VIEW'
+            and permission = 'PERM_WASTE_QDR_APPLICATION_AMENDS_SUBMIT_VIEW_TASK'
+            and role_type = 'OPERATOR';
+
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT'
+            and scope = 'REQUEST_TASK_EXECUTE'
+            and permission = 'PERM_WASTE_QDR_APPLICATION_AMENDS_SUBMIT_EXECUTE_TASK'
+            and role_type = 'OPERATOR';
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            and s.name in ('processRequestTaskAction', 'uploadRequestTaskAttachment')
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            and s.name in ('getTaskItemInfoById', 'getCandidateAssigneesByTaskId', 'assignTask', 'releaseTask', 'generateRequestTaskGetFileAttachmentToken')
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope = 'REQUEST_TASK_VIEW';
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT'
+            and handler = 'requestTaskAccessHandler'
+            and role_type = 'OPERATOR'
+            and scope = 'REQUEST_TASK_EXECUTE';
+
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT'
+            and handler = 'requestTaskAccessHandler'
+            and role_type = 'OPERATOR'
+            and scope = 'REQUEST_TASK_VIEW';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_waste_qdr_application_amends_submitted_request_action_authorization_rules_1" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION', 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED','requestActionViewHandler', 'OPERATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION', 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED','requestActionViewHandler', 'REGULATOR');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById','generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope IS NULL;
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById','generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope IS NULL;
+        </sql>
+        <rollback>
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getRequestActionById','generateRequestActionGetFileAttachmentToken')
+            and r.resource_type = 'REQUEST_ACTION'
+            and r.resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED'
+            and r.handler = 'requestActionViewHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope IS NULL;
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getRequestActionById','generateRequestActionGetFileAttachmentToken')
+            and r.resource_type = 'REQUEST_ACTION'
+            and r.resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED'
+            and r.handler = 'requestActionViewHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope IS NULL;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED'
+            and handler = 'requestActionViewHandler'
+            and role_type = 'OPERATOR'
+            and scope IS NULL;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+            and resource_sub_type = 'WASTE_QDR_APPLICATION_AMENDS_SUBMITTED'
+            and handler = 'requestActionViewHandler'
+            and role_type = 'REGULATOR'
+            and scope IS NULL;
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_CREATE_generateGetFileAccountFileAttachmentToken_AUTHORIZATION_SERVICE" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'generateGetFileAccountFileAttachmentToken');
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service
+                where name = 'generateGetFileAccountFileAttachmentToken';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_ASSOCIATE_generateGetFileAccountFileAttachmentToken_AUTHORIZATION_SERVICE_with_account_resource_type_rule" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'generateGetFileAccountFileAttachmentToken'
+              and aur.resource_type = 'ACCOUNT'
+              and aur.resource_sub_type is null
+              and aur.handler = 'accountAccessHandler'
+              and aur.role_type in ('REGULATOR', 'OPERATOR', 'VERIFIER')
+              and scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'generateGetFileAccountFileAttachmentToken')
+                and rule_id in (
+                select id
+                from au_rule
+                where resource_type = 'ACCOUNT'
+                and resource_sub_type is null
+                and handler = 'accountAccessHandler'
+                and aur.role_type in ('REGULATOR', 'OPERATOR', 'VERIFIER')
+                and scope is null
+                );
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_bdrs2_authorization_rules_1" author="vasileios.vitzilaios@trasys.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'BDRS2_APPLICATION_SUBMIT', 'requestTaskAccessHandler', 'OPERATOR', 'REQUEST_TASK_VIEW');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'BDRS2_APPLICATION_SUBMIT', 'requestTaskAccessHandler', 'OPERATOR', 'REQUEST_TASK_EXECUTE');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getTaskItemInfoById', 'getCandidateAssigneesByTaskId', 'assignTask','releaseTask', 'generateRequestTaskGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'BDRS2_APPLICATION_SUBMIT'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_VIEW';
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('processRequestTaskAction', 'uploadRequestTaskAttachment')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'BDRS2_APPLICATION_SUBMIT'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_EXECUTE';
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'BDRS2_APPLICATION_SUBMIT',
+                        'REQUEST_TASK_VIEW',
+                        'PERM_BDRS2_APPLICATION_SUBMIT_VIEW_TASK',
+                        'OPERATOR');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'BDRS2_APPLICATION_SUBMIT',
+                        'REQUEST_TASK_EXECUTE',
+                        'PERM_BDRS2_APPLICATION_SUBMIT_EXECUTE_TASK',
+                        'OPERATOR');
+        </sql>
+        <rollback>
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'BDRS2_APPLICATION_SUBMIT'
+            and scope = 'REQUEST_TASK_VIEW'
+            and permission = 'PERM_BDRS2_APPLICATION_SUBMIT_VIEW_TASK'
+            and role_type = 'OPERATOR';
+
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'BDRS2_APPLICATION_SUBMIT'
+            and scope = 'REQUEST_TASK_EXECUTE'
+            and permission = 'PERM_BDRS2_APPLICATION_SUBMIT_EXECUTE_TASK'
+            and role_type = 'OPERATOR';
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            and s.name in ('processRequestTaskAction', 'uploadRequestTaskAttachment')
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'BDRS2_APPLICATION_SUBMIT'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            and s.name in ('getTaskItemInfoById', 'getCandidateAssigneesByTaskId', 'assignTask', 'releaseTask', 'generateRequestTaskGetFileAttachmentToken')
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'BDRS2_APPLICATION_SUBMIT'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope = 'REQUEST_TASK_VIEW';
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'BDRS2_APPLICATION_SUBMIT'
+            and handler = 'requestTaskAccessHandler'
+            and role_type = 'OPERATOR'
+            and scope = 'REQUEST_TASK_EXECUTE';
+
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'BDRS2_APPLICATION_SUBMIT'
+            and handler = 'requestTaskAccessHandler'
+            and role_type = 'OPERATOR'
+            and scope = 'REQUEST_TASK_VIEW';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_alr_bulk_download_service_rules" author="vasileios.vitzilaios@trasys.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'CA', 'ALR',
+                    'caAccessHandler', 'REGULATOR', 'ALR_BULK_DOWNLOAD');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'CA',
+                        'ALR',
+                        'ALR_BULK_DOWNLOAD',
+                        'PERM_ALR_APPLICATION_BULK_DOWNLOAD',
+                        'REGULATOR');
+
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'generateBulkDownloadExportToken');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_rule aur
+                     cross join public.au_service aus
+            where aus.name in ('generateBulkDownloadExportToken')
+              and aur.resource_type = 'CA'
+              and aur.resource_sub_type = 'ALR'
+              and aur.handler = 'caAccessHandler'
+              and aur.scope = 'ALR_BULK_DOWNLOAD'
+              and aur.role_type = 'REGULATOR';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'generateBulkDownloadExportToken')
+                and rule_id in (select id
+                from au_rule
+                where resource_type = 'CA'
+                and resource_sub_type = 'ALR'
+                and handler = 'caAccessHandler'
+                and role_type = 'REGULATOR'
+                and scope = 'ALR_BULK_DOWNLOAD');
+
+                delete
+                from au_service
+                where name = 'generateBulkDownloadExportToken';
+
+                delete
+                from au_resource_scope_permission
+                where resource_type = 'CA'
+                and resource_sub_type = 'ALR'
+                and scope = 'ALR_BULK_DOWNLOAD'
+                and permission = 'PERM_ALR_APPLICATION_BULK_DOWNLOAD'
+                and role_type = 'REGULATOR';
+
+                delete
+                from au_rule
+                where resource_type = 'CA'
+                and resource_sub_type = 'ALR'
+                and handler = 'caAccessHandler'
+                and role_type = 'REGULATOR'
+                and scope = 'ALR_BULK_DOWNLOAD';
+            </sql>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_2_0_add_request_type_authorization_backup_tables" author="P35066">
+    	<sql>
+    		--crete backup tables for easy rollback
+			CREATE TABLE au_rule_backup AS
+			SELECT *
+			FROM au_rule;
+			
+			CREATE TABLE au_service_rule_backup AS
+			SELECT *
+			FROM au_service_rule;
+    	</sql>
+    	<rollback>	
+    	</rollback>
+    </changeSet>
+    
+    <changeSet id="0_2_0_add_request_type_authorization" author="P35066">
+    	<sql>
+    		with request_types(code) AS (
+			    SELECT unnest(ARRAY['INSTALLATION_ACCOUNT_OPENING', 'SYSTEM_MESSAGE_NOTIFICATION', 'PERMIT_ISSUANCE', 'PERMIT_SURRENDER', 
+			    'PERMIT_REVOCATION', 'PERMIT_TRANSFER_A', 'PERMIT_TRANSFER_B', 'PERMIT_VARIATION', 'PERMIT_NOTIFICATION', 
+			    'PERMIT_REISSUE', 'NON_COMPLIANCE', 'NER', 'DOAL', 'AER', 'VIR', 'AIR', 'DRE', 'WITHHOLDING_OF_ALLOWANCES', 'RETURN_OF_ALLOWANCES', 
+			    'INSTALLATION_ONSITE_INSPECTION', 'INSTALLATION_AUDIT', 'HSE_TI', 'BDR', 'BDRS2', 'PERMANENT_CESSATION', 'ALR', 'WASTE_QDR', 
+			    'AVIATION_ACCOUNT_CLOSURE', 'AVIATION_NON_COMPLIANCE', 'EMP_REISSUE', 'AVIATION_VIR', 
+			    'EMP_ISSUANCE_UKETS', 'EMP_VARIATION_UKETS', 'AVIATION_AER_UKETS', 'AVIATION_DRE_UKETS', 'EMP_ISSUANCE_CORSIA', 
+			    'EMP_VARIATION_CORSIA', 'AVIATION_AER_CORSIA', 'AVIATION_DOE_CORSIA', 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING', 
+			    'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING'])
+			),
+			rules(handler, role_type) as (
+		    select * from (
+		        values
+		            ('requestAccessHandler',        'REGULATOR'),
+		            ('requestAccessHandler',        'OPERATOR'),
+		            ('requestAccountBasedAccessHandler', 'VERIFIER')
+			    ) as r(handler, role_type)
+			)
+    		insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+			select nextval('au_rule_seq'), 'REQUEST', rt.code, r.handler, r.role_type, null
+			from request_types rt
+			cross join rules r;
+			
+			with request_types(code) AS (
+			    SELECT unnest(ARRAY['PERMIT_BATCH_REISSUE', 'EMP_BATCH_REISSUE'])
+			),
+			rules(handler, role_type) as (
+		    select * from (
+		        values
+		            ('requestAccessHandler',        'REGULATOR')
+			    ) as r(handler, role_type)
+			)
+    		insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+			select nextval('au_rule_seq'), 'REQUEST', rt.code, r.handler, r.role_type, null
+			from request_types rt
+			cross join rules r;
+
+			
+			INSERT INTO au_service_rule (rule_id, service_id)
+			SELECT r.id, s.id
+			FROM (
+			    select id 
+			from au_rule 
+			where resource_type = 'REQUEST'
+			  and resource_sub_type is not null
+			  and role_type = 'REGULATOR'
+			  and scope is null
+			) r
+			CROSS JOIN (
+			    select s.id
+			from au_rule r
+			join au_service_rule sr on sr.rule_id = r.id
+			join au_service s on s.id = sr.service_id
+			where r.resource_type = 'REQUEST'
+			  and r.resource_sub_type is null
+			  and r.role_type = 'REGULATOR'
+			  and r.scope is null
+			) s;
+			
+			INSERT INTO au_service_rule (rule_id, service_id)
+			SELECT r.id, s.id
+			FROM (
+			    select id 
+			from au_rule 
+			where resource_type = 'REQUEST'
+			  and resource_sub_type is not null
+			  and role_type = 'OPERATOR'
+			  and scope is null
+			) r
+			CROSS JOIN (
+			    select s.id
+			from au_rule r
+			join au_service_rule sr on sr.rule_id = r.id
+			join au_service s on s.id = sr.service_id
+			where r.resource_type = 'REQUEST'
+			  and r.resource_sub_type is null
+			  and r.role_type = 'OPERATOR'
+			  and r.scope is null
+			) s;
+			
+			INSERT INTO au_service_rule (rule_id, service_id)
+			SELECT r.id, s.id
+			FROM (
+			    select id 
+			from au_rule 
+			where resource_type = 'REQUEST'
+			  and resource_sub_type is not null
+			  and role_type = 'VERIFIER'
+			  and scope is null
+			) r
+			CROSS JOIN (
+			    select s.id
+			from au_rule r
+			join au_service_rule sr on sr.rule_id = r.id
+			join au_service s on s.id = sr.service_id
+			where r.resource_type = 'REQUEST'
+			  and r.resource_sub_type is null
+			  and r.role_type = 'VERIFIER'
+			  and r.scope is null
+			) s;
+			
+			--delete deprecated rules
+			delete
+			from au_service_rule
+			where rule_id in (
+			select id
+			from au_rule
+			where resource_type = 'REQUEST'
+			and resource_sub_type is null
+			and scope is null);
+			
+			delete from au_rule
+			where resource_type = 'REQUEST'
+			and resource_sub_type is null
+			and scope is null;
+    	</sql>
+    	<rollback>	
+    	</rollback>
+    </changeSet>
 </databaseChangeLog>

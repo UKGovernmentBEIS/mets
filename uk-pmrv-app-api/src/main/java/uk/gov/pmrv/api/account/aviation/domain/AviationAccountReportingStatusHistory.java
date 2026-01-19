@@ -19,11 +19,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Immutable;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 
 @Getter
 @Setter
@@ -31,6 +33,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity
+@Immutable
 @EntityListeners({AuditingEntityListener.class})
 @Table(name = "account_aviation_reporting_status_history")
 public class AviationAccountReportingStatusHistory {
@@ -42,9 +45,12 @@ public class AviationAccountReportingStatusHistory {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private AviationAccountReportingStatus status;
+    private AviationAccountReportingStatusType status;
 
     private String reason;
+
+    @NotNull
+    private Year year;
 
     @NotBlank
     private String submitterId;

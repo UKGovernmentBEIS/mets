@@ -152,6 +152,10 @@ public class BpmnProcessConstants {
     public static final String BDR_OUTCOME = "bdrOutcome";
     public static final String BDR_REGULATOR_REVIEW_OUTCOME = "bdrRegulatorReviewOutcome";
 
+    //BDRS2
+    public static final String BDRS2_EXPIRATION_DATE = RequestExpirationType.BDRS2.getCode() + _EXPIRATION_DATE;
+    public static final String BDRS2_OUTCOME = "bdrs2Outcome";
+
     //Permanent Cessation
     public static final String PERMANENT_CESSATION_SUBMIT_OUTCOME = "permanentCessationSubmitOutcome";
 
@@ -174,6 +178,9 @@ public class BpmnProcessConstants {
 
     //Waste QDR
     public static final String WASTE_QDR_EXPIRATION_DATE = RequestExpirationType.WASTEQDR.getCode() + _EXPIRATION_DATE;
+    public static final String WASTE_QDR_OUTCOME = "wasteQDROutcome";
+    public static final String WASTE_QDR_REGULATOR_REVIEW_OUTCOME = "wasteQdrReviewOutcome";
+
 
 
     // messaging

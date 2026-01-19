@@ -1779,6 +1779,18 @@ public enum RequestTaskType {
         }
     },
 
+    BDRS2_APPLICATION_SUBMIT(true, RequestType.BDRS2, RequestExpirationType.BDRS2) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.BDRS2_SAVE_APPLICATION,
+                    RequestTaskActionType.BDRS2_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.BDRS2_SUBMIT_TO_VERIFIER,
+                    RequestTaskActionType.BDRS2_SUBMIT_TO_REGULATOR
+            );
+        }
+    },
+
     /**
      * PERMANENT CESSATION
      */
@@ -1945,6 +1957,42 @@ public enum RequestTaskType {
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
                     RequestTaskActionType.WASTE_QDR_SAVE_APPLICATION,
+                    RequestTaskActionType.WASTE_QDR_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.WASTE_QDR_SUBMIT_TO_REGULATOR
+            );
+        }
+    },
+    WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW(true, RequestType.WASTE_QDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+    WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT(true, RequestType.WASTE_QDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.WASTE_QDR_SAVE_REVIEW_GROUP_DECISION,
+                    RequestTaskActionType.WASTE_QDR_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT,
+                    RequestTaskActionType.WASTE_QDR_REGULATOR_REVIEW_SUBMIT,
+                    RequestTaskActionType.WASTE_QDR_REGULATOR_REVIEW_RETURN_FOR_AMENDS
+            );
+        }
+    },
+
+    WASTE_QDR_WAIT_FOR_AMENDS(true, RequestType.WASTE_QDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+    WASTE_QDR_APPLICATION_AMENDS_SUBMIT(true, RequestType.WASTE_QDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.WASTE_QDR_APPLICATION_AMENDS_SAVE,
+                    RequestTaskActionType.WASTE_QDR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR,
                     RequestTaskActionType.WASTE_QDR_UPLOAD_ATTACHMENT
             );
         }
@@ -2272,7 +2320,8 @@ public enum RequestTaskType {
                 RequestTaskActionType.EMP_ISSUANCE_UKETS_RECALL_FROM_AMENDS,
                 RequestTaskActionType.RFI_SUBMIT,
                 RequestTaskActionType.RFI_UPLOAD_ATTACHMENT,
-                RequestTaskActionType.RDE_SUBMIT);
+                RequestTaskActionType.RDE_SUBMIT,
+                RequestTaskActionType.EMP_ISSUANCE_UKETS_MANUAL_ACCOUNT_OPENING_REGISTRY);
         }
     },
 

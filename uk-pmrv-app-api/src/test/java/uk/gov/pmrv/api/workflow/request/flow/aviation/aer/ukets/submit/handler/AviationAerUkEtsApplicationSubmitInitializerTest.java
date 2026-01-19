@@ -1,27 +1,13 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.submit.handler;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.time.Year;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerReportingObligationDetails;
@@ -39,6 +25,19 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.Aviation
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.common.domain.AviationAerUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.submit.domain.AviationAerUkEtsApplicationSubmitRequestTaskPayload;
+
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AviationAerUkEtsApplicationSubmitInitializerTest {
@@ -115,7 +114,7 @@ class AviationAerUkEtsApplicationSubmitInitializerTest {
 				.thenReturn(Optional.of(serviceContactDetails));
 		
 		AviationAccountInfoDTO accountInfoDTO = AviationAccountInfoDTO.builder()
-				.reportingStatus(AviationAccountReportingStatus.REQUIRED_TO_REPORT)
+				.reportingStatus(AviationAccountReportingStatusType.REQUIRED_TO_REPORT)
 				.crcoCode("latestCrcoCode")
 				.build();
 		when(aviationAccountQueryService.getAviationAccountInfoDTOById(accountId))
@@ -145,12 +144,12 @@ class AviationAerUkEtsApplicationSubmitInitializerTest {
         verify(accountContactQueryService, times(1)).getServiceContactDetails(accountId);
 
 		// Verify email set to false on exempt status
-		accountInfoDTO.setReportingStatus(AviationAccountReportingStatus.EXEMPT_COMMERCIAL);
+		accountInfoDTO.setReportingStatus(AviationAccountReportingStatusType.EXEMPT_COMMERCIAL);
 		expectedRequestTaskPayload.setSendEmailNotification(false);
 		requestTaskPayload = (AviationAerUkEtsApplicationSubmitRequestTaskPayload) cut.initializePayload(request);
 		assertEquals(expectedRequestTaskPayload, requestTaskPayload);
 
-		accountInfoDTO.setReportingStatus(AviationAccountReportingStatus.EXEMPT_NON_COMMERCIAL);
+		accountInfoDTO.setReportingStatus(AviationAccountReportingStatusType.EXEMPT_NON_COMMERCIAL);
 		requestTaskPayload = (AviationAerUkEtsApplicationSubmitRequestTaskPayload) cut.initializePayload(request);
 		assertEquals(expectedRequestTaskPayload, requestTaskPayload);
 

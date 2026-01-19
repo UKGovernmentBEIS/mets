@@ -24,7 +24,7 @@ export class FirstYearStatusGuard {
     return this.installationAccountViewService.getInstallationAccountById(accountId).pipe(
       map((account) => {
         return (
-          accountFirstYearStatuses((account?.account as InstallationAccountDTO)?.status) ||
+          accountFirstYearStatuses((account?.accountPermitDto?.account as InstallationAccountDTO)?.status) ||
           this.router.parseUrl(`/accounts/${accountId}`)
         );
       }),

@@ -17,16 +17,18 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
 import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
+import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountDetailsDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.permit.domain.dto.PermitDetailsDTO;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountHeaderInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountPermitDTO;
-import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountPermitQueryOrchestrator;
+import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountQueryOrchestrator;
 
 import java.util.Optional;
 
@@ -57,7 +59,7 @@ class InstallationAccountViewControllerTest {
     private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
-    private InstallationAccountPermitQueryOrchestrator orchestrator;
+    private InstallationAccountQueryOrchestrator orchestrator;
 
     private AuthorizationAspectUserResolver authorizationAspectUserResolver;
 
@@ -82,27 +84,29 @@ class InstallationAccountViewControllerTest {
     void getInstallationAccountById() throws Exception {
     	setupAppUser();
         final Long accountId = 1L;
-        final InstallationAccountPermitDTO installationAccountPermitDTO =
-        		InstallationAccountPermitDTO.builder()
-        		.account(InstallationAccountDTO.builder()
-        				.id(accountId)
-        				.build())
-        		.permit(PermitDetailsDTO.builder()
-        				.id("permitId")
-        				.build())
-                .build();
-        when(orchestrator.getAccountWithPermit(accountId)).thenReturn(installationAccountPermitDTO);
+        final InstallationAccountDetailsDTO installationAccountPermitDTO =
+                InstallationAccountDetailsDTO.builder().accountPermitDto(InstallationAccountPermitDTO.builder()
+                                .account(InstallationAccountDTO.builder()
+                                        .id(accountId)
+                                        .build())
+                                .permit(PermitDetailsDTO.builder()
+                                        .id("permitId")
+                                        .build())
+                                .build())
+                        .latestAlrFile(FileInfoDTO.builder().build())
+                        .build();
+        when(orchestrator.getAccountDetails(accountId)).thenReturn(installationAccountPermitDTO);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
                     .get(CONTROLLER_PATH + "/" + accountId)
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.account.id").value(accountId))
-            .andExpect(jsonPath("$.permit.id").value("permitId"));
+            .andExpect(jsonPath("$.accountPermitDto.account.id").value(accountId))
+            .andExpect(jsonPath("$.accountPermitDto.permit.id").value("permitId"));
 
         verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(orchestrator, times(1)).getAccountWithPermit(accountId);
+        verify(orchestrator, times(1)).getAccountDetails(accountId);
     }
 
     @Test
@@ -126,7 +130,7 @@ class InstallationAccountViewControllerTest {
     void getInstallationAccountById_account_not_found() throws Exception {
     	setupAppUser();
         final Long invalidAccountId = 1L;
-        when(orchestrator.getAccountWithPermit(invalidAccountId))
+        when(orchestrator.getAccountDetails(invalidAccountId))
             .thenThrow(new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
 
         mockMvc.perform(
@@ -135,7 +139,7 @@ class InstallationAccountViewControllerTest {
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
 
-        verify(orchestrator, times(1)).getAccountWithPermit(invalidAccountId);
+        verify(orchestrator, times(1)).getAccountDetails(invalidAccountId);
     }
 
     @Test

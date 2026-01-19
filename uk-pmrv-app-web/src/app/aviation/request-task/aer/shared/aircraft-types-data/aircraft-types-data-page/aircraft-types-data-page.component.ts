@@ -87,7 +87,7 @@ export class AircraftTypesDataPageComponent implements OnInit, OnDestroy {
     ],
     [
       csvRowValidator(
-        `Each row must have 6 comma separated values, labelled ‘aircraft type designator’, ‘sub type’, ‘registration number’, ‘owner or lessor name’, ‘start date’, ‘end date’`,
+        `The file must have 6 comma separated values, containing ‘aircraft type designator’, ‘sub type’, ‘registration number’, ‘owner or lessor name’ and at least one ‘start date’ and ‘end date’`,
         6,
       ),
     ],

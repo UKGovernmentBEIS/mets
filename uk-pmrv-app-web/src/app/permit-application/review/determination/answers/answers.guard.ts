@@ -28,7 +28,7 @@ export class AnswersGuard {
         return (
           (storeState.reviewSectionsCompleted?.[route.data.statusKey] &&
             this.router.parseUrl(wizardUrl.concat('/summary'))) ||
-          this.store.isDeterminationWizardComplete(result.account.emissionTradingScheme) ||
+          this.store.isDeterminationWizardComplete(result?.accountPermitDto?.account.emissionTradingScheme) ||
           this.router.parseUrl(`/${this.store.urlRequestType}/${route.paramMap.get('taskId')}/review/determination`)
         );
       }),

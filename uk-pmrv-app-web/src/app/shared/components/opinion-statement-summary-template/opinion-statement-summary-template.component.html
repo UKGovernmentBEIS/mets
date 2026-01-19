@@ -6,7 +6,9 @@
         [files]="opinionStatementFiles ? opinionStatementFiles : [opinionStatementFile]"></app-summary-download-files>
     </dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }" [hidden-text]="opinionStatementFilesText">
+        Change
+      </a>
     </dd>
   </div>
 
@@ -16,7 +18,7 @@
       <app-summary-download-files [files]="supportingFiles"></app-summary-download-files>
     </dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }" hidden-text="supporting files">Change</a>
     </dd>
   </div>
 
@@ -24,7 +26,7 @@
     <dt govukSummaryListRowKey>Notes</dt>
     <dd govukSummaryListRowValue class="pre-wrap">{{ notes }}</dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }" hidden-text="notes">Change</a>
     </dd>
   </div>
 </dl>

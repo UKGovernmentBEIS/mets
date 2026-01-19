@@ -61,7 +61,7 @@ class RegulatorRequestTaskAssignmentServiceTest {
 
         regulatorRequestTaskAssignmentService.assignTask(requestTask, userId);
 
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, userId);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, userId, RoleTypeConstants.REGULATOR);
         verifyNoMoreInteractions(requestTaskAssignmentService);
     }
 
@@ -97,7 +97,7 @@ class RegulatorRequestTaskAssignmentServiceTest {
 
         regulatorRequestTaskAssignmentService.assignTask(requestTask, userId);
 
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, userId);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, userId, RoleTypeConstants.REGULATOR);
     }
 
     @Test
@@ -109,14 +109,14 @@ class RegulatorRequestTaskAssignmentServiceTest {
             .type(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_REVIEW)
             .build();
 
-        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, userId);
+        doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, userId, RoleTypeConstants.REGULATOR);
 
         BusinessException businessException = assertThrows(BusinessException.class,
             () -> regulatorRequestTaskAssignmentService.assignTask(requestTask, userId));
 
         assertEquals(ErrorCode.ASSIGNMENT_NOT_ALLOWED, businessException.getErrorCode());
 
-        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, userId);
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, userId, RoleTypeConstants.REGULATOR);
         verifyNoMoreInteractions(requestTaskAssignmentService);
     }
 

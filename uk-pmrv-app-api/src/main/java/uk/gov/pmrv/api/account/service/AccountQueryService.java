@@ -127,7 +127,7 @@ public class AccountQueryService implements AccountAuthorityInfoProvider {
 	public Set<Long> findAccountIdsByVerificationBodyId(Long verificationBodyId) {
 		return new HashSet<>(accountRepository.findAllIdsByVerificationBody(verificationBodyId));
 	}
-    
+
     @Override
     public Set<CompetentAuthorityEnum> findCAByIdIn(Set<Long> accountIds){
     	return accountRepository.findCAByIdIn(accountIds);

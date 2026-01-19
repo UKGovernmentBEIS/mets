@@ -103,7 +103,7 @@ export class HseTiService extends TasksHelperService {
   userRoleType = toSignal(this.authStore.pipe(selectUserRoleType), { initialValue: null });
 
   installationAccount = toSignal(this.installationAccountId$, { initialValue: null });
-  installationName = computed(() => this.installationAccount()?.account.name ?? 'Unknown');
+  installationName = computed(() => this.installationAccount()?.accountPermitDto?.account.name ?? 'Unknown');
 
   postTaskSave(
     value: any,

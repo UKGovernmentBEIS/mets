@@ -7,7 +7,7 @@ import { InstallationAccountViewService } from 'pmrv-api';
 
 import { ActivatedRouteSnapshotStub, mockClass, MockType } from '../../testing';
 import { AccountGuard } from './account.guard';
-import { mockedAccountPermit } from './testing/mock-data';
+import { mockedAccountDetails, mockedAccountPermit } from './testing/mock-data';
 
 describe('AccountGuard', () => {
   let guard: AccountGuard;
@@ -15,7 +15,7 @@ describe('AccountGuard', () => {
 
   beforeEach(() => {
     accountViewService = mockClass(InstallationAccountViewService);
-    accountViewService.getInstallationAccountById.mockReturnValueOnce(of(mockedAccountPermit));
+    accountViewService.getInstallationAccountById.mockReturnValueOnce(of(mockedAccountDetails));
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],

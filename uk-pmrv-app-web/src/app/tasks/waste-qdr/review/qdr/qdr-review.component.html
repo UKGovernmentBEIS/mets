@@ -1,0 +1,15 @@
+<ng-container *ngIf="requestMetadata() as metadata">
+  <app-waste-qdr-task-common *ngIf="vm() as vm" returnLink="../" [breadcrumb]="true" heading="Quarterly data report">
+    <app-waste-qdr-summary-template
+      [reportProvided]="vm.reportProvided"
+      quartelyTitle="Will you provide a quarterly data report for {{ metadata.quarter | quarterName }} {{
+        metadata.year
+      }}?"
+      [qdrReport]="vm.qdrReport"
+      [notes]="vm.notes"
+      [reasonForUnprovided]="vm.reasonForUnprovided"
+      [supportingFiles]="vm.supportingFiles"></app-waste-qdr-summary-template>
+
+    <app-waste-qdr-review-group-decision (notification)="notification = $event"></app-waste-qdr-review-group-decision>
+  </app-waste-qdr-task-common>
+</ng-container>

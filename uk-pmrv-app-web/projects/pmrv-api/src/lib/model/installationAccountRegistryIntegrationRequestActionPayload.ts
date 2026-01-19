@@ -11,10 +11,10 @@
  */
 import { BusinessOrganisationDetails } from './businessOrganisationDetails';
 import { IndividualOrganisationDetails } from './individualOrganisationDetails';
-import { RegistryIntegrationActivePermit } from './registryIntegrationActivePermit';
+import { RegistryIntegrationAccountCreateActivePermit } from './registryIntegrationAccountCreateActivePermit';
 import { RequestActionPayload } from './requestActionPayload';
 
 export interface InstallationAccountRegistryIntegrationRequestActionPayload extends RequestActionPayload {
-  activePermit?: RegistryIntegrationActivePermit;
+  activePermit?: RegistryIntegrationAccountCreateActivePermit;
   organizationDetails?: BusinessOrganisationDetails | IndividualOrganisationDetails;
 }

@@ -43,6 +43,7 @@ import { BDRApplicationRegulatorReviewSubmitRequestTaskPayload } from './bDRAppl
 import { BDRApplicationSubmitRequestTaskPayload } from './bDRApplicationSubmitRequestTaskPayload';
 import { BDRApplicationVerificationSubmitRequestTaskPayload } from './bDRApplicationVerificationSubmitRequestTaskPayload';
 import { BDRApplicationWaitForRegulatorReviewRequestTaskPayload } from './bDRApplicationWaitForRegulatorReviewRequestTaskPayload';
+import { BDRS2ApplicationSubmitRequestTaskPayload } from './bDRS2ApplicationSubmitRequestTaskPayload';
 import { DoalApplicationSubmitRequestTaskPayload } from './doalApplicationSubmitRequestTaskPayload';
 import { DoalAuthorityResponseRequestTaskPayload } from './doalAuthorityResponseRequestTaskPayload';
 import { DreApplicationSubmitRequestTaskPayload } from './dreApplicationSubmitRequestTaskPayload';
@@ -117,6 +118,8 @@ import { SystemMessageNotificationRequestTaskPayload } from './systemMessageNoti
 import { VirApplicationRespondToRegulatorCommentsRequestTaskPayload } from './virApplicationRespondToRegulatorCommentsRequestTaskPayload';
 import { VirApplicationReviewRequestTaskPayload } from './virApplicationReviewRequestTaskPayload';
 import { VirApplicationSubmitRequestTaskPayload } from './virApplicationSubmitRequestTaskPayload';
+import { WasteQDRApplicationAmendsSubmitRequestTaskPayload } from './wasteQDRApplicationAmendsSubmitRequestTaskPayload';
+import { WasteQDRApplicationRegulatorReviewSubmitRequestTaskPayload } from './wasteQDRApplicationRegulatorReviewSubmitRequestTaskPayload';
 import { WasteQDRApplicationSubmitRequestTaskPayload } from './wasteQDRApplicationSubmitRequestTaskPayload';
 import { WithholdingOfAllowancesApplicationPeerReviewRequestTaskPayload } from './withholdingOfAllowancesApplicationPeerReviewRequestTaskPayload';
 import { WithholdingOfAllowancesApplicationSubmitRequestTaskPayload } from './withholdingOfAllowancesApplicationSubmitRequestTaskPayload';
@@ -305,6 +308,7 @@ export interface RequestTaskDTO {
     | 'BDR_AMEND_WAIT_FOR_VERIFICATION'
     | 'BDR_APPLICATION_PEER_REVIEW'
     | 'BDR_WAIT_FOR_PEER_REVIEW'
+    | 'BDRS2_APPLICATION_SUBMIT'
     | 'PERMANENT_CESSATION_APPLICATION_SUBMIT'
     | 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW'
     | 'PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW'
@@ -322,6 +326,10 @@ export interface RequestTaskDTO {
     | 'ALR_APPLICATION_PEER_REVIEW'
     | 'ALR_WAIT_FOR_PEER_REVIEW'
     | 'WASTE_QDR_APPLICATION_SUBMIT'
+    | 'WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW'
+    | 'WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+    | 'WASTE_QDR_WAIT_FOR_AMENDS'
+    | 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT'
     | 'AVIATION_ACCOUNT_CLOSURE_SUBMIT'
     | 'AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT'
     | 'AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE'
@@ -482,6 +490,7 @@ export interface RequestTaskDTO {
     | BDRApplicationSubmitRequestTaskPayload
     | BDRApplicationVerificationSubmitRequestTaskPayload
     | BDRApplicationWaitForRegulatorReviewRequestTaskPayload
+    | BDRS2ApplicationSubmitRequestTaskPayload
     | DoalApplicationSubmitRequestTaskPayload
     | DoalAuthorityResponseRequestTaskPayload
     | DreApplicationSubmitRequestTaskPayload
@@ -556,6 +565,8 @@ export interface RequestTaskDTO {
     | VirApplicationRespondToRegulatorCommentsRequestTaskPayload
     | VirApplicationReviewRequestTaskPayload
     | VirApplicationSubmitRequestTaskPayload
+    | WasteQDRApplicationAmendsSubmitRequestTaskPayload
+    | WasteQDRApplicationRegulatorReviewSubmitRequestTaskPayload
     | WasteQDRApplicationSubmitRequestTaskPayload
     | WithholdingOfAllowancesApplicationPeerReviewRequestTaskPayload
     | WithholdingOfAllowancesApplicationSubmitRequestTaskPayload

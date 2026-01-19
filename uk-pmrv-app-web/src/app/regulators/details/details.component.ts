@@ -190,6 +190,8 @@ export class DetailsComponent implements OnInit {
       MARK_NOT_REQUIRED_ALR: ['NONE'],
       SUBMIT_HSE_TI_REVIEW: ['NONE'],
       PEER_REVIEW_HSE_TI: ['NONE'],
+      SUBMIT_WASTE_QDR_REVIEW: ['NONE'],
+      BULK_DOWNLOAD_ALR: ['NONE'],
     }),
   });
 
@@ -519,6 +521,8 @@ export class DetailsComponent implements OnInit {
     },
     { permission: 'SUBMIT_HSE_TI_REVIEW', task: 'Review/Submit', type: 'HSE target increase' },
     { permission: 'PEER_REVIEW_HSE_TI', task: 'Peer review', type: 'HSE target increase' },
+    { permission: 'SUBMIT_WASTE_QDR_REVIEW', task: 'Review', type: 'Waste quarterly data report' },
+    { permission: 'BULK_DOWNLOAD_ALR', task: 'Download', type: 'ALR bulk download' },
   ];
 
   private readonly configFeatures$ = this.configStore.asObservable().pipe(map((state) => state.features));
@@ -542,8 +546,7 @@ export class DetailsComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$),
         tap((features) => {
-          const corsia3yearOffsettingEnabled = features.corsia3yearOffsettingEnabled;
-          const bdrEnabled = features.bdrEnabled;
+          const { corsia3yearOffsettingEnabled, bdrEnabled, wasteQdrEnabled } = features;
 
           if (!corsia3yearOffsettingEnabled) {
             this.filterTableRows([
@@ -554,6 +557,10 @@ export class DetailsComponent implements OnInit {
 
           if (!bdrEnabled) {
             this.filterTableRows(['SUBMIT_BDR_REVIEW', 'PEER_REVIEW_BDR']);
+          }
+
+          if (!wasteQdrEnabled) {
+            this.filterTableRows(['SUBMIT_WASTE_QDR_REVIEW']);
           }
         }),
       )

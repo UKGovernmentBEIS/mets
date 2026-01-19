@@ -19,6 +19,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandler;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.common.domain.RequestAviationAccountInfo;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.common.service.RequestAviationAccountQueryService;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.domain.EmpVariationUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.mapper.EmpVariationUkEtsMapper;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.submit.domain.EmpVariationUkEtsApplicationSubmitRequestTaskPayload;
 
@@ -40,12 +41,16 @@ public class EmpVariationUkEtsApplicationSubmitInitializer implements Initialize
 		
 		final EmissionsMonitoringPlanUkEts emp = empVariationUkEtsMapper.cloneEmissionsMonitoringPlanUkEts(
 				empContainer.getEmissionsMonitoringPlan(), accountInfo.getOperatorName(), accountInfo.getCrcoCode());
+
+		EmpVariationUkEtsRequestPayload empVariationUkEtsRequestPayload = (EmpVariationUkEtsRequestPayload) request.getPayload();
+		empVariationUkEtsRequestPayload.setHideEmpApplicationTimeframe(true);
 		
 		return EmpVariationUkEtsApplicationSubmitRequestTaskPayload.builder()
                 .payloadType(RequestTaskPayloadType.EMP_VARIATION_UKETS_APPLICATION_SUBMIT_PAYLOAD)
                 .emissionsMonitoringPlan(emp)
                 .serviceContactDetails(accountInfo.getServiceContactDetails())
                 .empAttachments(empContainer.getEmpAttachments())
+				.isHideEmpApplicationTimeframe(true)
                 .build();
 	}
 

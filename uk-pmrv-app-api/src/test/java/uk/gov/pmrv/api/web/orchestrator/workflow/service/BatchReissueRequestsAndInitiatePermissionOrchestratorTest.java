@@ -66,7 +66,7 @@ class BatchReissueRequestsAndInitiatePermissionOrchestratorTest {
 				.requestTypes(Set.of(RequestType.PERMIT_BATCH_REISSUE))
 				.paging(pagingRequestInfo).build();
     	
-    	when(requestQueryService.findRequestDetailsBySearchCriteria(requestSearchCriteria)).thenReturn(requestDetailsSearchResults);
+    	when(requestQueryService.findRequestDetailsBySearchCriteria(requestSearchCriteria, authUser)).thenReturn(requestDetailsSearchResults);
     	when(compAuthAuthorizationResourceService.hasUserScopeOnResourceSubType(authUser,
 				Scope.REQUEST_CREATE, RequestType.PERMIT_BATCH_REISSUE.name())).thenReturn(true);
     	
@@ -77,7 +77,7 @@ class BatchReissueRequestsAndInitiatePermissionOrchestratorTest {
 				.canInitiateBatchReissue(true)
 				.build());
     	
-    	verify(requestQueryService, times(1)).findRequestDetailsBySearchCriteria(requestSearchCriteria);
+    	verify(requestQueryService, times(1)).findRequestDetailsBySearchCriteria(requestSearchCriteria, authUser);
     	verify(compAuthAuthorizationResourceService, times(1)).hasUserScopeOnResourceSubType(authUser,
 				Scope.REQUEST_CREATE, RequestType.PERMIT_BATCH_REISSUE.name());
     	

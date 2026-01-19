@@ -15,14 +15,14 @@ import uk.gov.netz.api.authorization.core.domain.Permission;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
-import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusHistory;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountIdAndNameDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountSearchResults;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountSearchResultsInfoDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.aviation.transform.AviationAccountMapper;
@@ -30,7 +30,6 @@ import uk.gov.pmrv.api.account.domain.dto.AccountSearchCriteria;
 import uk.gov.pmrv.api.account.service.VerifierAccountAccessByAccountTypeService;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -133,8 +132,6 @@ class AviationAccountQueryServiceTest {
         verify(aviationAccountRepository, times(1))
                 .existsByCrcoCodeAndCompetentAuthorityAndEmissionTradingSchemeAndIdNot(code, competentAuthority, emissionTradingScheme, accountId);
     }
-
-
 
 
     @Test
@@ -330,11 +327,6 @@ class AviationAccountQueryServiceTest {
             .emissionTradingScheme(EmissionTradingScheme.UK_ETS_AVIATION)
             .name("name")
             .status(AviationAccountStatus.CLOSED)
-            .reportingStatusHistoryList(List.of(AviationAccountReportingStatusHistory
-                    .builder()
-                    .status(AviationAccountReportingStatus.EXEMPT_COMMERCIAL)
-                    .reason("reason")
-                    .build()))
             .crcoCode(crcoCode)
             .closureReason(closureReason)
             .closedByName(closedByName)
@@ -491,7 +483,7 @@ class AviationAccountQueryServiceTest {
     	CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
     	Set<AviationAccountStatus> statuses = Set.of(AviationAccountStatus.LIVE);
     	Set<EmissionTradingScheme> emissionTradingScheme = Set.of(EmissionTradingScheme.UK_ETS_AVIATION);
-    	Set<AviationAccountReportingStatus> reportingStatuses = Set.of(AviationAccountReportingStatus.REQUIRED_TO_REPORT);
+    	Set<AviationAccountReportingStatusType> reportingStatuses = Set.of(AviationAccountReportingStatusType.REQUIRED_TO_REPORT);
     	
     	Set<AviationAccountIdAndNameDTO> dtos = Set.of(
     			new AviationAccountIdAndNameDTO() {
@@ -531,7 +523,6 @@ class AviationAccountQueryServiceTest {
             .emitterId(emitterId)
             .status(AviationAccountStatus.NEW)
             .crcoCode(crcoCode)
-            .reportingStatusHistoryList(List.of(AviationAccountReportingStatusHistory.builder().status(AviationAccountReportingStatus.EXEMPT_COMMERCIAL).reason(reportingStatusReason).build()))
             .build();
 
         AviationAccountDTO aviationAccountDTO = AviationAccountDTO.builder()
@@ -541,7 +532,6 @@ class AviationAccountQueryServiceTest {
             .name(accountName)
             .status(AviationAccountStatus.NEW)
             .crcoCode(crcoCode)
-            .reportingStatus(AviationAccountReportingStatus.EXEMPT_COMMERCIAL)
             .build();
 
         AviationAccountDTO aviationAccountDTOForRegulator = AviationAccountDTO.builder()
@@ -551,8 +541,6 @@ class AviationAccountQueryServiceTest {
             .name(accountName)
             .status(AviationAccountStatus.NEW)
             .crcoCode(crcoCode)
-            .reportingStatus(AviationAccountReportingStatus.EXEMPT_COMMERCIAL)
-            .reportingStatusReason(reportingStatusReason)
             .build();
 
         return Stream.of(

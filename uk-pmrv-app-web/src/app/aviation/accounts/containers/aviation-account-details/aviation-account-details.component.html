@@ -60,6 +60,7 @@
       "></app-aviation-account-summary-info>
   </div>
   <app-account-reporting-status
-    [userRoleType]="userRoleType$ | async"
-    [accountInfo]="accountInfo$ | async"></app-account-reporting-status>
+    [editable]="
+      (userRoleType$ | async) === 'REGULATOR' && (accountInfo$ | async).status !== 'CLOSED'
+    "></app-account-reporting-status>
 </ng-container>

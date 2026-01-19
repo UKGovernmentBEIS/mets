@@ -24,7 +24,8 @@
             <a
               govukLink
               [routerLink]="[isSummaryPage ? '../../mmp-methods/physical-parts-list/remove' : 'remove', row.itemId]"
-              [state]="{ changing: true }">
+              [state]="{ changing: true }"
+              hidden-text="physical part">
               Remove
             </a>
           }
@@ -34,7 +35,8 @@
             <a
               govukLink
               [routerLink]="[isSummaryPage ? '../../mmp-methods/physical-parts-list' : './', row.itemId]"
-              [state]="{ changing: true }">
+              [state]="{ changing: true }"
+              hidden-text="physical part">
               Change
             </a>
           }

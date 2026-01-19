@@ -3,6 +3,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.submit
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EmpVariationUkEtsSaveApplicationRequestTaskActionPayload
 		extends EmpVariationUkEtsSaveApplicationRegulatorLedAbstractRequestTaskActionPayload {
 

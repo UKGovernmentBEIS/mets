@@ -11,6 +11,7 @@ import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.integration.model.account.AccountUpdatingEvent;
 import uk.gov.netz.integration.model.account.UpdateAccountDetailsMessage;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.pmrv.api.integration.registry.accountupdated.installation.request.InstallationAccountUpdatedRegistryProducer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
