@@ -96,6 +96,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRRegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRVerificationReturnedToOperatorRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountUpdatedRegistryIntegrationRequestActionPayload;
@@ -313,6 +314,8 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = BDRApplicationAmendsSubmittedRequestActionPayload.class, value = "BDR_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = BDRApplicationCompletedRequestActionPayload.class, value = "BDR_APPLICATION_COMPLETED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "BDR_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+
+                @DiscriminatorMapping(schema = BDRApplicationSubmittedRequestActionPayload.class, value = "BDRS2_APPLICATION_SUBMITTED_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = ALRApplicationSubmittedRequestActionPayload.class, value = "ALR_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = ALRVerificationReturnedToOperatorRequestActionPayload.class, value = "ALR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD"),
@@ -556,6 +559,8 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = BDRApplicationAmendsSubmittedRequestActionPayload.class, name = "BDR_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = BDRApplicationCompletedRequestActionPayload.class, name = "BDR_APPLICATION_COMPLETED_PAYLOAD"),
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "BDR_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+
+        @JsonSubTypes.Type(value = BDRS2ApplicationSubmittedRequestActionPayload.class, name = "BDRS2_APPLICATION_SUBMITTED_PAYLOAD"),
 
         @JsonSubTypes.Type(value = ALRApplicationSubmittedRequestActionPayload.class, name = "ALR_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = ALRVerificationReturnedToOperatorRequestActionPayload.class, name = "ALR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD"),

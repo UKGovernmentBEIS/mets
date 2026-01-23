@@ -29,18 +29,20 @@ public class AccountContactEventListener {
     @Transactional
     public void handleAccountContactRegistryEvent(AccountContactRegistryEvent event) {
 
-        Account account = accountRepository.findById(event.getAccountId()).orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
+        event.getAccountsIds().forEach(accountId -> {
+            Account account = accountRepository.findById(accountId).orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
 
-        if(AccountType.INSTALLATION.equals(account.getAccountType())) {
-            if(EmissionTradingScheme.UK_ETS_INSTALLATIONS.equals(account.getEmissionTradingScheme())) {
-                installationAccountContactNotifyRegistryService.notifyRegistry(account);
+            if(AccountType.INSTALLATION.equals(account.getAccountType())) {
+                if(EmissionTradingScheme.UK_ETS_INSTALLATIONS.equals(account.getEmissionTradingScheme())) {
+                    installationAccountContactNotifyRegistryService.notifyRegistry(account);
+                }
             }
-        }
-        else if(AccountType.AVIATION.equals(account.getAccountType())) {
-            if(EmissionTradingScheme.UK_ETS_AVIATION.equals(account.getEmissionTradingScheme())) {
-                aviationAccountContactNotifyRegistryService.notifyRegistry(account);
+            else if(AccountType.AVIATION.equals(account.getAccountType())) {
+                if(EmissionTradingScheme.UK_ETS_AVIATION.equals(account.getEmissionTradingScheme())) {
+                    aviationAccountContactNotifyRegistryService.notifyRegistry(account);
+                }
             }
-        }
+        });
 
     }
 

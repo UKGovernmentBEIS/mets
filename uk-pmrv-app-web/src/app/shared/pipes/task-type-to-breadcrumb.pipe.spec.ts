@@ -414,6 +414,10 @@ describe('TaskTypeToBreadcrumbPipe', () => {
     expect(pipe.transform('BDR_APPLICATION_PEER_REVIEW')).toEqual('Peer review baseline data report');
     expect(pipe.transform('BDR_WAIT_FOR_PEER_REVIEW')).toEqual('Peer review baseline data report');
 
+    expect(pipe.transform('BDRS2_APPLICATION_SUBMIT')).toEqual('Complete stage 2 baseline data report');
+    expect(pipe.transform('BDRS2_WAIT_FOR_VERIFICATION')).toEqual('Stage 2 baseline data report sent to verifier');
+    expect(pipe.transform('BDRS2_WAIT_FOR_REGULATOR_REVIEW')).toEqual('Stage 2 baseline data report sent to regulator');
+
     expect(pipe.transform('PERMANENT_CESSATION_APPLICATION_SUBMIT')).toEqual('Complete permanent cessation');
     expect(pipe.transform('PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW')).toEqual(
       'Permanent cessation sent to peer reviewer',

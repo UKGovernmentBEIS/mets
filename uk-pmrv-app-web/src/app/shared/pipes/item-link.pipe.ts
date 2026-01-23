@@ -652,6 +652,8 @@ export class ItemLinkPipe implements PipeTransform {
       case 'BDRS2': {
         switch (value?.taskType) {
           case 'BDRS2_APPLICATION_SUBMIT':
+          case 'BDRS2_WAIT_FOR_VERIFICATION':
+          case 'BDRS2_WAIT_FOR_REGULATOR_REVIEW':
             return [routerLooks + 'tasks', value.taskId, 'bdrs2', 'submit'];
           default:
             return ['.'];

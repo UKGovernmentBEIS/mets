@@ -9,7 +9,7 @@ import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 import { BDRRequestMetadata, RequestTaskDTO } from 'pmrv-api';
 
 import { BdrS2TaskSharedModule } from '../shared';
-import { bdrS2ExpectedTaskTypes, submitTitle } from './submit';
+import { bdrS2ExpectedTaskTypes, submitTitle, waitTasks, warningText } from './submit';
 
 interface ViewModel {
   expectedTaskType: RequestTaskDTO['type'];
@@ -17,6 +17,8 @@ interface ViewModel {
   notification: boolean;
   daysRemaining: number;
   sectionsCompleted: boolean;
+  isWaitTask: boolean;
+  warningText: string;
 }
 
 @Component({
@@ -43,6 +45,8 @@ export class SubmitComponent {
       notification: this.router.getCurrentNavigation()?.extras.state?.notification,
       daysRemaining: this.daysRemaining(),
       sectionsCompleted: submitWizardComplete(payload),
+      isWaitTask: waitTasks.includes(requestTaskType),
+      warningText: warningText[requestTaskType],
     };
   });
 

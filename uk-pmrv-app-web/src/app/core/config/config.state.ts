@@ -7,6 +7,7 @@ export const FEATURES = [
   'bdrEnabled',
   'wastePermitEnabled',
   'wasteQdrEnabled',
+  'bdrs2Enabled',
 ] as const;
 export type FeatureName = (typeof FEATURES)[number];
 export type FeaturesConfig = { [key in FeatureName]?: boolean };

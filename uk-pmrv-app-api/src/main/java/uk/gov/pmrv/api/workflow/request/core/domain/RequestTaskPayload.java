@@ -68,6 +68,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationWaitForRegulatorReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationWaitForRegulatorReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalAuthorityResponseRequestTaskPayload;
@@ -271,6 +272,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = BDRS2ApplicationSubmitRequestTaskPayload.class, value = "BDRS2_APPLICATION_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = BDRS2ApplicationWaitForRegulatorReviewRequestTaskPayload.class, value = "BDRS2_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = HSETIApplicationSubmitRequestTaskPayload.class, value = "HSE_TI_APPLICATION_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
@@ -507,6 +509,8 @@ import java.util.UUID;
     @JsonSubTypes.Type(value = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
     @JsonSubTypes.Type(value = BDRS2ApplicationSubmitRequestTaskPayload.class, name = "BDRS2_APPLICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRS2ApplicationWaitForRegulatorReviewRequestTaskPayload.class, name = "BDRS2_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD"),
+
 
     @JsonSubTypes.Type(value = HSETIApplicationSubmitRequestTaskPayload.class, name = "HSE_TI_APPLICATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),

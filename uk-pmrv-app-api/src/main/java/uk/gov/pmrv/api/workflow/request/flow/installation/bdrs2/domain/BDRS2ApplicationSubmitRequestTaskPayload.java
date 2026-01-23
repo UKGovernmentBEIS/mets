@@ -23,6 +23,8 @@ public class BDRS2ApplicationSubmitRequestTaskPayload extends RequestTaskPayload
 
     private BDRS2 bdrs2;
 
+    private boolean verificationPerformed;
+
     @Builder.Default
     private Map<String, Boolean> bdrs2SectionsCompleted = new HashMap<>();
 

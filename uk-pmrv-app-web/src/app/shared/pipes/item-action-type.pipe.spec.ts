@@ -119,7 +119,9 @@ describe('ItemActionTypePipe', () => {
       'Verification statement submitted to operator',
     );
     expect(pipe.transform('AER_APPLICATION_RE_INITIATED')).toEqual('Emissions report returned for amends');
-    expect(pipe.transform('AER_APPLICATION_AMENDS_SENT_TO_VERIFIER')).toEqual('Amended emissions report submitted');
+    expect(pipe.transform('AER_APPLICATION_AMENDS_SENT_TO_VERIFIER')).toEqual(
+      'Amended emissions report submitted to verifier',
+    );
     expect(pipe.transform('AER_APPLICATION_REVIEW_SKIPPED')).toEqual('Completed without review');
     expect(pipe.transform('AER_VERIFICATION_RETURNED_TO_OPERATOR')).toEqual(
       'Verifier returned to operator for changes',
@@ -366,10 +368,16 @@ describe('ItemActionTypePipe', () => {
       'Returned to operator for changes',
     );
 
-    expect(pipe.transform('AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED')).toEqual('Changes submitted');
-    expect(pipe.transform('AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER')).toEqual('Changes submitted');
-    expect(pipe.transform('AVIATION_AER_CORSIA_APPLICATION_AMENDS_SENT_TO_VERIFIER')).toEqual('Changes submitted');
-    expect(pipe.transform('AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED')).toEqual('Changes submitted');
+    expect(pipe.transform('AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED')).toEqual('Changes submitted to regulator');
+    expect(pipe.transform('AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER')).toEqual(
+      'Changes submitted to verifier',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_APPLICATION_AMENDS_SENT_TO_VERIFIER')).toEqual(
+      'Changes submitted to verifier',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED')).toEqual(
+      'Changes submitted to regulator',
+    );
 
     expect(pipe.transform('AVIATION_AER_CORSIA_VERIFICATION_RETURNED_TO_OPERATOR')).toEqual(
       'Verifier returned report to operator for changes',
@@ -483,6 +491,13 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('BDR_APPLICATION_RE_INITIATED')).toEqual('Baseline data report reopened');
     expect(pipe.transform('BDR_APPLICATION_PEER_REVIEW_ACCEPTED')).toEqual('Peer review agreement submitted');
     expect(pipe.transform('BDR_APPLICATION_PEER_REVIEW_REJECTED')).toEqual('Peer review disagreement submitted');
+
+    expect(pipe.transform('BDRS2_APPLICATION_SENT_TO_VERIFIER')).toEqual(
+      'Stage 2 baseline data report submitted to verifier',
+    );
+    expect(pipe.transform('BDRS2_APPLICATION_SENT_TO_REGULATOR')).toEqual(
+      'Stage 2 baseline data report submitted to regulator',
+    );
 
     expect(pipe.transform('PERMANENT_CESSATION_SUBMITTED')).toEqual('Permanent cessation started');
     expect(pipe.transform('PERMANENT_CESSATION_APPLICATION_CANCELLED')).toEqual('Permanent cessation cancelled');

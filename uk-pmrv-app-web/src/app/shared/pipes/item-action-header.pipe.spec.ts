@@ -264,7 +264,7 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'AER_APPLICATION_AMENDS_SENT_TO_VERIFIER',
       }),
-    ).toEqual('Amended emissions report submitted by John Bolt');
+    ).toEqual('Amended emissions report submitted to verifier by John Bolt');
 
     expect(
       pipe.transform({
@@ -924,7 +924,7 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER',
       }),
-    ).toEqual('Changes submitted by John Bolt');
+    ).toEqual('Changes submitted to verifier by John Bolt');
   });
 
   it('should return amends corsia Submitted to verifier', () => {
@@ -933,7 +933,7 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SENT_TO_VERIFIER',
       }),
-    ).toEqual('Changes submitted by John Bolt');
+    ).toEqual('Changes submitted to verifier by John Bolt');
   });
 
   it('should return verification submitted to operator by', () => {
@@ -1014,7 +1014,7 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED',
       }),
-    ).toEqual('Changes submitted by John Bolt');
+    ).toEqual('Changes submitted to regulator by John Bolt');
   });
 
   it('should return amends corsia Submitted to regulator', () => {
@@ -1023,7 +1023,7 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED',
       }),
-    ).toEqual('Changes submitted by John Bolt');
+    ).toEqual('Changes submitted to regulator by John Bolt');
   });
 
   it('should return Reportable emissions cancelled', () => {
@@ -1340,6 +1340,22 @@ describe('ItemActionHeaderPipe', () => {
         type: 'BDR_APPLICATION_RE_INITIATED',
       }),
     ).toEqual('Baseline data report reopened by John Bolt');
+  });
+
+  it('should return baseline data report', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDRS2_APPLICATION_SENT_TO_VERIFIER',
+      }),
+    ).toEqual('Stage 2 baseline data report submitted to verifier by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDRS2_APPLICATION_SENT_TO_REGULATOR',
+      }),
+    ).toEqual('Stage 2 baseline data report submitted to regulator by John Bolt');
   });
 
   it('should return permanent cessation', () => {

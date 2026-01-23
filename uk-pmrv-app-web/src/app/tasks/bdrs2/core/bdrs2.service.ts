@@ -7,9 +7,14 @@ import { AuthStore, selectUserRoleType } from '@core/store';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
-import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
+import {
+  requestTaskReassignedError,
+  taskNotFoundError,
+  taskSubmitNotFoundError,
+} from '@shared/errors/request-task-error';
 import { CapitalizeFirstPipe } from '@shared/pipes/capitalize-first.pipe';
 import { ItemNamePipe } from '@shared/pipes/item-name.pipe';
+import { AttachedFile } from '@shared/types/attached-file.type';
 import { TasksHelperService } from '@tasks/shared/services/tasks-helper.service';
 import { CommonTasksState } from '@tasks/store/common-tasks.state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
@@ -113,6 +118,33 @@ export class BdrS2Service extends TasksHelperService {
     return str.replace(/[^a-zA-Z0-9 _-]/g, '');
   }
 
+  getOperatorDownloadUrlFiles(files: string[]): AttachedFile[] {
+    const attachments: { [key: string]: string } = (
+      this.store.getValue().requestTaskItem.requestTask.payload as BDRS2ApplicationSubmitRequestTaskPayload
+    )?.bdrs2Attachments;
+    const url = this.getBaseFileDownloadUrl();
+    return (
+      files?.map((id) => ({
+        downloadUrl: url + `${id}`,
+        fileName: attachments[id],
+      })) ?? []
+    );
+  }
+
+  getOperatorDownloadUrlBdrFile(bdrFile: string): AttachedFile {
+    const attachments: { [key: string]: string } = (
+      this.store.getValue().requestTaskItem.requestTask.payload as BDRS2ApplicationSubmitRequestTaskPayload
+    )?.bdrs2Attachments;
+    const url = this.getBaseFileDownloadUrl();
+
+    return bdrFile
+      ? {
+          downloadUrl: url + `${bdrFile}`,
+          fileName: attachments[bdrFile],
+        }
+      : null;
+  }
+
   postTaskSave(
     value: any,
     attachments?: { [key: string]: string },
@@ -202,10 +234,39 @@ export class BdrS2Service extends TasksHelperService {
           bdrs2FileVersion: payload.bdrs2FileVersion,
         } as RequestTaskActionPayload;
 
+      case 'BDRS2_SUBMIT_TO_VERIFIER':
+        return {
+          payloadType: 'BDRS2_SUBMIT_TO_VERIFIER_PAYLOAD',
+          verificationSectionsCompleted: payload?.['verificationSectionsCompleted'],
+        } as RequestTaskActionPayload;
       default:
         return {
           payloadType: 'EMPTY_PAYLOAD',
         } as RequestTaskActionPayload;
     }
+  }
+
+  postSubmit(actionType: RequestTaskActionProcessDTO['requestTaskActionType'], payload?: any) {
+    return this.store.pipe(
+      first(),
+      switchMap((state) =>
+        this.tasksService.processRequestTaskAction({
+          requestTaskActionType: actionType,
+          requestTaskId: state.requestTaskItem.requestTask.id,
+          requestTaskActionPayload: this.createRequestTaskActionPayload(
+            actionType,
+            payload || state.requestTaskItem.requestTask.payload,
+          ),
+        }),
+      ),
+      catchNotFoundRequest(ErrorCode.NOTFOUND1001, () =>
+        actionType === 'BDRS2_SUBMIT_TO_VERIFIER'
+          ? this.businessErrorService.showErrorForceNavigation(taskSubmitNotFoundError)
+          : this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
+      ),
+      catchTaskReassignedBadRequest(() =>
+        this.businessErrorService.showErrorForceNavigation(requestTaskReassignedError()),
+      ),
+    );
   }
 }

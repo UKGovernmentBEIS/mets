@@ -58,7 +58,9 @@ public class InstallationAccountQueryOrchestrator {
         InstallationAccountPermitDTO accountPermitDTO = getAccountWithPermit(accountId);
 
         FileInfoDTO latestAlrFile = getLatestAlrFile_ALRandDOAL(accountId);
-        return InstallationAccountDetailsDTO.builder().accountPermitDto(accountPermitDTO).latestAlrFile(latestAlrFile).build();
+        FileInfoDTO latestBdrFile = getLatestBdrFile(accountId);
+        return InstallationAccountDetailsDTO.builder().accountPermitDto(accountPermitDTO).latestAlrFile(latestAlrFile)
+            .latestBdrFile(latestBdrFile).build();
     }
 
     protected FileInfoDTO getLatestAlrFile_ALRandDOAL(Long accountId) {
@@ -75,5 +77,18 @@ public class InstallationAccountQueryOrchestrator {
         return FileInfoDTO.builder().name(latestALRFileDTO.getFileName()).uuid(latestALR.get().getFileUuid()).build();
     }
 
+    protected FileInfoDTO getLatestBdrFile(Long accountId) {
+        Optional<AccountFileAttachmentDTO> latestBdr = accountFileAttachmentService.getLatestFinalizedFileByWorkflowsAndWorkflowSubTypeAndAccountId(accountId,
+            Set.of(AccountFileAttachmentWorkflow.BDR),
+            AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT);
+
+        if (latestBdr.isEmpty() || !fileAttachmentService.fileAttachmentExist(latestBdr.get().getFileUuid())) {
+            return null;
+        }
+
+        FileDTO latestBdrFileDTO = fileAttachmentService.getFileDTO(latestBdr.get().getFileUuid());
+
+        return FileInfoDTO.builder().name(latestBdrFileDTO.getFileName()).uuid(latestBdr.get().getFileUuid()).build();
+    }
 
 }

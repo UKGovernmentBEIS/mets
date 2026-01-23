@@ -14,4 +14,5 @@ public class InstallationAccountDetailsDTO {
 
     private InstallationAccountPermitDTO accountPermitDto;
     private FileInfoDTO latestAlrFile;
+    private FileInfoDTO latestBdrFile;
 }

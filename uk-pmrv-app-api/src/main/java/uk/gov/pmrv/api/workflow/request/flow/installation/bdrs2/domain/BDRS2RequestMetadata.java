@@ -22,4 +22,6 @@ public class BDRS2RequestMetadata extends RequestMetadata implements RequestMeta
 
     @NotNull
     private Year year;
+
+    private BDRS2InitiationType bdrs2InitiationType;
 }

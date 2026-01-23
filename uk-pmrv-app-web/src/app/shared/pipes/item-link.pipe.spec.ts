@@ -1298,6 +1298,24 @@ describe('ItemLinkPipe', () => {
       expectedPath: ['/tasks', taskId, 'bdr', 'review'],
     },
 
+    //BDRS2
+
+    {
+      requestType: 'BDRS2',
+      taskType: 'BDRS2_APPLICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'bdrs2', 'submit'],
+    },
+    {
+      requestType: 'BDRS2',
+      taskType: 'BDRS2_WAIT_FOR_VERIFICATION',
+      expectedPath: ['/tasks', taskId, 'bdrs2', 'submit'],
+    },
+    {
+      requestType: 'BDRS2',
+      taskType: 'BDRS2_WAIT_FOR_REGULATOR_REVIEW',
+      expectedPath: ['/tasks', taskId, 'bdrs2', 'submit'],
+    },
+
     //DOE
     {
       requestType: 'AVIATION_DOE_CORSIA',

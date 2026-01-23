@@ -18,6 +18,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstan
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2InitiationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RequestPayload;
 
@@ -68,6 +69,7 @@ class BDRS2CreationServiceTest {
                         .build())
                 .requestMetadata(BDRS2RequestMetadata.builder()
                         .type(RequestMetadataType.BDRS2)
+                        .bdrs2InitiationType(BDRS2InitiationType.INITIATED)
                         .year(Year.of(2025))
                         .build())
                 .processVars(processVars)
@@ -79,7 +81,7 @@ class BDRS2CreationServiceTest {
                 .accountId(accountId)
                 .metadata(requestParams.getRequestMetadata())
                 .payload(requestParams.getRequestPayload())
-                .type(RequestType.BDR)
+                .type(RequestType.BDRS2)
                 .accountId(accountId)
                 .status(RequestStatus.IN_PROGRESS)
                 .build();
@@ -96,7 +98,7 @@ class BDRS2CreationServiceTest {
         when(bdrs2DueDateService.generateDueDate())
                 .thenReturn(expirationDate);
 
-        when(startProcessRequestService.startProcess(requestParams))
+        when(startProcessRequestService.startProcess(any(RequestParams.class)))
                 .thenReturn(request);
 
 
@@ -110,7 +112,7 @@ class BDRS2CreationServiceTest {
         verify(bdrs2CreationValidatorService, times(1)).validateYear(eq(accountId), any());
         verify(bdrs2DueDateService, times(1)).generateDueDate();
 
-        verify(startProcessRequestService, times(1)).startProcess(requestParams);
+        verify(startProcessRequestService, times(1)).startProcess(any(RequestParams.class));
     }
 
 
@@ -170,6 +172,7 @@ class BDRS2CreationServiceTest {
                         .build())
                 .requestMetadata(BDRS2RequestMetadata.builder()
                         .type(RequestMetadataType.BDRS2)
+                        .bdrs2InitiationType(BDRS2InitiationType.INITIATED)
                         .year(Year.of(2025))
                         .build())
                 .processVars(processVars)
@@ -189,7 +192,7 @@ class BDRS2CreationServiceTest {
         when(bdrs2CreationValidatorService.validateYear(eq(accountId), any()))
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
 
-        when(startProcessRequestService.startProcess(requestParams))
+        when(startProcessRequestService.startProcess(any(RequestParams.class)))
                 .thenReturn(request);
 
         Request actualRequest = service.createBDRS2ForYear(accountId, bdrYear, expirationDate);
@@ -199,6 +202,6 @@ class BDRS2CreationServiceTest {
 
 
         verify(bdrs2CreationValidatorService, times(1)).validateYear(eq(accountId), any());
-        verify(startProcessRequestService, times(1)).startProcess(requestParams);
+        verify(startProcessRequestService, times(1)).startProcess(any(RequestParams.class));
     }
 }

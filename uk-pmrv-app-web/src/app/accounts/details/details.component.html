@@ -39,17 +39,31 @@
       </div>
     </dl>
 
-    <ng-container *ngIf="latestALRFile$ | async as latestALRFile">
+    <ng-container *ngIf="latestFiles$ | async as files">
       <h2 class="govuk-heading-m">Related files</h2>
+
       <dl govuk-summary-list>
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Latest ALR</dt>
-          <dd govukSummaryListRowValue *ngIf="(account$ | async).id as accountId">
-            <a [routerLink]="['details', accountId, 'attachment', latestALRFile?.uuid]" govukLink target="_blank">
-              {{ latestALRFile?.name }}
-            </a>
-          </dd>
-        </div>
+        @if (files?.latestAlr) {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Latest ALR</dt>
+            <dd govukSummaryListRowValue *ngIf="(account$ | async).id as accountId">
+              <a [routerLink]="['details', accountId, 'attachment', files?.latestAlr?.uuid]" govukLink target="_blank">
+                {{ files?.latestAlr?.name }}
+              </a>
+            </dd>
+          </div>
+        }
+
+        @if (files?.latestBdr) {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Latest BDR</dt>
+            <dd govukSummaryListRowValue *ngIf="(account$ | async).id as accountId">
+              <a [routerLink]="['details', accountId, 'attachment', files?.latestBdr?.uuid]" govukLink target="_blank">
+                {{ files?.latestBdr?.name }}
+              </a>
+            </dd>
+          </div>
+        }
       </dl>
     </ng-container>
   </ng-container>

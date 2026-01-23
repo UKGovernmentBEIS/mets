@@ -13,6 +13,7 @@ import { BDRS2 } from './bDRS2';
 
 export interface BDRS2ApplicationSubmitRequestTaskPayloadAllOf {
   bdrs2?: BDRS2;
+  verificationPerformed?: boolean;
   bdrs2SectionsCompleted?: { [key: string]: boolean };
   bdrs2Attachments?: { [key: string]: string };
   bdrs2FileVersion?: number;

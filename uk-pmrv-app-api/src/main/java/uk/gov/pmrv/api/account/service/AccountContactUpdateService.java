@@ -77,7 +77,7 @@ public class AccountContactUpdateService {
         publishFirstServiceContactAssignedToAccountEvent(currentOperatorContacts, serviceContact, accountId);
 
         //publish contact update to registry
-        eventPublisher.publishEvent(AccountContactRegistryEvent.builder().accountId(accountId).build());
+        eventPublisher.publishEvent(AccountContactRegistryEvent.builder().accountsIds(List.of(accountId)).build());
 
     }
 

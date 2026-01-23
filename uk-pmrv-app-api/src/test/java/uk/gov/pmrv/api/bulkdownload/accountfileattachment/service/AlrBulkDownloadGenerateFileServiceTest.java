@@ -1,6 +1,7 @@
 package uk.gov.pmrv.api.bulkdownload.accountfileattachment.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -93,4 +94,34 @@ class AlrBulkDownloadGenerateFileServiceTest {
         );
     }
 
+    @Test
+    void generateFile_unknownWorkflowSubtype_throwsIllegalArgumentException() throws Exception {
+        AccountFileAttachmentDTO invalidDto = mock(AccountFileAttachmentDTO.class);
+
+        when(invalidDto.getWorkflowSubtype()).thenReturn(AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT);//use unexpected subtype
+
+        when(accountFileAttachmentService.getFilesByWorkflowAndPeriodAndCompetentAuthority(
+            AccountFileAttachmentWorkflow.ALR,
+            "2024",
+            CompetentAuthorityEnum.ENGLAND
+        )).thenReturn(List.of(invalidDto));
+
+        when(invalidDto.getFileUuid()).thenReturn("UUID");
+        FileDTO file = new FileDTO();
+        file.setFileName("filename");
+        file.setFileContent("filecontent".getBytes());
+        when(fileAttachmentService.getFileDTO("UUID")).thenReturn(file);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ZipOutputStream zipOut = new ZipOutputStream(baos);
+
+        assertThatThrownBy(() ->
+            alrBulkDownloadGenerateFileService.generateFile(
+                zipOut,
+                "2024",
+                CompetentAuthorityEnum.ENGLAND
+            )
+        ).isInstanceOf(IllegalArgumentException.class)
+         .hasMessageContaining("Unknown ALR workflow subtype");
+    }
 }

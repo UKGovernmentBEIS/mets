@@ -76,7 +76,7 @@ export class ReportsComponent extends BaseComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$),
         tap((features) => {
-          const { bdrEnabled, corsia3yearOffsettingEnabled, wasteQdrEnabled } = features;
+          const { bdrEnabled, corsia3yearOffsettingEnabled, wasteQdrEnabled, bdrs2Enabled } = features;
 
           this.reportsTypesMap = reportsTypesMap[this.domain];
 
@@ -86,11 +86,14 @@ export class ReportsComponent extends BaseComponent implements OnInit {
 
           if (!bdrEnabled) {
             delete this.reportsTypesMap['Baseline data report'];
-            delete this.reportsTypesMap['Baseline data report (stage 2)'];
           }
 
           if (!wasteQdrEnabled) {
             delete this.reportsTypesMap['Waste voluntary quarterly report'];
+          }
+
+          if (!bdrs2Enabled) {
+            delete this.reportsTypesMap['Baseline data report (stage 2)'];
           }
         }),
       )

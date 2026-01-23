@@ -15,6 +15,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstan
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2InitiationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RequestPayload;
 
@@ -70,6 +71,7 @@ public class BDRS2CreationService {
                         .build())
                 .requestMetadata(BDRS2RequestMetadata.builder()
                         .type(RequestMetadataType.BDRS2)
+                        .bdrs2InitiationType(BDRS2InitiationType.INITIATED)
                         .year(bdrs2Year)
                         .build())
                 .processVars(processVars)

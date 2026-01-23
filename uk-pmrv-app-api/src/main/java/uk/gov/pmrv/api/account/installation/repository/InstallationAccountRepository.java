@@ -44,10 +44,11 @@ public interface InstallationAccountRepository extends AccountBaseRepository<Ins
     boolean existsByTransferCode(String transferCode);
 
     @Transactional(readOnly = true)
-    @Query("SELECT a.id FROM InstallationAccount a " +
-            "WHERE a.status = 'LIVE' " +
-            "AND a.faStatus = true " +
-            "AND a.emitterType IN ('GHGE', 'HSE')")
+	@Query("SELECT a.id FROM InstallationAccount a " +
+			"JOIN BaselineDataReportFreeAllocation b ON a.id = b.accountId " +
+			"WHERE a.status = 'LIVE' " +
+			"AND a.emitterType IN ('GHGE', 'HSE') " +
+			"AND b.freeAllocation = true")
     List<Long> findEligibleAccountIdsForBDRS2();
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)

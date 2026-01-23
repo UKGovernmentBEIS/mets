@@ -1120,6 +1120,14 @@ describe('TimelineItemLinkPipe', () => {
     expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdr', 'peer-review-decision']);
   });
 
+  it('should return links for stage 2 baseline data report (BDRS2)', () => {
+    requestAction.type = 'BDRS2_APPLICATION_SENT_TO_VERIFIER';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdrs2', 'submitted']);
+
+    requestAction.type = 'BDRS2_APPLICATION_SENT_TO_REGULATOR';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdrs2', 'submitted']);
+  });
+
   it('should return links for PERMANENT CESSATION', () => {
     requestAction.type = 'PERMANENT_CESSATION_SUBMITTED';
     expect(pipe.transform(requestAction, true, true, 'REGULATOR')).toBe(null);

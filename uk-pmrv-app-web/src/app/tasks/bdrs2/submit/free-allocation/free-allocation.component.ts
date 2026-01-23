@@ -37,7 +37,7 @@ export class FreeAllocationComponent implements PendingRequest {
 
   onContinue(): void {
     const payload = this.bdrS2Payload();
-    const nextRoute = this.form.value?.continueApplicationForFreeAllocationType !== 'WITHDRAW' ? 'details' : '../';
+    const nextRoute = this.form.value?.continueApplicationForFreeAllocationType !== 'WITHDRAW' ? 'details' : 'summary';
 
     if (!this.form.dirty) {
       this.router.navigate([nextRoute], { relativeTo: this.route }).then();
@@ -53,9 +53,16 @@ export class FreeAllocationComponent implements PendingRequest {
                 ? {
                     covidAdjustments: undefined,
                     inEiteSector: undefined,
+                    requiresAdditionalSubInstallationSplitsForCbam: undefined,
                   }
                 : {}),
             },
+            ...(this.form.value?.continueApplicationForFreeAllocationType === 'WITHDRAW'
+              ? {
+                  bdrs2Files: undefined,
+                  mmpFiles: undefined,
+                }
+              : {}),
           },
           {
             ...payload?.bdrs2Attachments,

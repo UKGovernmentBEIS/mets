@@ -73,7 +73,7 @@ class PmrvOperatorAuthorityDeletionServiceTest {
         verify(childEventPublisher).publishEvent(childEventCaptor.capture());
         AccountContactRegistryEvent publishedEvent = childEventCaptor.getValue();
         assertNotNull(publishedEvent);
-        assertEquals(ACCOUNT_ID, publishedEvent.getAccountId());
+        assertEquals(ACCOUNT_ID, publishedEvent.getAccountsIds().getFirst());
 
         verifyNoMoreInteractions(childEventPublisher);
     }

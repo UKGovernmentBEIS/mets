@@ -30,7 +30,7 @@ describe('BDRS2UploadMmpComponent', () => {
   let component: BDRS2UploadMmpComponent;
   let fixture: ComponentFixture<BDRS2UploadMmpComponent>;
 
-  const expectedNextRoute = '../..';
+  const expectedNextRoute = '../summary';
   const tasksService = mockClass(TasksService);
   const route = new ActivatedRouteStub({ taskId: '1' });
   const attachmentService = mockClass(RequestTaskAttachmentsHandlingService);

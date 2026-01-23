@@ -52,6 +52,7 @@ import { ApplicationTypePipe } from './application-type.pipe';
 import { AppliedTierPipe } from './applied-tier.pipe';
 import { AviationNamePipePipe } from './aviation-name-pipe.pipe';
 import { StatusApplicationTypePipe } from './bdr/statusApplicationType.pipe';
+import { FreeAllocationTypePipe } from './bdrs2/bdrs2-free-allocation-type.pipe';
 import { BigNumberPipe } from './big-number.pipe';
 import { BulkDownloadWorkflowTypePipe } from './bulk-download-workflow-type.pipe';
 import { CapitalizeFirstPipe } from './capitalize-first.pipe';
@@ -80,6 +81,7 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
 @NgModule({
   imports: [
     CessationScopePipePipe,
+    FreeAllocationTypePipe,
     OverallDecisionTypePipe,
     QuarterNamePipe,
     ReviewBdrAlrGroupDecisionPipe,
@@ -183,6 +185,7 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
     DeterminationAssessmentPipe,
     DeterminationTypePipe,
     EtsSchemePipe,
+    FreeAllocationTypePipe,
     FuelMeteringConditionTypePipe,
     GasPipe,
     GovukDatePipe,

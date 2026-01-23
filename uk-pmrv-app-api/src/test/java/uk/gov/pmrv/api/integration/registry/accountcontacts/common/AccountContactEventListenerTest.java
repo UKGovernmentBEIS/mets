@@ -16,10 +16,13 @@ import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.integration.registry.accountcontacts.aviation.request.AviationAccountContactNotifyRegistryService;
 import uk.gov.pmrv.api.integration.registry.accountcontacts.installation.request.InstallationAccountContactNotifyRegistryService;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -44,7 +47,7 @@ class AccountContactEventListenerTest {
     @Test
     void handleAccountContactRegistryEvent_for_installation_ukets() {
         AccountContactRegistryEvent event = buildAccountContactRegistryEvent();
-        Account account = buildAccount(AccountType.INSTALLATION, EmissionTradingScheme.UK_ETS_INSTALLATIONS);
+        Account account = buildAccount(ACCOUNT_ID,AccountType.INSTALLATION, EmissionTradingScheme.UK_ETS_INSTALLATIONS);
 
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
@@ -57,7 +60,7 @@ class AccountContactEventListenerTest {
     @Test
     void handleAccountContactRegistryEvent_for_aviation_ukets() {
         AccountContactRegistryEvent event = buildAccountContactRegistryEvent();
-        Account account = buildAccount(AccountType.AVIATION, EmissionTradingScheme.UK_ETS_AVIATION);
+        Account account = buildAccount(ACCOUNT_ID,AccountType.AVIATION, EmissionTradingScheme.UK_ETS_AVIATION);
 
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
@@ -83,7 +86,7 @@ class AccountContactEventListenerTest {
     @Test
     void handleAccountContactRegistryEvent_for_installation_but_not_ukets() {
         AccountContactRegistryEvent event = buildAccountContactRegistryEvent();
-        Account account = buildAccount(AccountType.INSTALLATION, EmissionTradingScheme.EU_ETS_INSTALLATIONS);
+        Account account = buildAccount(ACCOUNT_ID,AccountType.INSTALLATION, EmissionTradingScheme.EU_ETS_INSTALLATIONS);
 
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
@@ -96,7 +99,7 @@ class AccountContactEventListenerTest {
     @Test
     void handleAccountContactRegistryEvent_for_aviation_but_not_ukets() {
         AccountContactRegistryEvent event = buildAccountContactRegistryEvent();
-        Account account = buildAccount(AccountType.AVIATION, EmissionTradingScheme.CORSIA);
+        Account account = buildAccount(ACCOUNT_ID,AccountType.AVIATION, EmissionTradingScheme.CORSIA);
 
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
@@ -106,16 +109,35 @@ class AccountContactEventListenerTest {
         verifyNoInteractions(installationAccountContactNotifyRegistryService);
     }
 
+    @Test
+    void handleAccountContactRegistryEvent_for_aviation_multiple_accounts() {
+        AccountContactRegistryEvent event = buildAccountContactRegistryEventMultiple();
+        Account account1 = buildAccount(1L,AccountType.AVIATION, EmissionTradingScheme.UK_ETS_AVIATION);
+        Account account2 = buildAccount(2L,AccountType.AVIATION, EmissionTradingScheme.UK_ETS_AVIATION);
+        Account account3 = buildAccount(3L,AccountType.AVIATION, EmissionTradingScheme.UK_ETS_AVIATION);
+        when(accountRepository.findById(1L)).thenReturn(Optional.of(account1));
+        when(accountRepository.findById(2L)).thenReturn(Optional.of(account2));
+        when(accountRepository.findById(3L)).thenReturn(Optional.of(account3));
+        accountContactEventListener.handleAccountContactRegistryEvent(event);
+        verify(aviationAccountContactNotifyRegistryService,times(3)).notifyRegistry(any());
+    }
+
     private AccountContactRegistryEvent buildAccountContactRegistryEvent() {
         return AccountContactRegistryEvent.builder()
-                .accountId(ACCOUNT_ID)
+                .accountsIds(List.of(ACCOUNT_ID))
                 .build();
     }
 
-    private Account buildAccount(AccountType accountType, EmissionTradingScheme scheme) {
+    private AccountContactRegistryEvent buildAccountContactRegistryEventMultiple() {
+        return AccountContactRegistryEvent.builder()
+                .accountsIds(List.of(1L, 2L, 3L))
+                .build();
+    }
+
+    private Account buildAccount(Long accountId, AccountType accountType, EmissionTradingScheme scheme) {
         if(AccountType.INSTALLATION.equals(accountType)) {
             return InstallationAccount.builder()
-                    .id(ACCOUNT_ID)
+                    .id(accountId)
                     .accountType(accountType)
                     .emissionTradingScheme(scheme)
                     .build();

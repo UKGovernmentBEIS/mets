@@ -313,6 +313,10 @@ export class ItemActionHeaderPipe implements PipeTransform {
       case 'BDR_APPLICATION_PEER_REVIEW_REJECTED':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
+      case 'BDRS2_APPLICATION_SENT_TO_VERIFIER':
+      case 'BDRS2_APPLICATION_SENT_TO_REGULATOR':
+        return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
+
       case 'PERMANENT_CESSATION_APPLICATION_CANCELLED':
       case 'PERMANENT_CESSATION_SUBMITTED':
       case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REQUESTED':

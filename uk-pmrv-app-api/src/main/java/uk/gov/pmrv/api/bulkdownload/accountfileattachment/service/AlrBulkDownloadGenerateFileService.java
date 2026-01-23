@@ -49,6 +49,7 @@ class AlrBulkDownloadGenerateFileService {
             String subfolder = switch (fileDTO.getWorkflowSubtype()) {
                 case ALR_ATTACHMENT -> "ALR reports/";
                 case ALR_VOS -> "ALR VOS/";
+                default -> throw new IllegalArgumentException("Unknown ALR workflow subtype: " + fileDTO.getWorkflowSubtype());
             };
 
             String finalFilename = buildFinalFilename(fileDTO, file);

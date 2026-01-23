@@ -12,11 +12,13 @@ import uk.gov.netz.api.authorization.core.domain.dto.AuthorityRoleDTO;
 import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.user.core.service.UserSecuritySetupService;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -42,11 +44,17 @@ class OperatorUserManagementServiceTest {
 	private UserSecuritySetupService userSecuritySetupService;
 
 	@Mock
+	private AccountQueryService accountQueryService;
+
+	@Mock
 	private ApplicationEventPublisher applicationEventPublisher;
 	
 	@Test
 	void updateOperatorUser() {
 		OperatorUserDTO operatorUserDTO = buildOperatorUserDTO();
+
+		when(operatorUserAuthService.getUserIdByEmail(anyString())).thenReturn(Optional.of("userId"));
+		when(accountQueryService.getAccountIdsByUserId("userId")).thenReturn(List.of(1L));
 
 		service.updateOperatorUser(operatorUserDTO);
 

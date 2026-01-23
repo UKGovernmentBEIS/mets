@@ -45,6 +45,7 @@ public class AviationAccountCreationService {
 
         validateAccountNameUniqueness(aviationAccountCreationDTO.getName(), competentAuthority, emissionTradingScheme);
         validateCrcoCodeUniqueness(aviationAccountCreationDTO.getCrcoCode(), competentAuthority, emissionTradingScheme);
+        validateCommencementDateDTO(aviationAccountCreationDTO.getCommencementDate(), competentAuthority, emissionTradingScheme);
 
         final Long identifier = accountIdentifierService.incrementAndGet();
 
@@ -76,6 +77,21 @@ public class AviationAccountCreationService {
         if(aviationAccountQueryService.isExistingCrcoCode(crcoCode, competentAuthority, emissionTradingScheme)) {
             throw new BusinessException(MetsErrorCode.CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT,
                 crcoCode, competentAuthority, emissionTradingScheme);
+        }
+    }
+
+    private void validateCommencementDateDTO(LocalDate commencementDate, CompetentAuthorityEnum competentAuthority,
+                                            EmissionTradingScheme emissionTradingScheme) {
+        int year = commencementDate.getYear();
+        int currentYear = LocalDate.now().getYear();
+
+        if (year < 2021 || year > currentYear) {
+            throw new BusinessException(
+                    MetsErrorCode.AVIATION_COMMENCEMENT_DATE_NOT_BEFORE_2021_NOT_AFTER_CURRENT_YEAR,
+                    commencementDate,
+                    competentAuthority,
+                    emissionTradingScheme
+            );
         }
     }
 

@@ -48,7 +48,7 @@ export class BDRS2UploadReportComponent implements PendingRequest {
   onContinue(): void {
     const payload = this.bdrs2Payload();
     const isYesCBAM = payload.bdrs2?.bdrs2guardQuestions?.requiresAdditionalSubInstallationSplitsForCbam === true;
-    const nextRoute = isYesCBAM ? '../upload-mmp' : '../..';
+    const nextRoute = isYesCBAM ? '../upload-mmp' : '../summary';
 
     if (!this.form.dirty) {
       this.router.navigate([nextRoute], { relativeTo: this.route });

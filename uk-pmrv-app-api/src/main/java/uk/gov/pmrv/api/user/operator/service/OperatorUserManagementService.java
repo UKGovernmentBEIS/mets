@@ -8,6 +8,7 @@ import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryServ
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.event.AccountContactRegistryEvent;
+import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.user.core.service.UserSecuritySetupService;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 
@@ -22,6 +23,7 @@ public class OperatorUserManagementService {
     private final OperatorAuthorityQueryService operatorAuthorityQueryService;
     private final UserSecuritySetupService userSecuritySetupService;
     private final ApplicationEventPublisher eventPublisher;
+    private final AccountQueryService accountQueryService;
 
     /**
      * Returns the Operator User.
@@ -38,6 +40,10 @@ public class OperatorUserManagementService {
     
     public void updateOperatorUser(OperatorUserDTO operatorUserDTO) {
         operatorUserAuthService.updateUser( operatorUserDTO);
+        String userId = operatorUserAuthService.getUserIdByEmail(operatorUserDTO.getEmail()).orElseThrow();
+        eventPublisher.publishEvent(AccountContactRegistryEvent.builder()
+                .accountsIds(accountQueryService.getAccountIdsByUserId(userId)).build());
+
     }
 
     /**
@@ -54,7 +60,8 @@ public class OperatorUserManagementService {
         operatorUserAuthService.updateUser(operatorUserDTO);
 
         //publish account contacts to registry
-        eventPublisher.publishEvent(AccountContactRegistryEvent.builder().accountId(accountId).build());
+        eventPublisher.publishEvent(AccountContactRegistryEvent.builder()
+                .accountsIds(accountQueryService.getAccountIdsByUserId(userId)).build());
     }
     
 	public void resetOperator2Fa(Long accountId, String userId) {

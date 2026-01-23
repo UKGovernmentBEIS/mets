@@ -38,7 +38,7 @@ export class BDRS2UploadMmpComponent implements PendingRequest {
   ) {}
 
   onContinue(): void {
-    const nextRoute = '../..';
+    const nextRoute = '../summary';
 
     if (!this.form.dirty) {
       this.router.navigate([nextRoute], { relativeTo: this.route });

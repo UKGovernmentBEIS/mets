@@ -23,6 +23,6 @@ public class PmrvOperatorAuthorityDeletionService extends OperatorAuthorityDelet
     @Transactional
     public void deleteAccountOperatorAuthorityAndNotifyRegistry(String userId,Long accountId) {
         this.deleteAccountOperatorAuthority(userId, accountId);
-        applicationEventPublisher.publishEvent(AccountContactRegistryEvent.builder().accountId(accountId).build());
+        applicationEventPublisher.publishEvent(AccountContactRegistryEvent.builder().accountsIds(List.of(accountId)).build());
     }
 }

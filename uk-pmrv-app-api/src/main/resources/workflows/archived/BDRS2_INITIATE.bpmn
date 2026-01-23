@@ -23,7 +23,7 @@
         <bpmn:startEvent id="Event_070qnvy" name="BDRS2 initiation">
             <bpmn:outgoing>Flow_0uvz7fx</bpmn:outgoing>
             <bpmn:timerEventDefinition id="TimerEventDefinition_0il6gt8">
-                <bpmn:timeDate xsi:type="bpmn:tFormalExpression">2026-01-01T00:00Z</bpmn:timeDate>
+                <bpmn:timeDate xsi:type="bpmn:tFormalExpression">2026-04-01T00:00Z</bpmn:timeDate>
             </bpmn:timerEventDefinition>
         </bpmn:startEvent>
         <bpmn:sequenceFlow id="Flow_0uvz7fx" sourceRef="Event_070qnvy" targetRef="Activity_1ttk3r7"/>

@@ -7,18 +7,22 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ContinueApplicationForFreeAllocationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2GuardQuestions;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2VerificationReport;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
-public class BDRS2ValidationServiceTest {
+class BDRS2ValidationServiceTest {
 
     @InjectMocks
     private BDRS2ValidationService bdrs2ValidationService;
 
     @Test
-    public void validateBDRS2FileName_valid() {
+    void validateBDRS2FileName_valid() {
         String[] validFileNames = {
                 "BDRS2-00001-2025-v1-uploaded by Operator-OPp5.txt",
                 "BDRS2-12345-2024-v2-uploaded by Regulator-Test.pdf",
@@ -37,7 +41,7 @@ public class BDRS2ValidationServiceTest {
     }
 
     @Test
-    public void validateBDRS2FileName_invalid() {
+    void validateBDRS2FileName_invalid() {
         String[] invalidFileNames = {
                 "XYZBDRS2-00001-2025-v1-uploaded by Operator-OPp5.txt", // ❌ Doesn't start with BDRS2-
                 "BDRS2-123-2025-v1-uploaded by Operator-OPp5.txt",     // ❌ Account ID < 5 digits
@@ -62,5 +66,35 @@ public class BDRS2ValidationServiceTest {
                     thrown.getErrorCode()
             );
         }
+    }
+
+    @Test
+    void validateBDRS2_valid() {
+        final BDRS2GuardQuestions guardQuestions = BDRS2GuardQuestions.builder()
+                .continueApplicationForFreeAllocationType(BDRS2ContinueApplicationForFreeAllocationType.CONTINUE_AS_MAIN_SCHEME_PARTICIPANT)
+                .covidAdjustments(Boolean.FALSE)
+                .inEiteSector(Boolean.TRUE)
+                .requiresAdditionalSubInstallationSplitsForCbam(Boolean.FALSE)
+                .build();
+
+        final BDRS2 bdrs2 = BDRS2.builder()
+                .bdrs2guardQuestions(guardQuestions)
+                .build();
+
+        assertDoesNotThrow(
+                () -> bdrs2ValidationService.validateBDRS2(bdrs2),
+                "Expected no exception for valid BDRS2"
+        );
+    }
+
+    @Test
+    void validateVerificationReport_valid() {
+        final BDRS2VerificationReport verificationReport = BDRS2VerificationReport.builder()
+                .build();
+
+        assertDoesNotThrow(
+                () -> bdrs2ValidationService.validateVerificationReport(verificationReport),
+                "Expected no exception for valid verification report"
+        );
     }
 }

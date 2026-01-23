@@ -1,0 +1,158 @@
+<dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Do you want to continue with your application for free allocation?</dt>
+    <dd govukSummaryListRowValue>
+      {{ data?.bdrs2guardQuestions?.continueApplicationForFreeAllocationType | freeAllocationType }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }" hidden-text="decision for free allocation">
+        Change
+      </a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="data?.bdrs2guardQuestions?.continueApplicationForFreeAllocationType === 'WITHDRAW'">
+    <dt govukSummaryListRowKey>Reason</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ data?.bdrs2guardQuestions?.applicationWithdrawalReason }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }" hidden-text="withdraw reason">Change</a>
+    </dd>
+  </div>
+
+  <div
+    govukSummaryListRow
+    *ngIf="
+      data?.bdrs2guardQuestions?.covidAdjustments !== null && data?.bdrs2guardQuestions?.covidAdjustments !== undefined
+    ">
+    <dt govukSummaryListRowKey>Are you making COVID adjustments?</dt>
+    <dd govukSummaryListRowValue>
+      {{ data?.bdrs2guardQuestions?.covidAdjustments ? 'Yes' : 'No' }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a
+        govukLink
+        [routerLink]="['..', 'details']"
+        [state]="{ changing: true }"
+        hidden-text="decision for COVID adjustments">
+        Change
+      </a>
+    </dd>
+  </div>
+
+  <div
+    govukSummaryListRow
+    *ngIf="data?.bdrs2guardQuestions?.inEiteSector !== null && data?.bdrs2guardQuestions?.inEiteSector !== undefined">
+    <dt govukSummaryListRowKey>
+      Is your installation in the aluminium, cement, fertiliser, hydrogen, iron or steel sector?
+    </dt>
+    <dd govukSummaryListRowValue>
+      {{ data?.bdrs2guardQuestions?.inEiteSector ? 'Yes' : 'No' }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a
+        govukLink
+        [routerLink]="['..', 'details']"
+        [state]="{ changing: true }"
+        hidden-text="decision about EITE sector">
+        Change
+      </a>
+    </dd>
+  </div>
+
+  <div
+    govukSummaryListRow
+    *ngIf="
+      data?.bdrs2guardQuestions?.requiresAdditionalSubInstallationSplitsForCbam !== null &&
+      data?.bdrs2guardQuestions?.requiresAdditionalSubInstallationSplitsForCbam !== undefined
+    ">
+    <dt govukSummaryListRowKey>Are additional sub-installation splits required because of the UK CBAM?</dt>
+    <dd govukSummaryListRowValue>
+      {{ data?.bdrs2guardQuestions?.requiresAdditionalSubInstallationSplitsForCbam ? 'Yes' : 'No' }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..', 'cbam']" [state]="{ changing: true }" hidden-text="CBAM decision">Change</a>
+    </dd>
+  </div>
+</dl>
+
+<ng-container *ngIf="bdrFile">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded stage 2 baseline data report</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="[bdrFile]"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a
+          govukLink
+          [routerLink]="['..', 'upload-report']"
+          [state]="{ changing: true }"
+          hidden-text="stage 2 baseline data report">
+          Change
+        </a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="files?.length">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded supporting files</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="files"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a
+          govukLink
+          [routerLink]="['..', 'upload-report']"
+          [state]="{ changing: true }"
+          hidden-text="stage 2 baseline data report supporting files">
+          Change
+        </a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="mmpFile">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded monitoring methodology plan</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="[mmpFile]"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a
+          govukLink
+          [routerLink]="['..', 'upload-mmp']"
+          [state]="{ changing: true }"
+          hidden-text=" monitoring methodology plan">
+          Change
+        </a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="mmpFiles?.length">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded supporting files</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="mmpFiles"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a
+          govukLink
+          [routerLink]="['..', 'upload-mmp']"
+          [state]="{ changing: true }"
+          hidden-text="monitoring methodology plan supporting files">
+          Change
+        </a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

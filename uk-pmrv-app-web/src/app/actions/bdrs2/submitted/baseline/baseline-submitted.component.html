@@ -1,0 +1,11 @@
+<ng-container *ngIf="vm() as vm">
+  <app-action-task header="Baseline data report and details" [breadcrumb]="true">
+    <app-bdrs2-baseline-summary-template
+      [isEditable]="false"
+      [data]="vm.bdrs2"
+      [bdrFile]="vm.bdrFile"
+      [files]="vm.files"
+      [mmpFile]="vm.mmpFile"
+      [mmpFiles]="vm.mmpFiles"></app-bdrs2-baseline-summary-template>
+  </app-action-task>
+</ng-container>

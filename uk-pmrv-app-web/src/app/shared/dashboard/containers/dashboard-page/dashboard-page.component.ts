@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, distinctUntilChanged, filter, map, Observable, switchMap, takeUntil } from 'rxjs';
 
-import { selectIsFeatureEnabled } from '@core/config/config.selectors';
+import { selectFeatures } from '@core/config/config.selectors';
 import { ConfigStore } from '@core/config/config.store';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AccountType, AuthStore, selectCurrentDomain, selectUserRoleType, UserState } from '@core/store/auth';
@@ -100,11 +100,14 @@ export class DashboardPageComponent implements OnInit {
     this.store.pipe(selectOrderBy),
     this.store.pipe(selectFilterBy),
     this.configStore.pipe(
-      selectIsFeatureEnabled('wasteQdrEnabled'),
-      switchMap((wasteQdrEnabled) =>
-        this.requestsService
-          .getRequestTypesByUserRolesAndService()
-          .pipe(map((requestTypes) => requestTypes.filter((type) => (wasteQdrEnabled ? true : type !== 'WASTE_QDR')))),
+      selectFeatures,
+      switchMap((features) =>
+        this.requestsService.getRequestTypesByUserRolesAndService().pipe(
+          map((requestTypes) =>
+            requestTypes.filter((type) => (features.wasteQdrEnabled ? true : type !== 'WASTE_QDR')),
+          ),
+          map((requestTypes) => requestTypes.filter((type) => (features.bdrs2Enabled ? true : type !== 'BDRS2'))),
+        ),
       ),
     ),
     this.store.pipe(selectAccountSearchTerm),

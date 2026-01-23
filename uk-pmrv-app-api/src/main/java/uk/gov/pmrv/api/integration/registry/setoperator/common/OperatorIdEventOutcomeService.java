@@ -52,7 +52,7 @@ public class OperatorIdEventOutcomeService {
             log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.AVIATION_SERVICE_KEY, event.getEmitterId(),
                     NotifyRegistryUtils.OPERATOR_ID_INTEGRATION_POINT_KEY, "Operator Id received from registry " + event);
             publisher.publishEvent(AviationAccountUpdatedRegistryEvent.builder().accountId(account.getId()).build());
-            publisher.publishEvent(AccountContactRegistryEvent.builder().accountId(account.getId()).build());
+            publisher.publishEvent(AccountContactRegistryEvent.builder().accountsIds(List.of(account.getId())).build());
             aviationSetOperatorIdExemptStatusUpdateService.notifyRegistryWithExemptStatuses(account);
         }
         else {
@@ -74,7 +74,7 @@ public class OperatorIdEventOutcomeService {
             log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.INSTALLATION_SERVICE_KEY, event.getEmitterId(),
                     NotifyRegistryUtils.OPERATOR_ID_INTEGRATION_POINT_KEY, "Operator Id received from registry " + event);
             publisher.publishEvent(InstallationAccountUpdatedRegistryEvent.builder().accountId(account.getId()).build());
-            publisher.publishEvent(AccountContactRegistryEvent.builder().accountId(account.getId()).build());
+            publisher.publishEvent(AccountContactRegistryEvent.builder().accountsIds(List.of(account.getId())).build());
 
         }
         else {

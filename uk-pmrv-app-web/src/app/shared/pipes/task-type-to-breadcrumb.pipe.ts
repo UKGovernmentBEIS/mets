@@ -509,6 +509,10 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
 
       case 'BDRS2_APPLICATION_SUBMIT':
         return 'Complete stage 2 baseline data report';
+      case 'BDRS2_WAIT_FOR_VERIFICATION':
+        return 'Stage 2 baseline data report sent to verifier';
+      case 'BDRS2_WAIT_FOR_REGULATOR_REVIEW':
+        return 'Stage 2 baseline data report sent to regulator';
 
       case 'PERMANENT_CESSATION_APPLICATION_SUBMIT':
         return 'Complete permanent cessation';

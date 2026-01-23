@@ -42,7 +42,13 @@ export class DetailsComponent implements OnInit {
     switchMap((accountPermit) => this.accountViewService.getInstallationAccountById(accountPermit?.account?.id)),
   );
 
-  latestALRFile$ = this.accountDetails$.pipe(map((accountDetails) => accountDetails?.latestAlrFile));
+  latestFiles$ = this.accountDetails$.pipe(
+    map((accountDetails) =>
+      !!accountDetails?.latestAlrFile || !!accountDetails?.latestBdrFile
+        ? { latestAlr: accountDetails?.latestAlrFile, latestBdr: accountDetails?.latestBdrFile }
+        : undefined,
+    ),
+  );
 
   userRoleType$ = this.authStore.pipe(selectUserRoleType, takeUntil(this.destroy$));
 

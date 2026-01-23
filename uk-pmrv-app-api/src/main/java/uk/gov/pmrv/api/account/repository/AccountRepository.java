@@ -114,4 +114,8 @@ public interface AccountRepository extends JpaRepository<Account, Long>, Account
     @Query("SELECT a FROM Account a WHERE a.emitterId= :emitterId")
     Optional<Account> findAccountByEmitterId(@Param("emitterId") String emitterId);
 
+    @Transactional(readOnly = true)
+    @Query("SELECT DISTINCT(a.id) FROM Account a JOIN a.contacts c WHERE c = :userId")
+    List<Long> findAccountIdsByContactUserId(@Param("userId") String userId);
+
 }

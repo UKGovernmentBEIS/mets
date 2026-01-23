@@ -49,6 +49,9 @@ export class CBAMComponent implements PendingRequest {
               requiresAdditionalSubInstallationSplitsForCbam:
                 this.form.value?.requiresAdditionalSubInstallationSplitsForCbam,
             },
+            ...(this.form.value?.requiresAdditionalSubInstallationSplitsForCbam === false
+              ? { mmpFiles: undefined }
+              : {}),
           },
           {
             ...payload?.bdrs2Attachments,

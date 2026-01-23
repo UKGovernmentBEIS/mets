@@ -56,6 +56,7 @@ import { BDRApplicationCompletedRequestActionPayload } from './bDRApplicationCom
 import { BDRApplicationSubmittedRequestActionPayload } from './bDRApplicationSubmittedRequestActionPayload';
 import { BDRApplicationVerificationSubmittedRequestActionPayload } from './bDRApplicationVerificationSubmittedRequestActionPayload';
 import { BDRRegulatorReviewReturnedForAmendsRequestActionPayload } from './bDRRegulatorReviewReturnedForAmendsRequestActionPayload';
+import { BDRS2ApplicationSubmittedRequestActionPayload } from './bDRS2ApplicationSubmittedRequestActionPayload';
 import { BDRVerificationReturnedToOperatorRequestActionPayload } from './bDRVerificationReturnedToOperatorRequestActionPayload';
 import { DoalApplicationAcceptedRequestActionPayload } from './doalApplicationAcceptedRequestActionPayload';
 import { DoalApplicationAcceptedWithCorrectionsRequestActionPayload } from './doalApplicationAcceptedWithCorrectionsRequestActionPayload';
@@ -353,6 +354,9 @@ export interface RequestActionDTO {
     | 'BDR_APPLICATION_PEER_REVIEW_ACCEPTED'
     | 'BDR_APPLICATION_PEER_REVIEW_REJECTED'
     | 'BDR_APPLICATION_RE_INITIATED'
+    | 'BDRS2_APPLICATION_SENT_TO_VERIFIER'
+    | 'BDRS2_APPLICATION_SENT_TO_REGULATOR'
+    | 'BDRS2_RECALLED_FROM_VERIFICATION'
     | 'PERMANENT_CESSATION_APPLICATION_CANCELLED'
     | 'PERMANENT_CESSATION_APPLICATION_SUBMITTED'
     | 'PERMANENT_CESSATION_SUBMITTED'
@@ -531,6 +535,7 @@ export interface RequestActionDTO {
     | BDRApplicationSubmittedRequestActionPayload
     | BDRApplicationVerificationSubmittedRequestActionPayload
     | BDRRegulatorReviewReturnedForAmendsRequestActionPayload
+    | BDRS2ApplicationSubmittedRequestActionPayload
     | BDRVerificationReturnedToOperatorRequestActionPayload
     | BatchReissueCompletedRequestActionPayload
     | BatchReissueSubmittedRequestActionPayload

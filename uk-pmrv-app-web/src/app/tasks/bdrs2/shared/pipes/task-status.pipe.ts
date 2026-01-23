@@ -3,8 +3,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
 import { TaskItemStatus } from '@shared/task-list/task-list.interface';
-import { submitWizardComplete } from '@tasks/bdr/submit/submit.wizard';
 import { BdrS2Service } from '@tasks/bdrs2/core';
+import { submitWizardComplete } from '@tasks/bdrs2/utils';
 
 import { BDRS2ApplicationSubmitRequestTaskPayload, RequestTaskPayload } from 'pmrv-api';
 

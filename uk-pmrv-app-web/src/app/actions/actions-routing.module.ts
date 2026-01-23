@@ -129,6 +129,10 @@ const routes: Routes = [
         loadChildren: () => import('./bdr/bdr.routes').then((r) => r.BDR_ACTION_ROUTES),
       },
       {
+        path: 'bdrs2',
+        loadChildren: () => import('./bdrs2/bdrs2.routes').then((r) => r.BDRS2_ACTION_ROUTES),
+      },
+      {
         path: 'permanent-cessation',
         loadChildren: () =>
           import('./permanent-cessation/permanent-cessation-routing.module').then(

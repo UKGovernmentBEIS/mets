@@ -1791,6 +1791,30 @@ public enum RequestTaskType {
         }
     },
 
+    BDRS2_WAIT_FOR_REGULATOR_REVIEW(true, RequestType.BDRS2) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+    BDRS2_WAIT_FOR_VERIFICATION(true, RequestType.BDRS2, RequestExpirationType.BDRS2) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.BDRS2_RECALL_FROM_VERIFICATION
+            );
+        }
+    },
+    BDRS2_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.BDRS2) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    //TODO: filled in next steps
+            );
+        }
+    },
+
     /**
      * PERMANENT CESSATION
      */

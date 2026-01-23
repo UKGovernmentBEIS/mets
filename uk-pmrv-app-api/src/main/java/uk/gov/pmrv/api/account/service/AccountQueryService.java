@@ -137,4 +137,8 @@ public class AccountQueryService implements AccountAuthorityInfoProvider {
 	public Optional<Long> getThirdPartyDataProviderId(Long accountId) {
 		return Optional.ofNullable(getAccountById(accountId).getThirdPartyDataProviderId());
 	}
+
+    public List<Long> getAccountIdsByUserId(String userId) {
+        return accountRepository.findAccountIdsByContactUserId(userId);
+    }
 }

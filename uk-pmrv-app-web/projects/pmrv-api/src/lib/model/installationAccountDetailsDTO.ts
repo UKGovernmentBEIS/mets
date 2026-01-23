@@ -15,4 +15,5 @@ import { InstallationAccountPermitDTO } from './installationAccountPermitDTO';
 export interface InstallationAccountDetailsDTO {
   accountPermitDto?: InstallationAccountPermitDTO;
   latestAlrFile?: FileInfoDTO;
+  latestBdrFile?: FileInfoDTO;
 }

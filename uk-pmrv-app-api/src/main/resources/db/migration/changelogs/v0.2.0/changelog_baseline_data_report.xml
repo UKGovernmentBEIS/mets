@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog logicalFilePath="v0.2.0/changelog_baseline_data_report.xml"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_0_baseline_data_report_free_allocation" author="mitzelose@unisystems.gr">
+        <createTable tableName="baseline_data_report_free_allocation">
+            <column name="id" type="bigint" remarks="The baseline data report free allocation identifier">
+                <constraints primaryKey="true" primaryKeyName="baseline_data_report_free_allocation_id_pk" />
+            </column>
+            <column name="account_id" type="bigint" remarks="The unique account identifier">
+                <constraints foreignKeyName="baseline_data_report_free_allocation_account_fk" references="account_installation(id)" nullable="false" unique="true" />
+            </column>
+            <column name="free_allocation" type="boolean" remarks="The free allocation flag (true/false)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="0_2_1_baseline_data_report_free_allocation_seq" author="mitzelose@unisystems.gr">
+        <createSequence sequenceName="baseline_data_report_free_allocation_seq"
+                        startValue="1"
+                        incrementBy="1"/>
+    </changeSet>
+</databaseChangeLog>

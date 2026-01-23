@@ -53,6 +53,7 @@ export class DetailsComponent implements PendingRequest {
               inEiteSector: this.form.value?.inEiteSector,
               ...(isEiteSectorFalse ? { requiresAdditionalSubInstallationSplitsForCbam: undefined } : {}),
             },
+            ...(isEiteSectorFalse ? { mmpFiles: undefined } : {}),
           },
           {
             ...payload?.bdrs2Attachments,

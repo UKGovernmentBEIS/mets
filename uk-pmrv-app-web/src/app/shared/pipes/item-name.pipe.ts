@@ -534,6 +534,10 @@ export class ItemNamePipe implements PipeTransform {
       // BDRS2
       case 'BDRS2_APPLICATION_SUBMIT':
         return `Complete ${customField} stage 2 baseline data report`;
+      case 'BDRS2_WAIT_FOR_VERIFICATION':
+        return `${customField} stage 2 baseline data report sent to verifier`;
+      case 'BDRS2_WAIT_FOR_REGULATOR_REVIEW':
+        return `${customField} stage 2 baseline data report sent to regulator`;
 
       //DOE
       case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':

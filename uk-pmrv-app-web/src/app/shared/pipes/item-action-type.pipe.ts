@@ -146,10 +146,11 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'AER_APPLICATION_RE_INITIATED':
         return 'Emissions report returned for amends';
       case 'AER_APPLICATION_RETURNED_FOR_AMENDS':
-        return 'Emissions report returned for amends';
+        return 'Emissions report returned for amends to operator';
       case 'AER_APPLICATION_AMENDS_SUBMITTED':
+        return 'Amended emissions report submitted to regulator';
       case 'AER_APPLICATION_AMENDS_SENT_TO_VERIFIER':
-        return 'Amended emissions report submitted';
+        return 'Amended emissions report submitted to verifier';
       case 'AER_APPLICATION_REVIEW_SKIPPED':
         return 'Completed without review';
       case 'AER_VERIFICATION_RETURNED_TO_OPERATOR':
@@ -431,9 +432,10 @@ export class ItemActionTypePipe implements PipeTransform {
 
       case 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER':
       case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SENT_TO_VERIFIER':
+        return 'Changes submitted to verifier';
       case 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED':
       case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED':
-        return 'Changes submitted';
+        return 'Changes submitted to regulator';
 
       case 'AVIATION_AER_CORSIA_VERIFICATION_RETURNED_TO_OPERATOR':
       case 'AVIATION_AER_UKETS_VERIFICATION_RETURNED_TO_OPERATOR':
@@ -528,6 +530,11 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'Peer review agreement submitted';
       case 'BDR_APPLICATION_PEER_REVIEW_REJECTED':
         return 'Peer review disagreement submitted';
+
+      case 'BDRS2_APPLICATION_SENT_TO_VERIFIER':
+        return 'Stage 2 baseline data report submitted to verifier';
+      case 'BDRS2_APPLICATION_SENT_TO_REGULATOR':
+        return 'Stage 2 baseline data report submitted to regulator';
 
       case 'PERMANENT_CESSATION_SUBMITTED':
         return 'Permanent cessation started';

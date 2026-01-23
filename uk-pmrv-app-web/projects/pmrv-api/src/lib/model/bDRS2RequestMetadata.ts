@@ -13,4 +13,5 @@ import { RequestMetadata } from './requestMetadata';
 
 export interface BDRS2RequestMetadata extends RequestMetadata {
   year: number;
+  bdrs2InitiationType?: 'RE_INITIATED' | 'INITIATED';
 }

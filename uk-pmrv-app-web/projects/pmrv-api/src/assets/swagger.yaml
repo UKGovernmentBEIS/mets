@@ -2024,24 +2024,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  type: string
-                  format: decimal
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  type: string
-                  format: decimal
   /v1.0/regulator-users:
     post:
       tags:
@@ -3908,22 +3896,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/AviationReportableEmissionsDTO'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/AviationReportableEmissionsDTO'
   /v1.0/aviation-reporting-data/airports:
     post:
       tags:
@@ -5041,6 +5019,9 @@ paths:
                     - BDR_APPLICATION_PEER_REVIEW
                     - BDR_WAIT_FOR_PEER_REVIEW
                     - BDRS2_APPLICATION_SUBMIT
+                    - BDRS2_WAIT_FOR_REGULATOR_REVIEW
+                    - BDRS2_WAIT_FOR_VERIFICATION
+                    - BDRS2_APPLICATION_VERIFICATION_SUBMIT
                     - PERMANENT_CESSATION_APPLICATION_SUBMIT
                     - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW
                     - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW
@@ -6134,6 +6115,9 @@ paths:
               - BDR_APPLICATION_PEER_REVIEW
               - BDR_WAIT_FOR_PEER_REVIEW
               - BDRS2_APPLICATION_SUBMIT
+              - BDRS2_WAIT_FOR_REGULATOR_REVIEW
+              - BDRS2_WAIT_FOR_VERIFICATION
+              - BDRS2_APPLICATION_VERIFICATION_SUBMIT
               - PERMANENT_CESSATION_APPLICATION_SUBMIT
               - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW
               - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW
@@ -6518,33 +6502,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
   /v1.0/requests/available-workflows/permit/{accountId}:
     get:
       tags:
@@ -6574,33 +6543,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
   /v1.0/request-notes/{requestId}/files:
     get:
       tags:
@@ -25178,6 +25132,7 @@ components:
             - BDRS2_UPLOAD_ATTACHMENT
             - BDRS2_SUBMIT_TO_VERIFIER
             - BDRS2_SUBMIT_TO_REGULATOR
+            - BDRS2_RECALL_FROM_VERIFICATION
             - PERMANENT_CESSATION_CANCEL_APPLICATION
             - PERMANENT_CESSATION_SAVE_APPLICATION
             - PERMANENT_CESSATION_UPLOAD
@@ -27502,6 +27457,7 @@ components:
             - BDRS2_UPLOAD_ATTACHMENT
             - BDRS2_SUBMIT_TO_VERIFIER
             - BDRS2_SUBMIT_TO_REGULATOR
+            - BDRS2_RECALL_FROM_VERIFICATION
             - PERMANENT_CESSATION_CANCEL_APPLICATION
             - PERMANENT_CESSATION_SAVE_APPLICATION
             - PERMANENT_CESSATION_UPLOAD
@@ -28318,6 +28274,11 @@ components:
             year:
               type: integer
               format: int16
+            bdrs2InitiationType:
+              type: string
+              enum:
+                - RE_INITIATED
+                - INITIATED
     DoalRequestMetadata:
       required:
         - year
@@ -30229,6 +30190,9 @@ components:
             - BDR_APPLICATION_PEER_REVIEW
             - BDR_WAIT_FOR_PEER_REVIEW
             - BDRS2_APPLICATION_SUBMIT
+            - BDRS2_WAIT_FOR_REGULATOR_REVIEW
+            - BDRS2_WAIT_FOR_VERIFICATION
+            - BDRS2_APPLICATION_VERIFICATION_SUBMIT
             - PERMANENT_CESSATION_APPLICATION_SUBMIT
             - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW
             - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW
@@ -32173,6 +32137,8 @@ components:
           properties:
             bdrs2:
               $ref: '#/components/schemas/BDRS2'
+            verificationPerformed:
+              type: boolean
             bdrs2SectionsCompleted:
               type: object
               additionalProperties:
@@ -35036,6 +35002,9 @@ components:
             - BDR_APPLICATION_PEER_REVIEW
             - BDR_WAIT_FOR_PEER_REVIEW
             - BDRS2_APPLICATION_SUBMIT
+            - BDRS2_WAIT_FOR_REGULATOR_REVIEW
+            - BDRS2_WAIT_FOR_VERIFICATION
+            - BDRS2_APPLICATION_VERIFICATION_SUBMIT
             - PERMANENT_CESSATION_APPLICATION_SUBMIT
             - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW
             - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW
@@ -35650,6 +35619,7 @@ components:
               - BDRS2_UPLOAD_ATTACHMENT
               - BDRS2_SUBMIT_TO_VERIFIER
               - BDRS2_SUBMIT_TO_REGULATOR
+              - BDRS2_RECALL_FROM_VERIFICATION
               - PERMANENT_CESSATION_CANCEL_APPLICATION
               - PERMANENT_CESSATION_SAVE_APPLICATION
               - PERMANENT_CESSATION_UPLOAD
@@ -35982,6 +35952,7 @@ components:
             - BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD
             - BDR_APPLICATION_PEER_REVIEW_PAYLOAD
             - BDRS2_APPLICATION_SUBMIT_PAYLOAD
+            - BDRS2_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD
             - PERMANENT_CESSATION_SUBMIT_PAYLOAD
             - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW_PAYLOAD
             - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_PAYLOAD
@@ -37068,6 +37039,9 @@ components:
             - BDR_APPLICATION_PEER_REVIEW_ACCEPTED
             - BDR_APPLICATION_PEER_REVIEW_REJECTED
             - BDR_APPLICATION_RE_INITIATED
+            - BDRS2_APPLICATION_SENT_TO_VERIFIER
+            - BDRS2_APPLICATION_SENT_TO_REGULATOR
+            - BDRS2_RECALLED_FROM_VERIFICATION
             - PERMANENT_CESSATION_APPLICATION_CANCELLED
             - PERMANENT_CESSATION_APPLICATION_SUBMITTED
             - PERMANENT_CESSATION_SUBMITTED
@@ -38554,6 +38528,52 @@ components:
               type: object
               additionalProperties:
                 type: string
+    BDRS2ApplicationSubmittedRequestActionPayload:
+      required:
+        - bdrs2
+        - installationOperatorDetails
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            bdrs2:
+              $ref: '#/components/schemas/BDRS2'
+            installationOperatorDetails:
+              $ref: '#/components/schemas/InstallationOperatorDetails'
+            verificationPerformed:
+              type: boolean
+            verificationReport:
+              $ref: '#/components/schemas/BDRS2VerificationReport'
+            bdrs2Attachments:
+              type: object
+              additionalProperties:
+                type: string
+            verificationAttachments:
+              type: object
+              additionalProperties:
+                type: string
+    BDRS2VerificationReport:
+      required:
+        - opinionStatement
+        - overallAssessment
+      type: object
+      properties:
+        verificationBodyId:
+          type: integer
+          format: int64
+        verificationBodyDetails:
+          $ref: '#/components/schemas/VerificationBodyDetails'
+        opinionStatement:
+          $ref: '#/components/schemas/BDRS2VerificationOpinionStatement'
+        overallAssessment:
+          oneOf:
+            - $ref: >-
+                #/components/schemas/BDRS2NotVerifiedOverallVerificationAssessment
+            - $ref: >-
+                #/components/schemas/BDRS2VerifiedSatisfactoryOverallVerificationAssessment
+            - $ref: >-
+                #/components/schemas/BDRS2VerifiedWithCommentsOverallVerificationAssessment
     BDRVerificationReturnedToOperatorRequestActionPayload:
       required:
         - changesRequired
@@ -41529,6 +41549,9 @@ components:
             - BDR_APPLICATION_PEER_REVIEW_ACCEPTED
             - BDR_APPLICATION_PEER_REVIEW_REJECTED
             - BDR_APPLICATION_RE_INITIATED
+            - BDRS2_APPLICATION_SENT_TO_VERIFIER
+            - BDRS2_APPLICATION_SENT_TO_REGULATOR
+            - BDRS2_RECALLED_FROM_VERIFICATION
             - PERMANENT_CESSATION_APPLICATION_CANCELLED
             - PERMANENT_CESSATION_APPLICATION_SUBMITTED
             - PERMANENT_CESSATION_SUBMITTED
@@ -41749,6 +41772,8 @@ components:
                 #/components/schemas/BDRApplicationVerificationSubmittedRequestActionPayload
             - $ref: >-
                 #/components/schemas/BDRRegulatorReviewReturnedForAmendsRequestActionPayload
+            - $ref: >-
+                #/components/schemas/BDRS2ApplicationSubmittedRequestActionPayload
             - $ref: >-
                 #/components/schemas/BDRVerificationReturnedToOperatorRequestActionPayload
             - $ref: '#/components/schemas/BatchReissueCompletedRequestActionPayload'
@@ -42140,6 +42165,7 @@ components:
             - BDR_APPLICATION_AMENDS_SUBMITTED_PAYLOAD
             - BDR_APPLICATION_COMPLETED_PAYLOAD
             - BDR_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
+            - BDRS2_APPLICATION_SUBMITTED_PAYLOAD
             - ALR_APPLICATION_SUBMITTED_PAYLOAD
             - ALR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD
             - ALR_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD
@@ -42408,6 +42434,7 @@ components:
             #/components/schemas/BDRApplicationAmendsSubmittedRequestActionPayload
           BDR_APPLICATION_COMPLETED_PAYLOAD: '#/components/schemas/BDRApplicationCompletedRequestActionPayload'
           BDR_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
+          BDRS2_APPLICATION_SUBMITTED_PAYLOAD: '#/components/schemas/BDRApplicationSubmittedRequestActionPayload'
           ALR_APPLICATION_SUBMITTED_PAYLOAD: '#/components/schemas/ALRApplicationSubmittedRequestActionPayload'
           ALR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD: >-
             #/components/schemas/ALRVerificationReturnedToOperatorRequestActionPayload
@@ -43258,6 +43285,8 @@ components:
         accountPermitDto:
           $ref: '#/components/schemas/InstallationAccountPermitDTO'
         latestAlrFile:
+          $ref: '#/components/schemas/FileInfoDTO'
+        latestBdrFile:
           $ref: '#/components/schemas/FileInfoDTO'
     InstallationAccountPermitDTO:
       type: object

@@ -509,6 +509,10 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'BDR_APPLICATION_PEER_REVIEW_REJECTED':
         return [routerLooks + 'actions', value.id, 'bdr', 'peer-review-decision'];
 
+      case 'BDRS2_APPLICATION_SENT_TO_VERIFIER':
+      case 'BDRS2_APPLICATION_SENT_TO_REGULATOR':
+        return [routerLooks + 'actions', value.id, 'bdrs2', 'submitted'];
+
       case 'PERMANENT_CESSATION_SUBMITTED':
       case 'PERMANENT_CESSATION_APPLICATION_CANCELLED':
       case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REQUESTED':

@@ -135,7 +135,7 @@ class InstallationAccountQueryOrchestratorTest {
     }
 
     @Test
-    void getAccountDetails_latestAlrFileReturned() {
+    void getAccountDetails_latestAlrAndBdrFileReturned() {
         Long accountId = 1L;
 
         when(installationAccountQueryService.getAccountDTOById(accountId))
@@ -144,7 +144,10 @@ class InstallationAccountQueryOrchestratorTest {
                 .thenReturn(Optional.empty());
 
         Optional<AccountFileAttachmentDTO> alr =
-                Optional.of(AccountFileAttachmentDTO.builder().fileUuid("FILE123").build());
+                Optional.of(AccountFileAttachmentDTO.builder().fileUuid("ALR_FILE123").build());
+
+        Optional<AccountFileAttachmentDTO> bdr =
+            Optional.of(AccountFileAttachmentDTO.builder().fileUuid("BDR_FILE123").build());
 
         when(accountFileAttachmentService
                 .getLatestFinalizedFileByWorkflowsAndWorkflowSubTypeAndAccountId(
@@ -154,22 +157,39 @@ class InstallationAccountQueryOrchestratorTest {
                 ))
                 .thenReturn(alr);
 
-        when(fileAttachmentService.fileAttachmentExist("FILE123")).thenReturn(true);
-        when(fileAttachmentService.getFileDTO("FILE123"))
-                .thenReturn(new FileDTO("FILE123", "FILE_NAME", null, 1L));
+        when(accountFileAttachmentService
+            .getLatestFinalizedFileByWorkflowsAndWorkflowSubTypeAndAccountId(
+                accountId,
+                Set.of(AccountFileAttachmentWorkflow.BDR),
+                AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT
+            ))
+            .thenReturn(bdr);
+
+        when(fileAttachmentService.fileAttachmentExist("ALR_FILE123")).thenReturn(true);
+        when(fileAttachmentService.fileAttachmentExist("BDR_FILE123")).thenReturn(true);
+        when(fileAttachmentService.getFileDTO("ALR_FILE123"))
+                .thenReturn(new FileDTO("ALR_FILE123", "ALR_FILE123", null, 1L));
+        when(fileAttachmentService.getFileDTO("BDR_FILE123"))
+            .thenReturn(new FileDTO("BDR_FILE123", "BDR_FILE123", null, 1L));
 
         InstallationAccountDetailsDTO result =
                 orchestrator.getAccountDetails(accountId);
 
         assertThat(result.getLatestAlrFile())
                 .isEqualTo(FileInfoDTO.builder()
-                        .uuid("FILE123")
-                        .name("FILE123")
+                        .uuid("ALR_FILE123")
+                        .name("ALR_FILE123")
                         .build());
+
+        assertThat(result.getLatestBdrFile())
+            .isEqualTo(FileInfoDTO.builder()
+                .uuid("BDR_FILE123")
+                .name("BDR_FILE123")
+                .build());
     }
 
     @Test
-    void getAccountDetails_noAlrAttachment_returnsNullLatestAlrFile() {
+    void getAccountDetails_noAlrAttachment_returnsNullLatestAlrAndBdrFile() {
         Long accountId = 1L;
 
         when(installationAccountQueryService.getAccountDTOById(accountId))
@@ -185,10 +205,19 @@ class InstallationAccountQueryOrchestratorTest {
                 ))
                 .thenReturn(Optional.empty());
 
+        when(accountFileAttachmentService
+            .getLatestFinalizedFileByWorkflowsAndWorkflowSubTypeAndAccountId(
+                accountId,
+                Set.of(AccountFileAttachmentWorkflow.BDR),
+                AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT
+            ))
+            .thenReturn(Optional.empty());
+
         InstallationAccountDetailsDTO result =
                 orchestrator.getAccountDetails(accountId);
 
         assertThat(result.getLatestAlrFile()).isNull();
+        assertThat(result.getLatestBdrFile()).isNull();
     }
 
     @Test
@@ -201,7 +230,10 @@ class InstallationAccountQueryOrchestratorTest {
                 .thenReturn(Optional.empty());
 
         Optional<AccountFileAttachmentDTO> alr =
-                Optional.of(AccountFileAttachmentDTO.builder().fileUuid("FILE123").build());
+                Optional.of(AccountFileAttachmentDTO.builder().fileUuid("ALR_FILE123").build());
+
+        Optional<AccountFileAttachmentDTO> bdr =
+            Optional.of(AccountFileAttachmentDTO.builder().fileUuid("BDR_FILE123").build());
 
         when(accountFileAttachmentService
                 .getLatestFinalizedFileByWorkflowsAndWorkflowSubTypeAndAccountId(
@@ -211,12 +243,25 @@ class InstallationAccountQueryOrchestratorTest {
                 ))
                 .thenReturn(alr);
 
-        when(fileAttachmentService.fileAttachmentExist("FILE123"))
+        when(accountFileAttachmentService
+            .getLatestFinalizedFileByWorkflowsAndWorkflowSubTypeAndAccountId(
+                accountId,
+                Set.of(AccountFileAttachmentWorkflow.BDR),
+                AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT
+            ))
+            .thenReturn(bdr);
+
+        when(fileAttachmentService.fileAttachmentExist("ALR_FILE123"))
                 .thenReturn(false);
+
+        when(fileAttachmentService.fileAttachmentExist("BDR_FILE123"))
+            .thenReturn(false);
 
         InstallationAccountDetailsDTO result =
                 orchestrator.getAccountDetails(accountId);
 
         assertThat(result.getLatestAlrFile()).isNull();
+        assertThat(result.getLatestBdrFile()).isNull();
     }
+
 }
