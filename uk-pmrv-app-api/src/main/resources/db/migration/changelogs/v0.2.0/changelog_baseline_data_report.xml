@@ -22,4 +22,30 @@
                         startValue="1"
                         incrementBy="1"/>
     </changeSet>
+
+    <changeSet id="0_2_0_migrate_bdr_free_allocation_flag_completed" author="dridakisc@unisystems.gr">
+        <sql>
+            with completed_bdr_requests as (select account_id, COALESCE((payload->'bdr'->>'isApplicationForFreeAllocation')::boolean, false) as is_fa from request where type='BDR' and status='COMPLETED')
+            insert into baseline_data_report_free_allocation (id, account_id, free_allocation)
+            select nextval('baseline_data_report_free_allocation_seq'), account_id, is_fa from completed_bdr_requests;
+        </sql>
+        <rollback>
+            delete from baseline_data_report_free_allocation where account_id in (select account_id from request where type='BDR' and status='COMPLETED');
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_migrate_bdr_free_allocation_flag_in_progress" author="dridakisc@unisystems.gr">
+        <sql>
+            with in_progress_bdr_requests as (select account_id, id from request where type='BDR' and status='IN_PROGRESS'),
+                 filtered_request_actions as (select bdr_reqs.account_id, ra.id, ra.creation_date, ra.type, COALESCE((ra.payload->'bdr'->>'isApplicationForFreeAllocation')::boolean, false) as is_fa from request_action ra join in_progress_bdr_requests bdr_reqs on ra.request_id = bdr_reqs.id where ra.type in ('BDR_APPLICATION_SENT_TO_REGULATOR', 'BDR_APPLICATION_COMPLETED', 'BDR_APPLICATION_RE_INITIATED')),
+                 max_request_actions_per_acc_id as (select account_id, max(creation_date) as max_creation_date from filtered_request_actions group by account_id),
+                 max_request_actions_info_per_acc_id as (select fra.* from filtered_request_actions fra join max_request_actions_per_acc_id mfrapa on fra.account_id = mfrapa.account_id and fra.creation_date = mfrapa.max_creation_date)
+            insert into baseline_data_report_free_allocation (id, account_id, free_allocation)
+            select nextval('baseline_data_report_free_allocation_seq'), account_id, is_fa from max_request_actions_info_per_acc_id;
+        </sql>
+        <rollback>
+            delete from baseline_data_report_free_allocation where account_id in (select account_id from request where type='BDR' and status='IN_PROGRESS');
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

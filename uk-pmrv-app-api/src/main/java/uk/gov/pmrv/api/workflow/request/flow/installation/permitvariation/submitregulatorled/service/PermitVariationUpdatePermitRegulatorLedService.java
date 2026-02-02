@@ -9,6 +9,7 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountUpdateService;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
+import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.permit.service.PermitService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -34,17 +35,21 @@ public class PermitVariationUpdatePermitRegulatorLedService {
                 request.getAccountId());
         final PermitContainer permitContainer = PERMIT_VARIATION_MAPPER.toPermitContainer(requestPayload, installationOperatorDetails);
 
-		EmitterType emitterType = switch (permitContainer.getPermitType()) {
-			case HSE -> EmitterType.HSE;
-			case WASTE -> EmitterType.WASTE;
-			default -> EmitterType.GHGE;
-		};
         
         permitService.updatePermit(permitContainer, accountId);
 		installationAccountUpdateService.updateAccountUponPermitVariationRegulatorLedSubmit(
 				accountId,
-				emitterType,
+				convertPermitTypeToEmitterType(permitContainer.getPermitType()),
+				convertPermitTypeToEmitterType(requestPayload.getOriginalPermitContainer().getPermitType()),
 				permitContainer.getPermit().getEstimatedAnnualEmissions().getQuantity(),
 				permitContainer.getFirstYearOfReportingObligation());
+	}
+
+	private EmitterType convertPermitTypeToEmitterType(PermitType permitType) {
+		return  switch (permitType) {
+			case HSE -> EmitterType.HSE;
+			case WASTE -> EmitterType.WASTE;
+			default -> EmitterType.GHGE;
+		};
 	}
 }

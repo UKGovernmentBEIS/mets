@@ -7,6 +7,7 @@ import org.springframework.util.ObjectUtils;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
+import uk.gov.pmrv.api.reporting.service.bdr.BaselineDataReportFreeAllocationService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -34,6 +35,7 @@ public class BDRSubmitService {
     private final BDRValidationService bdrValidationService;
     private final RequestService requestService;
     private final InstallationOperatorDetailsQueryService installationOperatorDetailsQueryService;
+    private final BaselineDataReportFreeAllocationService baselineDataReportFreeAllocationService;
     private static final BDRMapper BDR_MAPPER = Mappers.getMapper(BDRMapper.class);
 
     public void applySaveAction(RequestTask requestTask,
@@ -70,6 +72,9 @@ public class BDRSubmitService {
 
         Optional.ofNullable(requestPayload.getVerificationReport()).ifPresent(report ->
              requestMetadata.setOverallAssessmentType(report.getVerificationData().getOverallAssessment().getType()));
+
+        Boolean freeAllocation = taskPayload.getBdr().getIsApplicationForFreeAllocation();
+        baselineDataReportFreeAllocationService.createFreeAllocationEntry(request.getAccountId(), freeAllocation);
 
         submitBDR(requestPayload, requestTask, appUser, RequestActionType.BDR_APPLICATION_SENT_TO_REGULATOR, actionPayload, taskPayload.getBdrSectionsCompleted());
 

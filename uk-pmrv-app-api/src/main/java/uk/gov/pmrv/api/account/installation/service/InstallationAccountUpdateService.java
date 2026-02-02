@@ -73,21 +73,22 @@ public class InstallationAccountUpdateService {
     }
 
     @Transactional
-    public void updateAccountUponPermitVariationGranted(Long accountId, EmitterType emitterType, BigDecimal estimatedAnnualEmissions, Integer registryReportingFirstYear) {
+    public void updateAccountUponPermitVariationGranted(Long accountId, EmitterType emitterType, EmitterType originalContainerEmitterType,
+                                                        BigDecimal estimatedAnnualEmissions, Integer registryReportingFirstYear) {
         InstallationAccount account = installationAccountQueryService.getAccountById(accountId);
         account.setInstallationCategory(InstallationCategoryMapper.getInstallationCategory(emitterType, estimatedAnnualEmissions));
-        if(EmitterType.GHGE.equals(emitterType) && registryReportingFirstYear!=null) {
+        if(EmitterType.GHGE.equals(emitterType) && !EmitterType.GHGE.equals(originalContainerEmitterType) && registryReportingFirstYear!=null) {
             account.setRegistryReportingFirstYear(registryReportingFirstYear);
         }
     }
 
     @Transactional
-    public void updateAccountUponPermitVariationRegulatorLedSubmit(Long accountId, EmitterType emitterType,
+    public void updateAccountUponPermitVariationRegulatorLedSubmit(Long accountId, EmitterType emitterType, EmitterType originalContainerEmitterType,
                                                                    BigDecimal estimatedAnnualEmissions,Integer registryReportingFirstYear) {
         InstallationAccount account = installationAccountQueryService.getAccountById(accountId);
         account.setEmitterType(emitterType);
         account.setInstallationCategory(InstallationCategoryMapper.getInstallationCategory(emitterType, estimatedAnnualEmissions));
-        if(EmitterType.GHGE.equals(emitterType) && registryReportingFirstYear!=null) {
+        if(EmitterType.GHGE.equals(emitterType) && !EmitterType.GHGE.equals(originalContainerEmitterType) && registryReportingFirstYear!=null) {
             account.setRegistryReportingFirstYear(registryReportingFirstYear);
         }
     }

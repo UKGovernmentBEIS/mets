@@ -168,7 +168,7 @@ class InstallationAccountUpdateServiceTest {
 
         when(installationAccountQueryService.getAccountById(accountId)).thenReturn(account);
 
-        service.updateAccountUponPermitVariationGranted(accountId, emitterType, BigDecimal.valueOf(40000),null);
+        service.updateAccountUponPermitVariationGranted(accountId, emitterType, EmitterType.GHGE,BigDecimal.valueOf(40000),null);
 
         assertEquals(EmitterType.HSE, account.getEmitterType());
         assertEquals(installationCategory, account.getInstallationCategory());
@@ -190,7 +190,8 @@ class InstallationAccountUpdateServiceTest {
 
         when(installationAccountQueryService.getAccountById(accountId)).thenReturn(account);
 
-        service.updateAccountUponPermitVariationRegulatorLedSubmit(accountId, emitterType, BigDecimal.valueOf(40000),null);
+        service.updateAccountUponPermitVariationRegulatorLedSubmit(accountId, emitterType, EmitterType.HSE,
+                BigDecimal.valueOf(40000),null);
 
         assertEquals(EmitterType.GHGE, account.getEmitterType());
         assertEquals(installationCategory, account.getInstallationCategory());

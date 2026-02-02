@@ -58,6 +58,7 @@ class PermitVariationUpdatePermitServiceTest {
     	PermitVariationRequestPayload requestPayload = PermitVariationRequestPayload.builder()
     			.permitType(PermitType.GHGE)
     			.permit(permit)
+				.originalPermitContainer(PermitContainer.builder().permitType(PermitType.GHGE).build())
     			.determination(PermitVariationGrantDetermination.builder()
     					.type(DeterminationType.GRANTED)
     					.activationDate(activationDate)
@@ -87,6 +88,6 @@ class PermitVariationUpdatePermitServiceTest {
 				.firstYearOfReportingObligation(2025)
     			.build(), accountId);
 		verify(installationAccountUpdateService, times(1)).updateAccountUponPermitVariationGranted(accountId,
-				EmitterType.GHGE, BigDecimal.valueOf(50000),2025);
+				EmitterType.GHGE, EmitterType.GHGE,BigDecimal.valueOf(50000),2025);
 	}
 }

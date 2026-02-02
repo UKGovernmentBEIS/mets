@@ -15,6 +15,7 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetai
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
 import uk.gov.pmrv.api.reporting.domain.verification.OverallAssessmentType;
+import uk.gov.pmrv.api.reporting.service.bdr.BaselineDataReportFreeAllocationService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -62,6 +63,9 @@ public class BDRSubmitServiceTest {
 
     @Mock
     private RequestService requestService;
+
+    @Mock
+    private BaselineDataReportFreeAllocationService baselineDataReportFreeAllocationService;
 
     @Mock
     private InstallationOperatorDetailsQueryService installationOperatorDetailsQueryService;
@@ -164,6 +168,8 @@ public class BDRSubmitServiceTest {
         service.submitToRegulator(requestTask, appUser);
 
         verify(bdrValidationService, times(1)).validateBDR(bdr);
+        verify(baselineDataReportFreeAllocationService, times(1))
+            .createFreeAllocationEntry(request.getAccountId(), bdr.getIsApplicationForFreeAllocation());
         verify(installationOperatorDetailsQueryService, times(1))
                 .getInstallationOperatorDetails(request.getAccountId());
         verify(requestService, times(1)).addActionToRequest(requestTask.getRequest(),

@@ -162,4 +162,12 @@
             delete from configuration where key = 'ui.features.bdrs2Enabled';
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_delete_configuration_bdr.enable.flag" author="dridakisc@unisystems.gr">
+        <sql>
+            delete from configuration where key = 'ui.features.bdrEnabled';
+        </sql>
+        <rollback>
+            insert into configuration(key, value, type) values ('ui.features.bdrEnabled', false, 'BOOLEAN');
+        </rollback>
+    </changeSet>
 </databaseChangeLog>
