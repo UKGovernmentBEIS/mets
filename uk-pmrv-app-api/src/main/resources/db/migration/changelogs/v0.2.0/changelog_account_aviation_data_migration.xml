@@ -100,4 +100,53 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="0_2_0_data_migration_for_reporting_status_table_corrections" author="dridakisc@unisystems.gr">
+    <sql>
+        <![CDATA[
+        --1 - delete 2026 statuses from accounts that are not LIVE or NEW
+        with account_with_statuses as
+                     (select id, status from account_aviation)
+        delete from account_aviation_reporting_status where year=2026 and account_id not in (select id from account_with_statuses where status in ('LIVE', 'NEW'));
+
+        --2 - update 2026 statuses of accounts that are LIVE or NEW to REQUIRED_TO_REPORT
+        with account_with_statuses as
+                     (select id, status from account_aviation)
+        update account_aviation_reporting_status set status='REQUIRED_TO_REPORT' where year=2026 and account_id in (select id from account_with_statuses where status in ('LIVE', 'NEW'));
+
+        --3 - delete old records before 2021 for UK_ETS_AVIATION and before 2019 for CORSIA
+        with reporting_status_per_scheme as
+                 (select aars.year, aars.account_id , acc.emission_trading_scheme from account_aviation_reporting_status aars join account acc on acc.id = aars.account_id)
+        delete from account_aviation_reporting_status where (account_id, year) in
+                                                            (select account_id, year from reporting_status_per_scheme where (year < 2021 and emission_trading_scheme='UK_ETS_AVIATION') or (year < 2019 and emission_trading_scheme='CORSIA'));
+
+        --4 - change required to report years without emissions to EXEMPT_COMMERCIAL for years before 2025
+        with emissions_per_account_per_year as
+                     (select account_id, year from aviation_rpt_reportable_emissions),
+            reporting_statuses_per_account_per_year_required as
+            (select account_id, year from account_aviation_reporting_status where status='REQUIRED_TO_REPORT'),
+            accounts_per_year_inconsistent as
+                                                                                (select account_id, year from reporting_statuses_per_account_per_year_required rspapyr where (account_id, year) not in (select account_id, year from emissions_per_account_per_year))
+        update account_aviation_reporting_status set status = 'EXEMPT_COMMERCIAL' where (account_id, year) in (
+            select account_id, year from accounts_per_year_inconsistent where year < 2025
+        );
+
+        --5 - remove reporting statuses for closed accounts after their last AER
+        with closed_accounts as (
+            select id, status from account_aviation where status not in ('LIVE', 'NEW')
+        ),
+             aer_year_per_account as (
+                 select account_id, (metadata ->> 'year') ::int as aer_year from request where type in ('AVIATION_AER_CORSIA', 'AVIATION_AER_UKETS') group by account_id, metadata ->> 'year'
+            ),
+            max_aer_year_per_account as (
+        select account_id, max(aer_year) as max_aer_year from aer_year_per_account group by account_id
+            ),
+            reporting_statuses_with_aer_max_year as (
+        select aars.account_id, aars.year, maypa.max_aer_year from account_aviation_reporting_status aars join closed_accounts ca on ca.id = aars.account_id left join max_aer_year_per_account maypa on maypa.account_id = aars.account_id
+            )
+        delete from account_aviation_reporting_status where (account_id, year) in
+                                                            (select account_id, year from reporting_statuses_with_aer_max_year where year > max_aer_year);
+        ]]>;
+    </sql>
+    </changeSet>
+
 </databaseChangeLog>
