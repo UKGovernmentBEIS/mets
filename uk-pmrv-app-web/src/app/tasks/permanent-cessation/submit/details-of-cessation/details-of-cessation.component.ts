@@ -15,11 +15,10 @@ import { detailsOfPermanentCessationFormProvider } from './details-of-cessation-
 
 @Component({
   selector: 'app-details-of-cessation',
-  templateUrl: './details-of-cessation.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [detailsOfPermanentCessationFormProvider],
-  standalone: true,
   imports: [SharedModule, TaskSharedModule, PermanentCessationTaskComponent],
+  templateUrl: './details-of-cessation.component.html',
+  providers: [detailsOfPermanentCessationFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsOfCessationComponent {
   permanentCessationPayload: Signal<PermanentCessationApplicationSubmitRequestTaskPayload> =

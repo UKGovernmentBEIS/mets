@@ -15,9 +15,10 @@ import { optionalFormProvider } from './optional-form.provider';
 
 @Component({
   selector: 'app-optional',
+  standalone: false,
   templateUrl: './optional.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [optionalFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OptionalComponent {
   taskKey$ = this.route.data.pipe(map((x) => x?.taskKey));

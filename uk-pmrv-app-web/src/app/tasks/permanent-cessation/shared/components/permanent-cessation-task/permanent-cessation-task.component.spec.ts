@@ -31,6 +31,7 @@ describe('PermanentCessationTaskComponent', () => {
   }
 
   @Component({
+    standalone: false,
     template: `
       <app-permanent-cessation-task [breadcrumb]="true">
         <app-page-heading caption="Permanent cessation details">Permanent cessation details</app-page-heading>

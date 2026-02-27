@@ -8,7 +8,6 @@ import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 
 @Component({
   selector: 'app-bdr-complete-confirmation',
-  standalone: true,
   imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, RouterLink],
   template: `
     <div class="govuk-grid-row">

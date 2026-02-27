@@ -12,6 +12,7 @@ import { refundFormProvider } from './refund-form.provider';
 
 @Component({
   selector: 'app-refund',
+  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onContinue()"
@@ -32,8 +33,8 @@ import { refundFormProvider } from './refund-form.provider';
     </app-wizard-step>
     <a govukLink routerLink="../..">Return to: Cessation</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [refundFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RefundComponent implements PendingRequest {
   constructor(

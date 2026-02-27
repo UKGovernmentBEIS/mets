@@ -27,6 +27,7 @@ describe('FileInputComponent', () => {
   let control: FormControl;
 
   @Component({
+    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-file-input formControlName="file" [downloadUrl]="getDownloadUrl"></app-file-input>

@@ -15,6 +15,7 @@ describe('MonitoringPlanSummaryTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-monitoring-plan-summary-template
         [planDeviation]="planDeviation"

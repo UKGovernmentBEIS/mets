@@ -17,7 +17,6 @@ import { NotifyOperatorForDecisionRequestTaskActionPayload, RequestTaskActionPay
 
 @Component({
   selector: 'app-waste-qdr-complete-task',
-  standalone: true,
   imports: [SharedModule, WasteQdrTaskReviewComponent],
   templateUrl: './complete-task.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

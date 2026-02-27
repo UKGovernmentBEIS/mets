@@ -36,9 +36,10 @@ import {
 
 @Component({
   selector: 'app-activity-calculation-aggregation',
+  standalone: false,
   templateUrl: './activity-calculation-aggregation.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActivityCalculationAggregationComponent implements OnInit {
   measurementUnits = getActivityDataMeasuremenUnits();

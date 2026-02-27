@@ -49,6 +49,9 @@ public enum MetsErrorCode implements NetzErrorCode {
     /** Codes for DOAL. */
     INVALID_DOAL("DOAL1001", HttpStatus.BAD_REQUEST, "Invalid DOAL"),
 
+    /** Codes for Withhold*/
+    INVALID_NUMBER_OF_WORKFLOWS("WITHHOLD1001", HttpStatus.BAD_REQUEST, "More than 1 withhold workflows open"),
+
     /** Codes for HSE_TI. */
     HSE_TI_CREATION_NOT_ALLOWED("HSETI1000", HttpStatus.BAD_REQUEST, "HSE TI creation is not allowed"),
     HSE_TI_ALLOCATION_PERIOD_IS_OPEN("HSETI1001", HttpStatus.BAD_REQUEST, "An HSE target increase application is already in progress for the selected allocation period. You must select a different allocation period."),
@@ -65,6 +68,11 @@ public enum MetsErrorCode implements NetzErrorCode {
     /** Codes for BDRS2. */
     BDRS2_CREATION_NOT_ALLOWED("BDRS21000", HttpStatus.BAD_REQUEST, "BDRS2 creation is not allowed"),
     BDRS2_FILENAME_NOT_VALID("BDRS21001", HttpStatus.BAD_REQUEST, "BDRS2 file name is not valid"),
+    BDRS2_MUST_UNDERGO_VERIFICATION("BDRS21002", HttpStatus.BAD_REQUEST, "BDRS2 must undergo verification"),
+    INVALID_BDRS2_REVIEW_OUTCOME("BDRS21003", HttpStatus.BAD_REQUEST, "Invalid BDRS2 review outcome"),
+    INVALID_BDRS2_REVIEW("BDRS21004", HttpStatus.BAD_REQUEST, "Invalid BDRS2 review"),
+    BDRS2_REQUEST_IS_NOT_BDRS2("BDRS21005", HttpStatus.BAD_REQUEST, "Provided request id is not of type BDRS2"),
+
 
     /** Codes for ALR. */
     ALR_CREATION_NOT_ALLOWED("ALR1000", HttpStatus.BAD_REQUEST, "ALR creation is not allowed"),
@@ -94,6 +102,9 @@ public enum MetsErrorCode implements NetzErrorCode {
     VIR_CREATION_NOT_ALLOWED("VIR1000", HttpStatus.BAD_REQUEST, "VIR creation is not allowed"),
     INVALID_VIR("VIR1001", HttpStatus.BAD_REQUEST, "Invalid VIR"),
     INVALID_VIR_REVIEW("VIR1002", HttpStatus.BAD_REQUEST, "Invalid VIR review"),
+
+    /** Codes for Withholding **/
+    WITHHOLDING_OF_ALLOWANCES_CREATION_NOT_ALLOWED("WITHHOLDING1000", HttpStatus.BAD_REQUEST,"Invalid request type"),
 
     /** Codes for AIR. */
     INVALID_AIR("AIR1001", HttpStatus.BAD_REQUEST, "Invalid AIR"),

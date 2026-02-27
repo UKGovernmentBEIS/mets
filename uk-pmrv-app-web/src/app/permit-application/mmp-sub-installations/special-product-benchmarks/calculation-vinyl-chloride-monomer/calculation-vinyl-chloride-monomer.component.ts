@@ -18,9 +18,10 @@ import { calculationVinylChlorideMonomerAddFormFactory } from './calculation-vin
 
 @Component({
   selector: 'app-calculation-vinyl-chloride-monomer',
+  standalone: false,
   templateUrl: './calculation-vinyl-chloride-monomer.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [calculationVinylChlorideMonomerAddFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalculationVinylChlorideMonomerComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

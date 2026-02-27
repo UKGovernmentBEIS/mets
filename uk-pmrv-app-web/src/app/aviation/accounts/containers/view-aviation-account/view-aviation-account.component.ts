@@ -14,6 +14,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-view-aviation-account',
+  standalone: false,
   templateUrl: './view-aviation-account.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

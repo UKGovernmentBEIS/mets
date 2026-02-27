@@ -9,6 +9,7 @@ import { PermitRevocationStore } from '../../../store/permit-revocation-store';
 
 @Component({
   selector: 'app-revocation-cessation-summary',
+  standalone: false,
   template: `
     <app-page-heading>Revocation cessation</app-page-heading>
 

@@ -9,9 +9,10 @@ import { AviationAccountsStore, selectNewAccount } from '../../store';
 
 @Component({
   selector: 'app-create-aviation-account-summary',
+  standalone: false,
   templateUrl: './create-aviation-account-summary.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateAviationAccountSummaryComponent {
   info$ = this.store.pipe(selectNewAccount, takeUntil(this.destroy$));

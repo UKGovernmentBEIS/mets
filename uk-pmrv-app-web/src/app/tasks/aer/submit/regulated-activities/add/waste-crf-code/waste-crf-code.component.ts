@@ -15,9 +15,10 @@ import { wasteCrfCodeFormProvider } from './waste-crf-code-form.provider';
 
 @Component({
   selector: 'app-regulated-activity-waste-crf-code',
+  standalone: false,
   templateUrl: './waste-crf-code.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [wasteCrfCodeFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WasteCrfCodeComponent implements PendingRequest, AfterViewInit {
   caption$ = combineLatest([this.aerService.getTask('regulatedActivities'), this.route.paramMap]).pipe(

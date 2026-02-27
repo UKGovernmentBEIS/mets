@@ -12,9 +12,8 @@ import { FlightProceduresFormProvider } from '../flight-procedures-form.provider
 
 @Component({
   selector: 'app-flight-procedures-determination-international-flights-no-monitoring',
-  templateUrl: './flight-procedures-determination-international-flights-no-monitoring.component.html',
-  standalone: true,
   imports: [SharedModule, FlightProceduresFormComponent, ReturnToLinkComponent],
+  templateUrl: './flight-procedures-determination-international-flights-no-monitoring.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class FlightProceduresDeterminationInternationalFlightsNoMonitoringComponent {

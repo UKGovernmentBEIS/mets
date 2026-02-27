@@ -12,6 +12,7 @@ describe('AsyncValidationFieldDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
+    standalone: false,
     template: '<div govuk-text-input appAsyncValidationField [formControl]="name" label="Name"></div>',
   })
   class TestComponent {

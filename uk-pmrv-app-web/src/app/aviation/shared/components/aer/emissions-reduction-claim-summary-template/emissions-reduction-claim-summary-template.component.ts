@@ -8,9 +8,8 @@ import { AviationAerSaf, AviationAerSafPurchase } from 'pmrv-api';
 
 @Component({
   selector: 'app-aer-emissions-reduction-claim-summary-template',
-  templateUrl: './emissions-reduction-claim-summary-template.component.html',
-  standalone: true,
   imports: [SharedModule, RouterLinkWithHref, EmissionsReductionClaimListTemplateComponent],
+  templateUrl: './emissions-reduction-claim-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionsReductionClaimSummaryTemplateComponent {

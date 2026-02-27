@@ -7,6 +7,7 @@ import { ComplianceEtsService } from '@tasks/aer/verification-submit/compliance-
 
 @Component({
   selector: 'app-missing-data-methods',
+  standalone: false,
   templateUrl: './missing-data-methods.component.html',
   providers: [missingDataMethodsFormProvider, ComplianceEtsService],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -8,11 +8,11 @@ import { GovukComponentsModule, GovukSelectOption } from 'govuk-components';
 
 @Component({
   selector: 'app-operator-details-air-operating-certificate-template',
-  standalone: true,
   imports: [GovukComponentsModule, SharedModule, ReactiveFormsModule],
+  standalone: true,
   templateUrl: './operator-details-air-operating-certificate-template.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorDetailsAirOperatingCertificateTemplateComponent {
   @Input() form: FormGroup<any>;

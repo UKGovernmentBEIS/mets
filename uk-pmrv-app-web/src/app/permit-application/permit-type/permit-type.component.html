@@ -13,16 +13,16 @@
 
     <div formControlName="type" govuk-radio legend="Which type of permit are you applying for?" legendSize="medium">
       <govuk-radio-option
-        [value]="'GHGE'"
+        value="GHGE"
         label="Apply for a GHGE permit"
         hint="Installations which carry out regulated activities and are not eligible for HSE status must have a GHGE permit"></govuk-radio-option>
       <govuk-radio-option
-        [value]="'HSE'"
+        value="HSE"
         label="Apply for an HSE permit"
         hint="You are an ultra small emitter if your installation emits less than 2,500 tonnes of carbon dioxide equivalent (CO2 eq) in the relevant period. You can only apply for an HSE permit if you have HSE status for the relevant allocation period"></govuk-radio-option>
       <govuk-radio-option
         *ngIf="(wastePermitEnabled$ | async) === true"
-        [value]="'WASTE'"
+        value="WASTE"
         label="Apply for a waste voluntary monitoring plan"
         hint="Installations which process waste via incineration and are within scope of and participating in the voluntary MRV-only period can apply for a waste voluntary monitoring plan. This includes facilities conducting advanced treatments and advanced conversion technologies, such as gasification and pyrolysis-based processes, as well as energy from waste facilities and waste incinerators without energy recovery.">
         <ng-container govukConditionalContent>

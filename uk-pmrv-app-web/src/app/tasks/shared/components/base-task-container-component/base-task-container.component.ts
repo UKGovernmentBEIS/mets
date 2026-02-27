@@ -9,7 +9,9 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { ItemDTO, RequestActionInfoDTO, RequestTaskDTO, RequestTaskItemDTO } from 'pmrv-api';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app-base-task-container-component[expectedTaskType][header]',
+  standalone: false,
   template: `
     <govuk-notification-banner *ngIf="notification" type="success">
       <h1 class="govuk-notification-banner__heading">Details updated</h1>

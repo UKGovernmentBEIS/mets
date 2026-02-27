@@ -16,6 +16,7 @@ import { cancelActionMap } from '../../cancel-action.map';
 
 @Component({
   selector: 'app-cancel-surrender',
+  standalone: false,
   template: `
     <app-page-heading size="xl">Are you sure you want to cancel this task?</app-page-heading>
     <p class="govuk-body">This task and its data will be deleted.</p>

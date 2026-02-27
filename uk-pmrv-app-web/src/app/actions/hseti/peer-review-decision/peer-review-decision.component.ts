@@ -20,7 +20,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-action-hseti-peer-review-decision',
-  standalone: true,
   imports: [SharedModule, ActionSharedModule],
   templateUrl: './peer-review-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

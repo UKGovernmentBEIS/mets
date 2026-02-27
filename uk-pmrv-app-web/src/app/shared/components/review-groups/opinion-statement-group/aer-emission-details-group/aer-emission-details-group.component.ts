@@ -4,6 +4,7 @@ import { OpinionStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-aer-emission-details-group',
+  standalone: false,
   templateUrl: './aer-emission-details-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

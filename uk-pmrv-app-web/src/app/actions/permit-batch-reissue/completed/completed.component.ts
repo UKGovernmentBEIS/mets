@@ -9,6 +9,7 @@ import { CommonActionsStore } from '../../store/common-actions.store';
 
 @Component({
   selector: 'app-completed',
+  standalone: false,
   templateUrl: './completed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

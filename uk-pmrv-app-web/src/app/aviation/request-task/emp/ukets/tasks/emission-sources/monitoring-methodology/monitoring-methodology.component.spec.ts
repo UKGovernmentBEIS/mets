@@ -32,11 +32,11 @@ const mockAircraftType: AircraftTypeDetails = {
 };
 @Component({
   selector: 'app-mock-parent',
+  imports: [ReactiveFormsModule, MonitoringMethodologyComponent],
+  standalone: true,
   template: `
     <app-monitoring-methodology></app-monitoring-methodology>
   `,
-  standalone: true,
-  imports: [ReactiveFormsModule, MonitoringMethodologyComponent],
   providers: [EmissionSourcesFormProvider],
 })
 class MockParentComponent {

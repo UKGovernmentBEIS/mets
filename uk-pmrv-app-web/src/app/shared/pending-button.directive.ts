@@ -5,7 +5,11 @@ import { takeUntil } from 'rxjs';
 import { PendingRequestService } from '../core/guards/pending-request.service';
 import { DestroySubject } from '../core/services/destroy-subject.service';
 
-@Directive({ selector: 'button[appPendingButton]', providers: [DestroySubject] })
+@Directive({
+  selector: 'button[appPendingButton]',
+  standalone: false,
+  providers: [DestroySubject],
+})
 export class PendingButtonDirective implements OnInit {
   constructor(
     @Optional() private readonly pendingRequest: PendingRequestService,

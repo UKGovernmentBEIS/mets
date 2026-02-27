@@ -33,27 +33,21 @@ export const EMP_CORSIA_FLIGHT_PROCEDURES_ROUTES: Routes = [
         data: { backlink: '../list-state-pairs' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
-          import(
-            './flight-procedures-determination-international-flights/flight-procedures-determination-international-flights.component'
-          ),
+          import('./flight-procedures-determination-international-flights/flight-procedures-determination-international-flights.component'),
       },
       {
         path: 'determination-international-flights-offset',
         data: { backlink: '../determination-international-flights' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
-          import(
-            './flight-procedures-determination-international-flights-offset/flight-procedures-determination-international-flights-offset.component'
-          ),
+          import('./flight-procedures-determination-international-flights-offset/flight-procedures-determination-international-flights-offset.component'),
       },
       {
         path: 'determination-international-flights-no-monitoring',
         data: { backlink: '../determination-international-flights-offset' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
-          import(
-            './flight-procedures-determination-international-flights-no-monitoring/flight-procedures-determination-international-flights-no-monitoring.component'
-          ),
+          import('./flight-procedures-determination-international-flights-no-monitoring/flight-procedures-determination-international-flights-no-monitoring.component'),
       },
       {
         path: 'summary',

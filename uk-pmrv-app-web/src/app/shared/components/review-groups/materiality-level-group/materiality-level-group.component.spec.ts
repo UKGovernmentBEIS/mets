@@ -15,6 +15,7 @@ describe('MaterialityLevelGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-materiality-level-group
         [isEditable]="isEditable"

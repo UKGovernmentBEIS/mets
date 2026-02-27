@@ -17,7 +17,6 @@ import { onSubmitFlightProcedures } from '../shared/flight-procedures.functions'
 
 @Component({
   selector: 'app-flight-procedures-covered-uk',
-  standalone: true,
   imports: [GovukComponentsModule, SharedModule, FlightProceduresFormComponent, ReturnToLinkComponent],
   templateUrl: './flight-procedures-covered-uk.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

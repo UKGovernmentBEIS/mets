@@ -48,6 +48,7 @@ export const NON_COMPLIANCE_SUBMIT_PAGE_ROUTABLE = new InjectionToken<boolean>('
 });
 
 @NgModule({
+  imports: [CommonModule, NonComplianceRoutingModule, ReturnToLinkComponent, SharedModule, TaskSharedModule],
   declarations: [
     ChooseWorkflowAddComponent,
     ChooseWorkflowComponent,
@@ -85,7 +86,6 @@ export const NON_COMPLIANCE_SUBMIT_PAGE_ROUTABLE = new InjectionToken<boolean>('
     UploadInitialNoticeComponent,
     UploadNoticeOfIntentComponent,
   ],
-  imports: [CommonModule, NonComplianceRoutingModule, ReturnToLinkComponent, SharedModule, TaskSharedModule],
   providers: [PeerReviewDecisionGuard],
 })
 export class NonComplianceModule {}

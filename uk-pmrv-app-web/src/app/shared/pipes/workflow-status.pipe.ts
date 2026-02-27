@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { RequestDetailsDTO } from 'pmrv-api';
 
-@Pipe({ name: 'workflowStatus' })
+@Pipe({
+  name: 'workflowStatus',
+  standalone: false,
+})
 export class WorkflowStatusPipe implements PipeTransform {
   transform(type: RequestDetailsDTO['requestStatus']): string {
     switch (type) {

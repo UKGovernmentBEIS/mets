@@ -25,9 +25,8 @@ import { ManagementProceduresRolesFormComponent } from '../management-procedures
 
 @Component({
   selector: 'app-management-procedures-roles',
-  templateUrl: './management-procedures-roles.component.html',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent, ManagementProceduresRolesFormComponent],
+  templateUrl: './management-procedures-roles.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

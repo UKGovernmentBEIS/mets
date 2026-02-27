@@ -8,8 +8,8 @@ import { BulkDownloadsRoutingModule } from './bulk-downloads-routing.module';
 import { BulkDownloadsService } from './core/bulk-downloads.service';
 
 @NgModule({
-  declarations: [],
   imports: [BulkDownloadsRoutingModule, CommonModule, RouterModule, SharedModule],
+  declarations: [],
   providers: [BulkDownloadsService],
 })
 export class BulkDownloadsModule {}

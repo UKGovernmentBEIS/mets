@@ -27,9 +27,10 @@ import { createAnotherMeasurementDevice, temperatureFormProvider } from './tempe
 
 @Component({
   selector: 'app-temperature',
+  standalone: false,
   templateUrl: './temperature.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [temperatureFormProvider, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TemperatureComponent implements OnInit, AfterViewInit {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;

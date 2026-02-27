@@ -4,6 +4,7 @@ import { DoalDetermination } from 'pmrv-api';
 
 @Component({
   selector: 'app-determination-summary-template',
+  standalone: false,
   templateUrl: './determination-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

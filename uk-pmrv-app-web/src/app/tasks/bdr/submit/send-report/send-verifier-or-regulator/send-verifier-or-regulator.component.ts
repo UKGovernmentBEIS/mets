@@ -17,10 +17,9 @@ import { sendVerifierOrRegulatorFormProvider } from './send-verifier-or-regulato
 
 @Component({
   selector: 'app-send-verifier-or-regulator',
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   templateUrl: './send-verifier-or-regulator.component.html',
   providers: [sendVerifierOrRegulatorFormProvider],
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SendVerifierOrRegulatorComponent implements PendingRequest {

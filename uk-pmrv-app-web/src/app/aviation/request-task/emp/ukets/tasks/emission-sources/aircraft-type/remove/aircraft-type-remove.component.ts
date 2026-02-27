@@ -17,10 +17,9 @@ import {
 
 @Component({
   selector: 'app-aircraft-type-remove',
-  templateUrl: './aircraft-type-remove.component.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule, SharedModule],
+  templateUrl: './aircraft-type-remove.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AircraftTypeRemoveComponent {
   route = inject(ActivatedRoute);

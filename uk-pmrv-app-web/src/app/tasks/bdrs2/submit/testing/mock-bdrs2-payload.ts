@@ -12,18 +12,21 @@ export const mockBDRS2ApplicationSubmitPayload: BDRS2ApplicationSubmitRequestTas
 export const mockBDRS2ApplicationSubmitPayloadCompleted: BDRS2ApplicationSubmitRequestTaskPayload = {
   payloadType: 'BDRS2_APPLICATION_SUBMIT_PAYLOAD',
   bdrs2: {
-    files: ['b6c0615d-cb16-473e-9fe0-d3fa6991e4cf'],
-    mmpFiles: null,
+    mmpFiles: {
+      file: 'b6c0615d-cb16-473e-9fe0-d3fa6991e4cf',
+    },
     bdrs2guardQuestions: {
       continueApplicationForFreeAllocationType: 'CONTINUE_AS_MAIN_SCHEME_PARTICIPANT',
-      applicationWithdrawalReason: 'Not needed',
-      covidAdjustments: null,
-      inEiteSector: null,
+      covidAdjustments: false,
+      inEiteSector: true,
+    },
+    bdrs2Files: {
+      file: 'b6c0615d-cb16-473e-9fe0-d3fa6991e4cf',
     },
   },
   bdrs2Attachments: { 'b6c0615d-cb16-473e-9fe0-d3fa6991e4cf': 'test.PNG' },
   bdrs2SectionsCompleted: {
-    baseline: false,
+    baseline: true,
   },
 };
 
@@ -35,7 +38,10 @@ export const mockBdrS2State = {
       type: 'BDRS2',
       competentAuthority: 'ENGLAND',
       accountId: 46,
-      requestMetadata: {},
+      requestMetadata: {
+        type: 'BDRS2',
+        year: '2026',
+      },
     },
     requestTask: {
       id: 1,

@@ -10,9 +10,10 @@ import { AerService } from '@tasks/aer/core/aer.service';
 
 @Component({
   selector: 'app-approaches',
+  standalone: false,
   templateUrl: './approaches.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [PendingRequestService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApproachesComponent implements PendingRequest {
   monitoringApproaches$ = this.aerService

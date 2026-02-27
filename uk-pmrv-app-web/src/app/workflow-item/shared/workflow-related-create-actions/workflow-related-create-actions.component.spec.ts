@@ -25,6 +25,7 @@ describe('WorkflowRelatedCreateActionsComponent', () => {
   const requestItemsService = mockClass(RequestItemsService);
 
   @Component({
+    standalone: false,
     template: `
       <app-workflow-related-create-actions
         [accountId$]="accountId$"

@@ -13,6 +13,7 @@ export interface DoalSummaryAuthorityResponse extends DoalAuthorityResponse {
 
 @Component({
   selector: 'app-doal-authority-decision-template',
+  standalone: false,
   templateUrl: './authority-decision-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

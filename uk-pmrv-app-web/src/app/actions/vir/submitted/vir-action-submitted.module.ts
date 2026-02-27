@@ -9,7 +9,7 @@ import { SummaryComponent } from './summary/summary.component';
 import { VirActionSubmittedRoutingModule } from './vir-action-submitted-routing.module';
 
 @NgModule({
-  declarations: [SubmittedComponent, SummaryComponent],
   imports: [ActionSharedModule, SharedModule, VirActionSubmittedRoutingModule, VirSharedModule],
+  declarations: [SubmittedComponent, SummaryComponent],
 })
 export class VirActionSubmittedModule {}

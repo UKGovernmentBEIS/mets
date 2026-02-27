@@ -15,9 +15,10 @@ import { emissionNetworkFormProvider } from './emission-network.provider';
 
 @Component({
   selector: 'app-emission-network',
+  standalone: false,
   templateUrl: './emission-network.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [emissionNetworkFormProvider, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionNetworkComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

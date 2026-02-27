@@ -141,4 +141,8 @@ public class AccountQueryService implements AccountAuthorityInfoProvider {
     public List<Long> getAccountIdsByUserId(String userId) {
         return accountRepository.findAccountIdsByContactUserId(userId);
     }
+
+    public Optional<Integer> getRegistryIdByAccountId(Long accountId) {
+        return accountRepository.findRegistryIdByAccountId(accountId);
+    }
 }

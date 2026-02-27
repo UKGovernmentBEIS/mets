@@ -14,6 +14,7 @@ import {
 
 @Component({
   selector: 'app-pfc-tier-summary',
+  standalone: false,
   templateUrl: './pfc-tier-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

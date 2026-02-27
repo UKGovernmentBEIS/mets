@@ -4,6 +4,7 @@ import { ComplianceMonitoringReporting } from 'pmrv-api';
 
 @Component({
   selector: 'app-compliance-monitoring-group',
+  standalone: false,
   templateUrl: './compliance-monitoring-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

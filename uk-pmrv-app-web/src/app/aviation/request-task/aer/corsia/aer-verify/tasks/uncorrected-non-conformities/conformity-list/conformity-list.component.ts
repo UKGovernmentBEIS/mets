@@ -20,10 +20,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-conformity-list',
-  templateUrl: './conformity-list.component.html',
-  standalone: true,
-  providers: [DestroySubject],
   imports: [SharedModule, RouterModule, UncorrectedItemGroupComponent, ReturnToLinkComponent],
+  templateUrl: './conformity-list.component.html',
+  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConformityListComponent {

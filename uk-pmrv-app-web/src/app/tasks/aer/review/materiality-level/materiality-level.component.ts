@@ -9,6 +9,7 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-materiality-level',
+  standalone: false,
   template: `
     <app-aer-task-review
       [breadcrumb]="true"

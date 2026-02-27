@@ -22,7 +22,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-annual-offsetting-requirements-submitted',
-  standalone: true,
   imports: [AnnualOffsettingRequirementsSummaryTemplateComponent, SharedModule],
   template: `
     <ng-container *ngIf="vm() as vm">

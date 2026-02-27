@@ -18,9 +18,8 @@ import { createTablePage } from '../../../../../../mi-reports/core/mi-report';
 
 @Component({
   selector: 'app-total-emissions-aerodrome-pairs-table-template',
-  templateUrl: './total-emissions-aerodrome-pairs-table-template.component.html',
-  standalone: true,
   imports: [SharedModule],
+  templateUrl: './total-emissions-aerodrome-pairs-table-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsAerodromePairsTableTemplateComponent implements OnInit {

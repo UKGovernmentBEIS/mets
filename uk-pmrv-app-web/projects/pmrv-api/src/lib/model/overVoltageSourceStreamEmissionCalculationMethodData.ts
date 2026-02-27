@@ -11,8 +11,7 @@
  */
 import { PfcSourceStreamEmissionCalculationMethodData } from './pfcSourceStreamEmissionCalculationMethodData';
 
-export interface OverVoltageSourceStreamEmissionCalculationMethodData
-  extends PfcSourceStreamEmissionCalculationMethodData {
+export interface OverVoltageSourceStreamEmissionCalculationMethodData extends PfcSourceStreamEmissionCalculationMethodData {
   anodeEffectsOverVoltagePerCell: string;
   aluminiumAverageCurrentEfficiencyProduction: string;
   overVoltageCoefficient: string;

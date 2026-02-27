@@ -6,17 +6,18 @@ import { combineLatest, first, map, switchMap, withLatestFrom } from 'rxjs';
 import { AerService } from '@tasks/aer/core/aer.service';
 @Component({
   selector: 'app-emission-point-delete',
+  standalone: false,
   template: `
     <app-emission-point-delete-template
       (delete)="onDelete()"
       [emissionPoint]="emissionPoint$ | async"></app-emission-point-delete-template>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .nowrap {
       white-space: nowrap;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionPointDeleteComponent {
   emissionPoint$ = combineLatest([this.aerService.getTask('emissionPoints'), this.route.paramMap]).pipe(

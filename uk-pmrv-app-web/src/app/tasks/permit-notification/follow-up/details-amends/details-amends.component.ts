@@ -17,6 +17,7 @@ import {
 
 @Component({
   selector: 'app-details-amends',
+  standalone: false,
   templateUrl: './details-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

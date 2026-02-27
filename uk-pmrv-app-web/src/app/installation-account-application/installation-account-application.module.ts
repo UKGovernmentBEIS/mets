@@ -39,6 +39,7 @@ import { SummaryComponent } from './summary/summary.component';
 import { TaskListComponent } from './task-list/task-list.component';
 
 @NgModule({
+  imports: [InstallationAccountApplicationRoutingModule, SharedModule],
   declarations: [
     ApplicationSubmittedComponent,
     ApplicationTypeComponent,
@@ -62,7 +63,6 @@ import { TaskListComponent } from './task-list/task-list.component';
     SummaryComponent,
     TaskListComponent,
   ],
-  imports: [InstallationAccountApplicationRoutingModule, SharedModule],
   providers: [
     ApplicationGuard,
     FormGuard,

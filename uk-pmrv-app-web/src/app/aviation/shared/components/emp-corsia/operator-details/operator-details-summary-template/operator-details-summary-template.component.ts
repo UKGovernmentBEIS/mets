@@ -24,9 +24,6 @@ import { transformFiles } from '../utils/operator-details-summary.util';
 
 @Component({
   selector: 'app-operator-details-summary-template',
-  templateUrl: './operator-details-summary-template.component.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     RouterLink,
     SharedModule,
@@ -35,6 +32,8 @@ import { transformFiles } from '../utils/operator-details-summary.util';
     OperatorDetailsActivitiesDescriptionPipe,
     OperatorDetailsSubsidiaryListComponent,
   ],
+  templateUrl: './operator-details-summary-template.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorDetailsSummaryTemplateComponent implements OnInit {
   @Input() isEditable = false;

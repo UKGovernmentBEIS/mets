@@ -14,17 +14,18 @@ import { emisionSourcesAddFormFactory } from './emission-source-details-form.pro
 
 @Component({
   selector: 'app-emission-source-details',
+  standalone: false,
   template: `
     <app-permit-task>
       <app-emission-source-details-template
         (formSubmit)="onSubmit()"
         [form]="form"
         [isEditing]="isEditing$ | async"
-        [caption]="'Fuels and equipment inventory'"></app-emission-source-details-template>
+        caption="Fuels and equipment inventory"></app-emission-source-details-template>
     </app-permit-task>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [emisionSourcesAddFormFactory, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionSourceDetailsComponent {
   isEditing$ = this.store

@@ -18,9 +18,10 @@ import { decisionFormProvider, futureDateValidator, REVIEW_FORM } from './decisi
 
 @Component({
   selector: 'app-decision',
+  standalone: false,
   templateUrl: './decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [decisionFormProvider, DestroySubject, BreadcrumbService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecisionComponent implements OnInit {
   isEditable$ = this.store.select('isEditable');

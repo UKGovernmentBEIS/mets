@@ -2,7 +2,7 @@
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
-    [heading]="'Directly attributable emissions'"
+    heading="Directly attributable emissions"
     [caption]="(productBenchmarkType$ | async | subInstallationType) + ': benchmark improvement rate'"
     submitText="Continue">
     <div class="govuk-!-width-two-thirds">
@@ -58,5 +58,5 @@
     </div>
   </app-wizard-step>
 
-  <a govukLink [routerLink]="'../../../'">Return to: Sub-installations</a>
+  <a govukLink routerLink="../../../">Return to: Sub-installations</a>
 </app-permit-task>

@@ -15,9 +15,8 @@ import { EtsComplianceRulesFormProvider } from '../ets-compliance-rules-form.pro
 
 @Component({
   selector: 'app-ets-compliance-rules-page',
-  templateUrl: './ets-compliance-rules-page.component.html',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent, EtsComplianceRulesFormComponent],
+  templateUrl: './ets-compliance-rules-page.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

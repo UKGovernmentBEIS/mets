@@ -9,6 +9,7 @@ import { CaExternalContactDTO, CaExternalContactsService } from 'pmrv-api';
 
 @Component({
   selector: 'app-external-contacts',
+  standalone: false,
   templateUrl: './external-contacts.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

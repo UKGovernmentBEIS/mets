@@ -12,6 +12,7 @@ import { logChangesFormProvider } from './log-changes-form.provider';
 
 @Component({
   selector: 'app-log-changes',
+  standalone: false,
   template: `
     <app-permit-task [breadcrumb]="true">
       <app-wizard-step
@@ -32,8 +33,8 @@ import { logChangesFormProvider } from './log-changes-form.provider';
       <a govukLink routerLink="../..">Return to: Permit variation</a>
     </app-permit-task>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [logChangesFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LogChangesComponent implements PendingRequest {
   determination$ = this.store.getDeterminationType$();

@@ -16,6 +16,7 @@ describe('EmpReviewDecisionGroupSummaryComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-emp-review-decision-group-summary
         [data]="data"

@@ -12,6 +12,7 @@ describe('TransferredCo2PipelineSummaryTemplateComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-transferred-co2-pipeline-summary-template
         [pipelineSystems]="pipelineSystems"></app-transferred-co2-pipeline-summary-template>

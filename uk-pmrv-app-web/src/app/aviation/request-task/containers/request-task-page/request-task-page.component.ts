@@ -67,15 +67,16 @@ interface ViewModel {
 
 @Component({
   selector: 'app-request-task-page',
+  standalone: false,
   templateUrl: './request-task-page.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroySubject],
   styles: `
     :host ::ng-deep .app-task-list {
       list-style-type: none;
       padding-left: 0;
     }
   `,
+  providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestTaskPageComponent implements OnInit {
   vm$: Observable<ViewModel> = combineLatest([
@@ -163,7 +164,8 @@ export class RequestTaskPageComponent implements OnInit {
           iif(
             () =>
               (requestTask.requestTask.type === 'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW' ||
-                requestTask.requestTask.type === 'EMP_ISSUANCE_UKETS_WAIT_FOR_AMENDS') &&
+                requestTask.requestTask.type === 'EMP_ISSUANCE_UKETS_WAIT_FOR_AMENDS' ||
+                requestTask.requestTask.type === 'EMP_ISSUANCE_UKETS_WAIT_FOR_PEER_REVIEW') &&
               relatedActions.includes('EMP_ISSUANCE_UKETS_MANUAL_ACCOUNT_OPENING_REGISTRY'),
             this.aviationAccountCreationRegistryService.isManualPushToRegistryAvailable(requestTask.requestInfo.id),
             of(false),

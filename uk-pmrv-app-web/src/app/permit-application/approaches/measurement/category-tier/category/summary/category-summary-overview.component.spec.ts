@@ -33,6 +33,7 @@ describe('CategorySummaryOverviewComponent', () => {
   let store: PermitApplicationStore<PermitApplicationState>;
 
   @Component({
+    standalone: false,
     template: `
       <app-category-summary-overview [emissionPointCategory]="sourceStream"></app-category-summary-overview>
     `,

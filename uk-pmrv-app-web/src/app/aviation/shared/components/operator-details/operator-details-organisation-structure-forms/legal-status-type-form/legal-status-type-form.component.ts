@@ -12,7 +12,6 @@ import { PartnershipFormComponent } from '../partnership-form/partnership-form.c
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-organisation-structure-legal-status-type-form',
-  standalone: true,
   imports: [
     SharedModule,
     OperatorDetailsLegalStatusTypePipe,

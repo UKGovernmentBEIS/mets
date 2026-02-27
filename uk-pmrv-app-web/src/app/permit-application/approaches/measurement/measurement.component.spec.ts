@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { BasePage } from '../../../../testing';
 import { PermitIssuanceStore } from '../../../permit-issuance/store/permit-issuance.store';
@@ -40,8 +40,9 @@ describe('MeasurementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MeasurementModule, RouterTestingModule],
+      imports: [MeasurementModule],
       providers: [
+        provideRouter([]),
         {
           provide: PermitApplicationStore,
           useExisting: PermitIssuanceStore,

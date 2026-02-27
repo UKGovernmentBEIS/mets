@@ -17,9 +17,10 @@ import { measurementDevicesAddFormFactory, typeOptions } from './measurement-dev
 
 @Component({
   selector: 'app-measurement-device-details',
+  standalone: false,
   templateUrl: './measurement-device-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [measurementDevicesAddFormFactory, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MeasurementDeviceDetailsComponent implements OnInit {
   requestTaskType$ = this.store.pipe(map((response) => reviewRequestTaskTypes.includes(response.requestTaskType)));

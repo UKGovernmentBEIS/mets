@@ -4,6 +4,7 @@ import { permitTypeMap } from '@permit-application/shared/utils/permit';
 
 @Component({
   selector: 'app-permit-type-summary-template',
+  standalone: false,
   template: `
     <dl *ngIf="permitType" govuk-summary-list [hasBorders]="false" [class.summary-list--edge-border]="hasBottomBorder">
       <div govukSummaryListRow>

@@ -14,9 +14,10 @@ import { WorkflowItemAbstractComponent } from '../../workflow-item-abstract.comp
 
 @Component({
   selector: 'app-delete-request-note',
+  standalone: false,
   templateUrl: './delete-request-note.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteRequestNoteComponent extends WorkflowItemAbstractComponent implements OnInit {
   constructor(

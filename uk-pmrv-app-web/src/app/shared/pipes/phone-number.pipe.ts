@@ -6,6 +6,7 @@ import { UKCountryCodes } from '../types/country-codes';
 
 @Pipe({
   name: 'phoneNumber',
+  standalone: false,
 })
 export class PhoneNumberPipe implements PipeTransform {
   transform(callingCode: string): string {

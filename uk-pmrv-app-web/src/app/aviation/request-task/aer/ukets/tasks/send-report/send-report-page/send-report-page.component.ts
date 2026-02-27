@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -22,9 +22,8 @@ export interface SendReportViewModel {
 
 @Component({
   selector: 'app-send-report-page',
+  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './send-report-page.component.html',
-  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent],
-  standalone: true,
   providers: [DestroySubject, sendReportFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

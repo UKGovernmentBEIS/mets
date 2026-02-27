@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from
 
 @Component({
   selector: 'govuk-header',
+  standalone: false,
   templateUrl: './header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

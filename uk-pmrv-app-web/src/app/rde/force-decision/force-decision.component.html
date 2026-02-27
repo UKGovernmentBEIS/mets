@@ -5,13 +5,11 @@
       [formGroup]="form"
       heading="Deadline extension request"
       submitText="Confirm and complete"
-      [hideSubmit]="(store.isEditable$ | async) === false"
-    >
+      [hideSubmit]="(store.isEditable$ | async) === false">
       <app-page-heading size="xl">
         <app-task-header-info
           [assignee]="(store | async).assignee.assigneeFullName"
-          [daysRemaining]="(store | async).daysRemaining"
-        ></app-task-header-info>
+          [daysRemaining]="(store | async).daysRemaining"></app-task-header-info>
       </app-page-heading>
 
       <h2 app-summary-header class="govuk-heading-m">Request details</h2>
@@ -45,9 +43,8 @@
         <app-multiple-file-input
           [baseDownloadUrl]="getDownloadUrl()"
           [label]="(isFileUploaded$ | async) === true ? 'Upload a different file' : 'Upload a file (optional)'"
-          [listTitle]="'Uploaded files'"
-          formControlName="files"
-        ></app-multiple-file-input>
+          listTitle="Uploaded files"
+          formControlName="files"></app-multiple-file-input>
       </ng-container>
     </app-wizard-step>
 
@@ -60,9 +57,8 @@
         <app-timeline-item
           *ngFor="let action of actions$ | async"
           [action]="action"
-          [link]="action | timelineItemLink: false:isAviation"
-          [state]="navigationState"
-        ></app-timeline-item>
+          [link]="action | timelineItemLink: false : isAviation"
+          [state]="navigationState"></app-timeline-item>
       </app-timeline>
     </div>
   </div>
@@ -71,7 +67,6 @@
       [isAssignable$]="store.isAssignableAndCapable$"
       [taskId$]="taskId$"
       [allowedActions$]="allowedRequestTaskActions$"
-      [baseUrl]="isAviation ? '/aviation' : ''"
-    ></app-related-actions>
+      [baseUrl]="isAviation ? '/aviation' : ''"></app-related-actions>
   </div>
 </div>

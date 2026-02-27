@@ -9,6 +9,7 @@ import { PermitApplicationState } from '../../store/permit-application.state';
 
 @Component({
   selector: 'app-uncertainty-analysis',
+  standalone: false,
   templateUrl: './uncertainty-analysis.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -5,7 +5,6 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-emp-payment-not-completed',
-  standalone: true,
   imports: [SharedModule],
   template: `
     <app-payment-not-completed></app-payment-not-completed>

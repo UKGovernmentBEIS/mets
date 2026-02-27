@@ -10,6 +10,7 @@ import { removeAndBuildTaskData } from '@tasks/aer/submit/inherent-co2/inherent-
 
 @Component({
   selector: 'app-delete',
+  standalone: false,
   templateUrl: './delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

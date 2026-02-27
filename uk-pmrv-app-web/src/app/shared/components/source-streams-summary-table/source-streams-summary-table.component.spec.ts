@@ -14,6 +14,7 @@ describe('SourceStreamsSummaryTableComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-source-streams-summary-table [data]="data"></app-source-streams-summary-table>
     `,

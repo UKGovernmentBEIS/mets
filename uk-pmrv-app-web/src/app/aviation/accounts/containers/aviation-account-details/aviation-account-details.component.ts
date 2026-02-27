@@ -6,6 +6,7 @@ import { AviationAccountsStore, selectAccountEmp, selectAccountInfo } from '../.
 
 @Component({
   selector: 'app-aviation-account-details',
+  standalone: false,
   templateUrl: './aviation-account-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

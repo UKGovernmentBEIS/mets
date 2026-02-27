@@ -16,8 +16,8 @@ const declarations = [
 ];
 
 @NgModule({
+  imports: [RouterModule, SharedModule, SharedPermitModule],
   declarations: declarations,
   exports: declarations,
-  imports: [RouterModule, SharedModule, SharedPermitModule],
 })
 export class SharedPermitVariationModule {}

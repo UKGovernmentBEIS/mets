@@ -17,9 +17,10 @@ import { getVariationScheduleItems } from '../review';
 
 @Component({
   selector: 'app-permit-variation-decision-summary',
+  standalone: false,
   templateUrl: './decision-summary.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecisionSummaryComponent implements OnInit {
   urlRequestType = this.store.urlRequestType;

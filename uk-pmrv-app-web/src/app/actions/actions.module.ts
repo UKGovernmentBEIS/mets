@@ -9,7 +9,7 @@ import { SubmittedComponent } from './permit-transfer-a/submitted/submitted.comp
 import { ActionSharedModule } from './shared/action-shared-module';
 
 @NgModule({
-  declarations: [ActionComponent, SubmittedComponent],
   imports: [ActionSharedModule, ActionsRoutingModule, SharedModule, VirSharedModule],
+  declarations: [ActionComponent, SubmittedComponent],
 })
 export class ActionsModule {}

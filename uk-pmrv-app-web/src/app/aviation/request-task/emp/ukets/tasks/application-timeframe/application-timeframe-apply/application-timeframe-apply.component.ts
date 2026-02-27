@@ -15,11 +15,8 @@ import { ApplicationTimeframeFormProvider } from '../application-timeframe-form.
 
 @Component({
   selector: 'app-application-timeframe-apply',
-  templateUrl: './application-timeframe-apply.component.html',
-  standalone: true,
   imports: [GovukComponentsModule, SharedModule, ApplicationTimeframeApplyFormComponent, ReturnToLinkComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroySubject],
+  templateUrl: './application-timeframe-apply.component.html',
   styles: `
     .govuk-heading-s span {
       font-weight: normal;
@@ -28,6 +25,8 @@ import { ApplicationTimeframeFormProvider } from '../application-timeframe-form.
       margin-bottom: 0;
     }
   `,
+  providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApplicationTimeframeApplyComponent {
   form = this.formProvider.form;

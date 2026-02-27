@@ -7,9 +7,10 @@ import { DestroySubject } from '../../core/services/destroy-subject.service';
 
 @Component({
   selector: 'app-verification-sent',
+  standalone: false,
   templateUrl: './verification-sent.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerificationSentComponent implements OnInit {
   @Input() email: string;

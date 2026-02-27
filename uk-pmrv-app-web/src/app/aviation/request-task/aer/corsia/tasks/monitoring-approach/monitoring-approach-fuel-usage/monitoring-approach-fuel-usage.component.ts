@@ -18,9 +18,8 @@ import { AviationAerCorsiaMonitoringApproach } from 'pmrv-api';
 
 @Component({
   selector: 'app-monitoring-approach-type',
-  templateUrl: './monitoring-approach-fuel-usage.component.html',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent, FuelDensityTypePipe],
+  templateUrl: './monitoring-approach-fuel-usage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonitoringApproachFuelUsageComponent {

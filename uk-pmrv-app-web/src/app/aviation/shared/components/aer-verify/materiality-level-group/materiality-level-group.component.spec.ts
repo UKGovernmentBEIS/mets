@@ -14,6 +14,7 @@ describe('AerVerifyMaterialityLevelGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-aer-verify-materiality-level-group
         [isEditable]="isEditable"

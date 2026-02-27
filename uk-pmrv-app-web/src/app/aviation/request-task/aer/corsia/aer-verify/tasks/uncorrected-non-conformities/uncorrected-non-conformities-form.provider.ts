@@ -16,10 +16,10 @@ export interface AviationAerCorsiaUncorrectedNonConformitiesFormModel {
 }
 
 @Injectable()
-export class UncorrectedNonConformitiesFormProvider
-  implements
-    TaskFormProvider<AviationAerCorsiaUncorrectedNonConformities, AviationAerCorsiaUncorrectedNonConformitiesFormModel>
-{
+export class UncorrectedNonConformitiesFormProvider implements TaskFormProvider<
+  AviationAerCorsiaUncorrectedNonConformities,
+  AviationAerCorsiaUncorrectedNonConformitiesFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private destroy$ = new Subject<void>();

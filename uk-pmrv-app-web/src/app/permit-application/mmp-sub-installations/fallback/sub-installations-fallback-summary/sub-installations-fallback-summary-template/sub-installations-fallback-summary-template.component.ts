@@ -20,6 +20,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-sub-installations-fallback-summary-template',
+  standalone: false,
   templateUrl: './sub-installations-fallback-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

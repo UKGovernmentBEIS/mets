@@ -3,7 +3,7 @@
     (formSubmit)="onSubmit()"
     [formGroup]="form"
     caption="Add an EPRTR activity"
-    [heading]="'Select the relevant sector for the main activity at the installation'"
+    heading="Select the relevant sector for the main activity at the installation"
     [hideSubmit]="(isEditable$ | async) === false"
     submitText="Continue">
     <div formControlName="activity" govuk-radio>

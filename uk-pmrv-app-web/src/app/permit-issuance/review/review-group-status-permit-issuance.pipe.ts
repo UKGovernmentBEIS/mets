@@ -10,6 +10,7 @@ import { PermitIssuanceStore } from '../store/permit-issuance.store';
 
 @Pipe({
   name: 'reviewGroupStatusPermitIssuance',
+  standalone: false,
 })
 export class ReviewGroupStatusPermitIssuancePipe implements PipeTransform {
   constructor(private readonly store: PermitIssuanceStore) {}

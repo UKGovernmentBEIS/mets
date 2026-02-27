@@ -4,6 +4,7 @@ import { RequestActionDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-doal-action-task',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">

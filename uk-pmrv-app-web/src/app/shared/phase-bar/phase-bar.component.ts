@@ -9,6 +9,7 @@ import { KeycloakProfile } from 'keycloak-js';
 /* eslint-disable @angular-eslint/use-component-view-encapsulation */
 @Component({
   selector: 'app-phase-bar',
+  standalone: false,
   template: `
     <govuk-phase-banner phase="beta">
       <!-- FIXME: apply correct href when discussed with analysis -->
@@ -33,9 +34,9 @@ import { KeycloakProfile } from 'keycloak-js';
       float: right;
     }
   `,
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class PhaseBarComponent implements OnInit {
   isLoggedIn$: Observable<boolean>;

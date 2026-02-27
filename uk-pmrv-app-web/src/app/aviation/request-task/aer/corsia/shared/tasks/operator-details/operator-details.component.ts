@@ -25,7 +25,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-operator-details',
-  standalone: true,
   imports: [
     ReturnToLinkComponent,
     SharedModule,

@@ -20,7 +20,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-determination-submitted',
-  standalone: true,
   imports: [ActionSharedModule, AlrDeterminationSummaryTemplateComponent, NgIf],
   template: `
     <ng-container *ngIf="vm() as vm">

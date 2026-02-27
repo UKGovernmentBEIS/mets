@@ -7,7 +7,6 @@ import { SharedModule } from '@shared/shared.module';
 
 import { AviationAccountClosure, RequestActionDTO } from 'pmrv-api';
 
-import { RequestActionTaskComponent } from '../shared/components/request-action-task/request-action-task.component';
 import { AccountClosureRequestActionPayload, requestActionQuery, RequestActionStore } from '../store';
 import { getRequestActionHeader } from '../util';
 
@@ -21,8 +20,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-account-closed-submitted',
-  standalone: true,
-  imports: [RequestActionTaskComponent, SharedModule],
+  imports: [SharedModule],
   templateUrl: './account-closed-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

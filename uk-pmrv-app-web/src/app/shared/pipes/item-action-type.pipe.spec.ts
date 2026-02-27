@@ -21,6 +21,16 @@ describe('ItemActionTypePipe', () => {
     );
     expect(pipe.transform('INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED')).toEqual('Original application');
 
+    expect(pipe.transform('INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY')).toEqual(
+      'Information sent to Registry by system',
+    );
+    expect(pipe.transform('AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY')).toEqual(
+      'Information sent to Registry by system',
+    );
+    expect(pipe.transform('WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY')).toEqual(
+      'Information sent to Registry by system',
+    );
+
     expect(pipe.transform('PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMITTED')).toEqual(
       'Amended permit application submitted',
     );
@@ -495,9 +505,29 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('BDRS2_APPLICATION_SENT_TO_VERIFIER')).toEqual(
       'Stage 2 baseline data report submitted to verifier',
     );
+    expect(pipe.transform('BDRS2_APPLICATION_AMENDS_SENT_TO_VERIFIER')).toEqual(
+      'Stage 2 baseline data report submitted to verifier',
+    );
     expect(pipe.transform('BDRS2_APPLICATION_SENT_TO_REGULATOR')).toEqual(
       'Stage 2 baseline data report submitted to regulator',
     );
+    expect(pipe.transform('BDRS2_RECALLED_FROM_VERIFICATION')).toEqual('Stage 2 baseline data report recalled');
+    expect(pipe.transform('BDRS2_VERIFICATION_RETURNED_TO_OPERATOR')).toEqual(
+      'Stage 2 baseline data report returned to operator for changes',
+    );
+    expect(pipe.transform('BDRS2_APPLICATION_VERIFICATION_SUBMITTED')).toEqual(
+      'Stage 2 baseline data report verification statement submitted to operator',
+    );
+    expect(pipe.transform('BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS')).toEqual(
+      'Stage 2 baseline data report returned to operator',
+    );
+    expect(pipe.transform('BDRS2_APPLICATION_COMPLETED')).toEqual('Stage 2 baseline data report reviewed');
+    expect(pipe.transform('BDRS2_APPLICATION_RE_INITIATED')).toEqual('Stage 2 baseline data report reopened');
+    expect(pipe.transform('BDRS2_APPLICATION_PEER_REVIEW_REQUESTED')).toEqual('Peer review requested');
+
+    expect(pipe.transform('BDRS2_APPLICATION_PEER_REVIEW_REQUESTED')).toEqual('Peer review requested');
+    expect(pipe.transform('BDRS2_APPLICATION_PEER_REVIEW_ACCEPTED')).toEqual('Peer review agreement submitted');
+    expect(pipe.transform('BDRS2_APPLICATION_PEER_REVIEW_REJECTED')).toEqual('Peer review disagreement submitted');
 
     expect(pipe.transform('PERMANENT_CESSATION_SUBMITTED')).toEqual('Permanent cessation started');
     expect(pipe.transform('PERMANENT_CESSATION_APPLICATION_CANCELLED')).toEqual('Permanent cessation cancelled');
@@ -533,9 +563,6 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS')).toEqual(
       'Activity level report returned to operator',
     );
-    expect(pipe.transform('HSE_TI_APPLICATION_SENT_TO_REGULATOR')).toEqual(
-      'HSE target increase application submitted to regulator',
-    );
     expect(pipe.transform('ALR_APPLICATION_PROCEEDED_TO_AUTHORITY')).toEqual(
       'Activity level determination sent to UK Authority',
     );
@@ -558,6 +585,9 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS')).toEqual(
       'HSE target increase application returned to operator',
     );
+    expect(pipe.transform('HSE_TI_APPLICATION_SENT_TO_REGULATOR')).toEqual(
+      'HSE target increase application submitted to regulator',
+    );
     expect(pipe.transform('HSE_TI_APPROVED')).toEqual('HSE target increase application approved');
     expect(pipe.transform('HSE_TI_REJECTED')).toEqual('HSE target increase application rejected');
     expect(pipe.transform('HSE_TI_DEEMED_WITHDRAWN')).toEqual('HSE target increase application deemed withdrawn');
@@ -565,6 +595,27 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED')).toEqual('Peer review requested');
     expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED')).toEqual('Peer review agreement submitted');
     expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW_REJECTED')).toEqual('Peer review disagreement submitted');
+
+    expect(pipe.transform('WITHHOLDING_OF_ALLOWANCES_APPLICATION_SUBMITTED')).toEqual(
+      'Withholding of allowances submitted',
+    );
+    expect(pipe.transform('WITHHOLDING_OF_ALLOWANCES_APPLICATION_WITHDRAWN')).toEqual(
+      'Withholding of allowances notice withdrawn',
+    );
+    expect(pipe.transform('WITHHOLDING_OF_ALLOWANCES_APPLICATION_CLOSED')).toEqual('Withholding of allowances closed');
+    expect(pipe.transform('WITHHOLDING_OF_ALLOWANCES_PEER_REVIEW_REQUESTED')).toEqual('Peer review requested');
+    expect(pipe.transform('WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_ACCEPTED')).toEqual(
+      'Peer review agreement submitted',
+    );
+    expect(pipe.transform('WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_REJECTED')).toEqual(
+      'Peer review disagreement submitted',
+    );
+    expect(pipe.transform('WITHHOLDING_OF_ALLOWANCES_APPLICATION_CANCELLED')).toEqual(
+      'Withholding of allowances cancelled',
+    );
+    expect(pipe.transform('WITHHOLDING_OF_ALLOWANCES_APPLICATION_RE_INITIATED')).toEqual(
+      'Withholding of allowances reopened',
+    );
 
     expect(pipe.transform('WASTE_QDR_APPLICATION_SUBMITTED')).toEqual('Quarterly data report submitted to regulator');
     expect(pipe.transform('WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS')).toEqual(

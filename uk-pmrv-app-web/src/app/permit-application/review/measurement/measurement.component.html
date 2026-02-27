@@ -1,87 +1,89 @@
 <ng-template #contentTpl let-showOriginal let-appliedTiers="appliedTiers">
   <h2 class="govuk-heading-m">Measurement emission point categories</h2>
 
-  <ul app-task-item-list>
-    <div class="overflow-auto">
-      <ng-container *ngIf="appliedTiers?.length > 0; else addNew">
-        <govuk-table [columns]="columns" [data]="appliedTiers">
-          <ng-template let-column="column" let-row="row" let-index="index">
-            <ng-container [ngSwitch]="column.field">
-              <ng-container *ngSwitchCase="'category'">
-                <ng-container *ngIf="showOriginal; else currentCategory">
-                  <!-- prettier-ignore -->
-                  <ng-container
+  <ng-container *ngIf="appliedTiers?.length > 0; else addNew">
+    <div class="overflow-auto govuk-!-margin-bottom-9">
+      <govuk-table [columns]="columns" [data]="appliedTiers">
+        <ng-template let-column="column" let-row="row" let-index="index">
+          <ng-container [ngSwitch]="column.field">
+            <ng-container *ngSwitchCase="'category'">
+              <ng-container *ngIf="showOriginal; else currentCategory">
+                <!-- prettier-ignore -->
+                <ng-container
                     *ngIf="
                       row?.emissionPointCategory?.emissionPoint
                         | findEmissionPoint: !showOriginal
                         | async as emissionPoint;
                       else noEmissionPoint
-                    "
-                    >{{ emissionPoint | tierEmissionPointName: row.emissionPointCategory }}</ng-container
-                  >
-                </ng-container>
-                <ng-template #currentCategory>
-                  <a govukLink [routerLink]="['../../measurement/category-tier', index]">
-                    <!-- prettier-ignore -->
-                    <ng-container
+                    ">
+                      {{ emissionPoint | tierEmissionPointName: row.emissionPointCategory }}
+                    </ng-container>
+              </ng-container>
+              <ng-template #currentCategory>
+                <a govukLink [routerLink]="['../../measurement/category-tier', index]">
+                  <!-- prettier-ignore -->
+                  <ng-container
                       *ngIf="
                         row?.emissionPointCategory?.emissionPoint
                           | findEmissionPoint: !showOriginal
                           | async as emissionPoint;
                         else noEmissionPoint
-                      "
-                      >{{ emissionPoint | tierEmissionPointName: row.emissionPointCategory }}</ng-container
-                    >
-                  </a>
-                </ng-template>
-                <ng-template #noEmissionPoint>
-                  UNDEFINED: {{ row?.emissionPointCategory?.categoryType | categoryTypeName }}
-                </ng-template>
-              </ng-container>
-              <ng-container *ngSwitchCase="'emissions'">
-                {{ row?.emissionPointCategory?.annualEmittedCO2Tonnes | number }} t
-              </ng-container>
-              <ng-container *ngSwitchCase="'measuredEmissions'">
-                {{ row?.measuredEmissions?.tier | appliedTier }}
-              </ng-container>
-              <ng-container *ngSwitchCase="'biomassFraction'">
-                {{ row?.biomassFraction?.tier | appliedTier }}
-              </ng-container>
-              <ng-container *ngSwitchCase="'status'">
-                <ng-container *ngIf="!showOriginal; else originalStatus">
-                  <govuk-tag
-                    [color]="'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async | tagColor"
-                    class="app-task-list__tag">
-                    {{ 'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
-                  </govuk-tag>
-                </ng-container>
-                <ng-template #originalStatus>
-                  <govuk-tag [color]="'complete' | tagColor" class="app-task-list__tag">
-                    {{ 'complete' | i18nSelect: statusMap }}
-                  </govuk-tag>
-                </ng-template>
-              </ng-container>
+                      ">
+                      {{ emissionPoint | tierEmissionPointName: row.emissionPointCategory }}
+                      </ng-container>
+                </a>
+              </ng-template>
+              <ng-template #noEmissionPoint>
+                UNDEFINED: {{ row?.emissionPointCategory?.categoryType | categoryTypeName }}
+              </ng-template>
             </ng-container>
-          </ng-template>
-        </govuk-table>
+            <ng-container *ngSwitchCase="'emissions'">
+              {{ row?.emissionPointCategory?.annualEmittedCO2Tonnes | number }} t
+            </ng-container>
+            <ng-container *ngSwitchCase="'measuredEmissions'">
+              {{ row?.measuredEmissions?.tier | appliedTier }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'biomassFraction'">
+              {{ row?.biomassFraction?.tier | appliedTier }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'status'">
+              <ng-container *ngIf="!showOriginal; else originalStatus">
+                <govuk-tag
+                  [color]="'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async | tagColor"
+                  class="app-task-list__tag">
+                  {{ 'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
+                </govuk-tag>
+              </ng-container>
+              <ng-template #originalStatus>
+                <govuk-tag [color]="'complete' | tagColor" class="app-task-list__tag">
+                  {{ 'complete' | i18nSelect: statusMap }}
+                </govuk-tag>
+              </ng-template>
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </govuk-table>
+      <div class="govuk-!-font-size-19">
         <a
           *ngIf="(store.isEditable$ | async) === true"
           govukLink
           [routerLink]="['../../measurement/category-tier', (emissionPointCategoryAppliedTiers$ | async)?.length]">
           Add an emission point category
         </a>
-      </ng-container>
-
-      <ng-template #addNew>
-        <li
-          *ngIf="(store.isEditable$ | async) === true"
-          app-task-item
-          link="../../measurement/category-tier/0"
-          linkText="Add an emission point category"
-          [status]="emissionPointCategoriesStatus$ | async"></li>
-      </ng-template>
+      </div>
     </div>
-  </ul>
+  </ng-container>
+
+  <ng-template #addNew>
+    <ul app-task-item-list>
+      <li
+        *ngIf="(store.isEditable$ | async) === true"
+        app-task-item
+        link="../../measurement/category-tier/0"
+        linkText="Add an emission point category"
+        [status]="emissionPointCategoriesStatus$ | async"></li>
+    </ul>
+  </ng-template>
 
   <h2 class="govuk-heading-m">{{ 'MEASUREMENT_CO2' | monitoringApproachDescription }} details</h2>
 
@@ -128,7 +130,7 @@
         [procedureOptionalForm]="
           'monitoringApproaches.MEASUREMENT_CO2.gasFlowCalculation' | taskProcedureOptionalForm: !showOriginal | async
         "
-        [taskKey]="'monitoringApproaches.MEASUREMENT_CO2.gasFlowCalculation'"
+        taskKey="monitoringApproaches.MEASUREMENT_CO2.gasFlowCalculation"
         [hasBottomBorder]="false"></app-measurement-optional-summary-template>
     </li>
     <li
@@ -140,7 +142,7 @@
         [procedureOptionalForm]="
           'monitoringApproaches.MEASUREMENT_CO2.biomassEmissions' | taskProcedureOptionalForm: !showOriginal | async
         "
-        [taskKey]="'monitoringApproaches.MEASUREMENT_CO2.biomassEmissions'"
+        taskKey="monitoringApproaches.MEASUREMENT_CO2.biomassEmissions"
         [hasBottomBorder]="false"></app-measurement-optional-summary-template>
     </li>
     <li

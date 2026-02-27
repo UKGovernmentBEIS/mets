@@ -12,6 +12,7 @@ import { AirService } from '../../../core/air.service';
 
 @Component({
   selector: 'app-summary',
+  standalone: false,
   template: `
     <app-action-task header="Review information about this improvement" [breadcrumb]="true">
       <app-air-improvement-item [airImprovement]="airImprovement" [reference]="reference"></app-air-improvement-item>

@@ -4,6 +4,7 @@ import { RequestActionInfoDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-timeline-item',
+  standalone: false,
   template: `
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{ action | itemActionHeader: year }}</h3>
     <p class="govuk-body govuk-!-margin-bottom-1">{{ action.creationDate | govukDate: 'datetime' }}</p>

@@ -11,7 +11,6 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 @Component({
   selector: 'app-inspection-notify-operator',
-  standalone: true,
   imports: [SharedModule],
   template: `
     <div class="govuk-grid-row">
@@ -19,7 +18,7 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
         <app-notify-operator
           [taskId]="taskId$ | async"
           [accountId]="accountId$ | async"
-          [confirmationMessage]="'Follow-up actions sent to operator'"
+          confirmationMessage="Follow-up actions sent to operator"
           [requestTaskActionType]="notifyActionType$ | async"
           [referenceCode]="requestId$ | async"
           [previewDocuments]="previewDocuments"></app-notify-operator>

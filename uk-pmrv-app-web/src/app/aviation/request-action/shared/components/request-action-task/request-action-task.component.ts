@@ -12,7 +12,6 @@ import { RequestActionDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-request-action-task',
-  standalone: true,
   imports: [CommonModule, GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   template: `
     <div class="govuk-grid-row">
@@ -23,8 +22,8 @@ import { RequestActionDTO } from 'pmrv-api';
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestActionTaskComponent {
   @Input() header: string;

@@ -8,7 +8,7 @@ import { PermitBatchReissueRoutingModule } from './permit-batch-reissue-actions-
 import { SubmittedComponent } from './submitted/submitted.component';
 
 @NgModule({
-  declarations: [CompletedComponent, SubmittedComponent],
   imports: [ActionSharedModule, PermitBatchReissueRoutingModule, SharedModule, SharedUserModule],
+  declarations: [CompletedComponent, SubmittedComponent],
 })
 export class PermitBatchReissueActionsModule {}

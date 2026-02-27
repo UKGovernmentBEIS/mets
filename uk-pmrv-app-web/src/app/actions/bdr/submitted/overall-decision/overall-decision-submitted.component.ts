@@ -14,7 +14,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-overall-decision-submitted',
-  standalone: true,
   imports: [ActionSharedModule, NgIf, SharedModule],
   template: `
     <ng-container *ngIf="vm() as vm">

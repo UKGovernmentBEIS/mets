@@ -17,6 +17,7 @@ import { AccordionItemSummaryDirective } from '../directives/accordion-item-summ
 
 @Component({
   selector: 'govuk-accordion-item',
+  standalone: false,
   templateUrl: './accordion-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

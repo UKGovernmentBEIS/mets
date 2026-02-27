@@ -424,7 +424,8 @@ export class AerService extends TasksHelperService {
               .filter((statusKey) => !statusKey.startsWith(AER_AMEND_STATUS_PREFIX))
               .reduce(
                 (res, key) => (
-                  (res[key] = (payload as AerApplicationSubmitRequestTaskPayload)?.aerSectionsCompleted[key]), res
+                  (res[key] = (payload as AerApplicationSubmitRequestTaskPayload)?.aerSectionsCompleted[key]),
+                  res
                 ),
                 {},
               ),

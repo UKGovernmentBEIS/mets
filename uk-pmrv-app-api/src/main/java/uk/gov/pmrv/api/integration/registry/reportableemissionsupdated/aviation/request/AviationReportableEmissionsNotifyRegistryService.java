@@ -20,6 +20,7 @@ import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.common.reporting.domain.ReportableEmissionsUpdatedEvent;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.AccountEmissionsUpdatedRequestEvent;
+import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.request.requestaction.AviationReportableEmissionsAddRequestActionService;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.response.AviationRegistryIntegrationEmailProperties;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
@@ -62,12 +63,15 @@ class AviationReportableEmissionsNotifyRegistryService {
 	private final AviationReportableEmissionsRepository aviationReportableEmissionsRepository;
 	private final AviationRegistryIntegrationEmailProperties emailProperties;
 	private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
+	private final AviationReportableEmissionsAddRequestActionService aviationReportableEmissionsAddRequestActionService;
 
 	@Transactional
 	public void notifyRegistry(AviationReportableEmissionsUpdatedEvent event) {
 		Long accountId = event.getAccountId();
+		String requestId = event.getRequestId();
+
 		final AviationAccountInfoDTO account = aviationAccountQueryService.getAviationAccountInfoDTOById(accountId);
-		if(account.getEmissionTradingScheme() != EmissionTradingScheme.UK_ETS_AVIATION){
+		if(EmissionTradingScheme.UK_ETS_AVIATION != account.getEmissionTradingScheme()){
 			log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
 					INTEGRATION_POINT_KEY,
 					"Cannot send emissions to ETS Registry because no uk-ets schema");
@@ -78,29 +82,28 @@ class AviationReportableEmissionsNotifyRegistryService {
 			return;
 		}
 
-		if (event.isFromDre()) {
-			notifyRegistry(event, account);
-			return;
-		}
-
 		Optional<Request> aerRequest = aviationAerRequestQueryService
 			.findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, event.getYear());
 
-		if (aerRequest.isEmpty()) {
+		AviationAerUkEtsRequestPayload aerRequestPayload = aerRequest.map(req -> (AviationAerUkEtsRequestPayload) req.getPayload()).orElse(null);
 
+		if (event.isFromDre()) {
+			notifyRegistry(event, account, requestId);
+			return;
+		}
+
+		if (aerRequest.isEmpty()) {
 			log.error(REQUEST_LOG_FORMAT,
-				SERVICE_KEY,
-				event.getAccountId(),
-				INTEGRATION_POINT_KEY,
-				"Cannot send emissions to ETS Registry because no aer request has been found");
+					SERVICE_KEY,
+					event.getAccountId(),
+					INTEGRATION_POINT_KEY,
+					"Cannot send emissions to ETS Registry because no aer request has been found");
 
 			throw new BusinessException(MetsErrorCode.INTEGRATION_REGISTRY_EMISSIONS_AVIATION_AER_NOT_FOUND, event);
 		}
 
-		AviationAerUkEtsRequestPayload aerRequestPayload =  ((AviationAerUkEtsRequestPayload) aerRequest.get().getPayload());
-
 		if (aviationAerConditionsAreSatisfied(event, aerRequestPayload)) {
-			notifyRegistry(event, account);
+			notifyRegistry(event, account, requestId);
 		}
 	}
 
@@ -200,14 +203,15 @@ class AviationReportableEmissionsNotifyRegistryService {
 		}
 	}
 
-	private void notifyRegistry(ReportableEmissionsUpdatedEvent event, AviationAccountInfoDTO account) {
+	private void notifyRegistry(AviationReportableEmissionsUpdatedEvent event, AviationAccountInfoDTO aviationAccountInfoDTO, String requestId) {
+		Long accountId = event.getAccountId();
 
-		if (ObjectUtils.isEmpty(account.getRegistryId())) {
+		if (ObjectUtils.isEmpty(aviationAccountInfoDTO.getRegistryId())) {
 			log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
 					INTEGRATION_POINT_KEY,
 					"Cannot send emissions to ETS Registry because account doesn't have a registry id");
 
-			notifyRegulator(event, account);
+			notifyRegulator(event, aviationAccountInfoDTO);
 			return;
 		}
 
@@ -226,11 +230,14 @@ class AviationReportableEmissionsNotifyRegistryService {
 		}
 
 		final AccountEmissionsUpdatedRequestEvent accountEmissionsUpdatedRequestEvent = AccountEmissionsUpdatedRequestEvent.builder()
-				.registryId(account.getRegistryId()).reportableEmissions(reportableEmissions)
+				.registryId(aviationAccountInfoDTO.getRegistryId())
+				.reportableEmissions(reportableEmissions)
 				.reportingYear(event.getYear()).build();
 
 		reportableEmissionsSendToRegistryProducer.produce(accountEmissionsUpdatedRequestEvent,
 				aviationAccountEmissionsUpdatedKafkaTemplate);
+
+		aviationReportableEmissionsAddRequestActionService.addRequestAction(requestId, accountId, event);
 
 		log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
 				INTEGRATION_POINT_KEY, "Emissions sent to registry " + accountEmissionsUpdatedRequestEvent);

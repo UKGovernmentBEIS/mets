@@ -10,6 +10,7 @@ import { CommonTasksStore } from '../../../../store/common-tasks.store';
 
 @Component({
   selector: 'app-regulator',
+  standalone: false,
   templateUrl: './regulator.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

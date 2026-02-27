@@ -15,8 +15,8 @@ import { OpinionStatement, VirtualSiteVisit } from 'pmrv-api';
 
 @Component({
   selector: 'app-virtual-visit',
+  standalone: false,
   templateUrl: './virtual-visit.component.html',
-  providers: [virtualVisitFormProvider],
   styles: `
     .container {
       position: relative;
@@ -26,6 +26,7 @@ import { OpinionStatement, VirtualSiteVisit } from 'pmrv-api';
       float: right;
     }
   `,
+  providers: [virtualVisitFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VirtualVisitComponent implements PendingRequest {

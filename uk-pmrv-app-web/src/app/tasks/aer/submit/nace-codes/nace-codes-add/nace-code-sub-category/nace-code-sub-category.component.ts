@@ -8,9 +8,10 @@ import { naceCodeSubCategoryFormProvider } from '@tasks/aer/submit/nace-codes/na
 
 @Component({
   selector: 'app-nace-code-sub-category',
+  standalone: false,
   templateUrl: './nace-code-sub-category.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [naceCodeSubCategoryFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NaceCodeSubCategoryComponent implements OnInit {
   subCategoryOptions: [string, string][];

@@ -7,7 +7,6 @@ import {
   nonMaterialChanges,
   otherChanges,
 } from '@aviation/shared/components/emp-corsia/variation-details-summary-template/util/variation-details';
-import { VariationDetailsReasonTypePipe } from '@aviation/shared/pipes/variation-details-reason-type.pipe';
 
 import { GovukComponentsModule } from 'govuk-components';
 
@@ -15,8 +14,7 @@ import { EmpVariationCorsiaDetails } from 'pmrv-api';
 
 @Component({
   selector: 'app-corsia-variation-details-summary-template',
-  standalone: true,
-  imports: [GovukComponentsModule, NgIf, RouterLink, NgFor, VariationDetailsReasonTypePipe],
+  imports: [GovukComponentsModule, NgIf, RouterLink, NgFor],
   templateUrl: './variation-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -9,9 +9,14 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateAct
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestAccountCreateActionHandler;
+import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestCreateActionEmptyPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
+import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesInitiationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesRequestPayload;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -23,7 +28,10 @@ public class WithholdingOfAllowancesCreateActionHandler implements RequestAccoun
     public String process(final Long accountId, 
                           final RequestCreateActionEmptyPayload payload,
                           final AppUser appUser) {
-        
+
+        Map<String, Object> processVars = new HashMap<>();
+        processVars.put(BpmnProcessConstants.WITHHOLDING_OF_ALLOWANCES_INITIATION_TYPE, WithholdingOfAllowancesInitiationType.INITIATED);
+
         final RequestParams requestParams = RequestParams.builder()
             .type(RequestType.WITHHOLDING_OF_ALLOWANCES)
             .accountId(accountId)
@@ -31,6 +39,7 @@ public class WithholdingOfAllowancesCreateActionHandler implements RequestAccoun
                 .payloadType(RequestPayloadType.WITHHOLDING_OF_ALLOWANCES_REQUEST_PAYLOAD)
                 .regulatorAssignee(appUser.getUserId())
                 .build())
+            .processVars(processVars)
             .build();
 
         final Request request = startProcessRequestService.startProcess(requestParams);

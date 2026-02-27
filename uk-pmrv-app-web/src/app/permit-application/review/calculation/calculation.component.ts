@@ -15,6 +15,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-calculation',
+  standalone: false,
   templateUrl: './calculation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

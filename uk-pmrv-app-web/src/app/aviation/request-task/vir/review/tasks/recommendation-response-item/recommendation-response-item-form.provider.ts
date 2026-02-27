@@ -17,9 +17,10 @@ export interface RecommendationResponseItemFormModel {
 }
 
 @Injectable()
-export class RecommendationResponseItemFormProvider
-  implements TaskFormProvider<RegulatorImprovementResponse, RecommendationResponseItemFormModel>
-{
+export class RecommendationResponseItemFormProvider implements TaskFormProvider<
+  RegulatorImprovementResponse,
+  RecommendationResponseItemFormModel
+> {
   private _form: FormGroup<RecommendationResponseItemFormModel>;
   private destroy$ = new Subject<void>();
 

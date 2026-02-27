@@ -9,6 +9,7 @@ import { PermitTransferAActionService } from '../core/permit-transfer-a.service'
 
 @Component({
   selector: 'app-permit-transfer-a-action-submitted',
+  standalone: false,
   template: `
     <app-base-action-container-component
       [header]="(route.data | async)?.pageTitle"

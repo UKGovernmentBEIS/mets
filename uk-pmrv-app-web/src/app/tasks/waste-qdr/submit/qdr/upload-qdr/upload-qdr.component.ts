@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, Signal } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
@@ -13,11 +13,10 @@ import { wasteQdrUploadReportFormProvider } from './upload-qdr-form.provider';
 
 @Component({
   selector: 'app-waste-qdr-upload-qdr',
-  standalone: true,
-  imports: [RouterLink, SharedModule, WasteQdrTaskComponent],
+  imports: [SharedModule, WasteQdrTaskComponent],
   templateUrl: './upload-qdr.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [wasteQdrUploadReportFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WasteQdrUploadQdrComponent {
   isEditable = this.wasteQdrService.isEditable;

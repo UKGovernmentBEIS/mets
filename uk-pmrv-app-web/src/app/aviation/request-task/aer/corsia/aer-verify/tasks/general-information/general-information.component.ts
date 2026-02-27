@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { GeneralInformationFormProvider } from '@aviation/request-task/aer/corsia/aer-verify/tasks/general-information/general-information-form.provider';
 import { RequestTaskStore } from '@aviation/request-task/store';
@@ -11,8 +11,7 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-general-information',
-  standalone: true,
-  imports: [ReturnToLinkComponent, SharedModule, RouterLink],
+  imports: [ReturnToLinkComponent, SharedModule],
   templateUrl: './general-information.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

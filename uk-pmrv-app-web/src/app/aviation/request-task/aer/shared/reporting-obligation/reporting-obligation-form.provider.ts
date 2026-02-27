@@ -16,9 +16,10 @@ import {
 } from './reporting-obligation.interface';
 
 @Injectable()
-export class ReportingObligationFormProvider
-  implements TaskFormProvider<ReportingObligation, ReportingObligationFormModel>
-{
+export class ReportingObligationFormProvider implements TaskFormProvider<
+  ReportingObligation,
+  ReportingObligationFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup<ReportingObligationFormModel>;
   private store = inject(RequestTaskStore);

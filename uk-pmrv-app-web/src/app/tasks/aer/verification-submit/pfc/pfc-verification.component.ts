@@ -8,6 +8,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-pfc-verification',
+  standalone: false,
   template: `
     <app-page-heading>{{ 'CALCULATION_PFC' | monitoringApproachEmissionDescription }}</app-page-heading>
     <app-pfc-group [data]="aerData$ | async"></app-pfc-group>

@@ -9,6 +9,7 @@ import { StoreContextResolver } from '@shared/store-resolver/store-context.resol
 
 @Component({
   selector: 'app-peer-reviewer-submitted',
+  standalone: false,
   templateUrl: './peer-review-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

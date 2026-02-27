@@ -69,8 +69,13 @@ public enum PmrvNotificationTemplateName {
     REGISTRY_INTEGRATION_RESPONSE_ACCOUNT_CONTACT_ERROR_ACTION_TEMPLATE("Registry integration email template consume account contact registry error action template"),
     REGISTRY_INTEGRATION_RESPONSE_EXEMPT_FLAG_ERROR_INFO_TEMPLATE("Registry integration email template consume exempt flag registry error info template"),
     REGISTRY_INTEGRATION_RESPONSE_EXEMPT_FLAG_ERROR_ACTION_TEMPLATE("Registry integration email template consume exempt flag registry error template"),
+    REGISTRY_INTEGRATION_RESPONSE_WITHHOLD_FLAG_ERROR_INFO_TEMPLATE("Registry integration email template consume withhold flag registry error info template"),
+    REGISTRY_INTEGRATION_RESPONSE_WITHHOLD_FLAG_ERROR_ACTION_TEMPLATE("Registry integration email template consume withhold flag registry error action template"),
+    REGISTRY_INTEGRATION_WITHHOLD_FLAG_MISSING_REGISTRY_ID("Registry integration withhold flag missing registry id template"),
 
-    BDR_COMPLETED("BDR completed")
+
+    BDR_COMPLETED("BDR completed"),
+    BDRS2_COMPLETED("BDRS2 completed")
     ;
 
 

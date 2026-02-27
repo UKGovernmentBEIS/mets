@@ -15,9 +15,10 @@ import { ghgeConcentrationFormProvider } from './ghg-concentration-form.provider
 
 @Component({
   selector: 'app-ghg-concentration',
+  standalone: false,
   templateUrl: './ghg-concentration.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ghgeConcentrationFormProvider, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GhgConcentrationComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

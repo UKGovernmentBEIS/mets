@@ -13,9 +13,7 @@ import { isInstallationInspectionFollowUpSubmitCompleted, responseDeadlineValid 
 
 @Component({
   selector: 'app-follow-up-summary',
-  standalone: true,
   imports: [FollowUpActionsComponent, SharedModule, RouterLink],
-  providers: [responseDeadlineFormProvider],
   template: `
     <govuk-error-summary *ngIf="errors()" [form]="form"></govuk-error-summary>
 
@@ -39,6 +37,7 @@ import { isInstallationInspectionFollowUpSubmitCompleted, responseDeadlineValid 
     </app-follow-up-actions>
   `,
   styleUrl: '../../shared/css/form-errors.scss',
+  providers: [responseDeadlineFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FollowUpSummaryComponent {

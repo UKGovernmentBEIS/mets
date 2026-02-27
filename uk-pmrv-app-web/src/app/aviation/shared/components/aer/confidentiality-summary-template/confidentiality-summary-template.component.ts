@@ -7,9 +7,8 @@ import { AviationAerCorsiaConfidentiality } from 'pmrv-api';
 
 @Component({
   selector: 'app-confidentiality-summary-template',
-  templateUrl: './confidentiality-summary-template.component.html',
-  standalone: true,
   imports: [SharedModule, RouterLinkWithHref],
+  templateUrl: './confidentiality-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfidentialitySummaryTemplateComponent {

@@ -7,6 +7,7 @@ import { DoalActionService } from '../core/doal-action.service';
 
 @Component({
   selector: 'app-doal-peer-review-decision',
+  standalone: false,
   templateUrl: './peer-review-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -4,6 +4,7 @@ import { PermitTransferAApplicationRequestTaskPayload } from 'pmrv-api';
 
 @Pipe({
   name: 'transferParty',
+  standalone: false,
 })
 export class PermitTransferPartyPipe implements PipeTransform {
   transform(

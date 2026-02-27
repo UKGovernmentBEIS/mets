@@ -15,10 +15,9 @@ import {
 
 @Component({
   selector: 'app-vir-task-list',
-  templateUrl: './vir-task-list.component.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [VirSharedModule, SharedModule, VirTaskStatusPipe],
+  templateUrl: './vir-task-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VirTaskListComponent {
   virRequestPayload: RequestTaskPayload &

@@ -16,9 +16,10 @@ export interface UncorrectedMisstatementsFormModel {
 }
 
 @Injectable()
-export class UncorrectedMisstatementsFormProvider
-  implements TaskFormProvider<AviationAerUncorrectedMisstatements, UncorrectedMisstatementsFormModel>
-{
+export class UncorrectedMisstatementsFormProvider implements TaskFormProvider<
+  AviationAerUncorrectedMisstatements,
+  UncorrectedMisstatementsFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private destroy$ = new Subject<void>();

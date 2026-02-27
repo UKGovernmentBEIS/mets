@@ -23,7 +23,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-recommendation-response-item',
-  standalone: true,
   imports: [SharedModule, RequestActionTaskComponent, VirSharedModule],
   templateUrl: './recommendation-response-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

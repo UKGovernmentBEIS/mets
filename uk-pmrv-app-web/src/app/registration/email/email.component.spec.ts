@@ -18,7 +18,10 @@ describe('EmailComponent', () => {
   let component: EmailComponent;
   let fixture: ComponentFixture<TestComponent>;
 
-  @Component({ template: '<app-email></app-email>' })
+  @Component({
+    standalone: false,
+    template: '<app-email></app-email>',
+  })
   class TestComponent {}
 
   beforeEach(async () => {

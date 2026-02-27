@@ -8,6 +8,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-compliance-monitoring',
+  standalone: false,
   template: `
     <app-action-task header="Compliance with monitoring and reporting principles" [breadcrumb]="true">
       <app-compliance-monitoring-group [compliance]="compliance$ | async"></app-compliance-monitoring-group>

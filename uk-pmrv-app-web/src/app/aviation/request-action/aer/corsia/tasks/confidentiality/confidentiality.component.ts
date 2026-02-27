@@ -24,7 +24,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-confidentiality',
-  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

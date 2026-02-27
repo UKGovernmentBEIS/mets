@@ -7,6 +7,7 @@ import { AuthStore, selectCurrentDomain } from '@core/store/auth';
 
 @Component({
   selector: 'app-confirmation',
+  standalone: false,
   templateUrl: './confirmation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

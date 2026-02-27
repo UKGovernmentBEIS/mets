@@ -46,6 +46,7 @@ import { AviationAerUkEtsApplicationVerificationSubmittedRequestActionPayload } 
 import { AviationAerUkEtsVerificationReturnedToOperatorRequestActionPayload } from './aviationAerUkEtsVerificationReturnedToOperatorRequestActionPayload';
 import { AviationDoECorsiaSubmittedRequestActionPayload } from './aviationDoECorsiaSubmittedRequestActionPayload';
 import { AviationDreApplicationSubmittedRequestActionPayload } from './aviationDreApplicationSubmittedRequestActionPayload';
+import { AviationReportableEmissionsRegistryIntegrationRequestActionPayload } from './aviationReportableEmissionsRegistryIntegrationRequestActionPayload';
 import { AviationVirApplicationRespondedToRegulatorCommentsRequestActionPayload } from './aviationVirApplicationRespondedToRegulatorCommentsRequestActionPayload';
 import { AviationVirApplicationReviewedRequestActionPayload } from './aviationVirApplicationReviewedRequestActionPayload';
 import { AviationVirApplicationSubmittedRequestActionPayload } from './aviationVirApplicationSubmittedRequestActionPayload';
@@ -56,7 +57,12 @@ import { BDRApplicationCompletedRequestActionPayload } from './bDRApplicationCom
 import { BDRApplicationSubmittedRequestActionPayload } from './bDRApplicationSubmittedRequestActionPayload';
 import { BDRApplicationVerificationSubmittedRequestActionPayload } from './bDRApplicationVerificationSubmittedRequestActionPayload';
 import { BDRRegulatorReviewReturnedForAmendsRequestActionPayload } from './bDRRegulatorReviewReturnedForAmendsRequestActionPayload';
+import { BDRS2ApplicationAmendsSubmittedRequestActionPayload } from './bDRS2ApplicationAmendsSubmittedRequestActionPayload';
+import { BDRS2ApplicationCompletedRequestActionPayload } from './bDRS2ApplicationCompletedRequestActionPayload';
 import { BDRS2ApplicationSubmittedRequestActionPayload } from './bDRS2ApplicationSubmittedRequestActionPayload';
+import { BDRS2ApplicationVerificationSubmittedRequestActionPayload } from './bDRS2ApplicationVerificationSubmittedRequestActionPayload';
+import { BDRS2RegulatorReviewReturnedForAmendsRequestActionPayload } from './bDRS2RegulatorReviewReturnedForAmendsRequestActionPayload';
+import { BDRS2VerificationReturnedToOperatorRequestActionPayload } from './bDRS2VerificationReturnedToOperatorRequestActionPayload';
 import { BDRVerificationReturnedToOperatorRequestActionPayload } from './bDRVerificationReturnedToOperatorRequestActionPayload';
 import { DoalApplicationAcceptedRequestActionPayload } from './doalApplicationAcceptedRequestActionPayload';
 import { DoalApplicationAcceptedWithCorrectionsRequestActionPayload } from './doalApplicationAcceptedWithCorrectionsRequestActionPayload';
@@ -100,6 +106,7 @@ import { InstallationAccountRegistryIntegrationRequestActionPayload } from './in
 import { InstallationAccountUpdatedRegistryIntegrationRequestActionPayload } from './installationAccountUpdatedRegistryIntegrationRequestActionPayload';
 import { InstallationInspectionApplicationSubmittedRequestActionPayload } from './installationInspectionApplicationSubmittedRequestActionPayload';
 import { InstallationInspectionOperatorRespondedRequestActionPayload } from './installationInspectionOperatorRespondedRequestActionPayload';
+import { InstallationReportableEmissionsRegistryIntegrationRequestActionPayload } from './installationReportableEmissionsRegistryIntegrationRequestActionPayload';
 import { NerApplicationAcceptedRequestActionPayload } from './nerApplicationAcceptedRequestActionPayload';
 import { NerApplicationEndedRequestActionPayload } from './nerApplicationEndedRequestActionPayload';
 import { NerApplicationProceededToAuthorityRequestActionPayload } from './nerApplicationProceededToAuthorityRequestActionPayload';
@@ -163,10 +170,13 @@ import { WasteQDRRegulatorReviewReturnedForAmendsRequestActionPayload } from './
 import { WithholdingOfAllowancesApplicationClosedRequestActionPayload } from './withholdingOfAllowancesApplicationClosedRequestActionPayload';
 import { WithholdingOfAllowancesApplicationSubmittedRequestActionPayload } from './withholdingOfAllowancesApplicationSubmittedRequestActionPayload';
 import { WithholdingOfAllowancesApplicationWithdrawnRequestActionPayload } from './withholdingOfAllowancesApplicationWithdrawnRequestActionPayload';
+import { WithholdingOfAllowancesRegistryIntegrationRequestActionPayload } from './withholdingOfAllowancesRegistryIntegrationRequestActionPayload';
 
 export interface RequestActionDTO {
   id?: number;
   type?:
+    | 'INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY'
+    | 'AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY'
     | 'INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED'
     | 'INSTALLATION_ACCOUNT_OPENING_ACCEPTED'
     | 'INSTALLATION_ACCOUNT_OPENING_REJECTED'
@@ -326,6 +336,8 @@ export interface RequestActionDTO {
     | 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_REJECTED'
     | 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_WITHDRAWN'
     | 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_CLOSED'
+    | 'WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY'
+    | 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_RE_INITIATED'
     | 'RETURN_OF_ALLOWANCES_APPLICATION_SUBMITTED'
     | 'RETURN_OF_ALLOWANCES_APPLICATION_CANCELLED'
     | 'RETURN_OF_ALLOWANCES_PEER_REVIEW_REQUESTED'
@@ -357,6 +369,15 @@ export interface RequestActionDTO {
     | 'BDRS2_APPLICATION_SENT_TO_VERIFIER'
     | 'BDRS2_APPLICATION_SENT_TO_REGULATOR'
     | 'BDRS2_RECALLED_FROM_VERIFICATION'
+    | 'BDRS2_APPLICATION_VERIFICATION_SUBMITTED'
+    | 'BDRS2_VERIFICATION_RETURNED_TO_OPERATOR'
+    | 'BDRS2_APPLICATION_PEER_REVIEW_REQUESTED'
+    | 'BDRS2_APPLICATION_PEER_REVIEW_ACCEPTED'
+    | 'BDRS2_APPLICATION_PEER_REVIEW_REJECTED'
+    | 'BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS'
+    | 'BDRS2_APPLICATION_AMENDS_SENT_TO_VERIFIER'
+    | 'BDRS2_APPLICATION_COMPLETED'
+    | 'BDRS2_APPLICATION_RE_INITIATED'
     | 'PERMANENT_CESSATION_APPLICATION_CANCELLED'
     | 'PERMANENT_CESSATION_APPLICATION_SUBMITTED'
     | 'PERMANENT_CESSATION_SUBMITTED'
@@ -527,6 +548,7 @@ export interface RequestActionDTO {
     | AviationAerUkEtsVerificationReturnedToOperatorRequestActionPayload
     | AviationDoECorsiaSubmittedRequestActionPayload
     | AviationDreApplicationSubmittedRequestActionPayload
+    | AviationReportableEmissionsRegistryIntegrationRequestActionPayload
     | AviationVirApplicationRespondedToRegulatorCommentsRequestActionPayload
     | AviationVirApplicationReviewedRequestActionPayload
     | AviationVirApplicationSubmittedRequestActionPayload
@@ -535,7 +557,12 @@ export interface RequestActionDTO {
     | BDRApplicationSubmittedRequestActionPayload
     | BDRApplicationVerificationSubmittedRequestActionPayload
     | BDRRegulatorReviewReturnedForAmendsRequestActionPayload
+    | BDRS2ApplicationAmendsSubmittedRequestActionPayload
+    | BDRS2ApplicationCompletedRequestActionPayload
     | BDRS2ApplicationSubmittedRequestActionPayload
+    | BDRS2ApplicationVerificationSubmittedRequestActionPayload
+    | BDRS2RegulatorReviewReturnedForAmendsRequestActionPayload
+    | BDRS2VerificationReturnedToOperatorRequestActionPayload
     | BDRVerificationReturnedToOperatorRequestActionPayload
     | BatchReissueCompletedRequestActionPayload
     | BatchReissueSubmittedRequestActionPayload
@@ -581,6 +608,7 @@ export interface RequestActionDTO {
     | InstallationAccountUpdatedRegistryIntegrationRequestActionPayload
     | InstallationInspectionApplicationSubmittedRequestActionPayload
     | InstallationInspectionOperatorRespondedRequestActionPayload
+    | InstallationReportableEmissionsRegistryIntegrationRequestActionPayload
     | NerApplicationAcceptedRequestActionPayload
     | NerApplicationEndedRequestActionPayload
     | NerApplicationProceededToAuthorityRequestActionPayload
@@ -643,7 +671,8 @@ export interface RequestActionDTO {
     | WasteQDRRegulatorReviewReturnedForAmendsRequestActionPayload
     | WithholdingOfAllowancesApplicationClosedRequestActionPayload
     | WithholdingOfAllowancesApplicationSubmittedRequestActionPayload
-    | WithholdingOfAllowancesApplicationWithdrawnRequestActionPayload;
+    | WithholdingOfAllowancesApplicationWithdrawnRequestActionPayload
+    | WithholdingOfAllowancesRegistryIntegrationRequestActionPayload;
   requestId?: string;
   requestType?:
     | 'INSTALLATION_ACCOUNT_OPENING'

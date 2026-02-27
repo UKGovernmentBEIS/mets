@@ -10,6 +10,7 @@ import { emissionPointDetailsFormProvider } from '@tasks/aer/submit/emission-poi
 
 @Component({
   selector: 'app-emission-point-details',
+  standalone: false,
   template: `
     <app-aer-task>
       <app-emission-point-details-template
@@ -18,8 +19,8 @@ import { emissionPointDetailsFormProvider } from '@tasks/aer/submit/emission-poi
         [isEditing]="isEditing$ | async"></app-emission-point-details-template>
     </app-aer-task>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [emissionPointDetailsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionPointDetailsComponent {
   emissionPointId = this.form.get('id').value;

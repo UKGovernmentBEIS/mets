@@ -17,6 +17,7 @@ import { PermitSurrenderStore } from '../store/permit-surrender.store';
 
 @Component({
   selector: 'app-review-decision',
+  standalone: false,
   templateUrl: './determination-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

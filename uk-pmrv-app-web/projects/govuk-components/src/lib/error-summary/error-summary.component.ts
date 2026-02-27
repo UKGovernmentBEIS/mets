@@ -21,6 +21,7 @@ import { NestedMessageValidationErrors } from './nested-message-validation-error
 
 @Component({
   selector: 'govuk-error-summary',
+  standalone: false,
   templateUrl: './error-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

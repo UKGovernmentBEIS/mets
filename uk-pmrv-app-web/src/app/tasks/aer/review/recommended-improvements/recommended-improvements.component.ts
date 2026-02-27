@@ -9,6 +9,7 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-recommended-improvements',
+  standalone: false,
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Recommended improvements">
       <app-recommended-improvements-group

@@ -12,9 +12,8 @@ import { FlightProceduresFormProvider } from '../flight-procedures-form.provider
 
 @Component({
   selector: 'app-flight-procedures-list-flights',
-  templateUrl: './flight-procedures-list-flights.component.html',
-  standalone: true,
   imports: [SharedModule, FlightProceduresFormComponent, ReturnToLinkComponent],
+  templateUrl: './flight-procedures-list-flights.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class FlightProceduresListFlightsComponent {

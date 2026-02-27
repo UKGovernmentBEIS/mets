@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { PollutantRegisterActivities, PRTRCodes } from 'pmrv-api';
 
-@Pipe({ name: 'prtrActivityItemName' })
+@Pipe({
+  name: 'prtrActivityItemName',
+  standalone: false,
+})
 export class PrtrActivityItemNamePipe implements PipeTransform {
   transform(activityItem?: PRTRCodes['codes'][number] | PollutantRegisterActivities['activities'][number]): string {
     switch (activityItem) {

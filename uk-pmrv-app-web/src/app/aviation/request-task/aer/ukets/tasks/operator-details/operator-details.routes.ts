@@ -30,9 +30,9 @@ export const AER_OPERATOR_DETAILS_ROUTES: Routes = [
         data: { pageTitle: 'Air operating certificate', backlink: '../flight-identification' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
-          import(
-            './operator-details-air-operating-certificate/operator-details-air-operating-certificate.component'
-          ).then((c) => c.OperatorDetailsAirOperatingCertificateComponent),
+          import('./operator-details-air-operating-certificate/operator-details-air-operating-certificate.component').then(
+            (c) => c.OperatorDetailsAirOperatingCertificateComponent,
+          ),
       },
       {
         path: 'operating-license',

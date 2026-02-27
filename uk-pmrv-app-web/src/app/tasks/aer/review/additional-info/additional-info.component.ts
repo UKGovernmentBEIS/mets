@@ -9,6 +9,7 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-additional-info',
+  standalone: false,
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Additional information">
       <app-additional-info-group

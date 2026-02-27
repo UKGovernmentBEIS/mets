@@ -8,8 +8,9 @@ describe('FooterNavListComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
+    standalone: false,
     template: `
-      <govuk-footer-nav-list [title]="title" [columns]="columns"></govuk-footer-nav-list>
+      <govuk-footer-nav-list [title]="title" [columns]="columns" />
     `,
   })
   class TestComponent {

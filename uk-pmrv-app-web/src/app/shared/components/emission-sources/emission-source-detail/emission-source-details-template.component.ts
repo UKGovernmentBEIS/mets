@@ -3,6 +3,7 @@ import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-emission-source-details-template',
+  standalone: false,
   templateUrl: './emission-source-details-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

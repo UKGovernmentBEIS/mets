@@ -1,6 +1,5 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { RouterLink, RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, filter, map, Observable, startWith } from 'rxjs';
 
@@ -25,6 +24,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aggregated-consumption-flight-data-summary',
+  imports: [SharedModule, GovukComponentsModule, NgIf, ReturnToLinkComponent, FlightDataTableComponent],
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
@@ -35,7 +35,7 @@ interface ViewModel {
         </div>
 
         <app-flight-data-table
-          [headingText]="'File uploaded'"
+          headingText="File uploaded"
           [emissionDataDetails]="vm.data.aggregatedEmissionDataDetails"
           [isCorsia]="vm.isCorsia"></app-flight-data-table>
       </ng-container>
@@ -53,17 +53,6 @@ interface ViewModel {
       margin-left: auto;
     }
   `,
-  imports: [
-    SharedModule,
-    GovukComponentsModule,
-    NgFor,
-    NgIf,
-    RouterLinkWithHref,
-    ReturnToLinkComponent,
-    FlightDataTableComponent,
-    RouterLink,
-  ],
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class AggregatedConsumptionFlightDataSummaryComponent {

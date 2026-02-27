@@ -28,6 +28,7 @@ public class DreUpdateReportableEmissionsService {
                 .year(metadata.getYear())
                 .reportableEmissions(requestPayload.getDre().getTotalReportableEmissions())
                 .isFromDre(true)
+				.requestId(requestId)
                 .build());
 	}
 }

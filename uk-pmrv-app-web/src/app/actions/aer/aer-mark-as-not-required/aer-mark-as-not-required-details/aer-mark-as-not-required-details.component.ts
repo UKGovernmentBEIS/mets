@@ -9,6 +9,7 @@ import { AerApplicationMarkNotRequiredRequestActionPayload, RequestActionsServic
 
 @Component({
   selector: 'app-aer-not-required-details',
+  standalone: false,
   templateUrl: './aer-mark-as-not-required-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

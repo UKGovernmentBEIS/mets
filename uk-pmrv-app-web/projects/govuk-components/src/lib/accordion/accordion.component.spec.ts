@@ -12,6 +12,7 @@ describe('AccordionComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
+    standalone: false,
     template: `
       <govuk-accordion [id]="id">
         <govuk-accordion-item header="One">

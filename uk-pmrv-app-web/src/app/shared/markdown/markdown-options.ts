@@ -1,6 +1,6 @@
 import { SecurityContext } from '@angular/core';
 
-import { MarkdownModuleConfig, MARKED_OPTIONS } from 'ngx-markdown';
+import { MarkdownModuleConfig, MARKED_OPTIONS, SANITIZE } from 'ngx-markdown';
 
 import { markedOptionsFactory } from './marked-options-factory';
 
@@ -9,5 +9,8 @@ export const markdownModuleConfig: MarkdownModuleConfig = {
     provide: MARKED_OPTIONS,
     useFactory: markedOptionsFactory,
   },
-  sanitize: SecurityContext.URL,
+  sanitize: {
+    provide: SANITIZE,
+    useValue: SecurityContext.URL,
+  },
 };

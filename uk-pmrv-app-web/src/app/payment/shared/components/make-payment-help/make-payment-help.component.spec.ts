@@ -14,6 +14,7 @@ describe('MakePaymentHelpComponent', () => {
 
   @Component({
     selector: 'app-test-wrapper-component',
+    standalone: false,
     template: `
       <app-make-payment-help
         [competentAuthority$]="competentAuthority$"

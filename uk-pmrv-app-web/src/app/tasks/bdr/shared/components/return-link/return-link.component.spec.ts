@@ -13,10 +13,13 @@ describe('BDRReturnLinkComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
   let page: Page;
 
-  @Component({ template: '<router-outlet></router-outlet>' })
+  @Component({
+    standalone: false,
+    template: '<router-outlet></router-outlet>',
+  })
   class TestComponent {}
 
-  @Component({ template: '<app-bdr-return-link></app-bdr-return-link>' })
+  @Component({ standalone: false, template: '<app-bdr-return-link></app-bdr-return-link>' })
   class ChildComponent {}
 
   class Page extends BasePage<TestComponent> {

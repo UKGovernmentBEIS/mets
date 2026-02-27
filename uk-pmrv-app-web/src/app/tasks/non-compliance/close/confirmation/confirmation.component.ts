@@ -7,6 +7,7 @@ import { NonComplianceService } from '@tasks/non-compliance/core/non-compliance.
 
 @Component({
   selector: 'app-confirmation',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

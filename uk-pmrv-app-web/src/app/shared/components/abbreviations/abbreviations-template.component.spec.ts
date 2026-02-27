@@ -16,6 +16,7 @@ describe('AbbreviationsTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-abbreviations-template
         (formSubmit)="onSubmit($event)"

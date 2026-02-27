@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { RouterLink, RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
 import { TotalEmissionsSchemeYearHeaderComponent } from '@aviation/request-task/aer/ukets/tasks/total-emissions/shared/total-emissions-scheme-year-header';
-import { TotalEmissionsStandardFuelsTableComponent } from '@aviation/request-task/aer/ukets/tasks/total-emissions/table/total-emissions-standard-fuels-table';
 import { TotalEmissionsFormProvider } from '@aviation/request-task/aer/ukets/tasks/total-emissions/total-emissions-form.provider';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
@@ -23,6 +21,12 @@ interface ViewModel {
 
 @Component({
   selector: 'app-total-emissions-summary',
+  imports: [
+    SharedModule,
+    ReturnToLinkComponent,
+    TotalEmissionsSchemeYearHeaderComponent,
+    TotalEmissionsSummaryTemplateComponent,
+  ],
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
@@ -38,16 +42,6 @@ interface ViewModel {
 
     <app-return-to-link></app-return-to-link>
   `,
-  imports: [
-    SharedModule,
-    RouterLinkWithHref,
-    ReturnToLinkComponent,
-    RouterLink,
-    TotalEmissionsStandardFuelsTableComponent,
-    TotalEmissionsSchemeYearHeaderComponent,
-    TotalEmissionsSummaryTemplateComponent,
-  ],
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class TotalEmissionsSummaryComponent {

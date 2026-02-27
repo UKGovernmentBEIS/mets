@@ -2,19 +2,27 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowanc
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountStatus;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateAccountStatusValidationResult;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateRequestTypeValidationResult;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestCreateValidatorService;
-import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.validator.WithholdingOfAllowancesCreateValidator;
 
-import java.util.Collections;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anySet;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class WithholdingOfAllowancesCreateValidatorTest {
 
     @Mock
@@ -25,6 +33,24 @@ class WithholdingOfAllowancesCreateValidatorTest {
     @BeforeEach
     void setUp() {
         validator = new WithholdingOfAllowancesCreateValidator(requestCreateValidatorService);
+    }
+
+    @Test
+    void validateAction_valid() {
+        Long accountId = 1L;
+        RequestCreateAccountStatusValidationResult accountStatusResult =
+                RequestCreateAccountStatusValidationResult.builder().valid(true).build();
+        when(requestCreateValidatorService.validateAccountStatuses(eq(accountId), anySet()))
+                .thenReturn(accountStatusResult);
+
+        RequestCreateRequestTypeValidationResult conflictingRequestsResult =
+                RequestCreateRequestTypeValidationResult.builder().valid(true).build();
+        when(requestCreateValidatorService.validateInProgressAndCompletedConflictingRequestTypes(eq(accountId), anySet(),anySet()))
+                .thenReturn(conflictingRequestsResult);
+
+        RequestCreateValidationResult result = validator.validateAction(accountId);
+
+        assertTrue(result.isValid());
     }
 
     @Test
@@ -51,7 +77,8 @@ class WithholdingOfAllowancesCreateValidatorTest {
     @Test
     void getMutuallyExclusiveRequests() {
         Set<RequestType> mutuallyExclusiveRequests = validator.getMutuallyExclusiveRequests();
+        Set<RequestType> expectedSet = Set.of(RequestType.WITHHOLDING_OF_ALLOWANCES);
 
-        assertEquals(Collections.emptySet(), mutuallyExclusiveRequests);
+        assertEquals(expectedSet, mutuallyExclusiveRequests);
     }
 }

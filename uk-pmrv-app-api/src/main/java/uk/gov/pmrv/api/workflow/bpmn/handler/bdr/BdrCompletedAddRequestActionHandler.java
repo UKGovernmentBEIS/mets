@@ -18,7 +18,7 @@ public class BdrCompletedAddRequestActionHandler implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
 
         final String requestId = (String) execution.getVariable(BpmnProcessConstants.REQUEST_ID);
-        bdrCompleteService.complete(requestId);
+        bdrCompleteService.addRequestAction(requestId);
 
     }
 }

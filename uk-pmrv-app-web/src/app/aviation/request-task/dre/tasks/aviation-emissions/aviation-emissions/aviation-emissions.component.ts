@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { map, Observable } from 'rxjs';
@@ -16,11 +16,10 @@ import { BaseAviationEmissionsComponent } from '../base-aviation-emissions.compo
 
 @Component({
   selector: 'app-aviation-emissions',
+  imports: [GovukComponentsModule, SharedModule, NgIf, ReturnToLinkComponent, AviationEmissionsFormComponent],
   templateUrl: './aviation-emissions.component.html',
-  standalone: true,
-  imports: [GovukComponentsModule, SharedModule, NgIf, NgFor, ReturnToLinkComponent, AviationEmissionsFormComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AviationEmissionsComponent extends BaseAviationEmissionsComponent {
   form = this.formProvider.calculationApproachCtrl;

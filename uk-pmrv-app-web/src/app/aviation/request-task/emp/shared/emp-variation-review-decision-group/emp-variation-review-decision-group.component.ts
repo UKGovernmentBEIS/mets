@@ -20,7 +20,6 @@ import { EmpVariationReviewDecisionGroupFormComponent } from './form/emp-variati
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-emp-variation-review-decision-group',
-  standalone: true,
   imports: [
     SharedModule,
     EmpVariationReviewDecisionGroupFormComponent,

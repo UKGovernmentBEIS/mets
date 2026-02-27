@@ -20,11 +20,10 @@ import {
 
 @Component({
   selector: 'app-alr-verification-review-group-decision',
-  templateUrl: './alr-verification-review-group-decision.component.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SharedModule],
+  templateUrl: './alr-verification-review-group-decision.component.html',
   providers: [alrVerificationReviewGroupDecisionFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrVerificationReviewGroupDecisionComponent implements PendingRequest {
   alrPayload = this.alrService.payload as Signal<ALRApplicationRegulatorReviewSubmitRequestTaskPayload>;

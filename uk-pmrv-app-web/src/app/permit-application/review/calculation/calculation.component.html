@@ -1,101 +1,98 @@
 <ng-template #contentTpl let-showOriginal let-sourceStreamCategoryAppliedTiers="sourceStreamCategoryAppliedTiers">
   <h2 class="govuk-heading-m">Calculation emission sources</h2>
 
-  <ul app-task-item-list>
-    <div class="overflow-auto">
-      <ng-container *ngIf="sourceStreamCategoryAppliedTiers?.length > 0; else addNew">
-        <govuk-table [columns]="columns" [data]="sourceStreamCategoryAppliedTiers">
-          <ng-template let-column="column" let-row="row" let-index="index">
-            <ng-container [ngSwitch]="column.field">
-              <ng-container *ngSwitchCase="'category'">
-                <ng-container *ngIf="showOriginal; else currentCategory">
+  <ng-container *ngIf="sourceStreamCategoryAppliedTiers?.length > 0; else addNew">
+    <div class="overflow-auto govuk-!-margin-bottom-9">
+      <govuk-table [columns]="columns" [data]="sourceStreamCategoryAppliedTiers">
+        <ng-template let-column="column" let-row="row" let-index="index">
+          <ng-container [ngSwitch]="column.field">
+            <ng-container *ngSwitchCase="'category'">
+              <ng-container *ngIf="showOriginal; else currentCategory">
+                <ng-container
+                  *ngIf="
+                    row?.sourceStreamCategory?.sourceStream | findSourceStream: !showOriginal | async as sourceStream;
+                    else noSourceStream
+                  ">
+                  {{ sourceStream | tierSourceStreamName: row.sourceStreamCategory }}
+                </ng-container>
+              </ng-container>
+              <ng-template #currentCategory>
+                <a govukLink [routerLink]="['../../calculation/category-tier', index]">
                   <ng-container
                     *ngIf="
                       row?.sourceStreamCategory?.sourceStream | findSourceStream: !showOriginal | async as sourceStream;
                       else noSourceStream
-                    "
-                    >{{ sourceStream | tierSourceStreamName: row.sourceStreamCategory }}</ng-container
-                  >
-                </ng-container>
-                <ng-template #currentCategory>
-                  <a govukLink [routerLink]="['../../calculation/category-tier', index]">
-                    <ng-container
-                      *ngIf="
-                        row?.sourceStreamCategory?.sourceStream
-                          | findSourceStream: !showOriginal
-                          | async as sourceStream;
-                        else noSourceStream
-                      "
-                      >{{ sourceStream | tierSourceStreamName: row.sourceStreamCategory }}</ng-container
-                    >
-                  </a>
-                </ng-template>
-                <ng-template #noSourceStream>
-                  UNDEFINED: {{ row?.sourceStreamCategory?.categoryType | categoryTypeName }}
-                </ng-template>
-              </ng-container>
-              <ng-container *ngSwitchCase="'emissions'">
-                {{ row?.sourceStreamCategory?.annualEmittedCO2Tonnes | number }}
-              </ng-container>
-              <ng-container *ngSwitchCase="'activityData'">
-                {{ (row?.activityData?.tier | appliedTier) ?? notUsed }}
-              </ng-container>
-              <ng-container *ngSwitchCase="'netCalorificValue'">
-                {{ (row?.netCalorificValue?.tier | appliedTier) ?? notUsed }}
-              </ng-container>
-              <ng-container *ngSwitchCase="'emissionFactor'">
-                {{ (row?.emissionFactor?.tier | appliedTier) ?? notUsed }}
-              </ng-container>
-              <ng-container *ngSwitchCase="'oxidationFactor'">
-                {{ (row?.oxidationFactor?.tier | appliedTier) ?? notUsed }}
-              </ng-container>
-              <ng-container *ngSwitchCase="'carbonContent'">
-                {{ (row?.carbonContent?.tier | appliedTier) ?? notUsed }}
-              </ng-container>
-              <ng-container *ngSwitchCase="'conversionFactor'">
-                {{ (row?.conversionFactor?.tier | appliedTier) ?? notUsed }}
-              </ng-container>
-              <ng-container *ngSwitchCase="'biomassFraction'">
-                {{ (row?.biomassFraction?.tier | appliedTier) ?? notUsed }}
-              </ng-container>
-              <ng-container *ngSwitchCase="'status'">
-                <ng-container *ngIf="!showOriginal; else originalStatus">
-                  <govuk-tag
-                    [color]="'CALCULATION_CO2_Category_Tier' | taskStatus: index | async | tagColor"
-                    class="app-task-list__tag"
-                  >
-                    {{ 'CALCULATION_CO2_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
-                  </govuk-tag>
-                </ng-container>
-                <ng-template #originalStatus>
-                  <govuk-tag [color]="'complete' | tagColor" class="app-task-list__tag">
-                    {{ 'complete' | i18nSelect: statusMap }}
-                  </govuk-tag>
-                </ng-template>
-              </ng-container>
+                    ">
+                    {{ sourceStream | tierSourceStreamName: row.sourceStreamCategory }}
+                  </ng-container>
+                </a>
+              </ng-template>
+              <ng-template #noSourceStream>
+                UNDEFINED: {{ row?.sourceStreamCategory?.categoryType | categoryTypeName }}
+              </ng-template>
             </ng-container>
-          </ng-template>
-        </govuk-table>
+            <ng-container *ngSwitchCase="'emissions'">
+              {{ row?.sourceStreamCategory?.annualEmittedCO2Tonnes | number }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'activityData'">
+              {{ (row?.activityData?.tier | appliedTier) ?? notUsed }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'netCalorificValue'">
+              {{ (row?.netCalorificValue?.tier | appliedTier) ?? notUsed }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'emissionFactor'">
+              {{ (row?.emissionFactor?.tier | appliedTier) ?? notUsed }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'oxidationFactor'">
+              {{ (row?.oxidationFactor?.tier | appliedTier) ?? notUsed }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'carbonContent'">
+              {{ (row?.carbonContent?.tier | appliedTier) ?? notUsed }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'conversionFactor'">
+              {{ (row?.conversionFactor?.tier | appliedTier) ?? notUsed }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'biomassFraction'">
+              {{ (row?.biomassFraction?.tier | appliedTier) ?? notUsed }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'status'">
+              <ng-container *ngIf="!showOriginal; else originalStatus">
+                <govuk-tag
+                  [color]="'CALCULATION_CO2_Category_Tier' | taskStatus: index | async | tagColor"
+                  class="app-task-list__tag">
+                  {{ 'CALCULATION_CO2_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
+                </govuk-tag>
+              </ng-container>
+              <ng-template #originalStatus>
+                <govuk-tag [color]="'complete' | tagColor" class="app-task-list__tag">
+                  {{ 'complete' | i18nSelect: statusMap }}
+                </govuk-tag>
+              </ng-template>
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </govuk-table>
+      <div class="govuk-!-font-size-19">
         <a
           *ngIf="(store.isEditable$ | async) === true"
           govukLink
-          [routerLink]="['../../calculation/category-tier', sourceStreamCategoryAppliedTiers?.length]"
-        >
+          [routerLink]="['../../calculation/category-tier', sourceStreamCategoryAppliedTiers?.length]">
           Add a source stream category
         </a>
-      </ng-container>
-
-      <ng-template #addNew>
-        <li
-          *ngIf="(store.isEditable$ | async) === true"
-          app-task-item
-          link="../../calculation/category-tier/0"
-          linkText="Add a source stream category"
-          [status]="sourceStreamCategoriesStatus$ | async"
-        ></li>
-      </ng-template>
+      </div>
     </div>
-  </ul>
+  </ng-container>
+
+  <ng-template #addNew>
+    <ul app-task-item-list>
+      <li
+        *ngIf="(store.isEditable$ | async) === true"
+        app-task-item
+        link="../../calculation/category-tier/0"
+        linkText="Add a source stream category"
+        [status]="sourceStreamCategoriesStatus$ | async"></li>
+    </ul>
+  </ng-template>
 
   <h2 class="govuk-heading-m">{{ 'CALCULATION_CO2' | monitoringApproachDescription }} details</h2>
 
@@ -104,25 +101,21 @@
       app-task-item
       link="../../calculation/description/summary"
       linkText="Approach description"
-      [status]="'CALCULATION_CO2_Description' | taskStatus | async"
-    >
+      [status]="'CALCULATION_CO2_Description' | taskStatus | async">
       <app-calculation-approach-description-summary-template
         [showOriginal]="showOriginal"
-        [hasBottomBorder]="false"
-      ></app-calculation-approach-description-summary-template>
+        [hasBottomBorder]="false"></app-calculation-approach-description-summary-template>
     </li>
     <li
       app-task-item
       link="../../calculation/sampling-plan/summary"
       linkText="Sampling plan"
-      [status]="'CALCULATION_CO2_Plan' | taskStatus | async"
-    >
+      [status]="'CALCULATION_CO2_Plan' | taskStatus | async">
       <app-calculation-plan-summary-details
         *ngIf="('CALCULATION_CO2_Plan' | taskStatus | async) === 'complete'"
         [showOriginal]="showOriginal"
         [changePerStage]="false"
-        [hasBottomBorder]="false"
-      ></app-calculation-plan-summary-details>
+        [hasBottomBorder]="false"></app-calculation-plan-summary-details>
     </li>
   </ul>
 </ng-template>
@@ -130,8 +123,7 @@
 <app-permit-task-review
   [breadcrumb]="true"
   [notification]="notification"
-  [heading]="'CALCULATION_CO2' | monitoringApproachDescription"
->
+  [heading]="'CALCULATION_CO2' | monitoringApproachDescription">
   <app-site-emissions></app-site-emissions>
 
   <app-highlight-diff *ngIf="(showDiff$ | async) === true">
@@ -141,20 +133,18 @@
         contentTpl;
         context: {
           $implicit: true,
-          sourceStreamCategoryAppliedTiers: originalSourceStreamCategoryAppliedTiers$ | async
+          sourceStreamCategoryAppliedTiers: originalSourceStreamCategoryAppliedTiers$ | async,
         }
-      "
-    ></ng-container>
+      "></ng-container>
     <ng-container
       slot="current"
       *ngTemplateOutlet="
         contentTpl;
         context: {
           $implicit: false,
-          sourceStreamCategoryAppliedTiers: sourceStreamCategoryAppliedTiers$ | async
+          sourceStreamCategoryAppliedTiers: sourceStreamCategoryAppliedTiers$ | async,
         }
-      "
-    ></ng-container>
+      "></ng-container>
   </app-highlight-diff>
 
   <ng-container
@@ -162,12 +152,10 @@
     [ngTemplateOutlet]="contentTpl"
     [ngTemplateOutletContext]="{
       $implicit: false,
-      sourceStreamCategoryAppliedTiers: sourceStreamCategoryAppliedTiers$ | async
-    }"
-  ></ng-container>
+      sourceStreamCategoryAppliedTiers: sourceStreamCategoryAppliedTiers$ | async,
+    }"></ng-container>
 
   <app-review-group-decision-container
     [groupKey]="groupKey$ | async"
-    (notification)="notification = $event"
-  ></app-review-group-decision-container>
+    (notification)="notification = $event"></app-review-group-decision-container>
 </app-permit-task-review>

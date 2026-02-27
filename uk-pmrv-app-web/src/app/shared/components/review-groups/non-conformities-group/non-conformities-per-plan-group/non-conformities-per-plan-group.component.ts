@@ -6,6 +6,7 @@ import { UncorrectedNonConformities } from 'pmrv-api';
 
 @Component({
   selector: 'app-non-conformities-per-plan-group',
+  standalone: false,
   templateUrl: './non-conformities-per-plan-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

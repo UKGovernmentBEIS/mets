@@ -59,15 +59,12 @@ export interface NotVerifiedValue {
 }
 
 @Injectable()
-export class OverallDecisionFormProvider
-  implements
-    TaskFormProvider<
-      | AviationAerVerificationDecision
-      | AviationAerVerifiedSatisfactoryWithCommentsDecision
-      | AviationAerNotVerifiedDecision,
-      OverallDecisionFormModel
-    >
-{
+export class OverallDecisionFormProvider implements TaskFormProvider<
+  | AviationAerVerificationDecision
+  | AviationAerVerifiedSatisfactoryWithCommentsDecision
+  | AviationAerNotVerifiedDecision,
+  OverallDecisionFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private destroy$ = new Subject<void>();

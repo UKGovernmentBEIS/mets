@@ -12,6 +12,7 @@ import { buildTaskData } from '../measurement';
 
 @Component({
   selector: 'app-delete',
+  standalone: false,
   template: `
     <app-page-heading size="xl">
       Are you sure you want to delete

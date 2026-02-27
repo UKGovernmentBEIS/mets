@@ -7,7 +7,6 @@ import { SharedModule } from '@shared/shared.module';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-organisation-structure-limited-company-form',
-  standalone: true,
   imports: [SharedModule, LocationStateFormComponent],
   templateUrl: './limited-company-form.component.html',
   viewProviders: [existingControlContainer],

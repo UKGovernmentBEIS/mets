@@ -21,6 +21,7 @@ import { AccountNotesService, FileUuidDTO, NotePayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-account-note',
+  standalone: false,
   templateUrl: './account-note.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

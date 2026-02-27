@@ -8,6 +8,7 @@ import { CommonActionsStore } from '../../store/common-actions.store';
 
 @Component({
   selector: 'app-doal-submitted',
+  standalone: false,
   templateUrl: './submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

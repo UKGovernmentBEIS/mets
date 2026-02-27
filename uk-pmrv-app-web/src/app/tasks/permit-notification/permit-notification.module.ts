@@ -28,6 +28,7 @@ import { SubmitContainerComponent } from './submit/submit-container.component';
 import { SummaryComponent } from './submit/summary/summary.component';
 
 @NgModule({
+  imports: [PermitNotificationRoutingModule, PermitNotificationSharedModule, SharedModule, TaskSharedModule],
   declarations: [
     AnswersComponent,
     DecisionComponent,
@@ -50,7 +51,6 @@ import { SummaryComponent } from './submit/summary/summary.component';
     TemporaryFactorComponent,
     TemporarySuspensionComponent,
   ],
-  imports: [PermitNotificationRoutingModule, PermitNotificationSharedModule, SharedModule, TaskSharedModule],
   providers: [PeerReviewDecisionGuard],
 })
 export class PermitNotificationModule {}

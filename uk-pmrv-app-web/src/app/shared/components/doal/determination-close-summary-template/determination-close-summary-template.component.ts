@@ -4,6 +4,7 @@ import { DoalClosedDetermination } from 'pmrv-api';
 
 @Component({
   selector: 'app-doal-determination-close-summary-template',
+  standalone: false,
   templateUrl: './determination-close-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

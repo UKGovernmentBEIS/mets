@@ -16,7 +16,12 @@ export const expectBusinessErrorToBe = async (error: BusinessError) => {
   return expect(firstValueFrom(businessErrorService.error$)).resolves.toEqual(error);
 };
 
-@Component({ selector: 'app-business-error', template: '', changeDetection: ChangeDetectionStrategy.OnPush })
+@Component({
+  selector: 'app-business-error',
+  standalone: false,
+  template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
 export class BusinessErrorStubComponent {}
 
 @NgModule({

@@ -2,7 +2,7 @@
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
-    [heading]="'Sub-installation details'"
+    heading="Sub-installation details"
     [caption]="
       (isEditing$ | async)
         ? 'Edit a sub-installation with fallback approach'

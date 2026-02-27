@@ -1,7 +1,7 @@
 <h2 class="govuk-heading-m">What is your decision on the information submitted?</h2>
 
 <div formControlName="type" govuk-radio>
-  <govuk-radio-option value="ACCEPTED" label="Accepted"> </govuk-radio-option>
+  <govuk-radio-option value="ACCEPTED" label="Accepted"></govuk-radio-option>
 
   <govuk-radio-option value="OPERATOR_AMENDS_NEEDED" label="Operator changes required">
     <div govukConditionalContent>
@@ -14,8 +14,7 @@
             *ngFor="let requiredChange of requiredChangeCtrl.controls; index as i"
             [formGroupName]="i"
             govukFieldset
-            id="required=changes-{{ i }}"
-          >
+            id="required=changes-{{ i }}">
             <legend class="govuk-heading-s">Required change {{ i + 1 }}</legend>
 
             <button
@@ -25,8 +24,7 @@
               appAddAnother
               govukSecondaryButton
               type="button"
-              #removeButton
-            >
+              #removeButton>
               Remove
             </button>
 
@@ -36,9 +34,8 @@
               [baseDownloadUrl]="getDownloadUrl()"
               [label]="(uploadedFiles[i] | async) === true ? 'Upload a different file' : 'Upload a file (optional)'"
               headerSize="s"
-              [listTitle]="'Uploaded attachments for the operator'"
-              formControlName="files"
-            ></app-multiple-file-input>
+              listTitle="Uploaded attachments for the operator"
+              formControlName="files"></app-multiple-file-input>
           </fieldset>
 
           <button (click)="addRequiredChangeCtrl()" govukSecondaryButton type="button">

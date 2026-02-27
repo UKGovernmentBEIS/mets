@@ -7,6 +7,7 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-bdr-task',
+  imports: [RouterModule, SharedModule],
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -17,10 +18,8 @@ import { SharedModule } from '@shared/shared.module';
       </div>
     </div>
   `,
-  standalone: true,
-  imports: [RouterModule, SharedModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BdrTaskComponent {
   @Input() notification: any;

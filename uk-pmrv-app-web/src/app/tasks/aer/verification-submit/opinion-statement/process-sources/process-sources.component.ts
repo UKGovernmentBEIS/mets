@@ -11,6 +11,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-process-sources',
+  standalone: false,
   templateUrl: './process-sources.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

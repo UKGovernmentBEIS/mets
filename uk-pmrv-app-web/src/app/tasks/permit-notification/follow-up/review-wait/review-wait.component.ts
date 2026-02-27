@@ -7,6 +7,7 @@ import { CommonTasksStore } from '../../../store/common-tasks.store';
 
 @Component({
   selector: 'app-follow-up-review-wait',
+  standalone: false,
   template: `
     <app-base-task-container-component
       [header]="(route.data | async)?.pageTitle"

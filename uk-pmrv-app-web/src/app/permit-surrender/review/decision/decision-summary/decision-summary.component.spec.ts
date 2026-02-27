@@ -12,6 +12,7 @@ import { DecisionSummaryComponent } from './decision-summary.component';
 
 describe('DecisionSummaryComponent', () => {
   @Component({
+    standalone: false,
     template: `
       <app-permit-surrender-decision-summary
         [reviewDecision$]="reviewDecision$"

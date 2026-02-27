@@ -12,6 +12,7 @@ import { emissionsFormProvider } from './emissions-form.provider';
 
 @Component({
   selector: 'app-emissions',
+  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onContinue()"
@@ -30,8 +31,8 @@ import { emissionsFormProvider } from './emissions-form.provider';
     </app-wizard-step>
     <a govukLink routerLink="../..">Return to: Cessation</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [emissionsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionsComponent implements PendingRequest {
   constructor(

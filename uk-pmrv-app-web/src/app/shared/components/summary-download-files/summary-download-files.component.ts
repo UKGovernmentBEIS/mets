@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-summary-download-files',
+  standalone: false,
   template: `
     <ng-container *ngFor="let file of files; let isLast = last">
       <a [routerLink]="file?.downloadUrl" govukLink target="_blank" attr.data-print-text="{{ file?.fileName }}">

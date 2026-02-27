@@ -11,6 +11,7 @@ import { ApproachTaskPipe } from '../../approach-task.pipe';
 
 @Component({
   selector: 'app-inherent-summary',
+  standalone: false,
   templateUrl: './inherent-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

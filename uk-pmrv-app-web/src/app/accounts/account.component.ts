@@ -16,6 +16,7 @@ import { InstallationAccountDTO, InstallationAccountPermitDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-account',
+  standalone: false,
   templateUrl: './account.component.html',
   styles: `
     span.status {
@@ -28,8 +29,8 @@ import { InstallationAccountDTO, InstallationAccountPermitDTO } from 'pmrv-api';
       max-width: 100%;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountComponent implements OnInit {
   private accountPermit$: Observable<InstallationAccountPermitDTO>;

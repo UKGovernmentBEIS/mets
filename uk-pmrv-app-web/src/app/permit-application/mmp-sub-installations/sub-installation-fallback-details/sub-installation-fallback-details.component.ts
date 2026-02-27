@@ -16,9 +16,10 @@ import { fallbackApproachAddFormFactory } from './fallback-approach-details-form
 
 @Component({
   selector: 'app-sub-installation-fallback-details',
+  standalone: false,
   templateUrl: './sub-installation-fallback-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [fallbackApproachAddFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubInstallationFallbackDetailsComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

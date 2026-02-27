@@ -4,6 +4,7 @@ import { StatusKey } from '../../../../shared/types/permit-task.type';
 
 @Pipe({
   name: 'subtaskName',
+  standalone: false,
 })
 export class SubtaskNamePipe implements PipeTransform {
   transform(value: StatusKey): string {

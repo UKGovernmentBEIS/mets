@@ -11,10 +11,9 @@ import { returnToOperatorForChangesFormProvider } from './return-to-operator-for
 
 @Component({
   selector: 'app-aer-verify-return-to-operator-for-changes',
-  standalone: true,
   imports: [SharedModule],
-  providers: [returnToOperatorForChangesFormProvider],
   templateUrl: './return-to-operator-for-changes.component.html',
+  providers: [returnToOperatorForChangesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerVerifyReturnToOperatorForChangesComponent {

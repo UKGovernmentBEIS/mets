@@ -18,7 +18,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-action-date-submitted',
-  standalone: true,
   imports: [ActionSharedModule, SharedModule, NgIf],
   template: `
     <ng-container *ngIf="vm() as vm">

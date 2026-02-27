@@ -3,12 +3,10 @@
   [formGroup]="emissionsGroup"
   submitText="Continue"
   [hideSubmit]="false"
-  [heading]="'Review the aircraft operator’s emissions details'"
-  class="govuk-!-width-two-thirds"
->
+  heading="Review the aircraft operator’s emissions details"
+  class="govuk-!-width-two-thirds">
   <app-opinion-statement-emissions-form
-    [totalEmissionsProvided]="totalEmissionsProvided"
-  ></app-opinion-statement-emissions-form>
+    [totalEmissionsProvided]="totalEmissionsProvided"></app-opinion-statement-emissions-form>
 </app-wizard-step>
 
 <app-return-to-link></app-return-to-link>

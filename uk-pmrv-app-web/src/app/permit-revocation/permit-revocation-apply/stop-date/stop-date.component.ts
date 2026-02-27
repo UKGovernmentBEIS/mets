@@ -14,6 +14,7 @@ import { PermitRevocationStore } from '@permit-revocation/store/permit-revocatio
 
 @Component({
   selector: 'app-stop-date',
+  standalone: false,
   templateUrl: './stop-date.component.html',
   providers: [permitRevocationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

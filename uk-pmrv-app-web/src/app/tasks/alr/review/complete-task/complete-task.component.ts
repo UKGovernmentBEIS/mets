@@ -23,7 +23,6 @@ import {
 
 @Component({
   selector: 'app-alr-complete-task',
-  standalone: true,
   imports: [SharedModule, AlrTaskSharedModule],
   templateUrl: './complete-task.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

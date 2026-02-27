@@ -9,6 +9,7 @@ import { CountryService } from '../../core/services/country.service';
 
 @Directive({
   selector: 'govuk-select[appCountries],[govuk-select][appCountries]',
+  standalone: false,
 })
 export class CountriesDirective implements OnInit {
   constructor(

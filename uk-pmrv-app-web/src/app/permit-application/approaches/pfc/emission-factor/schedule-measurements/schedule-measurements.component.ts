@@ -12,6 +12,7 @@ import { scheduleMeasurementsFormProvider } from './schedule-measurements-form.p
 
 @Component({
   selector: 'app-schedule-measurements',
+  standalone: false,
   template: `
     <app-permit-task [breadcrumb]="[{ text: 'CALCULATION_PFC' | monitoringApproachDescription, link: ['pfc'] }]">
       <app-wizard-step
@@ -30,8 +31,8 @@ import { scheduleMeasurementsFormProvider } from './schedule-measurements-form.p
         [isNested]="true"></app-approach-return-link>
     </app-permit-task>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [scheduleMeasurementsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScheduleMeasurementsComponent implements PendingRequest {
   constructor(

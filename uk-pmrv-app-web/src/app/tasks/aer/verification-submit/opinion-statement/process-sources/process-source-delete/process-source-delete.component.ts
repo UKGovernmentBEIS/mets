@@ -12,6 +12,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-process-source-delete',
+  standalone: false,
   template: `
     <ng-container *ngIf="processSource$ | async as processSource">
       <app-page-heading size="xl">

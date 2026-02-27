@@ -10,7 +10,11 @@ describe('DestroySubject', () => {
   let fixture: ComponentFixture<TestComponent>;
   let closeSpy: jest.Mock;
 
-  @Component({ template: '', providers: [DestroySubject] })
+  @Component({
+    standalone: false,
+    template: '',
+    providers: [DestroySubject],
+  })
   class TestComponent {
     constructor(private readonly destroy$: DestroySubject) {
       interval(100)

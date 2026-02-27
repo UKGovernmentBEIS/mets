@@ -14,6 +14,7 @@ describe('MonitoringPlanVersionsComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-monitoring-plan-versions [versions]="versions"></app-monitoring-plan-versions>
     `,

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 
 @Component({
   selector: 'div[app-dropdown-button-item]',
+  standalone: false,
   template: `
     <button type="button" class="govuk-button button-item" (click)="click()">{{ label }}</button>
   `,

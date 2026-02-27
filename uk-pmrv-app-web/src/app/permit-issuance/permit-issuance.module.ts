@@ -17,6 +17,7 @@ import { SectionsContainerComponent } from './sections-container/sections-contai
 import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
+  imports: [PermitIssuanceRoutingModule, SharedModule, SharedPermitModule],
   declarations: [
     ApplicationSubmittedComponent,
     DecisionSummaryComponent,
@@ -25,7 +26,6 @@ import { SummaryComponent } from './summary/summary.component';
     SectionsContainerComponent,
     SummaryComponent,
   ],
-  imports: [PermitIssuanceRoutingModule, SharedModule, SharedPermitModule],
   providers: [
     {
       provide: PermitApplicationStore,

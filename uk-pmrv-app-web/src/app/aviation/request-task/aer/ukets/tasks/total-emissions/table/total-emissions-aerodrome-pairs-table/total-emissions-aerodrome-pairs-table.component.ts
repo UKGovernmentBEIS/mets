@@ -15,12 +15,11 @@ interface ViewModel {
 
 @Component({
   selector: 'app-total-emissions-aerodrome-pairs-table',
+  imports: [SharedModule, TotalEmissionsAerodromePairsTableTemplateComponent],
   template: `
     <app-total-emissions-aerodrome-pairs-table-template
       [data]="(vm$ | async).data"></app-total-emissions-aerodrome-pairs-table-template>
   `,
-  standalone: true,
-  imports: [SharedModule, TotalEmissionsAerodromePairsTableTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsAerodromePairsTableComponent {

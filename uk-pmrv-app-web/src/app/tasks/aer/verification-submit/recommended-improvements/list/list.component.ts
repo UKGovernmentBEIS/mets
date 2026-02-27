@@ -12,6 +12,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-list',
+  standalone: false,
   template: `
     <app-aer-task-review heading="Recommended improvements" returnToLink="../..">
       <app-recommended-improvements-group

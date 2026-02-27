@@ -10,6 +10,7 @@ import { PermitTransferAApplicationRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-transfer-a-summary',
+  standalone: false,
   template: `
     <app-page-heading>Check your answers</app-page-heading>
     <app-permit-transfer-details-summary-template

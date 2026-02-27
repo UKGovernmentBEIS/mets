@@ -21,6 +21,7 @@ describe('FuelsGroupComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-fuels-group [aerData]="aerData"></app-fuels-group>
     `,

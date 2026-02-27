@@ -17,6 +17,7 @@ describe('AppliedStandardFormComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-applied-standard-form formGroupName="appliedStandard"></app-applied-standard-form>

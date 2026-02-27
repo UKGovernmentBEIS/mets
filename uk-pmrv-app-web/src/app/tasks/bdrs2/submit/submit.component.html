@@ -11,6 +11,17 @@
   </ng-template>
 
   <ng-template #taskContentTemplate>
+    @if (requestTaskType() === 'BDRS2_APPLICATION_AMENDS_SUBMIT') {
+      <h2 class="govuk-heading-m govuk-!-margin-0">Regulator comments</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="changes-requested"
+          linkText="Changes requested by the regulator"
+          [status]="'changesRequested' | taskStatus | async"></li>
+      </ul>
+    }
+
     <h2 class="govuk-heading-m govuk-!-margin-0">Stage 2 baseline data report details</h2>
     <ul app-task-item-list>
       <li

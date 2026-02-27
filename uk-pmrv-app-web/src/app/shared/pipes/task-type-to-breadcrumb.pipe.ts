@@ -510,9 +510,22 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
       case 'BDRS2_APPLICATION_SUBMIT':
         return 'Complete stage 2 baseline data report';
       case 'BDRS2_WAIT_FOR_VERIFICATION':
+      case 'BDRS2_AMEND_WAIT_FOR_VERIFICATION':
         return 'Stage 2 baseline data report sent to verifier';
       case 'BDRS2_WAIT_FOR_REGULATOR_REVIEW':
         return 'Stage 2 baseline data report sent to regulator';
+      case 'BDRS2_APPLICATION_VERIFICATION_SUBMIT':
+      case 'BDRS2_AMEND_APPLICATION_VERIFICATION_SUBMIT':
+        return 'Verify stage 2 baseline data report';
+      case 'BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+        return 'Review stage 2 baseline data report';
+      case 'BDRS2_WAIT_FOR_AMENDS':
+        return `Stage 2 baseline data report`;
+      case 'BDRS2_APPLICATION_AMENDS_SUBMIT':
+        return 'Amend stage 2 baseline data report';
+      case 'BDRS2_WAIT_FOR_PEER_REVIEW':
+      case 'BDRS2_APPLICATION_PEER_REVIEW':
+        return `Peer review stage 2 baseline data report`;
 
       case 'PERMANENT_CESSATION_APPLICATION_SUBMIT':
         return 'Complete permanent cessation';

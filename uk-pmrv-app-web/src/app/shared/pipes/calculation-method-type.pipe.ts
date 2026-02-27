@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { CalculationParameterCalculationMethod } from 'pmrv-api';
 
-@Pipe({ name: 'calculationMethodType' })
+@Pipe({
+  name: 'calculationMethodType',
+  standalone: false,
+})
 export class CalculationMethodTypePipe implements PipeTransform {
   transform(value: CalculationParameterCalculationMethod['type']): string {
     switch (value) {

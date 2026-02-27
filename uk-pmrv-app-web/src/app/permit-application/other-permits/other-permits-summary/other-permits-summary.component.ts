@@ -6,6 +6,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-other-permits-summary',
+  standalone: false,
   templateUrl: './other-permits-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

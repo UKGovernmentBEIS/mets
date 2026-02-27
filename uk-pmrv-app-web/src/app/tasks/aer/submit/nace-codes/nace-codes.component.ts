@@ -7,6 +7,7 @@ import { AerService } from '@tasks/aer/core/aer.service';
 
 @Component({
   selector: 'app-nace-codes',
+  standalone: false,
   templateUrl: './nace-codes.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

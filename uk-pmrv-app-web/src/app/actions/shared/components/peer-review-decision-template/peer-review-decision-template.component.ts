@@ -4,6 +4,7 @@ import { PeerReviewDecision, RequestActionDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-peer-review-decision-template',
+  standalone: false,
   templateUrl: './peer-review-decision-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

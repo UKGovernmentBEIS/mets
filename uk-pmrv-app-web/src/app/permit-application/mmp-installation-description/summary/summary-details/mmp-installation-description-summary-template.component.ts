@@ -8,6 +8,7 @@ import { PermitApplicationStore } from '@permit-application/store/permit-applica
 
 @Component({
   selector: 'app-mmp-installation-description-summary-template',
+  standalone: false,
   templateUrl: './mmp-installation-description-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

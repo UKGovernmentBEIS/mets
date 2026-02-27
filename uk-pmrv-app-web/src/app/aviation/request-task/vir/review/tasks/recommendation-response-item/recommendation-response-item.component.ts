@@ -28,7 +28,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-recommendation-response-item',
-  standalone: true,
   imports: [AsyncPipe, VirSharedModule, ReturnToLinkComponent, NgIf],
   template: `
     <app-recommendation-response-item-form

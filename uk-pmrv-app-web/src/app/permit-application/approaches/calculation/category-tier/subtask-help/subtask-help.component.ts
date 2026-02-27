@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-subtask-help',
+  standalone: false,
   templateUrl: './subtask-help.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

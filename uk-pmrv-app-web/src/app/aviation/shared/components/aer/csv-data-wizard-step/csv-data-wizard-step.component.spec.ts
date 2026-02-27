@@ -15,6 +15,7 @@ describe('CsvDataWizardStepComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-csv-data-wizard-step
         [formGroup]="formGroup"

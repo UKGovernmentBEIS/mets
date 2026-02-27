@@ -2,7 +2,6 @@ import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
-import { BaselineSummaryTemplateComponent } from '@shared/components/bdr/baseline-summary-template/baseline-summary-template.component';
 import { SharedModule } from '@shared/shared.module';
 import { AttachedFile } from '@shared/types/attached-file.type';
 
@@ -28,16 +27,15 @@ interface ViewModel {
 
 @Component({
   selector: 'app-bdr-action-submitted',
-  standalone: true,
-  imports: [ActionSharedModule, BaselineSummaryTemplateComponent, NgIf, SharedModule],
+  imports: [ActionSharedModule, NgIf, SharedModule],
   templateUrl: './submitted.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     :host ::ng-deep .app-task-list {
       list-style-type: none;
       padding-left: 0;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BdrSubmittedComponent {
   payload = this.bdrActionService.payload as Signal<BDRApplicationSubmittedRequestActionPayload>;
@@ -45,19 +43,19 @@ export class BdrSubmittedComponent {
 
   requestActionType = this.bdrActionService.requestActionType;
 
-  hasVerificationReport = computed(() => {
+  readonly hasVerificationReport = computed(() => {
     return !!this.payload().verificationReport;
   });
 
-  hasOutcome = computed(() => {
+  readonly hasOutcome = computed(() => {
     return !!this.completedPayload().regulatorReviewOutcome;
   });
 
-  isVerificationSubmitted = computed(() => {
+  readonly isVerificationSubmitted = computed(() => {
     return this.requestActionType() === 'BDR_APPLICATION_VERIFICATION_SUBMITTED';
   });
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const header = getBdrActionTitle(this.requestActionType());
     const bdr = this.payload().bdr;
 

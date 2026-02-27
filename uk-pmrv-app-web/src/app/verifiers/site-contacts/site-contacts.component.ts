@@ -27,9 +27,10 @@ type TableData = AccountContactVbInfoDTO & { user: UserAuthorityInfoDTO };
 
 @Component({
   selector: 'app-verifier-site-contacts',
+  standalone: false,
   templateUrl: './site-contacts.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UserFullNamePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SiteContactsComponent implements OnChanges {
   @Input() disabled: boolean;

@@ -15,6 +15,7 @@ describe('DataGapsMethodologiesGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-data-gaps-methodologies-group
         [isEditable]="isEditable"

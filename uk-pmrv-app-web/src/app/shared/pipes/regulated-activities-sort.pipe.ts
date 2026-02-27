@@ -6,6 +6,7 @@ import { AerRegulatedActivity } from 'pmrv-api';
 
 @Pipe({
   name: 'regulatedActivitiesSort',
+  standalone: false,
 })
 export class RegulatedActivitiesSortPipe implements PipeTransform {
   transform(array: Array<AerRegulatedActivity>): Array<AerRegulatedActivity> {

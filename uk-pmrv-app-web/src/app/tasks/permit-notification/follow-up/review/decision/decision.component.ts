@@ -24,6 +24,7 @@ import {
 
 @Component({
   selector: 'app-follow-up-decision',
+  standalone: false,
   templateUrl: './decision.component.html',
   providers: [followUpReviewDecisionFormProvider, DestroySubject, BreadcrumbService],
   changeDetection: ChangeDetectionStrategy.OnPush,

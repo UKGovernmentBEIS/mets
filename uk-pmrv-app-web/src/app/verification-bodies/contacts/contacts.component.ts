@@ -12,6 +12,7 @@ import { savePartiallyNotFoundVerifierError } from '../../verifiers/errors/busin
 
 @Component({
   selector: 'app-contacts',
+  standalone: false,
   template: `
     <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="verifiersForm"></govuk-error-summary>
     <a routerLink="add-contact" govukButton>Add new verifier admin</a>

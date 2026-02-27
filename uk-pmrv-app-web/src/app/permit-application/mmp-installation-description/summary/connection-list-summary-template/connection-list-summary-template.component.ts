@@ -5,6 +5,7 @@ import { InstallationConnection } from 'pmrv-api';
 
 @Component({
   selector: 'app-connection-list-summary-template',
+  standalone: false,
   templateUrl: './connection-list-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

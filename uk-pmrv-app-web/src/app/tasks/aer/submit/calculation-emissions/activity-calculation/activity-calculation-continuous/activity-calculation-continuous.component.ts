@@ -32,6 +32,7 @@ import {
 } from '../activity-calculation';
 @Component({
   selector: 'app-activity-calculation-continuous',
+  standalone: false,
   templateUrl: './activity-calculation-continuous.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,

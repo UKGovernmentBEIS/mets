@@ -16,6 +16,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-process-source-add',
+  standalone: false,
   template: `
     <app-aer-task-review heading="Add a process source" returnToLink="../../..">
       <app-wizard-step

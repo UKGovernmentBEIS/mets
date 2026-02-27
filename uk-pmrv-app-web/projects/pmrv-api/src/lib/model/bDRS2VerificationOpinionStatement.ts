@@ -11,6 +11,6 @@
  */
 
 export interface BDRS2VerificationOpinionStatement {
-  opinionStatementFiles?: Array<string>;
+  opinionStatementFiles: Array<string>;
   notes?: string;
 }

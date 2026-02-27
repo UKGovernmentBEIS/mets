@@ -5,12 +5,13 @@ import { FOLLOW_UP_REVIEW_DECISION_FORM, followUpReviewDecisionFormProvider } fr
 
 @Component({
   selector: 'app-permit-notification-follow-up-review-invalid-data',
+  standalone: false,
   template: `
     <govuk-error-summary [form]="form"></govuk-error-summary>
     <a govukLink routerLink="..">Return to permit notification follow up</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [followUpReviewDecisionFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvalidDataComponent {
   constructor(@Inject(FOLLOW_UP_REVIEW_DECISION_FORM) readonly form: UntypedFormGroup) {}

@@ -17,6 +17,7 @@ describe('TemporarySuspensionComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-temporary-suspension formGroupName="notification" [today]="today"></app-temporary-suspension>

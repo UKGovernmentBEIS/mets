@@ -8,6 +8,7 @@ import { PreliminaryAllocation } from 'pmrv-api';
 
 @Component({
   selector: 'app-total-preliminary-allocation-list-template',
+  standalone: false,
   template: `
     <ng-container *ngIf="totalAllocations.length; else noResults">
       <govuk-table [columns]="columns" [data]="totalAllocations">

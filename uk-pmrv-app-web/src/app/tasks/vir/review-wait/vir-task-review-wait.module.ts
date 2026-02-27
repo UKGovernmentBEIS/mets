@@ -7,7 +7,7 @@ import { ReviewWaitComponent } from '@tasks/vir/review-wait/review-wait.componen
 import { VirTaskReviewWaitRoutingModule } from './vir-task-review-wait-routing.module';
 
 @NgModule({
-  declarations: [ReviewWaitComponent],
   imports: [SharedModule, TaskSharedModule, VirTaskReviewWaitRoutingModule],
+  declarations: [ReviewWaitComponent],
 })
 export class VirTaskReviewWaitModule {}

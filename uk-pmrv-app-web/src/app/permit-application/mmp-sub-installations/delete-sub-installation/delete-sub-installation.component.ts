@@ -12,6 +12,7 @@ import { isFallbackApproach, isProductBenchmark } from '../mmp-sub-installations
 
 @Component({
   selector: 'app-delete-sub-installation',
+  standalone: false,
   template: `
     <app-page-heading size="xl">
       Are you sure you want to delete Sub-installation {{ (subInstallationNo$ | async) + 1 }}?

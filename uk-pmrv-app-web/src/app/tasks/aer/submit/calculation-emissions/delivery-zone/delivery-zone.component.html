@@ -2,11 +2,10 @@
   <app-wizard-step
     (formSubmit)="onContinue()"
     [formGroup]="form"
-    [submitText]="'Continue'"
+    submitText="Continue"
     caption="Apply regional data for natural gas"
     heading="Find your local delivery zone"
-    [hideSubmit]="(isEditable$ | async) === false"
-  >
+    [hideSubmit]="(isEditable$ | async) === false">
     <p class="govuk-body">
       If your postcode cannot be found, or is in 2 different local delivery zones, contact your local gas supplier.
     </p>
@@ -31,5 +30,5 @@
     </div>
   </app-wizard-step>
 
-  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }}</a>
 </app-aer-task>

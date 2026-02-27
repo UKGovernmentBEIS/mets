@@ -8,6 +8,7 @@ import { LinkDirective } from './link.directive';
 
 describe('LinkDirective', () => {
   @Component({
+    standalone: false,
     template: `
       <a #meta govukLink="meta" href="#">Test Meta Link</a>
       <a #header govukLink="header" [routerLink]="['test']">Test Header Link</a>
@@ -32,7 +33,7 @@ describe('LinkDirective', () => {
     @ViewChild('notification') notificationLink: ElementRef<HTMLAnchorElement>;
   }
 
-  @Component({ template: '<router-outlet></router-outlet>' })
+  @Component({ template: '<router-outlet />' })
   class RouterComponent {}
 
   let directive: LinkDirective;
@@ -42,7 +43,7 @@ describe('LinkDirective', () => {
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([{ path: 'test', component: TestComponent }])],
-      declarations: [TestComponent, LinkDirective, RouterComponent, NotificationBannerComponent],
+      declarations: [TestComponent, LinkDirective, NotificationBannerComponent],
     }).createComponent(TestComponent);
 
     TestBed.createComponent(RouterComponent);

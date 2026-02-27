@@ -49,9 +49,10 @@ export interface AviationAerCorsiaMonitoringApproachFormModel {
 }
 
 @Injectable()
-export class AviationAerCorsiaMonitoringApproachFormProvider
-  implements TaskFormProvider<AviationAerCorsiaMonitoringApproach, AviationAerCorsiaMonitoringApproachFormModel>
-{
+export class AviationAerCorsiaMonitoringApproachFormProvider implements TaskFormProvider<
+  AviationAerCorsiaMonitoringApproach,
+  AviationAerCorsiaMonitoringApproachFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup<AviationAerCorsiaMonitoringApproachFormModel>;
   private destroy$ = new Subject<void>();

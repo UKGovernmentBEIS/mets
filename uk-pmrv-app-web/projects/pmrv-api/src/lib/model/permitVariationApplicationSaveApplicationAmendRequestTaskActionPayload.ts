@@ -13,8 +13,7 @@ import { Permit } from './permit';
 import { PermitVariationDetails } from './permitVariationDetails';
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface PermitVariationApplicationSaveApplicationAmendRequestTaskActionPayload
-  extends RequestTaskActionPayload {
+export interface PermitVariationApplicationSaveApplicationAmendRequestTaskActionPayload extends RequestTaskActionPayload {
   permit: Permit;
   permitVariationDetails: PermitVariationDetails;
   permitVariationDetailsCompleted: boolean;

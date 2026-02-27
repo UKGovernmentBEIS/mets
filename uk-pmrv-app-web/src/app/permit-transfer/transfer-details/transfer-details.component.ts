@@ -14,9 +14,10 @@ import { transferDetailsFormProvider } from './transfer-details-form.provider';
 
 @Component({
   selector: 'app-transfer-details',
+  standalone: false,
   templateUrl: './transfer-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [transferDetailsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransferDetailsComponent {
   permitTransferDetails$: Observable<PermitTransferBApplicationRequestTaskPayload['permitTransferDetails']> =

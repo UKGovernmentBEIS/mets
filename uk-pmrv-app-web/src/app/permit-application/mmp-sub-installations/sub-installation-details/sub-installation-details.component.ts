@@ -16,9 +16,10 @@ import { productBenchmarkAddFormFactory } from './product-benchmark-details-form
 
 @Component({
   selector: 'app-sub-installation-details',
+  standalone: false,
   templateUrl: './sub-installation-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [productBenchmarkAddFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubInstallationDetailsComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

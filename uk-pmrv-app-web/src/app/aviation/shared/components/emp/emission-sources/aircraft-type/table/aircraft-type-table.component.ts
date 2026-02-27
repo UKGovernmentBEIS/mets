@@ -23,11 +23,10 @@ const pipes = [AircraftTypeFuelTypesPipe, AircraftTypeDescriptionPipe, AircraftT
 
 @Component({
   selector: 'app-aircraft-type-table',
-  templateUrl: './aircraft-type-table.component.html',
-  standalone: true,
   imports: [CommonModule, RouterModule, SharedModule, ...pipes],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './aircraft-type-table.component.html',
   styleUrl: './aircraft-type-table.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AircraftTypeTableComponent implements OnInit {
   @Input()

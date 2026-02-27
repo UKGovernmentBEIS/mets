@@ -15,8 +15,8 @@ const FLIGHT_IDENTIFICATION_TYPE_CORSIA: Record<FlightIdentification['flightIden
 };
 @Pipe({
   name: 'operatorDetailsFlightIdentificationType',
-  pure: true,
   standalone: true,
+  pure: true,
 })
 export class OperatorDetailsFlightIdentificationTypePipe implements PipeTransform {
   transform(value: FlightIdentification['flightIdentificationType'], isCorsia = false): string | null {

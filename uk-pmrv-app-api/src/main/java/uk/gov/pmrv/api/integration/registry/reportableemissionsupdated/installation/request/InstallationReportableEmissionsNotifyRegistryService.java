@@ -60,11 +60,13 @@ class InstallationReportableEmissionsNotifyRegistryService {
 	private final ConfigurationService configurationService;
 	private final InstallationRegistryIntegrationEmailProperties emailProperties;
 	private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
+	private final InstallationReportableEmissionsAddRequestActionService addRequestActionService;
 
 	@Transactional
 	public void notifyRegistry(InstallationReportableEmissionsUpdatedEvent event) {
 
 		Long accountId = event.getAccountId();
+		String requestId = event.getRequestId();
 		final InstallationAccountInfoDTO account = installationAccountQueryService.getInstallationAccountInfoDTOById(accountId);
 		Optional<Request> aerRequest = aerRequestQueryService.findAerByAccountIdAndYear(account.getId(), event.getYear().getValue());
 
@@ -92,12 +94,12 @@ class InstallationReportableEmissionsNotifyRegistryService {
 		}
 
 		if (event.isFromDre()) {
-			notifyRegistry(event, account);
+			notifyRegistry(event, account, requestId);
 			return;
 		}
 
 		if (aerConditionsAreSatisfied(aerRequestPayload, aerRequestMetadata, event)) {
-			notifyRegistry(event, account);
+			notifyRegistry(event, account, requestId);
 		}
 	}
 
@@ -246,7 +248,8 @@ class InstallationReportableEmissionsNotifyRegistryService {
 		return false;
 	}
 
-	private void notifyRegistry(InstallationReportableEmissionsUpdatedEvent event, InstallationAccountInfoDTO account) {
+	private void notifyRegistry(InstallationReportableEmissionsUpdatedEvent event, InstallationAccountInfoDTO account,
+								String requestId) {
 
 		if (ObjectUtils.isEmpty(account.getRegistryId())) {
 			log.info(REQUEST_LOG_FORMAT,
@@ -281,11 +284,27 @@ class InstallationReportableEmissionsNotifyRegistryService {
 		reportableEmissionsSendToRegistryProducer.produce(accountEmissionsUpdatedRequestEvent,
 							installationAccountEmissionsUpdatedKafkaTemplate);
 
+		//timeline event
+		InstallationReportableEmissionsRequestActionDTO installationReportableEmissionsRequestActionDTO =
+				buildAccountReportableEmissionsRequestActionDTO(account, accountEmissionsUpdatedRequestEvent);
+		addRequestActionService.addRequestAction(requestId, installationReportableEmissionsRequestActionDTO, account.getId());
+
 		log.info(REQUEST_LOG_FORMAT,
 					SERVICE_KEY,
 					event.getAccountId(),
 					INTEGRATION_POINT_KEY,
 					"Emissions sent to registry " + accountEmissionsUpdatedRequestEvent);
+	}
+
+	private InstallationReportableEmissionsRequestActionDTO buildAccountReportableEmissionsRequestActionDTO(InstallationAccountInfoDTO account,
+																											AccountEmissionsUpdatedRequestEvent accountEmissionsUpdatedRequestEvent) {
+		return InstallationReportableEmissionsRequestActionDTO
+				.builder()
+				.installationName(account.getName())
+				.registryId(account.getRegistryId())
+				.reportingYear(accountEmissionsUpdatedRequestEvent.getReportingYear())
+				.reportableEmissions(accountEmissionsUpdatedRequestEvent.getReportableEmissions())
+				.build();
 	}
 
 	private void notifyRegulator(ReportableEmissionsUpdatedEvent event, InstallationAccountInfoDTO account,

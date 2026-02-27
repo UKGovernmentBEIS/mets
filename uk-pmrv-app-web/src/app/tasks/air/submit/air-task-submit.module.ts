@@ -16,6 +16,7 @@ import { SummaryComponent } from './summary/summary.component';
 import { SummaryGuard } from './summary/summary.guard';
 
 @NgModule({
+  imports: [AirSharedModule, AirTaskSharedModule, AirTaskSubmitRoutingModule, SharedModule, TaskSharedModule],
   declarations: [
     ImprovementExistingComponent,
     ImprovementNegativeComponent,
@@ -25,7 +26,6 @@ import { SummaryGuard } from './summary/summary.guard';
     SubmitContainerComponent,
     SummaryComponent,
   ],
-  imports: [AirSharedModule, AirTaskSharedModule, AirTaskSubmitRoutingModule, SharedModule, TaskSharedModule],
   providers: [SummaryGuard],
 })
 export class AirTaskSubmitModule {}

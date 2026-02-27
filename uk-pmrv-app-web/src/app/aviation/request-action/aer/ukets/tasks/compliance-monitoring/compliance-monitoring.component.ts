@@ -22,6 +22,12 @@ interface ViewModel {
 
 @Component({
   selector: 'app-compliance-monitoring',
+  imports: [
+    SharedModule,
+    RequestActionTaskComponent,
+    ComplianceMonitoringGroupComponent,
+    AerVerificationReviewDecisionGroupSummaryComponent,
+  ],
   template: `
     <app-request-action-task
       *ngIf="vm$ | async as vm"
@@ -38,13 +44,6 @@ interface ViewModel {
       </ng-container>
     </app-request-action-task>
   `,
-  standalone: true,
-  imports: [
-    SharedModule,
-    RequestActionTaskComponent,
-    ComplianceMonitoringGroupComponent,
-    AerVerificationReviewDecisionGroupSummaryComponent,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ComplianceMonitoringComponent {

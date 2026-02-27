@@ -7,7 +7,10 @@ import { SourceStream } from 'pmrv-api';
 import { PermitApplicationState } from '../../store/permit-application.state';
 import { PermitApplicationStore } from '../../store/permit-application.store';
 
-@Pipe({ name: 'findSourceStream' })
+@Pipe({
+  name: 'findSourceStream',
+  standalone: false,
+})
 export class FindSourceStreamPipe implements PipeTransform {
   constructor(private readonly store: PermitApplicationStore<PermitApplicationState>) {}
 

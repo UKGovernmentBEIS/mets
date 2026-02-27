@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -28,15 +28,13 @@ interface ViewModel {
 
 @Component({
   selector: 'app-materiality-level-summary',
-  templateUrl: './materiality-level-summary.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
-    RouterLinkWithHref,
     AerVerifyMaterialityLevelGroupComponent,
     AerVerificationReviewDecisionGroupComponent,
   ],
+  templateUrl: './materiality-level-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class MaterialityLevelSummaryComponent {

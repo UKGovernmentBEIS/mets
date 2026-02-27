@@ -16,6 +16,7 @@ describe('VerificationReportSummaryTemplateComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-verification-report-summary-template
         [verificationActivityLevelReport]="verificationActivityLevelReport"

@@ -9,7 +9,7 @@
             id="searchFilter"
             formControlName="search"
             govuk-text-input
-            [inputType]="'search'"
+            inputType="search"
             (keydown.enter)="searchBy()"></div>
         </div>
       </div>
@@ -42,7 +42,7 @@
       class="govuk-select govuk-grid-column-full"
       [ngModel]="filter"
       (ngModelChange)="onFilterByChange($event)">
-      <option [value]="''">All workflows</option>
+      <option value="">All workflows</option>
       <option [value]="filterRequestType" *ngFor="let filterRequestType of sortedRequestTypes">
         {{
           workflowDetailsTypesMap?.[filterRequestType]
@@ -60,8 +60,8 @@
       class="govuk-select govuk-grid-column-full"
       [ngModel]="order"
       (ngModelChange)="onOrderByChange($event)">
-      <option [value]="'NEWEST_FIRST'">Newest first</option>
-      <option [value]="'NEAREST_DUE_DATE'">Days remaining</option>
+      <option value="NEWEST_FIRST">Newest first</option>
+      <option value="NEAREST_DUE_DATE">Days remaining</option>
     </select>
   </div>
 </div>

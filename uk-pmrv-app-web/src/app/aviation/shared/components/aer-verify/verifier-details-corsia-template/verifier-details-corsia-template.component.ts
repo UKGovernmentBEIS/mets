@@ -8,9 +8,8 @@ import { AviationAerCorsiaVerifierDetails, VerificationBodyDetails } from 'pmrv-
 
 @Component({
   selector: 'app-verifier-details-corsia-template',
-  templateUrl: './verifier-details-corsia-template.component.html',
-  standalone: true,
   imports: [SharedModule, VerificationBodyDetailsInfoTemplateComponent, RouterLink],
+  templateUrl: './verifier-details-corsia-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifierDetailsCorsiaTemplateComponent {

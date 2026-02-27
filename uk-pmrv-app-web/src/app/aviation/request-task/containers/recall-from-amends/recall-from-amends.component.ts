@@ -17,7 +17,6 @@ import { RequestTaskActionPayload, TasksService } from 'pmrv-api';
 
 @Component({
   selector: 'app-aviation-recall-from-amends',
-  standalone: true,
   imports: [SharedModule],
   templateUrl: './recall-from-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -9,6 +9,7 @@ import { RdeStore } from '../../store/rde.store';
 
 @Component({
   selector: 'app-answers-template',
+  standalone: false,
   templateUrl: './answers-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

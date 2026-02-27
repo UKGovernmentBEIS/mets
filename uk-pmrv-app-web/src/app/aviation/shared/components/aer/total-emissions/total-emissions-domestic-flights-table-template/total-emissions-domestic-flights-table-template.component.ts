@@ -17,9 +17,8 @@ import {
 
 @Component({
   selector: 'app-total-emissions-domestic-flights-table-template',
-  templateUrl: './total-emissions-domestic-flights-table-template.component.html',
-  standalone: true,
   imports: [AsyncPipe, NgSwitch, NgIf, NgSwitchCase, SharedModule],
+  templateUrl: './total-emissions-domestic-flights-table-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsDomesticFlightsTableTemplateComponent implements OnInit {

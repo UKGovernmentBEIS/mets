@@ -6,6 +6,7 @@ import { UncorrectedMisstatements } from 'pmrv-api';
 
 @Component({
   selector: 'app-misstatements-group',
+  standalone: false,
   templateUrl: './misstatements-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

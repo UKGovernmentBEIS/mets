@@ -20,6 +20,7 @@ import { aromaticsFormFactory, relevantCWTFunctions } from './calculation-aromat
 
 @Component({
   selector: 'app-aromatics',
+  standalone: false,
   templateUrl: './calculation-aromatics.component.html',
   styleUrl: './calculation-aromatics.component.scss',
   providers: [aromaticsFormFactory],

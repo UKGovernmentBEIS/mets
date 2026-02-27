@@ -14,7 +14,6 @@ import { FiltersModel } from '../filters.model';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-emp-batch-reissue-filters-template',
-  standalone: true,
   imports: [SharedModule, GovukComponentsModule, RouterLink],
   templateUrl: './filters-template.component.html',
 })

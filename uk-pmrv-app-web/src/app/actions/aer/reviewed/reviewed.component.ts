@@ -9,6 +9,7 @@ import { monitoringApproachMap } from '../core/monitoringApproaches';
 
 @Component({
   selector: 'app-aer-reviewed',
+  standalone: false,
   templateUrl: './reviewed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

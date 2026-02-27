@@ -9,9 +9,8 @@ import { defaultColumns } from './column-header-mapping';
 
 @Component({
   selector: 'app-flight-procedures-data-table',
-  templateUrl: './flight-procedures-data-table.component.html',
-  standalone: true,
   imports: [GovukComponentsModule, NgSwitch, NgSwitchCase, NgSwitchDefault, CommonModule],
+  templateUrl: './flight-procedures-data-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlightProceduresDataTableComponent implements OnInit, OnChanges {

@@ -21,7 +21,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-authority-notify-operator',
-  standalone: true,
   imports: [SharedModule],
   template: `
     <ng-container *ngIf="vm() as vm">

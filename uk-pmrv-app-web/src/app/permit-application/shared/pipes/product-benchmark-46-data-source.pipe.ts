@@ -4,6 +4,7 @@ import { ImportedExportedAmountsDataSource } from 'pmrv-api';
 
 @Pipe({
   name: 'productBenchmark46DataSource',
+  standalone: false,
 })
 export class ProductBenchmark46DataSourcePipe implements PipeTransform {
   transform(value: ImportedExportedAmountsDataSource['energyContent']): string {

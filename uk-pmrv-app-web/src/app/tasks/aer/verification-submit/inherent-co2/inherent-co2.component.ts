@@ -8,6 +8,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-inherent-co2',
+  standalone: false,
   template: `
     <app-page-heading>{{ 'INHERENT_CO2' | monitoringApproachEmissionDescription }}</app-page-heading>
     <app-inherent-co2-group [inherentInstallations]="inherentInstallations$ | async"></app-inherent-co2-group>

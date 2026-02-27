@@ -1,8 +1,10 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.integration.registry.withholdflag.installation.request.WithholdFlagRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -22,6 +24,7 @@ public class WithholdingOfAllowancesWithdrawnService {
 
     private final RequestService requestService;
     private final RequestActionUserInfoResolver requestActionUserInfoResolver;
+    private final ApplicationEventPublisher eventPublisher;
     private final WithholdingOfAllowancesOfficialNoticeService withholdingOfAllowancesOfficialNoticeService;
 
     public void withdraw(final String requestId) {
@@ -57,6 +60,15 @@ public class WithholdingOfAllowancesWithdrawnService {
 
         LocalDateTime now = LocalDateTime.now();
         request.setSubmissionDate(now);
+
+        // Publish event to registry
+        WithholdFlagRegistryEvent event = WithholdFlagRegistryEvent.builder()
+                .requestId(request.getId())
+                .withholdFlag(false)
+                .year(requestPayload.getWithholdingOfAllowances().getYear())
+                .accountId(request.getAccountId())
+                .build();
+        eventPublisher.publishEvent(event);
 
         // send official notice
         withholdingOfAllowancesOfficialNoticeService.sendOfficialNotice(

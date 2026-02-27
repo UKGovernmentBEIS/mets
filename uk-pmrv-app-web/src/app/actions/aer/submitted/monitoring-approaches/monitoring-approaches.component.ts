@@ -8,6 +8,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-monitoring-approaches',
+  standalone: false,
   template: `
     <app-action-task header="Monitoring approaches used during the reporting year" [breadcrumb]="true">
       <app-approaches-used-summary-template

@@ -13,9 +13,8 @@ import { ALRGrantAuthorityResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-alr-preliminary-allocations',
-  templateUrl: './preliminary-allocations.component.html',
-  standalone: true,
   imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, AllocationListTemplateComponent, RouterLink],
+  templateUrl: './preliminary-allocations.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ALRPreliminaryAllocationsComponent {

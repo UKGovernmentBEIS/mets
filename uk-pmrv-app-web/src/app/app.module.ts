@@ -37,6 +37,15 @@ import { VersionComponent } from './version/version.component';
 const keycloakService = new KeycloakService();
 
 @NgModule({
+  imports: [
+    ApiModule.forRoot(() => new Configuration({ basePath: environment.apiOptions.baseUrl })),
+    AppRoutingModule,
+    BrowserModule,
+    KeycloakAngularModule,
+    MarkdownModule.forRoot(markdownModuleConfig),
+    SharedModule,
+    TimeoutModule,
+  ],
   declarations: [
     AccessibilityComponent,
     AppComponent,
@@ -47,15 +56,6 @@ const keycloakService = new KeycloakService();
     LegislationComponent,
     TermsAndConditionsComponent,
     VersionComponent,
-  ],
-  imports: [
-    ApiModule.forRoot(() => new Configuration({ basePath: environment.apiOptions.baseUrl })),
-    AppRoutingModule,
-    BrowserModule,
-    KeycloakAngularModule,
-    MarkdownModule.forRoot(markdownModuleConfig),
-    SharedModule,
-    TimeoutModule,
   ],
   providers: [
     {

@@ -10,6 +10,7 @@ import { catchBadRequest, ErrorCodes } from '../../error/business-errors';
 
 @Component({
   selector: 'app-delete-2fa',
+  standalone: false,
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

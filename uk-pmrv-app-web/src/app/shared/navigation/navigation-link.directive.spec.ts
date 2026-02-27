@@ -7,6 +7,7 @@ import { NavigationLinkDirective } from './navigation-link.directive';
 
 describe('NavigationLinkDirective', () => {
   @Component({
+    standalone: false,
     template: `
       <a #firstLink appNavigationLink [routerLink]="['test']">Test Link 1</a>
       <a #secondLink appNavigationLink [routerLink]="['test-2']">Test Link 2</a>
@@ -18,6 +19,7 @@ describe('NavigationLinkDirective', () => {
   }
 
   @Component({
+    standalone: false,
     template: `
       <router-outlet></router-outlet>
     `,

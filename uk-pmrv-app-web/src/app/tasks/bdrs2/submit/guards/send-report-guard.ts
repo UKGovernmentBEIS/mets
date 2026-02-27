@@ -8,9 +8,7 @@ import { submitWizardComplete } from '@tasks/bdrs2/utils';
 
 import { BDRS2ApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class Bdrs2SendReportGuard {
   constructor(
     private readonly bdrs2Service: BdrS2Service,
@@ -21,7 +19,7 @@ export class Bdrs2SendReportGuard {
     return this.bdrs2Service.getPayload().pipe(
       map((payload) => payload as BDRS2ApplicationSubmitRequestTaskPayload),
       map((payload) => {
-        const verificationPerformed = payload?.['verificationPerformed'];
+        const verificationPerformed = payload?.verificationPerformed;
 
         const sendToVerifierOrRegulatorCondition =
           (payload?.bdrs2?.bdrs2guardQuestions?.continueApplicationForFreeAllocationType === 'CONTINUE_AS_HSE' ||
@@ -41,8 +39,12 @@ export class Bdrs2SendReportGuard {
           payload?.bdrs2?.bdrs2Files?.file &&
           payload?.bdrs2?.mmpFiles?.file;
 
+        const isCbam = payload?.bdrs2?.bdrs2guardQuestions?.requiresAdditionalSubInstallationSplitsForCbam;
+        const verificationNotRequiredFromAmends =
+          (payload as any)?.regulatorReviewGroupDecisions?.BDRS2?.details?.verificationRequired === false && isCbam;
+
         return !verificationPerformed && submitWizardComplete(payload)
-          ? sendToVerifierOrRegulatorCondition
+          ? sendToVerifierOrRegulatorCondition || verificationNotRequiredFromAmends
             ? true
             : sendToVerifierCondition
               ? this.router.parseUrl(`/tasks/${route.paramMap.get('taskId')}/bdrs2/submit/send-report/verifier`)

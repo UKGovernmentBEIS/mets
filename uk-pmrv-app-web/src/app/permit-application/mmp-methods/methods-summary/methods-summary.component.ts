@@ -25,7 +25,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-mmp-methods-summary',
-  standalone: true,
   imports: [MethodsSummaryTemplateComponent, SharedPermitModule, SharedModule],
   templateUrl: './methods-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -73,13 +72,13 @@ export class MethodsSummaryComponent {
               ...state.permit.monitoringMethodologyPlans.digitizedPlan.methodTask,
               physicalPartsAndUnitsAnswer: this.hasTwoOrMoreSubInstallationsCompleted
                 ? state.permit.monitoringMethodologyPlans.digitizedPlan.methodTask.physicalPartsAndUnitsAnswer
-                : null,
+                : undefined,
               assignParts: this.hasTwoOrMoreSubInstallationsCompleted
                 ? state.permit.monitoringMethodologyPlans.digitizedPlan.methodTask.assignParts
-                : null,
+                : undefined,
               connections: this.hasTwoOrMoreSubInstallationsCompleted
                 ? state.permit.monitoringMethodologyPlans.digitizedPlan.methodTask.connections
-                : null,
+                : undefined,
             },
           },
         },

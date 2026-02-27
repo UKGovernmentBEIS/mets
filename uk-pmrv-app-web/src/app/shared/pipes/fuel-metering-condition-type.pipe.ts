@@ -1,6 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'fuelMeteringConditionType' })
+@Pipe({
+  name: 'fuelMeteringConditionType',
+  standalone: false,
+})
 export class FuelMeteringConditionTypePipe implements PipeTransform {
   transform(value): string {
     switch (value) {

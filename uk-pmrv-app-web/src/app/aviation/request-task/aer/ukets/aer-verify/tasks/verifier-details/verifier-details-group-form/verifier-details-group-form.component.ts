@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Params, RouterLinkWithHref } from '@angular/router';
 
-import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { SharedModule } from '@shared/shared.module';
 
 import { AviationAerUkEtsVerificationReport } from 'pmrv-api';
@@ -9,9 +8,8 @@ import { AviationAerUkEtsVerificationReport } from 'pmrv-api';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-aer-verifier-details-group-form',
+  imports: [SharedModule, RouterLinkWithHref],
   templateUrl: './verifier-details-group-form.component.html',
-  standalone: true,
-  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent],
 })
 export default class AerVerifierDetailsGroupFormComponent {
   @Input() isEditable = false;

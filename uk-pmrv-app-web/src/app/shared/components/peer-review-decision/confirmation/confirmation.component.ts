@@ -4,6 +4,7 @@ import { BaseSuccessComponent } from '@shared/base-success/base-success.componen
 
 @Component({
   selector: 'app-peer-review-decision-confirmation',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

@@ -16,9 +16,10 @@ import { referenceProvider } from './reference.provider';
 
 @Component({
   selector: 'app-reference',
+  standalone: false,
   templateUrl: './reference.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [referenceProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReferenceComponent implements PendingRequest {
   readonly index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

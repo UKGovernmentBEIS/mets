@@ -8,6 +8,7 @@ import { resolveDecisionStatus, resolveDeterminationStatus } from './core/review
 
 @Pipe({
   name: 'reviewSectionStatus',
+  standalone: false,
 })
 export class ReviewSectionStatusPipe implements PipeTransform {
   constructor(private readonly store: PermitSurrenderStore) {}

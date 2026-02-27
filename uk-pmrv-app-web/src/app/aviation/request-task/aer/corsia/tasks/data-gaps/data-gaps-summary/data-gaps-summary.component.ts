@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, first, map, Observable, switchMap, takeUntil } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
-import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { getSummaryHeaderForTaskType } from '@aviation/request-task/util';
@@ -31,16 +30,8 @@ export interface DataGapsSummaryViewModel {
 
 @Component({
   selector: 'app-data-gaps-summary',
+  imports: [SharedModule, ReturnToLinkComponent, DataGapsListTemplateComponent, DataGapsSummaryTemplateComponent],
   templateUrl: './data-gaps-summary.component.html',
-  standalone: true,
-  imports: [
-    SharedModule,
-    RouterLinkWithHref,
-    ReturnToLinkComponent,
-    DataGapsListTemplateComponent,
-    DataGapsSummaryTemplateComponent,
-    AerReviewDecisionGroupComponent,
-  ],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

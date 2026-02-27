@@ -13,6 +13,7 @@ import {
 } from './components';
 
 @NgModule({
+  imports: [RecipientsTemplateComponent, RouterModule, SharedModule],
   declarations: [
     ActionLayoutComponent,
     ActionTaskComponent,
@@ -28,6 +29,5 @@ import {
     RecipientsTemplateComponent,
     ReviewGroupDecisionSummaryComponent,
   ],
-  imports: [RecipientsTemplateComponent, RouterModule, SharedModule],
 })
 export class ActionSharedModule {}

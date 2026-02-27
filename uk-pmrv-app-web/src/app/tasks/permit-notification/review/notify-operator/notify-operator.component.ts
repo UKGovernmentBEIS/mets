@@ -11,13 +11,14 @@ import { PermitNotificationApplicationReviewRequestTaskPayload } from 'pmrv-api'
 
 @Component({
   selector: 'app-permit-notification-notify-operator',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <app-notify-operator
           [taskId]="taskId$ | async"
           [accountId]="accountId$ | async"
-          [confirmationMessage]="'Task completed'"
+          confirmationMessage="Task completed"
           requestTaskActionType="PERMIT_NOTIFICATION_NOTIFY_OPERATOR_FOR_DECISION"
           [previewDocuments]="previewDocuments$ | async"></app-notify-operator>
       </div>

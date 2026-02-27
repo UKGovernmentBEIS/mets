@@ -34,14 +34,15 @@ import { workflowTypesDomainMap } from './workflowTypesMap';
 
 @Component({
   selector: 'app-workflows',
+  standalone: false,
   templateUrl: './workflows.component.html',
   styles: `
     span.search-results-list_item_status {
       float: right;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkflowsComponent implements OnInit {
   @Input() currentTab: string;

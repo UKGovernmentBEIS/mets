@@ -13,6 +13,7 @@ import { canNotifyOperator, resolveSectionStatus } from './section-status';
 
 @Component({
   selector: 'app-authority-response-container',
+  standalone: false,
   templateUrl: './authority-response-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

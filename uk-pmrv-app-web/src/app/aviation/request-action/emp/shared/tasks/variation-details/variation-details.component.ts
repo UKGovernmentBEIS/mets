@@ -28,7 +28,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-variation-details',
-  standalone: true,
   imports: [
     CommonModule,
     RequestActionTaskComponent,

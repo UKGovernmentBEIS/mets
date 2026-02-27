@@ -572,8 +572,29 @@ describe('ItemNamePipe', () => {
     expect(pipe.transform('BDRS2_WAIT_FOR_VERIFICATION', 2022, '2022')).toEqual(
       '2022 stage 2 baseline data report sent to verifier',
     );
+    expect(pipe.transform('BDRS2_AMEND_WAIT_FOR_VERIFICATION', 2022, '2022')).toEqual(
+      '2022 stage 2 baseline data report sent to verifier',
+    );
+    expect(pipe.transform('BDRS2_APPLICATION_VERIFICATION_SUBMIT', 2022, '2022')).toEqual(
+      'Verify 2022 stage 2 baseline data report',
+    );
+    expect(pipe.transform('BDRS2_AMEND_APPLICATION_VERIFICATION_SUBMIT', 2022, '2022')).toEqual(
+      'Verify 2022 stage 2 baseline data report',
+    );
     expect(pipe.transform('BDRS2_WAIT_FOR_REGULATOR_REVIEW', 2022, '2022')).toEqual(
       '2022 stage 2 baseline data report sent to regulator',
+    );
+    expect(pipe.transform('BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT', 2025, '2025')).toEqual(
+      'Review 2025 stage 2 baseline data report',
+    );
+    expect(pipe.transform('BDRS2_WAIT_FOR_AMENDS', 2025, '2025')).toEqual(
+      '2025 stage 2 baseline data report returned to operator',
+    );
+    expect(pipe.transform('BDRS2_WAIT_FOR_PEER_REVIEW', 2025, '2025')).toEqual(
+      '2025 stage 2 baseline data report sent to peer reviewer',
+    );
+    expect(pipe.transform('BDRS2_APPLICATION_PEER_REVIEW', 2025, '2025')).toEqual(
+      'Peer review 2025 stage 2 baseline data report',
     );
 
     expect(pipe.transform('AVIATION_DOE_CORSIA_APPLICATION_SUBMIT', 2022)).toEqual('Estimate 2022 emissions');

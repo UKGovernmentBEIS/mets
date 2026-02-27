@@ -13,6 +13,7 @@ import { AirApplicationSubmitRequestTaskPayload, OperatorAirImprovementAlreadyMa
 
 @Component({
   selector: 'app-improvement-existing',
+  standalone: false,
   templateUrl: './improvement-existing.component.html',
   providers: [improvementExistingFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

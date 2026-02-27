@@ -4,6 +4,7 @@ import { BackLinkService } from '@shared/back-link/back-link.service';
 
 @Component({
   selector: 'app-request-two-fa-reset',
+  standalone: false,
   templateUrl: './request-two-fa-reset.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

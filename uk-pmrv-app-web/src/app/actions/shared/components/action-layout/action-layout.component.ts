@@ -7,6 +7,7 @@ import { RequestActionDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-action-layout',
+  standalone: false,
   templateUrl: './action-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -16,7 +16,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-bdr-return-to-operator-summary',
-  standalone: true,
   imports: [BdrTaskSharedModule, SharedModule, RouterLink],
   templateUrl: './return-to-operator-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

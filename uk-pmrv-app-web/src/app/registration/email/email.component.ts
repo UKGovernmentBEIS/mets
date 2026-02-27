@@ -10,6 +10,7 @@ import { BackLinkService } from '../../shared/back-link/back-link.service';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-email',
+  standalone: false,
   templateUrl: './email.component.html',
 })
 export class EmailComponent implements OnInit {

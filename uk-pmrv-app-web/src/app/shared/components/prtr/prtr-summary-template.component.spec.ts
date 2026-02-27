@@ -15,6 +15,7 @@ describe('PrtrSummaryTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-prtr-summary-template [activities]="activities" [isEditable]="isEditable"></app-prtr-summary-template>
     `,

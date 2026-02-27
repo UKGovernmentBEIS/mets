@@ -23,6 +23,7 @@ describe('EmpVariationReviewDecisionGroupComponent', () => {
   const tasksService = mockClass(TasksService);
 
   @Component({
+    standalone: false,
     template: `
       <app-emp-variation-review-decision-group taskKey="abbreviations"></app-emp-variation-review-decision-group>
     `,

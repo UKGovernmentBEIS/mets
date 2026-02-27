@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-notify-operator-no-contact-address',
+  standalone: false,
   template: `
     <div class="govuk-grid-column-two-thirds">
       <app-page-heading>You must add a contact address for the aviation operator</app-page-heading>

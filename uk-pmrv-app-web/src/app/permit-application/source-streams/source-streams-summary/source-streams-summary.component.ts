@@ -6,6 +6,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-source-streams-summary',
+  standalone: false,
   templateUrl: './source-streams-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

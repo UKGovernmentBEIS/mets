@@ -33,6 +33,7 @@ describe('NotifyOperatorComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-notify-operator
         [taskId]="237"
@@ -40,9 +41,9 @@ describe('NotifyOperatorComponent', () => {
         requestTaskActionType="HSE_TI_REGULATOR_REVIEW_SUBMIT"
         [pendingRfi]="false"
         [pendingRde]="true"
-        [decisionType]="'rejected'"
-        [allocationPeriod]="'2024-2025'"
-        [confirmationMessage]="'Surrender completed'"></app-notify-operator>
+        decisionType="rejected"
+        allocationPeriod="2024-2025"
+        confirmationMessage="Surrender completed"></app-notify-operator>
     `,
   })
   class TestComponent {}

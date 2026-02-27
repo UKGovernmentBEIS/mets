@@ -40,6 +40,7 @@ import { getCalculationReviewFormControls, getEmissionsElements, isRegionalDataS
 
 @Component({
   selector: 'app-inventory-data-review',
+  standalone: false,
   templateUrl: './inventory-data-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

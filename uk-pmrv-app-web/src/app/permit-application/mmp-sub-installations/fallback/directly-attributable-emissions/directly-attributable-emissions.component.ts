@@ -16,10 +16,11 @@ import { directlyAttributableEmissionsAddFormFactory } from './directly-attribut
 
 @Component({
   selector: 'app-directly-attributable-emissions-fa',
+  standalone: false,
   templateUrl: './directly-attributable-emissions.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [directlyAttributableEmissionsAddFormFactory],
   styleUrl: './directly-attributable-emissions.component.scss',
+  providers: [directlyAttributableEmissionsAddFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DirectlyAttributableEmissionsFAComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

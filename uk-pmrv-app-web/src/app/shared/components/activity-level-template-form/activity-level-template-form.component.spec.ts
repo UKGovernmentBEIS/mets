@@ -20,6 +20,7 @@ describe('ActivityLevelTemplateComponent', () => {
   const activatedRoute = new ActivatedRouteStub({ taskId: 1, index: '0' }, null, null);
 
   @Component({
+    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-activity-level-template-form></app-activity-level-template-form>

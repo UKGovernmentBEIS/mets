@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map, Observable, tap } from 'rxjs';
 
@@ -33,12 +33,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-opinion-statement-summary',
-  templateUrl: './opinion-statement-summary.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
-    RouterLinkWithHref,
     AerMonitoringPlanVersionsComponent,
     OpinionStatementEmissionDetailsSummaryTemplateComponent,
     OpinionStatementTotalEmissionsSummaryTemplateComponent,
@@ -46,6 +43,7 @@ interface ViewModel {
     OpinionStatementSiteVerificationSummaryTemplateComponent,
     AerVerificationReviewDecisionGroupComponent,
   ],
+  templateUrl: './opinion-statement-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class OpinionStatementSummaryComponent {

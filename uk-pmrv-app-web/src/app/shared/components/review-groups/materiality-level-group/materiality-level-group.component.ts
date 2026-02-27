@@ -4,6 +4,7 @@ import { MaterialityLevel } from 'pmrv-api';
 
 @Component({
   selector: 'app-materiality-level-group',
+  standalone: false,
   templateUrl: './materiality-level-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -27,6 +27,7 @@ describe('TermsAndConditionsComponent', () => {
   };
 
   @Component({
+    standalone: false,
     template: '<app-terms-and-conditions></app-terms-and-conditions>',
   })
   class TestComponent {}

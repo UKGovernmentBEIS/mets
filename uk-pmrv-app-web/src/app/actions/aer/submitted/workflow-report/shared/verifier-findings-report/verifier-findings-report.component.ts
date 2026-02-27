@@ -8,6 +8,7 @@ import { AerService } from '../../../../core/aer.service';
 
 @Component({
   selector: 'app-verifier-findings-report',
+  standalone: false,
   templateUrl: './verifier-findings-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

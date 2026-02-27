@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
@@ -10,8 +10,7 @@ import { AviationAerMonitoringPlanChanges } from 'pmrv-api';
 
 @Component({
   selector: 'app-aer-monitoring-plan-changes-summary-template',
-  standalone: true,
-  imports: [GovukComponentsModule, NgIf, NgFor, SharedModule, RouterLink],
+  imports: [GovukComponentsModule, NgIf, SharedModule, RouterLink],
   templateUrl: './monitoring-plan-changes-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -10,10 +10,9 @@ import { ALRPreliminaryAllocation } from 'pmrv-api';
 
 @Component({
   selector: 'app-alr-allocation-list-template',
+  imports: [SharedModule, RouterLink],
   templateUrl: './allocation-list-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [SharedModule, RouterLink],
 })
 export class AllocationListTemplateComponent implements OnInit {
   @Input() data: ALRPreliminaryAllocation[];

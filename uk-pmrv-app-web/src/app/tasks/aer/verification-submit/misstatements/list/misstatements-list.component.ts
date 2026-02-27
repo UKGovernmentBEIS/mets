@@ -12,6 +12,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-misstatements-list',
+  standalone: false,
   template: `
     <app-aer-task-review heading="List the uncorrected misstatements" returnToLink="../..">
       <app-misstatements-group

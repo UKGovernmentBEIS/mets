@@ -8,8 +8,8 @@ import { SharedModule } from '@shared/shared.module';
 import { PermanentCessationService } from './services';
 
 @NgModule({
-  exports: [],
   imports: [RouterModule, SharedModule],
   providers: [ItemNamePipe, PermanentCessationService, TaskTypeToBreadcrumbPipe],
+  exports: [],
 })
 export class PermanentCessationTaskSharedModule {}

@@ -9,9 +9,10 @@ import { WithholdingAllowancesActionService } from '../core/withholding-allowanc
 
 @Component({
   selector: 'app-withholding-allowances-action-submitted-withdrawn',
+  standalone: false,
   templateUrl: './submitted-withdrawn.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UserInfoResolverPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubmittedWithdrawnComponent {
   actionType = this.route.snapshot.data.actionType;

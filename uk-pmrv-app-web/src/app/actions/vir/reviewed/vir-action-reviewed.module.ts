@@ -11,7 +11,7 @@ import { ReviewedComponent } from './reviewed.component';
 import { VirActionReviewedRoutingModule } from './vir-action-reviewed-routing.module';
 
 @NgModule({
-  declarations: [ReportSummaryComponent, ResponseListComponent, ReviewedComponent, SummaryComponent],
   imports: [ActionSharedModule, SharedModule, VirActionReviewedRoutingModule, VirSharedModule],
+  declarations: [ReportSummaryComponent, ResponseListComponent, ReviewedComponent, SummaryComponent],
 })
 export class VirActionReviewedModule {}

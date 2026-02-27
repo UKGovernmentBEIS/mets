@@ -17,9 +17,10 @@ import { allowancesFormProvider } from './allowances-form.provider';
 
 @Component({
   selector: 'app-allowances',
+  standalone: false,
   templateUrl: './allowances.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [allowancesFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AllowancesComponent implements PendingRequest {
   today = startOfDay(new Date());

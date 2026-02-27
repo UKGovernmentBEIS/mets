@@ -16,9 +16,10 @@ import { tiersUsedFormProvider } from './tiers-used-form.provider';
 
 @Component({
   selector: 'app-tiers-used',
+  standalone: false,
   templateUrl: './tiers-used.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [tiersUsedFormProvider, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TiersUsedComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

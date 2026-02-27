@@ -4,7 +4,7 @@
     <dd govukSummaryListRowValue>{{ reportingData.reportingRequired ? 'Yes' : 'No' }}</dd>
 
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
     </dd>
   </div>
 
@@ -16,7 +16,7 @@
       </dd>
 
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
 
@@ -28,7 +28,7 @@
       </dd>
 
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
   </ng-container>

@@ -8,7 +8,10 @@ describe('FieldsetHintDirective', () => {
   let directive: FieldsetHintDirective;
   let fixture: ComponentFixture<TestComponent>;
 
-  @Component({ template: '<span govukFieldsetHint>This is a hint</span>' })
+  @Component({
+    standalone: false,
+    template: '<span govukFieldsetHint>This is a hint</span>',
+  })
   class TestComponent {}
 
   beforeEach(async () => {

@@ -17,9 +17,10 @@ import { entryStepProvider } from './entry-step.provider';
 
 @Component({
   selector: 'app-entry-step',
+  standalone: false,
   templateUrl: './entry-step.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [entryStepProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntryStepComponent implements PendingRequest {
   readonly index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

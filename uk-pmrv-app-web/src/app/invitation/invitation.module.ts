@@ -9,12 +9,12 @@ import { RegulatorInvitationComponent } from './regulator-invitation/regulator-i
 import { VerifierInvitationComponent } from './verifier-invitation/verifier-invitation.component';
 
 @NgModule({
+  imports: [InvitationRouting, SharedModule, SharedUserModule],
   declarations: [
     InvalidLinkComponent,
     InvitationConfirmationComponent,
     RegulatorInvitationComponent,
     VerifierInvitationComponent,
   ],
-  imports: [InvitationRouting, SharedModule, SharedUserModule],
 })
 export class InvitationModule {}

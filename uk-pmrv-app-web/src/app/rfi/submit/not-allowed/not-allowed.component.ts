@@ -14,14 +14,15 @@ import { RfiStore } from '../../store/rfi.store';
 
 @Component({
   selector: 'app-not-allowed',
+  standalone: false,
   template: `
     <app-page-heading>You can only have one active request at any given time</app-page-heading>
     <div class="govuk-button-group">
       <button (click)="onClick()" govukSecondaryButton type="button">View the active request</button>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotAllowedComponent implements OnInit {
   constructor(

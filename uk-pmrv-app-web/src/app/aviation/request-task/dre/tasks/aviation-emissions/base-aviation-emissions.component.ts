@@ -15,6 +15,7 @@ import { AviationEmissionsFormProvider } from './aviation-emissions-form.provide
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 /* eslint-disable @angular-eslint/use-component-selector */
 @Component({
+  standalone: false,
   template: '',
 })
 export class BaseAviationEmissionsComponent {

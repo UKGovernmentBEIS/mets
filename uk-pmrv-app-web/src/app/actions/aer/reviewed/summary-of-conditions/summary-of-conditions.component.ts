@@ -9,6 +9,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-summary-of-conditions',
+  standalone: false,
   template: `
     <app-action-task header="Summary of conditions, changes, clarifications and variations" [breadcrumb]="true">
       <app-summary-of-conditions-group

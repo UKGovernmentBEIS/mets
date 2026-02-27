@@ -12,6 +12,7 @@ import {
 
 @Pipe({
   name: 'taskStatus',
+  standalone: false,
 })
 export class TaskStatusPipe implements PipeTransform {
   transform(

@@ -9,6 +9,7 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-emissions-summary',
+  standalone: false,
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Emissions summary">
       <app-emissions-summary-group [data]="aerData$ | async"></app-emissions-summary-group>

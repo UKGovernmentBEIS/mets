@@ -10,6 +10,7 @@ import { verificationSubmitSendReportStatus } from '@tasks/aer/core/aer-task-sta
 
 @Component({
   selector: 'app-send-report',
+  standalone: false,
   templateUrl: './send-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

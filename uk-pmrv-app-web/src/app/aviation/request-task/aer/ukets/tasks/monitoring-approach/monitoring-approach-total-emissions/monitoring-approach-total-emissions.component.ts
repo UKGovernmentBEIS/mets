@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
@@ -12,18 +11,10 @@ import { MonitoringApproachTotalEmissionsFormComponent } from '../monitoring-app
 
 @Component({
   selector: 'app-monitoring-approach-total-emissions',
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent, MonitoringApproachTotalEmissionsFormComponent],
   templateUrl: './monitoring-approach-total-emissions.component.html',
-  standalone: true,
-  imports: [
-    GovukComponentsModule,
-    NgIf,
-    NgFor,
-    SharedModule,
-    ReturnToLinkComponent,
-    MonitoringApproachTotalEmissionsFormComponent,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonitoringApproachTotalEmissionsComponent
   extends BaseMonitoringApproachComponent

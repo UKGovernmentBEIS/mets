@@ -16,9 +16,10 @@ export interface RespondItemFormModel {
 }
 
 @Injectable()
-export class RespondItemFormProvider
-  implements TaskFormProvider<OperatorImprovementFollowUpResponse, RespondItemFormModel>
-{
+export class RespondItemFormProvider implements TaskFormProvider<
+  OperatorImprovementFollowUpResponse,
+  RespondItemFormModel
+> {
   private _form: FormGroup<RespondItemFormModel>;
   private destroy$ = new Subject<void>();
 

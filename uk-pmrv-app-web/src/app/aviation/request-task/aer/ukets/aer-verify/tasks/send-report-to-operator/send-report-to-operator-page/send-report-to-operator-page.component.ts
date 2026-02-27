@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { map } from 'rxjs';
 
@@ -12,9 +12,8 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-send-report-to-operator-page',
+  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './send-report-to-operator-page.component.html',
-  standalone: true,
-  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

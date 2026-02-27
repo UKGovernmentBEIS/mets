@@ -38,6 +38,7 @@ import { getPfcSummaries, getPfcSummariesTotals } from './approaches/emissions-s
 
 @Component({
   selector: 'app-emissions-summary-group',
+  standalone: false,
   templateUrl: './emissions-summary-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

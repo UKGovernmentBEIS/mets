@@ -13,6 +13,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-materiality-level',
+  standalone: false,
   templateUrl: './materiality-level.component.html',
   providers: [materialityLevelFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

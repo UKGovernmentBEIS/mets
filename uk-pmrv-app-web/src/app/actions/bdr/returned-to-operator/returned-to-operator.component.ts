@@ -17,7 +17,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-bdr-action-returned-to-operator',
-  standalone: true,
   imports: [ActionSharedModule, NgIf, SharedModule],
   templateUrl: './returned-to-operator.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

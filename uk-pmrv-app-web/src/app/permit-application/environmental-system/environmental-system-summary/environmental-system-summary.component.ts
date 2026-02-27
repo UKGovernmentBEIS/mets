@@ -6,6 +6,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-environmental-system-summary',
+  standalone: false,
   templateUrl: './environmental-system-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

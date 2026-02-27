@@ -14,9 +14,10 @@ import { firstYearFormProvider } from './first-year-form.provider';
 
 @Component({
   selector: 'app-first-year',
+  standalone: false,
   templateUrl: './first-year.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [firstYearFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FirstYearComponent implements PendingRequest {
   taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

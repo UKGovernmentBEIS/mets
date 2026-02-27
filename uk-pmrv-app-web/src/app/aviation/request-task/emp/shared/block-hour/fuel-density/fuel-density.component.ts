@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -14,16 +13,8 @@ import { BlockHourProceduresFormProvider } from '../block-hour-procedures-form.p
 
 @Component({
   selector: 'app-fuel-density',
+  imports: [SharedModule, GovukComponentsModule, ProcedureFormPageHeaderDirective, ProcedureFormStepComponent],
   templateUrl: './fuel-density.component.html',
-  standalone: true,
-  imports: [
-    SharedModule,
-    GovukComponentsModule,
-    NgIf,
-    NgFor,
-    ProcedureFormPageHeaderDirective,
-    ProcedureFormStepComponent,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FuelDensityComponent {

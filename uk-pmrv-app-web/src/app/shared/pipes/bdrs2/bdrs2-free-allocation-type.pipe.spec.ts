@@ -11,7 +11,7 @@ describe('FreeAllocationTypePipe', () => {
       'Yes, I currently hold HSE status and want to continue my application for free allocation but remain on the HSE list',
     );
     expect(pipe.transform('CONTINUE_AS_MAIN_SCHEME_PARTICIPANT')).toEqual(
-      'Yes, I hold a GHGE permit and want to continue my application for free allocation as a main scheme participant, or I currently hold HSE status and want to become a main scheme participant from 2027',
+      'Yes, I hold a GHGE permit and want to continue my application for free allocation as a main scheme participant, or I currently hold HSE status and want to become a main scheme participant from 2027 to 2030',
     );
     expect(pipe.transform('WITHDRAW')).toEqual('No, I want to withdraw my application for free allocation');
   });

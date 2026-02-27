@@ -14,9 +14,10 @@ import { MonitoringPlanAppropriatenessFormProvider } from './monitoring-plan-app
 
 @Component({
   selector: 'app-monitoring-plan-appropriateness',
+  standalone: false,
   templateUrl: './monitoring-plan-appropriateness.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [MonitoringPlanAppropriatenessFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonitoringPlanAppropriatenessComponent implements PendingRequest {
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));

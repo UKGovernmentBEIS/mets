@@ -13,6 +13,7 @@ describe('DeterminationCloseSummaryTemplateComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-doal-determination-close-summary-template
         [determination]="determination"

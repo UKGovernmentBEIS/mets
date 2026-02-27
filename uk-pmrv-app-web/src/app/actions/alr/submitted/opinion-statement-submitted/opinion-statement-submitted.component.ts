@@ -16,7 +16,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-opinion-statement-submitted',
-  standalone: true,
   imports: [ActionSharedModule, NgIf, SharedModule],
   template: `
     <ng-container *ngIf="vm() as vm">

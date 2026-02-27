@@ -4,6 +4,7 @@ import { Dre } from 'pmrv-api';
 
 @Component({
   selector: 'app-dre-summary-template',
+  standalone: false,
   templateUrl: './dre-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

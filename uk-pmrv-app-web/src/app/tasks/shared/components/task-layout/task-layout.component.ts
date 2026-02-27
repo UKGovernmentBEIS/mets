@@ -20,6 +20,7 @@ import {
 
 @Component({
   selector: 'app-task-layout',
+  standalone: false,
   templateUrl: './task-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

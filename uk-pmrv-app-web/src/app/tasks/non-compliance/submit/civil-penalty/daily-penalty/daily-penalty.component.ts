@@ -15,9 +15,10 @@ import { dailyPenaltyFormProvider } from './daily-penalty-form.provider';
 
 @Component({
   selector: 'app-daily-penalty',
+  standalone: false,
   templateUrl: './daily-penalty.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [dailyPenaltyFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DailyPenaltyComponent {
   private readonly nextWizardStep = 'summary';

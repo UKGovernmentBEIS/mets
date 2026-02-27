@@ -19,9 +19,8 @@ import { createTablePage } from '../../../../../../mi-reports/core/mi-report';
 
 @Component({
   selector: 'app-total-emissions-non-domestic-flights-table-template',
-  templateUrl: './total-emissions-non-domestic-flights-table-template.component.html',
-  standalone: true,
   imports: [SharedModule],
+  templateUrl: './total-emissions-non-domestic-flights-table-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsNonDomesticFlightsTableTemplateComponent implements OnInit {

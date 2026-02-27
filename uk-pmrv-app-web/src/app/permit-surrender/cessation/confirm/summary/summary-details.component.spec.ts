@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { ActivatedRouteStub, BasePage } from '../../../../../testing';
 import { SharedModule } from '../../../../shared/shared.module';
@@ -12,6 +11,7 @@ import { SummaryDetailsComponent } from './summary-details.component';
 
 describe('SummaryDetailsComponent', () => {
   @Component({
+    standalone: false,
     template: `
       <app-cessation-summary-details
         [cessation]="cessation$ | async"
@@ -56,7 +56,7 @@ describe('SummaryDetailsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SummaryDetailsComponent, TestComponent],
-      imports: [RouterTestingModule, SharedModule],
+      imports: [SharedModule],
       providers: [{ provide: ActivatedRoute, useValue: route }],
     }).compileComponents();
   });
@@ -88,7 +88,7 @@ describe('SummaryDetailsComponent', () => {
       ['Should the installations subsistence fee be refunded?', 'Yes'],
       [
         'Text for the official notice',
-        'Satisfied that the requirements set out in the schedule have been compiled with',
+        'Satisfied that the requirements set out in the schedule have been complied with',
       ],
       ['Notes', 'notes'],
     ]);
@@ -110,7 +110,7 @@ describe('SummaryDetailsComponent', () => {
       ['Should the installations subsistence fee be refunded?', 'Yes'],
       [
         'Text for the official notice',
-        'Satisfied that the requirements set out in the schedule have been compiled with',
+        'Satisfied that the requirements set out in the schedule have been complied with',
       ],
       ['Notes', 'notes'],
     ]);

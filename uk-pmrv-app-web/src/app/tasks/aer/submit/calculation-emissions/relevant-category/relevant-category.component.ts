@@ -18,6 +18,7 @@ import { NationalInventoryService } from '../services/national-inventory.service
 
 @Component({
   selector: 'app-relevant-category',
+  standalone: false,
   templateUrl: './relevant-category.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

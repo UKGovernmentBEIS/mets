@@ -40,8 +40,6 @@ interface ViewModel {
 }
 @Component({
   selector: 'app-application-timeframe-summary',
-  templateUrl: './application-timeframe-summary.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     GovukComponentsModule,
@@ -52,6 +50,7 @@ interface ViewModel {
     ApplicationTimeframeSummaryTemplateComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,
   ],
+  templateUrl: './application-timeframe-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApplicationTimeframeSummaryComponent {

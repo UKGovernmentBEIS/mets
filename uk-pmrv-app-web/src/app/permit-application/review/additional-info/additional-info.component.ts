@@ -8,6 +8,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-additional-info',
+  standalone: false,
   templateUrl: './additional-info.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

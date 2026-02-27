@@ -13,6 +13,7 @@ import { UploadEvidenceQuestionComponent } from '@tasks/vir/submit/upload-eviden
 import { VirTaskSubmitRoutingModule } from '@tasks/vir/submit/vir-task-submit-routing.module';
 
 @NgModule({
+  imports: [SharedModule, TaskSharedModule, VirSharedModule, VirTaskSharedModule, VirTaskSubmitRoutingModule],
   declarations: [
     RecommendationResponseComponent,
     SendReportComponent,
@@ -21,6 +22,5 @@ import { VirTaskSubmitRoutingModule } from '@tasks/vir/submit/vir-task-submit-ro
     UploadEvidenceFilesComponent,
     UploadEvidenceQuestionComponent,
   ],
-  imports: [SharedModule, TaskSharedModule, VirSharedModule, VirTaskSharedModule, VirTaskSubmitRoutingModule],
 })
 export class VirTaskSubmitModule {}

@@ -9,6 +9,7 @@ import { PermitSurrenderStore } from '../../../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-deem-withdraw-determination-summary-details',
+  standalone: false,
   templateUrl: './summary-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

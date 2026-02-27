@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'snakeToKebab',
+  standalone: false,
 })
 export class SnakeToKebabPipe implements PipeTransform {
   transform(value: string): string {

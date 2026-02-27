@@ -27,10 +27,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-follow-up-action-respond',
-  standalone: true,
   imports: [FollowUpItemComponent, InspectionTaskComponent, SharedModule],
-  providers: [followUpActionRespondFormProvider, DestroySubject],
   templateUrl: './follow-up-action.component.html',
+  providers: [followUpActionRespondFormProvider, DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FollowUpActionRespondComponent extends FollowUpRespondAbstractComponent implements OnInit {

@@ -20,6 +20,7 @@ describe('VerifierCommentGroupComponent', () => {
   }
 
   @Component({
+    standalone: false,
     template: `
       <app-verifier-comment-group
         [isEditable]="isEditable"

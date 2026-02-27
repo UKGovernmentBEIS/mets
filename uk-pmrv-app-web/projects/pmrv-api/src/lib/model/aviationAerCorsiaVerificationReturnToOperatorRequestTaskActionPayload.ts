@@ -11,7 +11,6 @@
  */
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface AviationAerCorsiaVerificationReturnToOperatorRequestTaskActionPayload
-  extends RequestTaskActionPayload {
+export interface AviationAerCorsiaVerificationReturnToOperatorRequestTaskActionPayload extends RequestTaskActionPayload {
   changesRequired: string;
 }

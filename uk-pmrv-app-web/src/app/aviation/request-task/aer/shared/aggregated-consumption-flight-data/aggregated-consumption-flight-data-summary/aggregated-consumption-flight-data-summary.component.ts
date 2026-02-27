@@ -35,9 +35,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aggregated-consumption-flight-data-summary',
-  templateUrl: './aggregated-consumption-flight-data-summary.component.html',
   imports: [SharedModule, ReturnToLinkComponent, FlightDataTableComponent, AerReviewDecisionGroupComponent],
-  standalone: true,
+  templateUrl: './aggregated-consumption-flight-data-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AggregatedConsumptionFlightDataSummaryComponent implements OnInit, OnDestroy {

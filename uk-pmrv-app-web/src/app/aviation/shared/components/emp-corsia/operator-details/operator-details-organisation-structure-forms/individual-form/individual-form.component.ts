@@ -9,8 +9,8 @@ import { GovukComponentsModule } from 'govuk-components';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-organisation-structure-individual-form',
-  standalone: true,
   imports: [GovukComponentsModule, SharedModule, LocationStateFormComponent],
+  standalone: true,
   templateUrl: './individual-form.component.html',
   viewProviders: [existingControlContainer],
 })

@@ -4,6 +4,7 @@ import { IdentityBarService } from '../../core/services/identity-bar.service';
 
 @Component({
   selector: 'app-identity-bar',
+  standalone: false,
   template: `
     <div class="hmcts-identity-bar" *ngIf="barService.content | async as content">
       <div class="hmcts-identity-bar__container">

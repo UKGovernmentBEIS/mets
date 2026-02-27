@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,9 +15,8 @@ import { BlockHourProceduresFormProvider } from '../block-hour-procedures-form.p
 
 @Component({
   selector: 'app-fuel-uplift-supplier-records',
+  imports: [SharedModule, GovukComponentsModule, ReturnToLinkComponent, FuelUpliftSupplierRecordTypePipe],
   templateUrl: './fuel-uplift-supplier-records.component.html',
-  standalone: true,
-  imports: [SharedModule, GovukComponentsModule, NgIf, NgFor, ReturnToLinkComponent, FuelUpliftSupplierRecordTypePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FuelUpliftSupplierRecordsComponent {

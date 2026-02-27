@@ -10,9 +10,8 @@ import { GovukComponentsModule } from 'govuk-components';
 
 @Component({
   selector: 'app-send-report-to-operator-confirmation',
-  templateUrl: './send-report-to-operator-confirmation.component.html',
-  standalone: true,
   imports: [GovukComponentsModule, AsyncPipe, RouterLink],
+  templateUrl: './send-report-to-operator-confirmation.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

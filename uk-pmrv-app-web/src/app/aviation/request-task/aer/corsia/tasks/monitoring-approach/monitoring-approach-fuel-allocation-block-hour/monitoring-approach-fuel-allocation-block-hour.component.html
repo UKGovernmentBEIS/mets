@@ -3,8 +3,7 @@
   aria-labelledby="error-summary-title"
   class="govuk-error-summary"
   role="alert"
-  tabindex="-1"
->
+  tabindex="-1">
   <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
   <div class="govuk-error-summary__body">
     <ul class="govuk-list govuk-error-summary__list">
@@ -24,11 +23,11 @@
   [formGroup]="form"
   heading="Fuel allocation by block hour"
   submitText="Continue"
-  [hideSubmit]="!fileLoaded || !parsedData"
->
+  [hideSubmit]="!fileLoaded || !parsedData">
   <div class="govuk-!-width-three-quarters">
     <p class="govuk-body">
-      Upload a comma-separated values (.csv) file of the average fuel burn ratio for each aeroplane type, for the reporting year.
+      Upload a comma-separated values (.csv) file of the average fuel burn ratio for each aeroplane type, for the
+      reporting year.
     </p>
     <p class="govuk-body">Each row of the file should include the:</p>
     <ul class="govuk-list govuk-list--bullet">
@@ -47,19 +46,16 @@
 
   <div *ngIf="!fileLoaded || !parsedData">
     <app-aircraft-fuel-burn-ratio-table
-      [headingText]="'Your CSV file needs to look like this example'"
+      headingText="Your CSV file needs to look like this example"
       [customColumns]="exampleTableColumns"
-      [aviationAerCorsiaAircraftTypeDetails]="exampleTableData"
-    ></app-aircraft-fuel-burn-ratio-table>
+      [aviationAerCorsiaAircraftTypeDetails]="exampleTableData"></app-aircraft-fuel-burn-ratio-table>
   </div>
-
 
   <input [hidden]="true" formArrayName="aircraftTypeDetails" />
   <div *ngIf="fileLoaded && parsedData">
     <app-aircraft-fuel-burn-ratio-table
       [headingText]="fileName"
-      [aviationAerCorsiaAircraftTypeDetails]="parsedData"
-    ></app-aircraft-fuel-burn-ratio-table>
+      [aviationAerCorsiaAircraftTypeDetails]="parsedData"></app-aircraft-fuel-burn-ratio-table>
   </div>
 </app-csv-data-wizard-step>
 <app-return-to-link></app-return-to-link>

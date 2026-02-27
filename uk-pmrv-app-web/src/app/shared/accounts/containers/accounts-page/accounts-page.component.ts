@@ -34,9 +34,10 @@ interface ViewModel {
 
 @Component({
   selector: 'app-accounts',
+  standalone: false,
   templateUrl: './accounts-page.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountsPageComponent implements OnInit {
   resultsReturnedSubject = new BehaviorSubject('');

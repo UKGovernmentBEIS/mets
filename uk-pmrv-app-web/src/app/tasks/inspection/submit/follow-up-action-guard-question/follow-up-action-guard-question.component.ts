@@ -15,8 +15,6 @@ import {
   InspectionType,
 } from '@tasks/inspection/shared/inspection';
 import { InspectionTaskComponent } from '@tasks/inspection/shared/inspection-task/inspection-task.component';
-import { DetailsSubtaskHeaderPipe } from '@tasks/inspection/shared/pipes/details-subtask-header.pipe';
-import { DetailsSubtaskLinktextPipe } from '@tasks/inspection/shared/pipes/details-subtask-linktext.pipe';
 import { followUpStatusKeySubmit } from '@tasks/inspection/shared/section-status';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
@@ -26,17 +24,10 @@ import { followUpActionGuardFormProvider } from './follow-up-action-guard-form.p
 
 @Component({
   selector: 'app-follow-up-action-guard-question',
-  standalone: true,
-  imports: [
-    InspectionTaskComponent,
-    SharedModule,
-    DetailsSubtaskHeaderPipe,
-    DetailsSubtaskLinktextPipe,
-    GovukComponentsModule,
-  ],
+  imports: [InspectionTaskComponent, SharedModule, GovukComponentsModule],
   templateUrl: './follow-up-action-guard-question.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [followUpActionGuardFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FollowUpActionsGuardQuestionComponent {
   private readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

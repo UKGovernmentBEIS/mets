@@ -21,14 +21,12 @@ interface ViewModel {
 
 @Component({
   selector: 'app-time-allocation',
-  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
     TimeAllocationCorsiaTemplateComponent,
     AerVerificationReviewDecisionGroupComponent,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <app-page-heading>{{ vm.heading }}</app-page-heading>
@@ -39,6 +37,7 @@ interface ViewModel {
     </ng-container>
     <app-return-to-link></app-return-to-link>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimeAllocationComponent {
   private store = inject(RequestTaskStore);

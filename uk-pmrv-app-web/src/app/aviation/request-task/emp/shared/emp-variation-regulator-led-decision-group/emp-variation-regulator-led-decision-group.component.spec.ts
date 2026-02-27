@@ -23,6 +23,7 @@ describe('EmpVariationRegulatorLedDecisionGroupComponent', () => {
   const tasksService = mockClass(TasksService);
 
   @Component({
+    standalone: false,
     template: `
       <app-emp-variation-regulator-led-decision-group
         taskKey="abbreviations"></app-emp-variation-regulator-led-decision-group>

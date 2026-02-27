@@ -13,6 +13,8 @@ import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplate
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.common.domain.EmpIssuanceDetermination;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.common.domain.EmpIssuanceDeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.submit.domain.EmpIssuanceUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
@@ -197,6 +199,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
                 .payload(EmpIssuanceUkEtsRequestPayload.builder()
                         .decisionNotification(decisionNotification)
                         .officialNotice(officialDocFileInfoDTO)
+                        .determination(EmpIssuanceDetermination.builder().type(EmpIssuanceDeterminationType.APPROVED).build())
                         .build())
                 .build();
 
@@ -209,6 +212,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
         empIssuanceOfficialNoticeService.sendOfficialNotice(requestId);
 
         verify(requestService, times(1)).findRequestById(requestId);
+        verify(empIssuanceRegistryEventPublisherService, times(1)).publishRegistryEvent((EmpIssuanceUkEtsRequestPayload) request.getPayload(), requestId, request.getAccountId());
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(officialNoticeSendService, times(1)).sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails, List.of(registryEmail));
     }

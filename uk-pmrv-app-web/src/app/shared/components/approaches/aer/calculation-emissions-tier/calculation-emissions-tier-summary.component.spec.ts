@@ -177,6 +177,7 @@ describe('CalculationEmissionsTierSummaryComponent', () => {
   } as AerApplicationSubmitRequestTaskPayload;
 
   @Component({
+    standalone: false,
     template: `
       <app-calculation-emissions-tier-summary
         [isEditable]="isEditable"

@@ -8,6 +8,7 @@ import {
 
 @Component({
   selector: 'app-operator-submitted-template',
+  standalone: false,
   templateUrl: './operator-submitted-template.component.html',
   styleUrl: './operator-submitted-template.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

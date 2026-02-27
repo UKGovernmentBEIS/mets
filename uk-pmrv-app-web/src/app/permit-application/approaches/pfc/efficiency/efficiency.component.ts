@@ -14,9 +14,10 @@ import { efficiencyFormProvider } from './efficiency-form.provider';
 
 @Component({
   selector: 'app-efficiency',
+  standalone: false,
   templateUrl: './efficiency.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [efficiencyFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EfficiencyComponent {
   constructor(

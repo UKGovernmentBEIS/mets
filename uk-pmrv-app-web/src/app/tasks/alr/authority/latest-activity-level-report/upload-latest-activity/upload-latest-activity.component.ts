@@ -13,11 +13,10 @@ import { alrAuthorityUploadLatestActivityFormProvider } from './upload-latest-ac
 
 @Component({
   selector: 'app-alr-authority-upload-latest-activity',
-  standalone: true,
   imports: [SharedModule, AlrTaskSharedModule],
   templateUrl: './upload-latest-activity.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [alrAuthorityUploadLatestActivityFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrAuthorityUploadLatestActivityComponent {
   isEditable = this.alrService.isEditable;

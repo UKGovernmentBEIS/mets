@@ -4,6 +4,7 @@ import { OpinionStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-aer-process-sources-group',
+  standalone: false,
   template: `
     <h2 class="govuk-heading-m">Process sources</h2>
     <dl govuk-summary-list>

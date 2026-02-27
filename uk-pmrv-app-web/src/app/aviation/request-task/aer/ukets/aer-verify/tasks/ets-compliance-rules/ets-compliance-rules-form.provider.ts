@@ -25,9 +25,10 @@ import {
 } from './util/form-helpers';
 
 @Injectable()
-export class EtsComplianceRulesFormProvider
-  implements TaskFormProvider<AviationAerEtsComplianceRules, AviationAerEtsComplianceRulesFormModel>
-{
+export class EtsComplianceRulesFormProvider implements TaskFormProvider<
+  AviationAerEtsComplianceRules,
+  AviationAerEtsComplianceRulesFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private destroy$ = new Subject<void>();

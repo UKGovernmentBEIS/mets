@@ -4,6 +4,7 @@ import { VERSION } from '../../environments/version';
 
 @Component({
   selector: 'app-version',
+  standalone: false,
   template: `
     <app-page-heading caption="Information about the application version" size="l">About</app-page-heading>
 

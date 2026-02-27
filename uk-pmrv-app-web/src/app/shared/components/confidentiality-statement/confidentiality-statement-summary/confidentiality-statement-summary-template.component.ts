@@ -4,6 +4,7 @@ import { ConfidentialityStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-confidentiality-statement-summary-template',
+  standalone: false,
   templateUrl: './confidentiality-statement-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

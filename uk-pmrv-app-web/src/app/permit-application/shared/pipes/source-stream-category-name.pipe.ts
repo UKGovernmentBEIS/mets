@@ -15,7 +15,10 @@ import { PermitApplicationState } from '../../store/permit-application.state';
 import { PermitApplicationStore } from '../../store/permit-application.store';
 import { FindSourceStreamPipe } from './find-source-stream.pipe';
 
-@Pipe({ name: 'sourceStreamCategoryName' })
+@Pipe({
+  name: 'sourceStreamCategoryName',
+  standalone: false,
+})
 export class SourceStreamCategoryNamePipe implements PipeTransform {
   constructor(
     private readonly store: PermitApplicationStore<PermitApplicationState>,

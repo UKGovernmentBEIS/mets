@@ -9,9 +9,10 @@ import { naceMainActivityFormProvider } from '@tasks/aer/submit/nace-codes/nace-
 
 @Component({
   selector: 'app-nace-code-main-activity',
+  standalone: false,
   templateUrl: './nace-code-main-activity.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [naceMainActivityFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NaceCodeMainActivityComponent {
   readonly originalOrder = originalOrder;

@@ -18,6 +18,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-change-assignee',
+  standalone: false,
   templateUrl: './change-assignee.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

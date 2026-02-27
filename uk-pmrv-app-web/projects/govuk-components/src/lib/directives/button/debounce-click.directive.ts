@@ -4,6 +4,7 @@ import { debounceTime, Subject, Subscription } from 'rxjs';
 
 @Directive({
   selector: 'button[govukDebounceClick]',
+  standalone: false,
 })
 export class DebounceClickDirective implements OnInit, OnDestroy {
   @Input() debounceTime = 500;
@@ -11,6 +12,7 @@ export class DebounceClickDirective implements OnInit, OnDestroy {
   private subscription = new Subscription();
   private clicks = new Subject<MouseEvent>();
 
+  // eslint-disable-next-line @angular-eslint/prefer-host-metadata-property
   @HostListener('click', ['$event'])
   onClick(event: MouseEvent): void {
     this.clicks.next(event);

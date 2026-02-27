@@ -11,7 +11,6 @@ import { ALRReturnLinkComponent, AlrReviewGroupDecisionComponent, AlrTaskCompone
 import { AlrTaskReviewComponent } from './components/alr-task-review/alr-task-review.component';
 
 @NgModule({
-  exports: [ALRReturnLinkComponent, AlrReviewGroupDecisionComponent, AlrTaskComponent, AlrTaskReviewComponent],
   imports: [
     ALRReturnLinkComponent,
     AlrReviewGroupDecisionComponent,
@@ -21,5 +20,6 @@ import { AlrTaskReviewComponent } from './components/alr-task-review/alr-task-re
     SharedModule,
   ],
   providers: [AlrService, CapitalizeFirstPipe, ItemNamePipe, TaskTypeToBreadcrumbPipe],
+  exports: [ALRReturnLinkComponent, AlrReviewGroupDecisionComponent, AlrTaskComponent, AlrTaskReviewComponent],
 })
 export class AlrTaskSharedModule {}

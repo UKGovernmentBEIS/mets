@@ -12,6 +12,7 @@ import { CommonTasksStore } from '../../store/common-tasks.store';
 
 @Component({
   selector: 'app-verification-submit',
+  standalone: false,
   templateUrl: './verification-submit-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

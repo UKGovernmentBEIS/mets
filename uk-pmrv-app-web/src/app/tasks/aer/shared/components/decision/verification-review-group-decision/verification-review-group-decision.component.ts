@@ -17,9 +17,10 @@ import { AerApplicationReviewRequestTaskPayload, AerVerificationReportDataReview
 
 @Component({
   selector: 'app-verification-review-group-decision',
+  standalone: false,
   templateUrl: './verification-review-group-decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [verificationReviewGroupDecisionFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerificationReviewGroupDecisionComponent implements PendingRequest {
   @Output() readonly notification = new EventEmitter<boolean>();

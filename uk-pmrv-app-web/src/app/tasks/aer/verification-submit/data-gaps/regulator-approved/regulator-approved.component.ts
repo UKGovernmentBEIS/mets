@@ -13,6 +13,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-regulator-approved',
+  standalone: false,
   templateUrl: './regulator-approved.component.html',
   providers: [regulatorApprovedFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -20,10 +20,11 @@ import { exchangeabilityAddFormFactory } from './exchangeability-form.provider';
 
 @Component({
   selector: 'app-exchangeability',
+  standalone: false,
   templateUrl: './exchangeability.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [exchangeabilityAddFormFactory],
   styleUrl: './exchangeability.component.scss',
+  providers: [exchangeabilityAddFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExchangeabilityComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

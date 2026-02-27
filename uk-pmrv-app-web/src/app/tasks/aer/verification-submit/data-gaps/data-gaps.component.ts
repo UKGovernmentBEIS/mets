@@ -9,6 +9,7 @@ import { dataGapsFormProvider } from '@tasks/aer/verification-submit/data-gaps/d
 
 @Component({
   selector: 'app-data-gaps',
+  standalone: false,
   templateUrl: './data-gaps.component.html',
   providers: [dataGapsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

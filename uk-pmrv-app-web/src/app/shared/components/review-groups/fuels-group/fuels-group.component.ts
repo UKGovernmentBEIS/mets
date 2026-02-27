@@ -6,6 +6,7 @@ import { Aer, EmissionPoint, EmissionSource } from 'pmrv-api';
 
 @Component({
   selector: 'app-fuels-group',
+  standalone: false,
   templateUrl: './fuels-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

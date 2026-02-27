@@ -28,10 +28,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-summary',
-  standalone: true,
+  imports: [VirSharedModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [VirSharedModule, SharedModule, ReturnToLinkComponent],
 })
 export class SummaryComponent {
   private verificationDataItem = this.route.snapshot.data.verificationDataItem as VerificationDataItem;

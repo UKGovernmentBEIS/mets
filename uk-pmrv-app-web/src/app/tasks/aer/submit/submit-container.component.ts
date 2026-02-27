@@ -14,6 +14,7 @@ import { StatusKey } from '../core/aer-task.type';
 
 @Component({
   selector: 'app-submit',
+  standalone: false,
   templateUrl: './submit-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

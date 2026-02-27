@@ -8,7 +8,6 @@ import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 
 @Component({
   selector: 'app-bdr-complete-review',
-  standalone: true,
   imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   template: `
     <app-bdr-task-review>

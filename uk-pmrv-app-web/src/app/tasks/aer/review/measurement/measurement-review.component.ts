@@ -9,6 +9,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-measurement-review',
+  standalone: false,
   template: `
     <app-aer-task-review
       [breadcrumb]="true"

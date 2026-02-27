@@ -10,6 +10,7 @@ import { ReturnOfAllowancesService } from '../../core/return-of-allowances.servi
 
 @Component({
   selector: 'app-summary',
+  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

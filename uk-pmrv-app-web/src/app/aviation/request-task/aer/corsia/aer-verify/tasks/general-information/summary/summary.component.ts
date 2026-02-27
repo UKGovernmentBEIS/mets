@@ -24,10 +24,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-summary',
-  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent, GeneralInformationCorsiaTemplateComponent],
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, ReturnToLinkComponent, GeneralInformationCorsiaTemplateComponent],
 })
 export class SummaryComponent {
   vm$: Observable<ViewModel> = combineLatest([

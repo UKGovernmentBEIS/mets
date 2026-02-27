@@ -15,9 +15,10 @@ export interface AviationAerCorsiaVerifiersConclusionsFormModel {
 }
 
 @Injectable()
-export class VerifiersConclusionsFormProvider
-  implements TaskFormProvider<AviationAerCorsiaVerifiersConclusions, AviationAerCorsiaVerifiersConclusionsFormModel>
-{
+export class VerifiersConclusionsFormProvider implements TaskFormProvider<
+  AviationAerCorsiaVerifiersConclusions,
+  AviationAerCorsiaVerifiersConclusionsFormModel
+> {
   private _form: FormGroup<AviationAerCorsiaVerifiersConclusionsFormModel>;
 
   constructor(private fb: FormBuilder) {}

@@ -8,7 +8,6 @@ import { EmpProcedureForm } from 'pmrv-api';
 
 @Component({
   selector: 'app-procedure-form-summary',
-  standalone: true,
   imports: [NgIf, RouterLinkWithHref, GovukComponentsModule],
   templateUrl: './procedure-form-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

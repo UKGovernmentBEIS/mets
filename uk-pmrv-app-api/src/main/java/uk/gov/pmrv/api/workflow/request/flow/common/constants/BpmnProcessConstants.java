@@ -135,6 +135,7 @@ public class BpmnProcessConstants {
     //withholding of allowances
     public static final String WITHHOLDING_OF_ALLOWANCES_SUBMIT_OUTCOME = "withholdingOfAllowancesSubmitOutcome";
     public static final String WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_OUTCOME = "withholdingOfAllowancesWithdrawalOutcome";
+    public static final String WITHHOLDING_OF_ALLOWANCES_INITIATION_TYPE = "withholdingOfAllowancesInitiationType";
 
     //return of allowances
     public static final String RETURN_OF_ALLOWANCES_SUBMIT_OUTCOME = "returnOfAllowancesSubmitOutcome";
@@ -153,8 +154,10 @@ public class BpmnProcessConstants {
     public static final String BDR_REGULATOR_REVIEW_OUTCOME = "bdrRegulatorReviewOutcome";
 
     //BDRS2
+    public static final String BDRS2_INITIATION_TYPE = "bdrs2InitiationType";
     public static final String BDRS2_EXPIRATION_DATE = RequestExpirationType.BDRS2.getCode() + _EXPIRATION_DATE;
     public static final String BDRS2_OUTCOME = "bdrs2Outcome";
+    public static final String BDRS2_REGULATOR_REVIEW_OUTCOME = "bdrs2RegulatorReviewOutcome";
 
     //Permanent Cessation
     public static final String PERMANENT_CESSATION_SUBMIT_OUTCOME = "permanentCessationSubmitOutcome";

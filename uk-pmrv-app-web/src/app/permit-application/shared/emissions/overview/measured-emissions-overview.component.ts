@@ -15,6 +15,7 @@ import { PermitApplicationStore } from '../../../store/permit-application.store'
 
 @Component({
   selector: 'app-measured-emissions-overview',
+  standalone: false,
   templateUrl: './measured-emissions-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

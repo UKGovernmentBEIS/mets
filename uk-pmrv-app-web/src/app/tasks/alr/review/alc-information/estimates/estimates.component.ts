@@ -13,11 +13,10 @@ import { estimatesFormProvider } from './estimates-form.provider';
 
 @Component({
   selector: 'app-alr-estimates',
-  templateUrl: './estimates.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [estimatesFormProvider],
-  standalone: true,
   imports: [SharedModule, AlrTaskSharedModule],
+  templateUrl: './estimates.component.html',
+  providers: [estimatesFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrEstimatesComponent {
   private readonly nextWizardStep = 'preliminary-allocations';

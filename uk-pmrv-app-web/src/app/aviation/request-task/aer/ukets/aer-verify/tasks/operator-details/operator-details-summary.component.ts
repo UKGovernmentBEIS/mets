@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -10,8 +9,6 @@ import { getSubtaskSummaryValues, getSummaryHeaderForTaskType } from '@aviation/
 import { OperatorDetailsSummaryTemplateComponent } from '@aviation/shared/components/operator-details/operator-details-summary-template/operator-details-summary-template.component';
 import { transformFiles } from '@aviation/shared/components/operator-details/utils/operator-details-summary.util';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
-import { OperatorDetailsFlightIdentificationTypePipe } from '@aviation/shared/pipes/operator-details-flight-identification-type.pipe';
-import { OperatorDetailsLegalStatusTypePipe } from '@aviation/shared/pipes/operator-details-legal-status-type.pipe';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SharedModule } from '@shared/shared.module';
 
@@ -28,16 +25,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-operator-details-summary-page',
-  standalone: true,
-  imports: [
-    SharedModule,
-    GovukComponentsModule,
-    RouterLinkWithHref,
-    ReturnToLinkComponent,
-    OperatorDetailsFlightIdentificationTypePipe,
-    OperatorDetailsLegalStatusTypePipe,
-    OperatorDetailsSummaryTemplateComponent,
-  ],
+  imports: [SharedModule, GovukComponentsModule, ReturnToLinkComponent, OperatorDetailsSummaryTemplateComponent],
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
@@ -51,8 +39,8 @@ interface ViewModel {
 
     <app-return-to-link></app-return-to-link>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class OperatorDetailsSummaryComponent {
   operatorDetails: EmpOperatorDetails;

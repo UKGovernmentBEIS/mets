@@ -43,7 +43,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-additional-documents-summary',
-  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,

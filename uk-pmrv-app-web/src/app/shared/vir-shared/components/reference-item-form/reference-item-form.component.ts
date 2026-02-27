@@ -5,6 +5,7 @@ import { VerificationDataItem } from '@shared/vir-shared/types/verification-data
 
 @Component({
   selector: 'app-reference-item-form',
+  standalone: false,
   templateUrl: './reference-item-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

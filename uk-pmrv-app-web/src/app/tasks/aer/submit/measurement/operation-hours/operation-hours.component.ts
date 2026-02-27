@@ -14,9 +14,10 @@ import { operationHoursFormProvider } from './operation-hours-form.provider';
 
 @Component({
   selector: 'app-operation-hours',
+  standalone: false,
   templateUrl: './operation-hours.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [operationHoursFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperationHoursComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

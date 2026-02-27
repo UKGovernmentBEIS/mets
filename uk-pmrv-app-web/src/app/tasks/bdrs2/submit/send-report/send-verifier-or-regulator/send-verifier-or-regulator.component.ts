@@ -17,10 +17,10 @@ import { bdrs2SendVerifierOrRegulatorFormProvider } from './send-verifier-or-reg
 
 @Component({
   selector: 'app-bdrs2-send-verifier-or-regulator',
+  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule],
+  standalone: true,
   templateUrl: './send-verifier-or-regulator.component.html',
   providers: [bdrs2SendVerifierOrRegulatorFormProvider],
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BdrS2SendVerifierOrRegulatorComponent implements PendingRequest {

@@ -7,8 +7,8 @@ import { ReasonComponent } from './reason/reason.component';
 const declarations = [ReasonComponent];
 
 @NgModule({
+  imports: [RouterModule, SharedModule],
   declarations: declarations,
   exports: declarations,
-  imports: [RouterModule, SharedModule],
 })
 export class SharedPermitSurrenderReviewDeterminationModule {}

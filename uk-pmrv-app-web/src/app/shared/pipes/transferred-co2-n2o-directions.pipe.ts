@@ -4,6 +4,7 @@ import { TransferCO2, TransferN2O } from 'pmrv-api';
 
 @Pipe({
   name: 'transferredCO2N2ODirections',
+  standalone: false,
 })
 export class TransferredCO2N2ODirectionsPipe implements PipeTransform {
   transform(value: TransferCO2['transferDirection'] | TransferN2O['transferDirection']): string {

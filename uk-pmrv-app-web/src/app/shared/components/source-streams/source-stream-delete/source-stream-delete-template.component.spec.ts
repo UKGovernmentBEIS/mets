@@ -15,6 +15,7 @@ describe('SourceStreamDeleteTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-source-stream-delete-template
         (delete)="onDelete()"

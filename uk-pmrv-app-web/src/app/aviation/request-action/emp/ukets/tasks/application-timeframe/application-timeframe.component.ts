@@ -20,7 +20,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-application-timeframe',
-  standalone: true,
   imports: [
     RequestActionTaskComponent,
     EmpReviewDecisionGroupSummaryComponent,

@@ -10,6 +10,7 @@ import { AirService } from '../core/air.service';
 
 @Component({
   selector: 'app-reviewed',
+  standalone: false,
   templateUrl: './reviewed.component.html',
   providers: [UserInfoResolverPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,

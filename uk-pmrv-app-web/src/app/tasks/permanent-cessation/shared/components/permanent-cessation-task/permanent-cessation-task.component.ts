@@ -6,6 +6,7 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-permanent-cessation-task',
+  imports: [RouterModule, SharedModule],
   template: `
     <div class="govuk-!-width-three-quarters">
       <govuk-notification-banner *ngIf="notification" type="success">
@@ -15,10 +16,8 @@ import { SharedModule } from '@shared/shared.module';
       <a govukLink [routerLink]="returnToLink">Return to: Permanent cessation</a>
     </div>
   `,
-  standalone: true,
-  imports: [RouterModule, SharedModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PermanentCessationTaskComponent {
   @Input() notification: any;

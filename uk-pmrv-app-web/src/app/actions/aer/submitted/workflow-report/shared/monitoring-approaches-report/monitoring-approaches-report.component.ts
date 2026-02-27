@@ -11,6 +11,7 @@ import { getInherentInstallations } from '../../../inherent-co2/inherent-co2';
 
 @Component({
   selector: 'app-monitoring-approaches-report',
+  standalone: false,
   templateUrl: './monitoring-approaches-report.component.html',
   styleUrl: './monitoring-approaches-report.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

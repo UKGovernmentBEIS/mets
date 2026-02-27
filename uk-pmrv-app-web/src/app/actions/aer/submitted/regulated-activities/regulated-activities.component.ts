@@ -8,6 +8,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-regulated-activities',
+  standalone: false,
   template: `
     <app-action-task header="Regulated activities carried out at the installation" [breadcrumb]="true">
       <ng-container *ngFor="let activity of activities$ | async | regulatedActivitiesSort">

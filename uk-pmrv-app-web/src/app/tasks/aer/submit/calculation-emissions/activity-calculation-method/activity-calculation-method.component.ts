@@ -18,9 +18,10 @@ import { activityCalculationMethodFormProvider } from './activity-calculation-me
 
 @Component({
   selector: 'app-activity-calculation-method',
+  standalone: false,
   templateUrl: './activity-calculation-method.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [activityCalculationMethodFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActivityCalculationMethodComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

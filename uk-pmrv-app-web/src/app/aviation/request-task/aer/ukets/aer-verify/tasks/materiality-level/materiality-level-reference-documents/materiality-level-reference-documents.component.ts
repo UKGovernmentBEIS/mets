@@ -20,9 +20,8 @@ import {
 
 @Component({
   selector: 'app-materiality-level-reference-documents',
-  templateUrl: './materiality-level-reference-documents.component.html',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent, AccreditationReferenceDocumentNamePipe],
+  templateUrl: './materiality-level-reference-documents.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -14,6 +14,7 @@ import { SummaryList } from '../../model/model';
 
 @Component({
   selector: 'app-follow-up-return-for-amends',
+  standalone: false,
   templateUrl: './return-for-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

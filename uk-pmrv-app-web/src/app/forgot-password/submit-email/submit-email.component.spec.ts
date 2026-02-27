@@ -23,6 +23,7 @@ describe('SubmitEmailComponent', () => {
 
   @Component({
     selector: 'app-email-sent',
+    standalone: false,
     template: '<p>Mock template</p>',
   })
   class MockEmailSentComponent {

@@ -4,6 +4,7 @@ import { RequestInfoDTO } from 'pmrv-api';
 
 @Pipe({
   name: 'permitRequestType',
+  standalone: false,
 })
 export class PermitRequestTypePipe implements PipeTransform {
   transform(value: RequestInfoDTO['type']): string {

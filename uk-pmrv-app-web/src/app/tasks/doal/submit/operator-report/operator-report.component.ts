@@ -10,9 +10,10 @@ import { operatorReportFormProvider } from './operator-report-form.provider';
 
 @Component({
   selector: 'app-operator-report',
+  standalone: false,
   templateUrl: './operator-report.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [operatorReportFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorReportComponent {
   constructor(

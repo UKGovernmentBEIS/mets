@@ -15,6 +15,7 @@ import { AerApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-upload-documents',
+  standalone: false,
   templateUrl: './upload-documents.component.html',
   providers: [uploadDocumentsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

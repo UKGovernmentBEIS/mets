@@ -15,6 +15,7 @@ describe('EtsComplianceRulesGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-ets-compliance-rules-group
         [isEditable]="isEditable"

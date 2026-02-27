@@ -26,9 +26,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-submit-container',
-  templateUrl: './submit-container.component.html',
-  standalone: true,
   imports: [SharedModule, TaskSharedModule],
+  templateUrl: './submit-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubmitContainerComponent {

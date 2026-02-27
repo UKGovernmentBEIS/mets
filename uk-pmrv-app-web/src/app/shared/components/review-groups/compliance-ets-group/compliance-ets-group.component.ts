@@ -4,6 +4,7 @@ import { EtsComplianceRules } from 'pmrv-api';
 
 @Component({
   selector: 'app-compliance-ets-group',
+  standalone: false,
   templateUrl: './compliance-ets-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

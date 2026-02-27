@@ -16,6 +16,7 @@ import { reasonFormProvider } from './reason-form.provider';
 
 @Component({
   selector: 'app-reason',
+  standalone: false,
   template: `
     <app-permit-task [breadcrumb]="true">
       <app-wizard-step
@@ -34,8 +35,8 @@ import { reasonFormProvider } from './reason-form.provider';
       <a govukLink routerLink="../..">Return to: {{ determinationHeader }}</a>
     </app-permit-task>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [reasonFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReasonComponent implements PendingRequest, OnInit {
   taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

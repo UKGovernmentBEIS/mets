@@ -11,8 +11,7 @@
  */
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface NonComplianceFinalDeterminationSaveApplicationRequestTaskActionPayload
-  extends RequestTaskActionPayload {
+export interface NonComplianceFinalDeterminationSaveApplicationRequestTaskActionPayload extends RequestTaskActionPayload {
   complianceRestored: boolean;
   complianceRestoredDate?: string;
   comments: string;

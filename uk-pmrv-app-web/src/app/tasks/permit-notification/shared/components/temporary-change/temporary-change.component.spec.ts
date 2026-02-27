@@ -16,6 +16,7 @@ describe('TemporaryChangeComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-temporary-change formGroupName="notification" [today]="today"></app-temporary-change>

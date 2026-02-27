@@ -4,6 +4,7 @@ import { AdditionalDocuments } from 'pmrv-api';
 
 @Component({
   selector: 'app-documents-summary-template',
+  standalone: false,
   templateUrl: './documents-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

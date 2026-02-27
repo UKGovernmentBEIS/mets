@@ -15,6 +15,7 @@ describe('ActionLayoutComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
+    standalone: false,
     template: `
       <app-action-layout [header]="header" [requestAction]="requestActionItem"></app-action-layout>
     `,

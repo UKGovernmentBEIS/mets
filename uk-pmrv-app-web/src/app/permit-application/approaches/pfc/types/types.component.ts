@@ -25,9 +25,10 @@ import { createCellAndAnodeTypes, typesFormProvider } from './types-form.provide
 
 @Component({
   selector: 'app-types',
+  standalone: false,
   templateUrl: './types.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [typesFormProvider, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TypesComponent implements AfterViewInit {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;

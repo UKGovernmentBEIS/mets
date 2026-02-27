@@ -6,6 +6,7 @@ import { UncorrectedNonCompliances } from 'pmrv-api';
 
 @Component({
   selector: 'app-non-compliances-group',
+  standalone: false,
   templateUrl: './non-compliances-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

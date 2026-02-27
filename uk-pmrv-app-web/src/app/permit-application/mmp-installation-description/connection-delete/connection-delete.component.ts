@@ -13,13 +13,14 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-connection-delete',
+  standalone: false,
   templateUrl: './connection-delete.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .nowrap {
       white-space: nowrap;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConnectionDeleteComponent implements PendingRequest {
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));

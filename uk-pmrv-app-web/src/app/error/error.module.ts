@@ -8,7 +8,7 @@ import { InternalServerErrorComponent } from './internal-server-error/internal-s
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
-  declarations: [BusinessErrorComponent, InternalServerErrorComponent, PageNotFoundComponent],
   imports: [CommonModule, ErrorRoutingModule, SharedModule],
+  declarations: [BusinessErrorComponent, InternalServerErrorComponent, PageNotFoundComponent],
 })
 export class ErrorModule {}

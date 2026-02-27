@@ -13,6 +13,7 @@ import { emissionPointFormProvider } from './emission-point-details-form.provide
 
 @Component({
   selector: 'app-emission-point-details',
+  standalone: false,
   template: `
     <app-permit-task
       [breadcrumb]="
@@ -31,8 +32,8 @@ import { emissionPointFormProvider } from './emission-point-details-form.provide
         [isEditing]="isEditing$ | async"></app-emission-point-details-template>
     </app-permit-task>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject, emissionPointFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionPointDetailsComponent {
   isEditing$ = this.store

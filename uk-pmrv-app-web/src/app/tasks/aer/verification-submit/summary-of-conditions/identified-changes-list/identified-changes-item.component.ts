@@ -13,6 +13,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-identified-changes-item',
+  standalone: false,
   templateUrl: './identified-changes-item.component.html',
   providers: [identifiedChangesItemFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

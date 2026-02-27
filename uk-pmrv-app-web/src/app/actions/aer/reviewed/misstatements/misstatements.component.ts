@@ -9,6 +9,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-misstatements',
+  standalone: false,
   template: `
     <app-action-task header="Uncorrected misstatements" [breadcrumb]="true">
       <app-misstatements-group

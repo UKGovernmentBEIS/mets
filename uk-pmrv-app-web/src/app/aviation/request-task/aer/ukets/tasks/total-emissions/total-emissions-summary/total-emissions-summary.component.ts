@@ -1,13 +1,12 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
 import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group.component';
 import { TotalEmissionsSchemeYearHeaderComponent } from '@aviation/request-task/aer/ukets/tasks/total-emissions/shared/total-emissions-scheme-year-header';
-import { TotalEmissionsStandardFuelsTableComponent } from '@aviation/request-task/aer/ukets/tasks/total-emissions/table/total-emissions-standard-fuels-table';
 import { TotalEmissionsFormProvider } from '@aviation/request-task/aer/ukets/tasks/total-emissions/total-emissions-form.provider';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
@@ -32,21 +31,16 @@ interface ViewModel {
 
 @Component({
   selector: 'app-total-emissions-summary',
-  templateUrl: './total-emissions-summary.component.html',
   imports: [
     SharedModule,
     GovukComponentsModule,
-    NgFor,
     NgIf,
-    RouterLinkWithHref,
     ReturnToLinkComponent,
-    RouterLink,
-    TotalEmissionsStandardFuelsTableComponent,
     TotalEmissionsSchemeYearHeaderComponent,
     TotalEmissionsSummaryTemplateComponent,
     AerReviewDecisionGroupComponent,
   ],
-  standalone: true,
+  templateUrl: './total-emissions-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsSummaryComponent {

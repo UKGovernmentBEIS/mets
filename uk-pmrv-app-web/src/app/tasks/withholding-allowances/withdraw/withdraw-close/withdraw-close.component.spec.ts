@@ -1,7 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -64,11 +63,12 @@ describe('WithdrawCloseComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WithholdingAllowancesModule, RouterTestingModule, SharedModule, TaskSharedModule],
+      imports: [WithholdingAllowancesModule, SharedModule, TaskSharedModule],
       providers: [
         KeycloakService,
         { provide: TasksService, useValue: tasksService },
         { provide: RequestTaskAttachmentsHandlingService, useValue: attachmentService },
+        provideRouter([]),
       ],
     }).compileComponents();
   });

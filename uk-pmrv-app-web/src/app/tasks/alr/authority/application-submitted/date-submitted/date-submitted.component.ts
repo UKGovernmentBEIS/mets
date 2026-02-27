@@ -13,7 +13,6 @@ import { alrAuthorityDateSubmittedFormProvider } from './date-submitted-form.pro
 
 @Component({
   selector: 'app-alr-date-submitted',
-  standalone: true,
   imports: [AlrTaskSharedModule, SharedModule],
   template: `
     <app-alr-task-common [breadcrumb]="true" returnLink="../">
@@ -33,8 +32,8 @@ import { alrAuthorityDateSubmittedFormProvider } from './date-submitted-form.pro
       </app-wizard-step>
     </app-alr-task-common>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [alrAuthorityDateSubmittedFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrAuthorityDateSubmittedComponent {
   private readonly payload = this.alrService.payload as Signal<ALRAuthorityResponseSubmitRequestTaskPayload>;

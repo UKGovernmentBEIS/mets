@@ -14,9 +14,10 @@ import { MmpInstallationDescriptionProvider } from './mmp-installation-descripti
 
 @Component({
   selector: 'app-mmp-installation-description',
+  standalone: false,
   templateUrl: './mmp-installation-description.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [MmpInstallationDescriptionProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MmpInstallationDescriptionComponent implements PendingRequest {
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));

@@ -12,6 +12,7 @@ describe('ProcedureFormSummaryComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-procedure-form-summary [details]="details"></app-procedure-form-summary>
     `,

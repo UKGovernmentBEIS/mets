@@ -11,6 +11,7 @@ import { confidentialityStatementFormProvider } from './confidentiality-statemen
 
 @Component({
   selector: 'app-confidentiality-statement',
+  standalone: false,
   template: `
     <app-aer-task>
       <app-confidentiality-statement-template
@@ -21,8 +22,8 @@ import { confidentialityStatementFormProvider } from './confidentiality-statemen
       <app-return-link></app-return-link>
     </app-aer-task>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [confidentialityStatementFormProvider, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfidentialityStatementComponent implements OnInit {
   constructor(

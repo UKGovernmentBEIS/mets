@@ -4,10 +4,8 @@ import { RouterModule } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
-import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
 import { requestActionQuery, RequestActionStore } from '@aviation/request-action/store';
 import { AviationEmissionsSummaryTemplateComponent } from '@aviation/shared/components/dre/aviation-emissions-summary-template';
-import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { SharedModule } from '@shared/shared.module';
 
 import {
@@ -36,17 +34,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aviation-emissions-updated',
+  imports: [SharedModule, RouterModule, NgIf, NgFor, AviationEmissionsSummaryTemplateComponent],
   templateUrl: './aviation-emissions-updated.component.html',
-  standalone: true,
-  imports: [
-    SharedModule,
-    RequestActionTaskComponent,
-    RouterModule,
-    NgIf,
-    NgFor,
-    ReturnToLinkComponent,
-    AviationEmissionsSummaryTemplateComponent,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AviationEmissionsUpdatedComponent {

@@ -14,6 +14,7 @@ import { getAerTitle } from '../../submitted';
 
 @Component({
   selector: 'app-operator-to-verifier',
+  standalone: false,
   templateUrl: './operator-to-verifier.component.html',
   styleUrl: './operator-to-verifier.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

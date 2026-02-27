@@ -7,6 +7,7 @@ import { DoalService } from '../../../core/doal.service';
 
 @Component({
   selector: 'app-doal-activity-levels',
+  standalone: false,
   templateUrl: './activity-levels.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

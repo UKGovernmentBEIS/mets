@@ -56,6 +56,7 @@ describe('FormComponent', () => {
   }
 
   @Component({
+    standalone: false,
     template: `
       <form [formGroup]="form" (ngSubmit)="submit()">
         <app-form></app-form>

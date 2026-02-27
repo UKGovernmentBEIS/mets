@@ -1,7 +1,8 @@
 <div class="govuk-!-width-two-thirds">
   <govuk-panel title="Verification report sent to operator">
     <p>
-      <strong>Your reference code is:</strong><br />
+      <strong>Your reference code is:</strong>
+      <br />
       {{ (requestId$ | async).id }}
     </p>
   </govuk-panel>
@@ -15,5 +16,5 @@
     <li>make changes and repeat the submission process</li>
   </ul>
 
-  <a govukLink [routerLink]="'/aviation/dashboard'">Return to your tasks</a>
+  <a govukLink routerLink="/aviation/dashboard">Return to your tasks</a>
 </div>

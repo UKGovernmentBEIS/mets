@@ -15,10 +15,9 @@ import { alrUploadReportFormProvider } from './alr-upload-report-form.provider';
 
 @Component({
   selector: 'app-alr-upload-report',
+  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule],
   templateUrl: './alr-upload-report.component.html',
   providers: [alrUploadReportFormProvider],
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ALRUploadReportComponent implements PendingRequest {

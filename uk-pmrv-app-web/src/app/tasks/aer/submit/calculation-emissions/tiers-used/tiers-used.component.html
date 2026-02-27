@@ -4,14 +4,13 @@
       (formSubmit)="onContinue()"
       [formGroup]="form"
       heading="What tiers have you used for this source stream’s calculation parameters?"
-      [hideSubmit]="(isEditable$ | async) === false"
-    >
+      [hideSubmit]="(isEditable$ | async) === false">
       <ng-container *ngFor="let element of formElements">
         <h2 class="govuk-heading-m">{{ element.label }}</h2>
         <ng-container *ngIf="element.permitTier as permitTier">
           <p class="govuk-body">{{ permitTier | appliedTier }} is applied in your monitoring plan</p>
         </ng-container>
-        <div [formControlName]="element.name" govuk-radio [legend]="'Tiers used'">
+        <div [formControlName]="element.name" govuk-radio legend="Tiers used">
           <ng-container *ngFor="let option of element.options">
             <govuk-radio-option [value]="option.value" [label]="option.label"></govuk-radio-option>
           </ng-container>
@@ -19,6 +18,6 @@
       </ng-container>
     </app-wizard-step>
 
-    <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+    <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }}</a>
   </ng-container>
 </app-aer-task>

@@ -17,7 +17,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-permanent-cessation-action-submitted',
-  standalone: true,
   imports: [ActionSharedModule, NgIf, PermanentCessationDetailsSummaryTemplateComponent],
   template: `
     <app-base-action-container-component
@@ -39,8 +38,8 @@ interface ViewModel {
         officialNoticeText="Notice document"></app-action-recipients-template>
     </ng-template>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UserInfoResolverPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PermanentCessationActionSubmittedComponent {
   payload = this.permanentCessationActionService.getPermanentCessationPayload();

@@ -19,10 +19,10 @@ describe('ListReturnLinkComponent', () => {
 
   const tasksService = mockClass(TasksService);
 
-  @Component({ template: '<router-outlet></router-outlet>' })
+  @Component({ standalone: false, template: '<router-outlet></router-outlet>' })
   class TestComponent {}
 
-  @Component({ template: '<app-list-return-link></app-list-return-link>' })
+  @Component({ standalone: false, template: '<app-list-return-link></app-list-return-link>' })
   class ChildComponent {}
 
   class Page extends BasePage<TestComponent> {

@@ -12,6 +12,7 @@ import { outcomeFormProvider } from './outcome-form.provider';
 
 @Component({
   selector: 'app-outcome',
+  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onContinue()"
@@ -29,8 +30,8 @@ import { outcomeFormProvider } from './outcome-form.provider';
     </app-wizard-step>
     <a govukLink routerLink="../..">Return to: Cessation</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [outcomeFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OutcomeComponent implements PendingRequest {
   constructor(

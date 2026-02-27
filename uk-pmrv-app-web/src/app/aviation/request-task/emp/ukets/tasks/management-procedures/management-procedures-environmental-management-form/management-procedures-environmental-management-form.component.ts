@@ -9,9 +9,8 @@ import { GovukComponentsModule } from 'govuk-components';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-management-procedures-environmental-management-form',
-  templateUrl: './management-procedures-environmental-management-form.component.html',
-  standalone: true,
   imports: [GovukComponentsModule, SharedModule],
+  templateUrl: './management-procedures-environmental-management-form.component.html',
   providers: [DestroySubject],
   viewProviders: [existingControlContainer],
 })

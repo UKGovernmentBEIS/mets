@@ -36,7 +36,7 @@ public class BdrCompletedAddRequestActionHandlerTest {
 
         handler.execute(execution);
 
-        verify(bdrCompleteService, times(1)).complete(requestId);
+        verify(bdrCompleteService, times(1)).addRequestAction(requestId);
     }
 
 }

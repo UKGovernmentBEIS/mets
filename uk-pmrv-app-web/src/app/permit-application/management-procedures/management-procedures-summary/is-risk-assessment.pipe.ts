@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { AssessAndControlRisk, ManagementProceduresDefinition, Permit } from 'pmrv-api';
 
-@Pipe({ name: 'IsRiskAssessment' })
+@Pipe({
+  name: 'IsRiskAssessment',
+  standalone: false,
+})
 export class IsRiskAssessmentPipe implements PipeTransform {
   transform(
     task: ManagementProceduresDefinition | AssessAndControlRisk,

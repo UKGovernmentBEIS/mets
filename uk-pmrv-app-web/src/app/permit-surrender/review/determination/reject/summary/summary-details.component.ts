@@ -9,6 +9,7 @@ import { PermitSurrenderStore } from '../../../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-reject-determination-summary-details',
+  standalone: false,
   templateUrl: './summary-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

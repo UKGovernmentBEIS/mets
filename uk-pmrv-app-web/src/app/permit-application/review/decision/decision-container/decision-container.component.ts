@@ -11,6 +11,7 @@ import { PermitApplicationStore } from '../../../store/permit-application.store'
 
 @Component({
   selector: 'app-review-group-decision-container',
+  standalone: false,
   templateUrl: './decision-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

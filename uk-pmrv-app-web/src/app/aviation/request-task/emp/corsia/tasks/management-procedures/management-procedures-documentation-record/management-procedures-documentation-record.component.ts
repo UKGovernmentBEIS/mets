@@ -11,9 +11,8 @@ import { ManagementProceduresCorsiaFormProvider } from '../management-procedures
 
 @Component({
   selector: 'app-management-procedures-documentation-record',
-  templateUrl: './management-procedures-documentation-record.component.html',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent],
+  templateUrl: './management-procedures-documentation-record.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementProceduresDocumentationRecordComponent {

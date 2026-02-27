@@ -21,7 +21,6 @@ import { MultipleMethodsSummaryTemplateComponent } from '@aviation/shared/compon
 import { EmpReviewDecisionGroupSummaryComponent } from '@aviation/shared/components/emp/emp-review-decision-group-summary/emp-review-decision-group-summary.component';
 import { EmpVariationRegulatorLedDecisionGroupSummaryComponent } from '@aviation/shared/components/emp/emp-variation-regulator-led-decision-group-summary/emp-variation-regulator-led-decision-group-summary.component';
 import { EmpVariationReviewDecisionGroupSummaryComponent } from '@aviation/shared/components/emp/emp-variation-review-decision-group-summary/emp-variation-review-decision-group-summary.component';
-import { ServiceContactDetailsSummaryTemplateComponent } from '@aviation/shared/components/emp/service-contact-details-summary-template/service-contact-details-summary-template.component';
 import { ProcedureFormSummaryComponent } from '@aviation/shared/components/procedure-form-summary';
 import { SharedModule } from '@shared/shared.module';
 
@@ -46,11 +45,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-emission-sources',
-  standalone: true,
   imports: [
     RequestActionTaskComponent,
     EmpReviewDecisionGroupSummaryComponent,
-    ServiceContactDetailsSummaryTemplateComponent,
     AircraftTypeTableComponent,
     EmissionFactorsSummaryTemplateComponent,
     MultipleMethodsSummaryTemplateComponent,

@@ -14,9 +14,10 @@ import { methodsFormProvider } from './methods.provider';
 
 @Component({
   selector: 'app-methods',
+  standalone: false,
   templateUrl: './methods.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [methodsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MethodsComponent {
   methodType = this.route.snapshot.data.methodType;

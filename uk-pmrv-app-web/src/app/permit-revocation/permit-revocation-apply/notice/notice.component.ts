@@ -14,6 +14,7 @@ import { PermitRevocationStore } from '@permit-revocation/store/permit-revocatio
 
 @Component({
   selector: 'app-notice',
+  standalone: false,
   templateUrl: './notice.component.html',
   providers: [permitRevocationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

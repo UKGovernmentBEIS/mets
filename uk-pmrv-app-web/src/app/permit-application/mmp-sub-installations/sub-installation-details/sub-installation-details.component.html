@@ -2,7 +2,7 @@
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
-    [heading]="'Sub-installation details'"
+    heading="Sub-installation details"
     [caption]="
       (isEditing$ | async)
         ? 'Edit a sub-installation with product benchmark'
@@ -21,7 +21,7 @@
         label="Please choose a product benchmark"
         [isLabelHidden]="true"
         widthClass="govuk-!-width-full">
-        <option [value]="''">Choose a product benchmark</option>
+        <option value="">Choose a product benchmark</option>
         <option *ngFor="let productBenchmarkType of productBenchmarkTypes$ | async" [value]="productBenchmarkType">
           {{ productBenchmarkType | subInstallationType }}
         </option>
@@ -60,5 +60,5 @@
     </div>
   </app-wizard-step>
 
-  <a govukLink [routerLink]="'../'">Return to: Sub-installations</a>
+  <a govukLink routerLink="../">Return to: Sub-installations</a>
 </app-permit-task>

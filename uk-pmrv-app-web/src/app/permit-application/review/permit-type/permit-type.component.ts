@@ -8,6 +8,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-permit-type',
+  standalone: false,
   templateUrl: './permit-type.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

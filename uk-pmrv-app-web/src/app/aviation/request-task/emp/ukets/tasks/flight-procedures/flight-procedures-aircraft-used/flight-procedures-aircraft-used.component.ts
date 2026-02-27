@@ -15,7 +15,6 @@ import { onSubmitFlightProcedures } from '../shared/flight-procedures.functions'
 
 @Component({
   selector: 'app-flight-procedures-aircraft-used',
-  standalone: true,
   imports: [SharedModule, FlightProceduresFormComponent, ReturnToLinkComponent],
   templateUrl: './flight-procedures-aircraft-used.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

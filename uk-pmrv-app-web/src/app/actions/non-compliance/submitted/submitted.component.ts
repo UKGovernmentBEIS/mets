@@ -6,6 +6,7 @@ import { AuthStore, selectCurrentDomain } from '@core/store';
 
 @Component({
   selector: 'app-submitted',
+  standalone: false,
   templateUrl: './submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

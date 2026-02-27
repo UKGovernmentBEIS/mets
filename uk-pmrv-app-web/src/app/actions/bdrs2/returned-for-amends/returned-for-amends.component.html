@@ -1,0 +1,51 @@
+@if (requestAction()) {
+  <app-base-action-container-component
+    [header]="bdrTitle()"
+    [customContentTemplate]="customContentTemplate"
+    [expectedActionType]="['BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS']"></app-base-action-container-component>
+
+  <ng-template #customContentTemplate>
+    @for (decision of decisionAmends(); track decision) {
+      <div>
+        <h2 app-summary-header class="govuk-heading-m">Stage 2 baseline data report details</h2>
+        <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+          @if (
+            decision?.data?.details?.verificationRequired !== null &&
+            decision?.data?.details?.verificationRequired !== undefined
+          ) {
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Does the operator need to send the amendments to the verifier?</dt>
+              <dd govukSummaryListRowValue>{{ decision?.data?.details?.['verificationRequired'] ? 'Yes' : 'No' }}</dd>
+            </div>
+          }
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Changes required</dt>
+            <dd govukSummaryListRowValue>
+              @for (requiredChange of decision.data.details?.requiredChanges; track $index) {
+                <div class="pre-wrap">
+                  {{ $index + 1 }}. {{ requiredChange.reason }}
+                  <br />
+                  @if (requiredChange?.files?.length > 0) {
+                    <app-summary-download-files
+                      [files]="
+                        bdrs2Service.getRegulatorDownloadUrlFiles(requiredChange?.files)
+                      "></app-summary-download-files>
+                  }
+                </div>
+                @if (!$last) {
+                  <br />
+                }
+              }
+            </dd>
+          </div>
+          @if (decision?.data?.details?.notes) {
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Notes</dt>
+              <dd govukSummaryListRowValue class="pre-wrap">{{ decision.data.details.notes }}</dd>
+            </div>
+          }
+        </dl>
+      </div>
+    }
+  </ng-template>
+}

@@ -5,6 +5,7 @@ import { GenericServiceErrorCode } from '@error/service-errors';
 
 @Component({
   selector: 'app-internal-server-error',
+  standalone: false,
   templateUrl: './internal-server-error.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

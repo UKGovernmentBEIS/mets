@@ -8,6 +8,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-abbreviations-summary',
+  standalone: false,
   templateUrl: './abbreviations-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -21,6 +21,7 @@ import { SummaryDetailsComponent } from './transfer-details/summary/summary-deta
 import { TransferDetailsComponent } from './transfer-details/transfer-details.component';
 
 @NgModule({
+  imports: [PermitTransferRoutingModule, ReviewModule, SharedModule, SharedPermitModule],
   declarations: [
     PermitTransferSummaryComponent,
     ReviewSectionsContainerComponent,
@@ -31,7 +32,6 @@ import { TransferDetailsComponent } from './transfer-details/transfer-details.co
     TransferDetailsConfirmationSummaryComponent,
     TransferDetailsReviewComponent,
   ],
-  imports: [PermitTransferRoutingModule, ReviewModule, SharedModule, SharedPermitModule],
   providers: [
     {
       provide: PermitApplicationStore,

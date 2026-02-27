@@ -8,6 +8,7 @@ import { PermitTransferAService } from '../core/permit-transfer-a.service';
 
 @Component({
   selector: 'app-transfer-wait',
+  standalone: false,
   templateUrl: './wait.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -9,6 +9,7 @@ import { NotificationTemplateDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-email-template-overview',
+  standalone: false,
   templateUrl: './email-template-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

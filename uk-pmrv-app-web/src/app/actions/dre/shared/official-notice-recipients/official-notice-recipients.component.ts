@@ -4,6 +4,7 @@ import { DreApplicationSubmittedRequestActionPayload, RequestActionDTO } from 'p
 
 @Component({
   selector: 'app-official-notice-recipients',
+  standalone: false,
   templateUrl: './official-notice-recipients.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

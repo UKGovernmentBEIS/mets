@@ -12,6 +12,7 @@ import uk.gov.pmrv.api.aviationreporting.common.domain.AviationReportableEmissio
 import uk.gov.pmrv.api.aviationreporting.common.domain.dto.AviationReportableEmissionsDTO;
 import uk.gov.pmrv.api.aviationreporting.common.repository.AviationReportableEmissionsRepository;
 import uk.gov.pmrv.api.aviationreporting.common.transform.AviationReportableEmissionsMapper;
+import uk.gov.pmrv.api.aviationreporting.common.util.AviationAerIdentifierGenerator;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.netz.api.common.exception.BusinessException;
 
@@ -51,6 +52,7 @@ public class AviationReportableEmissionsService {
                 .reportableEmissions(totalReportableEmissions)
                 .isFromDre(false)
                 .isFromRegulator(isFromRegulator)
+                .requestId(AviationAerIdentifierGenerator.generate(accountId, reportingYear.getValue()))
                 .build();
 
         saveReportableEmissions(reportableEmissionsSaveParams, aerContainer.getScheme());

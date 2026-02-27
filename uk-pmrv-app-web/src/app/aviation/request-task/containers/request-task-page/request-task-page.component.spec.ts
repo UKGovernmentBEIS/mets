@@ -2,9 +2,8 @@ import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
-import { BackLinkService } from '@shared/back-link/back-link.service';
 import { SharedModule } from '@shared/shared.module';
-import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
+import { ActivatedRouteStub, BasePage } from '@testing';
 import produce from 'immer';
 
 import { EmpRequestTaskPayloadUkEts, RequestTaskStore } from '../../store';
@@ -19,7 +18,6 @@ describe('RequestTaskPageComponent', () => {
   let component: RequestTaskPageComponent;
   let fixture: ComponentFixture<RequestTaskPageComponent>;
   let store: RequestTaskStore;
-  const backlinkService = mockClass(BackLinkService);
   const route = new ActivatedRouteStub();
   let page: Page;
 
@@ -28,7 +26,6 @@ describe('RequestTaskPageComponent', () => {
       imports: [SharedModule],
       declarations: [RequestTaskPageComponent],
       providers: [
-        { provide: BackLinkService, useValue: backlinkService },
         { provide: ActivatedRoute, useValue: route },
         { provide: APP_BASE_HREF, useValue: '/installation-aviation/' },
       ],

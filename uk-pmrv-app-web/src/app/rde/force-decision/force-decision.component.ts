@@ -25,10 +25,11 @@ import { forceDecisionProvider, RDE_FORM } from './force-decision-form.provider'
 
 @Component({
   selector: 'app-force-decision',
+  standalone: false,
   templateUrl: './force-decision.component.html',
   styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [forceDecisionProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForceDecisionComponent {
   taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

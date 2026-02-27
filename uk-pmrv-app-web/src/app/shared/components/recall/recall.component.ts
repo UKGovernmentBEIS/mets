@@ -21,7 +21,6 @@ import { recallActionTypeMap, recallReturnToTextMap } from './recall';
 
 @Component({
   selector: 'app-shared-recall',
-  standalone: true,
   imports: [SharedModule, RouterLink],
   templateUrl: './recall.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

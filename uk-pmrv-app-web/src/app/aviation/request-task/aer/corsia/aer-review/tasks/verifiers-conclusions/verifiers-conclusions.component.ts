@@ -21,8 +21,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-verifiers-conclusions',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
@@ -40,6 +38,7 @@ interface ViewModel {
     </ng-container>
     <app-return-to-link></app-return-to-link>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifiersConclusionsComponent {
   private store = inject(RequestTaskStore);

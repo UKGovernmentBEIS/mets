@@ -10,6 +10,7 @@ import { AerApplicationReviewRequestTaskPayload, FallbackEmissions } from 'pmrv-
 
 @Component({
   selector: 'app-fallback',
+  standalone: false,
   template: `
     <app-aer-task-review
       [breadcrumb]="true"

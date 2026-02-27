@@ -32,7 +32,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-additional-documents-summary',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent, AerReviewDecisionGroupComponent],
   templateUrl: './additional-documents-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

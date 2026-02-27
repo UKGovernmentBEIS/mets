@@ -12,9 +12,10 @@ import { uncertaintyAnalysisFormProvider } from './uncertainty-analysis-form.pro
 
 @Component({
   selector: 'app-uncertainty-analysis',
+  standalone: false,
   templateUrl: './uncertainty-analysis.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [uncertaintyAnalysisFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UncertaintyAnalysisComponent {
   constructor(

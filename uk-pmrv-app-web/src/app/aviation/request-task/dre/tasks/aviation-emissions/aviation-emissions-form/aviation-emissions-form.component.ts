@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 import { AviationDreEmissionsTypePipe } from '@aviation/shared/pipes/aviation-dre-emissions-type.pipe';
@@ -12,9 +11,8 @@ import { SupportingDocumentsViewModel } from '../aviation-emissions-form.provide
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-aviation-emissions-form',
+  imports: [GovukComponentsModule, SharedModule, AviationDreEmissionsTypePipe],
   templateUrl: './aviation-emissions-form.component.html',
-  standalone: true,
-  imports: [GovukComponentsModule, SharedModule, NgIf, NgFor, AviationDreEmissionsTypePipe],
   viewProviders: [existingControlContainer],
 })
 export class AviationEmissionsFormComponent {

@@ -15,6 +15,7 @@ import { AerApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-description',
+  standalone: false,
   templateUrl: './description.component.html',
   providers: [descriptionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

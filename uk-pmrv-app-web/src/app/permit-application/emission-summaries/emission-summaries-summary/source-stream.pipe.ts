@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { SourceStream } from 'pmrv-api';
 
-@Pipe({ name: 'sourceStream' })
+@Pipe({
+  name: 'sourceStream',
+  standalone: false,
+})
 export class SourceStreamPipe implements PipeTransform {
   transform(sourceStreams: SourceStream[], sourceStreamId: string): SourceStream {
     return sourceStreams.find((stream) => stream.id === sourceStreamId);

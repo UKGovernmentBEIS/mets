@@ -17,6 +17,7 @@ describe('ChangesRequestedTemplateComponent', () => {
     }
   }
   @Component({
+    standalone: false,
     template: `
       <app-changes-requested-template
         [requiredChanges]="requiredChanges"

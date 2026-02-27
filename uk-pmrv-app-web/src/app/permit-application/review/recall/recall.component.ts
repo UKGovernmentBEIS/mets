@@ -16,6 +16,7 @@ import { PermitApplicationState } from '../../store/permit-application.state';
 
 @Component({
   selector: 'app-recall',
+  standalone: false,
   template: `
     <app-page-heading size="xl">
       Are you sure you want to recall the {{ permitType | permitRequestType }} ?

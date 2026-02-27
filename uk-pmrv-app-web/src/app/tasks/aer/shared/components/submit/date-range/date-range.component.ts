@@ -14,9 +14,10 @@ import { dataRangeFormProvider } from './date-range.provider';
 
 @Component({
   selector: 'app-date-range',
+  standalone: false,
   templateUrl: './date-range.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [dataRangeFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DateRangeComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

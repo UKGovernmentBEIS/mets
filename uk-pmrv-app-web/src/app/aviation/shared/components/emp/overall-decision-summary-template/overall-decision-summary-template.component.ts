@@ -7,7 +7,6 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-overall-decision-summary-template',
-  standalone: true,
   imports: [RouterLink, SharedModule, EmpReviewDeterminationTypePipe],
   templateUrl: './overall-decision-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

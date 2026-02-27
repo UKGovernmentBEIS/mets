@@ -15,8 +15,8 @@ import { InPersonSiteVisit, OpinionStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-in-person-visit',
+  standalone: false,
   templateUrl: './in-person-visit.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .container {
       position: relative;
@@ -27,6 +27,7 @@ import { InPersonSiteVisit, OpinionStatement } from 'pmrv-api';
     }
   `,
   providers: [inPersonVisitFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InPersonVisitComponent implements PendingRequest {
   isEditable$ = this.aerService.isEditable$;

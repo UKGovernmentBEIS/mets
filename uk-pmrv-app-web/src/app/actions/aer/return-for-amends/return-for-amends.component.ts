@@ -6,6 +6,7 @@ import { AerService } from '../core/aer.service';
 
 @Component({
   selector: 'app-return-for-amends',
+  standalone: false,
   templateUrl: './return-for-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

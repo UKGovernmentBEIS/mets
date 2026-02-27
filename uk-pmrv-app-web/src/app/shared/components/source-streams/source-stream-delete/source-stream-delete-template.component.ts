@@ -4,6 +4,7 @@ import { SourceStream } from 'pmrv-api';
 
 @Component({
   selector: 'app-source-stream-delete-template',
+  standalone: false,
   template: `
     <ng-container *ngIf="sourceStream">
       <app-page-heading size="xl">
@@ -19,12 +20,12 @@ import { SourceStream } from 'pmrv-api';
       </div>
     </ng-container>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .nowrap {
       white-space: nowrap;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SourceStreamDeleteTemplateComponent {
   @Input() sourceStream: SourceStream;

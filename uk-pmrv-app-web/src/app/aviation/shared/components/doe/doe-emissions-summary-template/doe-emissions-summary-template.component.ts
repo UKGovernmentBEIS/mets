@@ -13,8 +13,6 @@ import { AviationDoECorsia } from 'pmrv-api';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-doe-emissions-summary-template',
-  templateUrl: './doe-emissions-summary-template.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     GovukComponentsModule,
@@ -22,6 +20,7 @@ import { AviationDoECorsia } from 'pmrv-api';
     DoeDeterminationReasonTypePipe,
     DoeDeterminationReasonSubTypePipe,
   ],
+  templateUrl: './doe-emissions-summary-template.component.html',
   viewProviders: [existingControlContainer],
 })
 export class DoeEmissionsSummaryTemplateComponent {

@@ -11,7 +11,7 @@
         {{ emissions.safBatchClaimsReviewed ? 'Yes' : 'No' }}
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
 
@@ -24,7 +24,7 @@
           </p>
         </dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+          <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
         </dd>
       </div>
 
@@ -36,7 +36,7 @@
           </p>
         </dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+          <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
         </dd>
       </div>
     </ng-container>
@@ -50,7 +50,7 @@
       </dd>
 
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
 
@@ -63,7 +63,7 @@
       </dd>
 
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
 
@@ -78,7 +78,7 @@
         <p class="govuk-body" *ngIf="!emissions.evidenceAllCriteriaMetExist">No, {{ emissions.noCriteriaMetIssues }}</p>
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
 
@@ -92,7 +92,7 @@
         </p>
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
   </dl>

@@ -10,6 +10,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-permit-task-review',
+  standalone: false,
   template: `
     <govuk-notification-banner *ngIf="notification" type="success">
       <h1 class="govuk-notification-banner__heading">Details updated</h1>
@@ -18,8 +19,8 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
     <ng-content></ng-content>
     <a govukLink routerLink="..">Return to: {{ returnLinkText$ | async }}</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PermitTaskReviewComponent implements OnInit {
   @Input() notification: any;

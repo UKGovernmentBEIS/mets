@@ -17,9 +17,10 @@ import { analysisMethodProvider } from './analysis-method.provider';
 
 @Component({
   selector: 'app-analysis-method',
+  standalone: false,
   templateUrl: './analysis-method.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [analysisMethodProvider, SamplingFrequencyPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnalysisMethodComponent implements PendingRequest {
   readonly index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

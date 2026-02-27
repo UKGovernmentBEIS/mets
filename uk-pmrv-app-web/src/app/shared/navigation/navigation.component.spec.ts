@@ -5,6 +5,7 @@ import { NavigationComponent } from './navigation.component';
 
 describe('NavigationComponent', () => {
   @Component({
+    standalone: false,
     template: `
       <app-navigation [ariaLabel]="ariaLabel"></app-navigation>
     `,

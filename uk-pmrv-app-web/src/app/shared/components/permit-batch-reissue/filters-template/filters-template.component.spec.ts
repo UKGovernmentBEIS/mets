@@ -23,6 +23,7 @@ describe('FiltersTemplateComponent', () => {
 
   @Component({
     selector: 'app-test-wrapper-component',
+    standalone: false,
     template: `
       <app-permit-batch-reissue-filters-template
         [filters]="filters"

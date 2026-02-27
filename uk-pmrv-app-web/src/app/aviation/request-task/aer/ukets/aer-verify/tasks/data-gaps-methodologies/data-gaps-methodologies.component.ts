@@ -26,9 +26,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-data-gaps-methodologies',
-  templateUrl: './data-gaps-methodologies.component.html',
-  standalone: true,
   imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
+  templateUrl: './data-gaps-methodologies.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGapsMethodologiesComponent {

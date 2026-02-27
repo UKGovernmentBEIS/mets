@@ -28,14 +28,13 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aer-verifier-details-summary',
-  templateUrl: './verifier-details-summary.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
     AerVerifierDetailsGroupFormComponent,
     AerVerificationReviewDecisionGroupComponent,
   ],
+  templateUrl: './verifier-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class AerVerifierDetailsSummaryComponent {

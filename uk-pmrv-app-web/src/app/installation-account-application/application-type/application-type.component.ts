@@ -15,9 +15,10 @@ import { applicationTypeMap } from './application-type';
 
 @Component({
   selector: 'app-application-type',
+  standalone: false,
   templateUrl: './application-type.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApplicationTypeComponent implements OnInit {
   form: UntypedFormGroup = this.formBuilder.group({

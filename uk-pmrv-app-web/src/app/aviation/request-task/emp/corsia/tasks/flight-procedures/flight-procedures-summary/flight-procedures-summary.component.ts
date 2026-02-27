@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -28,8 +28,16 @@ import { FlightProceduresFormProvider } from '../flight-procedures-form.provider
 
 @Component({
   selector: 'app-flight-procedures-summary',
+  imports: [
+    SharedModule,
+    ReturnToLinkComponent,
+    FlightProceduresDataTableComponent,
+    EmpReviewDecisionGroupComponent,
+    EmpVariationReviewDecisionGroupComponent,
+    EmpVariationRegulatorLedDecisionGroupComponent,
+    ProcedureFormSummaryComponent,
+  ],
   templateUrl: './flight-procedures-summary.component.html',
-  standalone: true,
   styles: `
     .header-container {
       display: flex;
@@ -42,16 +50,6 @@ import { FlightProceduresFormProvider } from '../flight-procedures-form.provider
       line-height: 1.3157894737;
     }
   `,
-  imports: [
-    SharedModule,
-    RouterLinkWithHref,
-    ReturnToLinkComponent,
-    FlightProceduresDataTableComponent,
-    EmpReviewDecisionGroupComponent,
-    EmpVariationReviewDecisionGroupComponent,
-    EmpVariationRegulatorLedDecisionGroupComponent,
-    ProcedureFormSummaryComponent,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class FlightProceduresSummaryComponent {

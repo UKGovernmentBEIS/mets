@@ -17,6 +17,7 @@ describe('OtherFactorComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-other-factor formGroupName="notification" [today]="today"></app-other-factor>

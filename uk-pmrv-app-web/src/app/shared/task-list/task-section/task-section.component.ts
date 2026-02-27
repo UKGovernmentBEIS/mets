@@ -4,6 +4,7 @@ import { TaskItem } from '../task-list.interface';
 
 @Component({
   selector: 'li[app-task-section]',
+  standalone: false,
   template: `
     <h2 *ngIf="title" class="app-task-list__section">{{ title }}</h2>
     <ul *ngIf="tasks" app-task-item-list [taskItems]="tasks"></ul>

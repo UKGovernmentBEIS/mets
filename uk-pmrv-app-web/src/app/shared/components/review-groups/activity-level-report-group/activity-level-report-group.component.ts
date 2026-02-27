@@ -4,6 +4,7 @@ import { ActivityLevelReport } from 'pmrv-api';
 
 @Component({
   selector: 'app-activity-level-report-group',
+  standalone: false,
   templateUrl: './activity-level-report-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

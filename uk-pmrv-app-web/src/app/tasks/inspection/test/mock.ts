@@ -52,7 +52,7 @@ export const mockInspectionSubmitRequestTaskPayload: InspectionSubmitRequestTask
         followUpActionType: 'NON_CONFORMITY',
       },
     ],
-    responseDeadline: '2026-02-20T00:00:00.000Z',
+    responseDeadline: '2099-02-20T00:00:00.000Z',
   },
   installationInspectionSectionsCompleted: {
     details: true,

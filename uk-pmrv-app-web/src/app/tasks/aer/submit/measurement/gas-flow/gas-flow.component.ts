@@ -18,9 +18,10 @@ import { gasFlowFormProvider } from './gas-flow-form.provider';
 
 @Component({
   selector: 'app-gas-flow',
+  standalone: false,
   templateUrl: './gas-flow.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [gasFlowFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GasFlowComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

@@ -16,11 +16,10 @@ import { ItemLinkPipe } from '../../shared/pipes/item-link.pipe';
 
 @Component({
   selector: 'app-trigger-hse',
-  templateUrl: './trigger-hseti.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [CommonModule, SharedModule, RouterModule],
+  templateUrl: './trigger-hseti.component.html',
   providers: [PendingRequestService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TriggerHseTiComponent implements OnInit {
   accountId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('accountId'))));

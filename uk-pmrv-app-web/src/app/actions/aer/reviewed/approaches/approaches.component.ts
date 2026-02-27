@@ -9,6 +9,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-approaches',
+  standalone: false,
   template: `
     <app-action-task
       *ngIf="payload$ | async as payload"

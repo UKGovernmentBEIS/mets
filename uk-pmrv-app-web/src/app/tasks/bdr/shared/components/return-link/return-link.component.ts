@@ -7,9 +7,8 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-bdr-return-link',
-  template: '<a govukLink [routerLink]="link$ | async">Return to: {{ title }}</a>',
-  standalone: true,
   imports: [RouterModule, SharedModule],
+  template: '<a govukLink [routerLink]="link$ | async">Return to: {{ title }}</a>',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BDRReturnLinkComponent {

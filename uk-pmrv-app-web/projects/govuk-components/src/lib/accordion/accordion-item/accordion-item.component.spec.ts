@@ -17,6 +17,7 @@ describe('AccordionItemComponent', () => {
     f.nativeElement.querySelectorAll('.govuk-accordion__section-header');
 
   @Component({
+    standalone: false,
     template: `
       <govuk-accordion id="test-accordion" [openIndexes]="openIndexes">
         <govuk-accordion-item header="First item">

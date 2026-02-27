@@ -10,6 +10,7 @@ import { PRTRCodes } from 'pmrv-api';
 
 @Component({
   selector: 'app-prtr-summary',
+  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

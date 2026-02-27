@@ -9,6 +9,7 @@ import { resolveApplyStatus, resolveSubmitStatus } from './section-status';
 
 @Pipe({
   name: 'taskStatus',
+  standalone: false,
 })
 export class TaskStatusPipe implements PipeTransform {
   constructor(private readonly store: PermitSurrenderStore) {}

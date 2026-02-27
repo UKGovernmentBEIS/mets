@@ -4,7 +4,10 @@ import { ItemDTO } from 'pmrv-api';
 
 import { QuarterNamePipe } from './quarter-name.pipe';
 
-@Pipe({ name: 'itemName' })
+@Pipe({
+  name: 'itemName',
+  standalone: false,
+})
 export class ItemNamePipe implements PipeTransform {
   private readonly quarterNamePipe = new QuarterNamePipe();
 
@@ -535,9 +538,23 @@ export class ItemNamePipe implements PipeTransform {
       case 'BDRS2_APPLICATION_SUBMIT':
         return `Complete ${customField} stage 2 baseline data report`;
       case 'BDRS2_WAIT_FOR_VERIFICATION':
+      case 'BDRS2_AMEND_WAIT_FOR_VERIFICATION':
         return `${customField} stage 2 baseline data report sent to verifier`;
       case 'BDRS2_WAIT_FOR_REGULATOR_REVIEW':
         return `${customField} stage 2 baseline data report sent to regulator`;
+      case 'BDRS2_APPLICATION_VERIFICATION_SUBMIT':
+      case 'BDRS2_AMEND_APPLICATION_VERIFICATION_SUBMIT':
+        return `Verify ${customField} stage 2 baseline data report`;
+      case 'BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+        return `Review ${customField} stage 2 baseline data report`;
+      case 'BDRS2_WAIT_FOR_AMENDS':
+        return `${customField} stage 2 baseline data report returned to operator`;
+      case 'BDRS2_APPLICATION_AMENDS_SUBMIT':
+        return `Amend ${customField} stage 2 baseline data report`;
+      case 'BDRS2_APPLICATION_PEER_REVIEW':
+        return `Peer review ${customField} stage 2 baseline data report`;
+      case 'BDRS2_WAIT_FOR_PEER_REVIEW':
+        return `${customField} stage 2 baseline data report sent to peer reviewer`;
 
       //DOE
       case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':

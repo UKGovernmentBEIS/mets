@@ -6,6 +6,7 @@ import { OperatorAirImprovementResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-air-operator-response-data-item',
+  standalone: false,
   templateUrl: './air-operator-response-data-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

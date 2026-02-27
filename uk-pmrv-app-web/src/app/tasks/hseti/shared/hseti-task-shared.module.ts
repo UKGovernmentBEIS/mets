@@ -13,7 +13,6 @@ import { OverallDecisionSummaryTemplateComponent } from './components/overall-de
 import { PageTitleResolver } from './resolvers/page-title.resolver';
 
 @NgModule({
-  exports: [HseTiTaskComponent, HsetiTaskReviewComponent, OverallDecisionSummaryTemplateComponent],
   imports: [
     HseTiTaskComponent,
     HsetiTaskReviewComponent,
@@ -22,5 +21,6 @@ import { PageTitleResolver } from './resolvers/page-title.resolver';
     SharedModule,
   ],
   providers: [CapitalizeFirstPipe, HseTiService, ItemNamePipe, PageTitleResolver, TaskTypeToBreadcrumbPipe],
+  exports: [HseTiTaskComponent, HsetiTaskReviewComponent, OverallDecisionSummaryTemplateComponent],
 })
 export class HseTiTaskSharedModule {}

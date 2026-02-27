@@ -14,10 +14,9 @@ import { OperatorDetailsCorsiaFormProvider } from '../../operator-details-form.p
 
 @Component({
   selector: 'app-has-subsidiary-company',
+  imports: [HasSubsidiaryCompaniesTemplateComponent, ReturnToLinkComponent],
   templateUrl: './has-subsidiary-company.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [HasSubsidiaryCompaniesTemplateComponent, ReturnToLinkComponent],
 })
 export class HasSubsidiaryCompanyComponent extends BaseOperatorDetailsComponent {
   form = this.fb.group({

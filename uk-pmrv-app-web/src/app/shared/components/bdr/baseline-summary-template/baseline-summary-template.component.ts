@@ -8,9 +8,8 @@ import { BDR } from 'pmrv-api';
 
 @Component({
   selector: 'app-bdr-baseline-summary-template',
-  templateUrl: './baseline-summary-template.component.html',
-  standalone: true,
   imports: [SharedModule, RouterLink],
+  templateUrl: './baseline-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaselineSummaryTemplateComponent {

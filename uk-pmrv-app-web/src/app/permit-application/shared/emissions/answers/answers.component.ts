@@ -20,10 +20,11 @@ import { measurementDevicesFormProvider } from '../measurement-devices-form.prov
 
 @Component({
   selector: 'app-answers',
+  standalone: false,
   templateUrl: './answers.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [measurementDevicesFormProvider, DestroySubject],
   styleUrl: './answers.component.scss',
+  providers: [measurementDevicesFormProvider, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnswersComponent implements PendingRequest {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

@@ -22,9 +22,10 @@ interface YearlyOffsettingDataValidator {
 }
 
 @Injectable()
-export class ThreeYearOffsettingRequirementsFormProvider
-  implements TaskFormProvider<AviationAerCorsia3YearPeriodOffsetting, ThreeYearOffsettingRequirementsFormModel>
-{
+export class ThreeYearOffsettingRequirementsFormProvider implements TaskFormProvider<
+  AviationAerCorsia3YearPeriodOffsetting,
+  ThreeYearOffsettingRequirementsFormModel
+> {
   private readonly fb = inject(FormBuilder);
   private _form: FormGroup<ThreeYearOffsettingRequirementsFormModel>;
 

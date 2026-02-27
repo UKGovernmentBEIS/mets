@@ -26,9 +26,10 @@ import { createAnotherRole, monitoringRolesFormProvider } from './monitoring-rol
 
 @Component({
   selector: 'app-monitoring-roles',
+  standalone: false,
   templateUrl: './monitoring-roles.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject, monitoringRolesFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonitoringRolesComponent extends SectionComponent implements AfterViewInit, AfterContentChecked {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;

@@ -13,6 +13,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, SummaryOfConditions
 
 @Component({
   selector: 'app-identified-changes',
+  standalone: false,
   templateUrl: './identified-changes.component.html',
   providers: [identifiedChangesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

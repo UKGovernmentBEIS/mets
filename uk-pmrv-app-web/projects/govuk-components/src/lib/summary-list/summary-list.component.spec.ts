@@ -15,6 +15,7 @@ describe('SummaryListComponent', () => {
   let fixture3: ComponentFixture<TemplateTestComponent>;
 
   @Component({
+    standalone: false,
     template: '<dl govuk-summary-list [details]="details"></dl>',
   })
   class DetailsTestComponent {
@@ -25,6 +26,7 @@ describe('SummaryListComponent', () => {
   }
 
   @Component({
+    standalone: false,
     template: `
       <dl govuk-summary-list [details]="details">
         <ng-template #keyTemplate let-item>
@@ -44,6 +46,7 @@ describe('SummaryListComponent', () => {
   }
 
   @Component({
+    standalone: false,
     template: `
       <dl govuk-summary-list [details]="details">
         <div govukSummaryListRow>

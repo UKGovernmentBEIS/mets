@@ -60,8 +60,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-management-procedures-summary',
-  templateUrl: './management-procedures-summary.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
@@ -70,6 +68,7 @@ interface ViewModel {
     EmpReviewDecisionGroupComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,
   ],
+  templateUrl: './management-procedures-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementProceduresSummaryComponent {

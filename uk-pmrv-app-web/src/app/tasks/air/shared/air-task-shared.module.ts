@@ -16,6 +16,7 @@ import { AirService } from '@tasks/air/shared/services/air.service';
 import { AirImprovementResponseService } from '@tasks/air/shared/services/air-improvement-response.service';
 
 @NgModule({
+  imports: [AirSharedModule, RouterModule, SharedModule],
   declarations: [
     AirImprovementDataGroupComponent,
     AirImprovementDataGroupReviewComponent,
@@ -23,14 +24,6 @@ import { AirImprovementResponseService } from '@tasks/air/shared/services/air-im
     SubmitRespondStatusPipe,
     TaskStatusPipe,
   ],
-  exports: [
-    AirImprovementDataGroupComponent,
-    AirImprovementDataGroupReviewComponent,
-    AirTaskComponent,
-    SubmitRespondStatusPipe,
-    TaskStatusPipe,
-  ],
-  imports: [AirSharedModule, RouterModule, SharedModule],
   providers: [
     AirImprovementItemResolver,
     AirImprovementResponseGuard,
@@ -38,6 +31,13 @@ import { AirImprovementResponseService } from '@tasks/air/shared/services/air-im
     AirService,
     ItemNamePipe,
     TaskTypeToBreadcrumbPipe,
+  ],
+  exports: [
+    AirImprovementDataGroupComponent,
+    AirImprovementDataGroupReviewComponent,
+    AirTaskComponent,
+    SubmitRespondStatusPipe,
+    TaskStatusPipe,
   ],
 })
 export class AirTaskSharedModule {}

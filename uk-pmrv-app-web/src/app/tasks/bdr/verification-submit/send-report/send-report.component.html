@@ -1,5 +1,5 @@
 <app-bdr-task-review *ngIf="(isSubmitted$ | async) !== true; else submitted" heading="Send report to operator">
-  <ng-container *ngIf="isSendReportAvailable; else notAvailable">
+  <ng-container *ngIf="isSendReportAvailable(); else notAvailable">
     <p class="govuk-body govuk-!-width-two-thirds">
       By selecting ‘confirm and send’ you are confirming that the information you have provided in this report is
       correct to the best of your knowledge.

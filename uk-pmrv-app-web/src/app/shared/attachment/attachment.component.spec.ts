@@ -7,6 +7,7 @@ import { AttachmentComponent } from './attachment.component';
 
 describe('AttachmentComponent', () => {
   @Component({
+    standalone: false,
     template: '<app-attachment [title]="title" [url]="url" [type]="type" [size]="size"></app-attachment>',
   })
   class TestComponent {

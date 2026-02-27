@@ -7,6 +7,7 @@ import { DoalService } from '../../../core/doal.service';
 
 @Component({
   selector: 'app-preliminary-allocations',
+  standalone: false,
   templateUrl: './preliminary-allocations.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

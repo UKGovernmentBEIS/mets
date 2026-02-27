@@ -14,6 +14,7 @@ import { saveNotFoundRegulatorError } from '../errors/business-error';
 
 @Component({
   selector: 'app-delete',
+  standalone: false,
   templateUrl: './delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { fakeAsync, flush, TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed } from '@angular/core/testing';
 import { FormGroup, UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlSegment } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -37,8 +37,6 @@ describe('LegalEntityDetailsGuard', () => {
     guard = TestBed.inject(LegalEntityDetailsGuard);
     form = TestBed.inject(LEGAL_ENTITY_FORM_REG);
   });
-
-  afterEach(fakeAsync(() => flush()));
 
   it('should be created', () => {
     expect(guard).toBeTruthy();

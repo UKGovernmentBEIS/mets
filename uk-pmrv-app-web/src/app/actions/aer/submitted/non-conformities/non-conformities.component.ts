@@ -8,6 +8,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-non-conformities',
+  standalone: false,
   template: `
     <app-action-task header="Uncorrected non-conformities" [breadcrumb]="true">
       <app-non-conformities-group

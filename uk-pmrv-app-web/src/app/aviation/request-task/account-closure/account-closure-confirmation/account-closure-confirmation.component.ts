@@ -6,7 +6,6 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-account-closure-confirmation',
-  standalone: true,
   imports: [SharedModule, RouterModule],
   template: `
     <div class="govuk-grid-row">

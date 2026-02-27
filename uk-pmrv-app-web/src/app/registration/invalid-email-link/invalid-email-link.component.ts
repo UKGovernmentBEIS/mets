@@ -9,6 +9,7 @@ import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-invalid-email',
+  standalone: false,
   template: `
     <govuk-error-summary [form]="form"></govuk-error-summary>
 

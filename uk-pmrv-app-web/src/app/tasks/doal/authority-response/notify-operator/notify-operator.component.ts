@@ -11,13 +11,14 @@ import { DoalAuthorityResponseRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-doal-authority-response-notify-operator',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <app-notify-operator
           [taskId]="taskId$ | async"
           [accountId]="accountId$ | async"
-          [confirmationMessage]="'Notification sent successfully'"
+          confirmationMessage="Notification sent successfully"
           requestTaskActionType="DOAL_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION"
           [referenceCode]="requestId$ | async"
           [previewDocuments]="previewDocuments$ | async"></app-notify-operator>

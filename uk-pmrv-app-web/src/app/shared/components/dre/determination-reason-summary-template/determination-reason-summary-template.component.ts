@@ -6,6 +6,7 @@ import { Dre } from 'pmrv-api';
 
 @Component({
   selector: 'app-determination-reason-summary-template',
+  standalone: false,
   templateUrl: './determination-reason-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

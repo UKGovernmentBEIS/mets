@@ -7,6 +7,7 @@ import { ComplianceEtsService } from '@tasks/aer/verification-submit/compliance-
 
 @Component({
   selector: 'app-non-conformities',
+  standalone: false,
   templateUrl: './non-conformities.component.html',
   providers: [nonConformitiesFormProvider, ComplianceEtsService],
   changeDetection: ChangeDetectionStrategy.OnPush,

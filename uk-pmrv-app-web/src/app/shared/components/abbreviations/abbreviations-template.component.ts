@@ -23,9 +23,10 @@ import { WizardStepComponent } from '@shared/wizard/wizard-step.component';
 
 @Component({
   selector: 'app-abbreviations-template',
+  standalone: false,
   templateUrl: './abbreviations-template.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AbbreviationsTemplateComponent implements OnInit, AfterViewInit, AfterContentChecked {
   @Input() submitText = 'Confirm and complete';

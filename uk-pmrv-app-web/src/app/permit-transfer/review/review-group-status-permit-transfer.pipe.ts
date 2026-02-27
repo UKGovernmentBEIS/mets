@@ -10,6 +10,7 @@ import { PermitTransferStore } from '../store/permit-transfer.store';
 
 @Pipe({
   name: 'reviewGroupStatusPermitTransfer',
+  standalone: false,
 })
 export class ReviewGroupStatusPermitTransferPipe implements PipeTransform {
   constructor(private readonly store: PermitTransferStore) {}

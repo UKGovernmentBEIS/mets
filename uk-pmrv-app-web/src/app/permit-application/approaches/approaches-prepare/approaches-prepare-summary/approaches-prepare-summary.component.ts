@@ -5,9 +5,10 @@ import { DestroySubject } from '../../../../core/services/destroy-subject.servic
 
 @Component({
   selector: 'app-approaches-prepare-summary',
+  standalone: false,
   templateUrl: './approaches-prepare-summary.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApproachesPrepareSummaryComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;

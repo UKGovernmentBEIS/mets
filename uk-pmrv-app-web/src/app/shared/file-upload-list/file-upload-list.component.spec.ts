@@ -14,6 +14,7 @@ describe('FileUploadListComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-file-upload-list
         [listTitle]="listTitle"

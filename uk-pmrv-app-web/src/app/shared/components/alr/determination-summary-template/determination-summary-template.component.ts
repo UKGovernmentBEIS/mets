@@ -12,8 +12,6 @@ import { DeterminationProceedAuthoritySummaryTemplateComponent } from '../determ
 
 @Component({
   selector: 'app-alr-determination-summary-template',
-  templateUrl: './determination-summary-template.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     AlrTaskSharedModule,
@@ -21,6 +19,7 @@ import { DeterminationProceedAuthoritySummaryTemplateComponent } from '../determ
     DeterminationCloseSummaryTemplateComponent,
     RouterLink,
   ],
+  templateUrl: './determination-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrDeterminationSummaryTemplateComponent {

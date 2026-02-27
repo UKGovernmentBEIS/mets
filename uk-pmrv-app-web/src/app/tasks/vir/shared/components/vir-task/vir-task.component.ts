@@ -7,6 +7,7 @@ import { VirService } from '@tasks/vir/core/vir.service';
 
 @Component({
   selector: 'app-vir-task',
+  standalone: false,
   template: `
     <app-page-heading>{{ heading }}</app-page-heading>
     <ng-content></ng-content>

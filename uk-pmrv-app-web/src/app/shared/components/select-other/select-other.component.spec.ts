@@ -16,6 +16,7 @@ describe('SelectOtherComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-select-other formControlName="control">

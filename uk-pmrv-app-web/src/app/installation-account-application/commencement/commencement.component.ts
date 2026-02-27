@@ -11,6 +11,7 @@ import { InstallationAccountApplicationStore } from '../store/installation-accou
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-commencement',
+  standalone: false,
   templateUrl: './commencement.component.html',
   providers: [DestroySubject],
 })

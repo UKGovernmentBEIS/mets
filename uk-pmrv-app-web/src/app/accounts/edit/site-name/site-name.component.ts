@@ -10,6 +10,7 @@ import { InstallationAccountPermitDTO, InstallationAccountUpdateService } from '
 
 @Component({
   selector: 'app-site-name',
+  standalone: false,
   template: `
     <app-page-heading size="l">Edit site name</app-page-heading>
 
@@ -25,7 +26,6 @@ import { InstallationAccountPermitDTO, InstallationAccountUpdateService } from '
 
     <a govukLink routerLink="../..">Return to: Installation details</a>
   `,
-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SiteNameComponent {

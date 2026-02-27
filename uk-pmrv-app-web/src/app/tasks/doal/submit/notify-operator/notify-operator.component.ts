@@ -12,13 +12,14 @@ import { CommonTasksStore } from '../../../store/common-tasks.store';
 
 @Component({
   selector: 'app-doal-submit-notify-operator',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <app-notify-operator
           [taskId]="taskId$ | async"
           [accountId]="accountId$ | async"
-          [confirmationMessage]="'Operator has been notified'"
+          confirmationMessage="Operator has been notified"
           requestTaskActionType="DOAL_PROCEED_TO_AUTHORITY_AND_NOTIFY_OPERATOR_FOR_DECISION"
           [referenceCode]="requestId$ | async"
           [previewDocuments]="previewDocuments$ | async"></app-notify-operator>

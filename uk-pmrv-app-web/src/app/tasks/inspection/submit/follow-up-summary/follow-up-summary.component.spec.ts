@@ -58,7 +58,7 @@ describe('FollowUpSummaryComponent', () => {
       ['Uploaded files', 'aircraftdata2 1.csv'],
       ['Action type', 'Non-conformity'],
       ['Explanation', 'Vitae facere est as'],
-      ['Response deadline', '20 February 2026'],
+      ['Response deadline', '20 February 2099'],
     ]);
   });
 
@@ -120,7 +120,7 @@ describe('FollowUpSummaryComponent', () => {
       ['Uploaded files', 'aircraftdata2 1.csv'],
       ['Action type', 'Non-conformity'],
       ['Explanation', 'Vitae facere est as'],
-      ['Response deadline', '20 February 2026'],
+      ['Response deadline', '20 February 2099'],
     ]);
   });
 });

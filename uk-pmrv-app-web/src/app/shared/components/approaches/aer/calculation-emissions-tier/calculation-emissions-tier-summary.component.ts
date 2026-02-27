@@ -18,6 +18,7 @@ import {
 
 @Component({
   selector: 'app-calculation-emissions-tier-summary',
+  standalone: false,
   templateUrl: './calculation-emissions-tier-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

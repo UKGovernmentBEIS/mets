@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
 
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
@@ -12,9 +12,8 @@ import { ReportingObligationFormProvider } from '../reporting-obligation-form.pr
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-reporting-obligation-form',
+  imports: [GovukComponentsModule, NgIf, SharedModule],
   templateUrl: './reporting-obligation-form.component.html',
-  imports: [GovukComponentsModule, NgIf, NgFor, SharedModule],
-  standalone: true,
   viewProviders: [existingControlContainer],
 })
 export class ReportingObligationFormComponent {

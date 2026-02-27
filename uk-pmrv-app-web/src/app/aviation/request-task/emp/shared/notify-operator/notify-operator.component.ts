@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -10,7 +10,6 @@ import {
   variationSubmitRegulatorLedRequestTaskTypes,
 } from '@aviation/request-task/emp/shared/util/emp.util';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { ReviewDeterminationStatus } from '@permit-application/review/types/review.permit.type';
 import { DocumentFilenameAndDocumentType } from '@shared/interfaces/previewDocumentFilenameAndDocumentType';
 import { SharedModule } from '@shared/shared.module';
@@ -34,8 +33,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-emp-notify-operator',
-  standalone: true,
-  imports: [GovukComponentsModule, SharedModule, RouterLinkWithHref, ReturnToLinkComponent],
+  imports: [GovukComponentsModule, SharedModule],
   template: `
     <div class="govuk-grid-row" *ngIf="vm$ | async as vm">
       <div class="govuk-grid-column-two-thirds">

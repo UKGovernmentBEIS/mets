@@ -8,6 +8,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-details',
+  standalone: false,
   template: `
     <app-page-heading>Installation details</app-page-heading>
     <app-installation-details-group [payload]="payload$ | async"></app-installation-details-group>

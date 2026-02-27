@@ -15,6 +15,7 @@ import { PaymentStore } from '../../store/payment.store';
 
 @Component({
   selector: 'app-options',
+  standalone: false,
   templateUrl: './options.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

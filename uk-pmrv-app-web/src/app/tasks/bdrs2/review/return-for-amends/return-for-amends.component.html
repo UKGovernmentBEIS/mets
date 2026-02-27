@@ -1,0 +1,58 @@
+@if ((isSubmitted$ | async) === false) {
+  <app-bdrs2-task-review [breadcrumb]="true" heading="Return for amendments">
+    <p class="govuk-body">Check your information before sending</p>
+    @if (payload()) {
+      @for (decision of decisionAmends(); track decision) {
+        <div>
+          <h2 app-summary-header class="govuk-heading-m">Stage 2 baseline data report details</h2>
+
+          <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Changes required</dt>
+              <dd govukSummaryListRowValue>
+                @for (requiredChange of decision.data.details?.requiredChanges; track $index) {
+                  <div class="pre-wrap">
+                    {{ $index + 1 }}. {{ requiredChange.reason }}
+                    <br />
+                    @if (requiredChange?.files?.length > 0) {
+                      <app-summary-download-files
+                        [files]="
+                          bdrs2Service.getRegulatorDownloadUrlFiles(requiredChange?.files)
+                        "></app-summary-download-files>
+                    }
+                  </div>
+                  @if (!$last) {
+                    <br />
+                  }
+                }
+              </dd>
+            </div>
+            @if (decision?.data?.details?.notes) {
+              <div govukSummaryListRow>
+                <dt govukSummaryListRowKey>Notes</dt>
+                <dd govukSummaryListRowValue class="pre-wrap">{{ decision.data.details.notes }}</dd>
+              </div>
+            }
+          </dl>
+        </div>
+      }
+    }
+
+    @if ((store.isEditable$ | async) === true) {
+      <div class="govuk-button-group">
+        <button appPendingButton govukButton type="button" (click)="onSubmit()">Confirm and complete</button>
+      </div>
+    }
+  </app-bdrs2-task-review>
+} @else {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="Returned to the operator for amendments"></govuk-panel>
+
+      <h3 class="govuk-heading-m">What happens next</h3>
+      <p class="govuk-body">The operator will return the application to you when the amendments have been made.</p>
+
+      <a govukLink routerLink="/dashboard">Return to dashboard</a>
+    </div>
+  </div>
+}

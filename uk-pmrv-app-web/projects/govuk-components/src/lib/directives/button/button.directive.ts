@@ -1,8 +1,10 @@
+/* eslint-disable @angular-eslint/prefer-host-metadata-property */
 import { Directive, ElementRef, HostBinding, HostListener } from '@angular/core';
 
 @Directive({
   selector:
     'a[govukButton], a[govukSecondaryButton], a[govukWarnButton], button[govukButton], button[govukWarnButton], button[govukSecondaryButton]',
+  standalone: false,
 })
 export class ButtonDirective {
   constructor(private readonly elementRef: ElementRef) {}

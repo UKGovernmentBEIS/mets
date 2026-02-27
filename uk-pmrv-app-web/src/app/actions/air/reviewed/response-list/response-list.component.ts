@@ -8,6 +8,7 @@ import { AirService } from '../../core/air.service';
 
 @Component({
   selector: 'app-response-list',
+  standalone: false,
   templateUrl: './response-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

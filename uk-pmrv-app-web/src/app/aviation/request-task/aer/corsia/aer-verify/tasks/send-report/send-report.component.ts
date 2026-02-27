@@ -17,7 +17,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-send-report',
-  standalone: true,
   imports: [ReturnToLinkComponent, SharedModule, RouterLink],
   templateUrl: './send-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

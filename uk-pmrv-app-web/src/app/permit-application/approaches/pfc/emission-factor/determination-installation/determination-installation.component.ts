@@ -12,9 +12,10 @@ import { determinationInstallationFormProvider } from './determination-installat
 
 @Component({
   selector: 'app-determination-installation',
+  standalone: false,
   templateUrl: './determination-installation.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [determinationInstallationFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeterminationInstallationComponent implements PendingRequest {
   constructor(

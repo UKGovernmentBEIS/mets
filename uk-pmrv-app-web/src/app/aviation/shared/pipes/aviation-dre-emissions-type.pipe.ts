@@ -10,8 +10,8 @@ const AVIATION_DRE_EMISSIONS_SELECTION = {
 
 @Pipe({
   name: 'aviationDreEmissionsType',
-  pure: true,
   standalone: true,
+  pure: true,
 })
 export class AviationDreEmissionsTypePipe implements PipeTransform {
   transform(value: AviationDreEmissionsCalculationApproach['type']): string | null {

@@ -11,9 +11,8 @@ import { ManagementProceduresCorsiaFormProvider } from '../management-procedures
 
 @Component({
   selector: 'app-management-procedures-explanation-risks',
-  templateUrl: './management-procedures-explanation-risks.component.html',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent],
+  templateUrl: './management-procedures-explanation-risks.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementProceduresExplanationRisksComponent {

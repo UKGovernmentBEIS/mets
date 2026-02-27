@@ -1,6 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'measurementUnitType' })
+@Pipe({
+  name: 'measurementUnitType',
+  standalone: false,
+})
 export class MeasurementUnitTypePipe implements PipeTransform {
   transform(value): string {
     switch (value) {

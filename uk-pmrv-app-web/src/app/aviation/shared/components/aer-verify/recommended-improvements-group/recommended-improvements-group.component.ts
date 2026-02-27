@@ -9,9 +9,8 @@ import { VerifierComment } from 'pmrv-api';
 
 @Component({
   selector: 'app-recommended-improvements-group-template',
-  templateUrl: './recommended-improvements-group.component.html',
   imports: [GovukComponentsModule, SharedModule, RouterModule],
-  standalone: true,
+  templateUrl: './recommended-improvements-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecommendedImprovementsGroupComponent {

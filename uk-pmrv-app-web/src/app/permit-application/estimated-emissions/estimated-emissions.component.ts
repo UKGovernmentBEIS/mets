@@ -17,9 +17,10 @@ import { estimatedEmissionsFormProvider } from './estimated-emissions-form.provi
 
 @Component({
   selector: 'app-estimated-emissions',
+  standalone: false,
   templateUrl: './estimated-emissions.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject, estimatedEmissionsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EstimatedEmissionsComponent extends SectionComponent implements OnInit, PendingRequest {
   category$ = new BehaviorSubject<string>(null);

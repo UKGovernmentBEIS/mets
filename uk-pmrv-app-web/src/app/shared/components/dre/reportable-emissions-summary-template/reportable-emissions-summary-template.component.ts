@@ -28,6 +28,7 @@ interface EmissionRow {
 
 @Component({
   selector: 'app-reportable-emissions-summary-template',
+  standalone: false,
   templateUrl: './reportable-emissions-summary-template.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,

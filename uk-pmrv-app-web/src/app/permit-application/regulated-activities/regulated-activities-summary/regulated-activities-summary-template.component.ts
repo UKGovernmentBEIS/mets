@@ -4,6 +4,7 @@ import { GovukTableColumn } from 'govuk-components';
 
 @Component({
   selector: 'app-regulated-activities-summary-template',
+  standalone: false,
   template: `
     <govuk-table
       [columns]="columns"

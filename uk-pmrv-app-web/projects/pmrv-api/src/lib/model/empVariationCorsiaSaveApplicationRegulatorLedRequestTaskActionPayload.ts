@@ -13,8 +13,7 @@ import { EmissionsMonitoringPlanCorsia } from './emissionsMonitoringPlanCorsia';
 import { EmpVariationCorsiaDetails } from './empVariationCorsiaDetails';
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface EmpVariationCorsiaSaveApplicationRegulatorLedRequestTaskActionPayload
-  extends RequestTaskActionPayload {
+export interface EmpVariationCorsiaSaveApplicationRegulatorLedRequestTaskActionPayload extends RequestTaskActionPayload {
   reasonRegulatorLed?: string;
   emissionsMonitoringPlan?: EmissionsMonitoringPlanCorsia;
   empVariationDetails?: EmpVariationCorsiaDetails;

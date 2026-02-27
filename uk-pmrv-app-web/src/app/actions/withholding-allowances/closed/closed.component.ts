@@ -9,6 +9,7 @@ import { WithholdingAllowancesActionService } from '../core/withholding-allowanc
 
 @Component({
   selector: 'app-closed',
+  standalone: false,
   templateUrl: './closed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

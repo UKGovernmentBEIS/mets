@@ -7,9 +7,8 @@ import { BaseDataGapsComponent } from '../base-data-gaps.component';
 
 @Component({
   selector: 'app-other-data-gaps-types',
-  templateUrl: './other-data-gaps-types.component.html',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent],
+  templateUrl: './other-data-gaps-types.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OtherDataGapsTypesComponent extends BaseDataGapsComponent {

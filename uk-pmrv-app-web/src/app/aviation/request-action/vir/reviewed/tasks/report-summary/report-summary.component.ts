@@ -18,7 +18,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-report-summary',
-  standalone: true,
   imports: [SharedModule, RequestActionTaskComponent, VirSharedModule],
   template: `
     <app-request-action-task

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-approaches-prepare-template',
+  standalone: false,
   templateUrl: './approaches-prepare-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

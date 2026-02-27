@@ -6,6 +6,7 @@ import { VerificationReportOfTheActivityLevelReport } from 'pmrv-api';
 
 @Component({
   selector: 'app-verification-report-summary-template',
+  standalone: false,
   templateUrl: './verification-report-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

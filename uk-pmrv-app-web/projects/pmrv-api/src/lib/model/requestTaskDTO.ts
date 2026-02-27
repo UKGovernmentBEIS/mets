@@ -43,7 +43,11 @@ import { BDRApplicationRegulatorReviewSubmitRequestTaskPayload } from './bDRAppl
 import { BDRApplicationSubmitRequestTaskPayload } from './bDRApplicationSubmitRequestTaskPayload';
 import { BDRApplicationVerificationSubmitRequestTaskPayload } from './bDRApplicationVerificationSubmitRequestTaskPayload';
 import { BDRApplicationWaitForRegulatorReviewRequestTaskPayload } from './bDRApplicationWaitForRegulatorReviewRequestTaskPayload';
+import { BDRS2ApplicationAmendsSubmitRequestTaskPayload } from './bDRS2ApplicationAmendsSubmitRequestTaskPayload';
+import { BDRS2ApplicationRegulatorReviewSubmitRequestTaskPayload } from './bDRS2ApplicationRegulatorReviewSubmitRequestTaskPayload';
 import { BDRS2ApplicationSubmitRequestTaskPayload } from './bDRS2ApplicationSubmitRequestTaskPayload';
+import { BDRS2ApplicationVerificationSubmitRequestTaskPayload } from './bDRS2ApplicationVerificationSubmitRequestTaskPayload';
+import { BDRS2ApplicationWaitForRegulatorReviewRequestTaskPayload } from './bDRS2ApplicationWaitForRegulatorReviewRequestTaskPayload';
 import { DoalApplicationSubmitRequestTaskPayload } from './doalApplicationSubmitRequestTaskPayload';
 import { DoalAuthorityResponseRequestTaskPayload } from './doalAuthorityResponseRequestTaskPayload';
 import { DreApplicationSubmitRequestTaskPayload } from './dreApplicationSubmitRequestTaskPayload';
@@ -309,9 +313,16 @@ export interface RequestTaskDTO {
     | 'BDR_APPLICATION_PEER_REVIEW'
     | 'BDR_WAIT_FOR_PEER_REVIEW'
     | 'BDRS2_APPLICATION_SUBMIT'
-    | 'BDRS2_WAIT_FOR_REGULATOR_REVIEW'
-    | 'BDRS2_WAIT_FOR_VERIFICATION'
     | 'BDRS2_APPLICATION_VERIFICATION_SUBMIT'
+    | 'BDRS2_WAIT_FOR_REGULATOR_REVIEW'
+    | 'BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+    | 'BDRS2_APPLICATION_PEER_REVIEW'
+    | 'BDRS2_WAIT_FOR_PEER_REVIEW'
+    | 'BDRS2_WAIT_FOR_VERIFICATION'
+    | 'BDRS2_APPLICATION_AMENDS_SUBMIT'
+    | 'BDRS2_WAIT_FOR_AMENDS'
+    | 'BDRS2_AMEND_APPLICATION_VERIFICATION_SUBMIT'
+    | 'BDRS2_AMEND_WAIT_FOR_VERIFICATION'
     | 'PERMANENT_CESSATION_APPLICATION_SUBMIT'
     | 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW'
     | 'PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW'
@@ -493,7 +504,11 @@ export interface RequestTaskDTO {
     | BDRApplicationSubmitRequestTaskPayload
     | BDRApplicationVerificationSubmitRequestTaskPayload
     | BDRApplicationWaitForRegulatorReviewRequestTaskPayload
+    | BDRS2ApplicationAmendsSubmitRequestTaskPayload
+    | BDRS2ApplicationRegulatorReviewSubmitRequestTaskPayload
     | BDRS2ApplicationSubmitRequestTaskPayload
+    | BDRS2ApplicationVerificationSubmitRequestTaskPayload
+    | BDRS2ApplicationWaitForRegulatorReviewRequestTaskPayload
     | DoalApplicationSubmitRequestTaskPayload
     | DoalAuthorityResponseRequestTaskPayload
     | DreApplicationSubmitRequestTaskPayload

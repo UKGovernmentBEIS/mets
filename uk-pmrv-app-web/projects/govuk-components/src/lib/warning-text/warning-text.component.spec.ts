@@ -8,6 +8,7 @@ describe('WarningTextComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
+    standalone: false,
     template: `
       <govuk-warning-text [assistiveText]="text">Test warning</govuk-warning-text>
     `,

@@ -22,9 +22,10 @@ export interface AviationAerCorsiaOpinionStatementFormModel {
 }
 
 @Injectable()
-export class MonitoringApproachFormProvider
-  implements TaskFormProvider<AviationAerCorsiaOpinionStatement, AviationAerCorsiaOpinionStatementFormModel>
-{
+export class MonitoringApproachFormProvider implements TaskFormProvider<
+  AviationAerCorsiaOpinionStatement,
+  AviationAerCorsiaOpinionStatementFormModel
+> {
   private _form: FormGroup<AviationAerCorsiaOpinionStatementFormModel>;
   private destroy$ = new Subject<void>();
 

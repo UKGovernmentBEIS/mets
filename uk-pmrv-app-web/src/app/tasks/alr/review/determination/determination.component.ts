@@ -12,10 +12,9 @@ import { ALRApplicationRegulatorReviewSubmitRequestTaskPayload, DoalDeterminatio
 
 @Component({
   selector: 'app-alr-determination',
+  imports: [SharedModule, AlrTaskSharedModule],
   templateUrl: './determination.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [SharedModule, AlrTaskSharedModule],
 })
 export class AlrDeterminationComponent {
   editable$ = this.alrService.isEditable$;

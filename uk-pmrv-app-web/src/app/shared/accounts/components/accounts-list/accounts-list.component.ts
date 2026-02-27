@@ -4,6 +4,7 @@ import { AccountSearchResult } from '@shared/accounts';
 
 @Component({
   selector: 'app-accounts-list',
+  standalone: false,
   templateUrl: './accounts-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

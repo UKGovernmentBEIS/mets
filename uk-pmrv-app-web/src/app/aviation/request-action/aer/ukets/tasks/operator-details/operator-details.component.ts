@@ -23,7 +23,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-operator-details',
-  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

@@ -10,9 +10,10 @@ import { EmpBlockOnBlockOffMethodProcedures } from 'pmrv-api';
 import { ProcedureFormBuilder, ProcedureFormModel } from '../procedure-form-step';
 
 @Injectable()
-export class BlockProceduresFormProvider
-  implements TaskFormProvider<EmpBlockOnBlockOffMethodProcedures, ProcedureFormModel>
-{
+export class BlockProceduresFormProvider implements TaskFormProvider<
+  EmpBlockOnBlockOffMethodProcedures,
+  ProcedureFormModel
+> {
   private _form: FormGroup<ProcedureFormModel>;
 
   private destroy$ = new Subject<void>();

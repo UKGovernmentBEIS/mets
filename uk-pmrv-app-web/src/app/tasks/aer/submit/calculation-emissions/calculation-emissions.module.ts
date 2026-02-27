@@ -24,6 +24,7 @@ import { TransferredComponent } from './transferred/transferred.component';
 import { TransferredDetailsComponent } from './transferred-details/transferred-details.component';
 
 @NgModule({
+  imports: [AerSharedModule, CalculationEmissionsRoutingModule, SharedModule],
   declarations: [
     ActivityCalculationAggregationComponent,
     ActivityCalculationContinuousComponent,
@@ -44,6 +45,5 @@ import { TransferredDetailsComponent } from './transferred-details/transferred-d
     TransferredComponent,
     TransferredDetailsComponent,
   ],
-  imports: [AerSharedModule, CalculationEmissionsRoutingModule, SharedModule],
 })
 export class CalculationEmissionsModule {}

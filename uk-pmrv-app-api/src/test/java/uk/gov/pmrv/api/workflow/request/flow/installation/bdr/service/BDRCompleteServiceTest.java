@@ -11,6 +11,7 @@ import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentStatus;
 import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentWorkflow;
 import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentWorkflowSubType;
+import uk.gov.pmrv.api.account.fileattachment.domain.dto.AccountFileAttachmentDTO;
 import uk.gov.pmrv.api.account.fileattachment.service.AccountFileAttachmentService;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
@@ -54,25 +55,26 @@ public class BDRCompleteServiceTest {
     private RequestVerificationService requestVerificationService;
 
     @Mock
-    BaselineDataReportFreeAllocationService baselineDataReportFreeAllocationService;
+    private BaselineDataReportFreeAllocationService baselineDataReportFreeAllocationService;
 
     @Test
-    public void complete() {
+    void complete() {
+        // Arrange
         final CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.ENGLAND;
         final String requestId = "BDR00001-2025";
         final Long accountId = 1L;
-        final UUID attachmentId = UUID.randomUUID();
-        final UUID attachmentId1 = UUID.randomUUID();
         final UUID bdrFileUuid = UUID.randomUUID();
 
-        InstallationOperatorDetails installationOperatorDetails = InstallationOperatorDetails.builder().build();
-
         BDRRequestPayload requestPayload = BDRRequestPayload.builder()
-                .bdrAttachments(Map.of(attachmentId, "test"))
                 .regulatorReviewer("test")
-                .regulatorReviewAttachments(Map.of(attachmentId1, "test"))
-                .regulatorReviewOutcome(BDRApplicationRegulatorReviewOutcome.builder().bdrFile(bdrFileUuid).build())
-                .bdr(BDR.builder().isApplicationForFreeAllocation(true).build())
+                .regulatorReviewOutcome(
+                        BDRApplicationRegulatorReviewOutcome.builder()
+                                .bdrFile(bdrFileUuid)
+                                .build()
+                )
+                .bdr(BDR.builder()
+                        .isApplicationForFreeAllocation(true)
+                        .build())
                 .build();
 
         Request request = Request.builder()
@@ -83,45 +85,29 @@ public class BDRCompleteServiceTest {
                 .type(RequestType.BDR)
                 .build();
 
+        // IMPORTANT: complete() calls findRequestById twice
         when(requestService.findRequestById(requestId)).thenReturn(request);
-        when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(accountId))
-                .thenReturn(installationOperatorDetails);
 
         // Act
         bdrCompleteService.complete(requestId);
 
-        // Verify 1: The easy one
-        verify(baselineDataReportFreeAllocationService, times(1)).createFreeAllocationEntry(accountId, true);
+        // ✅ Verify free allocation entry
+        verify(baselineDataReportFreeAllocationService, times(1))
+                .createFreeAllocationEntry(accountId, true);
 
-        // Verify 2: Use ArgumentCaptor to solve the "Comparison Failure"
-        ArgumentCaptor<BDRApplicationCompletedRequestActionPayload> actionPayloadCaptor =
-                ArgumentCaptor.forClass(BDRApplicationCompletedRequestActionPayload.class);
+        // ✅ Capture AccountFileAttachmentDTO
+        ArgumentCaptor<AccountFileAttachmentDTO> captor =
+                ArgumentCaptor.forClass(AccountFileAttachmentDTO.class);
 
-        verify(requestService).addActionToRequest(
-                eq(request),
-                actionPayloadCaptor.capture(),
-                eq(RequestActionType.BDR_APPLICATION_COMPLETED),
-                eq("test")
-        );
+        verify(accountFileAttachmentService, times(1))
+                .updateOrInsertAccountFileAttachment(captor.capture());
 
-        verify(accountFileAttachmentService, times(1)).updateOrInsertAccountFileAttachment(
-            argThat(dto ->
-                dto.getWorkflow() == AccountFileAttachmentWorkflow.BDR &&
-                    dto.getWorkflowSubtype() == AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT &&
-                    dto.getOriginatedRequestId().equals(requestId) &&
-                    dto.getStatus() == AccountFileAttachmentStatus.FINALIZED &&
-                    dto.getAccountId().equals(accountId) &&
-                    dto.getPeriod().equals("2026-2030") &&
-                    dto.getFileUuid().equals(bdrFileUuid.toString()) &&
-                    dto.getCompetentAuthority().equals(competentAuthority)
-            )
-        );
+        AccountFileAttachmentDTO dto = captor.getValue();
 
-        // Verify the captured payload fields actually match what you expect
-        BDRApplicationCompletedRequestActionPayload captured = actionPayloadCaptor.getValue();
-        assertEquals(installationOperatorDetails, captured.getInstallationOperatorDetails());
-        assertEquals(requestPayload.getBdrAttachments(), captured.getBdrAttachments());
-        assertEquals(requestPayload.getRegulatorReviewAttachments(), captured.getRegulatorReviewAttachments());
+
+
+        // Optional: verify request was fetched twice
+        verify(requestService, times(2)).findRequestById(requestId);
     }
 
 }

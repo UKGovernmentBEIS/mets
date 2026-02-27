@@ -15,6 +15,7 @@ describe('VerifyEmissionsReductionClaimGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-verify-emissions-reduction-claim-group
         [isEditable]="isEditable"

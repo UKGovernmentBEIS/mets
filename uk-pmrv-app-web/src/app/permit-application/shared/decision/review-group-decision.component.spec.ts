@@ -39,6 +39,7 @@ describe('ReviewGroupDecisionComponent', () => {
   );
 
   @Component({
+    standalone: false,
     template: `
       <app-review-group-decision
         [canEdit]="canEdit"

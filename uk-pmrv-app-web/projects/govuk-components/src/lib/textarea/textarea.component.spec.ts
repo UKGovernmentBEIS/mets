@@ -10,6 +10,7 @@ import { TextareaComponent } from './textarea.component';
 
 describe('TextareaComponent', () => {
   @Component({
+    standalone: false,
     template: '<div govuk-textarea [formControl]="control" [maxLength]="maxLength"></div>',
   })
   class TestComponent {

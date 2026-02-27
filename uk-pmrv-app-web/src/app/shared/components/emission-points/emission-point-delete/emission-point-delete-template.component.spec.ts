@@ -15,6 +15,7 @@ describe('EmissionPointDeleteTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-emission-point-delete-template
         (delete)="onDelete()"

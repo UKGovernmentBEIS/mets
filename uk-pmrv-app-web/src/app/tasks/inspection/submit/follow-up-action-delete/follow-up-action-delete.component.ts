@@ -11,7 +11,6 @@ import { followUpStatusKeySubmit } from '@tasks/inspection/shared/section-status
 
 @Component({
   selector: 'app-follow-up-action-delete',
-  standalone: true,
   imports: [SharedModule, RouterLink],
   template: `
     <div class="govuk-!-width-two-thirds">

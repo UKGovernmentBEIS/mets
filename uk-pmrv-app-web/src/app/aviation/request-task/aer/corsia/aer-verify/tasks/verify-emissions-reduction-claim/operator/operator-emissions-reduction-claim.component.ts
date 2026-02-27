@@ -21,7 +21,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-operator-emissions-reduction-claim',
-  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent, AerEmissionsReductionClaimCorsiaTemplateComponent],
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
@@ -33,7 +33,6 @@ interface ViewModel {
     <app-return-to-link></app-return-to-link>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, ReturnToLinkComponent, AerEmissionsReductionClaimCorsiaTemplateComponent],
 })
 export class OperatorEmissionsReductionClaimComponent {
   vm$: Observable<ViewModel> = combineLatest([

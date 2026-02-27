@@ -20,6 +20,7 @@ import { existingControlContainer } from '../providers/control-container.factory
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-boolean-radio-group',
+  standalone: false,
   templateUrl: './boolean-radio-group.component.html',
   providers: [existingControlContainer],
   viewProviders: [existingControlContainer],

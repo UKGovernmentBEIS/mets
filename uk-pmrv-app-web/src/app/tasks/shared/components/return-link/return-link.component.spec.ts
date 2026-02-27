@@ -14,10 +14,14 @@ describe('ReturnLinkComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
   let page: Page;
 
-  @Component({ template: '<router-outlet></router-outlet>' })
+  @Component({
+    standalone: false,
+    template: '<router-outlet></router-outlet>',
+  })
   class TestComponent {}
 
   @Component({
+    standalone: false,
     template: '<app-task-return-link [levelsUp]="2" taskType="DOAL_APPLICATION_SUBMIT"></app-task-return-link>',
   })
   class ChildComponent {}

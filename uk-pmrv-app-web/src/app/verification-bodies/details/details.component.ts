@@ -17,9 +17,10 @@ import { VERIFICATION_BODY_FORM, verificationBodyFormFactory } from '../form/for
 
 @Component({
   selector: 'app-details',
+  standalone: false,
   templateUrl: './details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject, verificationBodyFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsComponent implements OnInit {
   isSummaryDisplayed$ = new BehaviorSubject<boolean>(false);

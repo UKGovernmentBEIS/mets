@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
@@ -12,16 +12,15 @@ import { BDRApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-bdr-opinion-statement-summary',
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   templateUrl: './opinion-statement-summary.component.html',
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpinionStatementSummaryComponent {
-  isEditable: Signal<boolean> = this.bdrService.isEditable;
-  bdrPayload: Signal<BDRApplicationVerificationSubmitRequestTaskPayload> = this.bdrService.payload;
+  readonly isEditable: Signal<boolean> = this.bdrService.isEditable;
+  readonly bdrPayload: Signal<BDRApplicationVerificationSubmitRequestTaskPayload> = this.bdrService.payload;
 
-  opinionStatementFiles: Signal<AttachedFile[]> = computed(() => {
+  readonly opinionStatementFiles: Signal<AttachedFile[]> = computed(() => {
     const payload = this.bdrPayload();
 
     return payload?.verificationReport?.opinionStatement?.opinionStatementFiles
@@ -31,7 +30,7 @@ export class OpinionStatementSummaryComponent {
       : [];
   });
 
-  hideSubmit: Signal<boolean> = computed(() => {
+  readonly hideSubmit: Signal<boolean> = computed(() => {
     const isEditable = this.isEditable();
     return !isEditable || this.bdrPayload().verificationSectionsCompleted?.['opinionStatement']?.[0];
   });

@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { SourceStream } from 'pmrv-api';
 
-@Pipe({ name: 'sourceStreamType' })
+@Pipe({
+  name: 'sourceStreamType',
+  standalone: false,
+})
 export class SourceStreamTypePipe implements PipeTransform {
   transform(value: SourceStream['type']): string {
     switch (value) {

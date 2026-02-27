@@ -8,7 +8,6 @@ import { aerReviewCorsiaHeaderTaskMap } from '@aviation/request-task/aer/corsia/
 import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { showReviewDecisionComponent } from '@aviation/request-task/util';
-import { FlightDataTableComponent } from '@aviation/shared/components/aer/flight-data-table';
 import { TotalEmissionAviationAerCorsia } from '@aviation/shared/components/aer-corsia/total-emission-aviation-aer-corsia.model';
 import { TotalEmissionsCorsiaAerodromePairsTableTemplateComponent } from '@aviation/shared/components/aer-corsia/total-emissions-corsia-aerodrome-pairs-table-template/total-emissions-corsia-aerodrome-pairs-table-template.component';
 import { TotalEmissionsCorsiaSchemeYearSummaryComponent } from '@aviation/shared/components/aer-corsia/total-emissions-corsia-scheme-year-summary';
@@ -33,11 +32,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-total-emissions',
-  standalone: true,
   imports: [
     ReturnToLinkComponent,
     SharedModule,
-    FlightDataTableComponent,
     TotalEmissionsCorsiaAerodromePairsTableTemplateComponent,
     TotalEmissionsCorsiaSchemeYearSummaryComponent,
     TotalEmissionsCorsiaStandardFuelsTableTemplateComponent,

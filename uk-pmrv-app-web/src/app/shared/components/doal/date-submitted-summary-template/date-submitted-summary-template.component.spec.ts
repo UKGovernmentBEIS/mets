@@ -14,6 +14,7 @@ describe('DateSubmittedSummaryTemplateComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-doal-date-submitted-summary-template
         [dateSubmittedToAuthority]="dateSubmittedToAuthority"

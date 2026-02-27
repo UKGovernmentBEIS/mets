@@ -17,9 +17,10 @@ import { inherentCO2FormProvider } from './inherent-co2-form.provider';
 
 @Component({
   selector: 'app-inherent-co2',
+  standalone: false,
   templateUrl: './inherent-co2.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [inherentCO2FormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InherentCO2Component extends SectionComponent implements PendingRequest {
   displayErrors$ = new BehaviorSubject<boolean>(false);

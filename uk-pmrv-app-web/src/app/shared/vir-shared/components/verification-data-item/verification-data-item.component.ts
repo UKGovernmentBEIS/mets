@@ -4,6 +4,7 @@ import { VerificationDataItem } from '../../types/verification-data-item.type';
 
 @Component({
   selector: 'app-verification-data-item',
+  standalone: false,
   template: `
     <dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0">
       <div govukSummaryListRow>

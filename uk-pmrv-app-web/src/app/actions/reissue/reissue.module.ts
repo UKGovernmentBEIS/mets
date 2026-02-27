@@ -7,7 +7,7 @@ import { CompletedComponent } from './completed/completed.component';
 import { ReissueRoutingModule } from './reissue-routing.module';
 
 @NgModule({
-  declarations: [CompletedComponent],
   imports: [ActionSharedModule, ReissueRoutingModule, SharedModule, SharedUserModule],
+  declarations: [CompletedComponent],
 })
 export class ReissueModule {}

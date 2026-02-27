@@ -15,9 +15,10 @@ export interface MethodBProceduresFormModel {
 }
 
 @Injectable()
-export class MethodBProceduresFormProvider
-  implements TaskFormProvider<EmpMethodBProcedures, MethodBProceduresFormModel>
-{
+export class MethodBProceduresFormProvider implements TaskFormProvider<
+  EmpMethodBProcedures,
+  MethodBProceduresFormModel
+> {
   private _form: FormGroup<MethodBProceduresFormModel>;
   private fb = inject(FormBuilder);
   private destroy$ = new Subject<void>();

@@ -18,11 +18,10 @@ import { SimplifiedApproachFormComponent } from '../simplified-approach-form';
 
 @Component({
   selector: 'app-simplified-approach',
-  templateUrl: './simplified-approach.component.html',
-  standalone: true,
   imports: [GovukComponentsModule, SharedModule, SimplifiedApproachFormComponent, ReturnToLinkComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './simplified-approach.component.html',
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SimplifiedApproachComponent {
   form = this.formProvider.simplifiedApproachForm;

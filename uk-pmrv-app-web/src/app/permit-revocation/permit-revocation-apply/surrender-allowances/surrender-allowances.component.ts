@@ -14,6 +14,7 @@ import { PermitRevocationStore } from '@permit-revocation/store/permit-revocatio
 
 @Component({
   selector: 'app-surrender-allowances',
+  standalone: false,
   templateUrl: './surrender-allowances.component.html',
   providers: [permitRevocationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

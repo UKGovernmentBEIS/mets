@@ -16,6 +16,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationope
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestCreateActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIRequestCreateActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.audit.domain.InstallationAuditRequestCreateActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesReCreateActionPayload;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "payloadType", visible = true)
 @JsonSubTypes({
@@ -28,6 +29,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.audit.domai
     @JsonSubTypes.Type(value = InstallationAuditRequestCreateActionPayload.class, name = "INSTALLATION_AUDIT_REQUEST_CREATE_ACTION_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerCorsiaAnnualOffsettingCreateActionPayload.class, name = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_CREATE_ACTION_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerCorsia3YearPeriodCreateActionPayload.class, name = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_CREATE_ACTION_PAYLOAD"),
+    @JsonSubTypes.Type(value = WithholdingOfAllowancesReCreateActionPayload.class, name = "WITHHOLDING_OF_ALLOWANCES_RE_CREATE_ACTION_PAYLOAD"),
     @JsonSubTypes.Type(value = RequestCreateActionEmptyPayload.class, name = "EMPTY_PAYLOAD"),
 })
 @Data

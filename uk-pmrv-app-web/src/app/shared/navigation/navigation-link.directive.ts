@@ -7,6 +7,7 @@ import { DestroySubject } from '../../core/services/destroy-subject.service';
 
 @Directive({
   selector: 'a[appNavigationLink]',
+  standalone: false,
   providers: [DestroySubject],
 })
 export class NavigationLinkDirective implements OnInit {

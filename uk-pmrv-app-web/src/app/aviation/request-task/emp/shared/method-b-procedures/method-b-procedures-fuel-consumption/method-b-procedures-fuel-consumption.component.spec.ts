@@ -27,7 +27,7 @@ describe('MethodBProceduresFuelConsumptionComponent', () => {
       ],
     }).compileComponents();
 
-    TestBed.inject<MethodBProceduresFormProvider>(TASK_FORM_PROVIDER).form;
+    TestBed.inject<MethodBProceduresFormProvider>(TASK_FORM_PROVIDER);
 
     component = TestBed.createComponent(MethodBProceduresFuelConsumptionComponent).componentInstance;
   });

@@ -7,9 +7,8 @@ import { AviationAerCorsiaProcessAnalysis } from 'pmrv-api';
 
 @Component({
   selector: 'app-process-analysis-corsia-template',
-  templateUrl: './process-analysis-corsia-template.component.html',
-  standalone: true,
   imports: [SharedModule, RouterLink],
+  templateUrl: './process-analysis-corsia-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProcessAnalysisCorsiaTemplateComponent {

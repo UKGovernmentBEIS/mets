@@ -16,6 +16,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-permit-issuance-notify-operator',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -31,8 +32,8 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [PermitRequestTypePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotifyOperatorComponent implements OnInit {
   requestTaskType$ = this.store.pipe(map((state) => state.requestTaskType));

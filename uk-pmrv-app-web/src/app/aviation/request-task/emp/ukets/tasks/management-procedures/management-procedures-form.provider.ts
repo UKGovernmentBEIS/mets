@@ -53,9 +53,10 @@ export interface ManagementProceduresFormModel {
 }
 
 @Injectable()
-export class ManagementProceduresFormProvider
-  implements TaskFormProvider<EmpManagementProcedures, ManagementProceduresFormModel>
-{
+export class ManagementProceduresFormProvider implements TaskFormProvider<
+  EmpManagementProcedures,
+  ManagementProceduresFormModel
+> {
   private fb = inject(FormBuilder);
   private requestTaskFileService = inject(RequestTaskFileService);
   private store = inject(RequestTaskStore);

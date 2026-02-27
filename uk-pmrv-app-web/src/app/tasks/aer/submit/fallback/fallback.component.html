@@ -4,8 +4,7 @@
     [formGroup]="form"
     heading="Define the emission network used in your fallback approach"
     [hideSubmit]="(isEditable$ | async) === false"
-    [showBackLink]="true"
-  >
+    [showBackLink]="true">
     <p class="govuk-body">
       You may use a fallback approach - one not based on tiers - for certain source streams or emission sources.
     </p>
@@ -31,22 +30,19 @@
     <div
       app-multi-select
       formControlName="sourceStreams"
-      label="Select the source streams used in your fall back approach"
-    >
+      label="Select the source streams used in your fall back approach">
       <div
         *ngFor="let sourceStream of 'sourceStreams' | task | async"
         [itemValue]="sourceStream.id"
         [label]="sourceStream.reference + ' ' + (sourceStream.description | sourceStreamDescription)"
-        app-multi-select-item
-      ></div>
+        app-multi-select-item></div>
     </div>
 
     <div
       formControlName="contains"
       govuk-radio
       legend="Does any of the selected source streams contain biomass?"
-      [legendSize]="'medium'"
-    >
+      legendSize="medium">
       <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
       <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
     </div>

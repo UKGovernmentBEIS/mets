@@ -12,9 +12,10 @@ import { determinationReasonTypesLabelsMap } from './determination-reason-type-l
 
 @Component({
   selector: 'app-determination-reason',
+  standalone: false,
   templateUrl: './determination-reason.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [determinationReasonFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeterminationReasonComponent {
   private readonly nextWizardStep = 'official-notice-reason';

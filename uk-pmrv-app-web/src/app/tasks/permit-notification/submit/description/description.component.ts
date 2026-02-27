@@ -23,9 +23,10 @@ import { descriptionFormProvider } from './description-form.provider';
 
 @Component({
   selector: 'app-description',
+  standalone: false,
   templateUrl: './description.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [descriptionFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DescriptionComponent implements PendingRequest {
   taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, RouterLink } from '@angular/router';
 
 import { of } from 'rxjs';
+
+import { SharedPermitModule } from '@permit-application/shared/shared-permit.module';
+import { PermitApplicationStore } from '@permit-application/store/permit-application.store';
 
 import { RequestActionsService, RequestItemsService } from 'pmrv-api';
 
@@ -59,7 +62,8 @@ describe('SectionsContainerComponent', () => {
   };
 
   @Component({
-    selector: 'app-sections',
+    selector: 'app-test-sections',
+    standalone: false,
     template: `
       permit sections
     `,
@@ -76,10 +80,12 @@ describe('SectionsContainerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SectionsContainerComponent, MockPermitSectionsComponent],
-      imports: [RouterTestingModule, SharedModule],
+      imports: [SharedModule, SharedPermitModule, RouterLink],
       providers: [
         { provide: RequestItemsService, useValue: requestItemsService },
         { provide: RequestActionsService, useValue: requestActionsService },
+        { provide: PermitApplicationStore, useExisting: PermitIssuanceStore },
+        provideRouter([]),
       ],
     }).compileComponents();
   });

@@ -11,6 +11,7 @@ import { RecommendedImprovementsRoutingModule } from './recommended-improvements
 import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
+  imports: [AerSharedModule, RecommendedImprovementsRoutingModule, SharedModule],
   declarations: [
     DeleteComponent,
     ListComponent,
@@ -18,6 +19,5 @@ import { SummaryComponent } from './summary/summary.component';
     RecommendedImprovementsItemComponent,
     SummaryComponent,
   ],
-  imports: [AerSharedModule, RecommendedImprovementsRoutingModule, SharedModule],
 })
 export class RecommendedImprovementsModule {}

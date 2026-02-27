@@ -11,6 +11,7 @@ const ETS_NAMES_MAP = {
 
 @Pipe({
   name: 'aviationNamePipe',
+  standalone: false,
 })
 export class AviationNamePipePipe implements PipeTransform {
   transform(value: AviationAccountCreationDTO['emissionTradingScheme']): string | null {

@@ -8,12 +8,13 @@ import {
 
 @Component({
   selector: 'app-invalid-data',
+  standalone: false,
   template: `
     <govuk-error-summary [form]="form"></govuk-error-summary>
     <a govukLink routerLink="..">Return to permit revocation</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [permitRevocationFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvalidDataComponent {
   constructor(@Inject(PERMIT_REVOCATION_TASK_FORM) readonly form: UntypedFormGroup) {}

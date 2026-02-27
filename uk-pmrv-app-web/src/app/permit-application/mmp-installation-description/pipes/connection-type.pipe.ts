@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { InstallationConnection } from 'pmrv-api';
 
-@Pipe({ name: 'connectionType' })
+@Pipe({
+  name: 'connectionType',
+  standalone: false,
+})
 export class ConnectionTypePipe implements PipeTransform {
   transform(value: InstallationConnection['connectionType']): string {
     switch (value) {

@@ -28,9 +28,10 @@ import { createTableColumns, createTablePage, manipulateResultsAndExportToExcel,
 
 @Component({
   selector: 'app-regulator-outstanding-request-tasks',
+  standalone: false,
   templateUrl: './regulator-outstanding-request-tasks.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegulatorOutstandingRequestTasksComponent implements OnInit {
   taskTypes$: Observable<ItemDTO['taskType'][]>;

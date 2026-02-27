@@ -17,9 +17,8 @@ export interface AlrSummaryAuthorityResponse extends ALRAuthorityResponse {
 
 @Component({
   selector: 'app-alr-authority-summary-template',
-  templateUrl: './authority-summary-template.component.html',
-  standalone: true,
   imports: [SharedModule, RouterLink, AllocationListTemplateComponent],
+  templateUrl: './authority-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrAuthoritySummaryTemplateComponent {

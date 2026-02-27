@@ -15,6 +15,7 @@ import { VirApplicationRespondToRegulatorCommentsRequestTaskPayload } from 'pmrv
 
 @Component({
   selector: 'app-operator-followup',
+  standalone: false,
   template: `
     <app-vir-task [heading]="heading" returnToLink="../..">
       <app-respond-item-form

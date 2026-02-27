@@ -2,7 +2,7 @@
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
-    [heading]="'Directly attributable emissions'"
+    heading="Directly attributable emissions"
     [caption]="(productBenchmarkType$ | async | subInstallationType) + ': benchmark improvement rate'"
     submitText="Continue">
     <div class="govuk-!-width-two-thirds">
@@ -38,7 +38,7 @@
         formControlName="furtherInternalSourceStreamsRelevant"
         govuk-radio
         legend="Are further internal source streams relevant?"
-        [legendSize]="'medium'">
+        legendSize="medium">
         <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
         <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
       </div>
@@ -90,7 +90,7 @@
               <div>
                 <div class="govuk-body">Amounts imported or exported</div>
                 <div formControlName="amounts" govuk-select widthClass="govuk-!-width-full">
-                  <option [value]="''">
+                  <option value="">
                     @if (i === 0) {
                       Select an option
                     } @else {
@@ -106,7 +106,7 @@
 
                 <div class="govuk-body">Energy content</div>
                 <div formControlName="energyContent" govuk-select widthClass="govuk-!-width-full">
-                  <option [value]="''">Select an option if relevant</option>
+                  <option value="">Select an option if relevant</option>
                   <option
                     *ngFor="let importedExportedEnergyType of importedExportedEnergyTypes"
                     [value]="importedExportedEnergyType">
@@ -116,7 +116,7 @@
 
                 <div class="govuk-body">Emission factor or carbon content</div>
                 <div formControlName="emissionFactorOrCarbonContent" govuk-select widthClass="govuk-!-width-full">
-                  <option [value]="''">Select an option if relevant</option>
+                  <option value="">Select an option if relevant</option>
                   <option
                     *ngFor="let importedExportedEnergyType of importedExportedEnergyTypes"
                     [value]="importedExportedEnergyType">
@@ -126,7 +126,7 @@
 
                 <div class="govuk-body">Biomass content</div>
                 <div formControlName="biomassContent" govuk-select widthClass="govuk-!-width-full">
-                  <option [value]="''">Select an option if relevant</option>
+                  <option value="">Select an option if relevant</option>
                   <option
                     *ngFor="let importedExportedEnergyType of importedExportedEnergyTypes"
                     [value]="importedExportedEnergyType">
@@ -161,7 +161,7 @@
         formControlName="transferredCO2ImportedOrExportedRelevant"
         govuk-radio
         legend="Is any transferred CO2 imported or exported?"
-        [legendSize]="'medium'"
+        legendSize="medium"
         hint='For the specific purpose of the baseline data collection, this section should cover all data provided in section F.(j) in the "baseline data collection" template.'>
         <govuk-radio-option [value]="true" label="Yes">
           <ng-container govukConditionalContent>
@@ -184,5 +184,5 @@
     </div>
   </app-wizard-step>
 
-  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+  <a govukLink routerLink="../../">Return to: Sub-installations</a>
 </app-permit-task>

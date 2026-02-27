@@ -6,6 +6,7 @@ import { ReturnOfAllowancesService } from '../../core/return-of-allowances.servi
 
 @Component({
   selector: 'app-confirmation',
+  standalone: false,
   templateUrl: './confirmation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

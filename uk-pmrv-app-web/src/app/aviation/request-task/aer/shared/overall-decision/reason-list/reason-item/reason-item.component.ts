@@ -26,10 +26,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-reason-item',
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './reason-item.component.html',
   providers: [DestroySubject, reasonItemFormProvider],
-  standalone: true,
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReasonItemComponent {

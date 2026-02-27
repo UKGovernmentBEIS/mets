@@ -9,6 +9,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-emissions-summary',
+  standalone: false,
   template: `
     <app-action-task header="Emissions summary" [breadcrumb]="true">
       <app-emissions-summary-group [data]="aerPayload$ | async"></app-emissions-summary-group>

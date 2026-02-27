@@ -10,6 +10,7 @@ import { isReviewDecisionTakenValid } from '../core/section-status';
 
 @Component({
   selector: 'app-review',
+  standalone: false,
   templateUrl: './review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

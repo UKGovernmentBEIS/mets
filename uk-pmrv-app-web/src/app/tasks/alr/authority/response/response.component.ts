@@ -16,11 +16,10 @@ import { alrResponseFormProvider } from './response-form.provider';
 
 @Component({
   selector: 'app-alr-response',
-  templateUrl: './response.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule],
+  templateUrl: './response.component.html',
   providers: [alrResponseFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrResponseComponent {
   today = new Date();

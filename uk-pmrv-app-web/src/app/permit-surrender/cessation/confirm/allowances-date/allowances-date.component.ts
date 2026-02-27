@@ -12,6 +12,7 @@ import { allowancesDateFormProvider } from './allowances-date-form.provider';
 
 @Component({
   selector: 'app-allowances-date',
+  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onContinue()"
@@ -28,8 +29,8 @@ import { allowancesDateFormProvider } from './allowances-date-form.provider';
     </app-wizard-step>
     <a govukLink routerLink="../..">Return to: Cessation</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [allowancesDateFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AllowancesDateComponent implements PendingRequest {
   today = new Date();

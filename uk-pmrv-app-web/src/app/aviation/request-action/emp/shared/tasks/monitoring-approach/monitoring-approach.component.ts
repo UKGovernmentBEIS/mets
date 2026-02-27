@@ -25,7 +25,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-monitoring-approach',
-  standalone: true,
   imports: [
     RequestActionTaskComponent,
     EmpReviewDecisionGroupSummaryComponent,

@@ -11,9 +11,10 @@ import { environmentalSystemFormProvider } from './environmental-system-form.pro
 
 @Component({
   selector: 'app-environmental-system',
+  standalone: false,
   templateUrl: './environmental-system.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [environmentalSystemFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EnvironmentalSystemComponent extends SectionComponent {
   constructor(

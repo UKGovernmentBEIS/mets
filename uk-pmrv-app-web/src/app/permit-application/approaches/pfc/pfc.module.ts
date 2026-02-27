@@ -33,6 +33,7 @@ import { SummaryComponent as TypesSummaryComponent } from './types/summary/summa
 import { TypesComponent } from './types/types.component';
 
 @NgModule({
+  imports: [PFCRoutingModule, SharedModule, SharedPermitModule],
   declarations: [
     ActivityDataAnswersComponent,
     ActivityDataComponent,
@@ -63,6 +64,5 @@ import { TypesComponent } from './types/types.component';
     TypesComponent,
     TypesSummaryComponent,
   ],
-  imports: [PFCRoutingModule, SharedModule, SharedPermitModule],
 })
 export class PFCModule {}

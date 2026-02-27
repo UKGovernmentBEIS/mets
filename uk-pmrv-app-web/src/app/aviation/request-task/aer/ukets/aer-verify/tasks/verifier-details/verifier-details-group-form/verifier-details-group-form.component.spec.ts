@@ -51,7 +51,7 @@ describe('AerVerifierDetailsGroupFormComponent', () => {
       [['Company name'], ['VB Company']],
       [['Address'], ['street 1  , street 2 City111 80']],
       [['Accreditation number'], ['1313']],
-      [['National accreditation body'], ['UK ETS Aviation EU ETS Installations CORSIA UK ETS Installations']],
+      [['National accreditation body'], ['UK ETS Aviation  EU ETS Installations  CORSIA  UK ETS Installations']],
       [
         ['Name', 'Email', 'Telephone number'],
         ['Verifier Name', 'test@test.com', '6691423232'],
@@ -88,7 +88,7 @@ describe('AerVerifierDetailsGroupFormComponent', () => {
       [['Company name'], ['VB Company']],
       [['Address'], ['street 1  , street 2 City111 80']],
       [['Accreditation number'], ['1313']],
-      [['National accreditation body'], ['UK ETS Aviation EU ETS Installations CORSIA UK ETS Installations']],
+      [['National accreditation body'], ['UK ETS Aviation  EU ETS Installations  CORSIA  UK ETS Installations']],
     ]);
 
     fixture.componentInstance.showVerifierDetails = true;
@@ -104,7 +104,7 @@ describe('AerVerifierDetailsGroupFormComponent', () => {
       [['Company name'], ['VB Company']],
       [['Address'], ['street 1  , street 2 City111 80']],
       [['Accreditation number'], ['1313']],
-      [['National accreditation body'], ['UK ETS Aviation EU ETS Installations CORSIA UK ETS Installations']],
+      [['National accreditation body'], ['UK ETS Aviation  EU ETS Installations  CORSIA  UK ETS Installations']],
       [
         ['Name', 'Email', 'Telephone number'],
         ['Verifier Name', 'Change', 'test@test.com', 'Change', '6691423232', 'Change'],

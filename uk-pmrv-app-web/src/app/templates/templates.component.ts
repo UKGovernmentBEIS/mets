@@ -25,9 +25,10 @@ import { DocumentTemplatesService, NotificationTemplatesService, TemplateSearchR
 
 @Component({
   selector: 'app-templates',
+  standalone: false,
   templateUrl: './templates.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TemplatesComponent {
   readonly pageSize = 30;

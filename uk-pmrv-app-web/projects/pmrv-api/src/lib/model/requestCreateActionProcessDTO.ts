@@ -18,6 +18,7 @@ import { InstallationAccountOpeningSubmitApplicationCreateActionPayload } from '
 import { InstallationAuditRequestCreateActionPayload } from './installationAuditRequestCreateActionPayload';
 import { ReportRelatedRequestCreateActionPayload } from './reportRelatedRequestCreateActionPayload';
 import { RequestCreateActionEmptyPayload } from './requestCreateActionEmptyPayload';
+import { WithholdingOfAllowancesReCreateActionPayload } from './withholdingOfAllowancesReCreateActionPayload';
 
 /**
  * The request create action body
@@ -39,6 +40,7 @@ export interface RequestCreateActionProcessDTO {
     | 'AER'
     | 'DRE'
     | 'WITHHOLDING_OF_ALLOWANCES'
+    | 'WITHHOLDING_OF_ALLOWANCES_RE_INITIATE'
     | 'RETURN_OF_ALLOWANCES'
     | 'AIR'
     | 'HSE_TI'
@@ -65,5 +67,6 @@ export interface RequestCreateActionProcessDTO {
     | InstallationAccountOpeningSubmitApplicationCreateActionPayload
     | InstallationAuditRequestCreateActionPayload
     | ReportRelatedRequestCreateActionPayload
-    | RequestCreateActionEmptyPayload;
+    | RequestCreateActionEmptyPayload
+    | WithholdingOfAllowancesReCreateActionPayload;
 }

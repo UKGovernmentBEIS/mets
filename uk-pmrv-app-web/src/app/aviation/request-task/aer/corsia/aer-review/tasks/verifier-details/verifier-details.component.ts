@@ -4,7 +4,6 @@ import { combineLatest, map, Observable } from 'rxjs';
 
 import { aerVerifyCorsiaQuery } from '@aviation/request-task/aer/corsia/aer-verify/aer-verify-corsia.selector';
 import { aerReviewCorsiaHeaderTaskMap } from '@aviation/request-task/aer/corsia/shared/aer-review-corsia.types';
-import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group.component';
 import { AerVerificationReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-verification-review-decision-group/aer-verification-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { showReviewDecisionComponent } from '@aviation/request-task/util';
@@ -23,12 +22,10 @@ interface ViewModel {
 
 @Component({
   selector: 'app-verifier-details',
-  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
     VerifierDetailsCorsiaTemplateComponent,
-    AerReviewDecisionGroupComponent,
     AerVerificationReviewDecisionGroupComponent,
   ],
   template: `

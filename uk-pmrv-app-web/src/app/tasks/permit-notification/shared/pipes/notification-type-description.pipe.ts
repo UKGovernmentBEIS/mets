@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { PermitNotification } from 'pmrv-api';
 
-@Pipe({ name: 'notificationTypeDescription' })
+@Pipe({
+  name: 'notificationTypeDescription',
+  standalone: false,
+})
 export class NotificationTypeDescriptionPipe implements PipeTransform {
   transform(type: PermitNotification['type']): string {
     switch (type) {

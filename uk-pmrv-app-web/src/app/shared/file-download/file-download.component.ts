@@ -49,6 +49,7 @@ export const FILE_DOWNLOAD_SCHEDULER = new InjectionToken<SchedulerLike>('FILE_D
 
 @Component({
   selector: 'app-file-download',
+  standalone: false,
   template: `
     <h1 class="govuk-heading-l">Your download has started</h1>
     <p class="govuk-body">You should see your downloads in the downloads folder.</p>

@@ -22,7 +22,7 @@ public class BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload extends Re
 
     /**
      * On change Verification Body the sections completed by Verifier should be empty.
-     * In case of resending BDR for verification without changing verification body the sections completed should not be changed.
+     * In case of resending BDRS2 for verification without changing verification body the sections completed should not be changed.
      */
     @Builder.Default
     private Map<String, List<Boolean>> verificationSectionsCompleted = new HashMap<>();

@@ -8,6 +8,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-approach-return-link',
+  standalone: false,
   template: `
     <a govukLink [routerLink]="returnToUrl$ | async">Return to: {{ parentTitle }}</a>
   `,

@@ -27,9 +27,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-total-emissions-scheme-corsia',
-  templateUrl: './total-emissions-scheme-corsia.component.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     SharedModule,
     RequestTaskModule,
@@ -38,6 +35,8 @@ interface ViewModel {
     TotalEmissionsCorsiaAerodromePairsTableTemplateComponent,
     TotalEmissionsCorsiaStatePairsTableTemplateComponent,
   ],
+  templateUrl: './total-emissions-scheme-corsia.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsSchemeCorsiaComponent implements OnDestroy {
   private aviationReportingService = inject(AviationReportingService);

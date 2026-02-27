@@ -23,13 +23,12 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aggregated-consumption-and-flight-data',
-  standalone: true,
   imports: [ReturnToLinkComponent, SharedModule, FlightDataTableComponent, AerReviewDecisionGroupComponent],
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <app-page-heading>{{ vm.heading }}</app-page-heading>
       <app-flight-data-table
-        [headingText]="'File uploaded'"
+        headingText="File uploaded"
         [emissionDataDetails]="vm.data"
         [isCorsia]="vm.isCorsia"></app-flight-data-table>
       <app-aviation-aer-review-decision-group

@@ -20,7 +20,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-authority-upload-letest-alr-summary',
-  standalone: true,
   imports: [SharedModule, AlrTaskSharedModule, ActivitySummaryTemplateComponent],
   template: `
     <ng-container *ngIf="vm() as vm">

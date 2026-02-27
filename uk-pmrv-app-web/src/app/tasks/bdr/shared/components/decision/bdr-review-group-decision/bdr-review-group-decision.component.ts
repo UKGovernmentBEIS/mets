@@ -32,11 +32,10 @@ import { createAnotherRequiredChange } from './bdr-review-group-decision-form.ut
 
 @Component({
   selector: 'app-bdr-review-group-decision',
-  templateUrl: './bdr-review-group-decision.component.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SharedModule, TaskSharedModule],
+  templateUrl: './bdr-review-group-decision.component.html',
   providers: [bdrReviewGroupDecisionFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BdrReviewGroupDecisionComponent implements OnInit, PendingRequest {
   @Output() readonly notification = new EventEmitter<boolean>();

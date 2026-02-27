@@ -12,9 +12,10 @@ import { refundFormProvider } from './refund-form.provider';
 
 @Component({
   selector: 'app-refund',
+  standalone: false,
   templateUrl: './refund.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [refundFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RefundComponent implements PendingRequest {
   constructor(

@@ -4,6 +4,7 @@ import { InstallationAccountApplicationStore } from '../store/installation-accou
 
 @Component({
   selector: 'app-cancel',
+  standalone: false,
   template: `
     <app-page-heading caption="Delete installation account creation" size="xl">
       Are you sure you want to leave this page?

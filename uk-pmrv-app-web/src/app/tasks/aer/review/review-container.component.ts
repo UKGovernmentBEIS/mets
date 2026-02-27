@@ -14,6 +14,7 @@ import { monitoringApproachMap } from '../core/monitoringApproaches';
 
 @Component({
   selector: 'app-review-container',
+  standalone: false,
   templateUrl: './review-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

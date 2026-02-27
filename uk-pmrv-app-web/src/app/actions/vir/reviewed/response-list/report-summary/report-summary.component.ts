@@ -8,6 +8,7 @@ import { VirService } from '../../../core/vir.service';
 
 @Component({
   selector: 'app-report-summary',
+  standalone: false,
   template: `
     <app-action-task header="Create summary" [breadcrumb]="true">
       <app-regulator-create-summary

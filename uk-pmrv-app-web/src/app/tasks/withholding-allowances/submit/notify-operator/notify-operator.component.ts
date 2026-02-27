@@ -8,6 +8,7 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 @Component({
   selector: 'app-wa-notify-operator',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -15,7 +16,7 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
           [taskId]="taskId$ | async"
           [accountId]="accountId$ | async"
           [referenceCode]="requestId"
-          [confirmationMessage]="'Notification sent successfully'"
+          confirmationMessage="Notification sent successfully"
           requestTaskActionType="WITHHOLDING_OF_ALLOWANCES_NOTIFY_OPERATOR_FOR_DECISION"></app-notify-operator>
       </div>
     </div>

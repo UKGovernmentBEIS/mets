@@ -78,6 +78,7 @@ const getTableColumns = (domain: AccountType, activeTab: WorkflowItemsAssignment
 /* eslint-disable @angular-eslint/use-component-view-encapsulation */
 @Component({
   selector: 'app-dashboard-page',
+  standalone: false,
   templateUrl: './dashboard-page.component.html',
   styles: `
     .js-enabled .govuk-tabs__panel {

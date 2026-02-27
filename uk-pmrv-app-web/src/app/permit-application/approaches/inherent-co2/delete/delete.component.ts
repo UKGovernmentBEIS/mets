@@ -12,6 +12,7 @@ import { PermitApplicationStore } from '../../../store/permit-application.store'
 
 @Component({
   selector: 'app-delete',
+  standalone: false,
   templateUrl: './delete.component.html',
   styles: `
     .nowrap {

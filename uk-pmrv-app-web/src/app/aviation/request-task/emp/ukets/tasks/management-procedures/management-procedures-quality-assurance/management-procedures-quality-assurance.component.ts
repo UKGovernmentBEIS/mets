@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -13,9 +13,8 @@ import { ManagementProceduresFormProvider } from '../management-procedures-form.
 
 @Component({
   selector: 'app-management-procedures-quality-assurance',
+  imports: [SharedModule, ProcedureFormStepComponent, ProcedureFormPageHeaderDirective],
   templateUrl: './management-procedures-quality-assurance.component.html',
-  standalone: true,
-  imports: [SharedModule, RouterLinkWithHref, ProcedureFormStepComponent, ProcedureFormPageHeaderDirective],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -9,6 +9,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-materiality-level',
+  standalone: false,
   template: `
     <app-action-task header="Materiality level and reference documents" [breadcrumb]="true">
       <app-materiality-level-group

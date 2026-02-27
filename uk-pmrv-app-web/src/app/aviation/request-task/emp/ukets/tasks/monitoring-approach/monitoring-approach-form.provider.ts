@@ -26,9 +26,10 @@ export interface MonitoringApproachFormModel {
 }
 
 @Injectable()
-export class MonitoringApproachFormProvider
-  implements TaskFormProvider<EmissionsMonitoringApproach, MonitoringApproachFormModel>
-{
+export class MonitoringApproachFormProvider implements TaskFormProvider<
+  EmissionsMonitoringApproach,
+  MonitoringApproachFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup<MonitoringApproachFormModel>;
   private store = inject(RequestTaskStore);

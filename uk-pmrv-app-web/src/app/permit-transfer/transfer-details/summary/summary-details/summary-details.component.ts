@@ -4,6 +4,7 @@ import { PermitTransferDetailsConfirmation } from 'pmrv-api';
 
 @Component({
   selector: 'app-transfer-details-summary-details-template',
+  standalone: false,
   templateUrl: './summary-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -5,8 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
 import { SharedModule } from '@shared/shared.module';
-import { BDRS2_TASK_FORM } from '@tasks/bdrs2/core';
-import { BdrS2Service } from '@tasks/bdrs2/core';
+import { BDRS2_TASK_FORM, BdrS2Service } from '@tasks/bdrs2/core';
 import { BdrS2TaskSharedModule } from '@tasks/bdrs2/shared/bdrs2-task-shared.module';
 import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 
@@ -16,10 +15,10 @@ import { bdrs2UploadMmpFormProvider } from './bdrs2-upload-mmp-form.provider';
 
 @Component({
   selector: 'app-bdrs2-upload-mmp',
+  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule],
+  standalone: true,
   templateUrl: './bdrs2-upload-mmp.component.html',
   providers: [bdrs2UploadMmpFormProvider],
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BDRS2UploadMmpComponent implements PendingRequest {

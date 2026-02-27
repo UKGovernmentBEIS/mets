@@ -12,9 +12,10 @@ import { commentsFormProvider } from './comments-form.provider';
 
 @Component({
   selector: 'app-comments',
+  standalone: false,
   templateUrl: './comments.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [commentsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentsComponent {
   private readonly nextWizardStep = 'summary';

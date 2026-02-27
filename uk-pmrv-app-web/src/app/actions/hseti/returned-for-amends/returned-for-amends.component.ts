@@ -10,9 +10,8 @@ import { HseTiActionService } from '../core/hseti.service';
 
 @Component({
   selector: 'app-hseti-returned-for-amends',
-  templateUrl: './returned-for-amends.component.html',
-  standalone: true,
   imports: [ActionSharedModule, NgIf, SharedModule],
+  templateUrl: './returned-for-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HsetiReturnedForAmendsComponent {

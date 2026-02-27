@@ -10,6 +10,7 @@ import { PermitRevocationStore } from '../../../store/permit-revocation-store';
 
 @Component({
   selector: 'app-completed',
+  standalone: false,
   templateUrl: './completed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

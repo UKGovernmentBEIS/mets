@@ -8,6 +8,7 @@ import { getHeadingMap } from '../../../core/payment.map';
 
 @Component({
   selector: 'app-return-link',
+  standalone: false,
   template: `
     <a govukLink [routerLink]="link">Return to: {{ linkName }}</a>
   `,

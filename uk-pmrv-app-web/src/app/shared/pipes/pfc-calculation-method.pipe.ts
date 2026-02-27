@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'pfcCalculationMethod',
+  standalone: false,
 })
 export class PfcCalculationMethodPipe implements PipeTransform {
   transform(value): string {

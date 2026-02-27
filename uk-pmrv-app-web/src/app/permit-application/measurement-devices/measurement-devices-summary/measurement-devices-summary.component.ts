@@ -6,6 +6,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-measurement-devices-summary',
+  standalone: false,
   templateUrl: './measurement-devices-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

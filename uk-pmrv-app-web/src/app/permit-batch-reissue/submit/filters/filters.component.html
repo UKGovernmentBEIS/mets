@@ -44,8 +44,8 @@
         <div class="govuk-grid-column-full" *ngIf="displayAllocationStatuses">
           <div class="govuk-heading-m">Allocation status (optional)</div>
           <div formControlName="allocationStatuses" govuk-checkboxes>
-            <govuk-checkbox [value]="'FREE_ALLOCATION'" [label]="'Free allocation'"></govuk-checkbox>
-            <govuk-checkbox [value]="'NONFREE_ALLOCATION'" [label]="'Non-free allocation'"></govuk-checkbox>
+            <govuk-checkbox value="FREE_ALLOCATION" label="Free allocation"></govuk-checkbox>
+            <govuk-checkbox value="NONFREE_ALLOCATION" label="Non-free allocation"></govuk-checkbox>
           </div>
         </div>
       </div>

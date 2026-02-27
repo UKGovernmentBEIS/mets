@@ -25,7 +25,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-authority-task-list',
-  standalone: true,
   imports: [SharedModule, TaskSharedModule],
   templateUrl: './authority-task-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

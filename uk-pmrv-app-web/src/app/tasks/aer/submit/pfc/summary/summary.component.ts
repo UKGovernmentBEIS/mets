@@ -11,14 +11,15 @@ import { getCompletionStatus } from '../../../shared/components/submit/emissions
 
 @Component({
   selector: 'app-summary',
+  standalone: false,
   templateUrl: './summary.component.html',
   styles: `
     .float-right {
       float: right;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryComponent {
   isEditable$ = this.aerService.isEditable$;

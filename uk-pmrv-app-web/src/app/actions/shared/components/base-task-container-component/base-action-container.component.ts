@@ -8,7 +8,9 @@ import { RequestActionDTO } from 'pmrv-api';
 import { CommonActionsStore } from '../../../store/common-actions.store';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app-base-action-container-component[expectedActionType][header]',
+  standalone: false,
   template: `
     <ng-container *ngIf="dataLoaded">
       <app-action-layout

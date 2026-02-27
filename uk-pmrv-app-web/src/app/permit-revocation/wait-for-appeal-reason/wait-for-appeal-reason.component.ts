@@ -13,6 +13,7 @@ import { PERMIT_REVOCATION_WITHDRAW_FORM, withdrawFormProvider } from './wait-fo
 
 @Component({
   selector: 'app-wait-for-appeal-reason',
+  standalone: false,
   templateUrl: './wait-for-appeal-reason.component.html',
   providers: [withdrawFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

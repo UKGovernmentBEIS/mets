@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-amend-summary',
+  standalone: false,
   template: `
     <app-amend-summary-template></app-amend-summary-template>
     <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
@@ -10,7 +11,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         <dd govukSummaryListRowValue>Yes</dd>
       </div>
     </dl>
-    <app-return-link [returnLink]="'../../..'"></app-return-link>
+    <app-return-link returnLink="../../.."></app-return-link>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

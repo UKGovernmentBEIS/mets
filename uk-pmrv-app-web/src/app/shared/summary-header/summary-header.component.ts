@@ -4,20 +4,22 @@ import { Params } from '@angular/router';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'h2[app-summary-header]',
+  standalone: false,
   template: `
     <ng-content></ng-content>
-    <a
-      *ngIf="changeRoute"
-      [routerLink]="changeRoute"
-      [queryParams]="queryParams"
-      (click)="changeClick.emit($event)"
-      govukLink
-      class="govuk-!-font-size-19 govuk-!-font-weight-regular float-right">
-      Change
-      @if (changeHiddenText) {
-        <span class="govuk-visually-hidden">{{ changeHiddenText }}</span>
-      }
-    </a>
+    @if (changeRoute) {
+      <a
+        [routerLink]="changeRoute"
+        [queryParams]="queryParams"
+        (click)="changeClick.emit($event)"
+        govukLink
+        class="govuk-!-font-size-19 govuk-!-font-weight-regular float-right">
+        Change
+        @if (changeHiddenText) {
+          <span class="govuk-visually-hidden">{{ changeHiddenText }}</span>
+        }
+      </a>
+    }
   `,
   styles: `
     .float-right {
@@ -31,6 +33,7 @@ export class SummaryHeaderComponent {
   @Input() changeHiddenText: string | null;
   @Output() readonly changeClick = new EventEmitter<Event>();
 
+  // eslint-disable-next-line @angular-eslint/prefer-host-metadata-property
   @HostBinding('class.govuk-clearfix') get clearfix() {
     return true;
   }

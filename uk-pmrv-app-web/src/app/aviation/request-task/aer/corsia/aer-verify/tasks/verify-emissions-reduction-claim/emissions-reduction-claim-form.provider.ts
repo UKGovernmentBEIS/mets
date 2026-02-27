@@ -12,13 +12,10 @@ export interface AviationAerCorsiaEmissionsReductionClaimVerificationFormModel {
 }
 
 @Injectable()
-export class EmissionsReductionClaimFormProvider
-  implements
-    TaskFormProvider<
-      AviationAerCorsiaEmissionsReductionClaimVerification,
-      AviationAerCorsiaEmissionsReductionClaimVerificationFormModel
-    >
-{
+export class EmissionsReductionClaimFormProvider implements TaskFormProvider<
+  AviationAerCorsiaEmissionsReductionClaimVerification,
+  AviationAerCorsiaEmissionsReductionClaimVerificationFormModel
+> {
   private _form: FormGroup<AviationAerCorsiaEmissionsReductionClaimVerificationFormModel>;
 
   constructor(private fb: FormBuilder) {}

@@ -13,6 +13,7 @@ import { resolveSectionStatus } from '../section.status';
 
 @Component({
   selector: 'app-peer-review',
+  standalone: false,
   templateUrl: './peer-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -11,9 +11,10 @@ import { aboutVariationFormProvider } from './about-variation-form.provider';
 
 @Component({
   selector: 'app-about-variation',
+  standalone: false,
   templateUrl: './about-variation.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [aboutVariationFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AboutVariationComponent {
   hintText = `This will help the ${

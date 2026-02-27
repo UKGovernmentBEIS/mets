@@ -11,9 +11,8 @@ import { AviationAerTotalEmissionsConfidentiality } from 'pmrv-api';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-total-emissions-summary-template',
-  templateUrl: './total-emissions-summary-template.component.html',
-  standalone: true,
   imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref, RouterLink],
+  templateUrl: './total-emissions-summary-template.component.html',
   viewProviders: [existingControlContainer],
 })
 export class TotalEmissionsSummaryTemplateComponent {

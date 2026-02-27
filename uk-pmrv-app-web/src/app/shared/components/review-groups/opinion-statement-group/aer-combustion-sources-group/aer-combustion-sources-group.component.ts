@@ -4,6 +4,7 @@ import { OpinionStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-aer-combustion-sources-group',
+  standalone: false,
   template: `
     <h2 class="govuk-heading-m">Source streams</h2>
     <dl govuk-summary-list>

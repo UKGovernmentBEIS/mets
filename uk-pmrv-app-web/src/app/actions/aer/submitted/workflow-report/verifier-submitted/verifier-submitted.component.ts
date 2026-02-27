@@ -15,6 +15,7 @@ import { getAerTitle } from '../../submitted';
 
 @Component({
   selector: 'app-verifier-submitted',
+  standalone: false,
   templateUrl: './verifier-submitted.component.html',
   styleUrl: './verifier-submitted.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
