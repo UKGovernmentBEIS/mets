@@ -15,7 +15,7 @@
             decision?.data?.details?.verificationRequired !== undefined
           ">
           <dt govukSummaryListRowKey>Does the operator need to send the amendments to the verifier?</dt>
-          <dd govukSummaryListRowValue>{{ decision.data?.details?.['verificationRequired'] ? 'Yes' : 'No' }}</dd>
+          <dd govukSummaryListRowValue>{{ decision.details?.['verificationRequired'] ? 'Yes' : 'No' }}</dd>
         </div>
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Changes required</dt>

@@ -14,6 +14,7 @@ import { IncludeAnswerDetailsComponent } from '../include-answer-details.compone
 
 @Component({
   selector: 'app-product-benchmark-form',
+  standalone: true,
   imports: [
     GovukComponentsModule,
     SharedModule,
@@ -23,8 +24,8 @@ import { IncludeAnswerDetailsComponent } from '../include-answer-details.compone
   ],
   templateUrl: './product-benchmark-form.component.html',
   styleUrl: './product-benchmark-form.component.scss',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class ProductBenchmarkFormComponent {
   @Input() form: FormGroup<any>;

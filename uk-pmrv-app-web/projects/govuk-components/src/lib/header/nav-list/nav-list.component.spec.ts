@@ -8,7 +8,6 @@ import { HeaderNavListComponent } from './nav-list.component';
 
 describe('HeaderNavListComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <govuk-header-nav-list
         ariaLabel="Aria label for test navigation"

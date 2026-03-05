@@ -6,8 +6,8 @@ import { Configuration } from './configuration';
 @NgModule({
   imports: [],
   declarations: [],
-  providers: [],
   exports: [],
+  providers: [],
 })
 export class ApiModule {
   public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

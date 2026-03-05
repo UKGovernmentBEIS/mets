@@ -26,8 +26,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-material-misstatement',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './material-misstatement.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MaterialMisstatementComponent {

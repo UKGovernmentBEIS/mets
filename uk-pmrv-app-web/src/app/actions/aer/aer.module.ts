@@ -78,7 +78,6 @@ import { VerifierFindingsReportComponent } from './submitted/workflow-report/sha
 import { VerifierSubmittedComponent } from './submitted/workflow-report/verifier-submitted/verifier-submitted.component';
 
 @NgModule({
-  imports: [ActionSharedModule, AerRoutingModule, SharedModule],
   declarations: [
     AbbreviationsComponent,
     ActivityLevelReportComponent,
@@ -153,5 +152,6 @@ import { VerifierSubmittedComponent } from './submitted/workflow-report/verifier
     VerifierFindingsReportComponent,
     VerifierSubmittedComponent,
   ],
+  imports: [ActionSharedModule, AerRoutingModule, SharedModule],
 })
 export class AerModule {}

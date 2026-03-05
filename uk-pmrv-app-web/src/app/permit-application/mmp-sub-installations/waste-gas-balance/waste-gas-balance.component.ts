@@ -20,7 +20,6 @@ import { wasteGasBalanceAddFormFactory } from './waste-gas-balance.component-for
 
 @Component({
   selector: 'app-waste-gas-balance',
-  standalone: false,
   templateUrl: './waste-gas-balance.component.html',
   styleUrl: './waste-gas-balance.component.scss',
   providers: [wasteGasBalanceAddFormFactory],

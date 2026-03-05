@@ -12,7 +12,6 @@ import { submitWizardComplete } from '@tasks/vir/submit/submit.wizard';
 
 @Component({
   selector: 'app-send-report',
-  standalone: false,
   templateUrl: './send-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

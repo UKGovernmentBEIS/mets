@@ -5,7 +5,6 @@ import { Abbreviations } from 'pmrv-api';
 
 @Component({
   selector: 'app-abbreviations-summary-template',
-  standalone: false,
   templateUrl: './abbreviations-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

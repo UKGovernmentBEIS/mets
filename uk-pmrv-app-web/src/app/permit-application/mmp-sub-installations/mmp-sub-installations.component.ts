@@ -18,7 +18,6 @@ import { isFallbackApproach, isProductBenchmark } from './mmp-sub-installations-
 
 @Component({
   selector: 'app-mmp-sub-installations',
-  standalone: false,
   templateUrl: './mmp-sub-installations.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

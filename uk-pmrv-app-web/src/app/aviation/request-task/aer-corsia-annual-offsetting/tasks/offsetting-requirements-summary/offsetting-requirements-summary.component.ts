@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { first, switchMap } from 'rxjs';
 
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { AnnualOffsettingRequirementsSummaryTemplateComponent } from '@aviation/shared/components/annual-offsetting-requirements-summary-template/annual-offsetting-requirements-summary-template.component';
+import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
 
@@ -24,7 +25,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-annual-offsetting-requirements-summary',
-  imports: [AnnualOffsettingRequirementsSummaryTemplateComponent, SharedModule],
+  standalone: true,
+  imports: [AnnualOffsettingRequirementsSummaryTemplateComponent, ReturnToLinkComponent, RouterLink, SharedModule],
   template: `
     <ng-container *ngIf="vm() as vm">
       <app-page-heading [caption]="vm.caption">{{ vm.heading }}</app-page-heading>

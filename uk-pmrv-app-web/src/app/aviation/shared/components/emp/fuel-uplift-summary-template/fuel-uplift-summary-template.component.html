@@ -1,9 +1,10 @@
 <ng-container *ngIf="data?.blockHoursPerFlight">
   <app-procedure-form-summary
-    header="Measurement of fuel uplift and block hours per flight"
+    [header]="'Measurement of fuel uplift and block hours per flight'"
     [isEditable]="isEditable"
     [procedureFormData]="data.blockHoursPerFlight"
-    formRouterLink="../"></app-procedure-form-summary>
+    formRouterLink="../"
+  ></app-procedure-form-summary>
 </ng-container>
 
 <ng-container *ngIf="data?.zeroFuelUplift">
@@ -17,7 +18,7 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../assignment-and-adjustment" [queryParams]="{ change: true }">Change</a>
+        <a govukLink [routerLink]="'../assignment-and-adjustment'" [queryParams]="{ change: true }">Change</a>
       </dd>
     </div>
   </dl>
@@ -34,7 +35,7 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../fuel-uplift-records" [queryParams]="{ change: true }">Change</a>
+        <a govukLink [routerLink]="'../fuel-uplift-records'" [queryParams]="{ change: true }">Change</a>
       </dd>
     </div>
   </dl>
@@ -45,5 +46,6 @@
     header="Measuring fuel density"
     [isEditable]="isEditable"
     [procedureFormData]="data.fuelDensity"
-    formRouterLink="../fuel-uplift-density"></app-procedure-form-summary>
+    formRouterLink="../fuel-uplift-density"
+  ></app-procedure-form-summary>
 </ng-container>

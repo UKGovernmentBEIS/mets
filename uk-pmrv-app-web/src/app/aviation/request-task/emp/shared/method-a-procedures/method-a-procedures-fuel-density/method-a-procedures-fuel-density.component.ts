@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
+import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SharedModule } from '@shared/shared.module';
@@ -12,10 +13,11 @@ import { MethodAProceduresFormProvider } from '../method-a-procedures-form.provi
 
 @Component({
   selector: 'app-method-a-procedures-fuel-density',
-  imports: [SharedModule, ProcedureFormStepComponent],
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent, ProcedureFormStepComponent],
   templateUrl: './method-a-procedures-fuel-density.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class MethodAProceduresFuelDensityComponent {
   private router = inject(Router);

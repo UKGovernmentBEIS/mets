@@ -21,7 +21,6 @@ describe('VerifiersTableComponent', () => {
   let authStore: AuthStore;
 
   @Component({
-    standalone: false,
     template: `
       <app-verifiers-table
         [verifiersAuthorities]="verifiersAuthorities$"

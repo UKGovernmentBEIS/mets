@@ -19,6 +19,7 @@ export interface ViewModel {
 
 @Component({
   selector: 'app-outcome-completed',
+  standalone: true,
   imports: [ActionSharedModule, OutcomeSummaryTemplateComponent, NgIf, SharedModule],
   templateUrl: './outcome-completed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

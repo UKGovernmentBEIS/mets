@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 
 @Component({
   selector: 'app-email-sent',
-  standalone: false,
   templateUrl: './email-sent.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

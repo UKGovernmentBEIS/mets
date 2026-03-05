@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core';
 import { ActivatedRoute, Params, Router, RouterLinkWithHref } from '@angular/router';
 
@@ -23,8 +23,16 @@ interface ViewModel {
 }
 @Component({
   selector: 'app-operator-details-subsidiary-companies',
-  imports: [GovukComponentsModule, RouterLinkWithHref, NgIf, SharedModule, OperatorDetailsSubsidiaryListComponent],
   templateUrl: './operator-details-subsidiary-companies.component.html',
+  standalone: true,
+  imports: [
+    GovukComponentsModule,
+    RouterLinkWithHref,
+    NgIf,
+    NgFor,
+    SharedModule,
+    OperatorDetailsSubsidiaryListComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorDetailsSubsidiaryCompaniesComponent extends BaseOperatorDetailsComponent {

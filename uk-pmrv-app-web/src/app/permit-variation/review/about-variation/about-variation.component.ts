@@ -8,7 +8,6 @@ import { variationDetailsStatus } from '../../variation-status';
 
 @Component({
   selector: 'app-about-variation-review',
-  standalone: false,
   templateUrl: './about-variation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

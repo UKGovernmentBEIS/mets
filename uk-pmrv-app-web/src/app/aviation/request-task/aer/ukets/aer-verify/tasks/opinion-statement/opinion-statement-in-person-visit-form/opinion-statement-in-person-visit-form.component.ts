@@ -20,8 +20,9 @@ export const AER_SITE_VISIT_FORM = new InjectionToken<{ form: AviationAerInPerso
 
 @Component({
   selector: 'app-opinion-statement-in-person-visit-form',
-  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './opinion-statement-in-person-visit-form.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
   providers: [
     {
       provide: AER_SITE_VISIT_FORM,

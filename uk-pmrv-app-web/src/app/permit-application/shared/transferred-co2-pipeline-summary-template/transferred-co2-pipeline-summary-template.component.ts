@@ -4,7 +4,6 @@ import { TransportCO2AndN2OPipelineSystems } from 'pmrv-api';
 
 @Component({
   selector: 'app-transferred-co2-pipeline-summary-template',
-  standalone: false,
   templateUrl: './transferred-co2-pipeline-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

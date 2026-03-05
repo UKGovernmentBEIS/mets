@@ -6,7 +6,6 @@ import { UserRegistrationStore } from '../store/user-registration.store';
 
 @Component({
   selector: 'app-email-confirmed',
-  standalone: false,
   template: `
     <govuk-panel>Email address confirmed</govuk-panel>
 

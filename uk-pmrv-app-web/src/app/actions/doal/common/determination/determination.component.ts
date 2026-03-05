@@ -9,7 +9,6 @@ import { DoalActionService } from '../../core/doal-action.service';
 
 @Component({
   selector: 'app-doal-determination',
-  standalone: false,
   templateUrl: './determination.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

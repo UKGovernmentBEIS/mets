@@ -30,6 +30,7 @@ import { AerVerificationReviewDecisionGroupFormComponent } from './form/aer-veri
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-aviation-aer-verification-review-decision-group',
+  standalone: true,
   imports: [
     SharedModule,
     AerVerificationReviewDecisionGroupFormComponent,

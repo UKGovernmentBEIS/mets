@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { RequestActionInfoDTO } from 'pmrv-api';
 
-@Pipe({
-  name: 'timelineItemLink',
-  standalone: false,
-})
+@Pipe({ name: 'timelineItemLink' })
 export class TimelineItemLinkPipe implements PipeTransform {
   transform(value: RequestActionInfoDTO, isWorkflow?: boolean, isAviation?: boolean, roleType?: string): any[] {
     const routerLooks = isWorkflow ? './' : '/';
@@ -16,14 +13,6 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED':
       case 'INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED':
         return [routerLooks + 'installation-account', 'summary', value.id];
-
-      case 'INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY':
-      case 'WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY':
-        return [routerLooks + 'actions', value.id, 'registry', 'information-sent'];
-      case 'AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY':
-        return isWorkflow
-          ? [routerLooks + 'actions', value.id, 'registry', 'information-sent']
-          : [routerLooks + 'aviation', 'actions', value.id, 'registry', 'information-sent'];
 
       case 'PERMIT_ISSUANCE_APPLICATION_SUBMITTED':
         return [routerLooks + 'permit-issuance', 'action', value.id];
@@ -390,7 +379,6 @@ export class TimelineItemLinkPipe implements PipeTransform {
         return [routerLooks + 'actions', value.id, 'withholding-allowances', 'closed'];
       case 'WITHHOLDING_OF_ALLOWANCES_PEER_REVIEW_REQUESTED':
       case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_CANCELLED':
-      case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_RE_INITIATED':
         return null;
       case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_ACCEPTED':
       case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_REJECTED':
@@ -521,23 +509,9 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'BDR_APPLICATION_PEER_REVIEW_REJECTED':
         return [routerLooks + 'actions', value.id, 'bdr', 'peer-review-decision'];
 
-      case 'BDRS2_RECALLED_FROM_VERIFICATION':
-      case 'BDRS2_APPLICATION_RE_INITIATED':
-      case 'BDRS2_APPLICATION_PEER_REVIEW_REQUESTED':
-        return null;
       case 'BDRS2_APPLICATION_SENT_TO_VERIFIER':
       case 'BDRS2_APPLICATION_SENT_TO_REGULATOR':
-      case 'BDRS2_APPLICATION_VERIFICATION_SUBMITTED':
-      case 'BDRS2_APPLICATION_AMENDS_SENT_TO_VERIFIER':
-      case 'BDRS2_APPLICATION_COMPLETED':
         return [routerLooks + 'actions', value.id, 'bdrs2', 'submitted'];
-      case 'BDRS2_VERIFICATION_RETURNED_TO_OPERATOR':
-        return [routerLooks + 'actions', value.id, 'bdrs2', 'returned-to-operator'];
-      case 'BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
-        return [routerLooks + 'actions', value.id, 'bdrs2', 'return-for-amends'];
-      case 'BDRS2_APPLICATION_PEER_REVIEW_ACCEPTED':
-      case 'BDRS2_APPLICATION_PEER_REVIEW_REJECTED':
-        return [routerLooks + 'actions', value.id, 'bdrs2', 'peer-review-decision'];
 
       case 'PERMANENT_CESSATION_SUBMITTED':
       case 'PERMANENT_CESSATION_APPLICATION_CANCELLED':

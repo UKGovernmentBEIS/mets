@@ -17,10 +17,9 @@ import { uploadNoticeOfIntentFormProvider } from './upload-notice-of-intent-form
 
 @Component({
   selector: 'app-upload-notice-of-intent',
-  standalone: false,
   templateUrl: './upload-notice-of-intent.component.html',
-  providers: [uploadNoticeOfIntentFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [uploadNoticeOfIntentFormProvider],
 })
 export class UploadNoticeOfIntentComponent {
   currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));

@@ -11,10 +11,9 @@ describe('CheckboxComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <div govuk-checkboxes [formControl]="control">
-        <govuk-checkbox [value]="1" label="First" />
+        <govuk-checkbox [value]="1" label="First"></govuk-checkbox>
         <govuk-checkbox [value]="2">
           <ng-container govukLabel>Second</ng-container>
           <ng-container govukConditionalContent>

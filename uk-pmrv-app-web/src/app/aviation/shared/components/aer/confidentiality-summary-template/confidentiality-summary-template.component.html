@@ -7,7 +7,7 @@
     <dd govukSummaryListRowValue>{{ confidentialityData.totalEmissionsPublished ? 'Yes' : 'No' }}</dd>
 
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+      <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
     </dd>
   </div>
 
@@ -20,7 +20,7 @@
       <dd govukSummaryListRowValue class="pre-wrap">{{ confidentialityData?.totalEmissionsExplanation }}</dd>
 
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
 
@@ -32,7 +32,7 @@
       </dd>
 
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
   </ng-container>
@@ -45,7 +45,7 @@
     <dd govukSummaryListRowValue>{{ confidentialityData.aggregatedStatePairDataPublished ? 'Yes' : 'No' }}</dd>
 
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+      <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
     </dd>
   </div>
 
@@ -58,7 +58,7 @@
       <dd govukSummaryListRowValue class="pre-wrap">{{ confidentialityData?.aggregatedStatePairDataExplanation }}</dd>
 
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
 
@@ -70,7 +70,7 @@
       </dd>
 
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
   </ng-container>

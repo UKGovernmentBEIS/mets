@@ -15,10 +15,9 @@ import { samplingJustificationProvider } from './sampling-justification.provider
 
 @Component({
   selector: 'app-sampling-justification',
-  standalone: false,
   templateUrl: './sampling-justification.component.html',
-  providers: [samplingJustificationProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [samplingJustificationProvider],
 })
 export class SamplingJustificationComponent implements PendingRequest {
   readonly index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

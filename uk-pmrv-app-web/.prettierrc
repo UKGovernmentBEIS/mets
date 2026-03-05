@@ -8,13 +8,5 @@
   "trailingComma": "all",
   "htmlWhitespaceSensitivity": "ignore",
   "bracketSameLine": true,
-  "endOfLine": "auto",
-  "overrides": [
-    {
-      "files": "*.html",
-      "options": {
-        "parser": "angular"
-      }
-    }
-  ]
+  "endOfLine": "auto"
 }

@@ -5,7 +5,6 @@ import { RdeStore } from '../../store/rde.store';
 
 @Component({
   selector: 'app-confirmation',
-  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

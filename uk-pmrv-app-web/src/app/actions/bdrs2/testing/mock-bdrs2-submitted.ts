@@ -1,8 +1,4 @@
-import {
-  BDRS2ApplicationSubmittedRequestActionPayload,
-  BDRS2ApplicationVerificationSubmittedRequestActionPayload,
-  InstallationOperatorDetails,
-} from 'pmrv-api';
+import { BDRS2ApplicationSubmittedRequestActionPayload, InstallationOperatorDetails } from 'pmrv-api';
 
 const mockInstallationOperatorDetails = {
   companyReferenceNumber: '88888',
@@ -51,36 +47,3 @@ export const bdrs2SubmittedRequestActionPayload: BDRS2ApplicationSubmittedReques
   verificationPerformed: false,
   bdrs2Attachments: { testFile: 'bcc7f0bc-d7ec-4d11-8170-2a6451b71413' },
 };
-
-export const bdrs2VerificationSubmittedRequestActionPayload: BDRS2ApplicationVerificationSubmittedRequestActionPayload =
-  {
-    bdrs2: {
-      bdrs2guardQuestions: {
-        continueApplicationForFreeAllocationType: 'CONTINUE_AS_MAIN_SCHEME_PARTICIPANT',
-        covidAdjustments: true,
-        inEiteSector: true,
-        requiresAdditionalSubInstallationSplitsForCbam: true,
-      },
-      bdrs2Files: {
-        supportingFiles: ['bcc7f0bc-d7ec-4d11-8170-2a6451b71413'],
-        file: 'bcc7f0bc-d7ec-4d11-8170-2a6451b71413',
-      },
-      mmpFiles: {
-        supportingFiles: ['bcc7f0bc-d7ec-4d11-8170-2a6451b71413'],
-        file: 'bcc7f0bc-d7ec-4d11-8170-2a6451b71413',
-      },
-    },
-    installationOperatorDetails: mockInstallationOperatorDetails,
-    verificationPerformed: false,
-    verificationReport: {
-      opinionStatement: {
-        notes: '123',
-        opinionStatementFiles: ['bcc7f0bc-d7ec-4d11-8170-2a6451b71413'],
-      },
-      overallAssessment: {
-        type: 'VERIFIED_AS_SATISFACTORY',
-      },
-    },
-    verificationAttachments: { testFile: 'bcc7f0bc-d7ec-4d11-8170-2a6451b71413' },
-    bdrs2Attachments: { testFile: 'bcc7f0bc-d7ec-4d11-8170-2a6451b71413' },
-  };

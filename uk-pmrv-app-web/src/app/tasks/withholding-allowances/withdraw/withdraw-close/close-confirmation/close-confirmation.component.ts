@@ -6,7 +6,7 @@ import { WithholdingAllowancesService } from '../../../core/withholding-allowanc
 
 @Component({
   selector: 'app-close-confirmation',
-  standalone: false,
+
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

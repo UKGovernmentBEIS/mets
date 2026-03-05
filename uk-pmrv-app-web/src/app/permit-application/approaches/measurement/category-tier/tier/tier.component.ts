@@ -16,10 +16,9 @@ import { tierProvider } from './tier.provider';
 
 @Component({
   selector: 'app-tier',
-  standalone: false,
   templateUrl: './tier.component.html',
-  providers: [tierProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [tierProvider],
 })
 export class TierComponent implements PendingRequest {
   readonly index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

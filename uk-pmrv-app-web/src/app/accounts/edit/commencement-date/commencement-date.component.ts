@@ -13,6 +13,7 @@ import { InstallationAccountDTO, InstallationAccountPermitDTO, InstallationAccou
 
 @Component({
   selector: 'app-commencement-date',
+  standalone: true,
   imports: [SharedModule, RouterModule],
   templateUrl: './commencement-date.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

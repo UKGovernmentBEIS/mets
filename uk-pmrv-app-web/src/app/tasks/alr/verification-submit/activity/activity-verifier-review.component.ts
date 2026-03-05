@@ -12,8 +12,9 @@ import { ALRApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-activity-verifier-review',
-  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, ActivitySummaryTemplateComponent],
   templateUrl: './activity-verifier-review.component.html',
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, ActivitySummaryTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActivityVerifierReviewComponent {

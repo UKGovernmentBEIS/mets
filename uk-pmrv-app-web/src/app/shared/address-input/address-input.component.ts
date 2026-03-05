@@ -10,7 +10,6 @@ import { existingControlContainer } from '../providers/control-container.factory
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-address-input',
-  standalone: false,
   templateUrl: './address-input.component.html',
   viewProviders: [existingControlContainer],
 })

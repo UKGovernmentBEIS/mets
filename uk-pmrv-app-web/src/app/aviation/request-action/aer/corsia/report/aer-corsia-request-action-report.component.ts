@@ -75,6 +75,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aer-corsia-request-action-report.component',
+  templateUrl: './aer-corsia-request-action-report.component.html',
+  standalone: true,
   imports: [
     SharedModule,
     VerifierDetailsCorsiaTemplateComponent,
@@ -105,7 +107,6 @@ interface ViewModel {
     TotalEmissionsCorsiaStatePairsTableTemplateComponent,
     ReportingObligationSummaryTemplateComponent,
   ],
-  templateUrl: './aer-corsia-request-action-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerCorsiaRequestActionReportComponent implements OnInit, AfterViewInit {

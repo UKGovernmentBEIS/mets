@@ -12,7 +12,6 @@ describe('OpinionStatementSiteVerificationSummaryTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-opinion-statement-site-verification-summary-template
         [siteVisit]="siteVisit"

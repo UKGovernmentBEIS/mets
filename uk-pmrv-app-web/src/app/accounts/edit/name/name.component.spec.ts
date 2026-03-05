@@ -56,6 +56,7 @@ describe('NameComponent', () => {
     component.form.setValue({
       installationName: 'oldInstallationName',
     });
+    component.form.invalid;
 
     component.onSubmit();
 

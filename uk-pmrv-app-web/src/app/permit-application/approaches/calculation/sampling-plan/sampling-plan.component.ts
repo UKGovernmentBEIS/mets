@@ -12,10 +12,9 @@ import { SAMPLING_PLAN_FORM, samplingPlanFormProvider } from './sampling-plan-fo
 
 @Component({
   selector: 'app-sampling-plan',
-  standalone: false,
   templateUrl: './sampling-plan.component.html',
-  providers: [samplingPlanFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [samplingPlanFormProvider],
 })
 export class SamplingPlanComponent implements PendingRequest {
   constructor(

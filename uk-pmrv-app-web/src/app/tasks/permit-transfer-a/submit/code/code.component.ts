@@ -15,7 +15,6 @@ import { codeFormProvider } from './code-form.provider';
 
 @Component({
   selector: 'app-transfer-code',
-  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onSubmit()"
@@ -35,8 +34,8 @@ import { codeFormProvider } from './code-form.provider';
     </app-wizard-step>
     <a govukLink routerLink="..">Return to: Permit transfer application</a>
   `,
-  providers: [codeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [codeFormProvider],
 })
 export class TransferACodeComponent {
   private readonly isAlrVisible = toSignal(this.permitTransferAService.isAlrVisible$);

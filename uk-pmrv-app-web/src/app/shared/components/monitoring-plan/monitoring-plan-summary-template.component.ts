@@ -4,7 +4,6 @@ import { AerMonitoringPlanDeviation, OpinionStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-monitoring-plan-summary-template',
-  standalone: false,
   // eslint-disable-next-line @angular-eslint/component-max-inline-declarations
   template: `
     <h3 class="govuk-heading-s" *ngIf="headingSmall; else h2Heading">

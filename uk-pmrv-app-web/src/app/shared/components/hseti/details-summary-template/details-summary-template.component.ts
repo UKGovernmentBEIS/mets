@@ -9,8 +9,9 @@ import { HSETI, HSETIRegulatorReviewDecision } from 'pmrv-api';
 
 @Component({
   selector: 'app-hseti-details-summary-template',
-  imports: [SharedModule, RouterLink],
   templateUrl: './details-summary-template.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsSummaryTemplateComponent {

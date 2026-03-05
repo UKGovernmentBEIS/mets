@@ -8,7 +8,6 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-management-procedures',
-  standalone: false,
   templateUrl: './management-procedures.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

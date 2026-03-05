@@ -18,10 +18,9 @@ import {
 } from './reference-documents-type';
 
 @Injectable()
-export class MaterialityLevelFormProvider implements TaskFormProvider<
-  AviationAerMaterialityLevel,
-  AviationAerMaterialityLevelFormModel
-> {
+export class MaterialityLevelFormProvider
+  implements TaskFormProvider<AviationAerMaterialityLevel, AviationAerMaterialityLevelFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private destroy$ = new Subject<void>();

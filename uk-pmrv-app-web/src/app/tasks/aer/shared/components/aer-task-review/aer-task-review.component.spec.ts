@@ -25,7 +25,6 @@ describe('AerTaskReviewComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-aer-task-review [breadcrumb]="true" heading="Transferred CO2">
         <h2 class="govuk-heading-m">Transferred CO2 details</h2>

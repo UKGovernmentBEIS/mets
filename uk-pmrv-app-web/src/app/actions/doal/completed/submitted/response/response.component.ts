@@ -9,7 +9,6 @@ import { DoalActionService } from '../../../core/doal-action.service';
 
 @Component({
   selector: 'app-doal-response',
-  standalone: false,
   template: `
     <app-doal-action-task header="Provide UK ETS Authority response" [actionType]="actionType$ | async">
       <app-doal-authority-decision-template

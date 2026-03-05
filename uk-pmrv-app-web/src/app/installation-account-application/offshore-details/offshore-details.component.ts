@@ -14,7 +14,6 @@ import { InstallationAccountApplicationStore } from '../store/installation-accou
 
 @Component({
   selector: 'app-offshore-details',
-  standalone: false,
   templateUrl: './offshore-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

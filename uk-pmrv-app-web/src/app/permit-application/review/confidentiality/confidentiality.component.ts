@@ -9,7 +9,6 @@ import { PermitApplicationState } from '../../store/permit-application.state';
 
 @Component({
   selector: 'app-confidentiality',
-  standalone: false,
   templateUrl: './confidentiality.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

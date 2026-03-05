@@ -4,7 +4,6 @@ import { DoalProceedToAuthorityDetermination } from 'pmrv-api';
 
 @Component({
   selector: 'app-determination-proceed-authority-withholding-template',
-  standalone: false,
   templateUrl: './determination-proceed-authority-withholding-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

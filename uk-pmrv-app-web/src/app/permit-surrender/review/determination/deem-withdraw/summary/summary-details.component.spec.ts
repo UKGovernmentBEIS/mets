@@ -13,7 +13,6 @@ import { SummaryDetailsComponent } from './summary-details.component';
 
 describe('SummaryDetailsComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <app-deem-withdraw-determination-summary-details
         [deemWithdrawDetermination$]="deemWithdrawDetermination$"></app-deem-withdraw-determination-summary-details>

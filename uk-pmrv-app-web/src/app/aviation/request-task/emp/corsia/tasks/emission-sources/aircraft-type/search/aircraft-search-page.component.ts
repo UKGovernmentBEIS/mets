@@ -26,8 +26,9 @@ const PAGE_SIZE = 30;
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-aircraft-search',
-  imports: [CommonModule, SharedModule, AircraftTypeDescriptionPipe, ReturnToLinkComponent],
   templateUrl: './aircraft-search-page.component.html',
+  standalone: true,
+  imports: [CommonModule, SharedModule, AircraftTypeDescriptionPipe, ReturnToLinkComponent],
 })
 export class AircraftSearchPageComponent implements OnInit, OnDestroy {
   // page size is static as described in respective the ticket.

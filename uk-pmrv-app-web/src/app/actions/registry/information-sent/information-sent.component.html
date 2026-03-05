@@ -1,158 +1,112 @@
-@let vm = this.vm();
+<ng-container *ngIf="vm() as vm">
+  <ng-container *ngTemplateOutlet="actionContainer"></ng-container>
 
-<ng-container *ngTemplateOutlet="actionContainer"></ng-container>
+  <ng-template #actionContainer>
+    <app-base-action-container-component
+      [header]="vm.header"
+      [customContentTemplate]="customContentTemplate"
+      [expectedActionType]="vm.expectedActionType"></app-base-action-container-component>
+  </ng-template>
 
-<ng-template #actionContainer>
-  <app-base-action-container-component
-    [header]="vm.header"
-    [customContentTemplate]="customContentTemplate"
-    [expectedActionType]="vm.expectedActionType"></app-base-action-container-component>
-</ng-template>
-
-<ng-template #customContentTemplate>
-  @switch (vm.expectedActionType[0]) {
-    @case ('INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY') {
-      <h2 class="govuk-heading-m">Active permit</h2>
-      <dl govuk-summary-list>
+  <ng-template #customContentTemplate>
+    <h2 class="govuk-heading-m">Active permit</h2>
+    <dl govuk-summary-list>
+      @if ($any(vm.activePermit).emitterId) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Emitter ID</dt>
+          <dd govukSummaryListRowValue>{{ $any(vm.activePermit).emitterId }}</dd>
+          <dd govukSummaryListRowActions></dd>
+        </div>
+      } @else if ($any(vm.activePermit).registryId) {
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>UK ETS Registry ID</dt>
           <dd govukSummaryListRowValue>{{ $any(vm.activePermit).registryId }}</dd>
           <dd govukSummaryListRowActions></dd>
         </div>
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Emissions year</dt>
-          <dd govukSummaryListRowValue>{{ $any(vm.activePermit).reportingYear }}</dd>
-          <dd govukSummaryListRowActions></dd>
-        </div>
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Emissions value</dt>
-          <dd govukSummaryListRowValue>{{ $any(vm.activePermit).reportableEmissions }}</dd>
-          <dd govukSummaryListRowActions></dd>
-        </div>
-      </dl>
-    }
+      }
 
-    @case ('WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY') {
-      <h2 class="govuk-heading-m">Details</h2>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Permit ID</dt>
+        <dd govukSummaryListRowValue>{{ vm.activePermit.permitId }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Installation name</dt>
+        <dd govukSummaryListRowValue>{{ vm.activePermit.installationName }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Operator name</dt>
+        <dd govukSummaryListRowValue>{{ vm.activePermit.operatorName }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+      <div govukSummaryListRow *ngIf="$any(vm.activePermit).regulator">
+        <dt govukSummaryListRowKey>Regulator</dt>
+        <dd govukSummaryListRowValue>{{ $any(vm.activePermit).regulator }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>First year of Registry reporting obligation</dt>
+        <dd govukSummaryListRowValue>{{ vm.activePermit.firstYearOfReportingObligation }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+
+      <div govukSummaryListRow *ngIf="$any(vm.activePermit).regulatedActivity">
+        <dt govukSummaryListRowKey>Regulated activity</dt>
+        <dd govukSummaryListRowValue>
+          @for (regulatedActivity of vm.activePermit.regulatedActivity; track $index) {
+            {{ regulatedActivity | regulatedActivityType }}
+            <br />
+          }
+        </dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+    </dl>
+
+    <ng-container *ngIf="vm?.organizationDetails as organisationStructure">
+      <h2 class="govuk-heading-m">Organisation details</h2>
       <dl govuk-summary-list>
         <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Registry ID</dt>
-          <dd govukSummaryListRowValue>{{ $any(vm.payload).registryId }}</dd>
-          <dd govukSummaryListRowActions></dd>
-        </div>
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Withhold flag</dt>
-          <dd govukSummaryListRowValue>{{ $any(vm.payload).withholdFlag ? 'Yes' : 'No' }}</dd>
-          <dd govukSummaryListRowActions></dd>
-        </div>
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Withhold year</dt>
-          <dd govukSummaryListRowValue>{{ $any(vm.payload).withholdYear }}</dd>
-          <dd govukSummaryListRowActions></dd>
-        </div>
-      </dl>
-    }
-
-    @default {
-      <h2 class="govuk-heading-m">Active permit</h2>
-      <dl govuk-summary-list>
-        @if ($any(vm.activePermit).emitterId) {
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>Emitter ID</dt>
-            <dd govukSummaryListRowValue>{{ $any(vm.activePermit).emitterId }}</dd>
-            <dd govukSummaryListRowActions></dd>
-          </div>
-        } @else if ($any(vm.activePermit).registryId) {
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>UK ETS Registry ID</dt>
-            <dd govukSummaryListRowValue>{{ $any(vm.activePermit).registryId }}</dd>
-            <dd govukSummaryListRowActions></dd>
-          </div>
-        }
-
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Permit ID</dt>
-          <dd govukSummaryListRowValue>{{ vm.activePermit.permitId }}</dd>
-          <dd govukSummaryListRowActions></dd>
-        </div>
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Installation name</dt>
-          <dd govukSummaryListRowValue>{{ vm.activePermit.installationName }}</dd>
-          <dd govukSummaryListRowActions></dd>
-        </div>
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Operator name</dt>
-          <dd govukSummaryListRowValue>{{ vm.activePermit.operatorName }}</dd>
-          <dd govukSummaryListRowActions></dd>
-        </div>
-        <div govukSummaryListRow *ngIf="$any(vm.activePermit).regulator">
-          <dt govukSummaryListRowKey>Regulator</dt>
-          <dd govukSummaryListRowValue>{{ $any(vm.activePermit).regulator }}</dd>
-          <dd govukSummaryListRowActions></dd>
-        </div>
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>First year of Registry reporting obligation</dt>
-          <dd govukSummaryListRowValue>{{ vm.activePermit.firstYearOfReportingObligation }}</dd>
-          <dd govukSummaryListRowActions></dd>
-        </div>
-
-        <div govukSummaryListRow *ngIf="$any(vm.activePermit).regulatedActivity">
-          <dt govukSummaryListRowKey>Regulated activity</dt>
+          <dt govukSummaryListRowKey>Organisation legal status</dt>
           <dd govukSummaryListRowValue>
-            @for (regulatedActivity of vm.activePermit.regulatedActivity; track $index) {
-              {{ regulatedActivity | regulatedActivityType }}
-              <br />
-            }
+            {{ $any(organisationStructure).organisationLegalStatus | legalEntityType }}
+          </dd>
+          <dd govukSummaryListRowActions></dd>
+        </div>
+
+        <ng-container *ngIf="$any(organisationStructure).organisationLegalStatus !== 'SOLE_TRADER'">
+          <div govukSummaryListRow *ngIf="$any(organisationStructure)?.companyRegistrationNumber">
+            <dt govukSummaryListRowKey>Company registration number</dt>
+            <dd govukSummaryListRowValue>{{ $any(organisationStructure).companyRegistrationNumber }}</dd>
+            <dd govukSummaryListRowActions></dd>
+          </div>
+          <div govukSummaryListRow *ngIf="$any(organisationStructure)?.justification">
+            <dt govukSummaryListRowKey>Justification</dt>
+            <dd govukSummaryListRowValue>{{ $any(organisationStructure).justification }}</dd>
+            <dd govukSummaryListRowActions></dd>
+          </div>
+        </ng-container>
+
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>
+            {{
+              $any(organisationStructure).organisationLegalStatus === 'SOLE_TRADER'
+                ? 'Operator address'
+                : 'Registered address'
+            }}
+          </dt>
+          <dd govukSummaryListRowValue>
+            <div>
+              {{ vm.address.line1 }}
+              <ng-container *ngIf="vm.address?.line2">, {{ vm.address.line2 }}</ng-container>
+            </div>
+            <div>{{ vm.address.city }}</div>
+            <div>{{ vm.address.postcode }}</div>
+            <div>{{ vm.address.country | country }}</div>
           </dd>
           <dd govukSummaryListRowActions></dd>
         </div>
       </dl>
-
-      <ng-container *ngIf="vm?.organizationDetails as organisationStructure">
-        <h2 class="govuk-heading-m">Organisation details</h2>
-        <dl govuk-summary-list>
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>Organisation legal status</dt>
-            <dd govukSummaryListRowValue>
-              {{ $any(organisationStructure).organisationLegalStatus | legalEntityType }}
-            </dd>
-            <dd govukSummaryListRowActions></dd>
-          </div>
-
-          <ng-container *ngIf="$any(organisationStructure).organisationLegalStatus !== 'SOLE_TRADER'">
-            <div govukSummaryListRow *ngIf="$any(organisationStructure)?.companyRegistrationNumber">
-              <dt govukSummaryListRowKey>Company registration number</dt>
-              <dd govukSummaryListRowValue>{{ $any(organisationStructure).companyRegistrationNumber }}</dd>
-              <dd govukSummaryListRowActions></dd>
-            </div>
-            <div govukSummaryListRow *ngIf="$any(organisationStructure)?.justification">
-              <dt govukSummaryListRowKey>Justification</dt>
-              <dd govukSummaryListRowValue>{{ $any(organisationStructure).justification }}</dd>
-              <dd govukSummaryListRowActions></dd>
-            </div>
-          </ng-container>
-
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>
-              {{
-                $any(organisationStructure).organisationLegalStatus === 'SOLE_TRADER'
-                  ? 'Operator address'
-                  : 'Registered address'
-              }}
-            </dt>
-            <dd govukSummaryListRowValue>
-              <div>
-                {{ vm.address.line1 }}
-                <ng-container *ngIf="vm.address?.line2">, {{ vm.address.line2 }}</ng-container>
-              </div>
-              <div>{{ vm.address.city }}</div>
-              <div>{{ vm.address.postcode }}</div>
-              <div>{{ vm.address.country | country }}</div>
-            </dd>
-            <dd govukSummaryListRowActions></dd>
-          </div>
-        </dl>
-      </ng-container>
-    }
-  }
-</ng-template>
+    </ng-container>
+  </ng-template>
+</ng-container>

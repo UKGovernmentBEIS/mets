@@ -5,7 +5,6 @@ import { PermitApplicationStore } from '@permit-application/store/permit-applica
 
 @Component({
   selector: 'app-fallback-description-summary-template',
-  standalone: false,
   templateUrl: './summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

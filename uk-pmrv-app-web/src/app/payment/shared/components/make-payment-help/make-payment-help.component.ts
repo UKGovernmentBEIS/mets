@@ -6,7 +6,6 @@ import { RequestInfoDTO, RequestTaskDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-make-payment-help',
-  standalone: false,
   templateUrl: './make-payment-help.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

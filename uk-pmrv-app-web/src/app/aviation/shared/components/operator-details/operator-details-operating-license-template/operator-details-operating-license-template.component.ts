@@ -8,10 +8,11 @@ import { GovukComponentsModule, GovukSelectOption } from 'govuk-components';
 
 @Component({
   selector: 'app-operator-details-operating-license-template',
+  standalone: true,
   imports: [GovukComponentsModule, SharedModule, ReactiveFormsModule],
   templateUrl: './operator-details-operating-license-template.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class OperatorDetailsOperatingLicenseTemplateComponent {
   @Input() form: FormGroup<any>;

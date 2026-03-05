@@ -13,7 +13,6 @@ import { officialNoticeFormProvider } from './official-notice-form.provider';
 
 @Component({
   selector: 'app-official-notice',
-  standalone: false,
   template: `
     <app-permit-task>
       <app-wizard-step
@@ -33,8 +32,8 @@ import { officialNoticeFormProvider } from './official-notice-form.provider';
       <a govukLink routerLink="../..">Return to: {{ determinationHeader }}</a>
     </app-permit-task>
   `,
-  providers: [officialNoticeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [officialNoticeFormProvider],
 })
 export class OfficialNoticeComponent implements PendingRequest {
   determinationHeader = this.store.getDeterminationHeader();

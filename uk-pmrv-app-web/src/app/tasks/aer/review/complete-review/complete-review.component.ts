@@ -9,7 +9,6 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 @Component({
   selector: 'app-aer-complete-review',
-  standalone: false,
   template: `
     <ng-container *ngIf="(isSubmitted$ | async) === false; else completed">
       <app-aer-task-review>

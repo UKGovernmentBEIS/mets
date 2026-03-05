@@ -7,6 +7,7 @@ import { AerDataReviewDecision } from 'pmrv-api';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-aer-review-decision-group-summary',
+  standalone: true,
   imports: [SharedModule],
   templateUrl: './aer-review-decision-group-summary.component.html',
 })

@@ -17,7 +17,6 @@ import { AirApplicationReviewRequestTaskPayload, RegulatorAirImprovementResponse
 
 @Component({
   selector: 'app-improvement-response-review',
-  standalone: false,
   templateUrl: './improvement-response-review.component.html',
   providers: [improvementResponseReviewFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

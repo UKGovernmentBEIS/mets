@@ -1,3 +1,4 @@
+import { AsyncPipe, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -10,14 +11,21 @@ import { TotalEmissionsStandardFuelsTableComponent } from '@aviation/request-tas
 import { RequestTaskModule } from '@aviation/request-task/request-task.module';
 import { AerRequestTaskPayload, RequestTaskStore } from '@aviation/request-task/store';
 import { TotalEmissionsSchemeYearSummaryComponent } from '@aviation/shared/components/aer/total-emissions/total-emissions-scheme-year-summary';
+import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { SharedModule } from '@shared/shared.module';
 
 import { AviationAerEmissionsCalculationDTO, AviationAerTotalEmissions, AviationReportingService } from 'pmrv-api';
 
 @Component({
   selector: 'app-total-emissions-scheme-year-header',
+  templateUrl: './total-emissions-scheme-year-header.component.html',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    AsyncPipe,
+    NgIf,
     SharedModule,
+    ReturnToLinkComponent,
     RequestTaskModule,
     TotalEmissionsStandardFuelsTableComponent,
     TotalEmissionsAerodromePairsTableComponent,
@@ -25,8 +33,6 @@ import { AviationAerEmissionsCalculationDTO, AviationAerTotalEmissions, Aviation
     TotalEmissionsNonDomesticFlightsTableComponent,
     TotalEmissionsSchemeYearSummaryComponent,
   ],
-  templateUrl: './total-emissions-scheme-year-header.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsSchemeYearHeaderComponent implements OnInit, OnDestroy {
   constructor(

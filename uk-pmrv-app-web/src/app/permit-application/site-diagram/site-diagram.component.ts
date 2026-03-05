@@ -14,10 +14,9 @@ import { siteDiagramAddFormFactory } from './site-diagram-form.provider';
 
 @Component({
   selector: 'app-site-diagram',
-  standalone: false,
   templateUrl: './site-diagram.component.html',
-  providers: [siteDiagramAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [siteDiagramAddFormFactory],
 })
 export class SiteDiagramComponent extends SectionComponent implements PendingRequest {
   isFileUploaded$: Observable<boolean> = this.form.get('siteDiagrams').valueChanges.pipe(

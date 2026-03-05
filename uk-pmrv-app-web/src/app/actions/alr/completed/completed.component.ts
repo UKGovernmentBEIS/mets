@@ -25,10 +25,11 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-action-completed',
+  standalone: true,
   imports: [ActionSharedModule, SharedModule, NgIf, RouterLink],
   templateUrl: './completed.component.html',
-  providers: [UserInfoResolverPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserInfoResolverPipe],
 })
 export class AlrActionCompletedComponent {
   vm: Signal<ViewModel> = computed(() => {

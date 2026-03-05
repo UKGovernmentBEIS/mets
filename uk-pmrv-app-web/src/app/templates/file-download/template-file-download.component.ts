@@ -7,7 +7,6 @@ import { DocumentTemplateFilesService, FileDocumentTemplatesService, FileToken }
 
 @Component({
   selector: 'app-template-file-download',
-  standalone: false,
   template: `
     <h1 class="govuk-heading-l">Your download has started</h1>
     <p class="govuk-body">You should see your downloads in the downloads folder.</p>

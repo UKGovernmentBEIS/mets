@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -20,7 +21,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-emp-batch-reissue-submitted',
-  imports: [SharedModule, EmpBatchReissueFiltersTemplateComponent],
+  standalone: true,
+  imports: [SharedModule, EmpBatchReissueFiltersTemplateComponent, RouterLink],
   templateUrl: './submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

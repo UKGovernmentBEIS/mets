@@ -20,11 +20,10 @@ import { annualProductionLevelsAddFormFactory } from './annual-production-levels
 
 @Component({
   selector: 'app-annual-production-levels',
-  standalone: false,
   templateUrl: './annual-production-levels.component.html',
-  styleUrl: './annual-production-levels.component.scss',
-  providers: [annualProductionLevelsAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [annualProductionLevelsAddFormFactory],
+  styleUrl: './annual-production-levels.component.scss',
 })
 export class AnnualProductionLevelComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

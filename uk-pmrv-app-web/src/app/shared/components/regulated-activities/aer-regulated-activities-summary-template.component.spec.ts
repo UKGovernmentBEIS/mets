@@ -15,7 +15,6 @@ describe('RegulatedActivitiesSummaryTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-aer-regulated-activities-summary-template
         [activity]="activity"

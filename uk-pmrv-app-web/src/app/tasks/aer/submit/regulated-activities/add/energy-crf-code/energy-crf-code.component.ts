@@ -15,10 +15,9 @@ import { activityItemNameMap } from '../crf-codes/crf-codes-item';
 
 @Component({
   selector: 'app-regulated-activity-energy-crf-code',
-  standalone: false,
   templateUrl: './energy-crf-code.component.html',
-  providers: [energyCrfCodeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [energyCrfCodeFormProvider],
 })
 export class EnergyCrfCodeComponent implements PendingRequest, AfterViewInit {
   caption$ = combineLatest([this.aerService.getTask('regulatedActivities'), this.route.paramMap]).pipe(

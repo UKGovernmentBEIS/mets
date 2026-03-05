@@ -16,10 +16,9 @@ import { emissionFactorFormProvider } from './emission-factor-form.provider';
 
 @Component({
   selector: 'app-category-tier-emission-factor',
-  standalone: false,
   templateUrl: './emission-factor.component.html',
-  providers: [emissionFactorFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [emissionFactorFormProvider],
 })
 export class EmissionFactorComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

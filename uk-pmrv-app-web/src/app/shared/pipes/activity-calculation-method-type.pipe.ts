@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { CalculationActivityDataCalculationMethod } from 'pmrv-api';
 
-@Pipe({
-  name: 'activityCalculationMethodType',
-  standalone: false,
-})
+@Pipe({ name: 'activityCalculationMethodType' })
 export class ActivityCalculationMethodTypePipe implements PipeTransform {
   transform(value: CalculationActivityDataCalculationMethod['type']): string {
     switch (value) {

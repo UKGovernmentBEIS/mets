@@ -14,10 +14,9 @@ import { MmpFlowDiagramProvider } from './mmp-flow-diagram-form.provider';
 
 @Component({
   selector: 'app-mmp-flow-diagram',
-  standalone: false,
   templateUrl: './mmp-flow-diagram.component.html',
-  providers: [MmpFlowDiagramProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [MmpFlowDiagramProvider],
 })
 export class MmpFlowDiagramComponent implements PendingRequest {
   readonly isFileUploaded$: Observable<boolean> = this.form.get('flowDiagrams').valueChanges.pipe(

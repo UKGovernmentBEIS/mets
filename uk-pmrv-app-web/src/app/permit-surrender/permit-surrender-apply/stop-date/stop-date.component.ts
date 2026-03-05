@@ -12,7 +12,6 @@ import { stopDateFormProvider } from './stop-date-form.provider';
 
 @Component({
   selector: 'app-stop-date',
-  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -32,8 +31,8 @@ import { stopDateFormProvider } from './stop-date-form.provider';
       </div>
     </div>
   `,
-  providers: [stopDateFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [stopDateFormProvider],
 })
 export class StopDateComponent implements PendingRequest {
   today = new Date();

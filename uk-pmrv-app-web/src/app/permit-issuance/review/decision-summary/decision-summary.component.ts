@@ -14,10 +14,9 @@ import { getDecisionNameMap, getDeterminationTypeMap } from '../decisionMap';
 
 @Component({
   selector: 'app-permit-issuance-decision-summary',
-  standalone: false,
   templateUrl: './decision-summary.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class DecisionSummaryComponent implements OnInit {
   urlRequestType = this.store.urlRequestType;

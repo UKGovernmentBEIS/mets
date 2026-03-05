@@ -6,7 +6,6 @@ import { TaskKey } from '../../../../shared/types/permit-task.type';
 
 @Component({
   selector: 'app-measurement-optional-summary-template',
-  standalone: false,
   templateUrl: './optional-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

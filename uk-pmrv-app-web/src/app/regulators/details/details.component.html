@@ -10,45 +10,51 @@
             formControlName="firstName"
             govuk-text-input
             label="First name"
-            widthClass="govuk-!-width-one-half"></div>
+            widthClass="govuk-!-width-one-half"
+          ></div>
           <div
             autoComplete="family-name"
             formControlName="lastName"
             govuk-text-input
             label="Last name"
-            widthClass="govuk-!-width-one-half"></div>
+            widthClass="govuk-!-width-one-half"
+          ></div>
           <div
             autoComplete="tel-national"
             formControlName="phoneNumber"
             govuk-text-input
             label="Telephone number"
-            widthClass="govuk-!-width-one-half"></div>
+            widthClass="govuk-!-width-one-half"
+          ></div>
           <div
             autoComplete="mobile tel-national"
             formControlName="mobileNumber"
             govuk-text-input
             label="Mobile number (optional)"
-            widthClass="govuk-!-width-one-half"></div>
+            widthClass="govuk-!-width-one-half"
+          ></div>
           <div
             autoComplete="email"
             formControlName="email"
             govuk-text-input
             label="Email address"
-            widthClass="govuk-!-width-one-half"></div>
+            widthClass="govuk-!-width-one-half"
+          ></div>
           <div
             autoComplete="organization-title"
             formControlName="jobTitle"
             govuk-text-input
             label="Job title"
-            widthClass="govuk-!-width-one-half"></div>
+            widthClass="govuk-!-width-one-half"
+          ></div>
         </div>
       </div>
     </div>
 
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-s">Files uploaded</h2>
-      <span class="govuk-hint">
-        The file must be:
+      <span class="govuk-hint"
+        >The file must be:
         <ul>
           <li>a BMP file</li>
           <li>no more than 240 x 140 pixels</li>
@@ -60,7 +66,8 @@
         formControlName="signature"
         hint="Upload a file"
         label="Signature"
-        [showFilesizeHint]="false"></app-file-input>
+        [showFilesizeHint]="false"
+      ></app-file-input>
     </div>
 
     <div *ngIf="allowEditPermissions$ | async as permissions" class="govuk-grid-row">
@@ -72,7 +79,8 @@
             govukSecondaryButton
             id="regulator_admin_team"
             type="button"
-            [attr.aria-pressed]="basePermissionSelected === 'regulator_admin_team'">
+            [attr.aria-pressed]="basePermissionSelected === 'regulator_admin_team'"
+          >
             Admin team
           </button>
           <button
@@ -80,7 +88,8 @@
             govukSecondaryButton
             id="regulator_technical_officer"
             type="button"
-            [attr.aria-pressed]="basePermissionSelected === 'regulator_technical_officer'">
+            [attr.aria-pressed]="basePermissionSelected === 'regulator_technical_officer'"
+          >
             Technical officer
           </button>
           <button
@@ -88,7 +97,8 @@
             govukSecondaryButton
             id="regulator_team_leader"
             type="button"
-            [attr.aria-pressed]="basePermissionSelected === 'regulator_team_leader'">
+            [attr.aria-pressed]="basePermissionSelected === 'regulator_team_leader'"
+          >
             Team leader
           </button>
           <button
@@ -96,7 +106,8 @@
             govukSecondaryButton
             id="ca_super_user"
             type="button"
-            [attr.aria-pressed]="basePermissionSelected === 'ca_super_user'">
+            [attr.aria-pressed]="basePermissionSelected === 'ca_super_user'"
+          >
             Regulator superuser
           </button>
           <button
@@ -104,7 +115,8 @@
             govukSecondaryButton
             id="pmrv_super_user"
             type="button"
-            [attr.aria-pressed]="basePermissionSelected === 'pmrv_super_user'">
+            [attr.aria-pressed]="basePermissionSelected === 'pmrv_super_user'"
+          >
             Service superuser
           </button>
         </div>
@@ -114,7 +126,7 @@
       <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-s">Customize Permissions</h2>
 
-        <div formGroupName="permissions">
+        <div [formGroupName]="'permissions'">
           <govuk-table [columns]="tableColumns" [data]="tableRows">
             <ng-template let-column="column" let-row="row">
               <ng-container *ngIf="column.field === 'task' || column.field === 'type'">
@@ -128,7 +140,8 @@
                     [formControlName]="row.permission"
                     [index]="column.field"
                     [value]="column.field"
-                    app-radio-option>
+                    app-radio-option
+                  >
                     <ng-container label>
                       <span class="govuk-visually-hidden">{{ column.header }}</span>
                     </ng-container>
@@ -139,7 +152,8 @@
                 <ng-container *ngIf="userPermissions$ | async as userPermissions">
                   <div
                     *ngIf="userPermissions[row.permission] === column.field"
-                    [id]="'check-' + row.permission + '-' + column.field">
+                    [id]="'check-' + row.permission + '-' + column.field"
+                  >
                     <strong>&#10004;</strong>
                   </div>
                 </ng-container>
@@ -152,16 +166,20 @@
 
     <app-two-fa-link
       *ngIf="isLoggedUser$ | async; else otherRegulatorUser"
-      title="Change two factor authentication"
-      link="/2fa/change"></app-two-fa-link>
+      [title]="'Change two factor authentication'"
+      [link]="'/2fa/change'"
+    >
+    </app-two-fa-link>
     <ng-template #otherRegulatorUser>
       <app-two-fa-link
         *ngIf="(allowEditPermissions$ | async) && (userId$ | async)"
-        title="Reset two-factor authentication"
-        link="/2fa/reset-2fa"
+        [title]="'Reset two-factor authentication'"
+        [link]="'/2fa/reset-2fa'"
         [userId]="userId$ | async"
         [userName]="userFullName"
-        role="REGULATOR"></app-two-fa-link>
+        [role]="'REGULATOR'"
+      >
+      </app-two-fa-link>
     </ng-template>
 
     <button appPendingButton govukButton type="submit">

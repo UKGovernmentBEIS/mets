@@ -7,7 +7,6 @@ import { RdeStore } from '../store/rde.store';
 
 @Component({
   selector: 'app-return-link',
-  standalone: false,
   template: `
     <a govukLink [routerLink]="returnLink$ | async">Return to: {{ returnText$ | async }}</a>
   `,

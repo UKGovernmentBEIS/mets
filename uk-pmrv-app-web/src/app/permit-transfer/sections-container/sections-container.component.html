@@ -2,34 +2,41 @@
   <div [class]="(isRelatedActionsSectionVisible$ | async) ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
     <govuk-notification-banner *ngIf="isTaskTypeAmendsSubmit$ | async" type="neutral">
       <h1 class="govuk-notification-banner__heading">The regulator has requested amends to your application.</h1>
-      <a [routerLink]="[]" (click)="viewAmends()" govukLink class="govuk-notification-banner__link">
-        View all required amends
-      </a>
+      <a [routerLink]="[]" (click)="viewAmends()" govukLink class="govuk-notification-banner__link"
+        >View all required amends</a
+      >
     </govuk-notification-banner>
     <app-page-heading size="xl">
       Full transfer of permit
       <app-task-header-info
         *ngIf="isTask$ | async"
         [assignee]="(store.select('assignee') | async).assigneeFullName"
-        [daysRemaining]="store.select('daysRemaining') | async"></app-task-header-info>
+        [daysRemaining]="store.select('daysRemaining') | async"
+      ></app-task-header-info>
     </app-page-heading>
 
-    <app-task-list [hideSubmit]="true">
-      <app-sections
-        [hideSubmit]="(store.select('isEditable') | async) === false"
-        [submitLink]="(isTransferSubmissionStatusCannotStartedYetOrComplete$ | async) ? '' : './summary'"
-        submitLinkText="Send to the regulator"
-        [submitLinkStatus]="transferSubmissionStatus$ | async">
-        <li app-task-section title="Tranfer details">
-          <ul app-task-item-list>
-            <li
-              app-task-item
-              link="./transfer-details/summary"
-              linkText="Confirm the transfer details"
-              [status]="transferDetailsConfirmationStatus$ | async"></li>
-          </ul>
-        </li>
-      </app-sections>
+    <app-task-list [hideSubmit]="true" [hideCancel]="true">
+      <li app-task-section title="Tranfer details">
+        <ul app-task-item-list>
+          <li
+            app-task-item
+            [link]="'./transfer-details/summary'"
+            linkText="Confirm the transfer details"
+            [status]="transferDetailsConfirmationStatus$ | async"
+          ></li>
+        </ul>
+      </li>
+      <app-sections></app-sections>
+      <li app-task-section title="Submit">
+        <ul app-task-item-list>
+          <li
+            app-task-item
+            [link]="(isTransferSubmissionStatusCannotStartedYetOrComplete$ | async) ? '' : './summary'"
+            linkText="Send to the regulator"
+            [status]="transferSubmissionStatus$ | async"
+          ></li>
+        </ul>
+      </li>
     </app-task-list>
 
     <ng-container *ngIf="relatedTasks$ | async as relatedTasks">
@@ -42,7 +49,8 @@
           *ngFor="let action of requestActions"
           [action]="action"
           [link]="action | timelineItemLink"
-          [state]="navigationState"></app-timeline-item>
+          [state]="navigationState"
+        ></app-timeline-item>
       </app-timeline>
     </ng-container>
   </div>
@@ -50,6 +58,7 @@
     <app-related-actions
       [isAssignable$]="store.isAssignableAndCapable$"
       [taskId$]="taskId$"
-      [allowedActions$]="store.select('allowedRequestTaskActions')"></app-related-actions>
+      [allowedActions$]="store.select('allowedRequestTaskActions')"
+    ></app-related-actions>
   </div>
 </div>

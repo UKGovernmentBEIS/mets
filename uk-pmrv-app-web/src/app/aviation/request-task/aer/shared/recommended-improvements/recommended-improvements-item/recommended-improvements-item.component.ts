@@ -30,9 +30,10 @@ interface ViewModel {
 
 @Component({
   selector: 'app-recommended-improvements-item',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './recommended-improvements-item.component.html',
   providers: [DestroySubject, RecommendedImprovementsItemFormProvider],
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecommendedImprovementsItemComponent {

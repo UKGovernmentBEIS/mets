@@ -69,7 +69,6 @@ describe('ConfidentialityStatementTemplateComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-confidentiality-statement-template
         (formSubmit)="onSubmit($event)"

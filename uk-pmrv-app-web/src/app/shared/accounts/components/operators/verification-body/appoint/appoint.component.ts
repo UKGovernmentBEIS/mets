@@ -36,10 +36,9 @@ import {
 
 @Component({
   selector: 'app-appoint',
-  standalone: false,
   templateUrl: './appoint.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class AppointComponent implements OnInit {
   form = this.fb.group({

@@ -21,6 +21,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-process-analysis',
+  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

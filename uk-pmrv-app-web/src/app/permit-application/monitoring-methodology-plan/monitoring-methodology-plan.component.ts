@@ -14,10 +14,9 @@ import { monitoringMethodologyPlanAddFormFactory } from './monitoring-methodolog
 
 @Component({
   selector: 'app-monitoring-methodology-plan',
-  standalone: false,
   templateUrl: './monitoring-methodology-plan.component.html',
-  providers: [monitoringMethodologyPlanAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [monitoringMethodologyPlanAddFormFactory],
 })
 export class MonitoringMethodologyPlanComponent implements PendingRequest {
   constructor(

@@ -11,7 +11,6 @@ import { MultiSelectItemComponent } from './multi-select-item/multi-select-item.
 
 describe('MultiSelectComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <form [formGroup]="form">
         <div app-multi-select formControlName="test" label="Test label">

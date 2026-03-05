@@ -12,7 +12,6 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-conformity-item-delete',
-  imports: [SharedModule, ReturnToLinkComponent],
   template: `
     <div class="govuk-!-width-two-thirds">
       <app-page-heading size="l">Are you sure you want to delete ‘{{ reference$ | async }}’?</app-page-heading>
@@ -23,6 +22,8 @@ import { SharedModule } from '@shared/shared.module';
       <app-return-to-link></app-return-to-link>
     </div>
   `,
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConformityItemDeleteComponent {

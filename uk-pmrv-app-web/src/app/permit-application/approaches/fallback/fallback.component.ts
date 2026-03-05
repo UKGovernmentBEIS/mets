@@ -13,7 +13,6 @@ import { areCategoryTierPrerequisitesMet } from './fallback-status';
 
 @Component({
   selector: 'app-fallback',
-  standalone: false,
   templateUrl: './fallback.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

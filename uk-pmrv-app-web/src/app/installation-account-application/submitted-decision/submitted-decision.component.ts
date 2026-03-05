@@ -9,7 +9,6 @@ import { InstallationAccountOpeningDecisionRequestActionPayload, RequestActionsS
 
 @Component({
   selector: 'app-submitted-decision',
-  standalone: false,
   templateUrl: './submitted-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -4,7 +4,6 @@ import { InherentReceivingTransferringInstallation } from 'pmrv-api';
 
 @Component({
   selector: 'app-inherent-co2-group',
-  standalone: false,
   templateUrl: './inherent-co2-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

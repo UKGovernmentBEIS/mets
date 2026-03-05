@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -27,8 +27,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-ets-compliance-rules-summary',
-  imports: [SharedModule, ReturnToLinkComponent, AerVerificationReviewDecisionGroupComponent],
   templateUrl: './ets-compliance-rules-summary.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent, RouterLinkWithHref, AerVerificationReviewDecisionGroupComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class EtsComplianceRulesSummaryComponent {

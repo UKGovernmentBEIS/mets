@@ -14,8 +14,9 @@ import { AviationAerCorsiaMonitoringApproach } from 'pmrv-api';
 
 @Component({
   selector: 'app-monitoring-approach-type',
-  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './monitoring-approach-cert.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonitoringApproachCertComponent {

@@ -19,8 +19,9 @@ export interface ViewModel {
 
 @Component({
   selector: 'app-overall-decision',
-  imports: [SharedModule, TaskSharedModule, HseTiTaskSharedModule, HsetiTaskReviewComponent],
   templateUrl: './overall-decision.component.html',
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, HseTiTaskSharedModule, HsetiTaskReviewComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HSETIOverallDecisionReviewComponent {

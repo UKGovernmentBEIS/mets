@@ -22,6 +22,7 @@ import { EmpReviewDecisionGroupFormComponent } from './form/emp-review-decision-
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-emp-review-decision-group',
+  standalone: true,
   imports: [SharedModule, EmpReviewDecisionGroupFormComponent, EmpReviewDecisionGroupSummaryComponent],
   templateUrl: './emp-review-decision-group.component.html',
   providers: [DestroySubject],

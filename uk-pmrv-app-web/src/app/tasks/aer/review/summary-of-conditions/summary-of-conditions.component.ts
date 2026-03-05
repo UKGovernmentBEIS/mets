@@ -9,7 +9,6 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-summary-of-conditions',
-  standalone: false,
   template: `
     <app-aer-task-review
       [breadcrumb]="true"

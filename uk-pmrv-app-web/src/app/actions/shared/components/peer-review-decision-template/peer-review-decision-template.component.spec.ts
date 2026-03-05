@@ -10,7 +10,6 @@ describe('PeerReviewDecisionTemplateComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
     template: `
       <app-peer-review-decision-template
         [requestActionType]="actionType"

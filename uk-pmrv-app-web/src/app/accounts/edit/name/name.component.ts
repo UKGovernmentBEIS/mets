@@ -12,7 +12,6 @@ import { EDIT_ACCOUNT_FORM, nameFormProvider } from './name-form.provider';
 
 @Component({
   selector: 'app-name',
-  standalone: false,
   template: `
     <app-page-heading size="l">Edit installation name</app-page-heading>
     <p class="govuk-body">

@@ -8,7 +8,6 @@ import { ReturnOfAllowancesService } from '../core/return-of-allowances.service'
 
 @Component({
   selector: 'app-returned',
-  standalone: false,
   templateUrl: './returned.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

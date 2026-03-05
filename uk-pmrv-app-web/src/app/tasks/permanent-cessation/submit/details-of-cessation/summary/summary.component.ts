@@ -12,6 +12,7 @@ import { PermanentCessationApplicationSubmitRequestTaskPayload } from 'pmrv-api'
 
 @Component({
   selector: 'app-permanent-cessation-details-summary',
+  standalone: true,
   imports: [PermanentCessationDetailsSummaryTemplateComponent, SharedModule, PermanentCessationTaskComponent],
   template: `
     <app-permanent-cessation-task returnToLink="../../">

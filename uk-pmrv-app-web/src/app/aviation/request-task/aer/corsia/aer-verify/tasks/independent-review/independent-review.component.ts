@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -16,7 +16,8 @@ import { GovukSelectOption } from 'govuk-components';
 
 @Component({
   selector: 'app-independent-review',
-  imports: [ReturnToLinkComponent, SharedModule],
+  standalone: true,
+  imports: [ReturnToLinkComponent, SharedModule, RouterLink, RouterLinkActive],
   templateUrl: './independent-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

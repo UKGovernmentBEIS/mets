@@ -15,10 +15,9 @@ import { PermitRevocation } from 'pmrv-api';
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
-  styles: '.govuk-list-error-key { border-left: 5px solid #d4351c; padding-left: 10px}',
   providers: [GovukDatePipe],
+  styles: '.govuk-list-error-key { border-left: 5px solid #d4351c; padding-left: 10px}',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryComponent {

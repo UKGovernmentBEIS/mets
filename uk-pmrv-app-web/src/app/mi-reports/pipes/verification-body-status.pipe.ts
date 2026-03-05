@@ -4,7 +4,6 @@ import { VerificationBodyDTO } from 'pmrv-api';
 
 @Pipe({
   name: 'verificationBodyStatus',
-  standalone: false,
 })
 export class VerificationBodyStatusPipe implements PipeTransform {
   transform(status?: VerificationBodyDTO['status']): string {

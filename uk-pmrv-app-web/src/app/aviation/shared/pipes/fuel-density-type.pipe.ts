@@ -4,8 +4,8 @@ import { AviationAerCorsiaFuelUseMonitoringDetails } from 'pmrv-api';
 
 @Pipe({
   name: 'fuelDensityType',
-  standalone: true,
   pure: true,
+  standalone: true,
 })
 export class FuelDensityTypePipe implements PipeTransform {
   transform(value: AviationAerCorsiaFuelUseMonitoringDetails['fuelDensityType']): string | null {

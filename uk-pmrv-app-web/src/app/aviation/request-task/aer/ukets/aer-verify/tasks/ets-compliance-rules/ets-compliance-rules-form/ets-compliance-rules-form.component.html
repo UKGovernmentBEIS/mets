@@ -17,7 +17,8 @@
         [maxLength]="2000"
         formControlName="monitoringPlanRequirementsNotMetReason"
         govuk-textarea
-        label="Provide a reason"></div>
+        label="Provide a reason"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 </div>
@@ -30,13 +31,12 @@
 <p class="govuk-body govuk-!-width-three-quarters">
   You must assess if the aircraft operator has met the requirements of the
   <a href="https://www.legislation.gov.uk/uksi/2020/1265/contents" target="_blank" rel="noreferrer noopener">
-    UK ETS Order
-  </a>
-  .
+    UK ETS Order </a
+  >.
 </p>
 
 <div formControlName="ukEtsOrderRequirementsMet" govuk-radio class="govuk-body govuk-!-width-two-thirds">
-  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
 
   <govuk-radio-option [value]="false" label="No">
     <ng-container govukConditionalContent>
@@ -44,7 +44,8 @@
         [maxLength]="2000"
         formControlName="ukEtsOrderRequirementsNotMetReason"
         govuk-textarea
-        label="Provide a reason"></div>
+        label="Provide a reason"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 </div>
@@ -85,7 +86,8 @@
         [maxLength]="2000"
         formControlName="partOfSiteVerification"
         govuk-textarea
-        label="Was this part of site verification?"></div>
+        label="Was this part of site verification?"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 
@@ -95,7 +97,8 @@
         [maxLength]="2000"
         formControlName="detailSourceDataNotVerifiedReason"
         govuk-textarea
-        label="Provide a reason"></div>
+        label="Provide a reason"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 </div>
@@ -123,7 +126,7 @@
 </govuk-details>
 
 <div formControlName="controlActivitiesDocumented" govuk-radio class="govuk-body govuk-!-width-two-thirds">
-  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
 
   <govuk-radio-option [value]="false" label="No">
     <ng-container govukConditionalContent>
@@ -131,7 +134,8 @@
         [maxLength]="2000"
         formControlName="controlActivitiesNotDocumentedReason"
         govuk-textarea
-        label="Provide a reason"></div>
+        label="Provide a reason"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 </div>
@@ -159,7 +163,7 @@
 </govuk-details>
 
 <div formControlName="proceduresMonitoringPlanDocumented" govuk-radio class="govuk-body govuk-!-width-two-thirds">
-  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
 
   <govuk-radio-option [value]="false" label="No">
     <ng-container govukConditionalContent>
@@ -167,7 +171,8 @@
         [maxLength]="2000"
         formControlName="proceduresMonitoringPlanNotDocumentedReason"
         govuk-textarea
-        label="Provide a reason"></div>
+        label="Provide a reason"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 </div>
@@ -197,7 +202,7 @@
 </govuk-details>
 
 <div formControlName="dataVerificationCompleted" govuk-radio class="govuk-body govuk-!-width-two-thirds">
-  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
 
   <govuk-radio-option [value]="false" label="No">
     <ng-container govukConditionalContent>
@@ -205,7 +210,8 @@
         [maxLength]="2000"
         formControlName="dataVerificationNotCompletedReason"
         govuk-textarea
-        label="Provide a reason"></div>
+        label="Provide a reason"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 </div>
@@ -227,7 +233,7 @@
 </govuk-details>
 
 <div formControlName="monitoringApproachAppliedCorrectly" govuk-radio class="govuk-body govuk-!-width-two-thirds">
-  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
 
   <govuk-radio-option [value]="false" label="No">
     <ng-container govukConditionalContent>
@@ -235,7 +241,8 @@
         [maxLength]="2000"
         formControlName="monitoringApproachNotAppliedCorrectlyReason"
         govuk-textarea
-        label="Provide a reason"></div>
+        label="Provide a reason"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 </div>
@@ -257,8 +264,9 @@
 <div
   formControlName="flightsCompletenessComparedWithAirTrafficData"
   govuk-radio
-  class="govuk-body govuk-!-width-two-thirds">
-  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  class="govuk-body govuk-!-width-two-thirds"
+>
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
 
   <govuk-radio-option [value]="false" label="No">
     <ng-container govukConditionalContent>
@@ -266,7 +274,8 @@
         [maxLength]="2000"
         formControlName="flightsCompletenessNotComparedWithAirTrafficDataReason"
         govuk-textarea
-        label="Provide a reason"></div>
+        label="Provide a reason"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 </div>
@@ -285,7 +294,8 @@
         [maxLength]="2000"
         formControlName="reportedDataConsistencyChecksNotPerformedReason"
         govuk-textarea
-        label="Provide a reason"></div>
+        label="Provide a reason"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 </div>
@@ -304,7 +314,8 @@
         [maxLength]="2000"
         formControlName="fuelConsistencyChecksNotPerformedReason"
         govuk-textarea
-        label="Provide a reason"></div>
+        label="Provide a reason"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 </div>
@@ -338,7 +349,7 @@
 </govuk-details>
 
 <div formControlName="missingDataMethodsApplied" govuk-radio class="govuk-body govuk-!-width-two-thirds">
-  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
 
   <govuk-radio-option [value]="false" label="No">
     <ng-container govukConditionalContent>
@@ -346,7 +357,8 @@
         [maxLength]="2000"
         formControlName="missingDataMethodsNotAppliedReason"
         govuk-textarea
-        label="Provide a reason"></div>
+        label="Provide a reason"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 </div>
@@ -375,7 +387,7 @@
 </govuk-details>
 
 <div formControlName="regulatorGuidanceMet" govuk-radio class="govuk-body govuk-!-width-two-thirds">
-  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
 
   <govuk-radio-option [value]="false" label="No">
     <ng-container govukConditionalContent>
@@ -383,7 +395,8 @@
         [maxLength]="2000"
         formControlName="regulatorGuidanceNotMetReason"
         govuk-textarea
-        label="Provide a reason"></div>
+        label="Provide a reason"
+      ></div>
     </ng-container>
   </govuk-radio-option>
 </div>
@@ -399,7 +412,7 @@
 <p class="govuk-body">If they have not, will this increase the risk of misstatements?</p>
 
 <div formControlName="nonConformities" govuk-radio class="govuk-body govuk-!-width-two-thirds">
-  <govuk-radio-option value="YES" label="Yes"></govuk-radio-option>
-  <govuk-radio-option value="NO" label="No"></govuk-radio-option>
-  <govuk-radio-option value="NOT_APPLICABLE" label="Not applicable" [divider]="true"></govuk-radio-option>
+  <govuk-radio-option [value]="'YES'" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="'NO'" label="No"> </govuk-radio-option>
+  <govuk-radio-option [value]="'NOT_APPLICABLE'" label="Not applicable" [divider]="true"></govuk-radio-option>
 </div>

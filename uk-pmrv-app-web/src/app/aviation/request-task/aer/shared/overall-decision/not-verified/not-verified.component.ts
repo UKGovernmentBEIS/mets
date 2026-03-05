@@ -33,8 +33,9 @@ type NotVerifiedReasonType =
 
 @Component({
   selector: 'app-not-verified',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './not-verified.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotVerifiedComponent {

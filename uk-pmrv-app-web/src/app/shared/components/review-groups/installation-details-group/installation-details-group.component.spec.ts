@@ -16,7 +16,6 @@ describe('InstallationDetailsGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-installation-details-group [payload]="payload"></app-installation-details-group>
     `,

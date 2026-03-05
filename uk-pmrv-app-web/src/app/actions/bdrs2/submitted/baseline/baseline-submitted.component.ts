@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 
 import { Bdrs2ActionService } from '@actions/bdrs2/core/bdrs2.service';
@@ -18,8 +19,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-baseline-submitted',
-  imports: [ActionSharedModule, BDRS2BaselineSummaryTemplateComponent, SharedModule],
   standalone: true,
+  imports: [ActionSharedModule, BDRS2BaselineSummaryTemplateComponent, NgIf, SharedModule],
   templateUrl: './baseline-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

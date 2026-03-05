@@ -25,6 +25,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-three-year-period-offsetting-requirements-submitted',
+  standalone: true,
   imports: [SharedModule, ThreeYearOffsettingRequirementsTableTemplateComponent],
   template: `
     <ng-container *ngIf="vm() as vm">

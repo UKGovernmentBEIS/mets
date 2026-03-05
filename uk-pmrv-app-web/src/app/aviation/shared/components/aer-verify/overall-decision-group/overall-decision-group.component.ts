@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit } from '@angular/core';
 import { RouterLinkWithHref } from '@angular/router';
 
+import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { NotVerifiedDecisionReasonTypePipe } from '@aviation/shared/pipes/not-verified-reason.pipe';
 import { SharedModule } from '@shared/shared.module';
 
@@ -16,8 +17,17 @@ import {
 
 @Component({
   selector: 'app-aviation-overall-decision-group',
-  imports: [GovukComponentsModule, CommonModule, SharedModule, RouterLinkWithHref, NotVerifiedDecisionReasonTypePipe],
   templateUrl: './overall-decision-group.component.html',
+
+  imports: [
+    GovukComponentsModule,
+    CommonModule,
+    SharedModule,
+    ReturnToLinkComponent,
+    RouterLinkWithHref,
+    NotVerifiedDecisionReasonTypePipe,
+  ],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverallDecisionGroupComponent implements OnInit, OnChanges {

@@ -28,6 +28,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-follow-up-response-summary',
+  standalone: true,
   imports: [FollowUpItemComponent, InspectionTaskComponent, SharedModule, RouterLink],
   templateUrl: './follow-up-response-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -15,7 +15,6 @@ import { AerApplicationSubmitRequestTaskPayload, FallbackBiomass, FallbackEmissi
 
 @Component({
   selector: 'app-fallback',
-  standalone: false,
   templateUrl: './fallback.component.html',
   providers: [fallbackFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

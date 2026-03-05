@@ -14,7 +14,6 @@ import { dateFormProvider } from './date-form.provider';
 
 @Component({
   selector: 'app-date',
-  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onSubmit()"
@@ -29,8 +28,8 @@ import { dateFormProvider } from './date-form.provider';
     </app-wizard-step>
     <a govukLink routerLink="..">Return to: Permit transfer application</a>
   `,
-  providers: [dateFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [dateFormProvider],
 })
 export class TransferADateComponent {
   hideSubmit$ = this.permitTransferAService.isEditable$.pipe(map((isEditable) => !isEditable));

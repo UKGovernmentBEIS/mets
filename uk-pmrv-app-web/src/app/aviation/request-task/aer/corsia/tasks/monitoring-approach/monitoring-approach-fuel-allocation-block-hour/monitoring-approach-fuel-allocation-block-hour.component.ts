@@ -37,9 +37,10 @@ import {
 
 @Component({
   selector: 'app-aircraft-types-data-page',
-  imports: [SharedModule, ReturnToLinkComponent, CsvDataWizardStepComponent, AircraftFuelBurnRatioTableComponent],
   templateUrl: './monitoring-approach-fuel-allocation-block-hour.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, ReturnToLinkComponent, CsvDataWizardStepComponent, AircraftFuelBurnRatioTableComponent],
 })
 export class MonitoringApproachFuelAllocationBlockHourComponent implements OnInit {
   @ViewChild(CsvDataWizardStepComponent) wizardStep: CsvDataWizardStepComponent;

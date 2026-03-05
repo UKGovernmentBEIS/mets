@@ -10,6 +10,7 @@ import { PermitBatchReissueStore } from '../store/permit-batch-reissue.store';
 
 @Component({
   selector: 'app-changes-summary',
+  standalone: true,
   imports: [SharedModule],
   templateUrl: './changes-summary.component.html',
   styles: ``,

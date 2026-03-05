@@ -7,8 +7,9 @@ import { BaseDataGapsComponent } from '../base-data-gaps.component';
 
 @Component({
   selector: 'app-data-gaps',
-  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './data-gaps-form.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGapsFormComponent extends BaseDataGapsComponent {

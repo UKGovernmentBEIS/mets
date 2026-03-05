@@ -17,10 +17,9 @@ import { calculationHydrogenAddFormFactory } from './calculation-hydrogen-form.p
 
 @Component({
   selector: 'app-calculation-hydrogen',
-  standalone: false,
   templateUrl: './calculation-hydrogen.component.html',
-  providers: [calculationHydrogenAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [calculationHydrogenAddFormFactory],
 })
 export class CalculationHydrogenComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

@@ -21,6 +21,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aircraft-types-data',
+  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,
@@ -34,7 +35,7 @@ interface ViewModel {
       [requestActionType]="vm.requestActionType"
       [breadcrumb]="true">
       <app-aircraft-types-data-table
-        headingText="File uploaded"
+        [headingText]="'File uploaded'"
         [aviationAerAircraftDataDetails]="vm.aviationAerAircraftDataDetails"></app-aircraft-types-data-table>
 
       <ng-container *ngIf="vm.showDecision">

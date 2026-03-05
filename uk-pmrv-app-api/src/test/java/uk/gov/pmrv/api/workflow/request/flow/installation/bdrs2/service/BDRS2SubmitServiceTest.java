@@ -10,8 +10,6 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetai
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -116,7 +114,7 @@ class BDRS2SubmitServiceTest {
                 .bdrs2Files(bdrs2Files)
                 .build();
 
-        final BDRS2RequestPayload requestPayload = BDRS2RequestPayload.builder().bdrs2(bdrs2).build();
+        final BDRS2RequestPayload requestPayload = BDRS2RequestPayload.builder().build();
         final Request request = Request.builder()
                 .id("requestId")
                 .accountId(accountId)
@@ -183,7 +181,7 @@ class BDRS2SubmitServiceTest {
                 .bdrs2Files(bdrs2Files)
                 .build();
 
-        final BDRS2RequestPayload requestPayload = BDRS2RequestPayload.builder().bdrs2(bdrs2).build();
+        final BDRS2RequestPayload requestPayload = BDRS2RequestPayload.builder().build();
         final Request request = Request.builder()
                 .id("requestId")
                 .accountId(accountId)
@@ -225,109 +223,6 @@ class BDRS2SubmitServiceTest {
                 any(BDRS2ApplicationSubmittedRequestActionPayload.class),
                 eq(RequestActionType.BDRS2_APPLICATION_SENT_TO_VERIFIER),
                 eq(userId));
-        verify(installationOperatorDetailsQueryService, times(1))
-                .getInstallationOperatorDetails(accountId);
-    }
-
-    @Test
-    void submitBDRS2() {
-        final String userId = "userId";
-        final Long accountId = 1L;
-        final AppUser user = AppUser.builder().userId(userId).build();
-        final Map<String, Boolean> sectionsCompleted = Map.of("baseline", true);
-        final UUID fileUuid = UUID.randomUUID();
-        final Map<UUID, String> attachments = new HashMap<>();
-        attachments.put(fileUuid, "BDRS2-00001-2025-v1-uploaded by Operator-Test.pdf");
-
-        final BDRS2GuardQuestions guardQuestions = BDRS2GuardQuestions.builder()
-                .continueApplicationForFreeAllocationType(BDRS2ContinueApplicationForFreeAllocationType.CONTINUE_AS_MAIN_SCHEME_PARTICIPANT)
-                .covidAdjustments(Boolean.FALSE)
-                .inEiteSector(Boolean.TRUE)
-                .build();
-
-        final BDRS2 bdrs2 = BDRS2.builder()
-                .bdrs2guardQuestions(guardQuestions)
-                .build();
-
-        final BDRS2RequestPayload requestPayload = BDRS2RequestPayload.builder().bdrs2(BDRS2.builder().build()).build();
-        final Request request = Request.builder()
-                .id("requestId")
-                .accountId(accountId)
-                .payload(requestPayload)
-                .build();
-
-        final BDRS2ApplicationSubmitRequestTaskPayload taskPayload = BDRS2ApplicationSubmitRequestTaskPayload.builder()
-                .bdrs2(bdrs2)
-                .bdrs2SectionsCompleted(sectionsCompleted)
-                .bdrs2Attachments(attachments)
-                .verificationPerformed(true)
-                .build();
-
-        final RequestTask requestTask = RequestTask.builder()
-                .request(request)
-                .payload(taskPayload)
-                .build();
-
-        final RequestActionPayload actionPayload = BDRS2ApplicationSubmittedRequestActionPayload.builder()
-                .payloadType(RequestActionPayloadType.BDRS2_APPLICATION_AMENDS_SUBMITTED_PAYLOAD)
-                .bdrs2(bdrs2)
-                .build();
-
-        service.submitBDRS2(requestPayload, requestTask, user, RequestActionType.BDRS2_APPLICATION_AMENDS_SENT_TO_VERIFIER, actionPayload, sectionsCompleted);
-
-        assertEquals(bdrs2, requestPayload.getBdrs2());
-        assertEquals(sectionsCompleted, requestPayload.getBdrs2SectionsCompleted());
-        assertEquals(attachments, requestPayload.getBdrs2Attachments());
-        assertEquals(true, requestPayload.isVerificationPerformed());
-
-        verify(requestService, times(1)).addActionToRequest(
-                eq(request),
-                eq(actionPayload),
-                eq(RequestActionType.BDRS2_APPLICATION_AMENDS_SENT_TO_VERIFIER),
-                eq(userId));
-    }
-
-    @Test
-    void createApplicationSubmittedRequestActionPayload() {
-        final Long accountId = 1L;
-        final UUID fileUuid = UUID.randomUUID();
-        final Map<UUID, String> attachments = new HashMap<>();
-        attachments.put(fileUuid, "BDRS2-00001-2025-v1-uploaded by Operator-Test.pdf");
-
-        final BDRS2 bdrs2 = BDRS2.builder().build();
-
-        final BDRS2RequestPayload requestPayload = BDRS2RequestPayload.builder()
-                .verificationReport(null)
-                .build();
-        final Request request = Request.builder()
-                .id("requestId")
-                .accountId(accountId)
-                .payload(requestPayload)
-                .build();
-
-        final BDRS2ApplicationSubmitRequestTaskPayload taskPayload = BDRS2ApplicationSubmitRequestTaskPayload.builder()
-                .bdrs2(bdrs2)
-                .bdrs2Attachments(attachments)
-                .verificationPerformed(false)
-                .build();
-
-        final RequestTask requestTask = RequestTask.builder()
-                .request(request)
-                .payload(taskPayload)
-                .build();
-
-        final InstallationOperatorDetails installationOperatorDetails = InstallationOperatorDetails.builder().build();
-        when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(accountId))
-                .thenReturn(installationOperatorDetails);
-
-        BDRS2ApplicationSubmittedRequestActionPayload result = service.createApplicationSubmittedRequestActionPayload(
-                requestTask, taskPayload, requestPayload, RequestActionPayloadType.BDRS2_APPLICATION_AMENDS_SUBMITTED_PAYLOAD);
-
-        assertEquals(RequestActionPayloadType.BDRS2_APPLICATION_AMENDS_SUBMITTED_PAYLOAD, result.getPayloadType());
-        assertEquals(bdrs2, result.getBdrs2());
-        assertEquals(attachments, result.getBdrs2Attachments());
-        assertEquals(installationOperatorDetails, result.getInstallationOperatorDetails());
-
         verify(installationOperatorDetailsQueryService, times(1))
                 .getInstallationOperatorDetails(accountId);
     }

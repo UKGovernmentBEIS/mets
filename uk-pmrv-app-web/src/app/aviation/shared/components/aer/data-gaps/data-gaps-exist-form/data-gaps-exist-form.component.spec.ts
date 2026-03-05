@@ -18,13 +18,13 @@ async function setup() {
 
 @Component({
   selector: 'app-mock-parent',
-  imports: [ReactiveFormsModule, DataGapsExistFormComponent],
-  standalone: true,
   template: `
     <form [formGroup]="existGroup">
       <app-data-gaps-exist-form></app-data-gaps-exist-form>
     </form>
   `,
+  standalone: true,
+  imports: [ReactiveFormsModule, DataGapsExistFormComponent],
   providers: [{ provide: TASK_FORM_PROVIDER, useClass: DataGapsFormProvider }],
 })
 class MockParentComponent {

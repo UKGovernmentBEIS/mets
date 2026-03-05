@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { EmpDetermination } from '@aviation/request-task/emp/shared/util/emp.util';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
@@ -15,7 +15,14 @@ import { OverallDecisionFormProvider } from '../overall-decision-form.provider';
 
 @Component({
   selector: 'app-overall-decision-reason-page',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent, EmpReviewDeterminationTypePipe],
+  standalone: true,
+  imports: [
+    GovukComponentsModule,
+    SharedModule,
+    RouterLinkWithHref,
+    ReturnToLinkComponent,
+    EmpReviewDeterminationTypePipe,
+  ],
   template: `
     <app-wizard-step
       [showBackLink]="true"

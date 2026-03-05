@@ -50,7 +50,6 @@ import { TextareaComponent } from './textarea/textarea.component';
 import { WarningTextComponent } from './warning-text/warning-text.component';
 
 @NgModule({
-  imports: [CommonModule, InlineSVGModule.forRoot(), ReactiveFormsModule, RouterModule],
   declarations: [
     AccordionComponent,
     AccordionItemComponent,
@@ -101,11 +100,6 @@ import { WarningTextComponent } from './warning-text/warning-text.component';
     TextareaComponent,
     TextInputComponent,
     WarningTextComponent,
-  ],
-  providers: [
-    { provide: UntypedFormBuilder, useClass: FormBuilderService },
-    { provide: FormBuilder, useClass: FormBuilderService },
-    provideHttpClient(withInterceptorsFromDi()),
   ],
   exports: [
     AccordionComponent,
@@ -159,5 +153,11 @@ import { WarningTextComponent } from './warning-text/warning-text.component';
     WarningTextComponent,
   ],
   schemas: [NO_ERRORS_SCHEMA],
+  imports: [CommonModule, InlineSVGModule.forRoot(), ReactiveFormsModule, RouterModule],
+  providers: [
+    { provide: UntypedFormBuilder, useClass: FormBuilderService },
+    { provide: FormBuilder, useClass: FormBuilderService },
+    provideHttpClient(withInterceptorsFromDi()),
+  ],
 })
 export class GovukComponentsModule {}

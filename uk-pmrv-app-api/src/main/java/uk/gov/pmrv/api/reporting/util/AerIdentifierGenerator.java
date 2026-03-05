@@ -6,5 +6,6 @@ import lombok.experimental.UtilityClass;
 public class AerIdentifierGenerator {
 
     public String generate(Long accountId, int reportingYear) {
-        return String.format("%s%05d-%d", "AEM", accountId, reportingYear);    }
+        return String.format("%s%d-%d", "AEM", accountId, reportingYear);
+    }
 }

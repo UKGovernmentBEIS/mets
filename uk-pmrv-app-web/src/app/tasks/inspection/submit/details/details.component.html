@@ -1,18 +1,20 @@
-<app-inspection-task returnToLink="..">
+<app-inspection-task [returnToLink]="'..'">
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [caption]="requestTasktype$ | async | detailsSubtaskHeader"
     [heading]="requestTasktype$ | async | detailsSubtaskLinktext"
     [formGroup]="form"
     submitText="Continue"
-    [hideSubmit]="!isEditable()">
+    [hideSubmit]="!isEditable()"
+  >
     @if (isOnsiteInspection$ | async) {
       <div
         formControlName="date"
         govuk-date-input
         label="On-site inspection date"
         hint="For example, 25 7 2024"
-        [isRequired]="true"></div>
+        [isRequired]="true"
+      ></div>
     }
 
     <legend govukLegend *ngIf="'Names of the officers who carried out the' as v">
@@ -28,7 +30,8 @@
       formControlName="officerName1"
       govuk-select
       label="Officer name 1"
-      class="officer-select"></div>
+      class="officer-select"
+    ></div>
 
     <div
       *ngIf="(isOnsiteInspection$ | async) === false"
@@ -36,7 +39,8 @@
       formControlName="officerName2"
       govuk-select
       label="Officer name 2"
-      class="officer-select"></div>
+      class="officer-select"
+    ></div>
 
     <div formArrayName="extraOfficers">
       <fieldset
@@ -44,7 +48,8 @@
         [formGroupName]="i"
         govukFieldset
         id="extraOfficers-{{ i }}"
-        class="extra-officer-fieldset">
+        class="extra-officer-fieldset"
+      >
         <legend govukLegend class="govuk-label">
           @if ((isOnsiteInspection$ | async) === true) {
             Officer name {{ i + 2 }} (Optional)
@@ -59,7 +64,8 @@
           appAddAnother
           govukSecondaryButton
           type="button"
-          #removeButton>
+          #removeButton
+        >
           Remove
         </button>
 
@@ -74,7 +80,8 @@
         #addAnother
         (click)="addAnotherOfficer()"
         govukSecondaryButton
-        type="button">
+        type="button"
+      >
         Add another officer
       </button>
     </div>
@@ -84,14 +91,16 @@
       label="Upload files (visible to the Operator) (optional)"
       headerSize="m"
       listTitle="Uploaded attachments"
-      formControlName="files"></app-multiple-file-input>
+      formControlName="files"
+    ></app-multiple-file-input>
 
     <app-multiple-file-input
       [baseDownloadUrl]="getDownloadUrl()"
       label="Upload files (not visible to the Operator)  (optional)"
       headerSize="m"
       listTitle="Uploaded attachments"
-      formControlName="regulatorExtraFiles"></app-multiple-file-input>
+      formControlName="regulatorExtraFiles"
+    ></app-multiple-file-input>
 
     <div
       formControlName="additionalInformation"
@@ -99,6 +108,7 @@
       label="Additional information (optional)"
       labelSize="medium"
       hint="This will appear in the notification letter"
-      [maxLength]="10000"></div>
+      [maxLength]="10000"
+    ></div>
   </app-wizard-step>
 </app-inspection-task>

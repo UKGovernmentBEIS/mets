@@ -11,7 +11,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-combustion-sources',
-  standalone: false,
   templateUrl: './combustion-sources.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

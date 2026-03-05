@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable, take, tap } from 'rxjs';
 
@@ -21,7 +22,6 @@ interface DataGapsSummaryViewModel {
 
 @Component({
   selector: 'app-data-gaps-summary',
-  imports: [SharedModule, ReturnToLinkComponent, DataGapsListTemplateComponent, DataGapsSummaryTemplateComponent],
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
@@ -39,6 +39,14 @@ interface DataGapsSummaryViewModel {
 
     <app-return-to-link></app-return-to-link>
   `,
+  standalone: true,
+  imports: [
+    SharedModule,
+    RouterLinkWithHref,
+    ReturnToLinkComponent,
+    DataGapsListTemplateComponent,
+    DataGapsSummaryTemplateComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class DataGapsSummaryComponent {

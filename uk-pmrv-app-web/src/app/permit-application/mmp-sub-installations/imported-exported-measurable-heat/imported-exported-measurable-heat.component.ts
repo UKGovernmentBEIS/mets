@@ -20,11 +20,10 @@ import { importedExportedMeasurableHeatAddFormFactory } from './imported-exporte
 
 @Component({
   selector: 'app-imported-exported-measurable-heat',
-  standalone: false,
   templateUrl: './imported-exported-measurable-heat.component.html',
-  styleUrl: './imported-exported-measurable-heat.component.scss',
-  providers: [importedExportedMeasurableHeatAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [importedExportedMeasurableHeatAddFormFactory],
+  styleUrl: './imported-exported-measurable-heat.component.scss',
 })
 export class ImportedExportedMeasurableHeatComponent extends ProductBenchmarkComponent implements PendingRequest {
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;

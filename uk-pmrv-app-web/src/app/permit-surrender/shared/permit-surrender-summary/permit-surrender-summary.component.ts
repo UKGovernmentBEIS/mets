@@ -8,7 +8,6 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-permit-surrender-summary',
-  standalone: false,
   templateUrl: './permit-surrender-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

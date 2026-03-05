@@ -18,9 +18,10 @@ interface ViewModel {
 
 @Component({
   selector: 'app-send-report',
-  imports: [SharedModule, ReturnToLinkComponent, RouterLink],
+  standalone: true,
   templateUrl: './send-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, ReturnToLinkComponent, RouterLink],
 })
 export class SendReportComponent {
   isSubmitted$: BehaviorSubject<boolean> = new BehaviorSubject(false);

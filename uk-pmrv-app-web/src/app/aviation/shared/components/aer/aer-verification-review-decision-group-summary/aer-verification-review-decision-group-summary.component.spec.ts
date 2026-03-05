@@ -15,7 +15,6 @@ describe('AerVerificationReviewDecisionGroupSummaryComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-aer-verification-review-decision-group-summary
         [data]="data"></app-aer-verification-review-decision-group-summary>

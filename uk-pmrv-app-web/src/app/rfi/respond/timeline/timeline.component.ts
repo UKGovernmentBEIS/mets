@@ -9,10 +9,9 @@ import { RfiStore } from '../../store/rfi.store';
 
 @Component({
   selector: 'app-timeline-rfi-submitted',
-  standalone: false,
   templateUrl: './timeline.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class TimelineComponent implements OnInit {
   readonly pairs$ = this.store.pipe(

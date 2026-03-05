@@ -13,10 +13,9 @@ import { noticeFormProvider } from './notice-form.provider';
 
 @Component({
   selector: 'app-notice',
-  standalone: false,
   templateUrl: './notice.component.html',
-  providers: [noticeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [noticeFormProvider],
 })
 export class NoticeComponent implements PendingRequest {
   readonly officialNoticeTypeMap = OfficialNoticeTypeMap;

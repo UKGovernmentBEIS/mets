@@ -46,10 +46,9 @@ interface EmissionSmallEmittersSupportFacilityFormModel {
 }
 
 @Injectable()
-export class AerMonitoringApproachFormProvider implements TaskFormProvider<
-  EmissionsMonitoringApproach,
-  MonitoringApproachFormModel
-> {
+export class AerMonitoringApproachFormProvider
+  implements TaskFormProvider<EmissionsMonitoringApproach, MonitoringApproachFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup<MonitoringApproachFormModel>;
 

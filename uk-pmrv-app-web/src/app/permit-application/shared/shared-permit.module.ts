@@ -193,8 +193,9 @@ const declarations = [
 ];
 
 @NgModule({
-  imports: [RouterModule, SharedModule],
   declarations: declarations,
+  exports: declarations,
+  imports: [RouterModule, SharedModule],
   providers: [
     ApproachTaskPipe,
     FindEmissionPointPipe,
@@ -203,6 +204,5 @@ const declarations = [
     ReviewGroupStatusWrapperPipe,
     TaskStatusPipe,
   ],
-  exports: declarations,
 })
 export class SharedPermitModule {}

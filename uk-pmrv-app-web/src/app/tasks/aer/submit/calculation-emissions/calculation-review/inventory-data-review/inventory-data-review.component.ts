@@ -40,7 +40,6 @@ import { getCalculationReviewFormControls, getEmissionsElements, isRegionalDataS
 
 @Component({
   selector: 'app-inventory-data-review',
-  standalone: false,
   templateUrl: './inventory-data-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -159,9 +158,10 @@ export class InventoryDataReviewComponent {
     this.sourceStreamEmission$,
     this.calculatedEmissions$,
     this.calculationFactor$,
+    this.aerService.getIsSm3$(this.index$),
   ]).pipe(
-    map(([sourceStreamEmission, calculatedEmissions, calculationFactor]) => {
-      return getEmissionsElements(sourceStreamEmission, calculatedEmissions, calculationFactor);
+    map(([sourceStreamEmission, calculatedEmissions, calculationFactor, isSm3]) => {
+      return getEmissionsElements(sourceStreamEmission, calculatedEmissions, calculationFactor, isSm3);
     }),
   );
 

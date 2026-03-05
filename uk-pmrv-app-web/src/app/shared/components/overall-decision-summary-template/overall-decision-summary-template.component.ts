@@ -4,7 +4,6 @@ import { OverallVerificationAssessment } from '@shared/components/overall-decisi
 
 @Component({
   selector: 'app-shared-overall-decision-summary-template',
-  standalone: false,
   templateUrl: './overall-decision-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

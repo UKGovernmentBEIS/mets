@@ -12,7 +12,8 @@
 import { PermitTransferBDetailsConfirmationReviewDecision } from './permitTransferBDetailsConfirmationReviewDecision';
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface PermitTransferBSaveDetailsConfirmationReviewGroupDecisionRequestTaskActionPayload extends RequestTaskActionPayload {
+export interface PermitTransferBSaveDetailsConfirmationReviewGroupDecisionRequestTaskActionPayload
+  extends RequestTaskActionPayload {
   decision: PermitTransferBDetailsConfirmationReviewDecision;
   reviewSectionsCompleted?: { [key: string]: boolean };
 }

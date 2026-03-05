@@ -12,7 +12,6 @@ import { justificationFormProvider } from './justification-form.provider';
 
 @Component({
   selector: 'app-justification',
-  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -31,8 +30,8 @@ import { justificationFormProvider } from './justification-form.provider';
       </div>
     </div>
   `,
-  providers: [justificationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [justificationFormProvider],
 })
 export class JustificationComponent implements PendingRequest {
   constructor(

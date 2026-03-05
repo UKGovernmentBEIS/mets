@@ -10,7 +10,6 @@ import { HoldingCompanyDTO } from 'pmrv-api';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-holding-company-form',
-  standalone: false,
   templateUrl: './holding-company-form.component.html',
   styles: [],
   viewProviders: [existingControlContainer],

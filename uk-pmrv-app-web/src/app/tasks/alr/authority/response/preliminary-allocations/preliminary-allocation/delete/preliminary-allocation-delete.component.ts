@@ -13,7 +13,6 @@ import { ALRGrantAuthorityResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-preliminary-allocation-delete',
-  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, RouterLink],
   template: `
     <app-page-heading size="xl">Are you sure you want to delete this item?</app-page-heading>
 
@@ -24,6 +23,8 @@ import { ALRGrantAuthorityResponse } from 'pmrv-api';
       <a routerLink="../.." govukLink>Cancel</a>
     </div>
   `,
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrPreliminaryAllocationDeleteComponent {

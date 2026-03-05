@@ -4,8 +4,8 @@ import { EmpDetermination } from '@aviation/request-task/emp/shared/util/emp.uti
 
 @Pipe({
   name: 'empReviewDeterminationType',
-  standalone: true,
   pure: true,
+  standalone: true,
 })
 export class EmpReviewDeterminationTypePipe implements PipeTransform {
   transform(type: EmpDetermination['type']): string | null {

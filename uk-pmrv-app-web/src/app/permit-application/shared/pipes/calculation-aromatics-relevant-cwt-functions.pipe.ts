@@ -11,10 +11,7 @@ export interface CWTFunctionData {
   cwtFactor: number;
 }
 
-@Pipe({
-  name: 'calculationAromaticsRelevantCWTFunctions',
-  standalone: false,
-})
+@Pipe({ name: 'calculationAromaticsRelevantCWTFunctions' })
 export class CalculationAromaticsRelevantCWTFunctionsPipe implements PipeTransform {
   private readonly relevantCWTFunctions: Record<
     CWTFunctionKey,

@@ -14,10 +14,9 @@ type RateWithoutNotApplicable = Exclude<Rate, 'NOT_APPLICABLE_NOT_USED_YET'>;
 
 @Component({
   selector: 'app-feedback',
-  standalone: false,
   templateUrl: './feedback.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class FeedbackComponent implements OnInit {
   feedbackSent$ = new BehaviorSubject<boolean>(null);

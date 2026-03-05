@@ -6,7 +6,6 @@ import { PermitIssuanceStore } from '../store/permit-issuance.store';
 
 @Component({
   selector: 'app-application-submitted',
-  standalone: false,
   template: `
     <govuk-panel>Application submitted</govuk-panel>
 

@@ -11,10 +11,9 @@ import { reasonFormProvider } from './reason-form.provider';
 
 @Component({
   selector: 'app-close-reason',
-  standalone: false,
   templateUrl: './reason.component.html',
-  providers: [reasonFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [reasonFormProvider],
 })
 export class ReasonComponent {
   private readonly nextWizardStep = 'summary';

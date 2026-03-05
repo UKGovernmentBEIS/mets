@@ -11,8 +11,8 @@ const FLIGHT_IDENTIFICATION_TYPE_SELECTION = {
 
 @Pipe({
   name: 'flightIdentificationType',
-  standalone: true,
   pure: true,
+  standalone: true,
 })
 export class FlightIdentificationTypePipe implements PipeTransform {
   transform(value: FlightIdentification['flightIdentificationType']): string | null {

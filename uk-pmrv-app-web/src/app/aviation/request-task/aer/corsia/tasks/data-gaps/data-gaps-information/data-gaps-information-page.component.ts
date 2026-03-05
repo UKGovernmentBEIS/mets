@@ -11,8 +11,9 @@ import { DataGapsFormProvider } from '../data-gaps-form.provider';
 
 @Component({
   selector: 'app-data-gaps-information-page',
-  imports: [SharedModule, ReturnToLinkComponent, DataGapsInformationFormComponent],
   templateUrl: './data-gaps-information-page.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent, DataGapsInformationPageComponent, DataGapsInformationFormComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

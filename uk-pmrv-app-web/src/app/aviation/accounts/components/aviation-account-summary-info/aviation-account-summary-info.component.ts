@@ -4,7 +4,6 @@ import { AviationAccountDetails } from '../../store';
 
 @Component({
   selector: 'app-aviation-account-summary-info',
-  standalone: false,
   templateUrl: './aviation-account-summary-info.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

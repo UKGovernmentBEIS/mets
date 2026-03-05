@@ -14,8 +14,9 @@ import { RequestTaskActionPayload, TasksService } from 'pmrv-api';
 
 @Component({
   selector: 'app-recall-report-from-verifier',
-  imports: [SharedModule],
   templateUrl: './recall-report-from-verifier.component.html',
+  standalone: true,
+  imports: [SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class RecallReportFromVerifierComponent {

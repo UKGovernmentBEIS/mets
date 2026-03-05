@@ -16,7 +16,6 @@ describe('DeterminationReasonSummaryTemplateComponent', () => {
   let hostComponent: TestComponent;
 
   @Component({
-    standalone: false,
     template: `
       <app-determination-reason-summary-template
         [dre]="dre"

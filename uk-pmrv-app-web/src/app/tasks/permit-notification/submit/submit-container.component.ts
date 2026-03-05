@@ -6,7 +6,6 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 @Component({
   selector: 'app-submit-container',
-  standalone: false,
   templateUrl: './submit-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

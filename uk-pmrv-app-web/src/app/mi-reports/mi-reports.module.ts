@@ -16,7 +16,6 @@ import { RegulatorOutstandingRequestTasksComponent } from './regulator-outstandi
 import { VerificationBodiesUsersComponent } from './verification-bodies-users/verification-bodies-users.component';
 
 @NgModule({
-  imports: [CommonModule, MiReportsRoutingModule, RouterModule, SharedModule],
   declarations: [
     AccountsRegulatorsSiteContactsComponent,
     AccountsUsersContactsComponent,
@@ -28,5 +27,6 @@ import { VerificationBodiesUsersComponent } from './verification-bodies-users/ve
     VerificationBodiesUsersComponent,
     VerificationBodyStatusPipe,
   ],
+  imports: [CommonModule, MiReportsRoutingModule, RouterModule, SharedModule],
 })
 export class MiReportsModule {}

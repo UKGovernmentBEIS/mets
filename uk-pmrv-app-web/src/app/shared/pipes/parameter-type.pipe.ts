@@ -1,9 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-  name: 'parameterType',
-  standalone: false,
-})
+@Pipe({ name: 'parameterType' })
 export class ParameterTypePipe implements PipeTransform {
   transform(value): string {
     switch (value) {

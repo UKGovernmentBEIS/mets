@@ -6,7 +6,6 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-monitoring-roles-summary',
-  standalone: false,
   templateUrl: './monitoring-roles-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

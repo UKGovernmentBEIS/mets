@@ -11,10 +11,9 @@ import { EmpFlightAndAircraftProceduresCorsiaFormModel } from './flight-procedur
 import { ProcedureFormBuilder } from './procedure-form.builder';
 
 @Injectable()
-export class FlightProceduresFormProvider implements TaskFormProvider<
-  EmpFlightAndAircraftProceduresCorsia,
-  EmpFlightAndAircraftProceduresCorsiaFormModel
-> {
+export class FlightProceduresFormProvider
+  implements TaskFormProvider<EmpFlightAndAircraftProceduresCorsia, EmpFlightAndAircraftProceduresCorsiaFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup<EmpFlightAndAircraftProceduresCorsiaFormModel>;
 

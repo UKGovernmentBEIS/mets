@@ -9,7 +9,6 @@ import { AviationAccountsStore, selectNewAccount } from '../../store';
 
 @Component({
   selector: 'app-create-aviation-account',
-  standalone: false,
   templateUrl: './create-aviation-account.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

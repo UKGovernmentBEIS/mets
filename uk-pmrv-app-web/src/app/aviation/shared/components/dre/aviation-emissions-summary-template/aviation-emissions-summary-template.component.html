@@ -8,7 +8,7 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../" [queryParams]="changeUrlQueryParams">Change</a>
+        <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
       </dd>
     </div>
 
@@ -19,7 +19,7 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../" [queryParams]="changeUrlQueryParams">Change</a>
+        <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
       </dd>
     </div>
   </dl>
@@ -33,7 +33,7 @@
       <dd govukSummaryListRowValue>{{ data.totalReportableEmissions }} tCO2</dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../aviation-emissions" [queryParams]="changeUrlQueryParams">Change</a>
+        <a govukLink [routerLink]="'../aviation-emissions'" [queryParams]="changeUrlQueryParams">Change</a>
       </dd>
     </div>
 
@@ -47,7 +47,7 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../aviation-emissions" [queryParams]="changeUrlQueryParams">Change</a>
+        <a govukLink [routerLink]="'../aviation-emissions'" [queryParams]="changeUrlQueryParams">Change</a>
       </dd>
     </div>
 
@@ -55,7 +55,7 @@
       <dt govukSummaryListRowKey>Supporting documents</dt>
       <dd govukSummaryListRowValue *ngIf="files?.length === 0">None</dd>
       <dd govukSummaryListRowValue *ngIf="files?.length">
-        <app-summary-download-files [files]="files"></app-summary-download-files>
+        <app-summary-download-files [files]="files"> </app-summary-download-files>
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
@@ -75,7 +75,7 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../aviation-emissions-charges" [queryParams]="changeUrlQueryParams">Change</a>
+        <a govukLink [routerLink]="'../aviation-emissions-charges'" [queryParams]="changeUrlQueryParams">Change</a>
       </dd>
     </div>
 
@@ -85,9 +85,9 @@
         <dd govukSummaryListRowValue>{{ data.fee.feeDetails.totalBillableHours }} hours</dd>
         <dd></dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../aviation-emissions-charges-calculate" [queryParams]="changeUrlQueryParams">
-            Change
-          </a>
+          <a govukLink [routerLink]="'../aviation-emissions-charges-calculate'" [queryParams]="changeUrlQueryParams"
+            >Change</a
+          >
         </dd>
       </div>
       <div govukSummaryListRow>
@@ -95,9 +95,9 @@
         <dd govukSummaryListRowValue>&pound;{{ data.fee.feeDetails.hourlyRate }} per hour</dd>
         <dd></dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../aviation-emissions-charges-calculate" [queryParams]="changeUrlQueryParams">
-            Change
-          </a>
+          <a govukLink [routerLink]="'../aviation-emissions-charges-calculate'" [queryParams]="changeUrlQueryParams"
+            >Change</a
+          >
         </dd>
       </div>
       <div govukSummaryListRow>
@@ -107,9 +107,9 @@
         </dd>
         <dd></dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../aviation-emissions-charges-calculate" [queryParams]="changeUrlQueryParams">
-            Change
-          </a>
+          <a govukLink [routerLink]="'../aviation-emissions-charges-calculate'" [queryParams]="changeUrlQueryParams"
+            >Change</a
+          >
         </dd>
       </div>
       <div govukSummaryListRow *ngIf="data.fee.feeDetails?.comments">
@@ -119,17 +119,16 @@
         </dd>
         <dd></dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../aviation-emissions-charges-calculate" [queryParams]="changeUrlQueryParams">
-            Change
-          </a>
+          <a govukLink [routerLink]="'../aviation-emissions-charges-calculate'" [queryParams]="changeUrlQueryParams"
+            >Change</a
+          >
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Total operator fee</dt>
         <dd govukSummaryListRowValue>
           {{
-            +data.fee.feeDetails.totalBillableHours * +data.fee.feeDetails.hourlyRate
-              | currency: 'GBP' : 'symbol' : '1.2-2'
+            +data.fee.feeDetails.totalBillableHours * +data.fee.feeDetails.hourlyRate | currency: 'GBP':'symbol':'1.2-2'
           }}
         </dd>
         <dd></dd>

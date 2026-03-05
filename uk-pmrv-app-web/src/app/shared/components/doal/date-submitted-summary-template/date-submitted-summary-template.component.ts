@@ -4,7 +4,6 @@ import { DateSubmittedToAuthority } from 'pmrv-api';
 
 @Component({
   selector: 'app-doal-date-submitted-summary-template',
-  standalone: false,
   template: `
     <dl govuk-summary-list>
       <div govukSummaryListRow>

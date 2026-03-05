@@ -6,8 +6,9 @@ import { AttachedFile } from '@shared/types/attached-file.type';
 
 @Component({
   selector: 'app-alr-activity-summary-template',
-  imports: [SharedModule, RouterLink],
   templateUrl: './activity-summary-template.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActivitySummaryTemplateComponent {

@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, ElementRef, Renderer2, RendererFact
 
 @Component({
   selector: 'app-print',
-  standalone: false,
   template: `
     <div class="printable-content-wrapper">
       <div class="printable-content">

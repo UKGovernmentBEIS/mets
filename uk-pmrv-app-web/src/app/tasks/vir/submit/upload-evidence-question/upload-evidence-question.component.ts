@@ -15,7 +15,6 @@ import { OperatorImprovementResponse, VirApplicationSubmitRequestTaskPayload } f
 
 @Component({
   selector: 'app-upload-evidence-question',
-  standalone: false,
   templateUrl: './upload-evidence-question.component.html',
   providers: [uploadEvidenceQuestionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

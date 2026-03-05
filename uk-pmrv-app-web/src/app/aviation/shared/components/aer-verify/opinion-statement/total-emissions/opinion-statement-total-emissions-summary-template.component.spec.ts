@@ -14,7 +14,6 @@ describe('OpinionStatementTotalEmissionsSummaryTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-opinion-statement-total-emissions-summary-template
         [totalEmissionsProvided]="totalEmissionsProvided"

@@ -7,9 +7,9 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-bdrs2-return-link',
-  imports: [RouterModule, SharedModule],
-  standalone: true,
   template: '<a govukLink [routerLink]="link$ | async">Return to: {{ title }}</a>',
+  standalone: true,
+  imports: [RouterModule, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BDRS2ReturnLinkComponent {

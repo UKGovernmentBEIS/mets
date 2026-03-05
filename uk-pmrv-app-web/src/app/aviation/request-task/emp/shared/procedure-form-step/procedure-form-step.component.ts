@@ -9,6 +9,7 @@ import { ProcedureFormModel } from './procedure-form.builder';
 
 @Component({
   selector: 'app-procedure-form-step',
+  standalone: true,
   imports: [ProcedureFormComponent, SharedModule, ReturnToLinkComponent],
   templateUrl: './procedure-form-step.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

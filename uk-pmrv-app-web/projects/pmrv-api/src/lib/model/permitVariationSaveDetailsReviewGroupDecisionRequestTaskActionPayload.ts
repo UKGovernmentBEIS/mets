@@ -12,7 +12,8 @@
 import { PermitVariationReviewDecision } from './permitVariationReviewDecision';
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface PermitVariationSaveDetailsReviewGroupDecisionRequestTaskActionPayload extends RequestTaskActionPayload {
+export interface PermitVariationSaveDetailsReviewGroupDecisionRequestTaskActionPayload
+  extends RequestTaskActionPayload {
   decision: PermitVariationReviewDecision;
   reviewSectionsCompleted?: { [key: string]: boolean };
   permitVariationDetailsReviewCompleted?: boolean;

@@ -1,11 +1,12 @@
 package uk.gov.pmrv.api.workflow.request.flow.common.service;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
+
 import uk.gov.pmrv.api.account.domain.enumeration.AccountStatus;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateAccountStatusValidationResult;
@@ -80,32 +81,4 @@ public class RequestCreateValidatorService {
 
 		return validationResult;
 	}
-
-
-	public RequestCreateRequestTypeValidationResult validateInProgressAndCompletedConflictingRequestTypes(
-			final Long accountId,
-			Set<RequestType> mutuallyExclusiveRequestsTypes,
-			Set<RequestStatus> mutuallyExclusiveRequestsStatuses) {
-
-		final RequestCreateRequestTypeValidationResult validationResult =
-				RequestCreateRequestTypeValidationResult.builder().valid(true).build();
-
-		if (!mutuallyExclusiveRequestsTypes.isEmpty()) {
-			final List<Request> relevantRequests =
-					requestQueryService.findRequestsByAccountIdAndTypesAndStatuses(accountId,
-							mutuallyExclusiveRequestsTypes,mutuallyExclusiveRequestsStatuses);
-
-			final Set<RequestType> conflictingRequests = relevantRequests.stream()
-					.map(Request::getType)
-					.collect(Collectors.toSet());
-
-			if (!conflictingRequests.isEmpty()) {
-				validationResult.setValid(false);
-				validationResult.setReportedRequestTypes(conflictingRequests);
-			}
-		}
-
-		return validationResult;
-	}
-
 }

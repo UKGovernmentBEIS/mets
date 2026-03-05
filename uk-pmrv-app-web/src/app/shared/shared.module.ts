@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/sort-ngmodule-metadata-arrays */
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -413,14 +414,6 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     ServiceBannerComponent,
     PreviewDocumentsComponent,
   ],
-  providers: [
-    AccountsStore,
-    AviationAccountsStore,
-    CategoryTypeNamePipe,
-    DashboardStore,
-    ItemLinkPipe,
-    SourceStreamDescriptionPipe,
-  ],
   exports: [
     AbbreviationsSummaryTemplateComponent,
     AbbreviationsTemplateComponent,
@@ -611,6 +604,14 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     WorkflowsComponent,
     ServiceBannerComponent,
     PreviewDocumentsComponent,
+  ],
+  providers: [
+    AccountsStore,
+    AviationAccountsStore,
+    CategoryTypeNamePipe,
+    DashboardStore,
+    ItemLinkPipe,
+    SourceStreamDescriptionPipe,
   ],
 })
 export class SharedModule {}

@@ -34,6 +34,7 @@ public class BDRCompleteService {
     @Transactional
     public void complete(final String requestId) {
         final Request request = requestService.findRequestById(requestId);
+        addRequestAction(request);
         addFreeAllocationEntry(request);
         saveAccountFileAttachment(requestId);
     }
@@ -44,9 +45,7 @@ public class BDRCompleteService {
         baselineDataReportFreeAllocationService.createFreeAllocationEntry(request.getAccountId(), freeAllocation);
     }
 
-    public void addRequestAction(String requestId) {
-        final Request request = requestService.findRequestById(requestId);
-
+    private void addRequestAction(Request request) {
         final BDRRequestPayload requestPayload = (BDRRequestPayload) request.getPayload();
 
         final InstallationOperatorDetails installationOperatorDetails = installationOperatorDetailsQueryService

@@ -16,7 +16,6 @@ describe('OperatorReportSummaryTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-operator-report-summary-template
         [operatorActivityLevelReport]="operatorActivityLevelReport"

@@ -41,10 +41,9 @@ import { saveNotFoundRegulatorError } from '../errors/business-error';
 
 @Component({
   selector: 'app-details',
-  standalone: false,
   templateUrl: './details.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class DetailsComponent implements OnInit {
   basePermissionSelected: string;
@@ -193,8 +192,6 @@ export class DetailsComponent implements OnInit {
       PEER_REVIEW_HSE_TI: ['NONE'],
       SUBMIT_WASTE_QDR_REVIEW: ['NONE'],
       BULK_DOWNLOAD_ALR: ['NONE'],
-      SUBMIT_BDRS2_REVIEW: ['NONE'],
-      PEER_REVIEW_BDRS2: ['NONE'],
     }),
   });
 
@@ -526,16 +523,6 @@ export class DetailsComponent implements OnInit {
     { permission: 'PEER_REVIEW_HSE_TI', task: 'Peer review', type: 'HSE target increase' },
     { permission: 'SUBMIT_WASTE_QDR_REVIEW', task: 'Review', type: 'Waste quarterly data report' },
     { permission: 'BULK_DOWNLOAD_ALR', task: 'Download', type: 'ALR bulk download' },
-    {
-      permission: 'SUBMIT_BDRS2_REVIEW',
-      task: 'Review/Submit',
-      type: 'BDR stage 2',
-    },
-    {
-      permission: 'PEER_REVIEW_BDRS2',
-      task: 'Peer review',
-      type: 'BDR stage 2',
-    },
   ];
 
   private readonly configFeatures$ = this.configStore.asObservable().pipe(map((state) => state.features));
@@ -559,7 +546,7 @@ export class DetailsComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$),
         tap((features) => {
-          const { corsia3yearOffsettingEnabled, wasteQdrEnabled, bdrs2Enabled } = features;
+          const { corsia3yearOffsettingEnabled, bdrEnabled, wasteQdrEnabled } = features;
 
           if (!corsia3yearOffsettingEnabled) {
             this.filterTableRows([
@@ -568,12 +555,12 @@ export class DetailsComponent implements OnInit {
             ]);
           }
 
-          if (!wasteQdrEnabled) {
-            this.filterTableRows(['SUBMIT_WASTE_QDR_REVIEW']);
+          if (!bdrEnabled) {
+            this.filterTableRows(['SUBMIT_BDR_REVIEW', 'PEER_REVIEW_BDR']);
           }
 
-          if (!bdrs2Enabled) {
-            this.filterTableRows(['SUBMIT_BDRS2_REVIEW', 'PEER_REVIEW_BDRS2']);
+          if (!wasteQdrEnabled) {
+            this.filterTableRows(['SUBMIT_WASTE_QDR_REVIEW']);
           }
         }),
       )

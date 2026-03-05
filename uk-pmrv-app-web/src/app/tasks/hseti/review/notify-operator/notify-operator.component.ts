@@ -23,6 +23,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-hseti-notify-operator',
+  standalone: true,
   imports: [SharedModule],
   template: `
     <ng-container *ngIf="vm() as vm">

@@ -13,10 +13,11 @@ const CorsiaHeading =
 
 @Component({
   selector: 'app-operator-details-air-operating-certificate-template',
+  standalone: true,
   imports: [GovukComponentsModule, SharedModule, ReactiveFormsModule],
   templateUrl: './operator-details-air-operating-certificate-template.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class OperatorDetailsAirOperatingCertificateTemplateComponent implements OnInit {
   @Input() form: FormGroup<any>;

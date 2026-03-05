@@ -21,7 +21,6 @@ import { SummaryComponent as ProcedureSummaryComponent } from './procedure/summa
 import { TemplateComponent } from './procedure/template.component';
 
 @NgModule({
-  imports: [N2oRoutingModule, SharedModule, SharedPermitModule],
   declarations: [
     AppliedStandardComponent,
     AppliedStandardSummaryComponent,
@@ -40,5 +39,6 @@ import { TemplateComponent } from './procedure/template.component';
     TemplateComponent,
     TransferredN2ODetailsComponent,
   ],
+  imports: [N2oRoutingModule, SharedModule, SharedPermitModule],
 })
 export class N2oModule {}

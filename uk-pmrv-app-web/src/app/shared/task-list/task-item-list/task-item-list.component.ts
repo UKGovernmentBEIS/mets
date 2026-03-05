@@ -4,7 +4,6 @@ import { TaskItem } from '../task-list.interface';
 
 @Component({
   selector: 'ul[app-task-item-list]',
-  standalone: false,
   template: `
     <li
       app-task-item
@@ -19,6 +18,5 @@ import { TaskItem } from '../task-list.interface';
 export class TaskItemListComponent {
   @Input() taskItems: TaskItem<any>[];
 
-  // eslint-disable-next-line @angular-eslint/prefer-host-metadata-property
   @HostBinding('class.app-task-list__items') readonly taskListItems = true;
 }

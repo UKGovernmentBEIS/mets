@@ -8,7 +8,6 @@ import { getInstallationActivityLabelByValue } from '@tasks/aer/submit/nace-code
 
 @Component({
   selector: 'app-source-stream-delete',
-  standalone: false,
   template: `
     <ng-container *ngIf="naceCode$ | async as naceCode">
       <app-page-heading size="xl">

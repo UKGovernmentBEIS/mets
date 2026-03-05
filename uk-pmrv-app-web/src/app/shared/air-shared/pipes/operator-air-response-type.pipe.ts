@@ -4,7 +4,6 @@ import { OperatorAirImprovementResponse } from 'pmrv-api';
 
 @Pipe({
   name: 'operatorAirResponseType',
-  standalone: false,
 })
 export class OperatorAirResponseTypePipe implements PipeTransform {
   transform(type: OperatorAirImprovementResponse['type']): string {

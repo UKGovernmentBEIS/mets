@@ -6,7 +6,6 @@ import { MonitoringPlanVersion } from 'pmrv-api';
 
 @Component({
   selector: 'app-monitoring-plan-versions',
-  standalone: false,
   templateUrl: './monitoring-plan-versions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

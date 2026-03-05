@@ -29,6 +29,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-respond-item',
+  standalone: true,
   imports: [AsyncPipe, VirSharedModule, ReturnToLinkComponent, NgIf],
   template: `
     <app-respond-item-form

@@ -15,10 +15,9 @@ import { descriptionFormProvider } from './description-form.provider';
 
 @Component({
   selector: 'app-description',
-  standalone: false,
   templateUrl: './description.component.html',
-  providers: [DestroySubject, descriptionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject, descriptionFormProvider],
 })
 export class DescriptionComponent {
   isReview$ = this.store.pipe(map((response) => response.requestTaskType));

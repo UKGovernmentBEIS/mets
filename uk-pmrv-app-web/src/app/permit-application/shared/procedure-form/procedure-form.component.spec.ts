@@ -17,7 +17,6 @@ describe('ProcedureFormComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-procedure-form formGroupName="procedureForm"></app-procedure-form>

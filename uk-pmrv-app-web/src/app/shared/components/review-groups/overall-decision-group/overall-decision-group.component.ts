@@ -9,7 +9,6 @@ import {
 
 @Component({
   selector: 'app-overall-decision-group',
-  standalone: false,
   templateUrl: './overall-decision-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

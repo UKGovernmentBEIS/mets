@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'samplingFrequency',
-  standalone: false,
 })
 export class SamplingFrequencyPipe implements PipeTransform {
   transform(value: unknown): string {

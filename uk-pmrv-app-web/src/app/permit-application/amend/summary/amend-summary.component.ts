@@ -5,7 +5,6 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-amend-summary',
-  standalone: false,
   template: `
     <app-amend-summary-template></app-amend-summary-template>
     <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">

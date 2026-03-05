@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { MeasurementDeviceOrMethod } from 'pmrv-api';
 
-@Pipe({
-  name: 'measurementDeviceOrMethod',
-  standalone: false,
-})
+@Pipe({ name: 'measurementDeviceOrMethod' })
 export class MeasurementDeviceOrMethodPipe implements PipeTransform {
   transform(
     measurementDevicesOrMethods: MeasurementDeviceOrMethod[],

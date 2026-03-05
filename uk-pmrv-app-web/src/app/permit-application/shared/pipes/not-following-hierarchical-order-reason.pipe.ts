@@ -4,7 +4,6 @@ import { SubInstallationHierarchicalOrder } from 'pmrv-api';
 
 @Pipe({
   name: 'notFollowingHierarchicalOrderReason',
-  standalone: false,
 })
 export class NotFollowingHierarchicalOrderReasonPipe implements PipeTransform {
   transform(value: SubInstallationHierarchicalOrder['notFollowingHierarchicalOrderReason']): string {

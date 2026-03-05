@@ -7,7 +7,6 @@ import { PermitNotificationService } from '../core/permit-notification.service';
 
 @Component({
   selector: 'app-follow-up-return-for-amends',
-  standalone: false,
   templateUrl: './follow-up-return-for-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

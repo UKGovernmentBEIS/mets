@@ -9,10 +9,9 @@ import { PermitVariationStore } from '../../store/permit-variation.store';
 
 @Component({
   selector: 'app-answers',
-  standalone: false,
   templateUrl: './answers.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class AnswersComponent {
   permitVariationDetails = this.store.getState().permitVariationDetails;

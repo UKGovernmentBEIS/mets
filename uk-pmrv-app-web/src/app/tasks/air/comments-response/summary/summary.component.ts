@@ -13,7 +13,6 @@ import { AirApplicationRespondToRegulatorCommentsRequestTaskPayload } from 'pmrv
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

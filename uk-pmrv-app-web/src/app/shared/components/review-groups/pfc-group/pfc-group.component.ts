@@ -20,7 +20,6 @@ interface TemplateCalculationSourceStreamEmission {
 
 @Component({
   selector: 'app-pfc-group',
-  standalone: false,
   templateUrl: './pfc-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

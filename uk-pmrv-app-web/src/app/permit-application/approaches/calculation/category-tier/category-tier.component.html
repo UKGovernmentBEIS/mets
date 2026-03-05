@@ -5,13 +5,12 @@
     </app-page-heading>
     <p class="govuk-body">
       Get help with
-      <a routerLink="help-with-source-stream-categories" target="_blank" govukLink>source stream categories</a>
-      .
+      <a routerLink="help-with-source-stream-categories" target="_blank" govukLink>source stream categories</a>.
     </p>
     <p class="govuk-body">
       Get help with
-      <a routerLink="help-with-calculation-approach" target="_blank">calculation approach and calculation parameters</a>
-      .
+      <a routerLink="help-with-calculation-approach" target="_blank"> calculation approach and calculation parameters</a
+      >.
     </p>
     <p class="govuk-body">Other tasks must be completed before you can start:</p>
     <ul class="govuk-list govuk-list--bullet">
@@ -26,7 +25,8 @@
         *ngIf="
           ('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers as tiers;
           else addStream
-        ">
+        "
+      >
         <ng-container *ngIf="tiers && tiers[index$ | async]; else addStream">
           {{ tiers[index$ | async] | sourceStreamCategoryName | async }}
           <button *ngIf="(store.isEditable$ | async) === true" routerLink="delete" govukSecondaryButton type="button">
@@ -40,13 +40,12 @@
     </app-page-heading>
     <p class="govuk-body">
       Get help with
-      <a routerLink="help-with-source-stream-categories" target="_blank" govukLink>source stream categories</a>
-      .
+      <a routerLink="help-with-source-stream-categories" target="_blank" govukLink>source stream categories</a>.
     </p>
     <p class="govuk-body">
       Get help with
-      <a routerLink="help-with-calculation-approach" target="_blank">calculation approach and calculation parameters</a>
-      .
+      <a routerLink="help-with-calculation-approach" target="_blank"> calculation approach and calculation parameters</a
+      >.
     </p>
     <h2 class="govuk-heading-m">Define the source stream category</h2>
     <ul app-task-item-list>
@@ -54,14 +53,17 @@
         app-task-item
         link="./category/summary"
         linkText="Source stream category"
-        [status]="'CALCULATION_CO2_Category' | taskStatus: (index$ | async) | async">
+        [status]="'CALCULATION_CO2_Category' | taskStatus: (index$ | async) | async"
+      >
         <app-category-summary-overview
           *ngIf="('CALCULATION_CO2_Category' | taskStatus: (index$ | async) | async) === 'complete'"
           [sourceStreamCategory]="
             ('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async]
               .sourceStreamCategory
           "
-          cssClass="govuk-!-margin-bottom-0"></app-category-summary-overview>
+          cssClass="govuk-!-margin-bottom-0"
+        >
+        </app-category-summary-overview>
       </li>
     </ul>
 
@@ -71,17 +73,17 @@
         app-task-item
         link="activity-data/summary"
         linkText="Activity data"
-        [status]="'CALCULATION_CO2_Activity_Data' | taskStatus: (index$ | async) | async">
+        [status]="'CALCULATION_CO2_Activity_Data' | taskStatus: (index$ | async) | async"
+      >
         <ng-container *ngIf="('CALCULATION_CO2_Activity_Data' | taskStatus: (index$ | async) | async) === 'complete'">
           <ng-container
-            *ngIf="
-              ('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers?.[(index$ | async)]
-                ?.activityData as activityData
-            ">
+            *ngIf="('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers?.[index$ | async]?.activityData as activityData"
+          >
             <app-activity-data-summary-overview
               [isChangeLinkAvailable]="false"
               [activityDataSectionHasBottomBorder]="false"
-              [justificationSectionHasBottomBorder]="false"></app-activity-data-summary-overview>
+              [justificationSectionHasBottomBorder]="false"
+            ></app-activity-data-summary-overview>
           </ng-container>
         </ng-container>
       </li>
@@ -91,12 +93,14 @@
         *ngIf="'CALCULATION_CO2_Calorific' | taskStatus: (index$ | async) | async as status"
         link="calorific-value/summary"
         linkText="Net calorific value"
-        [status]="status">
+        [status]="status"
+      >
         <app-calculation-category-tier-subtasks-summary-template
           *ngIf="status === 'complete'"
           [isPreview]="true"
-          statusKey="CALCULATION_CO2_Calorific"
-          cssClass="govuk-!-margin-bottom-0"></app-calculation-category-tier-subtasks-summary-template>
+          [statusKey]="'CALCULATION_CO2_Calorific'"
+          cssClass="govuk-!-margin-bottom-0"
+        ></app-calculation-category-tier-subtasks-summary-template>
       </li>
 
       <li
@@ -104,12 +108,14 @@
         *ngIf="'CALCULATION_CO2_Emission_Factor' | taskStatus: (index$ | async) | async as status"
         link="emission-factor/summary"
         linkText="Emission factor"
-        [status]="status">
+        [status]="status"
+      >
         <app-calculation-category-tier-subtasks-summary-template
           *ngIf="status === 'complete'"
           [isPreview]="true"
-          statusKey="CALCULATION_CO2_Emission_Factor"
-          cssClass="govuk-!-margin-bottom-0"></app-calculation-category-tier-subtasks-summary-template>
+          [statusKey]="'CALCULATION_CO2_Emission_Factor'"
+          cssClass="govuk-!-margin-bottom-0"
+        ></app-calculation-category-tier-subtasks-summary-template>
       </li>
 
       <li
@@ -117,12 +123,14 @@
         *ngIf="'CALCULATION_CO2_Oxidation_Factor' | taskStatus: (index$ | async) | async as status"
         link="oxidation-factor/summary"
         linkText="Oxidation factor"
-        [status]="status">
+        [status]="status"
+      >
         <app-calculation-category-tier-subtasks-summary-template
           *ngIf="status === 'complete'"
           [isPreview]="true"
-          statusKey="CALCULATION_CO2_Oxidation_Factor"
-          cssClass="govuk-!-margin-bottom-0"></app-calculation-category-tier-subtasks-summary-template>
+          [statusKey]="'CALCULATION_CO2_Oxidation_Factor'"
+          cssClass="govuk-!-margin-bottom-0"
+        ></app-calculation-category-tier-subtasks-summary-template>
       </li>
 
       <li
@@ -130,12 +138,14 @@
         *ngIf="'CALCULATION_CO2_Carbon_Content' | taskStatus: (index$ | async) | async as status"
         link="carbon-content/summary"
         linkText="Carbon content"
-        [status]="status">
+        [status]="status"
+      >
         <app-calculation-category-tier-subtasks-summary-template
           *ngIf="status === 'complete'"
           [isPreview]="true"
-          statusKey="CALCULATION_CO2_Carbon_Content"
-          cssClass="govuk-!-margin-bottom-0"></app-calculation-category-tier-subtasks-summary-template>
+          [statusKey]="'CALCULATION_CO2_Carbon_Content'"
+          cssClass="govuk-!-margin-bottom-0"
+        ></app-calculation-category-tier-subtasks-summary-template>
       </li>
 
       <li
@@ -143,12 +153,14 @@
         *ngIf="'CALCULATION_CO2_Conversion_Factor' | taskStatus: (index$ | async) | async as status"
         link="conversion-factor/summary"
         linkText="Conversion factor"
-        [status]="status">
+        [status]="status"
+      >
         <app-calculation-category-tier-subtasks-summary-template
           *ngIf="status === 'complete'"
           [isPreview]="true"
-          statusKey="CALCULATION_CO2_Conversion_Factor"
-          cssClass="govuk-!-margin-bottom-0"></app-calculation-category-tier-subtasks-summary-template>
+          [statusKey]="'CALCULATION_CO2_Conversion_Factor'"
+          cssClass="govuk-!-margin-bottom-0"
+        ></app-calculation-category-tier-subtasks-summary-template>
       </li>
 
       <li
@@ -156,17 +168,20 @@
         *ngIf="'CALCULATION_CO2_Biomass_Fraction' | taskStatus: (index$ | async) | async as status"
         link="biomass-fraction/summary"
         linkText="Biomass fraction"
-        [status]="status">
+        [status]="status"
+      >
         <app-calculation-category-tier-subtasks-summary-template
           *ngIf="status === 'complete'"
           [isPreview]="true"
-          statusKey="CALCULATION_CO2_Biomass_Fraction"
-          cssClass="govuk-!-margin-bottom-0"></app-calculation-category-tier-subtasks-summary-template>
+          [statusKey]="'CALCULATION_CO2_Biomass_Fraction'"
+          cssClass="govuk-!-margin-bottom-0"
+        ></app-calculation-category-tier-subtasks-summary-template>
       </li>
     </ul>
   </ng-template>
 
   <app-approach-return-link
     [parentTitle]="'CALCULATION_CO2' | monitoringApproachDescription"
-    reviewGroupUrl="calculation"></app-approach-return-link>
+    reviewGroupUrl="calculation"
+  ></app-approach-return-link>
 </app-permit-task>

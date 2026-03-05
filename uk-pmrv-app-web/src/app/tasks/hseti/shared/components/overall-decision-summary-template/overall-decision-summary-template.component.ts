@@ -8,9 +8,10 @@ import { HSETIRegulatorReviewOverallDecision } from 'pmrv-api';
 
 @Component({
   selector: 'app-overall-decision-summary-template',
-  imports: [SharedModule, TaskSharedModule, RouterLink],
   templateUrl: './overall-decision-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, RouterLink],
 })
 export class OverallDecisionSummaryTemplateComponent {
   @Input() isEditable = false;

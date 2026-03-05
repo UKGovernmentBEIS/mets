@@ -11,7 +11,6 @@ import { resolveSectionStatus } from './section.status';
 
 @Component({
   selector: 'app-daily-penalty-notice',
-  standalone: false,
   templateUrl: './daily-penalty-notice.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

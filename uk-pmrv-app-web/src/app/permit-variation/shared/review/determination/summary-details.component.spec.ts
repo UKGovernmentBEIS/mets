@@ -20,7 +20,6 @@ describe('SummaryDetailsComponent', () => {
   let store: PermitVariationStore;
 
   @Component({
-    standalone: false,
     template: `
       <app-permit-variation-determination-summary-details></app-permit-variation-determination-summary-details>
     `,

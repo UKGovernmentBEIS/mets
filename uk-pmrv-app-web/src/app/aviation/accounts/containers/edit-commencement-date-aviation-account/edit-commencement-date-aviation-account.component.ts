@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -8,11 +8,8 @@ import { AviationAccountFormProvider } from '@aviation/accounts/services';
 import { AviationAccountsStore, selectAccount, selectAccountInfo } from '@aviation/accounts/store';
 import produce from 'immer';
 
-import { AviationAccountReportingStatusService } from 'pmrv-api';
-
 @Component({
   selector: 'app-edit-commencement-date-aviation-account',
-  standalone: false,
   template: `
     <app-wizard-step (formSubmit)="onContinue()" [formGroup]="form" heading="Edit first year of reporting obligation">
       <p class="govuk-body">First year of reporting obligation</p>
@@ -22,7 +19,7 @@ import { AviationAccountReportingStatusService } from 'pmrv-api';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditCommencementDateAviationAccountComponent implements OnInit, OnDestroy {
+export class EditCommencementDateAviationAccountComponent implements OnInit {
   private readonly accountInfo$ = this.store.pipe(selectAccountInfo, first());
 
   form = new FormGroup({ commencementDate: this.formProvider.getCommencementDateFormControl(true) });
@@ -32,7 +29,6 @@ export class EditCommencementDateAviationAccountComponent implements OnInit, OnD
     private readonly store: AviationAccountsStore,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly reportingStatusService: AviationAccountReportingStatusService,
   ) {}
 
   ngOnInit(): void {
@@ -41,27 +37,6 @@ export class EditCommencementDateAviationAccountComponent implements OnInit, OnD
         commencementDate: new Date(response?.commencementDate) as any,
       });
     });
-  }
-
-  ngOnDestroy(): void {
-    const { account, reportingStatus } = this.store.getState().currentAccount;
-
-    this.reportingStatusService
-      .getAllReportingStatuses(account.aviationAccount.id, 0, reportingStatus?.paging.pageSize)
-      .pipe(
-        switchMap(() => {
-          return this.reportingStatusService.getAllReportingStatuses(
-            account.aviationAccount.id,
-            0,
-            reportingStatus?.paging.pageSize,
-          );
-        }),
-        tap((res) => {
-          this.store.setReportingStatuses((res as any)?.reportingStatusList);
-          this.store.setReportingStatusTotal((res as any)?.total);
-        }),
-      )
-      .subscribe();
   }
 
   onContinue() {

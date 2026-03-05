@@ -28,10 +28,9 @@ export interface EmpBlockHourMethodProceduresFormModel {
 }
 
 @Injectable()
-export class BlockHourProceduresFormProvider implements TaskFormProvider<
-  EmpBlockHourMethodProcedures,
-  EmpBlockHourMethodProceduresFormModel
-> {
+export class BlockHourProceduresFormProvider
+  implements TaskFormProvider<EmpBlockHourMethodProcedures, EmpBlockHourMethodProceduresFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup<EmpBlockHourMethodProceduresFormModel>;
   private destroy$ = new Subject<void>();

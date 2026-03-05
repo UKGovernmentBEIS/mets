@@ -44,6 +44,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-waste-qdr-task-list',
+  standalone: true,
   imports: [SharedModule, TaskSharedModule],
   templateUrl: './task-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

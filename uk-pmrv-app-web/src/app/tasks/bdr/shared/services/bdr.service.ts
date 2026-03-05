@@ -234,7 +234,7 @@ export class BdrService extends TasksHelperService {
                 verificationPerformed: false,
                 ...(requestTaskType === 'BDR_APPLICATION_AMENDS_SUBMIT'
                   ? {
-                      regulatorReviewSectionsCompleted: {
+                      reviewSectionsCompleted: {
                         ...(state.requestTaskItem.requestTask.payload as BDRApplicationAmendsSubmitRequestTaskPayload)
                           ?.regulatorReviewSectionsCompleted,
                       },

@@ -1,3 +1,4 @@
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,13 +17,14 @@ import { BlockHourProceduresFormProvider } from '../block-hour-procedures-form.p
 
 @Component({
   selector: 'app-specific-burn-fuel-calculation',
-  imports: [SharedModule, GovukComponentsModule, ReturnToLinkComponent],
   templateUrl: './specific-burn-fuel-calculation.component.html',
+  standalone: true,
+  imports: [SharedModule, GovukComponentsModule, NgIf, NgFor, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SpecificBurnFuelCalculationComponent {
   form = this.formProvider.specificBurnFuel;
-  readonly isCorsia = toSignal(this.store.pipe(empQuery.selectIsCorsia));
+  isCorsia = toSignal(this.store.pipe(empQuery.selectIsCorsia));
 
   constructor(
     @Inject(TASK_FORM_PROVIDER) private formProvider: BlockHourProceduresFormProvider,

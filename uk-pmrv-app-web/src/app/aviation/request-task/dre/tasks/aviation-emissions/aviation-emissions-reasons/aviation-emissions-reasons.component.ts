@@ -1,3 +1,4 @@
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
@@ -11,10 +12,18 @@ import { BaseAviationEmissionsComponent } from '../base-aviation-emissions.compo
 
 @Component({
   selector: 'app-aviation-emissions-reasons',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent, AviationEmissionsReasonsFormComponent],
   templateUrl: './aviation-emissions-reasons.component.html',
-  providers: [DestroySubject],
+  standalone: true,
+  imports: [
+    GovukComponentsModule,
+    SharedModule,
+    NgIf,
+    NgFor,
+    ReturnToLinkComponent,
+    AviationEmissionsReasonsFormComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class AviationEmissionsReasonsComponent extends BaseAviationEmissionsComponent {
   form = this.formProvider.determinationReasonCtrl;

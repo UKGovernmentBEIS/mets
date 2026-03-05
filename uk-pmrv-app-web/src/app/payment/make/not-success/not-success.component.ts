@@ -9,7 +9,6 @@ import { PaymentStore } from '../../store/payment.store';
 
 @Component({
   selector: 'app-not-success',
-  standalone: false,
   template: `
     <app-page-heading>{{ message$ | async }}</app-page-heading>
     <app-return-link [requestType]="(store | async).requestType" [home]="true"></app-return-link>

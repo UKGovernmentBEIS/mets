@@ -30,10 +30,9 @@ import { createTableColumns, createTablePage, manipulateResultsAndExportToExcel,
 
 @Component({
   selector: 'app-completed-work',
-  standalone: false,
   templateUrl: './completed-work.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class CompletedWorkComponent implements OnInit {
   private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, take(1));

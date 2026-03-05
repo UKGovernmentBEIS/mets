@@ -8,7 +8,6 @@ import { PermitApplicationStore } from '../../../store/permit-application.store'
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   template: `
     <app-permit-task [breadcrumb]="true" [notification]="notification">
       <app-page-heading>{{ determinationHeader }}</app-page-heading>

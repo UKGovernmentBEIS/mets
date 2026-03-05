@@ -16,9 +16,10 @@ export interface ViewModel {
 
 @Component({
   selector: 'app-outcome-summary-template',
-  imports: [SharedModule, RouterLink],
   templateUrl: './outcome-summary-template.component.html',
+  imports: [SharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class OutcomeSummaryTemplateComponent {
   @Input() vm: ViewModel;

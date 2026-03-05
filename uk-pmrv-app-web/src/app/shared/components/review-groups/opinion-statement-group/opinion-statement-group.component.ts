@@ -10,7 +10,6 @@ import {
 
 @Component({
   selector: 'app-opinion-statement-group',
-  standalone: false,
   templateUrl: './opinion-statement-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

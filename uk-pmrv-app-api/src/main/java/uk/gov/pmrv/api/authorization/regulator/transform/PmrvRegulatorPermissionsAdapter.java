@@ -63,10 +63,6 @@ import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_DRE_
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_DRE_PEER_REVIEW_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK;
-import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK;
-import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK;
-import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_BDRS2_APPLICATION_PEER_REVIEW_VIEW_TASK;
-import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_BDRS2_APPLICATION_PEER_REVIEW_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_EMP_BATCH_REISSUE_SUBMIT_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_EMP_BATCH_REISSUE_SUBMIT_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_EMP_ISSUANCE_APPLICATION_PEER_REVIEW_EXECUTE_TASK;
@@ -207,8 +203,6 @@ import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermis
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_PERMANENT_CESSATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_PERMANENT_CESSATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_BDR_REVIEW;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_BDRS2_REVIEW;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_BDRS2;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_ALR_REVIEW;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_ALR;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_HSE_TI_REVIEW;
@@ -617,21 +611,6 @@ public class PmrvRegulatorPermissionsAdapter extends AbstarctRegulatorPermission
                 new RegulatorPermissionGroupLevel(PEER_REVIEW_BDR, EXECUTE),
                 List.of(PERM_BDR_APPLICATION_PEER_REVIEW_VIEW_TASK,
                         PERM_BDR_APPLICATION_PEER_REVIEW_EXECUTE_TASK));
-
-        //BDRS2
-        permissionGroupLevelsConfig.put(new RegulatorPermissionGroupLevel(PEER_REVIEW_BDRS2, NONE), List.of());
-        permissionGroupLevelsConfig.put(new RegulatorPermissionGroupLevel(PEER_REVIEW_BDRS2, VIEW_ONLY),
-                List.of(PERM_BDRS2_APPLICATION_PEER_REVIEW_VIEW_TASK));
-        permissionGroupLevelsConfig
-                .put(new RegulatorPermissionGroupLevel(PEER_REVIEW_BDRS2, EXECUTE),
-                        List.of(PERM_BDRS2_APPLICATION_PEER_REVIEW_VIEW_TASK, PERM_BDRS2_APPLICATION_PEER_REVIEW_EXECUTE_TASK));
-
-        permissionGroupLevelsConfig.put(new RegulatorPermissionGroupLevel(SUBMIT_BDRS2_REVIEW, NONE), List.of());
-        permissionGroupLevelsConfig.put(new RegulatorPermissionGroupLevel(SUBMIT_BDRS2_REVIEW, VIEW_ONLY),
-                List.of(PERM_BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK));
-        permissionGroupLevelsConfig
-                .put(new RegulatorPermissionGroupLevel(SUBMIT_BDRS2_REVIEW, EXECUTE),
-                        List.of(PERM_BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK, PERM_BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK));
 
 
         //HSETI

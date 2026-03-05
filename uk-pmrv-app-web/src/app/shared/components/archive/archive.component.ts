@@ -13,7 +13,6 @@ import { requestTaskReassignedError, taskNotFoundError } from '../../errors/requ
 
 @Component({
   selector: 'app-archive',
-  standalone: false,
   template: `
     <govuk-warning-text *ngIf="warningText">
       No actions are currently required.

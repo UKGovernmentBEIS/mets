@@ -7,7 +7,6 @@ import { PollutantRegisterActivities, PRTRCodes } from 'pmrv-api';
 
 @Component({
   selector: 'app-prtr-summary-template',
-  standalone: false,
   templateUrl: './prtr-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

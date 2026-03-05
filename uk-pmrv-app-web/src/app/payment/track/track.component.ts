@@ -17,7 +17,6 @@ import { PaymentStore } from '../store/payment.store';
 
 @Component({
   selector: 'app-track',
-  standalone: false,
   templateUrl: './track.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

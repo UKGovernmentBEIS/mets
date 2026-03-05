@@ -16,8 +16,9 @@ import {
 
 @Component({
   selector: 'app-total-emissions-standard-fuels-table-template',
-  imports: [SharedModule],
   templateUrl: './total-emissions-standard-fuels-table-template.component.html',
+  standalone: true,
+  imports: [SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsStandardFuelsTableTemplateComponent implements OnInit {

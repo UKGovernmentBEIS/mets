@@ -9,7 +9,6 @@ import { DoalActionService } from '../../core/doal-action.service';
 
 @Component({
   selector: 'app-doal-alc-information',
-  standalone: false,
   template: `
     <app-doal-action-task
       header="Provide information about this activity level change"

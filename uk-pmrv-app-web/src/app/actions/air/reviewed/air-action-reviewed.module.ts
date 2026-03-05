@@ -12,7 +12,7 @@ import { SummaryComponent } from './response-list/summary/summary.component';
 import { ReviewedComponent } from './reviewed.component';
 
 @NgModule({
-  imports: [ActionSharedModule, AirActionReviewedRoutingModule, AirSharedModule, AirTaskSharedModule, SharedModule],
   declarations: [ProvideSummaryComponent, ResponseListComponent, ReviewedComponent, SummaryComponent],
+  imports: [ActionSharedModule, AirActionReviewedRoutingModule, AirSharedModule, AirTaskSharedModule, SharedModule],
 })
 export class AirActionReviewedModule {}

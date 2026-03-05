@@ -15,13 +15,13 @@ import { ProcedureFormStepComponent } from './procedure-form-step.component';
 
 @Component({
   selector: 'app-mock-parent',
-  imports: [ProcedureFormStepComponent],
-  standalone: true,
   template: `
     <app-procedure-form-step [form]="form">
       <h3 procedureFormPageHeader>Page heading</h3>
     </app-procedure-form-step>
   `,
+  standalone: true,
+  imports: [ProcedureFormStepComponent],
 })
 class MockParentComponent {
   form = ProcedureFormBuilder.createProcedureForm();

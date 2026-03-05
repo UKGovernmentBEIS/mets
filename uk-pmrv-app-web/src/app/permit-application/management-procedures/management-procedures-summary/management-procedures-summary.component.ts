@@ -9,7 +9,6 @@ import { ManagementProceduresDefinitionData } from '../management-procedures.int
 
 @Component({
   selector: 'app-management-procedures-summary',
-  standalone: false,
   templateUrl: './management-procedures-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

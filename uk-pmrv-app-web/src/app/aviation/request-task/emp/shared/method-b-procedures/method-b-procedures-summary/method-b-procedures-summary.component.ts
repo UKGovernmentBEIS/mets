@@ -44,6 +44,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-method-b-procedures-summary',
+  templateUrl: './method-b-procedures-summary.component.html',
+  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
@@ -52,7 +54,6 @@ interface ViewModel {
     EmpReviewDecisionGroupComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,
   ],
-  templateUrl: './method-b-procedures-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MethodBProceduresSummaryComponent {

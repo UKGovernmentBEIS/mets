@@ -118,8 +118,4 @@ public interface AccountRepository extends JpaRepository<Account, Long>, Account
     @Query("SELECT DISTINCT(a.id) FROM Account a JOIN a.contacts c WHERE c = :userId")
     List<Long> findAccountIdsByContactUserId(@Param("userId") String userId);
 
-    @Transactional(readOnly = true)
-    @Query("SELECT a.registryId FROM Account a WHERE a.id = :accountId")
-    Optional<Integer> findRegistryIdByAccountId(@Param("accountId") Long accountId);
-
 }

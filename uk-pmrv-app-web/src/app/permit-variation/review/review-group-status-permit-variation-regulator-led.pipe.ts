@@ -10,7 +10,6 @@ import { resolveReviewGroupStatusRegulatorLed } from './review-status';
 
 @Pipe({
   name: 'reviewGroupStatusPermitVariationRegulatorLed',
-  standalone: false,
 })
 export class ReviewGroupStatusPermitVariationRegulatorLedPipe implements PipeTransform {
   constructor(private readonly store: PermitVariationStore) {}

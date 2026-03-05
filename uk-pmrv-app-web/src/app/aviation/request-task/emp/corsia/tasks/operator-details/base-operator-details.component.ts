@@ -21,7 +21,6 @@ import { OperatorDetailsCorsiaFormProvider } from './operator-details-form.provi
 import { OperatorDetailsQuery } from './store/operator-details.selectors';
 
 @Component({
-  standalone: false,
   template: '',
 })
 export abstract class BaseOperatorDetailsComponent implements OnInit {

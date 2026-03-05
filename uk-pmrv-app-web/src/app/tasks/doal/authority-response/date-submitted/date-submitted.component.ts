@@ -9,10 +9,9 @@ import { DOAL_TASK_FORM } from '@tasks/doal/core/doal-task-form.token';
 
 @Component({
   selector: 'app-date-submitted',
-  standalone: false,
   templateUrl: './date-submitted.component.html',
-  providers: [dateSubmittedComponentFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [dateSubmittedComponentFormProvider],
 })
 export class DateSubmittedComponent {
   today = new Date();

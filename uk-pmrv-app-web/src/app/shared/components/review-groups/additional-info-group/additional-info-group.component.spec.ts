@@ -14,7 +14,6 @@ describe('AdditionalInfoGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-additional-info-group [aerData]="aerData"></app-additional-info-group>
     `,

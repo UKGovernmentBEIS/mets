@@ -12,10 +12,9 @@ import { PermitApplicationStore } from '../../../store/permit-application.store'
 
 @Component({
   selector: 'app-answers',
-  standalone: false,
   templateUrl: './answers.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class AnswersComponent implements OnInit, PendingRequest {
   determinationHeader = this.store.getDeterminationHeader();

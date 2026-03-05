@@ -15,10 +15,9 @@ import { oneThirdProvider } from './one-third.provider';
 
 @Component({
   selector: 'app-one-third',
-  standalone: false,
   templateUrl: './one-third.component.html',
-  providers: [oneThirdProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [oneThirdProvider],
 })
 export class OneThirdComponent implements PendingRequest {
   readonly index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

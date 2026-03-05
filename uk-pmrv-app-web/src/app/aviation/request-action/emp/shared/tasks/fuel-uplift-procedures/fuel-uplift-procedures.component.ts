@@ -20,6 +20,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-fuel-uplift-procedures',
+  standalone: true,
   imports: [
     RequestActionTaskComponent,
     EmpReviewDecisionGroupSummaryComponent,

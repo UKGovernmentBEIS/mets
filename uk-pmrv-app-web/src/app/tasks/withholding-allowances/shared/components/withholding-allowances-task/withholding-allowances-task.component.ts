@@ -4,7 +4,6 @@ import { DestroySubject } from '@core/services/destroy-subject.service';
 
 @Component({
   selector: 'app-withholding-allowances-task',
-  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -15,8 +14,8 @@ import { DestroySubject } from '@core/services/destroy-subject.service';
       </div>
     </div>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class WithholdingAllowancesTaskComponent {
   @Input() notification: boolean;

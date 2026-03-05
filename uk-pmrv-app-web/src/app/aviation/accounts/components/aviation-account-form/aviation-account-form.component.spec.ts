@@ -21,7 +21,6 @@ describe('AccountFormComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <form [formGroup]="formGroup">
         <app-aviation-account-form></app-aviation-account-form>

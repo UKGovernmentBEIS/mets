@@ -4,8 +4,8 @@ import { AviationAerCorsiaOpinionStatement } from 'pmrv-api';
 
 @Pipe({
   name: 'monitoringApproachVerifyCorsiaType',
-  standalone: true,
   pure: true,
+  standalone: true,
 })
 export class MonitoringApproachVerifyCorsiaTypePipe implements PipeTransform {
   transform(value: AviationAerCorsiaOpinionStatement['monitoringApproachType']): string | null {

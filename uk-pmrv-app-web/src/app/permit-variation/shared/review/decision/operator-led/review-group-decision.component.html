@@ -1,5 +1,6 @@
 <ng-container
-  *ngIf="(isEditable$ | async) && canEdit && (isOnEditState || (isOnEditByDefaultState$ | async)); else viewDecision">
+  *ngIf="(isEditable$ | async) && canEdit && (isOnEditState || (isOnEditByDefaultState$ | async)); else viewDecision"
+>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
     <h2 class="govuk-heading-m">What is your decision on the information submitted?</h2>
@@ -20,7 +21,8 @@
               [formGroupName]="i"
               [disabled]="(store.isEditable$ | async) === false"
               govukFieldset
-              id="variation-schedule-items-{{ i }}">
+              id="variation-schedule-items-{{ i }}"
+            >
               <legend class="govuk-heading-s">Item {{ i + 1 }}</legend>
               <button
                 (click)="variationScheduleItems.removeAt(i)"
@@ -30,7 +32,8 @@
                 appAddAnother
                 govukSecondaryButton
                 type="button"
-                #removeButton>
+                #removeButton
+              >
                 Remove
               </button>
               <div govuk-textarea [maxLength]="10000" formControlName="item"></div>
@@ -40,16 +43,15 @@
               (click)="addOtherVariationScheduleItem()"
               [disabled]="(store.isEditable$ | async) === false"
               govukSecondaryButton
-              type="button">
-              Add
-              <ng-container *ngIf="variationScheduleItems.length > 0"><span>another</span></ng-container>
-              item
+              type="button"
+            >
+              Add <ng-container *ngIf="variationScheduleItems.length > 0"> <span>another</span> </ng-container> item
             </button>
           </div>
         </div>
       </govuk-radio-option>
 
-      <govuk-radio-option value="REJECTED" label="Rejected"></govuk-radio-option>
+      <govuk-radio-option value="REJECTED" label="Rejected"> </govuk-radio-option>
       <govuk-radio-option value="OPERATOR_AMENDS_NEEDED" label="Operator amends needed">
         <div govukConditionalContent>
           <div>
@@ -63,7 +65,8 @@
               [formGroupName]="i"
               [disabled]="(store.isEditable$ | async) === false"
               govukFieldset
-              id="required=changes-{{ i }}">
+              id="required=changes-{{ i }}"
+            >
               <legend class="govuk-heading-s">Required change {{ i + 1 }}</legend>
               <button
                 (click)="requiredChanges.removeAt(i)"
@@ -73,7 +76,8 @@
                 appAddAnother
                 govukSecondaryButton
                 type="button"
-                #removeButton>
+                #removeButton
+              >
                 Remove
               </button>
               <div govuk-textarea [maxLength]="10000" formControlName="reason"></div>
@@ -82,15 +86,17 @@
                 [baseDownloadUrl]="getDownloadUrl()"
                 [label]="(uploadedFiles[i] | async) === true ? 'Upload a different file' : 'Upload a file (optional)'"
                 headerSize="s"
-                listTitle="Uploaded attachments for the operator"
-                formControlName="files"></app-multiple-file-input>
+                [listTitle]="'Uploaded attachments for the operator'"
+                formControlName="files"
+              ></app-multiple-file-input>
             </fieldset>
 
             <button
               (click)="addOtherRequiredChange()"
               [disabled]="(store.isEditable$ | async) === false"
               govukSecondaryButton
-              type="button">
+              type="button"
+            >
               Add another required change
             </button>
           </div>
@@ -103,7 +109,8 @@
       [maxLength]="10000"
       formControlName="notes"
       label="Notes"
-      hint="The operator cannot view this"></div>
+      hint="The operator cannot view this"
+    ></div>
     <button appPendingButton govukButton type="submit">Confirm</button>
   </form>
 </ng-container>
@@ -113,13 +120,15 @@
     app-summary-header
     class="govuk-heading-m"
     (changeClick)="isOnEditState = true"
-    [changeRoute]="(isEditable$ | async) && canEdit ? '.' : null">
+    [changeRoute]="(isEditable$ | async) && canEdit ? '.' : null"
+  >
     Decision Summary
   </h2>
   <dl
     govuk-summary-list
     class="govuk-summary-list--no-border summary-list--edge-border"
-    *ngIf="groupKey | reviewGroupVariation | async as reviewDecision">
+    *ngIf="groupKey | reviewGroupVariation | async as reviewDecision"
+  >
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Decision status</dt>
       <dd govukSummaryListRowValue>{{ reviewDecision.type | reviewGroupDecision }}</dd>
@@ -134,11 +143,9 @@
               let variationScheduleItem of $any(reviewDecision).details.variationScheduleItems;
               let i = index;
               let isLast = last
-            ">
-            <div>
-              {{ i + 1 }}. {{ variationScheduleItem }}
-              <br />
-            </div>
+            "
+          >
+            <div>{{ i + 1 }}. {{ variationScheduleItem }} <br /></div>
             <br *ngIf="!isLast" />
           </ng-container>
         </dd>
@@ -155,15 +162,15 @@
               let requiredChange of $any(reviewDecision).details.requiredChanges;
               let i = index;
               let isLast = last
-            ">
+            "
+          >
             <div class="pre-wrap">
-              {{ i + 1 }}. {{ requiredChange.reason }}
-              <br />
+              {{ i + 1 }}. {{ requiredChange.reason }} <br />
               <ng-container *ngIf="requiredChange?.files?.length > 0">
                 <app-summary-download-files
-                  [files]="
-                    store.getDownloadUrlFiles(requiredChange?.files, 'reviewAttachments')
-                  "></app-summary-download-files>
+                  [files]="store.getDownloadUrlFiles(requiredChange?.files, 'reviewAttachments')"
+                >
+                </app-summary-download-files>
               </ng-container>
             </div>
             <br *ngIf="!isLast" />

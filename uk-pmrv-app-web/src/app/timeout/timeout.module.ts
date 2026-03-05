@@ -6,8 +6,8 @@ import { TimedOutComponent } from './timed-out/timed-out.component';
 import { TimeoutBannerComponent } from './timeout-banner/timeout-banner.component';
 
 @NgModule({
-  imports: [CommonModule, SharedModule],
   declarations: [TimedOutComponent, TimeoutBannerComponent],
+  imports: [CommonModule, SharedModule],
   exports: [TimeoutBannerComponent],
 })
 export class TimeoutModule {}

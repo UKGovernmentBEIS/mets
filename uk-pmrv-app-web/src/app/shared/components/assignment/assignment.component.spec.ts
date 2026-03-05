@@ -29,7 +29,6 @@ describe('AssignmentComponent', () => {
   );
 
   @Component({
-    standalone: false,
     template: `
       <app-assignment [info]="info" (submitted)="submitted($event)"></app-assignment>
     `,

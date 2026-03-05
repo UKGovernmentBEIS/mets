@@ -14,7 +14,6 @@ import { ConditionalContentDirective } from '../../directives';
 
 @Component({
   selector: 'govuk-radio-option',
-  standalone: false,
   templateUrl: './radio-option.component.html',
   providers: [
     {

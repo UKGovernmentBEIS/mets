@@ -17,9 +17,10 @@ import { MmpProceduresSummaryTemplateComponent } from './mmp-procedures-summary-
 
 @Component({
   selector: 'app-mmp-procedures-summary',
-  imports: [SharedPermitModule, SharedModule, MmpProceduresSummaryTemplateComponent],
   templateUrl: './mmp-procedures-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [SharedPermitModule, SharedModule, MmpProceduresSummaryTemplateComponent],
 })
 export class MmpProceduresSummaryComponent extends ProductBenchmarkComponent implements PendingRequest {
   state = toSignal(this.store.asObservable());

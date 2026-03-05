@@ -13,7 +13,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-conservative-method',
-  standalone: false,
   templateUrl: './conservative-method.component.html',
   providers: [conservativeMethodFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

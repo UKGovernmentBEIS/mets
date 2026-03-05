@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-router-stub',
-  standalone: false,
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

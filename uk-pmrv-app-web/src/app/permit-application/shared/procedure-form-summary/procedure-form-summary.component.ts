@@ -5,7 +5,6 @@ import { ProcedureForm } from 'pmrv-api';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-procedure-form-summary',
-  standalone: false,
   templateUrl: './procedure-form-summary.component.html',
 })
 export class ProcedureFormSummaryComponent {

@@ -13,7 +13,6 @@ import {
 
 @Component({
   selector: 'app-measurement-tier-summary',
-  standalone: false,
   templateUrl: './measurement-tier-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

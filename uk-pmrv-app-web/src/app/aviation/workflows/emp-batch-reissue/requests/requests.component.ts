@@ -6,7 +6,6 @@ import { RequestsService } from 'pmrv-api';
 
 @Component({
   selector: 'app-requests',
-  standalone: false,
   templateUrl: './requests.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

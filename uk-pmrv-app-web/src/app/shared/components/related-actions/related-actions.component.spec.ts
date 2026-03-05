@@ -19,7 +19,6 @@ describe('RelatedActionsComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-related-actions
         [taskId$]="taskId$"
@@ -86,7 +85,6 @@ describe('RelatedActionsComponent', () => {
       'AER_SAVE_APPLICATION',
       'AVIATION_ACCOUNT_CLOSURE_CANCEL_APPLICATION',
       'BDR_VERIFICATION_RETURN_TO_OPERATOR',
-      'BDRS2_RECALL_FROM_VERIFICATION',
     ]);
     fixture.detectChanges();
 
@@ -98,7 +96,6 @@ describe('RelatedActionsComponent', () => {
       ['http://localhost/', 'Recall your response'],
       ['http://localhost/aviation/tasks/1/cancel', 'Cancel this task'],
       ['http://localhost/', 'Return to operator for changes'],
-      ['http://localhost/', 'Recall stage 2 BDR application from verifier'],
     ]);
   });
 

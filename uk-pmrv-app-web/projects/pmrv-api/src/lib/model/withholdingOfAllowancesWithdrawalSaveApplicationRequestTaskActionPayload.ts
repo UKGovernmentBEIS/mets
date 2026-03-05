@@ -12,7 +12,8 @@
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 import { WithholdingWithdrawal } from './withholdingWithdrawal';
 
-export interface WithholdingOfAllowancesWithdrawalSaveApplicationRequestTaskActionPayload extends RequestTaskActionPayload {
+export interface WithholdingOfAllowancesWithdrawalSaveApplicationRequestTaskActionPayload
+  extends RequestTaskActionPayload {
   withholdingWithdrawal: WithholdingWithdrawal;
   sectionsCompleted?: { [key: string]: boolean };
 }

@@ -9,8 +9,9 @@ import { AviationAerCorsiaOpinionStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-monitoring-approach-verify-corsia-template',
-  imports: [SharedModule, RouterLink, MonitoringApproachVerifyCorsiaTypePipe],
   templateUrl: './monitoring-approach-verify-corsia-template.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLink, MonitoringApproachVerifyCorsiaTypePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonitoringApproachVerifyCorsiaTemplateComponent implements OnInit {

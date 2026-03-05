@@ -12,7 +12,6 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-mmp-installation-description-answers',
-  standalone: false,
   templateUrl: './mmp-installation-description-answers.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

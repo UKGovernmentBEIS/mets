@@ -19,5 +19,4 @@ public class AviationReportableEmissionsSaveParams {
     private boolean isFromDre;
     private boolean isFromRegulator;
     private boolean isExempted;
-    private String requestId;
 }

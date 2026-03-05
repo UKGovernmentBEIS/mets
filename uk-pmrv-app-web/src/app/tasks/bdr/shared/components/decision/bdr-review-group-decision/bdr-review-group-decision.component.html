@@ -50,7 +50,7 @@
                 [baseDownloadUrl]="getDownloadUrl()"
                 [label]="(uploadedFiles[i] | async) === true ? 'Upload a different file' : 'Upload a file (optional)'"
                 headerSize="s"
-                listTitle="Uploaded attachments for the operator"
+                [listTitle]="'Uploaded attachments for the operator'"
                 formControlName="files"></app-multiple-file-input>
             </fieldset>
 

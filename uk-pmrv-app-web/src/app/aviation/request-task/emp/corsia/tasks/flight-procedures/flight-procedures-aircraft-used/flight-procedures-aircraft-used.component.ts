@@ -12,8 +12,9 @@ import { FlightProceduresFormProvider } from '../flight-procedures-form.provider
 
 @Component({
   selector: 'app-flight-procedures-aircraft-used',
-  imports: [SharedModule, FlightProceduresFormComponent, ReturnToLinkComponent],
   templateUrl: './flight-procedures-aircraft-used.component.html',
+  standalone: true,
+  imports: [SharedModule, FlightProceduresFormComponent, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class FlightProceduresAircraftUsedComponent {

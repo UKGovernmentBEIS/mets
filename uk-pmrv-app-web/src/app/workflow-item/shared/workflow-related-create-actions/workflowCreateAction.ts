@@ -4,7 +4,6 @@ import {
   ReportRelatedRequestCreateActionPayload,
   RequestCreateActionEmptyPayload,
   RequestCreateActionProcessDTO,
-  WithholdingOfAllowancesReCreateActionPayload,
 } from 'pmrv-api';
 
 export const requestCreateActionTypeLabelMap: Partial<
@@ -16,10 +15,8 @@ export const requestCreateActionTypeLabelMap: Partial<
   AVIATION_AER_CORSIA_ANNUAL_OFFSETTING: 'Calculate annual offsetting requirements',
   AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING: 'Calculate 3-year period offsetting requirements',
   BDR: 'Reopen BDR workflow',
-  BDRS2: 'Reopen stage 2 BDR workflow',
   AVIATION_DOE_CORSIA: 'Initiate estimation of emissions',
   ALR: 'Mark workflow as not required',
-  WITHHOLDING_OF_ALLOWANCES: 'Reopen withhold workflow',
 };
 
 export function createRequestCreateActionProcessDTO(
@@ -31,7 +28,6 @@ export function createRequestCreateActionProcessDTO(
     case 'DRE':
     case 'AVIATION_DRE_UKETS':
     case 'BDR':
-    case 'BDRS2':
     case 'AVIATION_DOE_CORSIA':
       return {
         requestCreateActionType,
@@ -55,14 +51,6 @@ export function createRequestCreateActionProcessDTO(
           payloadType: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_CREATE_ACTION_PAYLOAD',
           requestId: requestId,
         } as AviationAerCorsia3YearPeriodCreateActionPayload,
-      };
-    case 'WITHHOLDING_OF_ALLOWANCES':
-      return {
-        requestCreateActionType: 'WITHHOLDING_OF_ALLOWANCES_RE_INITIATE',
-        requestCreateActionPayload: {
-          payloadType: 'WITHHOLDING_OF_ALLOWANCES_RE_CREATE_ACTION_PAYLOAD',
-          requestId,
-        } as WithholdingOfAllowancesReCreateActionPayload,
       };
 
     default:

@@ -8,8 +8,6 @@ import { PipesModule } from '@shared/pipes/pipes.module';
 import { SharedModule } from '@shared/shared.module';
 
 import {
-  AviationReportableEmissionsOperatorDetails,
-  AviationReportableEmissionsRegistryIntegrationRequestActionPayload,
   EmpIssuanceIndividualCompanyDetails,
   EmpIssuanceLimitedCompanyDetails,
   EmpIssuanceOperatorDetails,
@@ -29,7 +27,7 @@ import { RegistryActionService } from '../core/registry.service';
 
 interface ViewModel {
   expectedActionType: Array<RequestActionDTO['type']>;
-  operatorDetails: EmpIssuanceOperatorDetails & AviationReportableEmissionsOperatorDetails;
+  operatorDetails: EmpIssuanceOperatorDetails;
   organizationDetails: Partial<
     EmpIssuanceOrganisationDetails &
       EmpIssuanceIndividualCompanyDetails &
@@ -41,22 +39,21 @@ interface ViewModel {
 
 @Component({
   selector: 'app-information-sent',
+  standalone: true,
   imports: [ActionSharedModule, NgIf, PipesModule, SharedModule, OperatorDetailsLegalStatusTypePipe],
   templateUrl: './information-sent.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InformationSentToRegistryComponent {
   payload = this.registryActionService.payload as Signal<
-    | EmpIssuanceRegistryIntegrationRequestActionPayload
-    | EmpVariationRegistryIntegrationRequestActionPayload
-    | AviationReportableEmissionsRegistryIntegrationRequestActionPayload
+    EmpIssuanceRegistryIntegrationRequestActionPayload | EmpVariationRegistryIntegrationRequestActionPayload
   >;
   private readonly requestActionType = this.registryActionService.requestActionType;
 
   vm: Signal<ViewModel> = computed(() => {
     const payload = this.payload();
     const operatorDetails = payload.operatorDetails;
-    const organizationDetails = (payload as EmpIssuanceRegistryIntegrationRequestActionPayload).organisationDetails;
+    const organizationDetails = payload.organisationDetails;
 
     return {
       expectedActionType: [this.requestActionType()],

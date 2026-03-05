@@ -3,7 +3,6 @@ import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-approaches-add-template',
-  standalone: false,
   templateUrl: './approaches-add-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -120,7 +120,6 @@ describe('PfcTierSummaryComponent', () => {
   } as AerApplicationSubmitRequestTaskPayload;
 
   @Component({
-    standalone: false,
     template: `
       <app-pfc-tier-summary [isEditable]="isEditable" [payload]="payload" [index]="0"></app-pfc-tier-summary>
     `,

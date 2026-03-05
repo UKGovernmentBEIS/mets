@@ -9,7 +9,6 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-approaches',
-  standalone: false,
   template: `
     <app-action-task header="{{ this.taskKey | monitoringApproachEmissionDescription }}" [breadcrumb]="true">
       <div [ngSwitch]="this.taskKey">

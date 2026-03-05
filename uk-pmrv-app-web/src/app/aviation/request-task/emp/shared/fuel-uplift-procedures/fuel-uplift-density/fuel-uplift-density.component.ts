@@ -1,3 +1,4 @@
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -13,8 +14,16 @@ import { FuelUpliftProceduresFormProvider } from '../fuel-uplift-procedures-form
 
 @Component({
   selector: 'app-fuel-uplift-density',
-  imports: [SharedModule, GovukComponentsModule, ProcedureFormPageHeaderDirective, ProcedureFormStepComponent],
   templateUrl: './fuel-uplift-density.component.html',
+  standalone: true,
+  imports: [
+    SharedModule,
+    GovukComponentsModule,
+    NgIf,
+    NgFor,
+    ProcedureFormPageHeaderDirective,
+    ProcedureFormStepComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FuelUpliftDensityComponent {

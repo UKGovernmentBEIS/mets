@@ -7,7 +7,6 @@ import { SelectComponent } from './select.component';
 
 describe('SelectComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <div
         govuk-select

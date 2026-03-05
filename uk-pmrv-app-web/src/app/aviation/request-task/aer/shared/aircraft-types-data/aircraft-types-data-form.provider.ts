@@ -21,10 +21,9 @@ export interface AviationAerAircraftTypesDataFormModel {
 }
 
 @Injectable()
-export class AircraftTypesDataFormProvider implements TaskFormProvider<
-  AviationAerAircraftData,
-  AviationAerAircraftTypesDataFormModel
-> {
+export class AircraftTypesDataFormProvider
+  implements TaskFormProvider<AviationAerAircraftData, AviationAerAircraftTypesDataFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   store = inject(RequestTaskStore);

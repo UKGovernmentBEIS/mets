@@ -12,7 +12,6 @@ import { allowancesNumberFormProvider } from './allowances-number-form.provider'
 
 @Component({
   selector: 'app-allowances-number',
-  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onContinue()"
@@ -32,8 +31,8 @@ import { allowancesNumberFormProvider } from './allowances-number-form.provider'
     </app-wizard-step>
     <a govukLink routerLink="../..">Return to: Cessation</a>
   `,
-  providers: [allowancesNumberFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [allowancesNumberFormProvider],
 })
 export class AllowancesNumberComponent implements PendingRequest {
   constructor(

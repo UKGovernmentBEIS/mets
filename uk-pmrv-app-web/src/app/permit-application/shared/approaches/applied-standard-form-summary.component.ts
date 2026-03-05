@@ -5,7 +5,6 @@ import { AppliedStandard } from 'pmrv-api';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-applied-standard-form-summary',
-  standalone: false,
   templateUrl: './applied-standard-form-summary.component.html',
 })
 export class AppliedStandardFormSummaryComponent {

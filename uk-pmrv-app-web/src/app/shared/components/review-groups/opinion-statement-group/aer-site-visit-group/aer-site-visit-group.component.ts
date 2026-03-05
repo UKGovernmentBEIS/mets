@@ -6,7 +6,6 @@ import { SiteVisit } from 'pmrv-api';
 
 @Component({
   selector: 'app-aer-site-visit-group',
-  standalone: false,
   // eslint-disable-next-line @angular-eslint/component-max-inline-declarations
   template: `
     <ng-container *ngIf="siteVisit">

@@ -32,7 +32,6 @@ describe('WasteQdrTaskComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-waste-qdr-task heading="Check your answers" caption="Quarterly data report" [breadcrumb]="true">
         <h2 app-summary-header changeRoute=".." class="govuk-heading-m">Check your answers</h2>

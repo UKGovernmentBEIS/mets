@@ -15,6 +15,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-action-activity-submitted',
+  standalone: true,
   imports: [ActionSharedModule, NgIf, ActivitySummaryTemplateComponent],
   templateUrl: './activity-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

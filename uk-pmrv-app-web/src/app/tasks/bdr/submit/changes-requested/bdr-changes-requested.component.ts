@@ -17,8 +17,9 @@ import { PendingRequestService } from '../../../../core/guards/pending-request.s
 
 @Component({
   selector: 'app-bdr-changes-requested',
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, ChangesRequestedTemplateComponent],
   templateUrl: './bdr-changes-requested.component.html',
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, ChangesRequestedTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BdrChangesRequestedComponent {

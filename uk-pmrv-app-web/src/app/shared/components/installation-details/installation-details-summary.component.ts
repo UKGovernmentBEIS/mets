@@ -6,7 +6,6 @@ import { CompanyProfileDTO, InstallationOperatorDetails } from 'pmrv-api';
 
 @Component({
   selector: 'app-installation-details-summary',
-  standalone: false,
   templateUrl: './installation-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

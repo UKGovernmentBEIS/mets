@@ -17,7 +17,6 @@ describe('AuthorityDecisionTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-doal-authority-decision-template [data]="data"></app-doal-authority-decision-template>
     `,

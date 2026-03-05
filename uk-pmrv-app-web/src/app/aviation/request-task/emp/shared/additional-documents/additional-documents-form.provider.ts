@@ -23,10 +23,9 @@ export interface AdditionalDocumentsFormModel {
 }
 
 @Injectable()
-export class AdditionalDocumentsFormProvider implements TaskFormProvider<
-  AdditionalDocumentsModel,
-  AdditionalDocumentsFormModel
-> {
+export class AdditionalDocumentsFormProvider
+  implements TaskFormProvider<AdditionalDocumentsModel, AdditionalDocumentsFormModel>
+{
   private fb = inject(FormBuilder);
   private requestTaskFileService = inject(RequestTaskFileService);
   private store = inject(RequestTaskStore);

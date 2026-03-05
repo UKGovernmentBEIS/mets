@@ -14,10 +14,9 @@ import { chooseWorkflowAddFormProvider } from './choose-workflow-add-form.provid
 
 @Component({
   selector: 'app-choose-workflow-add',
-  standalone: false,
   templateUrl: './choose-workflow-add.component.html',
-  providers: [chooseWorkflowAddFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [chooseWorkflowAddFormProvider],
 })
 export class ChooseWorkflowAddComponent implements OnInit {
   private readonly nextWizardStep = 'choose-workflow';

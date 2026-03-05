@@ -14,10 +14,9 @@ import { VERIFICATION_BODY_FORM, verificationBodyFormFactory } from '../form/for
 
 @Component({
   selector: 'app-add',
-  standalone: false,
   templateUrl: './add.component.html',
-  providers: [verificationBodyFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [verificationBodyFormFactory],
 })
 export class AddComponent implements OnInit {
   confirmedVBname$: Observable<string>;

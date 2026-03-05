@@ -31,7 +31,6 @@ describe('ReviewGroupDecisionComponent', () => {
   const tasksService = mockClass(TasksService);
 
   @Component({
-    standalone: false,
     template: `
       <app-variation-operator-led-review-group-decision
         [canEdit]="canEdit"

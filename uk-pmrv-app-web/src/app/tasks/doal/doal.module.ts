@@ -51,7 +51,6 @@ import { SummaryComponent as VerificationReportSubmitSummaryComponent } from './
 import { VerificationReportComponent } from './submit/verification-report/verification-report.component';
 
 @NgModule({
-  imports: [DoalRoutingModule, SharedModule, TaskSharedModule],
   declarations: [
     ActivityLevelDeleteComponent,
     AdditionalDocumentsComponent,
@@ -97,6 +96,7 @@ import { VerificationReportComponent } from './submit/verification-report/verifi
     VerificationReportSubmitSummaryComponent,
     VerificationReportSummaryComponent,
   ],
+  imports: [DoalRoutingModule, SharedModule, TaskSharedModule],
   providers: [ItemNamePipe, PeerReviewDecisionGuard],
 })
 export class DoalModule {}

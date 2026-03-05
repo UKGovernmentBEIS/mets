@@ -14,7 +14,6 @@ describe('MeasurementGroupComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
   let element: HTMLElement;
   @Component({
-    standalone: false,
     template: `
       <app-measurement-group
         [data]="data"

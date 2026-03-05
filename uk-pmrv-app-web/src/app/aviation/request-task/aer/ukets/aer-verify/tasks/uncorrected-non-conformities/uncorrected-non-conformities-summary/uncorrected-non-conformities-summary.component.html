@@ -20,9 +20,10 @@
   <app-uncorrected-item-group
     [isEditable]="vm.isEditable"
     [uncorrectedItems]="vm.uncorrectedNonConformities.uncorrectedNonConformities"
-    baseUrl="../uncorrected-list"
+    [baseUrl]="'../uncorrected-list'"
     [queryParams]="{ change: true }"
-    *ngIf="vm.uncorrectedNonConformities.existUncorrectedNonConformities"></app-uncorrected-item-group>
+    *ngIf="vm.uncorrectedNonConformities.existUncorrectedNonConformities"
+  ></app-uncorrected-item-group>
 
   <h2 class="govuk-heading-m">Non-conformities from the previous year that have not been resolved</h2>
 
@@ -39,9 +40,10 @@
   <app-verifier-comment-group
     [isEditable]="vm.isEditable"
     [verifierComments]="vm.uncorrectedNonConformities.priorYearIssues"
-    baseUrl="../prior-year-issues-list"
+    [baseUrl]="'../prior-year-issues-list'"
     [queryParams]="{ change: true }"
-    *ngIf="vm.uncorrectedNonConformities.existPriorYearIssues"></app-verifier-comment-group>
+    *ngIf="vm.uncorrectedNonConformities.existPriorYearIssues"
+  ></app-verifier-comment-group>
 
   <div class="govuk-button-group">
     <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
@@ -51,7 +53,8 @@
 
   <app-aviation-aer-verification-review-decision-group
     *ngIf="vm.showDecision"
-    taskKey="uncorrectedNonConformities"></app-aviation-aer-verification-review-decision-group>
+    taskKey="uncorrectedNonConformities"
+  ></app-aviation-aer-verification-review-decision-group>
 </ng-container>
 
 <app-return-to-link></app-return-to-link>

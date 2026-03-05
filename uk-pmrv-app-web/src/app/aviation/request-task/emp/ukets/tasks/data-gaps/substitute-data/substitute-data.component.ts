@@ -7,8 +7,9 @@ import { BaseDataGapsComponent } from '../base-data-gaps.component';
 
 @Component({
   selector: 'app-substitute-data',
-  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './substitute-data.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubstituteDataComponent extends BaseDataGapsComponent {

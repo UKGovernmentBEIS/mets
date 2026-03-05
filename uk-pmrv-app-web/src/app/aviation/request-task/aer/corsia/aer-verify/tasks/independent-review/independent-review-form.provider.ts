@@ -21,10 +21,9 @@ export interface AviationAerCorsiaIndependentReviewFormModel {
 }
 
 @Injectable()
-export class IndependentReviewFormProvider implements TaskFormProvider<
-  AviationAerCorsiaIndependentReview,
-  AviationAerCorsiaIndependentReviewFormModel
-> {
+export class IndependentReviewFormProvider
+  implements TaskFormProvider<AviationAerCorsiaIndependentReview, AviationAerCorsiaIndependentReviewFormModel>
+{
   private _form: FormGroup<AviationAerCorsiaIndependentReviewFormModel>;
 
   constructor(private fb: FormBuilder) {}

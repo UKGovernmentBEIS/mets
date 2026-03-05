@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'wasteGasActivity',
-  standalone: false,
 })
 export class WasteGasActivityPipe implements PipeTransform {
   transform(

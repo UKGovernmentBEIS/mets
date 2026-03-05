@@ -9,22 +9,22 @@
   <ol class="app-task-list">
     <li app-task-section title="Operator information">
       <ul app-task-item-list>
-        <li app-task-item link="./details" linkText="Installation details" status="complete"></li>
-        <li app-task-item link="./fuels" linkText="Fuels and equipment inventory" status="complete"></li>
+        <li app-task-item link="./details" linkText="Installation details" [status]="'complete'"></li>
+        <li app-task-item link="./fuels" linkText="Fuels and equipment inventory" [status]="'complete'"></li>
         <li
           *ngFor="let approach of monitoringApproaches$ | async"
           app-task-item
           [link]="approach.link"
           [linkText]="approach.linkText"
-          status="complete"></li>
+          [status]="'complete'"></li>
         <li app-task-item link="./emissions-summary" linkText="Emissions summary"></li>
         <li
           *ngIf="(isGHGE$ | async) && (showAlr$ | async)"
           app-task-item
           link="./activity-level-report"
           linkText="Activity level report"
-          status="complete"></li>
-        <li app-task-item link="./additional-info" linkText="Additional information" status="complete"></li>
+          [status]="'complete'"></li>
+        <li app-task-item link="./additional-info" linkText="Additional information" [status]="'complete'"></li>
       </ul>
     </li>
 
@@ -94,7 +94,11 @@
         <li
           app-task-item
           link="./materiality-level/summary"
-          linkText="Materiality level and reference documents"
+          [linkText]="
+            (yearEqualAfter25$ | async)
+              ? 'Further information of relevance to the opinion'
+              : 'Materiality level and reference documents'
+          "
           [status]="'materialityLevel' | taskStatus | async"></li>
         <li
           app-task-item

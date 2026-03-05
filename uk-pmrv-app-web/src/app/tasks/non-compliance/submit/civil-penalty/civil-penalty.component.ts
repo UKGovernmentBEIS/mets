@@ -15,10 +15,9 @@ import { civilPenaltyFormProvider } from './civil-penalty-form.provider';
 
 @Component({
   selector: 'app-civil-penalty',
-  standalone: false,
   templateUrl: './civil-penalty.component.html',
-  providers: [civilPenaltyFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [civilPenaltyFormProvider],
 })
 export class CivilPenaltyComponent {
   private readonly nextWizardStep = '';

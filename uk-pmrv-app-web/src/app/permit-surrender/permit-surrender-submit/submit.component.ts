@@ -8,10 +8,9 @@ import { PermitSurrenderStore } from '../store/permit-surrender.store';
 
 @Component({
   selector: 'app-submit',
-  standalone: false,
   templateUrl: './submit.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class SubmitComponent {
   allowSubmit$ = this.store.pipe(map((state) => state.sectionsCompleted?.SURRENDER_APPLY));

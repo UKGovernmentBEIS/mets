@@ -12,7 +12,6 @@ import { SummaryDetailsComponent } from './summary-details.component';
 
 describe('SummaryDetailsComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <app-grant-determination-summary-details
         [grantDetermination$]="grantDetermination$"></app-grant-determination-summary-details>

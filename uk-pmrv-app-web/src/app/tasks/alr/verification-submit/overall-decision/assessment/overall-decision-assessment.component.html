@@ -3,13 +3,15 @@
     <div formControlName="type" govuk-radio>
       <govuk-radio-option
         [label]="'VERIFIED_AS_SATISFACTORY' | verificationDecisionType"
-        value="VERIFIED_AS_SATISFACTORY"></govuk-radio-option>
-      <govuk-radio-option [label]="'VERIFIED_WITH_COMMENTS' | verificationDecisionType" value="VERIFIED_WITH_COMMENTS">
+        [value]="'VERIFIED_AS_SATISFACTORY'"></govuk-radio-option>
+      <govuk-radio-option
+        [label]="'VERIFIED_WITH_COMMENTS' | verificationDecisionType"
+        [value]="'VERIFIED_WITH_COMMENTS'">
         <ng-container govukConditionalContent>
           <div formControlName="reasons" [maxLength]="10000" govuk-textarea label="Your comments"></div>
         </ng-container>
       </govuk-radio-option>
-      <govuk-radio-option [label]="'NOT_VERIFIED' | verificationDecisionType" value="NOT_VERIFIED">
+      <govuk-radio-option [label]="'NOT_VERIFIED' | verificationDecisionType" [value]="'NOT_VERIFIED'">
         <ng-container govukConditionalContent>
           <div
             formControlName="reasonsNotVerified"

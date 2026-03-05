@@ -23,6 +23,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-verify-monitoring-approach',
+  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

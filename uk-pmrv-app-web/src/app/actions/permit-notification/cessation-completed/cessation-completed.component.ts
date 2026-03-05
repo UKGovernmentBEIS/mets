@@ -23,10 +23,11 @@ interface ViewModel {
 
 @Component({
   selector: 'app-action-notification-cessation-completed',
+  standalone: true,
   imports: [SharedModule, ActionSharedModule],
   templateUrl: './cessation-completed.component.html',
-  providers: [UserInfoResolverPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserInfoResolverPipe],
 })
 export class NotificationCessationCompletedActionComponent {
   vm: Signal<ViewModel> = computed(() => {

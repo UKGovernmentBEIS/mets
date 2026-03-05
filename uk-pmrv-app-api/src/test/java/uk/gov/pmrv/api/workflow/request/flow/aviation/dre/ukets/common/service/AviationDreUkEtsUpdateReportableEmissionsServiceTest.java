@@ -70,7 +70,6 @@ class AviationDreUkEtsUpdateReportableEmissionsServiceTest {
                         .build()
                 )
                 .isFromDre(true)
-                .requestId(requestId)
                 .build();
 
         when(requestService.findRequestById(requestId)).thenReturn(request);

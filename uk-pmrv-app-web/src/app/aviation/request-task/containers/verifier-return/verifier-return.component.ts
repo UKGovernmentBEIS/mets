@@ -19,8 +19,9 @@ import { AER_VERIFIER_RETURN_FORM, aerVerifierReturnProvider } from './verifier-
 
 @Component({
   selector: 'app-verifier-return',
-  imports: [SharedModule],
   templateUrl: './verifier-return.component.html',
+  standalone: true,
+  imports: [SharedModule],
   providers: [aerVerifierReturnProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -12,7 +12,6 @@ import {
 
 @Pipe({
   name: 'airImprovementTitle',
-  standalone: false,
 })
 export class AirImprovementTitlePipe implements PipeTransform {
   transform(airImprovement: AirImprovement, index: string): string {

@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-start-process',
-  standalone: false,
   template: `
     <app-page-heading>Create a UK Emissions Trading Scheme reporting sign in</app-page-heading>
     <div class="govuk-body">

@@ -8,7 +8,6 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-emission-summary-delete',
-  standalone: false,
   template: `
     <app-page-heading size="xl">Are you sure you want to delete this emission summary?</app-page-heading>
 

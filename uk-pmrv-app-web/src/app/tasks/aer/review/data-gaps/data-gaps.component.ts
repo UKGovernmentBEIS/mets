@@ -9,7 +9,6 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-data-gaps',
-  standalone: false,
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Methodologies to close data gaps">
       <app-data-gaps-group [dataGapsInfo]="dataGapsInfo$ | async"></app-data-gaps-group>

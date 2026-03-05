@@ -8,10 +8,9 @@ import { DoalActionService } from '../core/doal-action.service';
 
 @Component({
   selector: 'app-doal-proceeded',
-  standalone: false,
   templateUrl: './proceeded.component.html',
-  providers: [UserInfoResolverPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserInfoResolverPipe],
 })
 export class ProceededComponent {
   decisionNotification$ = this.doalActionService

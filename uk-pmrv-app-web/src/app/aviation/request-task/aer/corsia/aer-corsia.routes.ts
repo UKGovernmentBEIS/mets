@@ -81,9 +81,9 @@ export const AER_CORSIA_ROUTES: Routes = [
         path: 'aggregated-consumption-and-flight-data',
         providers: [{ provide: TASK_FORM_PROVIDER, useClass: AggregatedConsumptionFlightDataFormProvider }],
         loadChildren: () =>
-          import('@aviation/request-task/aer/shared/aggregated-consumption-flight-data/aggregated-consumption-flight-data.routes').then(
-            (r) => r.AER_AGGREGATED_CONSUMPTION_FLIGHT_DATA_ROUTES,
-          ),
+          import(
+            '@aviation/request-task/aer/shared/aggregated-consumption-flight-data/aggregated-consumption-flight-data.routes'
+          ).then((r) => r.AER_AGGREGATED_CONSUMPTION_FLIGHT_DATA_ROUTES),
       },
       {
         path: 'monitoring-approach',
@@ -97,9 +97,9 @@ export const AER_CORSIA_ROUTES: Routes = [
         path: 'emissions-reduction-claim',
         providers: [{ provide: TASK_FORM_PROVIDER, useClass: EmissionsReductionClaimFormProvider }],
         loadChildren: () =>
-          import('@aviation/request-task/aer/corsia/tasks/emissions-reduction-claim/emissions-reduction-claim.routes').then(
-            (r) => r.AER_CORSIA_EMISSIONS_REDUCTION_CLAIM_ROUTES,
-          ),
+          import(
+            '@aviation/request-task/aer/corsia/tasks/emissions-reduction-claim/emissions-reduction-claim.routes'
+          ).then((r) => r.AER_CORSIA_EMISSIONS_REDUCTION_CLAIM_ROUTES),
       },
       {
         path: 'total-emissions',

@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/prefer-host-metadata-property */
 import {
   ChangeDetectorRef,
   ComponentRef,
@@ -21,10 +20,7 @@ import { BehaviorSubject, combineLatest, startWith, Subject, takeUntil, tap } fr
 
 import { ErrorMessageComponent } from '../../error-message/error-message.component';
 
-@Directive({
-  selector: '[govukFormError]',
-  standalone: false,
-})
+@Directive({ selector: '[govukFormError]' })
 export class FormErrorDirective implements OnDestroy, OnInit, DoCheck {
   @Input() id: string;
 

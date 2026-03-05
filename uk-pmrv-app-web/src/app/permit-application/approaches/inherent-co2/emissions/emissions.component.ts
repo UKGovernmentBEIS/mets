@@ -14,10 +14,9 @@ import { emissionsFormProvider } from './emissions-form.provider';
 
 @Component({
   selector: 'app-emissions',
-  standalone: false,
   templateUrl: './emissions.component.html',
-  providers: [emissionsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [emissionsFormProvider],
 })
 export class EmissionsComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

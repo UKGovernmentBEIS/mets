@@ -14,7 +14,6 @@ import { isVariationRegulatorLedRequestTask } from '../utils/permit';
 
 @Component({
   selector: 'app-permit-task',
-  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -25,8 +24,8 @@ import { isVariationRegulatorLedRequestTask } from '../utils/permit';
       </div>
     </div>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class PermitTaskComponent implements OnInit {
   @Input() notification: any;
@@ -113,14 +112,6 @@ export class PermitTaskComponent implements OnInit {
                   text: 'Apply for a permit transfer',
                 };
                 break;
-              case 'PERMIT_TRANSFER_B_APPLICATION_AMENDS_SUBMIT':
-                taskUrlApproach = true;
-                firstBreadcrumb = {
-                  link: permitApplicationTaskLink,
-                  text: 'Amend your permit transfer',
-                };
-                break;
-
               default:
                 firstBreadcrumb = {
                   link: permitApplicationTaskLink,

@@ -43,16 +43,6 @@ import { TransferredCO2Component } from './transferred-co2/transferred-co2.compo
 import { UncertaintyAnalysisComponent } from './uncertainty-analysis/uncertainty-analysis.component';
 
 @NgModule({
-  imports: [
-    MeasurementDevicesTableComponent,
-    MethodsSummaryTemplateComponent,
-    MmpEnergyFlowsSummaryTemplateComponent,
-    MmpProceduresSummaryTemplateComponent,
-    ReviewRoutingModule,
-    SharedModule,
-    SharedPermitModule,
-    SharedPermitVariationModule,
-  ],
   declarations: [
     AdditionalInfoComponent,
     CalculationComponent,
@@ -84,6 +74,16 @@ import { UncertaintyAnalysisComponent } from './uncertainty-analysis/uncertainty
     ReturnForAmendsConfirmationComponent,
     TransferredCO2Component,
     UncertaintyAnalysisComponent,
+  ],
+  imports: [
+    MeasurementDevicesTableComponent,
+    MethodsSummaryTemplateComponent,
+    MmpEnergyFlowsSummaryTemplateComponent,
+    MmpProceduresSummaryTemplateComponent,
+    ReviewRoutingModule,
+    SharedModule,
+    SharedPermitModule,
+    SharedPermitVariationModule,
   ],
   providers: [PaymentCompletedGuard, PeerReviewDecisionGuard],
 })

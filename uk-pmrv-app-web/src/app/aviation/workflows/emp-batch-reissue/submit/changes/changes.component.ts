@@ -11,6 +11,7 @@ import { EmpBatchReissueStore } from '../store/emp-batch-reissue.store';
 
 @Component({
   selector: 'app-changes',
+  standalone: true,
   imports: [SharedModule],
   templateUrl: './changes.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

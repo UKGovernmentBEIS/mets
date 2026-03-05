@@ -10,25 +10,17 @@
           "strict": true
         },
         "@schematics/angular:component": {
-          "type": "component",
           "style": "scss",
           "changeDetection": "OnPush",
           "inlineStyle": true
-        },
-        "@schematics/angular:directive": { "type": "directive" },
-        "@schematics/angular:service": { "type": "service" },
-        "@schematics/angular:guard": { "typeSeparator": "." },
-        "@schematics/angular:interceptor": { "typeSeparator": "." },
-        "@schematics/angular:module": { "typeSeparator": "." },
-        "@schematics/angular:pipe": { "typeSeparator": "." },
-        "@schematics/angular:resolver": { "typeSeparator": "." }
+        }
       },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/uk-pmrv-main-web",
             "index": "src/index.html",
@@ -55,12 +47,9 @@
             ],
             "styles": ["src/styles.scss", "node_modules/dialog-polyfill/dialog-polyfill.css"],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/sass/include"],
-              "sass": {
-                "silenceDeprecations": ["mixed-decls", "import"]
-              }
+              "includePaths": ["src/sass/include"]
             },
-            "scripts": ["node_modules/govuk-frontend/govuk/all.js"],
+            "scripts": ["node_modules/govuk-frontend/govuk/all.js", "node_modules/marked/marked.min.js"],
             "allowedCommonJsDependencies": [
               "keycloak-js",
               "clean-deep",
@@ -105,7 +94,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "uk-pmrv-main-web:build:production"
@@ -117,7 +106,7 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular/build:extract-i18n",
+          "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
             "buildTarget": "uk-pmrv-main-web:build"
           }
@@ -141,7 +130,7 @@
       "prefix": "govuk",
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "project": "projects/govuk-components/ng-package.json"
           },
@@ -174,7 +163,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "project": "projects/pmrv-api/ng-package.json"
           },

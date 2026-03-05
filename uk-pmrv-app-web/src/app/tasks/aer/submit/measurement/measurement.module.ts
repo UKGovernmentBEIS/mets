@@ -20,7 +20,6 @@ import { TransferredComponent } from './transferred/transferred.component';
 import { TransferredDetailsComponent } from './transferred-details/transferred-details.component';
 
 @NgModule({
-  imports: [AerSharedModule, CommonModule, MeasurementRoutingModule, SharedModule],
   declarations: [
     BiomassCalculationComponent,
     CalculationReviewComponent,
@@ -37,5 +36,6 @@ import { TransferredDetailsComponent } from './transferred-details/transferred-d
     TransferredComponent,
     TransferredDetailsComponent,
   ],
+  imports: [AerSharedModule, CommonModule, MeasurementRoutingModule, SharedModule],
 })
 export class MeasurementModule {}

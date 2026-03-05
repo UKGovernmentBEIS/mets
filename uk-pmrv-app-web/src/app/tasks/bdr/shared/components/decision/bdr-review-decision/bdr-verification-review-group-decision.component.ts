@@ -19,10 +19,11 @@ import { BDRApplicationRegulatorReviewSubmitRequestTaskPayload, BDRBdrDataRegula
 
 @Component({
   selector: 'app-bdr-verification-review-group-decision',
-  imports: [SharedModule],
   templateUrl: './bdr-verification-review-group-decision.component.html',
-  providers: [bdrVerificationReviewGroupDecisionFormProvider],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule],
+  providers: [bdrVerificationReviewGroupDecisionFormProvider],
 })
 export class BdrVerificationReviewGroupDecisionComponent implements PendingRequest {
   bdrPayload = this.bdrService.payload as Signal<BDRApplicationRegulatorReviewSubmitRequestTaskPayload>;

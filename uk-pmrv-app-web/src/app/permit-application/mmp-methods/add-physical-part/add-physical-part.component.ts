@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { combineLatest, first, map, switchMap, tap } from 'rxjs';
+import { combineLatest, first, map, switchMap } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
@@ -22,10 +22,11 @@ import { AddPhysicalPartFormProvider } from './add-physical-part-form.provider';
 
 @Component({
   selector: 'app-add-physical-part',
-  imports: [SharedModule, SharedPermitModule, RouterLink],
   templateUrl: './add-physical-part.component.html',
-  providers: [AddPhysicalPartFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [SharedModule, SharedPermitModule, RouterLink],
+  providers: [AddPhysicalPartFormProvider],
 })
 export class AddPhysicalPartComponent implements PendingRequest {
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));
@@ -43,23 +44,17 @@ export class AddPhysicalPartComponent implements PendingRequest {
       );
 
       const completedProductBenchmarks = productBenchmarks.filter(
-        (_, index) =>
+        (productBenchmark, index) =>
           this.store.getValue().permitSectionsCompleted?.['MMP_SUB_INSTALLATION_Product_Benchmark'][index] === true,
       );
       const completedFallbackApproaches = fallbackApproaches.filter(
-        (_, index) =>
+        (fallbackApproach, index) =>
           this.store.getValue().permitSectionsCompleted?.['MMP_SUB_INSTALLATION_Fallback_Approach'][index] === true,
       );
 
       return [...completedProductBenchmarks, ...completedFallbackApproaches].map(
         (subInstallation) => subInstallation?.subInstallationType,
       );
-    }),
-    tap((subInstallations) => {
-      const updatedSubInstallationFormValue = this.form.controls['subInstallations'].value?.filter((subInstallation) =>
-        subInstallations.includes(subInstallation),
-      );
-      this.form.controls['subInstallations'].patchValue(updatedSubInstallationFormValue);
     }),
   );
 

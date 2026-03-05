@@ -10,7 +10,6 @@ import { WithholdingOfAllowancesWithdrawalApplicationSubmitRequestTaskPayload } 
 
 @Component({
   selector: 'app-withdraw-summary',
-  standalone: false,
   templateUrl: './withdraw-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -17,7 +17,6 @@ import { BaseSuccessComponent } from '@shared/base-success/base-success.componen
 
 @Component({
   selector: 'app-summary-container',
-  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -32,6 +31,7 @@ import { BaseSuccessComponent } from '@shared/base-success/base-success.componen
     </div>
   `,
   providers: [permitRevocationFormProvider],
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryContainerComponent extends BaseSuccessComponent implements OnInit {

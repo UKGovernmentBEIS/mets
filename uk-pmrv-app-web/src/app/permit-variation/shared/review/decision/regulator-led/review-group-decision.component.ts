@@ -28,10 +28,9 @@ import { REVIEW_GROUP_DECISION_FORM, reviewGroupDecisionFormProvider } from './r
 
 @Component({
   selector: 'app-variation-regulator-led-review-group-decision',
-  standalone: false,
   templateUrl: './review-group-decision.component.html',
-  providers: [DestroySubject, reviewGroupDecisionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject, reviewGroupDecisionFormProvider],
 })
 export class ReviewGroupDecisionComponent implements PendingRequest {
   @Input() groupKey: PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload['group'] | AboutVariationGroupKey;

@@ -15,7 +15,6 @@ import { SummaryComponent } from './submit/summary/summary.component';
 import { TransferWaitComponent } from './wait/wait.component';
 
 @NgModule({
-  imports: [PermitTransferARoutingModule, SharedModule, TaskSharedModule],
   declarations: [
     SendApplicationComponent,
     SubmitContainerComponent,
@@ -27,5 +26,6 @@ import { TransferWaitComponent } from './wait/wait.component';
     TransferAReasonComponent,
     TransferWaitComponent,
   ],
+  imports: [PermitTransferARoutingModule, SharedModule, TaskSharedModule],
 })
 export class PermitTransferAModule {}

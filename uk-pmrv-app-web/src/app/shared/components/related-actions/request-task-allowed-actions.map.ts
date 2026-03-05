@@ -42,8 +42,6 @@ const relatedRequestTaskActions: Array<RequestTaskActionProcessDTO['requestTaskA
   'AVIATION_AER_CORSIA_VERIFICATION_RETURN_TO_OPERATOR',
   'BDR_RECALL_FROM_VERIFICATION',
   'BDR_VERIFICATION_RETURN_TO_OPERATOR',
-  'BDRS2_RECALL_FROM_VERIFICATION',
-  'BDRS2_VERIFICATION_RETURN_TO_OPERATOR',
   'PERMANENT_CESSATION_CANCEL_APPLICATION',
   'AVIATION_DOE_CORSIA_SUBMIT_CANCEL',
   'ALR_VERIFICATION_RETURN_TO_OPERATOR',
@@ -205,11 +203,6 @@ function actionDetails(
     case 'BDR_RECALL_FROM_VERIFICATION':
       return { text: 'Recall BDR application from verifier', link: ['recall-bdr-from-verifier'] };
     case 'BDR_VERIFICATION_RETURN_TO_OPERATOR':
-      return { text: 'Return to operator for changes', link: ['return-to-operator-for-changes'] };
-
-    case 'BDRS2_RECALL_FROM_VERIFICATION':
-      return { text: 'Recall stage 2 BDR application from verifier', link: ['recall-bdrs2-from-verifier'] };
-    case 'BDRS2_VERIFICATION_RETURN_TO_OPERATOR':
       return { text: 'Return to operator for changes', link: ['return-to-operator-for-changes'] };
 
     case 'PERMANENT_CESSATION_CANCEL_APPLICATION':

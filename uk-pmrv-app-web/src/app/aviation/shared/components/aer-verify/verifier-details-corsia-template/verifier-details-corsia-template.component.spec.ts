@@ -12,7 +12,6 @@ describe('VerifierDetailsCorsiaTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-verifier-details-corsia-template
         [verificationBodyDetails]="verificationBodyDetails"

@@ -13,7 +13,6 @@ describe('TabLazyDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
     template: `
       <govuk-tabs>
         <ng-template govukTabLazy *ngFor="let tab of tabsLazy$ | async" [id]="tab.id" [label]="tab.label">

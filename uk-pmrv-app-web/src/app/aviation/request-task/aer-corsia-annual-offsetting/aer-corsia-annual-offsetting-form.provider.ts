@@ -14,10 +14,9 @@ export interface AnnualOffsettingRequirementsFormModel {
 }
 
 @Injectable()
-export class AnnualOffsettingRequirementsFormProvider implements TaskFormProvider<
-  AviationAerCorsiaAnnualOffsetting,
-  AnnualOffsettingRequirementsFormModel
-> {
+export class AnnualOffsettingRequirementsFormProvider
+  implements TaskFormProvider<AviationAerCorsiaAnnualOffsetting, AnnualOffsettingRequirementsFormModel>
+{
   private readonly fb = inject(FormBuilder);
   private _form: FormGroup<AnnualOffsettingRequirementsFormModel>;
 

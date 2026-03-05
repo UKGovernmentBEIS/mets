@@ -9,7 +9,6 @@ import { ReturnOfAllowancesService } from '../core/return-of-allowances.service'
 
 @Component({
   selector: 'app-submitted',
-  standalone: false,
   templateUrl: './submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

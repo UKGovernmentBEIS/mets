@@ -18,7 +18,6 @@ import { RadioOptionComponent } from './radio-option/radio-option.component';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'div[govuk-radio]',
-  standalone: false,
   templateUrl: './radio.component.html',
 })
 export class RadioComponent<T>

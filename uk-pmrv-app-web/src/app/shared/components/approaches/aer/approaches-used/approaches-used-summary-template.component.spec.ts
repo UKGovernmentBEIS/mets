@@ -13,7 +13,6 @@ describe('ApproachesUsedSummaryTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-approaches-used-summary-template
         [monitoringApproaches]="monitoringApproaches"></app-approaches-used-summary-template>

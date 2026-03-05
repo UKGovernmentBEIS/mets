@@ -11,7 +11,6 @@ describe('ActivityLevelListTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-activity-level-list-template
         [data]="data"

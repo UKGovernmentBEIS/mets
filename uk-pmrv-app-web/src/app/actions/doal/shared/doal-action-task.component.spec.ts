@@ -31,7 +31,6 @@ describe('ActionTaskComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-doal-action-task [header]="header" [actionType]="actionType">
         <h2 app-summary-header changeRoute=".." class="govuk-heading-m">
@@ -56,6 +55,7 @@ describe('ActionTaskComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);
     hostComponent = fixture.componentInstance;
+    fixture.nativeElement;
     page = new Page(fixture);
     fixture.detectChanges();
   });

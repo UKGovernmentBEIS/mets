@@ -1,7 +1,8 @@
 import { Component, NgModule } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { provideRouter, Router, RouterModule, Routes } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { MarkdownModule } from 'ngx-markdown';
 
@@ -16,10 +17,7 @@ describe('ConvertLinksDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let element: HTMLElement;
 
-  @Component({
-    standalone: false,
-    template: '<div markdown [data]="data"></div>',
-  })
+  @Component({ template: '<div markdown [data]="data"></div>' })
   class TestComponent {
     data = `
       # Title header
@@ -32,22 +30,20 @@ describe('ConvertLinksDirective', () => {
       Users can be managed at any time from your Dashboard by selecting 'Manage users, contacts or verifiers'
 
       or by clicking on this link to [Manage users, contacts and verifiers](/dashboard)
-      `;
+    `;
   }
-
-  const routes: Routes = [{ path: 'dashboard', component: TestComponent }];
 
   @NgModule({
     imports: [GovukComponentsModule, RouterModule],
     declarations: [RouterLinkComponent],
+    entryComponents: [RouterLinkComponent],
   })
   class TestModule {}
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ConvertLinksDirective, TestComponent],
-      imports: [TestModule, MarkdownModule.forRoot(markdownModuleConfig)],
-      providers: [provideRouter(routes)],
+      imports: [TestModule, RouterTestingModule, MarkdownModule.forRoot(markdownModuleConfig)],
     }).compileComponents();
   });
 

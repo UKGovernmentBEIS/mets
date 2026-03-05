@@ -25,7 +25,6 @@ import { BackLinkService } from '../../../../back-link/back-link.service';
 
 @Component({
   selector: 'app-add',
-  standalone: false,
   templateUrl: './add.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

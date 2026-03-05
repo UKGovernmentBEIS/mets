@@ -232,7 +232,6 @@ class AviationReportableEmissionsServiceTest {
                         .year(year)
                         .reportableEmissions(reportableEmissions)
                         .isFromDre(false)
-                        .requestId("AEM00001-2022")
                         .build();
 
         when(aviationAerCorsiaReportableEmissionsCalculationService.getEmissionTradingScheme())
@@ -280,7 +279,6 @@ class AviationReportableEmissionsServiceTest {
                         .year(year)
                         .reportableEmissions(reportableEmissions)
                         .isFromDre(false)
-                        .requestId("AEM00001-2022")
                         .build();
 
         when(aviationAerCorsiaReportableEmissionsCalculationService.getEmissionTradingScheme())
@@ -423,7 +421,6 @@ class AviationReportableEmissionsServiceTest {
                         .year(year)
                         .reportableEmissions(reportableEmissions)
                         .isFromDre(false)
-                        .requestId("AEM00001-2022")
                         .build();
 
         when(aviationAerCorsiaReportableEmissionsCalculationService.getEmissionTradingScheme())

@@ -22,6 +22,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-emp-batch-reissue-completed',
+  standalone: true,
   imports: [SharedModule, EmpBatchReissueFiltersTemplateComponent, RouterLink],
   templateUrl: './completed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

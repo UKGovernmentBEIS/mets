@@ -14,7 +14,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, UncorrectedNonConfo
 
 @Component({
   selector: 'app-previous-year',
-  standalone: false,
   templateUrl: './previous-year.component.html',
   providers: [previousYearFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

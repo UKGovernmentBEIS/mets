@@ -14,7 +14,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, UncorrectedNonCompl
 
 @Component({
   selector: 'app-non-compliances',
-  standalone: false,
   templateUrl: './non-compliances.component.html',
   providers: [nonCompliancesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

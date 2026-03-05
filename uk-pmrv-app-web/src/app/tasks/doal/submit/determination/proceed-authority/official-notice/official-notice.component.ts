@@ -11,10 +11,9 @@ import { officialNoticeFormProvider } from './official-notice-form.provider';
 
 @Component({
   selector: 'app-official-notice',
-  standalone: false,
   templateUrl: './official-notice.component.html',
-  providers: [officialNoticeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [officialNoticeFormProvider],
 })
 export class OfficialNoticeComponent {
   private readonly nextWizardStep = 'summary';

@@ -8,7 +8,6 @@ import { PermitApplicationStore } from '../../../../store/permit-application.sto
 
 @Component({
   selector: 'app-emission-factor-summary-details',
-  standalone: false,
   templateUrl: './summary-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -12,7 +12,6 @@ import { PaymentStore } from '../../store/payment.store';
 
 @Component({
   selector: 'app-bank-transfer',
-  standalone: false,
   templateUrl: './bank-transfer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

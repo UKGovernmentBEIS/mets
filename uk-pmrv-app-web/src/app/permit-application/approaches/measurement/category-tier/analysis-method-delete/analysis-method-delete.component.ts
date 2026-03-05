@@ -11,7 +11,6 @@ import { categoryAppliedTier, statusKeyToSubtaskNameMapper } from '../category-t
 
 @Component({
   selector: 'app-analysis-method-delete',
-  standalone: false,
   templateUrl: './analysis-method-delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

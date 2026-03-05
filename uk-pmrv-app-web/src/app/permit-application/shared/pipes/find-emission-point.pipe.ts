@@ -7,10 +7,7 @@ import { PermitApplicationStore } from '@permit-application/store/permit-applica
 
 import { EmissionPoint } from 'pmrv-api';
 
-@Pipe({
-  name: 'findEmissionPoint',
-  standalone: false,
-})
+@Pipe({ name: 'findEmissionPoint' })
 export class FindEmissionPointPipe implements PipeTransform {
   constructor(private readonly store: PermitApplicationStore<PermitApplicationState>) {}
 

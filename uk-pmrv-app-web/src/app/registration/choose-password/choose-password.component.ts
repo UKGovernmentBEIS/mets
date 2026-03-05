@@ -14,10 +14,9 @@ import { UserRegistrationStore } from '../store/user-registration.store';
 
 @Component({
   selector: 'app-choose-password',
-  standalone: false,
   templateUrl: './choose-password.component.html',
-  providers: [DestroySubject, passwordFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject, passwordFormFactory],
 })
 export class ChoosePasswordComponent implements OnInit {
   isSummaryDisplayed = false;

@@ -16,9 +16,10 @@ import { uploadReportFormProvider } from './upload-report-form.provider';
 
 @Component({
   selector: 'app-upload-report',
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   templateUrl: './upload-report.component.html',
   providers: [uploadReportFormProvider],
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UploadReportComponent implements PendingRequest {

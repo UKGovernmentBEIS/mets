@@ -14,10 +14,9 @@ import { instrumentsFormProvider } from './instruments-form.provider';
 
 @Component({
   selector: 'app-instruments',
-  standalone: false,
   templateUrl: './instruments.component.html',
-  providers: [instrumentsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [instrumentsFormProvider],
 })
 export class InstrumentsComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

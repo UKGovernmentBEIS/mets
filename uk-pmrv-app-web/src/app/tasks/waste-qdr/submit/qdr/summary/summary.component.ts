@@ -19,6 +19,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-waste-qdr-summary',
+  standalone: true,
   imports: [RouterLink, SharedModule, WasteQdrTaskComponent],
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

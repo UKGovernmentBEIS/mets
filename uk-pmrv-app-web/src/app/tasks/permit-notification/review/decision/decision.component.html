@@ -10,7 +10,7 @@
   [allowChange]="false"
   [files]="permitNotificationService.downloadUrlFiles$ | async"
   [notification]="notification"
-  sectionHeading="Response details"></app-permit-notification-summary-details>
+  [sectionHeading]="'Response details'"></app-permit-notification-summary-details>
 
 <ng-container *ngIf="(showSummary$ | async) === false; else summaryReviewDecision">
   <ng-container *ngIf="(isEditable$ | async) === true">

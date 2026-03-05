@@ -1,3 +1,4 @@
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
@@ -10,10 +11,11 @@ import { BaseDoeCorsiaEmissionsComponent } from '../doe-corsia-base.component';
 
 @Component({
   selector: 'app-doe-emission-charges-calculation',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './emission-charges-calculation.component.html',
-  providers: [DestroySubject],
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, NgIf, NgFor, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class EmissionsChargesCalculationComponent extends BaseDoeCorsiaEmissionsComponent implements OnInit {
   form = this.formProvider.feeCtrl;

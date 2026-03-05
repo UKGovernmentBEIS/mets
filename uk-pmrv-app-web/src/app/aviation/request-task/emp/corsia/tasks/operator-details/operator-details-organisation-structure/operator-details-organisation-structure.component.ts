@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { FormArray, FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
@@ -25,10 +25,17 @@ import { OperatorDetailsCorsiaFormProvider } from '../operator-details-form.prov
 
 @Component({
   selector: 'app-operator-details-organisation-structure-page',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent, LegalStatusTypeFormComponent],
+  standalone: true,
+  imports: [
+    GovukComponentsModule,
+    SharedModule,
+    RouterLinkWithHref,
+    ReturnToLinkComponent,
+    LegalStatusTypeFormComponent,
+  ],
   templateUrl: './operator-details-organisation-structure.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class OperatorDetailsOrganisationStructureComponent extends BaseOperatorDetailsComponent {
   @ViewChild('conditionalHeader') header: ElementRef;

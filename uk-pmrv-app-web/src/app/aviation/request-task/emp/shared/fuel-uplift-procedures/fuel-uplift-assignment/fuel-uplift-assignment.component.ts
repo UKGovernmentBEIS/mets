@@ -1,3 +1,4 @@
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
@@ -16,15 +17,16 @@ import { FuelUpliftProceduresFormProvider } from '../fuel-uplift-procedures-form
 
 @Component({
   selector: 'app-fuel-uplift-assignment',
-  imports: [SharedModule, GovukComponentsModule, ReturnToLinkComponent],
   templateUrl: './fuel-uplift-assignment.component.html',
+  standalone: true,
+  imports: [SharedModule, GovukComponentsModule, ReturnToLinkComponent, NgIf, NgFor],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FuelUpliftAssignmentComponent {
   form = new FormGroup({
     zeroFuelUplift: this.formProvider.zeroFuelUpliftCtrl,
   });
-  readonly isCorsia = toSignal(this.store.pipe(empQuery.selectIsCorsia));
+  isCorsia = toSignal(this.store.pipe(empQuery.selectIsCorsia));
 
   constructor(
     @Inject(TASK_FORM_PROVIDER) private readonly formProvider: FuelUpliftProceduresFormProvider,

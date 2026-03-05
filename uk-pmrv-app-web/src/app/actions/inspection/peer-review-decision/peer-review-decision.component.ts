@@ -12,6 +12,7 @@ import { InspectionActionService } from '../core/inspection-action.service';
 
 @Component({
   selector: 'app-action-inspection-peer-review-decision',
+  standalone: true,
   imports: [SharedModule, ActionSharedModule],
   templateUrl: './peer-review-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

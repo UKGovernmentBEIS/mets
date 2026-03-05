@@ -10,7 +10,6 @@ import { resolveSectionStatus } from './section.status';
 
 @Component({
   selector: 'app-conclusion',
-  standalone: false,
   templateUrl: './conclusion.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

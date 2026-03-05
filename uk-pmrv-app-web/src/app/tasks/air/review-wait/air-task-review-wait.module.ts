@@ -8,7 +8,7 @@ import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 import { AirTaskReviewWaitRoutingModule } from './air-task-review-wait-routing.module';
 
 @NgModule({
-  imports: [AirTaskReviewWaitRoutingModule, AirTaskSharedModule, SharedModule, TaskSharedModule],
   declarations: [ReviewWaitComponent],
+  imports: [AirTaskReviewWaitRoutingModule, AirTaskSharedModule, SharedModule, TaskSharedModule],
 })
 export class AirTaskReviewWaitModule {}

@@ -30,7 +30,6 @@ describe('ContactsComponent', () => {
   };
 
   @Component({
-    standalone: false,
     template: `
       <app-contacts [verificationBodyId]="verificationBodyId$"></app-contacts>
     `,

@@ -14,7 +14,6 @@ import { areCategoryTierPrerequisitesMet } from './measurement-status';
 
 @Component({
   selector: 'app-measurement',
-  standalone: false,
   templateUrl: './measurement.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

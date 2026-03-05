@@ -9,7 +9,6 @@ import { BackLinkService } from '@shared/back-link/back-link.service';
 
 @Component({
   selector: 'app-permit-revocation-submitted',
-  standalone: false,
   template: `
     <app-request-action-heading
       [headerText]="(route.data | async)?.pageTitle"

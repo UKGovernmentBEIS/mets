@@ -8,7 +8,6 @@ import { VirService } from '../../core/vir.service';
 
 @Component({
   selector: 'app-response-list',
-  standalone: false,
   template: `
     <app-action-task [header]="virTitle$ | async" [breadcrumb]="true">
       <ng-container *ngFor="let item of operatorImprovementResponses$ | async | keyvalue">
@@ -26,6 +25,7 @@ import { VirService } from '../../core/vir.service';
       </ul>
     </app-action-task>
   `,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResponseListComponent {

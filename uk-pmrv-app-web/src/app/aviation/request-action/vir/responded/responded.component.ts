@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
+import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
 import { requestActionQuery, RequestActionStore } from '@aviation/request-action/store';
 import { virQuery } from '@aviation/request-action/vir/vir.selectors';
 import { SharedModule } from '@shared/shared.module';
@@ -27,7 +29,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-responded',
-  imports: [SharedModule, VirSharedModule],
+  standalone: true,
+  imports: [SharedModule, RequestActionTaskComponent, RouterLink, VirSharedModule],
   templateUrl: './responded.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

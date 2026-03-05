@@ -9,7 +9,6 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-opinion-statement',
-  standalone: false,
   template: `
     <app-action-task header="Opinion statement" [breadcrumb]="true">
       <app-opinion-statement-group [payload]="payload$ | async" [showVerifiedData]="true"></app-opinion-statement-group>

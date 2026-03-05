@@ -19,10 +19,9 @@ import { withdrawCloseReasonFormProvider } from './withdraw-close-form.provider'
 
 @Component({
   selector: 'app-withdraw-close',
-  standalone: false,
   templateUrl: './withdraw-close.component.html',
-  providers: [withdrawCloseReasonFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [withdrawCloseReasonFormProvider],
 })
 export class WithdrawCloseComponent implements OnInit, OnDestroy {
   isEditable$: Observable<boolean> = this.withholdingAllowancesService.isEditable$;

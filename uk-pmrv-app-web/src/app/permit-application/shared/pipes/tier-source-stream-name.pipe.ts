@@ -14,7 +14,6 @@ import {
 
 @Pipe({
   name: 'tierSourceStreamName',
-  standalone: false,
 })
 export class TierSourceStreamNamePipe implements PipeTransform {
   constructor(

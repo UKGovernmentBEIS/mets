@@ -9,10 +9,9 @@ import { provideReturnedDetailsFormProvider } from './provide-returned-details-f
 
 @Component({
   selector: 'app-provide-returned-details',
-  standalone: false,
   templateUrl: './provide-returned-details.component.html',
-  providers: [provideReturnedDetailsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideReturnedDetailsFormProvider],
 })
 export class ProvideReturnedDetailsComponent {
   nextRoute = '../summary';

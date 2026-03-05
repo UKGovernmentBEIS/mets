@@ -17,7 +17,6 @@ import { buildTaskData } from '../calculation-emissions';
 
 @Component({
   selector: 'app-transferred-details',
-  standalone: false,
   templateUrl: './transferred-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

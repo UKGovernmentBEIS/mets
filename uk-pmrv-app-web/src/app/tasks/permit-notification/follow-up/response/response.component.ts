@@ -15,7 +15,6 @@ import { PERMIT_NOTIFICATION_FOLLOW_UP_FORM, permitNotificationFollowUpFormProvi
 
 @Component({
   selector: 'app-response',
-  standalone: false,
   templateUrl: './response.component.html',
   providers: [permitNotificationFollowUpFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

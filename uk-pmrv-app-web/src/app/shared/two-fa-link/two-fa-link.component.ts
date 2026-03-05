@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-two-fa-link',
-  standalone: false,
   template: `
     <div class="govuk-button-group">
       <a

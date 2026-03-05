@@ -13,7 +13,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-verifier-details',
-  standalone: false,
   templateUrl: './verifier-details.component.html',
   providers: [verifierDetailsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

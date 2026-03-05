@@ -10,7 +10,6 @@ import { InstallationAccountApplicationStore } from '../store/installation-accou
 
 @Component({
   selector: 'app-onshore-details',
-  standalone: false,
   templateUrl: './onshore-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

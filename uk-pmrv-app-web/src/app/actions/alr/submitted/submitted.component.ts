@@ -22,6 +22,7 @@ export interface ViewModel {
 
 @Component({
   selector: 'app-alr-action-submitted',
+  standalone: true,
   imports: [ActionSharedModule, NgIf, SharedModule],
   templateUrl: './submitted.component.html',
   styles: `

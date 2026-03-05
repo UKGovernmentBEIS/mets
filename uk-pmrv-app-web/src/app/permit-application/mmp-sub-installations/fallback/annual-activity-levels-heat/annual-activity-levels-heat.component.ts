@@ -20,11 +20,10 @@ import { annualActivityHeatAddFormFactory } from './annual-activity-levels-heat-
 
 @Component({
   selector: 'app-annual-activity-levels-heat',
-  standalone: false,
   templateUrl: './annual-activity-levels-heat.component.html',
-  styleUrl: './annual-activity-levels-heat.component.scss',
-  providers: [annualActivityHeatAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [annualActivityHeatAddFormFactory],
+  styleUrl: './annual-activity-levels-heat.component.scss',
 })
 export class AnnualActivityLevelsHeatComponent extends ProductBenchmarkComponent implements PendingRequest {
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;

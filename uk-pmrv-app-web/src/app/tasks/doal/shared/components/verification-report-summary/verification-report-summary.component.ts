@@ -6,7 +6,6 @@ import { DoalService } from '@tasks/doal/core/doal.service';
 
 @Component({
   selector: 'app-verification-report-summary',
-  standalone: false,
   template: `
     <app-doal-task [breadcrumb]="true">
       <app-page-heading>Upload verification report of the activity level report</app-page-heading>

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { ActivitySummaryTemplateComponent } from '@shared/components/alr/activity-summary-template/activity-summary-template.component';
@@ -13,25 +13,26 @@ import { ALRApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-alr-file-summary',
-  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, ActivitySummaryTemplateComponent],
   templateUrl: './summary.component.html',
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, RouterLink, AlrTaskSharedModule, ActivitySummaryTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrFileSummaryComponent {
-  readonly isEditable: Signal<boolean> = this.alrService.isEditable;
-  readonly alrPayload: Signal<ALRApplicationSubmitRequestTaskPayload> = this.alrService.payload;
+  isEditable: Signal<boolean> = this.alrService.isEditable;
+  alrPayload: Signal<ALRApplicationSubmitRequestTaskPayload> = this.alrService.payload;
 
-  readonly alrFiles: Signal<AttachedFile> = computed(() => {
+  alrFiles: Signal<AttachedFile> = computed(() => {
     const payload = this.alrPayload();
     return payload?.alr?.alrFile ? this.alrService.getOperatorDownloadUrlAlrFile(payload?.alr?.alrFile) : null;
   });
 
-  readonly files: Signal<AttachedFile[]> = computed(() => {
+  files: Signal<AttachedFile[]> = computed(() => {
     const payload = this.alrPayload();
     return payload?.alr?.files ? this.alrService.getOperatorDownloadUrlFiles(payload?.alr?.files) : [];
   });
 
-  readonly hideSubmit: Signal<boolean> = computed(() => {
+  hideSubmit: Signal<boolean> = computed(() => {
     const isEditable = this.isEditable();
     return !isEditable || this.alrPayload().alrSectionsCompleted?.['activity'];
   });

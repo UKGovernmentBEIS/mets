@@ -8,6 +8,7 @@ import { GovukComponentsModule } from 'govuk-components';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-emissions-reduction-claim-form',
+  standalone: true,
   imports: [GovukComponentsModule, SharedModule],
   templateUrl: './emissions-reduction-claim-form.component.html',
   viewProviders: [existingControlContainer],

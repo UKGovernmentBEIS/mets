@@ -20,7 +20,6 @@ interface TemplateCalculationSourceStreamEmission {
 
 @Component({
   selector: 'app-calculation-emissions-group',
-  standalone: false,
   templateUrl: './calculation-emissions-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

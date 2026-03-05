@@ -7,7 +7,6 @@ import { AerService } from '@tasks/aer/core/aer.service';
 
 @Component({
   selector: 'app-emission-sources',
-  standalone: false,
   templateUrl: './emission-sources.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -9,8 +9,9 @@ import { AviationAerCorsiaDataGaps } from 'pmrv-api';
 
 @Component({
   selector: 'app-data-gaps-summary-template',
-  imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref],
   templateUrl: './data-gaps-summary-template.component.html',
+  standalone: true,
+  imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGapsSummaryTemplateComponent {

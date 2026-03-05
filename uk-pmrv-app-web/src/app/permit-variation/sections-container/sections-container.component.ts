@@ -19,7 +19,6 @@ import { variationDetailsStatus } from '../variation-status';
 
 @Component({
   selector: 'app-sections-container',
-  standalone: false,
   templateUrl: './sections-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

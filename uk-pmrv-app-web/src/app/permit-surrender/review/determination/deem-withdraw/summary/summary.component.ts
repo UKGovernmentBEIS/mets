@@ -12,7 +12,6 @@ import { PermitSurrenderStore } from '../../../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   template: `
     <app-page-heading>Permit surrender deem withdrawn</app-page-heading>
 

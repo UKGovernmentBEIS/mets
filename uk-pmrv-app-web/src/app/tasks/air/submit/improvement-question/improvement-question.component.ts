@@ -13,7 +13,6 @@ import { improvementQuestionFormProvider } from '@tasks/air/submit/improvement-q
 
 @Component({
   selector: 'app-improvement-question',
-  standalone: false,
   templateUrl: './improvement-question.component.html',
   providers: [improvementQuestionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

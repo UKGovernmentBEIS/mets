@@ -22,6 +22,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aviation-aer-verifier-returned',
+  standalone: true,
   imports: [AerVerifierReturnedTemplateComponent, SharedModule, RouterLinkWithHref],
   template: `
     <ng-container *ngIf="vm() as vm">

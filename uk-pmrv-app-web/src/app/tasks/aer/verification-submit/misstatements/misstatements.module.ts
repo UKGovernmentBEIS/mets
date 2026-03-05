@@ -10,7 +10,6 @@ import { MisstatementsRoutingModule } from '@tasks/aer/verification-submit/misst
 import { SummaryComponent } from '@tasks/aer/verification-submit/misstatements/summary/summary.component';
 
 @NgModule({
-  imports: [AerSharedModule, MisstatementsRoutingModule, SharedModule],
   declarations: [
     MisstatementsComponent,
     MisstatementsItemComponent,
@@ -18,5 +17,6 @@ import { SummaryComponent } from '@tasks/aer/verification-submit/misstatements/s
     MisstatementsListComponent,
     SummaryComponent,
   ],
+  imports: [AerSharedModule, MisstatementsRoutingModule, SharedModule],
 })
 export class MisstatementsModule {}

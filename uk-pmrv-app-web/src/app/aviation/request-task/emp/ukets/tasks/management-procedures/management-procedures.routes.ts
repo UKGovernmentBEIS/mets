@@ -99,9 +99,9 @@ export const EMP_MANAGEMENT_PROCEDURES_ROUTES: Routes = [
         data: { backlink: '../corrections' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
-          import('./management-procedures-outsourced-activities/management-procedures-outsourced-activities.component').then(
-            (c) => c.ManagementProceduresOutsourcedActivitiesComponent,
-          ),
+          import(
+            './management-procedures-outsourced-activities/management-procedures-outsourced-activities.component'
+          ).then((c) => c.ManagementProceduresOutsourcedActivitiesComponent),
       },
       {
         path: 'risks',
@@ -136,9 +136,9 @@ export const EMP_MANAGEMENT_PROCEDURES_ROUTES: Routes = [
         resolve: { backlinkUrl: resolveEnvironmentalManagementBackLink },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
-          import('./management-procedures-environmental-management/management-procedures-environmental-management.component').then(
-            (c) => c.ManagementProceduresEnvironmentalManagementComponent,
-          ),
+          import(
+            './management-procedures-environmental-management/management-procedures-environmental-management.component'
+          ).then((c) => c.ManagementProceduresEnvironmentalManagementComponent),
       },
       {
         path: 'summary',

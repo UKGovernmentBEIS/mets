@@ -10,7 +10,6 @@ const REPORTING_STATUS_MAP = {
 
 @Pipe({
   name: 'accountReportingStatus',
-  standalone: false,
   pure: true,
 })
 export class AccountReportingStatusPipe implements PipeTransform {

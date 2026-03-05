@@ -5,7 +5,6 @@ import { DocumentTemplateDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-document-template-details-template',
-  standalone: false,
   templateUrl: './document-template-details-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

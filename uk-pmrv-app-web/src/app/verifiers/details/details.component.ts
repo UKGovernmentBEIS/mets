@@ -37,10 +37,9 @@ import { saveNotFoundVerifierError } from '../errors/business-error';
 
 @Component({
   selector: 'app-details',
-  standalone: false,
   templateUrl: './details.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class DetailsComponent implements OnInit {
   confirmedAddedVerifier$ = new BehaviorSubject<string>(null);

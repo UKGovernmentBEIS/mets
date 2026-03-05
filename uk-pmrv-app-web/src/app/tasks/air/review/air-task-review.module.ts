@@ -16,7 +16,6 @@ import { ReviewContainerComponent } from './review-container.component';
 import { SendReportComponent } from './send-report/send-report.component';
 
 @NgModule({
-  imports: [AirSharedModule, AirTaskReviewRoutingModule, AirTaskSharedModule, SharedModule, TaskSharedModule],
   declarations: [
     ImprovementResponseReviewComponent,
     ProvideSummaryComponent,
@@ -25,6 +24,7 @@ import { SendReportComponent } from './send-report/send-report.component';
     SendReportComponent,
     SummaryComponent,
   ],
+  imports: [AirSharedModule, AirTaskReviewRoutingModule, AirTaskSharedModule, SharedModule, TaskSharedModule],
   providers: [ProvideSummaryGuard, SummaryGuard],
 })
 export class AirTaskReviewModule {}

@@ -16,12 +16,13 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-authority-summary',
+  standalone: true,
   imports: [AlrTaskSharedModule, SharedModule, RouterLink],
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrAuthoritySummaryComponent {
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const isEditable = this.isEditable();
     const payload = this.payload();
     const SectionCompleted = payload.authorityReviewSectionsCompleted['applicationSubmitted'];

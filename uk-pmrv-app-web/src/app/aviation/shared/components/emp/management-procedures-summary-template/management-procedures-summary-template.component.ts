@@ -11,8 +11,9 @@ import { EmpManagementProcedures } from 'pmrv-api';
 
 @Component({
   selector: 'app-management-procedures-summary-template',
-  imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref, ProcedureFormSummaryComponent],
   templateUrl: './management-procedures-summary-template.component.html',
+  standalone: true,
+  imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref, ProcedureFormSummaryComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -11,7 +11,6 @@ import { VirService } from '../../../core/vir.service';
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   template: `
     <app-action-task [header]="verificationDataItem.reference | verificationReferenceTitle" [breadcrumb]="true">
       <app-verification-recommendation-item

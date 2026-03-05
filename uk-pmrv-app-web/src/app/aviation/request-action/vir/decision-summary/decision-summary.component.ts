@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
+import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
 import { requestActionQuery, RequestActionStore } from '@aviation/request-action/store';
 import { virQuery } from '@aviation/request-action/vir/vir.selectors';
 import { ItemActionTypePipe } from '@shared/pipes/item-action-type.pipe';
@@ -20,7 +21,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-decision-summary',
-  imports: [SharedModule, RouterLink],
+  standalone: true,
+  imports: [SharedModule, RequestActionTaskComponent, RouterLink],
   templateUrl: './decision-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -20,11 +20,10 @@ import { directlyAttributableEmissionsAddFormFactory } from './directly-attribut
 
 @Component({
   selector: 'app-directly-attributable-emissions',
-  standalone: false,
   templateUrl: './directly-attributable-emissions.component.html',
-  styleUrl: './directly-attributable-emissions.component.scss',
-  providers: [directlyAttributableEmissionsAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [directlyAttributableEmissionsAddFormFactory],
+  styleUrl: './directly-attributable-emissions.component.scss',
 })
 export class DirectlyAttributableEmissionsComponent extends ProductBenchmarkComponent implements PendingRequest {
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;

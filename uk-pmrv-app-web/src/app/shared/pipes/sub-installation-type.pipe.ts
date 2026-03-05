@@ -4,7 +4,6 @@ import { SubInstallation } from 'pmrv-api';
 
 @Pipe({
   name: 'subInstallationType',
-  standalone: false,
 })
 export class SubInstallationTypePipe implements PipeTransform {
   transform(value: SubInstallation['subInstallationType']): string {

@@ -21,6 +21,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-verify-emissions-reduction-claim',
+  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

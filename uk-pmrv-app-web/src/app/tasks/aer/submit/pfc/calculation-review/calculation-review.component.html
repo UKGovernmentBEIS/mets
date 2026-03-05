@@ -2,8 +2,9 @@
   <app-wizard-step
     (formSubmit)="onContinue()"
     [formGroup]="form"
-    heading="Review the calculated emissions data"
-    [hideSubmit]="(isEditable$ | async) === false">
+    [heading]="'Review the calculated emissions data'"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
     <ng-container *ngIf="sourceStreamEmission$ | async as sourceStreamEmission">
       <h2 class="govuk-heading-m">CF4 (Tetrafluoromethane)</h2>
       <p class="govuk-body">
@@ -42,25 +43,28 @@
       formControlName="calculationCorrect"
       govuk-radio
       legend="Are the calculated emissions correct?"
-      legendSize="medium">
-      <govuk-radio-option [value]="true" label="Yes, the emissions are correct"></govuk-radio-option>
+      legendSize="medium"
+    >
+      <govuk-radio-option [value]="true" label="Yes, the emissions are correct"> </govuk-radio-option>
       <govuk-radio-option [value]="false" label="No, I want to provide my own emissions figures">
         <ng-container govukConditionalContent>
           <div
             formControlName="reasonForProvidingManualEmissions"
             govuk-textarea
             [maxLength]="10000"
-            label="Explain why you are providing your own emission figures"></div>
+            label="Explain why you are providing your own emission figures"
+          ></div>
           <div
             formControlName="totalProvidedReportableEmissions"
             govuk-text-input
-            label="Enter your total emissions"
+            [label]="'Enter your total emissions'"
             widthClass="govuk-input--width-20"
-            suffix="tonnes CO2e"></div>
+            suffix="tonnes CO2e"
+          ></div>
         </ng-container>
       </govuk-radio-option>
     </div>
   </app-wizard-step>
 
-  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_PFC' | monitoringApproachEmissionDescription }}</a>
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_PFC' | monitoringApproachEmissionDescription }} </a>
 </app-aer-task>

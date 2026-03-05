@@ -26,8 +26,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-account-reporting-status',
-  standalone: false,
   templateUrl: './account-reporting-status.component.html',
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountReportingStatusComponent {

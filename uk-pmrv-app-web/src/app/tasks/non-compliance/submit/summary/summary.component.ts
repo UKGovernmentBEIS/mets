@@ -13,7 +13,6 @@ import { PendingRequestService } from '../../../../core/guards/pending-request.s
 import { NonComplianceService } from '../../core/non-compliance.service';
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

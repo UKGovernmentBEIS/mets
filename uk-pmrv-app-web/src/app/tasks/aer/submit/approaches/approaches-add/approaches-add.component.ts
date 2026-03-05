@@ -18,7 +18,6 @@ import { approachesAddFormProvider } from './approaches-add-form.provider';
 
 @Component({
   selector: 'app-approaches-add',
-  standalone: false,
   template: `
     <app-aer-task [breadcrumb]="[{ text: 'Define monitoring approaches', link: ['monitoring-approaches'] }]">
       <app-approaches-add-template
@@ -39,8 +38,8 @@ import { approachesAddFormProvider } from './approaches-add-form.provider';
       </app-approaches-add-template>
     </app-aer-task>
   `,
-  providers: [approachesAddFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [approachesAddFormProvider],
 })
 export class ApproachesAddComponent {
   monitoringApproaches$ = this.aerService

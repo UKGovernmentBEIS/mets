@@ -11,7 +11,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-not-included-list',
-  standalone: false,
   template: `
     <app-aer-task-review heading="Approved changes not included in a re-issued permit" returnToLink="../..">
       <app-summary-of-conditions-list

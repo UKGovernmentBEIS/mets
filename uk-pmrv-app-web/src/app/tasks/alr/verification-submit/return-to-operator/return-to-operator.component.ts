@@ -8,6 +8,7 @@ import { AlrTaskSharedModule } from '@tasks/alr/shared/alr-task-shared.module';
 
 @Component({
   selector: 'app-alr-verifier-return-to-operator',
+  standalone: true,
   imports: [AlrTaskSharedModule, SharedModule],
   template: `
     <app-alr-task-common

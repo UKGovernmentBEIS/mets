@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, Signal } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -36,10 +36,9 @@ import {
 
 @Component({
   selector: 'app-activity-calculation-aggregation',
-  standalone: false,
   templateUrl: './activity-calculation-aggregation.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class ActivityCalculationAggregationComponent implements OnInit {
   measurementUnits = getActivityDataMeasuremenUnits();
@@ -56,6 +55,8 @@ export class ActivityCalculationAggregationComponent implements OnInit {
         ],
     ),
   );
+
+  isSm3: Signal<boolean> = this.aerService.getIsSm3(this.index$);
 
   nationalInventoryData$ = this.nationalInventoryService.nationalInventoryData$;
 
@@ -75,8 +76,9 @@ export class ActivityCalculationAggregationComponent implements OnInit {
     this.nationalInventoryData$,
     this.regionalInventoryData$,
     this.isEditable$,
+    this.aerService.getIsSm3$(this.index$),
   ]).pipe(
-    map(([sourceStreamEmission, nationalInventoryData, regionalInventoryData, isEditable]) => {
+    map(([sourceStreamEmission, nationalInventoryData, regionalInventoryData, isEditable, isSm3]) => {
       const [predefinedMeasurementUnit, calculationActivityDataCalculationMethod] = getFormData(
         sourceStreamEmission,
         nationalInventoryData,
@@ -87,6 +89,7 @@ export class ActivityCalculationAggregationComponent implements OnInit {
         predefinedMeasurementUnit,
         calculationActivityDataCalculationMethod,
         isEditable,
+        isSm3,
       );
 
       return this.fb.group(formControls, {
@@ -152,7 +155,7 @@ export class ActivityCalculationAggregationComponent implements OnInit {
       calculationActivityDataCalculationMethod: {
         ...calculation.sourceStreamEmissions?.[index]?.parameterCalculationMethod
           ?.calculationActivityDataCalculationMethod,
-        measurementUnit: form.get('measurementUnit').value,
+        measurementUnit: form.get('measurementUnit').value ?? 'NM3',
         totalMaterial: totalMaterial.toString(),
         activityData,
         materialOpeningQuantity: form.get('materialOpeningQuantity').value,
@@ -240,12 +243,13 @@ export class ActivityCalculationAggregationComponent implements OnInit {
     );
   }
 
-  private getFormControls(predefinedMeasurementUnit, calculationActivityDataCalculationMethod, isEditable) {
+  private getFormControls(predefinedMeasurementUnit, calculationActivityDataCalculationMethod, isEditable, isSm3) {
     return {
       measurementUnit: [
         {
-          value:
-            predefinedMeasurementUnit === 'GJ_PER_TONNE'
+          value: isSm3
+            ? null
+            : predefinedMeasurementUnit === 'GJ_PER_TONNE'
               ? 'TONNES'
               : predefinedMeasurementUnit === 'GJ_PER_NM3'
                 ? 'NM3'
@@ -254,10 +258,12 @@ export class ActivityCalculationAggregationComponent implements OnInit {
                   : null,
           disabled: !isEditable || !!predefinedMeasurementUnit,
         },
-        {
-          validators: GovukValidators.required('Please select a measurement unit'),
-          updateOn: 'change',
-        },
+        isSm3
+          ? {}
+          : {
+              validators: GovukValidators.required('Please select a measurement unit'),
+              updateOn: 'change',
+            },
       ],
       materialOpeningQuantity: [
         {

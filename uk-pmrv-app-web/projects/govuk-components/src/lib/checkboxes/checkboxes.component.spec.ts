@@ -17,12 +17,11 @@ describe('CheckboxesComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <form [formGroup]="form">
         <div govuk-checkboxes formControlName="checkboxes" legend="Some options" hint="Choose an option">
-          <govuk-checkbox label="First" [value]="0" />
-          <govuk-checkbox label="Second" [value]="1" />
+          <govuk-checkbox label="First" [value]="0"></govuk-checkbox>
+          <govuk-checkbox label="Second" [value]="1"></govuk-checkbox>
           <govuk-checkbox label="Third" [value]="2">
             <ng-container govukConditionalContent>
               <p>The third option is more complicated</p>
@@ -31,8 +30,8 @@ describe('CheckboxesComponent', () => {
         </div>
         <div govuk-checkboxes formControlName="extraCheckboxes">
           <ng-container govukLegend>Some extra options</ng-container>
-          <govuk-checkbox label="First" [value]="0" />
-          <govuk-checkbox label="Second" [value]="1" />
+          <govuk-checkbox label="First" [value]="0"></govuk-checkbox>
+          <govuk-checkbox label="Second" [value]="1"></govuk-checkbox>
         </div>
       </form>
     `,

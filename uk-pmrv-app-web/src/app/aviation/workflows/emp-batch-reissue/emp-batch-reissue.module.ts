@@ -11,7 +11,7 @@ import { SignatoryComponent } from './submit/signatory/signatory.component';
 import { SummaryComponent } from './submit/summary/summary.component';
 
 @NgModule({
-  imports: [CommonModule, EmpBatchReissueFiltersTemplateComponent, EmpBatchReissueRoutingModule, SharedModule],
   declarations: [FiltersComponent, RequestsComponent, SignatoryComponent, SummaryComponent],
+  imports: [CommonModule, EmpBatchReissueFiltersTemplateComponent, EmpBatchReissueRoutingModule, SharedModule],
 })
 export class EmpBatchReissueModule {}

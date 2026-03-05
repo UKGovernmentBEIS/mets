@@ -8,7 +8,6 @@ import { ManagementProceduresDefinitionData } from '../management-procedures.int
 
 @Component({
   selector: 'app-management-procedures-summary-template',
-  standalone: false,
   templateUrl: './management-procedures-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

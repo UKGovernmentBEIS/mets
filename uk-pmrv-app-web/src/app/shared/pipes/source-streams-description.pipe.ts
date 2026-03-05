@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { SourceStream } from 'pmrv-api';
 
-@Pipe({
-  name: 'sourceStreamDescription',
-  standalone: false,
-})
+@Pipe({ name: 'sourceStreamDescription' })
 export class SourceStreamDescriptionPipe implements PipeTransform {
   transform(value: SourceStream | SourceStream['description']): string {
     if (!value) return '';

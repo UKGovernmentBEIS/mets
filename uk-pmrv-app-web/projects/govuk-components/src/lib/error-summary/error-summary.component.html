@@ -14,7 +14,7 @@
     <a
       #anchor
       (click)="errorClick(controlError.path)"
-      [fragment]="controlError.path ? `l.${controlError.path}` : ''"
+      [fragment]="controlError.path ? 'l.' + controlError.path : ''"
       [state]="{ scrollSkip: true }"
       [replaceUrl]="true"
       queryParamsHandling="preserve"

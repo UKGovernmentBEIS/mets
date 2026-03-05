@@ -23,8 +23,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-submit',
-  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule],
   standalone: true,
+  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule],
   templateUrl: './submit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

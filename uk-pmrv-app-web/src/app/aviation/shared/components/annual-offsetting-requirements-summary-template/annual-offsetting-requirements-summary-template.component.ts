@@ -7,6 +7,7 @@ import { AviationAerCorsiaAnnualOffsetting } from 'pmrv-api';
 
 @Component({
   selector: 'app-annual-offsetting-requirements-summary-template',
+  standalone: true,
   imports: [RouterLink, SharedModule],
   templateUrl: './annual-offsetting-requirements-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

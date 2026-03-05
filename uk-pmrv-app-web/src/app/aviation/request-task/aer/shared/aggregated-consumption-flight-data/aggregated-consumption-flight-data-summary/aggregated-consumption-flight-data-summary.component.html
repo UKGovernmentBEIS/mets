@@ -6,13 +6,15 @@
       app-summary-header
       class="govuk-heading-m"
       [changeRoute]="vm.isEditable ? '../' : null"
-      [queryParams]="{ change: true }">
+      [queryParams]="{ change: true }"
+    >
       Aggregated Emissions Data uploaded data
     </h2>
     <app-flight-data-table
-      headingText="File uploaded"
+      [headingText]="'File uploaded'"
       [emissionDataDetails]="vm.data.aggregatedEmissionDataDetails"
-      [isCorsia]="vm.isCorsia"></app-flight-data-table>
+      [isCorsia]="vm.isCorsia"
+    ></app-flight-data-table>
     <div class="govuk-button-group">
       <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
         Confirm and complete
@@ -21,7 +23,8 @@
 
     <app-aviation-aer-review-decision-group
       *ngIf="vm.showDecision"
-      taskKey="aggregatedEmissionsData"></app-aviation-aer-review-decision-group>
+      taskKey="aggregatedEmissionsData"
+    ></app-aviation-aer-review-decision-group>
   </ng-container>
 </ng-container>
 <app-return-to-link></app-return-to-link>

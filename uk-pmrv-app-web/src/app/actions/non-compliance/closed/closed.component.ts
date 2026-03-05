@@ -10,7 +10,6 @@ import { NonComplianceService } from '../core/non-compliance.service';
 
 @Component({
   selector: 'app-closed',
-  standalone: false,
   templateUrl: './closed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

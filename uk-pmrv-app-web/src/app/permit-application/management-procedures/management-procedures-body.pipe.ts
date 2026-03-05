@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { Permit } from 'pmrv-api';
 
-@Pipe({
-  name: 'managementProceduresBody',
-  standalone: false,
-})
+@Pipe({ name: 'managementProceduresBody' })
 export class ManagementProceduresBodyPipe implements PipeTransform {
   transform(value: keyof Permit): string {
     switch (value) {

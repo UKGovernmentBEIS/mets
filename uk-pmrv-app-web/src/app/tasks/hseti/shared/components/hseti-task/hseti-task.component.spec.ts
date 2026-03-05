@@ -35,7 +35,6 @@ describe('HseTiTaskComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-hseti-task [breadcrumb]="true">
         <app-page-heading caption="Provide the HSE details">

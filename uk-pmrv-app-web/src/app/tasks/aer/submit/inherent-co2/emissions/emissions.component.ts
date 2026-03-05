@@ -16,10 +16,9 @@ import { emissionsFormProvider } from './emissions-form.provider';
 
 @Component({
   selector: 'app-total-emissions',
-  standalone: false,
   templateUrl: './emissions.component.html',
-  providers: [emissionsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [emissionsFormProvider],
 })
 export class EmissionsComponent implements PendingRequest {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

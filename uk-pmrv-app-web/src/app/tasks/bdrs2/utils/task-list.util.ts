@@ -26,13 +26,8 @@ export const bdrs2SendReportBacklinkResolver: ResolveFn<string> = () => {
         !payload?.bdrs2?.bdrs2guardQuestions?.requiresAdditionalSubInstallationSplitsForCbam)) &&
     payload?.bdrs2?.bdrs2Files?.file;
 
-  const isCbam = payload?.bdrs2?.bdrs2guardQuestions?.requiresAdditionalSubInstallationSplitsForCbam;
-  const verificationRequiredFromAmends =
-    (payload as any)?.regulatorReviewGroupDecisions?.BDRS2?.details?.verificationRequired === true && isCbam;
-
-  return verificationRequiredFromAmends ||
-    payload?.verificationPerformed ||
-    (!payload?.verificationPerformed && !sendToVerifierOrRegulatorCondition)
+  return payload?.['verificationPerformed'] ||
+    (!payload?.['verificationPerformed'] && !sendToVerifierOrRegulatorCondition)
     ? '../../'
     : '../';
 };
@@ -71,12 +66,5 @@ export function baselineComplete(payload: BDRS2ApplicationSubmitRequestTaskPaylo
 }
 
 export function submitWizardComplete(payload: BDRS2ApplicationSubmitRequestTaskPayload): boolean {
-  if (payload?.payloadType === 'BDRS2_APPLICATION_AMENDS_SUBMIT_PAYLOAD') {
-    return (
-      payload?.bdrs2SectionsCompleted?.['baseline'] === true &&
-      payload?.bdrs2SectionsCompleted?.['changesRequested'] === true
-    );
-  }
-
   return payload?.bdrs2SectionsCompleted?.['baseline'] === true;
 }

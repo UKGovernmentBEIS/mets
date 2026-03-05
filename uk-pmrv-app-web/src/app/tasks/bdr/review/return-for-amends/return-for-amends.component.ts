@@ -14,8 +14,9 @@ import { BDRApplicationRegulatorReviewSubmitRequestTaskPayload } from 'pmrv-api'
 
 @Component({
   selector: 'app-bdr-return-for-amends',
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, RouterLink],
   templateUrl: './return-for-amends.component.html',
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BdrReturnForAmendsComponent {

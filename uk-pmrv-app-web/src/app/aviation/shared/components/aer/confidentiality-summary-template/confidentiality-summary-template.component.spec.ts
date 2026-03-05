@@ -12,7 +12,6 @@ describe('ConfidentialitySummaryTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-confidentiality-summary-template
         [confidentialityData]="confidentialityData"

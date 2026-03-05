@@ -23,7 +23,6 @@ describe('DecisionContainerComponent', () => {
   let store: PermitApplicationStore<PermitApplicationState>;
 
   @Component({
-    standalone: false,
     template: `
       <app-review-group-decision-container
         [groupKey]="groupKey"
@@ -39,7 +38,6 @@ describe('DecisionContainerComponent', () => {
 
   @Component({
     selector: 'app-variation-regulator-led-review-group-decision',
-    standalone: false,
     template: `
       <div>
         Review group decision regulator led component.
@@ -56,7 +54,6 @@ describe('DecisionContainerComponent', () => {
 
   @Component({
     selector: 'app-variation-operator-led-review-group-decision',
-    standalone: false,
     template: `
       <div>
         Review group decision operator led component.
@@ -73,7 +70,6 @@ describe('DecisionContainerComponent', () => {
 
   @Component({
     selector: 'app-review-group-decision',
-    standalone: false,
     template: `
       <div>
         Review group decision component.

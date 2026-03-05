@@ -30,6 +30,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-overall-decision',
+  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,

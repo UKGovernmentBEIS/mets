@@ -9,7 +9,6 @@ import { DateInputComponent } from './date-input.component';
 
 describe('DateInputComponent', () => {
   @Component({
-    standalone: false,
     template: '<div govuk-date-input [formControl]="control" [min]="min" [max]="max"></div>',
   })
   class TestComponent {
@@ -19,7 +18,6 @@ describe('DateInputComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: '<div govuk-date-input [formControl]="control"></div>',
   })
   class Test2Component {

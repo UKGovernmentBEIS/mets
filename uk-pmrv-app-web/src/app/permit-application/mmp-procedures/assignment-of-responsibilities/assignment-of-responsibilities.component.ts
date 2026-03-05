@@ -14,10 +14,9 @@ import { AssignmentOfResponsibilitiesFormProvider } from './assignment-of-respon
 
 @Component({
   selector: 'app-assignment-of-responsibilities',
-  standalone: false,
   templateUrl: './assignment-of-responsibilities.component.html',
-  providers: [AssignmentOfResponsibilitiesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [AssignmentOfResponsibilitiesFormProvider],
 })
 export class AssignmentOfResponsibilitiesComponent implements PendingRequest {
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));

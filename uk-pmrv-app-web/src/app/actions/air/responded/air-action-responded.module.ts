@@ -8,7 +8,7 @@ import { AirActionRespondedRoutingModule } from './air-action-responded-routing.
 import { RespondedComponent } from './responded.component';
 
 @NgModule({
-  imports: [ActionSharedModule, AirActionRespondedRoutingModule, AirSharedModule, SharedModule],
   declarations: [RespondedComponent],
+  imports: [ActionSharedModule, AirActionRespondedRoutingModule, AirSharedModule, SharedModule],
 })
 export class AirActionRespondedModule {}

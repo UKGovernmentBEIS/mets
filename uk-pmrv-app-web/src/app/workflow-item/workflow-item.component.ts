@@ -15,7 +15,6 @@ import {
   RequestCreateActionProcessDTO,
   RequestItemsService,
   RequestsService,
-  WithholdFlagRequestsService,
 } from 'pmrv-api';
 
 import { statusesTagMap } from './shared/statusesTagMap';
@@ -25,15 +24,14 @@ import { WorkflowItemAbstractComponent } from './workflow-item-abstract.componen
 
 @Component({
   selector: 'app-workflow-item',
-  standalone: false,
   templateUrl: './workflow-item.component.html',
   styles: `
     span.search-results-list_item_status {
       float: right;
     }
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class WorkflowItemComponent extends WorkflowItemAbstractComponent implements OnInit {
   private readonly quarterNamePipe = new QuarterNamePipe();
@@ -76,13 +74,8 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
 
   userRoleType$ = this.authStore.pipe(selectUserRoleType);
 
-  validRequestCreateActionsTypes$ = combineLatest([
-    this.requestInfo$,
-    this.userRoleType$,
-    this.requestId$,
-    this.accountId$,
-  ]).pipe(
-    switchMap(([requestInfo, roleType, requestId, accountId]) => {
+  validRequestCreateActionsTypes$ = combineLatest([this.requestInfo$, this.userRoleType$, this.requestId$]).pipe(
+    switchMap(([requestInfo, roleType, requestId]) => {
       if (
         roleType === 'REGULATOR' &&
         ['AER', 'AVIATION_AER_CORSIA', 'AVIATION_AER_UKETS'].includes(requestInfo.requestType)
@@ -96,28 +89,12 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
         return of({ BDR: { valid: true } });
       } else if (
         roleType === 'REGULATOR' &&
-        ['BDRS2'].includes(requestInfo.requestType) &&
-        requestInfo.requestStatus === 'COMPLETED'
-      ) {
-        return of({ BDRS2: { valid: true } });
-      } else if (
-        roleType === 'REGULATOR' &&
         ['ALR'].includes(requestInfo.requestType) &&
         requestInfo.requestStatus === 'IN_PROGRESS'
       ) {
         return this.requestsService.hasAccessMarkAsNotRequiredAlr(requestId).pipe(
           switchMap((hasAccess) => {
             return hasAccess ? of({ ALR: { valid: true } }) : of({});
-          }),
-        );
-      } else if (
-        roleType === 'REGULATOR' &&
-        ['WITHHOLDING_OF_ALLOWANCES'].includes(requestInfo.requestType) &&
-        requestInfo.requestStatus === 'COMPLETED'
-      ) {
-        return this.withholdFlagRequestsService.isWithholdFlagReopenAvailable(accountId).pipe(
-          switchMap((hasAccess) => {
-            return hasAccess ? of({ WITHHOLDING_OF_ALLOWANCES: { valid: true } }) : of({});
           }),
         );
       } else {
@@ -142,7 +119,6 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
     private readonly requestsService: RequestsService,
     private readonly requestItemsService: RequestItemsService,
     private readonly requestActionsService: RequestActionsService,
-    private readonly withholdFlagRequestsService: WithholdFlagRequestsService,
     private readonly titleService: Title,
   ) {
     super(authStore, router, route, backLinkService, destroy$);

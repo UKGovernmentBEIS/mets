@@ -17,10 +17,9 @@ import { subActivityFormProvider } from './sub-activity-form.provider';
 
 @Component({
   selector: 'app-prtr-sub-activity',
-  standalone: false,
   templateUrl: './sub-activity.component.html',
-  providers: [subActivityFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [subActivityFormProvider],
 })
 export class SubActivityComponent {
   isEditable$ = this.aerService.isEditable$;

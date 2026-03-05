@@ -5,7 +5,6 @@ import { BehaviorSubject, filter, startWith, take } from 'rxjs';
 
 @Component({
   selector: 'app-wizard-step',
-  standalone: false,
   templateUrl: './wizard-step.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

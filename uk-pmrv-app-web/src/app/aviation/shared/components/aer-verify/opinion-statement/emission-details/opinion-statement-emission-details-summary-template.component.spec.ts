@@ -15,7 +15,6 @@ describe('OpinionStatementEmissionDetailsSummaryTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-opinion-statement-emission-details-summary-template
         [fuelTypes]="fuelTypes"

@@ -8,9 +8,9 @@ import { BDRS2 } from 'pmrv-api';
 
 @Component({
   selector: 'app-bdrs2-baseline-summary-template',
-  imports: [SharedModule, RouterLink],
-  standalone: true,
   templateUrl: './baseline-summary-template.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BDRS2BaselineSummaryTemplateComponent {

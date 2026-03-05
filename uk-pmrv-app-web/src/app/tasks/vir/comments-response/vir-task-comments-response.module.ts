@@ -12,7 +12,7 @@ import { SummaryComponent } from './summary/summary.component';
 import { VirTaskCommentsResponseRoutingModule } from './vir-task-comments-response-routing.module';
 
 @NgModule({
-  imports: [SharedModule, TaskSharedModule, VirSharedModule, VirTaskCommentsResponseRoutingModule, VirTaskSharedModule],
   declarations: [CommentsResponseContainerComponent, OperatorFollowupComponent, SendReportComponent, SummaryComponent],
+  imports: [SharedModule, TaskSharedModule, VirSharedModule, VirTaskCommentsResponseRoutingModule, VirTaskSharedModule],
 })
 export class VirTaskCommentsResponseModule {}

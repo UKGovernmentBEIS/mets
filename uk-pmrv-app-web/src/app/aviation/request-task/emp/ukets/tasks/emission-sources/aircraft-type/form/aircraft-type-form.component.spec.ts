@@ -15,13 +15,13 @@ import { AircraftTypeFormComponent } from './aircraft-type-form.component';
 
 @Component({
   selector: 'app-mock-parent',
-  imports: [ReactiveFormsModule, RouterTestingModule, AircraftTypeFormComponent],
-  standalone: true,
   template: `
     <form [formGroup]="form">
       <app-aircraft-type-form></app-aircraft-type-form>
     </form>
   `,
+  standalone: true,
+  imports: [ReactiveFormsModule, RouterTestingModule, AircraftTypeFormComponent],
   providers: [
     EmissionSourcesFormProvider,
     AircraftTypeFormProvider,

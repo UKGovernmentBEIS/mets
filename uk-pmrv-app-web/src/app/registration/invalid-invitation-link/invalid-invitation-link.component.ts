@@ -6,7 +6,6 @@ import { BehaviorSubject, map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-invalid-invitation-link',
-  standalone: false,
   template: `
     <ng-container [ngSwitch]="error$ | async">
       <app-page-heading>{{ title$ | async }}</app-page-heading>

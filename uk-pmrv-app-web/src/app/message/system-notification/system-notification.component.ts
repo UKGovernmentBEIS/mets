@@ -6,7 +6,6 @@ import { map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-system-notification',
-  standalone: false,
   templateUrl: './system-notification.component.html',
   styleUrl: './system-notification.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

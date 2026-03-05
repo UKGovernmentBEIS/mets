@@ -8,7 +8,6 @@ import { DoalService } from '@tasks/doal/core/doal.service';
 
 @Component({
   selector: 'app-preliminary-allocation-delete',
-  standalone: false,
   templateUrl: './delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

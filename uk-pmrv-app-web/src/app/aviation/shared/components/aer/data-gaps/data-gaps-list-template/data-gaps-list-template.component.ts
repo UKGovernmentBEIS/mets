@@ -8,9 +8,10 @@ import { AviationAerDataGap } from 'pmrv-api';
 
 @Component({
   selector: 'app-data-gaps-list-template',
-  imports: [GovukComponentsModule, RouterLinkWithHref, NgIf, NgFor],
   templateUrl: './data-gaps-list-template.component.html',
   styleUrl: './data-gaps-list-template.component.scss',
+  standalone: true,
+  imports: [GovukComponentsModule, RouterLinkWithHref, NgIf, NgFor],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGapsListTemplateComponent {

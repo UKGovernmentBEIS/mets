@@ -19,7 +19,6 @@ describe('AddressInputComponent', () => {
   let hostComponent: TestComponent;
 
   @Component({
-    standalone: false,
     template: `
       <form [formGroup]="form">
         <fieldset govukFieldset>

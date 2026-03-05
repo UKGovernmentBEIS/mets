@@ -23,7 +23,6 @@ import { variationDetailsStatus } from '../variation-status';
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
   providers: [TaskStatusPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,

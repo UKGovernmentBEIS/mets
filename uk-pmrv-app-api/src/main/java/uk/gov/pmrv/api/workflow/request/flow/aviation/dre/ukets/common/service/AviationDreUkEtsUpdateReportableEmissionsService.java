@@ -35,7 +35,6 @@ public class AviationDreUkEtsUpdateReportableEmissionsService {
                 )
                 .isExempted(metadata.isExempted())
                 .isFromDre(true)
-                .requestId(requestId)
                 .build();
 
         aviationReportableEmissionsService.saveReportableEmissions(saveParams, EmissionTradingScheme.UK_ETS_AVIATION);

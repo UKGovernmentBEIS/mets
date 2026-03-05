@@ -10,7 +10,6 @@ import { VirService } from '../core/vir.service';
 
 @Component({
   selector: 'app-reviewed',
-  standalone: false,
   templateUrl: './reviewed.component.html',
   providers: [UserInfoResolverPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,

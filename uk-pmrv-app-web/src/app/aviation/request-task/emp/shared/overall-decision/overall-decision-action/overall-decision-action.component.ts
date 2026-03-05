@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -29,7 +29,14 @@ import { OverallDecisionFormProvider } from '../overall-decision-form.provider';
 
 @Component({
   selector: 'app-overall-decision-page',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent, EmpReviewDeterminationTypePipe],
+  standalone: true,
+  imports: [
+    GovukComponentsModule,
+    SharedModule,
+    RouterLinkWithHref,
+    ReturnToLinkComponent,
+    EmpReviewDeterminationTypePipe,
+  ],
   templateUrl: './overall-decision-action.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

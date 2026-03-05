@@ -40,7 +40,7 @@ describe('OpinionStatementVisitFormComponent', () => {
       }),
     );
 
-    TestBed.inject<OpinionStatementFormProvider>(TASK_FORM_PROVIDER);
+    TestBed.inject<OpinionStatementFormProvider>(TASK_FORM_PROVIDER).form;
 
     fixture = TestBed.createComponent(OpinionStatementVisitFormComponent);
   });

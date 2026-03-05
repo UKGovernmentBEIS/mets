@@ -21,10 +21,9 @@ import { notifyUsersFormFactory, RDE_FORM } from './notify-users-form.provider';
 
 @Component({
   selector: 'app-notify-users',
-  standalone: false,
   templateUrl: './notify-users.component.html',
-  providers: [notifyUsersFormFactory, UserFullNamePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [notifyUsersFormFactory, UserFullNamePipe],
 })
 export class NotifyUsersComponent implements OnInit {
   readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

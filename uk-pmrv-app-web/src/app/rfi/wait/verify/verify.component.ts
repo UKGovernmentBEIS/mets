@@ -14,7 +14,6 @@ import { requestTaskReassignedError, taskNotFoundError } from '../../../shared/e
 
 @Component({
   selector: 'app-verify-cancel',
-  standalone: false,
   template: `
     <app-page-heading size="xl">
       Are you sure you want to cancel this official request for information?

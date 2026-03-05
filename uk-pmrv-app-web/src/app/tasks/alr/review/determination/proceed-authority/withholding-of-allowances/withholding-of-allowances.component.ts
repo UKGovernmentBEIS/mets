@@ -13,10 +13,11 @@ import { alrWithholdingOfAllowancesFormProvider } from './withholding-of-allowan
 
 @Component({
   selector: 'app-alr-withholding-of-allowances',
+  standalone: true,
   imports: [SharedModule, AlrTaskSharedModule],
   templateUrl: './withholding-of-allowances.component.html',
-  providers: [alrWithholdingOfAllowancesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [alrWithholdingOfAllowancesFormProvider],
 })
 export class AlrWithholdingOfAllowancesComponent {
   isEditable = this.alrService.isEditable;

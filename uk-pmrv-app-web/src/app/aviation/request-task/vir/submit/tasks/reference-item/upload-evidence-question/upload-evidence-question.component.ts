@@ -22,6 +22,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-upload-evidence-question',
+  standalone: true,
   imports: [ReturnToLinkComponent, SharedModule],
   template: `
     <app-wizard-step

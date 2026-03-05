@@ -9,7 +9,6 @@ import { AerApplicationReviewRequestTaskPayload, InherentCO2Emissions } from 'pm
 
 @Component({
   selector: 'app-inherent-co2',
-  standalone: false,
   template: `
     <app-aer-task-review
       [breadcrumb]="true"

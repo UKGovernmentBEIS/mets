@@ -12,10 +12,9 @@ import { installationDescriptionFormProvider } from './installation-description-
 
 @Component({
   selector: 'app-installation-description',
-  standalone: false,
   templateUrl: './installation-description.component.html',
-  providers: [installationDescriptionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [installationDescriptionFormProvider],
 })
 export class InstallationDescriptionComponent extends SectionComponent implements PendingRequest {
   constructor(

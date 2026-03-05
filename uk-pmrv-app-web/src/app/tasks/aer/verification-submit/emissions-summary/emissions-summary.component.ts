@@ -8,7 +8,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-emissions-summary',
-  standalone: false,
   template: `
     <app-page-heading>Emissions summary</app-page-heading>
     <app-emissions-summary-group [data]="aerData$ | async"></app-emissions-summary-group>

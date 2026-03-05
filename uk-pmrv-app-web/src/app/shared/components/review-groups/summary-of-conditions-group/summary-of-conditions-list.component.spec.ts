@@ -13,7 +13,6 @@ describe('SummaryOfConditionsListComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-summary-of-conditions-list
         [isEditable]="isEditable"

@@ -9,6 +9,7 @@ import { ALRApplicationRegulatorReviewSubmitRequestTaskPayload } from 'pmrv-api'
 
 @Component({
   selector: 'app-alr-activity-level-delete',
+  standalone: true,
   imports: [SharedModule, RouterLink],
   template: `
     <app-page-heading size="xl">Are you sure you want to delete this item?</app-page-heading>

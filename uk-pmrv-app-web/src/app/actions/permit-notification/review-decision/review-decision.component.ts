@@ -12,7 +12,6 @@ import { PermitNotificationService } from '../core/permit-notification.service';
 
 @Component({
   selector: 'app-permit-notification-review-decision',
-  standalone: false,
   templateUrl: './review-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

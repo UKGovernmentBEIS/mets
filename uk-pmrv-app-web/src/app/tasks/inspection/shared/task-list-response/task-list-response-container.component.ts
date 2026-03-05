@@ -30,6 +30,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-task-list-response-container',
+  standalone: true,
   imports: [SharedModule, TaskSharedModule, DetailsSubtaskLinktextPipe, DetailsSubtaskHeaderPipe],
   templateUrl: './task-list-response-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

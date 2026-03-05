@@ -8,7 +8,6 @@ import { DropdownButtonItemComponent } from './item/dropdown-button-item.compone
 
 describe('MultiSelectComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <div app-dropdown-button>
         <div app-dropdown-button-item label="Withdraw" (actionEmit)="withdraw()"></div>

@@ -23,10 +23,9 @@ import { deliveryZoneFormProvider } from './delivery-zone.provider';
 
 @Component({
   selector: 'app-delivery-zone',
-  standalone: false,
   templateUrl: './delivery-zone.component.html',
-  providers: [deliveryZoneFormProvider, DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [deliveryZoneFormProvider, DestroySubject],
 })
 export class DeliveryZoneComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

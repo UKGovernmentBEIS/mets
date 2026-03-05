@@ -137,8 +137,6 @@ export const mockRegulatorUser: {
       PEER_REVIEW_HSE_TI: 'NONE',
       SUBMIT_WASTE_QDR_REVIEW: 'NONE',
       BULK_DOWNLOAD_ALR: 'NONE',
-      SUBMIT_BDRS2_REVIEW: 'VIEW_ONLY',
-      PEER_REVIEW_BDRS2: 'VIEW_ONLY',
     },
   },
 };
@@ -211,8 +209,6 @@ export const mockRegulatorRolePermissions = [
   'PEER_REVIEW_HSE_TI',
   'SUBMIT_WASTE_QDR_REVIEW',
   'BULK_DOWNLOAD_ALR',
-  'SUBMIT_BDRS2_REVIEW',
-  'PEER_REVIEW_BDRS2',
 ];
 
 export const mockRegulatorBasePermissions = [
@@ -287,8 +283,6 @@ export const mockRegulatorBasePermissions = [
       PEER_REVIEW_HSE_TI: 'NONE',
       SUBMIT_WASTE_QDR_REVIEW: 'NONE',
       BULK_DOWNLOAD_ALR: 'NONE',
-      SUBMIT_BDRS2_REVIEW: 'VIEW_ONLY',
-      PEER_REVIEW_BDRS2: 'VIEW_ONLY',
     },
   },
   {
@@ -362,8 +356,6 @@ export const mockRegulatorBasePermissions = [
       PEER_REVIEW_HSE_TI: 'NONE',
       SUBMIT_WASTE_QDR_REVIEW: 'NONE',
       BULK_DOWNLOAD_ALR: 'NONE',
-      SUBMIT_BDRS2_REVIEW: 'EXECUTE',
-      PEER_REVIEW_BDRS2: 'EXECUTE',
     },
   },
   {
@@ -437,8 +429,6 @@ export const mockRegulatorBasePermissions = [
       PEER_REVIEW_HSE_TI: 'NONE',
       SUBMIT_WASTE_QDR_REVIEW: 'NONE',
       BULK_DOWNLOAD_ALR: 'NONE',
-      SUBMIT_BDRS2_REVIEW: 'EXECUTE',
-      PEER_REVIEW_BDRS2: 'EXECUTE',
     },
   },
   {
@@ -512,8 +502,6 @@ export const mockRegulatorBasePermissions = [
       PEER_REVIEW_HSE_TI: 'EXECUTE',
       SUBMIT_WASTE_QDR_REVIEW: 'EXECUTE',
       BULK_DOWNLOAD_ALR: 'EXECUTE',
-      SUBMIT_BDRS2_REVIEW: 'EXECUTE',
-      PEER_REVIEW_BDRS2: 'EXECUTE',
     },
   },
   {
@@ -587,8 +575,6 @@ export const mockRegulatorBasePermissions = [
       PEER_REVIEW_HSE_TI: 'EXECUTE',
       SUBMIT_WASTE_QDR_REVIEW: 'EXECUTE',
       BULK_DOWNLOAD_ALR: 'EXECUTE',
-      SUBMIT_BDRS2_REVIEW: 'EXECUTE',
-      PEER_REVIEW_BDRS2: 'EXECUTE',
     },
   },
 ];
@@ -649,7 +635,6 @@ export const mockRegulatorPermissionGroups = {
   AVIATION_AER_3YEAR_PERIOD_OFFSETTING: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
   PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
   SUBMIT_BDR_REVIEW: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
-  PEER_REVIEW_BDR: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
   SUBMIT_PERMANENT_CESSATION: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
   PEER_REVIEW_PERMANENT_CESSATION: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
   SUBMIT_AVIATION_DOE_CORSIA: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
@@ -661,6 +646,4 @@ export const mockRegulatorPermissionGroups = {
   PEER_REVIEW_HSE_TI: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
   SUBMIT_WASTE_QDR_REVIEW: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
   BULK_DOWNLOAD_ALR: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
-  SUBMIT_BDRS2_REVIEW: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
-  PEER_REVIEW_BDRS2: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
 };

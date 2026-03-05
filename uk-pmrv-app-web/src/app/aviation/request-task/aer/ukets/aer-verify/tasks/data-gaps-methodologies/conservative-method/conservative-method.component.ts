@@ -26,8 +26,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-conservative-method',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './conservative-method.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConservativeMethodComponent {

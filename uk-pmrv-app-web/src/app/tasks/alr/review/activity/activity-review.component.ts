@@ -12,8 +12,9 @@ import { ALRApplicationRegulatorReviewSubmitRequestTaskPayload } from 'pmrv-api'
 
 @Component({
   selector: 'app-alr-activity-review',
-  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, ActivitySummaryTemplateComponent],
   templateUrl: './activity-review.component.html',
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, ActivitySummaryTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActivityReviewComponent {

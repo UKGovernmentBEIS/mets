@@ -29,10 +29,9 @@ interface AviationAerUketsVerificationReportFormModel {
 }
 
 @Injectable()
-export class VerifierDetailsFormProvider implements TaskFormProvider<
-  AviationAerUkEtsVerificationReport,
-  AviationAerUketsVerificationReportFormModel
-> {
+export class VerifierDetailsFormProvider
+  implements TaskFormProvider<AviationAerUkEtsVerificationReport, AviationAerUketsVerificationReportFormModel>
+{
   private store = inject(RequestTaskStore);
   private fb = inject(FormBuilder);
   private _form: FormGroup<AviationAerUketsVerificationReportFormModel>;

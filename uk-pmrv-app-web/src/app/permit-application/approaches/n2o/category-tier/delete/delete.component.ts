@@ -14,7 +14,6 @@ import { deleteReturnUrl } from '../../../approaches';
 
 @Component({
   selector: 'app-category-tier-delete',
-  standalone: false,
   templateUrl: './delete.component.html',
   styles: `
     .nowrap {

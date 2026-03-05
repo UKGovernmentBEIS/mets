@@ -12,7 +12,6 @@ describe('AerEmissionsReductionClaimCorsiaTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-aer-emissions-reduction-claim-corsia-template
         [emissionsReductionClaim]="emissionsReductionClaim"

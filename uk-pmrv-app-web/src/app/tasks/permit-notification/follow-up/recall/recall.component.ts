@@ -14,7 +14,6 @@ import { catchNotFoundRequest, ErrorCode } from '../../../../error/not-found-err
 
 @Component({
   selector: 'app-permit-notification-follow-up-recall-from-amends',
-  standalone: false,
   template: `
     <div *ngIf="(isRecallSubmitted$ | async) === false; else confirmationTemplate">
       <app-page-heading size="xl">Are you sure you want to recall your response ?</app-page-heading>

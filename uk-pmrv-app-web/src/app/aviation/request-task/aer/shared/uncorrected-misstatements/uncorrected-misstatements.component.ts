@@ -25,8 +25,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-uncorrected-misstatements',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './uncorrected-misstatements.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UncorrectedMisstatementsComponent {

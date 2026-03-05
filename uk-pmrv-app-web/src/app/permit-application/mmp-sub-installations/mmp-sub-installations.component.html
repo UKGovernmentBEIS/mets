@@ -7,39 +7,41 @@
   <ng-container *ngIf="competentAuthority !== 'OPRED'">
     <h2 class="govuk-heading-m">Sub-installations with product benchmarks</h2>
     <p class="govuk-body">You can only have one sub-installation for each product benchmark.</p>
-    <ng-container *ngIf="(productBenchmarks$ | async)?.length > 0">
-      <govuk-table [columns]="columns" [data]="productBenchmarks$ | async">
-        <ng-template let-column="column" let-row="row" let-index="index">
-          <ng-container [ngSwitch]="column.field">
-            <ng-container *ngSwitchCase="'type'">
-              <a govukLink [routerLink]="['./', row.subInstallationNo, 'summary']">
-                {{ row.subInstallationType | subInstallationType }}
-              </a>
+    <ul app-task-item-list>
+      <ng-container *ngIf="(productBenchmarks$ | async)?.length > 0">
+        <govuk-table [columns]="columns" [data]="productBenchmarks$ | async">
+          <ng-template let-column="column" let-row="row" let-index="index">
+            <ng-container [ngSwitch]="column.field">
+              <ng-container *ngSwitchCase="'type'">
+                <a govukLink [routerLink]="['./', row.subInstallationNo, 'summary']">
+                  {{ row.subInstallationType | subInstallationType }}
+                </a>
+              </ng-container>
+              <ng-container *ngSwitchCase="'carbon'">
+                {{ row.subInstallationType | carbonLeakage }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'action'">
+                <a
+                  *ngIf="isEditable$ | async"
+                  [hidden-text]="hiddenTextOnRemove(row.subInstallationType)"
+                  govukLink
+                  [routerLink]="['./', row.subInstallationNo, 'delete']"
+                  style="float: right">
+                  Remove
+                </a>
+              </ng-container>
+              <ng-container *ngSwitchCase="'status'">
+                <govuk-tag
+                  [color]="'MMP_SUB_INSTALLATION_Product_Benchmark' | taskStatus: index | async | tagColor"
+                  class="app-task-list__tag">
+                  {{ 'MMP_SUB_INSTALLATION_Product_Benchmark' | taskStatus: index | async | i18nSelect: statusMap }}
+                </govuk-tag>
+              </ng-container>
             </ng-container>
-            <ng-container *ngSwitchCase="'carbon'">
-              {{ row.subInstallationType | carbonLeakage }}
-            </ng-container>
-            <ng-container *ngSwitchCase="'action'">
-              <a
-                *ngIf="isEditable$ | async"
-                [hidden-text]="hiddenTextOnRemove(row.subInstallationType)"
-                govukLink
-                [routerLink]="['./', row.subInstallationNo, 'delete']"
-                style="float: right">
-                Remove
-              </a>
-            </ng-container>
-            <ng-container *ngSwitchCase="'status'">
-              <govuk-tag
-                [color]="'MMP_SUB_INSTALLATION_Product_Benchmark' | taskStatus: index | async | tagColor"
-                class="app-task-list__tag">
-                {{ 'MMP_SUB_INSTALLATION_Product_Benchmark' | taskStatus: index | async | i18nSelect: statusMap }}
-              </govuk-tag>
-            </ng-container>
-          </ng-container>
-        </ng-template>
-      </govuk-table>
-    </ng-container>
+          </ng-template>
+        </govuk-table>
+      </ng-container>
+    </ul>
 
     <div
       class="govuk-button-group"
@@ -60,40 +62,41 @@
     For measurable heat, you can have an additional sub-installation for the delivery of district heating that is not
     exposed to carbon leakage.
   </p>
-
-  <ng-container *ngIf="(fallbackApproaches$ | async)?.length > 0">
-    <govuk-table [columns]="columns" [data]="fallbackApproaches$ | async">
-      <ng-template let-column="column" let-row="row" let-index="index">
-        <ng-container [ngSwitch]="column.field">
-          <ng-container *ngSwitchCase="'type'">
-            <a govukLink [routerLink]="['./fallback', row.subInstallationNo, 'summary']">
-              {{ row.subInstallationType | subInstallationType }}
-            </a>
+  <ul app-task-item-list>
+    <ng-container *ngIf="(fallbackApproaches$ | async)?.length > 0">
+      <govuk-table [columns]="columns" [data]="fallbackApproaches$ | async">
+        <ng-template let-column="column" let-row="row" let-index="index">
+          <ng-container [ngSwitch]="column.field">
+            <ng-container *ngSwitchCase="'type'">
+              <a govukLink [routerLink]="['./fallback', row.subInstallationNo, 'summary']">
+                {{ row.subInstallationType | subInstallationType }}
+              </a>
+            </ng-container>
+            <ng-container *ngSwitchCase="'carbon'">
+              {{ row.subInstallationType | carbonLeakage }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'action'">
+              <a
+                *ngIf="isEditable$ | async"
+                govukLink
+                [hidden-text]="hiddenTextOnRemove(row.subInstallationType)"
+                [routerLink]="['./', row.subInstallationNo, 'delete']"
+                style="float: right">
+                Remove
+              </a>
+            </ng-container>
+            <ng-container *ngSwitchCase="'status'">
+              <govuk-tag
+                [color]="'MMP_SUB_INSTALLATION_Fallback_Approach' | taskStatus: index | async | tagColor"
+                class="app-task-list__tag">
+                {{ 'MMP_SUB_INSTALLATION_Fallback_Approach' | taskStatus: index | async | i18nSelect: statusMap }}
+              </govuk-tag>
+            </ng-container>
           </ng-container>
-          <ng-container *ngSwitchCase="'carbon'">
-            {{ row.subInstallationType | carbonLeakage }}
-          </ng-container>
-          <ng-container *ngSwitchCase="'action'">
-            <a
-              *ngIf="isEditable$ | async"
-              govukLink
-              [hidden-text]="hiddenTextOnRemove(row.subInstallationType)"
-              [routerLink]="['./', row.subInstallationNo, 'delete']"
-              style="float: right">
-              Remove
-            </a>
-          </ng-container>
-          <ng-container *ngSwitchCase="'status'">
-            <govuk-tag
-              [color]="'MMP_SUB_INSTALLATION_Fallback_Approach' | taskStatus: index | async | tagColor"
-              class="app-task-list__tag">
-              {{ 'MMP_SUB_INSTALLATION_Fallback_Approach' | taskStatus: index | async | i18nSelect: statusMap }}
-            </govuk-tag>
-          </ng-container>
-        </ng-container>
-      </ng-template>
-    </govuk-table>
-  </ng-container>
+        </ng-template>
+      </govuk-table>
+    </ng-container>
+  </ul>
 
   <div
     class="govuk-button-group"

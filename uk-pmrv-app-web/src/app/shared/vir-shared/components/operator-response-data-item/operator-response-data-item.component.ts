@@ -4,7 +4,6 @@ import { OperatorImprovementResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-operator-response-data-item',
-  standalone: false,
   template: `
     <dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0">
       <div govukSummaryListRow>

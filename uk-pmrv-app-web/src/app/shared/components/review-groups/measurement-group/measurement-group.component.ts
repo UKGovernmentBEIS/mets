@@ -22,7 +22,6 @@ interface TemplateEmissionPointEmission {
 
 @Component({
   selector: 'app-measurement-group',
-  standalone: false,
   templateUrl: './measurement-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

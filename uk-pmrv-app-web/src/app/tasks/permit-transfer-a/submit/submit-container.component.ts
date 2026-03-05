@@ -8,7 +8,6 @@ import { getSectionStatus } from '../core/permit-transfer-a-task-statuses';
 
 @Component({
   selector: 'app-transfer-a-submit',
-  standalone: false,
   templateUrl: './submit-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

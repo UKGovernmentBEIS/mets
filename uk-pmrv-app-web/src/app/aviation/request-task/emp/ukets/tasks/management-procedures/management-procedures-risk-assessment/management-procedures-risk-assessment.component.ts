@@ -17,8 +17,9 @@ import { ManagementProceduresFormProvider } from '../management-procedures-form.
 
 @Component({
   selector: 'app-management-procedures-risk-assessment',
-  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './management-procedures-risk-assessment.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

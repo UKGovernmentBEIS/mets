@@ -15,7 +15,6 @@ import { ScrollService } from 'govuk-components';
 
 @Component({
   selector: 'app-pagination',
-  standalone: false,
   templateUrl: './pagination.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

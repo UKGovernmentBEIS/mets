@@ -11,7 +11,6 @@ describe('PageHeadingComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: '<app-page-heading [caption]="caption" [size]="size">Test heading</app-page-heading>',
   })
   class TestComponent {

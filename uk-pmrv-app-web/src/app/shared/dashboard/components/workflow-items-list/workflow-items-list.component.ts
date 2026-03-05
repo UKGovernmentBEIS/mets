@@ -10,7 +10,6 @@ import { ItemDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-workflow-items-list',
-  standalone: false,
   templateUrl: './workflow-items-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

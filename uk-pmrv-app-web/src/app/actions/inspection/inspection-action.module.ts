@@ -9,6 +9,7 @@ import { OnsiteAuditSubmittedComponent } from './onsite-audit-submitted/onsite-a
 import { PeerReviewDecisionComponent } from './peer-review-decision/peer-review-decision.component';
 
 @NgModule({
+  declarations: [InspectionActionComponent],
   imports: [
     ActionSharedModule,
     InspectionActionRoutingModule,
@@ -16,6 +17,5 @@ import { PeerReviewDecisionComponent } from './peer-review-decision/peer-review-
     PeerReviewDecisionComponent,
     SharedModule,
   ],
-  declarations: [InspectionActionComponent],
 })
 export class InspectionActionModule {}

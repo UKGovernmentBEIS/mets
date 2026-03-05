@@ -10,7 +10,6 @@ import { ReturnLinkComponent } from './components/return-link/return-link.compon
 import { TaskLayoutComponent } from './components/task-layout/task-layout.component';
 
 @NgModule({
-  imports: [RouterModule, SharedModule],
   declarations: [
     BaseTaskContainerComponent,
     ReturnLinkComponent,
@@ -25,5 +24,6 @@ import { TaskLayoutComponent } from './components/task-layout/task-layout.compon
     SectionStatusPipe,
     TaskLayoutComponent,
   ],
+  imports: [RouterModule, SharedModule],
 })
 export class TaskSharedModule {}

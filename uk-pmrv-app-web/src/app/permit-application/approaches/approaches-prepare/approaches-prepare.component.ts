@@ -8,10 +8,9 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-approaches-prepare',
-  standalone: false,
   templateUrl: './approaches-prepare.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class ApproachesPrepareComponent implements OnInit {
   constructor(

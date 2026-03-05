@@ -32,7 +32,6 @@ describe('RequestActionTaskComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-request-action-task
         [breadcrumb]="true"

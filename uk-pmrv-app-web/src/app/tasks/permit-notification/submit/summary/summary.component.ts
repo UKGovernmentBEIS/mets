@@ -8,10 +8,9 @@ import { PermitNotificationService } from '../../core/permit-notification.servic
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class SummaryComponent {
   constructor(

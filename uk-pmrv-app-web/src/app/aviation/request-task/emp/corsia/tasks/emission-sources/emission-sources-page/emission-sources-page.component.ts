@@ -16,13 +16,21 @@ import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
 
 import { TASK_FORM_PROVIDER } from '../../../../../task-form.provider';
+import { EmissionFactorsSummaryComponent } from '../emission-factors-summary/emission-factors-summary.component';
 import { EmissionSourcesFormModelCorsia } from '../emission-sources-form.model';
 import { addMultipleMethodsControl, hasMoreThanOneMonitoringMethod } from '../emission-sources-form.provider';
 
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-emission-sources-page',
-  imports: [CommonModule, SharedModule, AircraftTypeTableComponent, ReturnToLinkComponent],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule,
+    AircraftTypeTableComponent,
+    EmissionFactorsSummaryComponent,
+    ReturnToLinkComponent,
+  ],
   templateUrl: './emission-sources-page.component.html',
 })
 export class EmissionSourcesPageComponent {

@@ -25,8 +25,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-recommended-improvements',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './recommended-improvements.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecommendedImprovementsComponent {

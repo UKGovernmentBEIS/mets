@@ -10,7 +10,6 @@ import { PermitApplicationStore } from '../../../../../store/permit-application.
 
 @Component({
   selector: 'app-activity-data-summary-overview',
-  standalone: false,
   templateUrl: './summary-overview.component.html',
   styleUrl: './summary-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -9,7 +9,6 @@ import { VirRequestMetadata } from 'pmrv-api';
 
 @Component({
   selector: 'app-submit-container',
-  standalone: false,
   templateUrl: './submit-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

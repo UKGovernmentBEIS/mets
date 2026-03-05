@@ -2,9 +2,10 @@
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
-    heading="Annual activity levels"
+    [heading]="'Annual activity levels'"
     [caption]="productBenchmarkType$ | async | subInstallationType"
-    submitText="Continue">
+    submitText="Continue"
+  >
     <div class="govuk-!-width-two-thirds">
       <div class="govuk-body">
         For the specific purpose of the baseline data collection, this section should cover all data provided in section
@@ -40,9 +41,10 @@
         [baseDownloadUrl]="getDownloadUrl()"
         label="Upload supporting files (optional)"
         formControlName="supportingFiles"
-        listTitle="Uploaded files"></app-multiple-file-input>
+        listTitle="Uploaded files"
+      ></app-multiple-file-input>
     </div>
   </app-wizard-step>
 
-  <a govukLink routerLink="../../../">Return to: Sub-installations</a>
+  <a govukLink [routerLink]="'../../../'">Return to: Sub-installations</a>
 </app-permit-task>

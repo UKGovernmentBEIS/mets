@@ -15,8 +15,9 @@ import { ManagementProceduresFormProvider } from '../management-procedures-form.
 
 @Component({
   selector: 'app-management-procedures-data-flow',
-  imports: [SharedModule, ReturnToLinkComponent, ManagementProceduresDataFlowFormComponent],
   templateUrl: './management-procedures-data-flow.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent, ManagementProceduresDataFlowFormComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

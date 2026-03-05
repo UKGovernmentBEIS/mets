@@ -10,7 +10,6 @@ import { AirService } from '@tasks/air/shared/services/air.service';
 
 @Component({
   selector: 'app-send-report',
-  standalone: false,
   templateUrl: './send-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

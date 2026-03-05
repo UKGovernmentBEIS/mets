@@ -93,10 +93,10 @@ describe('RegulatorsComponent', () => {
 
   const activatedRouteStub = new ActivatedRouteStub(null, null, cloneDeep(mockRegulatorsRouteData));
 
-  @Component({ selector: 'app-external-contacts', standalone: false, template: '' })
+  @Component({ selector: 'app-external-contacts', template: '' })
   class ExternalContactsStubComponent implements Partial<ExternalContactsComponent> {}
 
-  @Component({ selector: 'app-site-contacts', standalone: false, template: '' })
+  @Component({ selector: 'app-site-contacts', template: '' })
   class SiteContactsStubComponent implements Partial<SiteContactsComponent> {}
 
   const createComponent = () => {

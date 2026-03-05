@@ -7,7 +7,6 @@ import { ComplianceEtsService } from '@tasks/aer/verification-submit/compliance-
 
 @Component({
   selector: 'app-competent-authority-guidance',
-  standalone: false,
   templateUrl: './competent-authority-guidance.component.html',
   providers: [competentAuthorityGuidanceFormProvider, ComplianceEtsService],
   changeDetection: ChangeDetectionStrategy.OnPush,

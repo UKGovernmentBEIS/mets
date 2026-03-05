@@ -11,7 +11,6 @@ import { BreadcrumbItem } from './breadcrumbs.interface';
 
 @Component({
   selector: 'app-breadcrumbs',
-  standalone: false,
   template: `
     <govuk-breadcrumbs *ngIf="breadcrumbs$ | async as breadcrumbs">
       <ng-container *ngFor="let breadcrumb of breadcrumbs; index as i">
@@ -28,8 +27,8 @@ import { BreadcrumbItem } from './breadcrumbs.interface';
       </ng-container>
     </govuk-breadcrumbs>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class BreadcrumbsComponent {
   constructor(

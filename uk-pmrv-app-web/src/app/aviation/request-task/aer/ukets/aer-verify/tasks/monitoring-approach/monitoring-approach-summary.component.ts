@@ -1,5 +1,6 @@
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -22,13 +23,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-monitoring-approach-summary',
-  imports: [
-    SharedModule,
-    GovukComponentsModule,
-    NgIf,
-    ReturnToLinkComponent,
-    MonitoringApproachSummaryTemplateComponent,
-  ],
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
@@ -40,8 +34,18 @@ interface ViewModel {
 
     <app-return-to-link></app-return-to-link>
   `,
-  providers: [DestroySubject],
+  standalone: true,
+  imports: [
+    SharedModule,
+    GovukComponentsModule,
+    NgFor,
+    NgIf,
+    RouterLinkWithHref,
+    ReturnToLinkComponent,
+    MonitoringApproachSummaryTemplateComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export default class MonitoringApproachSummaryComponent {
   form = this.formProvider.form;

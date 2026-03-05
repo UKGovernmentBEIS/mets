@@ -4,7 +4,6 @@ import { ReturnOfAllowancesApplicationSubmitRequestTaskPayload } from 'pmrv-api'
 
 @Component({
   selector: 'app-ra-summary-template',
-  standalone: false,
   templateUrl: './ra-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

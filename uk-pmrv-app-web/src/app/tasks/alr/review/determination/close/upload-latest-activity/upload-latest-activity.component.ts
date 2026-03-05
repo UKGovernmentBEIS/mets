@@ -13,6 +13,7 @@ import { alrUploadLatestActivityFormProvider } from './upload-latest-activity-fo
 
 @Component({
   selector: 'app-alr-upload-latest-activity',
+  standalone: true,
   imports: [SharedModule, AlrTaskSharedModule],
   templateUrl: './upload-latest-activity.component.html',
   providers: [alrUploadLatestActivityFormProvider],

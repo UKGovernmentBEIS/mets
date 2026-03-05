@@ -11,7 +11,6 @@ import { NotVerifiedReason } from 'pmrv-api';
 
 @Component({
   selector: 'app-not-verified',
-  standalone: false,
   templateUrl: './not-verified.component.html',
   providers: [notVerifiedFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

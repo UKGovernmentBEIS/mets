@@ -63,7 +63,7 @@
 
   <div *ngIf="!fileLoaded || !parsedData">
     <app-flight-data-table
-      headingText="Your CSV file needs to look like this example"
+      [headingText]="'Your CSV file needs to look like this example'"
       [customColumns]="exampleTableColumns"
       [emissionDataDetails]="exampleTableData"></app-flight-data-table>
   </div>

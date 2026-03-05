@@ -6,20 +6,21 @@
     </dd>
     <dd></dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="../" [queryParams]="changeUrlQueryParams">Change</a>
+      <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
     </dd>
   </div>
 </dl>
 
 <dl
   govuk-summary-list
-  *ngIf="data.monitoringApproachType !== 'FUEL_USE_MONITORING' && data?.simplifiedApproach?.explanation">
+  *ngIf="data.monitoringApproachType !== 'FUEL_USE_MONITORING' && data?.simplifiedApproach?.explanation"
+>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Simplified reporting eligibility</dt>
     <dd class="pre-wrap" govukSummaryListRowValue>{{ data.simplifiedApproach.explanation }}</dd>
     <dd></dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="../simplified-approach" [queryParams]="changeUrlQueryParams">Change</a>
+      <a govukLink [routerLink]="'../simplified-approach'" [queryParams]="changeUrlQueryParams">Change</a>
     </dd>
   </div>
 </dl>
@@ -31,7 +32,7 @@
     </dd>
     <dd></dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="../simplified-approach" [queryParams]="changeUrlQueryParams">Change</a>
+      <a govukLink [routerLink]="'../simplified-approach'" [queryParams]="changeUrlQueryParams">Change</a>
     </dd>
   </div>
 </dl>

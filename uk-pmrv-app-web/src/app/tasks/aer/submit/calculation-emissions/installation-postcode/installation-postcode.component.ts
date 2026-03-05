@@ -18,10 +18,9 @@ import { installationPostcodeFormProvider } from './installation-postcode.provid
 
 @Component({
   selector: 'app-installation-postcode',
-  standalone: false,
   templateUrl: './installation-postcode.component.html',
-  providers: [installationPostcodeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [installationPostcodeFormProvider],
 })
 export class InstallationPostcodeComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

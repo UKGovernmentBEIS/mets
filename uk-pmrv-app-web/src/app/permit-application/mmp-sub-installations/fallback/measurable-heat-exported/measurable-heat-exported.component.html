@@ -67,7 +67,7 @@
               <div>
                 <div class="govuk-body">Heat exported</div>
                 <div formControlName="heatExported" govuk-select widthClass="govuk-!-width-full">
-                  <option value="">Select an option if relevant</option>
+                  <option [value]="''">Select an option if relevant</option>
                   <option *ngFor="let heatExported of dataSource45Types" [value]="heatExported">
                     {{ heatExported | productBenchmark45DataSource }}
                   </option>
@@ -75,7 +75,7 @@
 
                 <div class="govuk-body">Net measurable heat flows</div>
                 <div formControlName="netMeasurableHeatFlows" govuk-select widthClass="govuk-!-width-full">
-                  <option value="">{{ i === 0 ? 'Select an option' : 'Select an option if relevant' }}</option>
+                  <option [value]="''">{{ i === 0 ? 'Select an option' : 'Select an option if relevant' }}</option>
                   <option *ngFor="let netMeasurableHeatFlows of dataSource72Types" [value]="netMeasurableHeatFlows">
                     {{ netMeasurableHeatFlows | productBenchmark72DataSource }}
                   </option>
@@ -103,7 +103,7 @@
             govuk-radio
             legend="Has the hierarchical order been followed?"
             hint="Select yes if the data source with the highest rank within the hierarchy has been used, as set out in section 4 of Annex VII of the FAR."
-            legendSize="medium">
+            [legendSize]="'medium'">
             <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
             <govuk-radio-option [value]="false" label="No">
               <ng-container govukConditionalContent>
@@ -112,13 +112,13 @@
                   govuk-radio
                   legend="Reason for not following the hierarchy">
                   <govuk-radio-option
-                    value="OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY"
+                    [value]="'OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY'"
                     label="Other data sources lead to lower uncertainty according to the simplified uncertainty assessment in line with Article 7(2) of the FAR"></govuk-radio-option>
                   <govuk-radio-option
-                    value="USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE"
+                    [value]="'USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE'"
                     label="Use of better data sources is technically infeasible"></govuk-radio-option>
                   <govuk-radio-option
-                    value="USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS"
+                    [value]="'USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS'"
                     label="Use of better data sources would incur unreasonable costs"></govuk-radio-option>
                 </div>
                 <div
@@ -158,5 +158,5 @@
     </div>
   </app-wizard-step>
 
-  <a govukLink routerLink="../../../">Return to: Sub-installations</a>
+  <a govukLink [routerLink]="'../../../'">Return to: Sub-installations</a>
 </app-permit-task>

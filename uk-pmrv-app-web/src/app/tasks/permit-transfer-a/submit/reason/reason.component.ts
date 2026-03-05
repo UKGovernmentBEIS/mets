@@ -14,10 +14,9 @@ import { reasonFormProvider } from './reason-form.provider';
 
 @Component({
   selector: 'app-transfer-a-reason',
-  standalone: false,
   templateUrl: './reason.component.html',
-  providers: [reasonFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [reasonFormProvider],
 })
 export class TransferAReasonComponent {
   hideSubmit$ = this.permitTransferAService.isEditable$.pipe(map((isEditable) => !isEditable));

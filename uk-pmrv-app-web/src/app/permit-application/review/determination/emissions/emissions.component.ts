@@ -24,10 +24,9 @@ import { createAnotherEmissionsTarget, emissionsFormProvider } from './emissions
 
 @Component({
   selector: 'app-emissions',
-  standalone: false,
   templateUrl: './emissions.component.html',
-  providers: [emissionsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [emissionsFormProvider],
 })
 export class EmissionsComponent implements OnInit, PendingRequest {
   taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

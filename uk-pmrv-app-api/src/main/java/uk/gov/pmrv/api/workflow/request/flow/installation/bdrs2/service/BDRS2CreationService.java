@@ -57,7 +57,6 @@ public class BDRS2CreationService {
         // Create and start workflow
         Map<String, Object> processVars = new HashMap<>();
         processVars.put(BpmnProcessConstants.BDRS2_EXPIRATION_DATE, expirationDate);
-        processVars.put(BpmnProcessConstants.BDRS2_INITIATION_TYPE, BDRS2InitiationType.INITIATED);
         return createBDRS2(accountId, bdrs2Year, processVars);
     }
 

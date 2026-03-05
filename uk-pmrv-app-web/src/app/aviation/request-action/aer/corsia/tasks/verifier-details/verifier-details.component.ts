@@ -22,6 +22,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-verifier-details',
+  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

@@ -11,10 +11,9 @@ import { sendReportStatus } from '@tasks/aer/submit/send-report/send-report-stat
 
 @Component({
   selector: 'app-send-report',
-  standalone: false,
   templateUrl: './send-report.component.html',
-  providers: [sendReportFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [sendReportFormProvider],
 })
 export class SendReportComponent {
   isSendReportAvailable$ = this.aerService

@@ -11,7 +11,6 @@ describe('ErrorPageComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-error-page heading="Test heading">
         <p class="govuk-body">Some text</p>

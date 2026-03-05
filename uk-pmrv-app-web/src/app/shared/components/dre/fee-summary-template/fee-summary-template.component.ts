@@ -6,7 +6,6 @@ import { calculateTotalFee } from '../../../../tasks/dre/submit/fee/fee';
 
 @Component({
   selector: 'app-fee-summary-template',
-  standalone: false,
   templateUrl: './fee-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

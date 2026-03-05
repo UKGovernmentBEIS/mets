@@ -14,8 +14,9 @@ import { submitVerificationWizardComplete } from './verification.wizard';
 
 @Component({
   selector: 'app-verification-submit-container',
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   templateUrl: './verification-submit-container.component.html',
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerificationSubmitContainerComponent {

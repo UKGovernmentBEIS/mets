@@ -6,7 +6,6 @@ import { MonitoringApproachEmissionDescriptionPipe } from '../monitoring-approac
 
 @Pipe({
   name: 'aerTaskDescription',
-  standalone: false,
 })
 export class AerTaskDescriptionPipe implements PipeTransform {
   transform(value: AerSaveReviewGroupDecisionRequestTaskActionPayload['group']): string {

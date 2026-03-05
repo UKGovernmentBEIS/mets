@@ -5,7 +5,6 @@ import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 @Component({
   selector: 'app-base-success',
-  standalone: false,
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

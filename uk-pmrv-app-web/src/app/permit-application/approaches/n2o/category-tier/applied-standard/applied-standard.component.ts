@@ -16,10 +16,9 @@ import { appliedStandardFormProvider } from './applied-standard-form.provider';
 
 @Component({
   selector: 'app-applied-standard',
-  standalone: false,
   templateUrl: './applied-standard.component.html',
-  providers: [appliedStandardFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [appliedStandardFormProvider],
 })
 export class AppliedStandardComponent implements PendingRequest {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

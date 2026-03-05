@@ -32,10 +32,11 @@ import { createAnotherRequiredChange } from './alr-review-group-decision-form.ut
 
 @Component({
   selector: 'app-alr-review-group-decision',
-  imports: [SharedModule, TaskSharedModule],
   templateUrl: './alr-review-group-decision.component.html',
-  providers: [alrReviewGroupDecisionFormProvider],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, TaskSharedModule],
+  providers: [alrReviewGroupDecisionFormProvider],
 })
 export class AlrReviewGroupDecisionComponent implements OnInit, PendingRequest {
   @Output() readonly notification = new EventEmitter<boolean>();

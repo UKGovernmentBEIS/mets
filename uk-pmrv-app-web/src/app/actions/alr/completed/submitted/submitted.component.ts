@@ -6,6 +6,7 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-alr-action-submitted',
+  standalone: true,
   imports: [ActionSharedModule, SharedModule],
   templateUrl: './submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

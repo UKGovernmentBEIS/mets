@@ -11,9 +11,10 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-csv-data-wizard-step',
-  imports: [AsyncPipe, CsvDataErrorSummaryComponent, ReactiveFormsModule, SharedModule],
   templateUrl: './csv-data-wizard-step.component.html',
   styles: [],
+  standalone: true,
+  imports: [AsyncPipe, CsvDataErrorSummaryComponent, ReactiveFormsModule, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CsvDataWizardStepComponent implements OnInit, OnDestroy {

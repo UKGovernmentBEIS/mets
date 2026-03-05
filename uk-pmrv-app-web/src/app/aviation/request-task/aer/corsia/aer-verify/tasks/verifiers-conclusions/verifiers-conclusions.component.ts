@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { VerifiersConclusionsFormProvider } from '@aviation/request-task/aer/corsia/aer-verify/tasks/verifiers-conclusions/verifiers-conclusions-form.provider';
 import { RequestTaskStore } from '@aviation/request-task/store';
@@ -13,7 +13,8 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-verifiers-conclusions',
-  imports: [ReturnToLinkComponent, SharedModule, MaterialityThresholdTypePipe],
+  standalone: true,
+  imports: [ReturnToLinkComponent, SharedModule, RouterLink, MaterialityThresholdTypePipe],
   templateUrl: './verifiers-conclusions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

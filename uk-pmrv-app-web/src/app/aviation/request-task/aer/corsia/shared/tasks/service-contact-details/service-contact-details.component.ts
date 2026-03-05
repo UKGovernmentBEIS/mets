@@ -21,6 +21,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-service-contact-details',
+  standalone: true,
   imports: [
     ReturnToLinkComponent,
     SharedModule,

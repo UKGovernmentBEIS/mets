@@ -10,7 +10,6 @@ import { ALRReturnLinkComponent } from '../alr-return-link/alr-return-link.compo
 
 @Component({
   selector: 'app-alr-task-common',
-  imports: [RouterModule, SharedModule, ALRReturnLinkComponent],
   template: `
     <govuk-notification-banner *ngIf="notification" type="success">
       <h1 class="govuk-notification-banner__heading">Details updated</h1>
@@ -19,8 +18,10 @@ import { ALRReturnLinkComponent } from '../alr-return-link/alr-return-link.compo
     <ng-content></ng-content>
     <app-alr-return-link [returnLink]="returnLink" [title]="returnLinkTitle"></app-alr-return-link>
   `,
-  providers: [DestroySubject],
+  standalone: true,
+  imports: [RouterModule, SharedModule, ALRReturnLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class AlrTaskReviewComponent implements OnInit {
   @Input() notification: any;

@@ -13,8 +13,9 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 @Component({
   selector: 'app-send-report',
-  imports: [SharedModule, TaskSharedModule, RouterLink, HseTiTaskSharedModule],
   templateUrl: './send-report.component.html',
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, RouterLink, HseTiTaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SendReportComponent implements PendingRequest {

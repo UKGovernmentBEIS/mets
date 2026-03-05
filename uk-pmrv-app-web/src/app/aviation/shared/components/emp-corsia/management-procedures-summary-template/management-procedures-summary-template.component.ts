@@ -11,8 +11,9 @@ import { EmpManagementProceduresCorsia } from 'pmrv-api';
 
 @Component({
   selector: 'app-corsia-management-procedures-summary-template',
-  imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref, NgFor, NgForOf],
   templateUrl: './management-procedures-summary-template.component.html',
+  standalone: true,
+  imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref, NgFor, NgForOf],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

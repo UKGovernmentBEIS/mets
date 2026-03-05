@@ -1,13 +1,9 @@
-/* eslint-disable @angular-eslint/prefer-host-metadata-property */
 import { AfterContentInit, Directive, ElementRef, HostBinding, Input } from '@angular/core';
 
 import { FieldsetDirective } from './fieldset.directive';
 import { LegendSizeType } from './legend-size.type';
 
-@Directive({
-  selector: 'legend[govukLegend],ng-template[govukLegend]',
-  standalone: false,
-})
+@Directive({ selector: 'legend[govukLegend],ng-template[govukLegend]' })
 export class LegendDirective implements AfterContentInit {
   @Input() size: LegendSizeType;
 

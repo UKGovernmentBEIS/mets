@@ -33,13 +33,6 @@ import { ReviewSectionStatusPipe } from './review-section-status.pipe';
 import { WaitReviewComponent } from './wait/wait-review.component';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    SharedPermitModule,
-    SharedPermitSurrenderModule,
-    SharedPermitSurrenderReviewDeterminationModule,
-    SurrenderReviewRoutingModule,
-  ],
   declarations: [
     AllowancesComponent,
     AnswersDeemWithdraw,
@@ -64,6 +57,13 @@ import { WaitReviewComponent } from './wait/wait-review.component';
     SummaryDetailsGrantComponent,
     SummaryGrantComponent,
     WaitReviewComponent,
+  ],
+  imports: [
+    SharedModule,
+    SharedPermitModule,
+    SharedPermitSurrenderModule,
+    SharedPermitSurrenderReviewDeterminationModule,
+    SurrenderReviewRoutingModule,
   ],
   providers: [PaymentCompletedGuard, PeerReviewDecisionGuard],
 })

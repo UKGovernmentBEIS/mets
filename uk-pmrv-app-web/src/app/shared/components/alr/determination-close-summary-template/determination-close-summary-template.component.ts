@@ -8,8 +8,9 @@ import { ALRClosedDetermination } from 'pmrv-api';
 
 @Component({
   selector: 'app-alr-determination-close-summary-template',
-  imports: [SharedModule, RouterLink],
   templateUrl: './determination-close-summary-template.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeterminationCloseSummaryTemplateComponent {

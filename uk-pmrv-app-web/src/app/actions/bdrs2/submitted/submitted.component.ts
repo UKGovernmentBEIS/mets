@@ -1,14 +1,11 @@
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
+import { BDRS2BaselineSummaryTemplateComponent } from '@shared/components/bdrs2/baseline-summary-template/baseline-summary-template.component';
 import { SharedModule } from '@shared/shared.module';
 
-import {
-  BDRS2,
-  BDRS2ApplicationCompletedRequestActionPayload,
-  BDRS2ApplicationSubmittedRequestActionPayload,
-  RequestActionDTO,
-} from 'pmrv-api';
+import { BDRS2, BDRS2ApplicationSubmittedRequestActionPayload, RequestActionDTO } from 'pmrv-api';
 
 import { Bdrs2ActionService } from '../core/bdrs2.service';
 import { getBdrs2ActionTitle } from './submitted';
@@ -17,37 +14,25 @@ interface ViewModel {
   header: string;
   expectedActionType: Array<RequestActionDTO['type']>;
   bdrs2: BDRS2;
-  hasVerificationReport: boolean;
-  hasOutcome: boolean;
 }
 
 @Component({
   selector: 'app-bdrs2-action-submitted',
-  imports: [ActionSharedModule, SharedModule],
   standalone: true,
+  imports: [ActionSharedModule, BDRS2BaselineSummaryTemplateComponent, NgIf, SharedModule],
   templateUrl: './submitted.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     :host ::ng-deep .app-task-list {
       list-style-type: none;
       padding-left: 0;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Bdrs2SubmittedComponent {
   payload = this.bdrs2ActionService.payload as Signal<BDRS2ApplicationSubmittedRequestActionPayload>;
-  completedPayload = this.bdrs2ActionService.payload as Signal<BDRS2ApplicationCompletedRequestActionPayload>;
 
   requestActionType = this.bdrs2ActionService.requestActionType;
-
-  readonly hasVerificationReport = computed(() => {
-    const payload = this.payload();
-    return !!payload.verificationReport;
-  });
-
-  readonly hasOutcome = computed(() => {
-    return !!this.completedPayload().regulatorReviewOutcome;
-  });
 
   vm: Signal<ViewModel> = computed(() => {
     const header = getBdrs2ActionTitle(this.requestActionType());
@@ -57,8 +42,6 @@ export class Bdrs2SubmittedComponent {
       header,
       expectedActionType: [this.requestActionType()],
       bdrs2,
-      hasVerificationReport: this.hasVerificationReport(),
-      hasOutcome: this.hasOutcome(),
     };
   });
 

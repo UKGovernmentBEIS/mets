@@ -45,6 +45,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-block-hour-summary',
+  templateUrl: './block-hour-summary.component.html',
+  standalone: true,
   imports: [
     SharedModule,
     GovukComponentsModule,
@@ -54,7 +56,6 @@ interface ViewModel {
     EmpVariationReviewDecisionGroupComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,
   ],
-  templateUrl: './block-hour-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockHourSummaryComponent {

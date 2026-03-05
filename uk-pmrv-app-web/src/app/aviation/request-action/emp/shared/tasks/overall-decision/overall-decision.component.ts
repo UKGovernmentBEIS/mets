@@ -19,6 +19,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-emp-overall-decision-action',
+  standalone: true,
   imports: [CommonModule, RequestActionTaskComponent, OverallDecisionSummaryTemplateComponent],
   template: `
     <app-request-action-task

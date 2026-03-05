@@ -5,7 +5,6 @@ import { PermitApplicationStore } from '../store/permit-application.store';
 
 @Component({
   selector: 'app-permit-details',
-  standalone: false,
   template: `
     <app-permit-task [breadcrumb]="true">
       <app-page-heading caption="Installation details">Installation and operator details</app-page-heading>

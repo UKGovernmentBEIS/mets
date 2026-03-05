@@ -9,7 +9,6 @@ import { DoalGrantAuthorityResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-preliminary-allocations',
-  standalone: false,
   templateUrl: './preliminary-allocations.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

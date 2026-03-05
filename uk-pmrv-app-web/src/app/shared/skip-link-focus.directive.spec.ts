@@ -11,7 +11,6 @@ import { SkipLinkFocusDirective } from './skip-link-focus.directive';
 
 describe('SkipLinkFocusDirective', () => {
   @Component({
-    standalone: false,
     template: '<govuk-skip-link></govuk-skip-link><router-outlet appSkipLinkFocus></router-outlet>',
   })
   class TestComponent {}

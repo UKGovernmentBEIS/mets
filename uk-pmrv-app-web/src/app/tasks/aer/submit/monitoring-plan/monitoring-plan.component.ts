@@ -14,10 +14,9 @@ import { monitoringPlanFormFactory } from './monitoring-plan-form.provider';
 
 @Component({
   selector: 'app-additional-documents',
-  standalone: false,
   templateUrl: './monitoring-plan.component.html',
-  providers: [monitoringPlanFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [monitoringPlanFormFactory],
 })
 export class MonitoringPlanComponent {
   constructor(

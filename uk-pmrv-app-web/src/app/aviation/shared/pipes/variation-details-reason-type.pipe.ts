@@ -4,8 +4,8 @@ import { EmpVariationUkEtsRegulatorLedReason } from 'pmrv-api';
 
 @Pipe({
   name: 'empVariationDetailsReasonType',
-  standalone: true,
   pure: true,
+  standalone: true,
 })
 export class VariationDetailsReasonTypePipe implements PipeTransform {
   transform(type: EmpVariationUkEtsRegulatorLedReason['type']): string | null {

@@ -7,8 +7,9 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-hseti-return-link',
-  imports: [RouterModule, SharedModule],
   template: '<a govukLink [routerLink]="link$ | async">Return to: {{ title }}</a>',
+  standalone: true,
+  imports: [RouterModule, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HSETIReturnLinkComponent {

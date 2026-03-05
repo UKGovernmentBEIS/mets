@@ -14,7 +14,6 @@ import { catchBadRequest, ErrorCodes } from '../../error/business-errors';
 
 @Component({
   selector: 'app-change-2fa',
-  standalone: false,
   templateUrl: './change-2fa.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

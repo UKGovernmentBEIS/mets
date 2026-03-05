@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-invalid-code',
-  standalone: false,
   template: `
     <app-page-heading>Invalid code</app-page-heading>
     <div class="govuk-grid-row">

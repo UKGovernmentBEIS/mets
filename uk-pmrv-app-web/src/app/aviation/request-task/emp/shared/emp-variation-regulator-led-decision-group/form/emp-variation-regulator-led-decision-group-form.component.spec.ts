@@ -11,13 +11,13 @@ import userEvent from '@testing-library/user-event';
 
 @Component({
   selector: 'app-mock-parent',
-  imports: [ReactiveFormsModule, EmpVariationRegulatorLedDecisionGroupFormComponent],
-  standalone: true,
   template: `
     <form [formGroup]="form">
       <app-emp-variation-regulator-led-decision-group-form></app-emp-variation-regulator-led-decision-group-form>
     </form>
   `,
+  standalone: true,
+  imports: [ReactiveFormsModule, EmpVariationRegulatorLedDecisionGroupFormComponent],
   providers: [EmpVariationRegulatorLedDecisionGroupFormProvider],
 })
 class MockParentComponent {

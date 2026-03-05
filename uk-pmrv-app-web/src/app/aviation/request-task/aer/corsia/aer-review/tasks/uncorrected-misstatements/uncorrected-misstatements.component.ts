@@ -21,6 +21,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-uncorrected-misstatements',
+  standalone: true,
   imports: [
     SharedModule,
     UncorrectedItemGroupComponent,

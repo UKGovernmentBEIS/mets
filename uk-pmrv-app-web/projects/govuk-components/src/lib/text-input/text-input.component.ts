@@ -27,7 +27,6 @@ import { GovukTextWidthClass, HTMLInputType } from './text-input.type';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'div[govuk-text-input]',
-  standalone: false,
   templateUrl: './text-input.component.html',
   providers: [DecimalPipe],
 })

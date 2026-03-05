@@ -3,7 +3,7 @@
     <dt govukSummaryListRowKey>Have there been any data gaps during the scheme year?</dt>
     <dd govukSummaryListRowValue>{{ data.exist ? 'Yes' : 'No' }}</dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="../../data-gaps" [queryParams]="{ change: true }">Change</a>
+      <a govukLink [routerLink]="'../../data-gaps'" [queryParams]="{ change: true }">Change</a>
     </dd>
   </div>
 

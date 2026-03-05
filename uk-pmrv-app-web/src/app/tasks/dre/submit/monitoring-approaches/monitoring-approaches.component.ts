@@ -15,10 +15,9 @@ import { monitoringApproachesFormProvider } from './monitoring-approaches-form.p
 
 @Component({
   selector: 'app-monitoring-approaches',
-  standalone: false,
   templateUrl: './monitoring-approaches.component.html',
-  providers: [monitoringApproachesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [monitoringApproachesFormProvider],
 })
 export class MonitoringApproachesComponent implements OnInit {
   private readonly nextWizardStep = 'reportable-emissions';

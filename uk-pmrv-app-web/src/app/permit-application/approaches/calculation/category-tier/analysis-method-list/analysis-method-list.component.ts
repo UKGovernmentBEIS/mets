@@ -12,11 +12,10 @@ import { analysisMethodListProvider } from './analysis-method-list.provider';
 
 @Component({
   selector: 'app-analysis-method-list',
-  standalone: false,
   templateUrl: './analysis-method-list.component.html',
   styleUrl: './analysis-method-list.component.scss',
-  providers: [analysisMethodListProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [analysisMethodListProvider],
 })
 export class AnalysisMethodListComponent {
   displayAnalysisMethodNotExistError$ = new BehaviorSubject(false);

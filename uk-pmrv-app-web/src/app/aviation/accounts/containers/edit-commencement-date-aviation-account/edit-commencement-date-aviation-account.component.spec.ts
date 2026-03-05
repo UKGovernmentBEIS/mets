@@ -5,7 +5,6 @@ import { provideRouter } from '@angular/router';
 import { AviationAccountFormProvider } from '@aviation/accounts/services';
 import { AviationAccountsStore } from '@aviation/accounts/store';
 import { mockedAccount } from '@aviation/accounts/testing/mock-data';
-import { SharedModule } from '@shared/shared.module';
 
 import { EditCommencementDateAviationAccountComponent } from './edit-commencement-date-aviation-account.component';
 
@@ -16,7 +15,6 @@ describe('EditCommencementDateAviationAccountComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule],
       declarations: [EditCommencementDateAviationAccountComponent],
       providers: [AviationAccountsStore, AviationAccountFormProvider, provideRouter([]), provideHttpClient()],
     }).compileComponents();

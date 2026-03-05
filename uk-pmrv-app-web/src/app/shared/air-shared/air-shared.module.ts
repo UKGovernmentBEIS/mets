@@ -13,7 +13,6 @@ import { AirImprovementTitlePipe } from './pipes/air-improvement-title.pipe';
 import { OperatorAirResponseTypePipe } from './pipes/operator-air-response-type.pipe';
 
 @NgModule({
-  imports: [RouterModule, SharedModule],
   declarations: [
     AirImprovementItemComponent,
     AirImprovementTitlePipe,
@@ -34,5 +33,6 @@ import { OperatorAirResponseTypePipe } from './pipes/operator-air-response-type.
     AirRegulatorResponseItemComponent,
     OperatorAirResponseTypePipe,
   ],
+  imports: [RouterModule, SharedModule],
 })
 export class AirSharedModule {}

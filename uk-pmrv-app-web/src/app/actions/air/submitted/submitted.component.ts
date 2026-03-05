@@ -10,7 +10,6 @@ import { AirService } from '../core/air.service';
 
 @Component({
   selector: 'app-submitted',
-  standalone: false,
   templateUrl: './submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

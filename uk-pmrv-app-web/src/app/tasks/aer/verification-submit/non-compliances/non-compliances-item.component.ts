@@ -18,7 +18,6 @@ import {
 
 @Component({
   selector: 'app-non-compliances-item',
-  standalone: false,
   templateUrl: './non-compliances-item.component.html',
   providers: [nonCompliancesItemFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

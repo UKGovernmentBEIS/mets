@@ -12,7 +12,6 @@ import { noticeDateFormProvider } from './notice-date-form.provider';
 
 @Component({
   selector: 'app-notice-date',
-  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onContinue()"
@@ -31,8 +30,8 @@ import { noticeDateFormProvider } from './notice-date-form.provider';
     </app-wizard-step>
     <a govukLink routerLink="../../..">Return to: Surrender permit determination</a>
   `,
-  providers: [noticeDateFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [noticeDateFormProvider],
 })
 export class NoticeDateComponent implements PendingRequest {
   constructor(

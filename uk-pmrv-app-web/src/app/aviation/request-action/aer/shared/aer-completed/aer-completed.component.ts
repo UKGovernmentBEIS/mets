@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { aerCommonQuery } from '@aviation/request-action/aer/shared/aer-common.selector';
+import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
 import { requestActionQuery, RequestActionStore } from '@aviation/request-action/store';
 import { SharedModule } from '@shared/shared.module';
 
@@ -15,7 +16,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aer-completed',
-  imports: [SharedModule, RouterModule],
+  standalone: true,
+  imports: [SharedModule, RequestActionTaskComponent, RouterModule],
   template: `
     <app-request-action-heading
       *ngIf="vm$ | async as vm"

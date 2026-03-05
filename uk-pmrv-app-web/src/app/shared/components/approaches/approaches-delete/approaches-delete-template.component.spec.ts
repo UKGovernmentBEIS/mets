@@ -15,7 +15,6 @@ describe('ApproachesDeleteTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-approaches-delete-template
         (delete)="onDelete()"

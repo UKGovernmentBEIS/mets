@@ -15,11 +15,12 @@ interface ViewModel {
 
 @Component({
   selector: 'app-total-emissions-domestic-flights-table',
-  imports: [SharedModule, TotalEmissionsDomesticFlightsTableTemplateComponent],
   template: `
     <app-total-emissions-domestic-flights-table-template
       [data]="(vm$ | async).data"></app-total-emissions-domestic-flights-table-template>
   `,
+  standalone: true,
+  imports: [SharedModule, TotalEmissionsDomesticFlightsTableTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsDomesticFlightsTableComponent {

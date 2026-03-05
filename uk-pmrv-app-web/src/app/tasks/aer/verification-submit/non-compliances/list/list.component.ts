@@ -11,7 +11,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-list',
-  standalone: false,
   template: `
     <app-aer-task-review
       heading="Non-compliances that were not corrected before completing this report"

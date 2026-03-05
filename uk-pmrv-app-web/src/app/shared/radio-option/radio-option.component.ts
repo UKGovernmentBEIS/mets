@@ -10,7 +10,6 @@ import { FormService } from 'govuk-components';
 */
 @Component({
   selector: 'div[app-radio-option]',
-  standalone: false,
   templateUrl: './radio-option.component.html',
 })
 export class RadioOptionComponent implements ControlValueAccessor {
@@ -19,7 +18,6 @@ export class RadioOptionComponent implements ControlValueAccessor {
   @Input() label: string;
   @Input() isDisabled: boolean;
 
-  // eslint-disable-next-line @angular-eslint/prefer-host-metadata-property
   @HostBinding('class.govuk-radios__item') readonly govukRadiosItem = true;
 
   constructor(

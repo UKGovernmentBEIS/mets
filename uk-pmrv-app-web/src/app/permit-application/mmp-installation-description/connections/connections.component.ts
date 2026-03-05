@@ -11,7 +11,6 @@ import { PermitApplicationStore } from '@permit-application/store/permit-applica
 
 @Component({
   selector: 'app-connections',
-  standalone: false,
   templateUrl: './connections.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

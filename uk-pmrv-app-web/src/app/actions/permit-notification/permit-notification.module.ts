@@ -14,7 +14,6 @@ import { ReviewDecisionComponent } from './review-decision/review-decision.compo
 import { SubmittedComponent } from './submitted/submitted.component';
 
 @NgModule({
-  imports: [ActionSharedModule, PermitNotificationRoutingModule, PermitNotificationSharedModule, SharedModule],
   declarations: [
     FollowUpResponseComponent,
     FollowUpReturnForAmendsComponent,
@@ -24,5 +23,6 @@ import { SubmittedComponent } from './submitted/submitted.component';
     ReviewDecisionComponent,
     SubmittedComponent,
   ],
+  imports: [ActionSharedModule, PermitNotificationRoutingModule, PermitNotificationSharedModule, SharedModule],
 })
 export class PermitNotificationModule {}

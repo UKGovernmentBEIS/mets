@@ -32,7 +32,6 @@ describe('BdrTaskComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-bdr-task [breadcrumb]="true">
         <app-page-heading caption="Provide the baseline data report and details">

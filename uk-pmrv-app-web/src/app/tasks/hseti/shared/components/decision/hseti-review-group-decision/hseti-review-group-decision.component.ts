@@ -32,10 +32,11 @@ import { createAnotherRequiredChange } from './hseti-review-group-decision-form.
 
 @Component({
   selector: 'app-hseti-review-group-decision',
-  imports: [SharedModule, TaskSharedModule],
   templateUrl: './hseti-review-group-decision.component.html',
-  providers: [hsetiReviewGroupDecisionFormProvider],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, TaskSharedModule],
+  providers: [hsetiReviewGroupDecisionFormProvider],
 })
 export class HsetiReviewGroupDecisionComponent implements OnInit, PendingRequest {
   @Output() readonly notification = new EventEmitter<boolean>();

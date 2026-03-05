@@ -13,6 +13,8 @@ import { AviationAerCorsiaMonitoringApproach } from 'pmrv-api';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-monitoring-approach-corsia-summary-template',
+  templateUrl: './monitoring-approach-corsia-summary-template.component.html',
+  standalone: true,
   imports: [
     SharedModule,
     GovukComponentsModule,
@@ -21,7 +23,6 @@ import { AviationAerCorsiaMonitoringApproach } from 'pmrv-api';
     FuelDensityTypePipe,
     AircraftFuelBurnRatioTableComponent,
   ],
-  templateUrl: './monitoring-approach-corsia-summary-template.component.html',
 })
 export class MonitoringApproachCorsiaSummaryTemplateComponent {
   @Input() data: AviationAerCorsiaMonitoringApproach | null;

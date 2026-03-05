@@ -11,6 +11,7 @@ import { AerService } from '../core/aer.service';
 
 @Component({
   selector: 'app-verifier-returned-to-operator',
+  standalone: true,
   imports: [ActionSharedModule, SharedModule, RouterLinkWithHref],
   template: `
     <app-base-action-container-component

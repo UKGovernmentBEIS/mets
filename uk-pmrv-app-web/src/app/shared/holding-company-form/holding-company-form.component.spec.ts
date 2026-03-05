@@ -9,7 +9,6 @@ import { HoldingCompanyFormComponent } from './holding-company-form.component';
 
 @Component({
   selector: 'app-mock-parent',
-  standalone: false,
   template: `
     <form [formGroup]="form">
       <app-holding-company-form formGroupName="holdingCompany"></app-holding-company-form>

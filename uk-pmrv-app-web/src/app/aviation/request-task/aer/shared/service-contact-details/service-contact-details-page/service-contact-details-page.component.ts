@@ -25,6 +25,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-service-contact-details-page',
+  templateUrl: './service-contact-details-page.component.html',
   imports: [
     SharedModule,
     RouterLinkWithHref,
@@ -32,7 +33,7 @@ interface ViewModel {
     ServiceContactDetailsSummaryTemplateComponent,
     AerReviewDecisionGroupComponent,
   ],
-  templateUrl: './service-contact-details-page.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ServiceContactDetailsPageComponent {

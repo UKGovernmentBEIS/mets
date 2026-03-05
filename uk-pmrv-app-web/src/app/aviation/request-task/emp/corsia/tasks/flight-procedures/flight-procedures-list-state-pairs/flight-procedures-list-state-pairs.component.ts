@@ -32,8 +32,9 @@ import { FlightProceduresFormProvider } from '../flight-procedures-form.provider
 
 @Component({
   selector: 'app-flight-procedures-list-state-pairs',
-  imports: [SharedModule, ReturnToLinkComponent, FlightProceduresDataTableComponent, CsvDataWizardStepComponent],
   templateUrl: './flight-procedures-list-state-pairs.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent, FlightProceduresDataTableComponent, CsvDataWizardStepComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class FlightProceduresListStatePairsComponent implements OnInit, OnDestroy {

@@ -13,7 +13,6 @@ import { AerService } from '../../../core/aer.service';
 
 @Component({
   selector: 'app-measurement-tier-review-summary',
-  standalone: false,
   template: `
     <app-aer-task-review
       [heading]="heading$ | async"

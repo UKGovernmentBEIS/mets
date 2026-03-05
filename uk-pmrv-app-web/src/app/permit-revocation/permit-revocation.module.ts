@@ -24,7 +24,6 @@ import { WaitForAppealTasklistComponent } from './wait-for-appeal-tasklist/wait-
 import { WithdrawCompletedComponent } from './withdraw-completed/withdraw-completed.component';
 
 @NgModule({
-  imports: [PermitRevocationRoutingModule, SharedModule],
   declarations: [
     ConfirmAnswersComponent,
     FeeComponent,
@@ -47,6 +46,7 @@ import { WithdrawCompletedComponent } from './withdraw-completed/withdraw-comple
     WithdrawSummaryComponent,
     WithdrawSummaryContainerComponent,
   ],
+  imports: [PermitRevocationRoutingModule, SharedModule],
   providers: [PeerReviewDecisionGuard],
 })
 export class PermitRevocationModule {}

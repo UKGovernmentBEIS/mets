@@ -15,10 +15,9 @@ import { noticeOfIntentFormProvider } from './notice-of-intent-form.provider';
 
 @Component({
   selector: 'app-notice-of-intent',
-  standalone: false,
   templateUrl: './notice-of-intent.component.html',
-  providers: [noticeOfIntentFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [noticeOfIntentFormProvider],
 })
 export class NoticeOfIntentComponent {
   private readonly nextWizardStep = 'daily-penalty';

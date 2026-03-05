@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-information-sources-summary-template',
-  standalone: false,
   templateUrl: './information-sources-summary-template.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,

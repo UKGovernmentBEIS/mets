@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, Inject, Signal } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
@@ -15,19 +15,20 @@ import { hseTiUploadReportFormProvider } from './hseti-details-form.provider';
 
 @Component({
   selector: 'app-hseti-details',
-  imports: [SharedModule, TaskSharedModule, HseTiTaskSharedModule],
   templateUrl: './hseti-details.component.html',
   providers: [hseTiUploadReportFormProvider],
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, HseTiTaskSharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HSETIDetailsComponent implements PendingRequest {
   isEditable = this.hseTiService.isEditable;
-  readonly allocationPeriod: Signal<string> = this.hseTiService.allocationPeriod;
-  readonly title: Signal<string> = computed(() => `Upload the ${this.allocationPeriod()} HSE target increase file`);
+  allocationPeriod: Signal<string> = this.hseTiService.allocationPeriod;
+  title: Signal<string> = computed(() => `Upload the ${this.allocationPeriod()} HSE target increase file`);
 
-  readonly hseTiPayload: Signal<HSEApplicationSubmitRequestTaskPayload> = this.hseTiService.payload;
-  readonly hseTiRequestMetadata: Signal<HSEApplicationSubmitRequestTaskPayload> = this.hseTiService.requestMetadata;
-  readonly requestTaskType: Signal<HSEApplicationSubmitRequestTaskPayload> = this.hseTiService.requestTaskType;
+  hseTiPayload: Signal<HSEApplicationSubmitRequestTaskPayload> = this.hseTiService.payload;
+  hseTiRequestMetadata: Signal<HSEApplicationSubmitRequestTaskPayload> = this.hseTiService.requestMetadata;
+  requestTaskType: Signal<HSEApplicationSubmitRequestTaskPayload> = this.hseTiService.requestTaskType;
 
   constructor(
     @Inject(HSE_TI_TASK_FORM) readonly form: UntypedFormGroup,

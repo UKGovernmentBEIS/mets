@@ -8,7 +8,6 @@ import { FileUploadComponent } from './file-upload.component';
 
 describe('FileUploadComponent', () => {
   @Component({
-    standalone: false,
     template: '<div govukFileUpload [formControl]="control"></div>',
   })
   class TestComponent {

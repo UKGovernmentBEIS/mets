@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-router-link',
-  standalone: false,
   template: '<a [routerLink]="href" [fragment]="fragment" govukLink>{{text}}</a>',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

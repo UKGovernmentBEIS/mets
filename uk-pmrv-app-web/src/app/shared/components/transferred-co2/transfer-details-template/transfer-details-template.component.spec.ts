@@ -17,7 +17,6 @@ describe('TransferDetailsTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-transfer-details-template
         (formSubmit)="onSubmit($event)"

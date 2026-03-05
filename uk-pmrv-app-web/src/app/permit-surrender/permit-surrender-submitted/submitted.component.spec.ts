@@ -8,7 +8,6 @@ import { SubmittedComponent } from './submitted.component';
 
 @Component({
   selector: 'app-permit-surrender-summary',
-  standalone: false,
   template: 'Mocked Summary component',
 })
 class MockSummaryComponent {}

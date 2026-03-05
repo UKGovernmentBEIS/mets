@@ -9,8 +9,9 @@ import { VerifierComment } from 'pmrv-api';
 
 @Component({
   selector: 'app-verifier-comment-group',
-  imports: [GovukComponentsModule, SharedModule, RouterLinkWithHref],
   templateUrl: './verifier-comment-group.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, RouterLinkWithHref],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifierCommentGroupComponent {

@@ -1,14 +1,15 @@
 <label
   [class.govuk-visually-hidden]="!templateLabel && isLabelHidden"
   [for]="identifier"
-  [id]="`l.${identifier}`"
-  [class]="currentLabelSize">
+  [id]="'l.' + identifier"
+  [class]="currentLabelSize"
+>
   <ng-container *ngIf="!templateLabel; else labelTemplate">{{ currentLabel }}</ng-container>
   <ng-template #labelTemplate>
     <ng-content select="[govukLabel]" />
   </ng-template>
 </label>
-<span *ngIf="hint" [id]="`${identifier}-hint`" class="govuk-hint">
+<span *ngIf="hint" [id]="identifier + '-hint'" class="govuk-hint">
   {{ hint }}
 </span>
 <govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="identifier" />
@@ -36,5 +37,6 @@
     [ngClass]="widthClass"
     [spellcheck]="spellCheck"
     [type]="inputType === 'number' || inputType === 'big-number' ? 'text' : inputType"
-    class="govuk-input" />
+    class="govuk-input"
+  />
 </ng-template>

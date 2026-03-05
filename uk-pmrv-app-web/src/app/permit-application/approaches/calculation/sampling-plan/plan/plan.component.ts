@@ -13,10 +13,9 @@ import { PLAN_FORM, planFormProvider } from './plan-form.provider';
 
 @Component({
   selector: 'app-plan',
-  standalone: false,
   templateUrl: './plan.component.html',
-  providers: [planFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [planFormProvider],
 })
 export class PlanComponent implements PendingRequest {
   isFileUploaded$ = this.form.get('planIds').valueChanges.pipe(

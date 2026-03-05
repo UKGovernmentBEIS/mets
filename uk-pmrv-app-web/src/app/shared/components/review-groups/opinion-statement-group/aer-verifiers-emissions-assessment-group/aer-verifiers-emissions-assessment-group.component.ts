@@ -15,10 +15,9 @@ interface ReportableEmissionRow {
 
 @Component({
   selector: 'app-aer-verifiers-emissions-assessment-group',
-  standalone: false,
   templateUrl: './aer-verifiers-emissions-assessment-group.component.html',
-  providers: [OpinionStatementEmissionsCalculationService],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [OpinionStatementEmissionsCalculationService],
 })
 export class AerVerifiersEmissionsAssessmentGroupComponent implements OnInit {
   @Input() opinionStatement: OpinionStatement;

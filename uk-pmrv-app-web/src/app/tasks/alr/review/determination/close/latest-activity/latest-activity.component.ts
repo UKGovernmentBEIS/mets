@@ -18,6 +18,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-latest-activity',
+  standalone: true,
   imports: [AlrTaskSharedModule, ActivitySummaryTemplateComponent, NgIf, SharedModule],
   template: `
     <ng-container *ngIf="vm() as vm">

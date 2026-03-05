@@ -19,8 +19,9 @@ import { AnnualOffsettingRequirementsFormProvider } from '../../aer-corsia-annua
 
 @Component({
   selector: 'app-annual-offsetting-requirements',
-  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './offsetting-requirements.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -16,9 +16,10 @@ import { uploadFilesFormProvider } from './outcome-upload-files-form.provider';
 
 @Component({
   selector: 'app-outcome-upload-files',
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   templateUrl: './outcome-upload-files.component.html',
   providers: [uploadFilesFormProvider],
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OutcomeUploadFilesComponent implements PendingRequest {

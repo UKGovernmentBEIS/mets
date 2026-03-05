@@ -13,10 +13,9 @@ import { DoalGrantAuthorityWithCorrectionsResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-response',
-  standalone: false,
   templateUrl: './response.component.html',
-  providers: [responseComponentFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [responseComponentFormProvider],
 })
 export class ResponseComponent {
   today = new Date();

@@ -6,7 +6,6 @@ import { OperatorActivityLevelReport } from 'pmrv-api';
 
 @Component({
   selector: 'app-operator-report-summary-template',
-  standalone: false,
   templateUrl: './operator-report-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

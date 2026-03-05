@@ -23,7 +23,6 @@ describe('SummaryDetailsComponent', () => {
   let store: PermitApplicationStore<PermitApplicationState>;
 
   @Component({
-    standalone: false,
     template: `
       <app-emission-factor-summary-details [emissionFactor]="emissionFactor"></app-emission-factor-summary-details>
     `,

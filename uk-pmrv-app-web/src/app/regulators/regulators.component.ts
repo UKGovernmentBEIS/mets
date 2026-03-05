@@ -17,10 +17,9 @@ import { savePartiallyNotFoundRegulatorError } from './errors/business-error';
 
 @Component({
   selector: 'app-regulators',
-  standalone: false,
   templateUrl: './regulators.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class RegulatorsComponent implements OnInit {
   regulators$: Observable<RegulatorUserAuthorityInfoDTO[]>;

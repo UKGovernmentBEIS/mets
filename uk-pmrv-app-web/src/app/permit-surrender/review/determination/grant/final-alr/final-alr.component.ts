@@ -16,10 +16,11 @@ import { finalAlrFormProvider } from './final-alr-form.provider';
 
 @Component({
   selector: 'app-surrender-final-alr',
+  standalone: true,
   imports: [SharedModule],
   templateUrl: './final-alr.component.html',
-  providers: [finalAlrFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [finalAlrFormProvider],
 })
 export class SurrenderFinalAlrComponent {
   today = startOfDay(new Date());

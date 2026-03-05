@@ -21,10 +21,9 @@ import {
 
 @Component({
   selector: 'app-review',
-  standalone: false,
   templateUrl: './review.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class ReviewComponent implements PendingRequest {
   navigationState = { returnUrl: this.router.url };

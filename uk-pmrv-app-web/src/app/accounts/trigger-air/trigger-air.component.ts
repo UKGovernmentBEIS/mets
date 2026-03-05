@@ -9,8 +9,8 @@ import { RequestsService } from 'pmrv-api';
 
 @Component({
   selector: 'app-trigger-air',
-  standalone: false,
   templateUrl: './trigger-air.component.html',
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TriggerAirComponent {

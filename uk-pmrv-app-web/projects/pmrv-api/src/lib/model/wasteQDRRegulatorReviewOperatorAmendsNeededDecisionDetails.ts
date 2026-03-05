@@ -12,6 +12,7 @@
 import { WasteQDRRegulatorReviewDecisionDetails } from './wasteQDRRegulatorReviewDecisionDetails';
 import { WasteQDRRegulatorReviewRequiredChange } from './wasteQDRRegulatorReviewRequiredChange';
 
-export interface WasteQDRRegulatorReviewOperatorAmendsNeededDecisionDetails extends WasteQDRRegulatorReviewDecisionDetails {
+export interface WasteQDRRegulatorReviewOperatorAmendsNeededDecisionDetails
+  extends WasteQDRRegulatorReviewDecisionDetails {
   requiredChanges: Array<WasteQDRRegulatorReviewRequiredChange>;
 }

@@ -10,10 +10,9 @@ import { REVIEW_DECISION_FORM, reviewDecisionFormProvider } from './decision-for
 
 @Component({
   selector: 'app-decision',
-  standalone: false,
   templateUrl: './decision.component.html',
-  providers: [reviewDecisionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [reviewDecisionFormProvider],
 })
 export class DecisionComponent {
   isEditMode$ = new BehaviorSubject(false);

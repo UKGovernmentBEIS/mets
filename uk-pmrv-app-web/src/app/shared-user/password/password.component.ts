@@ -4,7 +4,6 @@ import { ControlContainer, FormGroupDirective } from '@angular/forms';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-password',
-  standalone: false,
   templateUrl: './password.component.html',
   styleUrl: './password.component.scss',
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],

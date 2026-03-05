@@ -19,7 +19,6 @@ import { BackLinkService } from '@shared/back-link/back-link.service';
 
 @Component({
   selector: 'app-confirm-answers',
-  standalone: false,
   templateUrl: './confirm-answers.component.html',
   providers: [permitRevocationFormProvider, DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,

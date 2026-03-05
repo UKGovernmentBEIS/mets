@@ -6,6 +6,7 @@ import { GovukComponentsModule } from 'govuk-components';
 
 @Component({
   selector: 'app-emission-factors-summary-template',
+  standalone: true,
   imports: [GovukComponentsModule, RouterLinkWithHref, NgForOf, NgIf],
   template: `
     <h2 class="govuk-heading-m">Emission factors to be applied</h2>

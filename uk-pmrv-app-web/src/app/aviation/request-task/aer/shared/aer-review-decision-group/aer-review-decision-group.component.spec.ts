@@ -23,7 +23,6 @@ describe('AerReviewDecisionGroupComponent', () => {
   const tasksService = mockClass(TasksService);
 
   @Component({
-    standalone: false,
     template: `
       <app-aviation-aer-review-decision-group taskKey="additionalDocuments"></app-aviation-aer-review-decision-group>
     `,

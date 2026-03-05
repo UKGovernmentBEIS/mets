@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -25,7 +26,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-return-for-amends',
-  imports: [GovukComponentsModule, SharedModule, ReturnForAmendsSharedComponent],
   template: `
     <div class="govuk-grid-row" *ngIf="vm$ | async as vm">
       <div class="govuk-grid-column-two-thirds">
@@ -40,6 +40,8 @@ interface ViewModel {
       </div>
     </div>
   `,
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, RouterLinkWithHref, ReturnForAmendsSharedComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerReturnForAmendsComponent {

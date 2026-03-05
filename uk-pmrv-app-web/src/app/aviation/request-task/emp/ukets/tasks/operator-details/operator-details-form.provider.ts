@@ -46,10 +46,9 @@ export interface UkEtsOperatorDetailsFormModel {
 export type OperatorDetailsFormModel = UkEtsOperatorDetailsFormModel;
 
 @Injectable()
-export class OperatorDetailsFormProvider implements TaskFormProvider<
-  EmpOperatorDetailsViewModel,
-  OperatorDetailsFormModel
-> {
+export class OperatorDetailsFormProvider
+  implements TaskFormProvider<EmpOperatorDetailsViewModel, OperatorDetailsFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup;
 

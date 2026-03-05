@@ -57,7 +57,6 @@ public class AerService {
             .reportableEmissions(reportableEmissions)
             .isFromDre(false)
             .isFromRegulator(isFromRegulator)
-            .requestId(AerIdentifierGenerator.generate(accountId, reportingYear.getValue()))
             .build();
         reportableEmissionsService.saveReportableEmissions(emissionsParams);
         return reportableEmissions;

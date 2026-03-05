@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
@@ -22,10 +22,11 @@ export interface SupportingDocumentsViewModel {
 
 @Component({
   selector: 'app-doe-estimated-emissions',
-  imports: [GovukComponentsModule, SharedModule, NgIf, ReturnToLinkComponent],
   templateUrl: './doe-estimated-emissions.component.html',
-  providers: [DestroySubject],
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, NgIf, NgFor, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class EstimatedEmissionsComponent extends BaseDoeCorsiaEmissionsComponent {
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;

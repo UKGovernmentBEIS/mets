@@ -6,7 +6,6 @@ import { UIConfigurationService } from 'pmrv-api';
 
 @Component({
   selector: 'app-service-banner',
-  standalone: false,
   templateUrl: './service-banner.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

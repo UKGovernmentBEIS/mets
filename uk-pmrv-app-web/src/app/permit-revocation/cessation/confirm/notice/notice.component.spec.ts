@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -57,7 +58,7 @@ describe('NoticeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NoticeComponent],
-      imports: [SharedModule],
+      imports: [RouterTestingModule, SharedModule],
       providers: [
         { provide: ActivatedRoute, useValue: route },
         { provide: TasksService, useValue: tasksService },

@@ -15,7 +15,6 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-pfc',
-  standalone: false,
   templateUrl: './pfc.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

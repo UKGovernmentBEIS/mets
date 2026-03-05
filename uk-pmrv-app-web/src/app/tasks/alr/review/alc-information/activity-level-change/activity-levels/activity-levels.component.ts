@@ -21,6 +21,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-activity-levels',
+  standalone: true,
   imports: [AlrTaskSharedModule, SharedModule, NgIf, RouterLink],
   templateUrl: './activity-levels.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

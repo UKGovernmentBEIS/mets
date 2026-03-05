@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'installationCategory',
-  standalone: false,
 })
 export class InstallationCategoryPipe implements PipeTransform {
   transform(value: string): string {

@@ -8,7 +8,6 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-confidentiality-statement',
-  standalone: false,
   template: `
     <app-action-task header="Confidentiality statement" [breadcrumb]="true">
       <app-confidentiality-statement-summary-template

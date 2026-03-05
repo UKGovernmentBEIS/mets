@@ -14,8 +14,8 @@ import {
 
 @Pipe({
   name: 'virTaskStatus',
-  standalone: true,
   pure: true,
+  standalone: true,
 })
 export class VirTaskStatusPipe implements PipeTransform {
   transform(

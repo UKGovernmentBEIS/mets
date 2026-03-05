@@ -7,7 +7,6 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -25,8 +24,8 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
       </div>
     </div>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class SummaryComponent extends BaseSuccessComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;

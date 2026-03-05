@@ -15,10 +15,9 @@ import { resolveReturnToText } from './peer-review-decision-type-resolver';
 
 @Component({
   selector: 'app-peer-review-decision',
-  standalone: false,
   templateUrl: './peer-review-decision.component.html',
-  providers: [peerReviewDecisionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [peerReviewDecisionFormProvider],
 })
 export class PeerReviewDecisionComponent implements OnInit {
   requestType = resolveRequestType(this.location.path());

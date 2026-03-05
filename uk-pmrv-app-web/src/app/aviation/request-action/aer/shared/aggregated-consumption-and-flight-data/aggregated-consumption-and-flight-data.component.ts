@@ -28,6 +28,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aggregated-consumption-and-flight-data',
+  standalone: true,
   imports: [SharedModule, RequestActionTaskComponent, FlightDataTableComponent, AerReviewDecisionGroupSummaryComponent],
   template: `
     <app-request-action-task
@@ -36,7 +37,7 @@ interface ViewModel {
       [requestActionType]="vm.requestActionType"
       [breadcrumb]="true">
       <app-flight-data-table
-        headingText="File uploaded"
+        [headingText]="'File uploaded'"
         [emissionDataDetails]="vm.emissionDataDetails"
         [isCorsia]="vm.isCorsia"></app-flight-data-table>
 

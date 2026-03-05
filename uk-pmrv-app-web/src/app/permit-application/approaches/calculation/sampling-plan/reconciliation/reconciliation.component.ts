@@ -12,10 +12,9 @@ import { RECONCILIATION_FORM, reconciliationFormProvider } from './reconciliatio
 
 @Component({
   selector: 'app-reconciliation',
-  standalone: false,
   templateUrl: './reconciliation.component.html',
-  providers: [reconciliationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [reconciliationFormProvider],
 })
 export class ReconciliationComponent implements PendingRequest {
   constructor(

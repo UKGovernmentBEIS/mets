@@ -11,7 +11,6 @@ import { GroupBuilderConfig } from '../../../../../shared/types';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-other-factor',
-  standalone: false,
   templateUrl: './other-factor.component.html',
   providers: [existingControlContainer],
   viewProviders: [existingControlContainer],

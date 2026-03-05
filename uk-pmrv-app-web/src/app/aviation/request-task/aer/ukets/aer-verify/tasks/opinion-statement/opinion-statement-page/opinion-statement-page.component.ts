@@ -16,8 +16,9 @@ import { OpinionStatementFormProvider } from '../opinion-statement-form.provider
 
 @Component({
   selector: 'app-opinion-statement-page',
-  imports: [SharedModule, ReturnToLinkComponent, OpinionStatementEmissionsFormComponent],
   templateUrl: './opinion-statement-page.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent, OpinionStatementEmissionsFormComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

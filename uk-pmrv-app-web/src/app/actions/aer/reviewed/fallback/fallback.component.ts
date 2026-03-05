@@ -11,7 +11,6 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-fallback',
-  standalone: false,
   template: `
     <app-action-task header="{{ 'FALLBACK' | monitoringApproachEmissionDescription }}" [breadcrumb]="true">
       <app-fallback-emissions-group

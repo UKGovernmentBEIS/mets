@@ -16,10 +16,9 @@ import { reportableEmissionsFormProvider } from './reportable-emissions-form.pro
 
 @Component({
   selector: 'app-reportable-emissions',
-  standalone: false,
   templateUrl: './reportable-emissions.component.html',
-  providers: [reportableEmissionsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [reportableEmissionsFormProvider],
 })
 export class ReportableEmissionsComponent {
   private readonly nextWizardStep = 'information-sources';

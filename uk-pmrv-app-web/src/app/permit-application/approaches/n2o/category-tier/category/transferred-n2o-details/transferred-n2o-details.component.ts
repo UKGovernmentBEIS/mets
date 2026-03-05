@@ -15,11 +15,10 @@ import { transferredN2ODetailsFormProvider } from './transferred-n2o-details-for
 
 @Component({
   selector: 'app-transferred-n2o-details',
-  standalone: false,
   templateUrl: './transferred-n2o-details.component.html',
   styles: [],
-  providers: [transferredN2ODetailsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [transferredN2ODetailsFormProvider],
 })
 export class TransferredN2ODetailsComponent implements PendingRequest {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

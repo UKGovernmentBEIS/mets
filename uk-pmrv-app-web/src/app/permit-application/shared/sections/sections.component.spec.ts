@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { PermitIssuanceStore } from '@permit-issuance/store/permit-issuance.store';
 import { SharedModule } from '@shared/shared.module';
@@ -24,7 +24,6 @@ describe('SectionsComponent', () => {
   const createComponent = () => {
     fixture = TestBed.createComponent(SectionsComponent);
     component = fixture.componentInstance;
-    component.hideSubmit = true;
     hostElement = fixture.nativeElement;
     fixture.detectChanges();
   };
@@ -32,7 +31,7 @@ describe('SectionsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SectionsComponent, TaskStatusPipe, TaskPipe],
-      imports: [SharedModule],
+      imports: [RouterTestingModule, SharedModule],
       providers: [
         { provide: TaskStatusPipe },
         { provide: TaskPipe },
@@ -40,7 +39,6 @@ describe('SectionsComponent', () => {
           provide: PermitApplicationStore,
           useExisting: PermitIssuanceStore,
         },
-        provideRouter([]),
       ],
     }).compileComponents();
   });

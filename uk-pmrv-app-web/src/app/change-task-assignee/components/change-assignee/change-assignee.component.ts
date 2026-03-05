@@ -10,7 +10,6 @@ import { RequestTaskItemDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-change-assignee',
-  standalone: false,
   template: `
     <ng-container *ngIf="isTaskAssigned$ | async; else mainView">
       <app-assignment-confirmation [user]="taskAssignedTo$ | async"></app-assignment-confirmation>

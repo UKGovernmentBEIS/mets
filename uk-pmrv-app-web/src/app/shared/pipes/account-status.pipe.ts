@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { AccountStatus } from '@shared/accounts';
 
-@Pipe({
-  name: 'accountStatus',
-  standalone: false,
-})
+@Pipe({ name: 'accountStatus' })
 export class AccountStatusPipe implements PipeTransform {
   transform(status?: AccountStatus): string {
     if (!status) {

@@ -31,12 +31,10 @@ import { FileUpload, FileUploadEvent } from '../file-input/file-upload-event';
 
 /*
   eslint-disable
-  @typescript-eslint/no-empty-function,
-  @angular-eslint/component-selector
+  @typescript-eslint/no-empty-function
  */
 @Component({
   selector: 'app-multiple-file-input[baseDownloadUrl]',
-  standalone: false,
   templateUrl: './multiple-file-input.component.html',
   styleUrl: './multiple-file-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -4,10 +4,7 @@ import { MonitoringApproachDescriptionPipe } from '@shared/pipes/monitoring-appr
 
 import { PermitMonitoringApproachSection } from 'pmrv-api';
 
-@Pipe({
-  name: 'monitoringApproachEmissionDescription',
-  standalone: false,
-})
+@Pipe({ name: 'monitoringApproachEmissionDescription' })
 export class MonitoringApproachEmissionDescriptionPipe implements PipeTransform {
   transform(value: PermitMonitoringApproachSection['type']): string {
     const approachDescriptionPipe = new MonitoringApproachDescriptionPipe();

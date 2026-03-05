@@ -32,10 +32,9 @@ export interface ConfidentialityViewModel {
 }
 
 @Injectable()
-export class ConfidentialityFormProvider implements TaskFormProvider<
-  AviationAerCorsiaConfidentiality,
-  ConfidentialityFormModel
-> {
+export class ConfidentialityFormProvider
+  implements TaskFormProvider<AviationAerCorsiaConfidentiality, ConfidentialityFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private store = inject(RequestTaskStore);

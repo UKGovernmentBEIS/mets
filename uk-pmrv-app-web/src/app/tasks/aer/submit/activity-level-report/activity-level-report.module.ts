@@ -8,7 +8,7 @@ import { ActivityLevelReportRoutingModule } from './activity-level-report-routin
 import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
-  imports: [ActivityLevelReportRoutingModule, AerSharedModule, SharedModule],
   declarations: [ActivityLevelReportComponent, SummaryComponent],
+  imports: [ActivityLevelReportRoutingModule, AerSharedModule, SharedModule],
 })
 export class ActivityLevelReportModule {}

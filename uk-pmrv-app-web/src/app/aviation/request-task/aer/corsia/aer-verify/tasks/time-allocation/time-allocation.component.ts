@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { TimeAllocationFormProvider } from '@aviation/request-task/aer/corsia/aer-verify/tasks/time-allocation/time-allocation-form.provider';
 import { RequestTaskStore } from '@aviation/request-task/store';
@@ -11,7 +11,8 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-time-allocation',
-  imports: [ReturnToLinkComponent, SharedModule],
+  standalone: true,
+  imports: [ReturnToLinkComponent, SharedModule, RouterLink],
   templateUrl: './time-allocation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -16,9 +16,10 @@ import { MmpEnergyFlowsSummaryTemplateComponent } from './mmp-energy-flows-summa
 
 @Component({
   selector: 'app-mmp-energy-flows-summary',
-  imports: [MmpEnergyFlowsSummaryTemplateComponent, SharedModule, SharedPermitModule, RouterModule],
   templateUrl: './mmp-energy-flows-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [MmpEnergyFlowsSummaryTemplateComponent, SharedModule, SharedPermitModule, RouterModule],
 })
 export class MmpEnergyFlowsSummaryComponent implements PendingRequest {
   state = toSignal(this.store.asObservable());

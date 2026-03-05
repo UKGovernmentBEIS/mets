@@ -13,6 +13,7 @@ import { DigitizedPlan } from 'pmrv-api';
 
 @Component({
   selector: 'app-mmp-delete-physical-part',
+  standalone: true,
   imports: [SharedModule, RouterLink],
   template: `
     <app-page-heading size="xl">

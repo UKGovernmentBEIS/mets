@@ -15,7 +15,6 @@ describe('TemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-template taskKey="monitoringApproaches.MEASUREMENT_N2O.emissionDetermination"></app-template>
     `,

@@ -8,15 +8,20 @@ import { RadioComponent } from './radio.component';
 
 describe('RadioComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <div govuk-radio [formControl]="control">
-        <govuk-radio-option *ngFor="let option of options" [value]="option.value" [label]="option.label" />
+        <govuk-radio-option
+          *ngFor="let option of options"
+          [value]="option.value"
+          [label]="option.label"></govuk-radio-option>
       </div>
 
       <form [formGroup]="form">
         <div govuk-radio formControlName="radio">
-          <govuk-radio-option *ngFor="let option of options" [value]="option.value" [label]="option.label" />
+          <govuk-radio-option
+            *ngFor="let option of options"
+            [value]="option.value"
+            [label]="option.label"></govuk-radio-option>
         </div>
       </form>
     `,

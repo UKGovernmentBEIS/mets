@@ -16,7 +16,6 @@ import { GovukValidators } from 'govuk-components';
 
 @Component({
   selector: 'app-filters',
-  standalone: false,
   templateUrl: './filters.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

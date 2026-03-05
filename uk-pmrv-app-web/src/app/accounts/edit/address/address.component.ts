@@ -26,7 +26,6 @@ import {
 
 @Component({
   selector: 'app-address',
-  standalone: false,
   templateUrl: './address.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

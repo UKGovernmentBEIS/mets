@@ -5,7 +5,6 @@ import { existingControlContainer } from '../providers/control-container.factory
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-user-input',
-  standalone: false,
   templateUrl: './user-input.component.html',
   viewProviders: [existingControlContainer],
 })

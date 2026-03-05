@@ -20,10 +20,9 @@ import {
 
 @Component({
   selector: 'app-connection-details',
-  standalone: false,
   templateUrl: './connection-details.component.html',
-  providers: [connectionsAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [connectionsAddFormFactory],
 })
 export class ConnectionDetailsComponent implements PendingRequest {
   requestTaskType$ = this.store.pipe(map((response) => reviewRequestTaskTypes.includes(response.requestTaskType)));

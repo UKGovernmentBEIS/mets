@@ -8,7 +8,6 @@ import { DoalService } from '../../../core/doal.service';
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

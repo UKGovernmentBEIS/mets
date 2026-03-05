@@ -25,6 +25,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-emissions-reduction-claim',
+  standalone: true,
   imports: [
     ReturnToLinkComponent,
     SharedModule,

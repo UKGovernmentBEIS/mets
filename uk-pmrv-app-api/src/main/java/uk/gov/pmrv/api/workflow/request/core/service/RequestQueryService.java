@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
@@ -42,11 +43,6 @@ public class RequestQueryService {
     @Transactional(readOnly = true)
     public List<Request> findRequestsByAccountIdAndType(Long accountId, RequestType type){
         return requestRepository.findByAccountIdAndType(accountId, type);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Request> findRequestsByAccountIdAndTypesAndStatuses(Long accountId, Set<RequestType> types, Set<RequestStatus> statuses){
-        return requestRepository.findByAccountIdAndTypeInAndStatusIn(accountId, types, statuses);
     }
 
     public boolean existsRequestById(String requestId){

@@ -23,7 +23,6 @@ import {
 
 @Component({
   selector: 'app-due-date',
-  standalone: false,
   templateUrl: './due-date.component.html',
   providers: [permitNotificationFollowUpFormProvider, followUpReviewDecisionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

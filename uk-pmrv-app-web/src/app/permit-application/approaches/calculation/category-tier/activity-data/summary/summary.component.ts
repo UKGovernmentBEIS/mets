@@ -11,10 +11,9 @@ import { measurementDevicesFormProvider } from '../measurement-devices-form.prov
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
-  providers: [measurementDevicesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [measurementDevicesFormProvider],
 })
 export class SummaryComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

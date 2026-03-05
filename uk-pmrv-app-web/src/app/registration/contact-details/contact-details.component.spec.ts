@@ -82,7 +82,7 @@ describe('ContactDetailsComponent', () => {
     }
   }
 
-  @Component({ standalone: false, template: '' })
+  @Component({ template: '' })
   class NoopComponent {}
 
   const mockContactDetails: Omit<OperatorUserRegistrationDTO, 'emailToken' | 'password'> = {

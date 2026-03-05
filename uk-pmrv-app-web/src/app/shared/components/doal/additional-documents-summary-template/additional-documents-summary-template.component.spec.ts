@@ -16,7 +16,6 @@ describe('AdditionalDocumentsSummaryTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-doal-additional-documents-summary-template
         [additionalDocuments]="additionalDocuments"

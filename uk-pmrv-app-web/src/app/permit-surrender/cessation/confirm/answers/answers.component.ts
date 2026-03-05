@@ -11,7 +11,6 @@ import { PermitSurrenderStore } from '../../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-answers',
-  standalone: false,
   template: `
     <app-page-heading>Check your answers</app-page-heading>
     <app-cessation-summary-details
@@ -25,8 +24,8 @@ import { PermitSurrenderStore } from '../../../store/permit-surrender.store';
     </div>
     <a govukLink routerLink="../..">Return to: Cessation</a>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class AnswersComponent implements PendingRequest {
   constructor(

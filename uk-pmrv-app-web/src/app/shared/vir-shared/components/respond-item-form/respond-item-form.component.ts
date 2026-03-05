@@ -8,7 +8,6 @@ import { OperatorImprovementResponse, RegulatorImprovementResponse } from 'pmrv-
 
 @Component({
   selector: 'app-respond-item-form',
-  standalone: false,
   templateUrl: './respond-item-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

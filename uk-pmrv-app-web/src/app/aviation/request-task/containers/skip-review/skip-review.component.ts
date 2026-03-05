@@ -19,7 +19,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-skip-review-aviation',
-  standalone: false,
   template: `
     <app-page-heading size="xl">Are you sure you want to skip the review and complete the report?</app-page-heading>
     <p class="govuk-body">

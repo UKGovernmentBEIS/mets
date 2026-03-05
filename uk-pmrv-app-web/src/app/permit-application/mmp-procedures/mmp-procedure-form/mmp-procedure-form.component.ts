@@ -11,7 +11,6 @@ import { GroupBuilderConfig } from '../../../shared/types';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-mmp-procedure-form',
-  standalone: false,
   templateUrl: './mmp-procedure-form.component.html',
   providers: [existingControlContainer],
   viewProviders: [existingControlContainer],

@@ -13,6 +13,8 @@ import { AviationDre } from 'pmrv-api';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-aviation-emissions-summary-template',
+  templateUrl: './aviation-emissions-summary-template.component.html',
+  standalone: true,
   imports: [
     SharedModule,
     GovukComponentsModule,
@@ -20,7 +22,6 @@ import { AviationDre } from 'pmrv-api';
     AviationDreEmissionsTypePipe,
     DeterminationReasonTypePipe,
   ],
-  templateUrl: './aviation-emissions-summary-template.component.html',
   viewProviders: [existingControlContainer],
 })
 export class AviationEmissionsSummaryTemplateComponent {

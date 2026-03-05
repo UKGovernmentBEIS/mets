@@ -24,15 +24,17 @@
   <app-uncorrected-item-group
     [isEditable]="vm.isEditable"
     [uncorrectedItems]="vm.data?.uncorrectedNonCompliances"
-    baseUrl="../list"
+    [baseUrl]="'../list'"
     [queryParams]="{ change: true }"
-    *ngIf="vm.data?.exist"></app-uncorrected-item-group>
+    *ngIf="vm.data?.exist"
+  ></app-uncorrected-item-group>
   <div *ngIf="!vm.hideSubmit" class="govuk-button-group">
     <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
   </div>
 
   <app-aviation-aer-verification-review-decision-group
     *ngIf="vm.showDecision"
-    taskKey="uncorrectedNonCompliances"></app-aviation-aer-verification-review-decision-group>
+    taskKey="uncorrectedNonCompliances"
+  ></app-aviation-aer-verification-review-decision-group>
   <div><app-return-to-link></app-return-to-link></div>
 </div>

@@ -22,6 +22,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-waste-qdr-action-submitted',
+  standalone: true,
   imports: [ActionSharedModule, NgIf, SummaryTemplateComponent],
   templateUrl: './submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

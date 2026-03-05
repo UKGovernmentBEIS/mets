@@ -9,7 +9,6 @@ import { CheckboxComponent } from './checkbox/checkbox.component';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'div[govuk-checkboxes]',
-  standalone: false,
   templateUrl: './checkboxes.component.html',
 })
 export class CheckboxesComponent<T> extends FormInput implements AfterContentInit, ControlValueAccessor {

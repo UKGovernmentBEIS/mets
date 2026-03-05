@@ -16,10 +16,9 @@ import { sourceStreamFormProvider } from './source-stream-form.provider';
 
 @Component({
   selector: 'app-source-streams-details',
-  standalone: false,
   templateUrl: './source-streams-details.component.html',
-  providers: [sourceStreamFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [sourceStreamFormProvider],
 })
 export class SourceStreamDetailsComponent {
   isEditing$ = this.store

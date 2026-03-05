@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-navigation',
-  standalone: false,
   template: `
     <div class="hmcts-primary-navigation">
       <div class="hmcts-primary-navigation__container">

@@ -15,7 +15,6 @@ import { AerApplicationSubmitRequestTaskPayload, AerMonitoringApproachEmissions,
 
 @Component({
   selector: 'app-total-emissions',
-  standalone: false,
   templateUrl: './total-emissions.component.html',
   providers: [totalEmissionsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

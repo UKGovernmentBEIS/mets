@@ -24,7 +24,6 @@ describe('AlrTaskReviewComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-alr-task-common [breadcrumb]="true" heading="Verify activity level report">
         <h2 class="govuk-heading-m">Activity level report</h2>

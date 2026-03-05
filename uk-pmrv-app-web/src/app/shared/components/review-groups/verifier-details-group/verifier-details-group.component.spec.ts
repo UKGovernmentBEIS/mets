@@ -15,7 +15,6 @@ describe('VerifierDetailsGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-verifier-details-group
         [showVerifierDetails]="showVerifierDetails"

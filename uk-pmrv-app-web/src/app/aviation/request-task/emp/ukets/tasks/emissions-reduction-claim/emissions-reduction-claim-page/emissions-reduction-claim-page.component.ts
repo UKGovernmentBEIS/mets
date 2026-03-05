@@ -18,10 +18,11 @@ import { EmissionsReductionClaimFormProvider } from '../emissions-reduction-clai
 
 @Component({
   selector: 'app-emissions-reduction-claim-page',
+  standalone: true,
   imports: [SharedModule, EmissionsReductionClaimFormComponent, ReturnToLinkComponent],
   templateUrl: './emissions-reduction-claim-page.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class EmissionsReductionClaimPageComponent implements OnInit, OnDestroy {
   private backLinkService = inject(BackLinkService);

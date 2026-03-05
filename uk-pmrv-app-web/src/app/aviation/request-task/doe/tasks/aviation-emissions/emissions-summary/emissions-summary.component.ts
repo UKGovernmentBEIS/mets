@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { combineLatest, map, Observable } from 'rxjs';
@@ -25,8 +25,16 @@ export interface ViewModel {
 }
 @Component({
   selector: 'app-doe-emissions-summary',
-  imports: [GovukComponentsModule, SharedModule, NgIf, ReturnToLinkComponent, DoeEmissionsSummaryTemplateComponent],
   templateUrl: './emissions-summary.component.html',
+  standalone: true,
+  imports: [
+    GovukComponentsModule,
+    SharedModule,
+    NgIf,
+    NgFor,
+    ReturnToLinkComponent,
+    DoeEmissionsSummaryTemplateComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DoeEmissionsSummaryComponent extends BaseDoeCorsiaEmissionsComponent {

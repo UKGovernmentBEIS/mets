@@ -15,7 +15,6 @@ describe('ReportableEmissionsSummaryTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-reportable-emissions-summary-template
         [approachEmissions]="dre.monitoringApproachReportingEmissions"

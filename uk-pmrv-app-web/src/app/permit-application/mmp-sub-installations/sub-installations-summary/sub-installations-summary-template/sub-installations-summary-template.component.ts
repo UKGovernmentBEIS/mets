@@ -23,7 +23,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-sub-installations-summary-template',
-  standalone: false,
   templateUrl: './sub-installations-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -6,8 +6,9 @@ import { AttachedFile } from '@shared/types/attached-file.type';
 
 @Component({
   selector: 'app-waste-qdr-summary-template',
-  imports: [SharedModule, RouterLink],
   templateUrl: './summary-template.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryTemplateComponent {

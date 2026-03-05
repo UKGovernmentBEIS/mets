@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -14,8 +14,9 @@ import { ManagementProceduresFormProvider } from '../management-procedures-form.
 
 @Component({
   selector: 'app-management-procedures-responsibilities',
-  imports: [SharedModule, ProcedureFormStepComponent, ProcedureFormPageHeaderDirective],
   templateUrl: './management-procedures-responsibilities.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLinkWithHref, ProcedureFormStepComponent, ProcedureFormPageHeaderDirective],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

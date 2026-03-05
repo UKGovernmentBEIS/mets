@@ -15,7 +15,6 @@ import { RegulatorImprovementResponse, VirApplicationReviewRequestTaskPayload } 
 
 @Component({
   selector: 'app-recommendation-response-review',
-  standalone: false,
   template: `
     <app-vir-task [heading]="heading" returnToLink="../..">
       <app-recommendation-response-item-form

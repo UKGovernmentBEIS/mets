@@ -34,7 +34,6 @@ describe('BatchReissueRequestsComponent', () => {
 
   describe('for non empty results with permission to start batch reissue', () => {
     @Component({
-      standalone: false,
       template: `
         <app-batch-reissue-requests
           [batchReissuesResponse$]="response$"
@@ -84,7 +83,6 @@ describe('BatchReissueRequestsComponent', () => {
 
   describe('for empty results with no permission to start batch reissue', () => {
     @Component({
-      standalone: false,
       template: `
         <app-batch-reissue-requests
           [batchReissuesResponse$]="response$"

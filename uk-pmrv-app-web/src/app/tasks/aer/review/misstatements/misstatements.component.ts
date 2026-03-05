@@ -9,7 +9,6 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-misstatements',
-  standalone: false,
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Uncorrected misstatements">
       <app-misstatements-group [uncorrectedMisstatements]="uncorrectedMisstatements$ | async"></app-misstatements-group>

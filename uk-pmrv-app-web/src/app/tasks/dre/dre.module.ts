@@ -22,7 +22,6 @@ import { SubmitContainerComponent } from './submit/submit-container.component';
 import { SummaryComponent } from './submit/summary/summary.component';
 
 @NgModule({
-  imports: [DreRoutingModule, SharedModule, TaskSharedModule],
   declarations: [
     ChargeOperatorComponent,
     DeleteComponent,
@@ -41,6 +40,7 @@ import { SummaryComponent } from './submit/summary/summary.component';
     SubmitContainerComponent,
     SummaryComponent,
   ],
+  imports: [DreRoutingModule, SharedModule, TaskSharedModule],
   providers: [PeerReviewDecisionGuard],
 })
 export class DreModule {}

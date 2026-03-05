@@ -6,7 +6,6 @@ import { vbTypes } from '@shared/pipes/verification-body-type.pipe';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-form',
-  standalone: false,
   templateUrl: './form.component.html',
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
 })

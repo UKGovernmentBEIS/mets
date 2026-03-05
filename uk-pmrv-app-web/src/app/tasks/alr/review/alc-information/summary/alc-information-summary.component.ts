@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { first, map, Observable, switchMap } from 'rxjs';
 
@@ -13,8 +13,9 @@ import { ALRApplicationRegulatorReviewOutcome } from 'pmrv-api';
 
 @Component({
   selector: 'app-alr-alc-information-summary',
-  imports: [SharedModule, AlrTaskSharedModule, AlrAlcInformationSummaryTemplateComponent],
   templateUrl: './alc-information-summary.component.html',
+  standalone: true,
+  imports: [SharedModule, AlrTaskSharedModule, RouterLink, AlrAlcInformationSummaryTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ALCInformationSummaryComponent {

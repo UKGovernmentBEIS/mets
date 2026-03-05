@@ -3,6 +3,7 @@ import {
   Component,
   ContentChild,
   ContentChildren,
+  HostBinding,
   Input,
   QueryList,
   TemplateRef,
@@ -13,13 +14,8 @@ import { SummaryItem } from './summary-list.interface';
 
 @Component({
   selector: 'dl[govuk-summary-list]',
-  standalone: false,
   templateUrl: './summary-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    '[class.govuk-summary-list]': 'true',
-    '[class.govuk-summary-list--no-border]': '!this.hasBorders',
-  },
 })
 export class SummaryListComponent {
   @Input() details: SummaryItem[];
@@ -28,4 +24,9 @@ export class SummaryListComponent {
   @ContentChildren(SummaryListRowDirective) rows: QueryList<SummaryListRowDirective>;
   @ContentChild('keyTemplate') keyTemplate: TemplateRef<any>;
   @ContentChild('valueTemplate') valueTemplate: TemplateRef<any>;
+
+  @HostBinding('class.govuk-summary-list') readonly govukSummaryList = true;
+  @HostBinding('class.govuk-summary-list--no-border') get govukSummaryListNoBorderClass(): boolean {
+    return !this.hasBorders;
+  }
 }

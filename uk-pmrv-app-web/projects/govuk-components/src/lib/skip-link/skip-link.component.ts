@@ -6,7 +6,6 @@ import { filter, map } from 'rxjs';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'govuk-skip-link',
-  standalone: false,
   template: `
     <div>
       <a class="govuk-skip-link" [routerLink]="routerLink | async" queryParamsHandling="preserve" [fragment]="anchor">

@@ -5,7 +5,6 @@ import { workflowLabelsMap } from './filters';
 
 @Component({
   selector: 'app-dashboard-filters',
-  standalone: false,
   templateUrl: './filters.component.html',
   styleUrl: './filters.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

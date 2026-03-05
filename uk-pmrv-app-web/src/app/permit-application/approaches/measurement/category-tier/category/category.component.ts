@@ -21,10 +21,9 @@ import { categoryFormProvider } from './category-form.provider';
 
 @Component({
   selector: 'app-category',
-  standalone: false,
   templateUrl: './category.component.html',
-  providers: [categoryFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [categoryFormProvider],
 })
 export class CategoryComponent implements PendingRequest {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

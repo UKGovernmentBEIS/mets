@@ -142,8 +142,8 @@ describe('UploadFileComponent', () => {
             monitoringMethodologyPlans: [false],
           },
         ),
-      );
-      expect(navigateSpy).toHaveBeenCalledWith(['../answers'], { relativeTo: route });
+      ),
+        expect(navigateSpy).toHaveBeenCalledWith(['../answers'], { relativeTo: route });
     });
   });
 

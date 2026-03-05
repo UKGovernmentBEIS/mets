@@ -13,10 +13,9 @@ import { uploadFileProvider } from './upload-file.provider';
 
 @Component({
   selector: 'app-upload-file',
-  standalone: false,
   templateUrl: './upload-file.component.html',
-  providers: [uploadFileProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [uploadFileProvider],
 })
 export class UploadFileComponent {
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));

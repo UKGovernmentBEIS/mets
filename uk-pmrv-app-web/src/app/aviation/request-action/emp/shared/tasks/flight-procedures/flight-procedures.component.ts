@@ -21,6 +21,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-flight-procedures',
+  standalone: true,
   imports: [
     RequestActionTaskComponent,
     EmpReviewDecisionGroupSummaryComponent,

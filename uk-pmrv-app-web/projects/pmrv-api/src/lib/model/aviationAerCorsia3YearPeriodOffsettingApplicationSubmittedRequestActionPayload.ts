@@ -15,7 +15,8 @@ import { FileInfoDTO } from './fileInfoDTO';
 import { RequestActionPayload } from './requestActionPayload';
 import { RequestActionUserInfo } from './requestActionUserInfo';
 
-export interface AviationAerCorsia3YearPeriodOffsettingApplicationSubmittedRequestActionPayload extends RequestActionPayload {
+export interface AviationAerCorsia3YearPeriodOffsettingApplicationSubmittedRequestActionPayload
+  extends RequestActionPayload {
   aviationAerCorsia3YearPeriodOffsetting?: AviationAerCorsia3YearPeriodOffsetting;
   decisionNotification: DecisionNotification;
   usersInfo?: { [key: string]: RequestActionUserInfo };

@@ -75,4 +75,3 @@ export * from './verifierAuthorities.service';
 export * from './verifierUsers.service';
 export * from './verifierUsersInvitation.service';
 export * from './verifierUsersRegistration.service';
-export * from './withholdFlagRequests.service';

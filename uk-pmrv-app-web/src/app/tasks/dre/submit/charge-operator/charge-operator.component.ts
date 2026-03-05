@@ -12,10 +12,9 @@ import { chargeOperatorFormProvider } from './charge-operator-form.provider';
 
 @Component({
   selector: 'app-charge-operator',
-  standalone: false,
   templateUrl: './charge-operator.component.html',
-  providers: [chargeOperatorFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [chargeOperatorFormProvider],
 })
 export class ChargeOperatorComponent {
   constructor(

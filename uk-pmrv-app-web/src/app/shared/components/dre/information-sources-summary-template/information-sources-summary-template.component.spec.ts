@@ -15,12 +15,11 @@ describe('InformationSourcesSummaryTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-information-sources-summary-template
         [data]="dre.informationSources"
         [editable]="editable"
-        baseChangeLink="../information-sources"></app-information-sources-summary-template>
+        [baseChangeLink]="'../information-sources'"></app-information-sources-summary-template>
     `,
   })
   class TestComponent {

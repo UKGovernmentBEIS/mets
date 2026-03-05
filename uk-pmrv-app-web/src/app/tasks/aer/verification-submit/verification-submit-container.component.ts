@@ -12,7 +12,6 @@ import { CommonTasksStore } from '../../store/common-tasks.store';
 
 @Component({
   selector: 'app-verification-submit',
-  standalone: false,
   templateUrl: './verification-submit-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -21,6 +20,8 @@ export class VerificationSubmitContainerComponent {
   aerTitle$ = this.aerService.requestMetadata$.pipe(
     map((metadata) => (metadata as AerRequestMetadata).year + ' emissions report'),
   );
+  yearEqualAfter25$ = this.aerService.yearEqualAfter2025$ as Observable<boolean>;
+
   monitoringApproaches$ = this.aerService.getTask('monitoringApproachEmissions').pipe(
     map(
       (monitoringApproachEmissions) =>

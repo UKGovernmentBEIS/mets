@@ -20,7 +20,6 @@ import { resolvePermitSectionStatus } from '../../permit-application/shared/util
 import { PermitIssuanceStore } from '../store/permit-issuance.store';
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

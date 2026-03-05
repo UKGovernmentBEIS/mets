@@ -8,7 +8,7 @@ import { RespondedComponent } from './responded.component';
 import { VirActionRespondedRoutingModule } from './vir-action-responded-routing.module';
 
 @NgModule({
-  imports: [ActionSharedModule, SharedModule, VirActionRespondedRoutingModule, VirSharedModule],
   declarations: [RespondedComponent],
+  imports: [ActionSharedModule, SharedModule, VirActionRespondedRoutingModule, VirSharedModule],
 })
 export class VirActionRespondedModule {}

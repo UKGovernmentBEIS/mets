@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { map } from 'rxjs';
 
@@ -16,7 +16,8 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-monitoring-approach',
-  imports: [ReturnToLinkComponent, SharedModule, MonitoringApproachVerifyCorsiaTypePipe],
+  standalone: true,
+  imports: [ReturnToLinkComponent, SharedModule, RouterLink, MonitoringApproachVerifyCorsiaTypePipe],
   templateUrl: './monitoring-approach.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

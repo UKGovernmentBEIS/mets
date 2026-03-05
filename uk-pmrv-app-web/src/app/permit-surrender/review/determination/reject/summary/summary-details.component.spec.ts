@@ -15,7 +15,6 @@ import { SummaryDetailsComponent } from './summary-details.component';
 
 describe('SummaryDetailsComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <app-reject-determination-summary-details
         [rejectDetermination]="rejectDetermination$ | async"></app-reject-determination-summary-details>

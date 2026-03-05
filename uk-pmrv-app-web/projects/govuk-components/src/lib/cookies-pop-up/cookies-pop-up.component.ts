@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 
 @Component({
   selector: 'govuk-cookies-pop-up',
-  standalone: false,
   templateUrl: './cookies-pop-up.component.html',
   styleUrl: './cookies-pop-up.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

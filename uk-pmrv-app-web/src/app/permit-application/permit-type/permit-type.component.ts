@@ -14,10 +14,9 @@ import { permitTypeFormProvider } from './permit-type-form.provider';
 
 @Component({
   selector: 'app-permit-type',
-  standalone: false,
   templateUrl: './permit-type.component.html',
-  providers: [permitTypeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [permitTypeFormProvider],
 })
 export class PermitTypeComponent {
   readonly wastePermitEnabled$ = this.configStore

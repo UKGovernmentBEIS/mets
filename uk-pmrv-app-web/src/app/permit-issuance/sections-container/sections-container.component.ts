@@ -14,7 +14,6 @@ import { PermitIssuanceStore } from '../store/permit-issuance.store';
 
 @Component({
   selector: 'app-sections-container',
-  standalone: false,
   templateUrl: './sections-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

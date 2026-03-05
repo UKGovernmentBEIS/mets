@@ -9,14 +9,13 @@ import { DecisionNotification, DocumentPreviewService } from 'pmrv-api';
 
 @Component({
   selector: 'app-preview-documents',
-  standalone: false,
   templateUrl: './preview-documents.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     div .govuk-link {
       cursor: pointer;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PreviewDocumentsComponent {
   @Input() taskId: number;

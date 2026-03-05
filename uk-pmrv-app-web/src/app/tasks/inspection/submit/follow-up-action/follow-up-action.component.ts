@@ -24,8 +24,9 @@ import { followUpActionSubmitFormProvider } from './follow-up-action-form.provid
 
 @Component({
   selector: 'app-follow-up-action-submit',
-  imports: [InspectionTaskComponent, SharedModule],
   templateUrl: './follow-up-action.component.html',
+  standalone: true,
+  imports: [InspectionTaskComponent, SharedModule],
   providers: [followUpActionSubmitFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

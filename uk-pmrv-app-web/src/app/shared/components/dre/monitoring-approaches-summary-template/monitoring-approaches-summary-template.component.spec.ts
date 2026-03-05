@@ -16,7 +16,6 @@ describe('MonitoringApproachesSummaryTemplateComponent', () => {
   let hostComponent: TestComponent;
 
   @Component({
-    standalone: false,
     template: `
       <app-monitoring-approaches-summary-template
         [approachEmissions]="dre.monitoringApproachReportingEmissions"

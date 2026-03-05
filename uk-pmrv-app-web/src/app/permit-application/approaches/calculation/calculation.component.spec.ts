@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { PermitIssuanceStore } from '@permit-issuance/store/permit-issuance.store';
 import { SharedModule } from '@shared/shared.module';
@@ -42,9 +42,8 @@ describe('CalculationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, CalculationModule],
+      imports: [SharedModule, CalculationModule, RouterTestingModule],
       providers: [
-        provideRouter([]),
         {
           provide: PermitApplicationStore,
           useExisting: PermitIssuanceStore,

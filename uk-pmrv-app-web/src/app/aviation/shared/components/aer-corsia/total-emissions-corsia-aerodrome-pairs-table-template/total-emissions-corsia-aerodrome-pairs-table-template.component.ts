@@ -18,8 +18,9 @@ import { createTablePage } from '../../../../../mi-reports/core/mi-report';
 
 @Component({
   selector: 'app-total-emissions-corsia-aerodrome-pairs-table-template',
-  imports: [SharedModule],
   templateUrl: './total-emissions-corsia-aerodrome-pairs-table-template.component.html',
+  standalone: true,
+  imports: [SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsCorsiaAerodromePairsTableTemplateComponent {

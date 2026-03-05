@@ -4,7 +4,6 @@ import { PaymentDetails } from '../../../core/payment.map';
 
 @Component({
   selector: 'app-payment-summary',
-  standalone: false,
   templateUrl: './payment-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

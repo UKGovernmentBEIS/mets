@@ -21,7 +21,6 @@ import uk.gov.pmrv.api.integration.registry.accountupdated.installation.request.
 import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
 import uk.gov.pmrv.api.integration.registry.common.RegistryResponseErrorCode;
 import uk.gov.pmrv.api.integration.registry.setoperator.aviation.AviationSetOperatorIdExemptStatusUpdateService;
-import uk.gov.pmrv.api.integration.registry.setoperator.installation.InstallationSetOperatorIdWithholdFlagUpdateService;
 
 import java.util.List;
 
@@ -38,7 +37,6 @@ public class OperatorIdEventOutcomeService {
     private final SetOperatorIdResponseValidator setOperatorIdResponseValidator;
     private final AviationSetOperatorIdExemptStatusUpdateService aviationSetOperatorIdExemptStatusUpdateService;
     private final ApplicationEventPublisher publisher;
-    private final InstallationSetOperatorIdWithholdFlagUpdateService installationSetOperatorIdWithholdFlagUpdateService;
 
 
     @Transactional
@@ -77,7 +75,7 @@ public class OperatorIdEventOutcomeService {
                     NotifyRegistryUtils.OPERATOR_ID_INTEGRATION_POINT_KEY, "Operator Id received from registry " + event);
             publisher.publishEvent(InstallationAccountUpdatedRegistryEvent.builder().accountId(account.getId()).build());
             publisher.publishEvent(AccountContactRegistryEvent.builder().accountsIds(List.of(account.getId())).build());
-            installationSetOperatorIdWithholdFlagUpdateService.notifyRegistryWithWithholdFlag(account.getId());
+
         }
         else {
             eventOutcome.setOutcome(IntegrationEventOutcome.ERROR);

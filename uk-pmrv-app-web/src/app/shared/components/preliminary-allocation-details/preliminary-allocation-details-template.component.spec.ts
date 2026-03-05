@@ -15,7 +15,6 @@ describe('PreliminaryAllocationDetailsTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-preliminary-allocation-details-template
         [form]="formGroup"

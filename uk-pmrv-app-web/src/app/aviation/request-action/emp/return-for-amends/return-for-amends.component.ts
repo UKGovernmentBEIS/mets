@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { empQuery } from '@aviation/request-action/emp/emp.selectors';
+import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
 import { EmpRequestActionPayload, requestActionQuery, RequestActionStore } from '@aviation/request-action/store';
 import { empReviewGroupMap } from '@aviation/request-task/emp/shared/util/emp.util';
 import { ReturnForAmendsSharedComponent } from '@aviation/shared/components/return-for-amends-shared/return-for-amends-shared.component';
@@ -19,7 +20,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-emp-return-for-amends',
-  imports: [RouterModule, SharedModule, ReturnForAmendsSharedComponent],
   template: `
     <div class="govuk-grid-row" *ngIf="vm$ | async as vm">
       <div class="govuk-grid-column-two-thirds">
@@ -32,6 +32,8 @@ interface ViewModel {
       </div>
     </div>
   `,
+  standalone: true,
+  imports: [RouterModule, SharedModule, RequestActionTaskComponent, ReturnForAmendsSharedComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpReturnForAmendsComponent {

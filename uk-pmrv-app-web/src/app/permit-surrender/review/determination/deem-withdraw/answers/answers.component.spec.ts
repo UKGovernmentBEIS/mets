@@ -16,7 +16,6 @@ import { AnswersComponent } from './answers.component';
 describe('AnswersComponent', () => {
   @Component({
     selector: 'app-deem-withdraw-determination-summary-details',
-    standalone: false,
     template: '<p>Mock deem details</p>',
   })
   class MockDeemWithdrawSummaryDetailsComponent {

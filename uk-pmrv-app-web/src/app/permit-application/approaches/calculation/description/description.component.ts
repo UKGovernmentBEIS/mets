@@ -14,10 +14,9 @@ import { descriptionFormProvider } from './description-form.provider';
 
 @Component({
   selector: 'app-description',
-  standalone: false,
   templateUrl: './description.component.html',
-  providers: [descriptionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [descriptionFormProvider],
 })
 export class DescriptionComponent {
   constructor(

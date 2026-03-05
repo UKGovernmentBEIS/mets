@@ -11,7 +11,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   template: `
     <app-aer-task-review heading="Check your answers" returnToLink="../..">
       <app-summary-of-conditions-group

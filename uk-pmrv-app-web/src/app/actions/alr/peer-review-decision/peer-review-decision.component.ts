@@ -19,6 +19,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-action-peer-review-decision',
+  standalone: true,
   imports: [ActionSharedModule, NgIf],
   template: `
     <ng-container *ngIf="vm() as vm">

@@ -22,6 +22,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-additional-documents',
+  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

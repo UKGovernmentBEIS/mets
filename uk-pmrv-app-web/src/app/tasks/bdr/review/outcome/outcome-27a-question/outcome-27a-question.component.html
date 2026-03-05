@@ -1,5 +1,5 @@
 <app-bdr-task-review [breadcrumb]="true" returnToLink="../..">
-  <span class="govuk-caption-l">Outcome of regulator review</span>
+  <span [class]="'govuk-caption-l'">Outcome of regulator review</span>
   <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()">
     <div
       formControlName="hasOperatorMetDataSubmissionRequirements"

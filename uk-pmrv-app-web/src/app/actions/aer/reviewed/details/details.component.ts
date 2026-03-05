@@ -9,7 +9,6 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-details',
-  standalone: false,
   template: `
     <app-action-task header="Installation details" [breadcrumb]="true">
       <app-installation-details-group [payload]="payload$ | async"></app-installation-details-group>

@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { NotVerifiedReason } from 'pmrv-api';
 
-@Pipe({
-  name: 'notVerifiedReasonType',
-  standalone: false,
-})
+@Pipe({ name: 'notVerifiedReasonType' })
 export class NotVerifiedReasonTypePipe implements PipeTransform {
   transform(value: NotVerifiedReason['type'], otherReason?: string): string {
     switch (value) {

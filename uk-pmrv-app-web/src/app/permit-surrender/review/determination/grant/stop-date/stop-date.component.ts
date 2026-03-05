@@ -12,7 +12,6 @@ import { stopDateFormProvider } from './stop-date-form.provider';
 
 @Component({
   selector: 'app-stop-date',
-  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onContinue()"
@@ -30,8 +29,8 @@ import { stopDateFormProvider } from './stop-date-form.provider';
     </app-wizard-step>
     <a govukLink routerLink="../../..">Return to: Surrender permit determination</a>
   `,
-  providers: [stopDateFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [stopDateFormProvider],
 })
 export class StopDateComponent implements PendingRequest {
   today = new Date();

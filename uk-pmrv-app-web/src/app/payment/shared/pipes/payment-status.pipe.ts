@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { PaymentCancelledRequestActionPayload, PaymentProcessedRequestActionPayload } from 'pmrv-api';
 
-@Pipe({
-  name: 'paymentStatus',
-  standalone: false,
-})
+@Pipe({ name: 'paymentStatus' })
 export class PaymentStatusPipe implements PipeTransform {
   transform(
     value: PaymentProcessedRequestActionPayload['status'] | PaymentCancelledRequestActionPayload['status'],

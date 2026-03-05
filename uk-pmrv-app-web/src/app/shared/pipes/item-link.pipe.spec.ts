@@ -1307,17 +1307,7 @@ describe('ItemLinkPipe', () => {
     },
     {
       requestType: 'BDRS2',
-      taskType: 'BDRS2_APPLICATION_AMENDS_SUBMIT',
-      expectedPath: ['/tasks', taskId, 'bdrs2', 'submit'],
-    },
-    {
-      requestType: 'BDRS2',
       taskType: 'BDRS2_WAIT_FOR_VERIFICATION',
-      expectedPath: ['/tasks', taskId, 'bdrs2', 'submit'],
-    },
-    {
-      requestType: 'BDRS2',
-      taskType: 'BDRS2_AMEND_WAIT_FOR_VERIFICATION',
       expectedPath: ['/tasks', taskId, 'bdrs2', 'submit'],
     },
     {
@@ -1325,37 +1315,7 @@ describe('ItemLinkPipe', () => {
       taskType: 'BDRS2_WAIT_FOR_REGULATOR_REVIEW',
       expectedPath: ['/tasks', taskId, 'bdrs2', 'submit'],
     },
-    {
-      requestType: 'BDRS2',
-      taskType: 'BDRS2_APPLICATION_VERIFICATION_SUBMIT',
-      expectedPath: ['/tasks', taskId, 'bdrs2', 'verification-submit'],
-    },
-    {
-      requestType: 'BDRS2',
-      taskType: 'BDRS2_AMEND_APPLICATION_VERIFICATION_SUBMIT',
-      expectedPath: ['/tasks', taskId, 'bdrs2', 'verification-submit'],
-    },
-    {
-      requestType: 'BDRS2',
-      taskType: 'BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT',
-      expectedPath: ['/tasks', taskId, 'bdrs2', 'review'],
-    },
-    {
-      requestType: 'BDRS2',
-      taskType: 'BDRS2_WAIT_FOR_AMENDS',
-      expectedPath: ['/tasks', taskId, 'bdrs2', 'review'],
-    },
-    {
-      requestType: 'BDRS2',
-      taskType: 'BDRS2_WAIT_FOR_PEER_REVIEW',
-      expectedPath: ['/tasks', taskId, 'bdrs2', 'peer-review-wait'],
-    },
 
-    {
-      requestType: 'BDRS2',
-      taskType: 'BDRS2_APPLICATION_PEER_REVIEW',
-      expectedPath: ['/tasks', taskId, 'bdrs2', 'review'],
-    },
     //DOE
     {
       requestType: 'AVIATION_DOE_CORSIA',

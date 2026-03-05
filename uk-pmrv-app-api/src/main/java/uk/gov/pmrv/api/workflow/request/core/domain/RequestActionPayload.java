@@ -10,8 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.integration.registry.accountupdated.aviation.request.requestaction.EmpVariationRegistryIntegrationRequestActionPayload;
-import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.request.requestaction.AviationReportableEmissionsRegistryIntegrationRequestActionPayload;
-import uk.gov.pmrv.api.integration.registry.withholdflag.installation.request.requestaction.WithholdingOfAllowancesRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.annualoffsetting.common.domain.AviationAerCorsiaAnnualOffsettingApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.annualoffsetting.common.domain.AviationAerCorsiaAnnualOffsettingPeerReviewDescisionActionPayload;
@@ -98,16 +96,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRRegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRVerificationReturnedToOperatorRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationAmendsSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationSubmittedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationVerificationSubmittedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RegulatorReviewReturnedForAmendsRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2VerificationReturnedToOperatorRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountUpdatedRegistryIntegrationRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationReportableEmissionsRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationAcceptedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationAcceptedWithCorrectionsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationClosedRequestActionPayload;
@@ -191,8 +183,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PermitIssuanceApplicationSubmittedRequestActionPayload.class, value = "PERMIT_ISSUANCE_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = InstallationAccountRegistryIntegrationRequestActionPayload.class, value = "PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD"),
 
-                @DiscriminatorMapping(schema = InstallationReportableEmissionsRegistryIntegrationRequestActionPayload.class, value = "INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY_PAYLOAD"),
-                @DiscriminatorMapping(schema = AviationReportableEmissionsRegistryIntegrationRequestActionPayload.class, value = "AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY_PAYLOAD"),
+
 
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "PERMIT_SURRENDER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitSurrenderApplicationDeemedWithdrawnRequestActionPayload.class, value = "PERMIT_SURRENDER_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD"),
@@ -303,8 +294,6 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "WITHHOLDING_OF_ALLOWANCES_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = WithholdingOfAllowancesApplicationWithdrawnRequestActionPayload.class, value = "WITHHOLDING_OF_ALLOWANCES_APPLICATION_WITHDRAWN_PAYLOAD"),
                 @DiscriminatorMapping(schema = WithholdingOfAllowancesApplicationClosedRequestActionPayload.class, value = "WITHHOLDING_OF_ALLOWANCES_APPLICATION_CLOSED_PAYLOAD"),
-                @DiscriminatorMapping(schema = WithholdingOfAllowancesRegistryIntegrationRequestActionPayload.class, value = "WITHHOLDING_OF_ALLOWANCES_REGISTRY_INTEGRATION_PAYLOAD"),
-
 
                 @DiscriminatorMapping(schema = ReturnOfAllowancesApplicationSubmittedRequestActionPayload.class, value = "RETURN_OF_ALLOWANCES_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = ReturnOfAllowancesReturnedApplicationCompletedRequestActionPayload.class, value = "RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_COMPLETED_PAYLOAD"),
@@ -326,13 +315,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = BDRApplicationCompletedRequestActionPayload.class, value = "BDR_APPLICATION_COMPLETED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "BDR_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
 
-                @DiscriminatorMapping(schema = BDRS2ApplicationSubmittedRequestActionPayload.class, value = "BDRS2_APPLICATION_SUBMITTED_PAYLOAD"),
-                @DiscriminatorMapping(schema = BDRS2ApplicationVerificationSubmittedRequestActionPayload.class, value = "BDRS2_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD"),
-                @DiscriminatorMapping(schema = BDRS2VerificationReturnedToOperatorRequestActionPayload.class, value = "BDRS2_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD"),
-                @DiscriminatorMapping(schema = BDRS2RegulatorReviewReturnedForAmendsRequestActionPayload.class, value = "BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD"),
-                @DiscriminatorMapping(schema = BDRS2ApplicationAmendsSubmittedRequestActionPayload.class, value = "BDRS2_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),
-                @DiscriminatorMapping(schema = BDRS2ApplicationCompletedRequestActionPayload.class, value = "BDRS2_APPLICATION_COMPLETED_PAYLOAD"),
-                @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "BDRS2_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = BDRApplicationSubmittedRequestActionPayload.class, value = "BDRS2_APPLICATION_SUBMITTED_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = ALRApplicationSubmittedRequestActionPayload.class, value = "ALR_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = ALRVerificationReturnedToOperatorRequestActionPayload.class, value = "ALR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD"),
@@ -447,8 +430,6 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = PermitIssuanceApplicationSubmittedRequestActionPayload.class, name = "PERMIT_ISSUANCE_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = InstallationAccountRegistryIntegrationRequestActionPayload.class, name = "PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD"),
 
-        @JsonSubTypes.Type(value = InstallationReportableEmissionsRegistryIntegrationRequestActionPayload.class, name = "INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY_PAYLOAD"),
-        @JsonSubTypes.Type(value = AviationReportableEmissionsRegistryIntegrationRequestActionPayload.class, name = "AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY_PAYLOAD"),
 
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "PERMIT_SURRENDER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitSurrenderApplicationDeemedWithdrawnRequestActionPayload.class, name = "PERMIT_SURRENDER_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD"),
@@ -559,7 +540,6 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "WITHHOLDING_OF_ALLOWANCES_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = WithholdingOfAllowancesApplicationWithdrawnRequestActionPayload.class, name = "WITHHOLDING_OF_ALLOWANCES_APPLICATION_WITHDRAWN_PAYLOAD"),
         @JsonSubTypes.Type(value = WithholdingOfAllowancesApplicationClosedRequestActionPayload.class, name = "WITHHOLDING_OF_ALLOWANCES_APPLICATION_CLOSED_PAYLOAD"),
-        @JsonSubTypes.Type(value = WithholdingOfAllowancesRegistryIntegrationRequestActionPayload.class, name = "WITHHOLDING_OF_ALLOWANCES_REGISTRY_INTEGRATION_PAYLOAD"),
 
         @JsonSubTypes.Type(value = ReturnOfAllowancesApplicationSubmittedRequestActionPayload.class, name = "RETURN_OF_ALLOWANCES_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = ReturnOfAllowancesReturnedApplicationCompletedRequestActionPayload.class, name = "RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_COMPLETED_PAYLOAD"),
@@ -581,12 +561,6 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "BDR_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
 
         @JsonSubTypes.Type(value = BDRS2ApplicationSubmittedRequestActionPayload.class, name = "BDRS2_APPLICATION_SUBMITTED_PAYLOAD"),
-        @JsonSubTypes.Type(value = BDRS2ApplicationVerificationSubmittedRequestActionPayload.class, name = "BDRS2_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD"),
-        @JsonSubTypes.Type(value = BDRS2VerificationReturnedToOperatorRequestActionPayload.class, name = "BDRS2_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD"),
-        @JsonSubTypes.Type(value = BDRS2RegulatorReviewReturnedForAmendsRequestActionPayload.class, name = "BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD"),
-        @JsonSubTypes.Type(value = BDRS2ApplicationAmendsSubmittedRequestActionPayload.class, name = "BDRS2_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),
-        @JsonSubTypes.Type(value = BDRS2ApplicationCompletedRequestActionPayload.class, name = "BDRS2_APPLICATION_COMPLETED_PAYLOAD"),
-        @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "BDRS2_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
 
         @JsonSubTypes.Type(value = ALRApplicationSubmittedRequestActionPayload.class, name = "ALR_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = ALRVerificationReturnedToOperatorRequestActionPayload.class, name = "ALR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD"),

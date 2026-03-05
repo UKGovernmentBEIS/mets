@@ -43,6 +43,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-data-gaps-summary',
+  templateUrl: './data-gaps-summary.component.html',
+  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
@@ -51,7 +53,6 @@ interface ViewModel {
     EmpReviewDecisionGroupComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,
   ],
-  templateUrl: './data-gaps-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGapsSummaryComponent {

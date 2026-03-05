@@ -9,7 +9,6 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-data-gaps',
-  standalone: false,
   template: `
     <app-action-task header="Methodologies to close data gaps" [breadcrumb]="true">
       <app-data-gaps-group

@@ -8,6 +8,7 @@ import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shar
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { AerCorsiaStoreDelegate } from '@aviation/request-task/store/delegates/aer-corsia/aer-corsia-store-delegate';
 import { showReviewDecisionComponent } from '@aviation/request-task/util';
+import { ReportingObligationSummaryTemplateComponent } from '@aviation/shared/components/aer/reporting-obligation-summary-template/reporting-obligation-summary-template.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { SharedModule } from '@shared/shared.module';
 import { AttachedFile } from '@shared/types/attached-file.type';
@@ -25,7 +26,13 @@ interface ViewModel {
 
 @Component({
   selector: 'app-reporting-obligation-details',
-  imports: [ReturnToLinkComponent, SharedModule, AerReviewDecisionGroupComponent],
+  standalone: true,
+  imports: [
+    ReturnToLinkComponent,
+    SharedModule,
+    AerReviewDecisionGroupComponent,
+    ReportingObligationSummaryTemplateComponent,
+  ],
   templateUrl: './reporting-obligation-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

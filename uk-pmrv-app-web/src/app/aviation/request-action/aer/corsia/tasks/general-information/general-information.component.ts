@@ -21,6 +21,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-general-information',
+  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

@@ -9,7 +9,6 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-additional-info',
-  standalone: false,
   template: `
     <app-action-task header="Additional information" [breadcrumb]="true">
       <app-additional-info-group

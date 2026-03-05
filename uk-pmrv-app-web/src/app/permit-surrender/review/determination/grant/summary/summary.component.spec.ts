@@ -16,7 +16,6 @@ import { SummaryComponent } from './summary.component';
 describe('SummaryComponent', () => {
   @Component({
     selector: 'app-grant-determination-summary-details',
-    standalone: false,
     template: '<p>Mock grant details</p>',
   })
   class MockGrantSummaryDetailsComponent {

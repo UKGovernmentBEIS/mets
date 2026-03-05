@@ -30,7 +30,6 @@ import uk.gov.netz.api.common.validation.SpELExpression;
 public class BDRS2 {
 
     @NotNull
-    //TODO: add @Valid
     private BDRS2GuardQuestions bdrs2guardQuestions;
 
     @Valid

@@ -24,13 +24,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-uncorrected-non-conformities',
-  imports: [
-    SharedModule,
-    RequestActionTaskComponent,
-    UncorrectedItemGroupComponent,
-    VerifierCommentGroupComponent,
-    AerVerificationReviewDecisionGroupSummaryComponent,
-  ],
   template: `
     <app-request-action-task
       *ngIf="vm$ | async as vm"
@@ -76,6 +69,14 @@ interface ViewModel {
       </ng-container>
     </app-request-action-task>
   `,
+  standalone: true,
+  imports: [
+    SharedModule,
+    RequestActionTaskComponent,
+    UncorrectedItemGroupComponent,
+    VerifierCommentGroupComponent,
+    AerVerificationReviewDecisionGroupSummaryComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class UncorrectedNonConformitiesComponent {

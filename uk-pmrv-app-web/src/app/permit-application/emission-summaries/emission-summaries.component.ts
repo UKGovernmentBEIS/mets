@@ -17,11 +17,10 @@ import { emisionSummariesFormFactory } from './emission-summaries-form.provider'
 
 @Component({
   selector: 'app-emission-summaries',
-  standalone: false,
   templateUrl: './emission-summaries.component.html',
-  styleUrl: './emission-summaries.component.scss',
-  providers: [emisionSummariesFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [emisionSummariesFormFactory],
+  styleUrl: './emission-summaries.component.scss',
 })
 export class EmissionSummariesComponent extends SectionComponent implements PendingRequest {
   displayErrorSummary$ = new BehaviorSubject(false);

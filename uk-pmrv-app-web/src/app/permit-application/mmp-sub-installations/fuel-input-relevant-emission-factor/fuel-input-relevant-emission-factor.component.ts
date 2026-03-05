@@ -20,11 +20,10 @@ import { fuelInputRelevantEmissionFactorAddFormFactory } from './fuel-input-rele
 
 @Component({
   selector: 'app-fuel-input-relevant-emission-factor',
-  standalone: false,
   templateUrl: './fuel-input-relevant-emission-factor.component.html',
-  styleUrl: './fuel-input-relevant-emission-factor.component.scss',
-  providers: [fuelInputRelevantEmissionFactorAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [fuelInputRelevantEmissionFactorAddFormFactory],
+  styleUrl: './fuel-input-relevant-emission-factor.component.scss',
 })
 export class FuelInputRelevantEmissionFactorComponent extends ProductBenchmarkComponent implements PendingRequest {
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;

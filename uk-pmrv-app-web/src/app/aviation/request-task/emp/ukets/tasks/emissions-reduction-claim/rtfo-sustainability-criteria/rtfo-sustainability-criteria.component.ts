@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
@@ -13,10 +13,11 @@ import { EmissionsReductionClaimFormProvider } from '../emissions-reduction-clai
 
 @Component({
   selector: 'app-rtfo-sustainability-criteria',
-  imports: [SharedModule, ProcedureFormStepComponent],
+  standalone: true,
+  imports: [SharedModule, ProcedureFormStepComponent, RouterLinkWithHref],
   templateUrl: './rtfo-sustainability-criteria.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class RtfoSustainabilityCriteriaComponent implements OnInit, OnDestroy {
   private readonly backLinkService = inject(BackLinkService);

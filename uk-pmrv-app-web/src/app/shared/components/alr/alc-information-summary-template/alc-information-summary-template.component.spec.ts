@@ -13,7 +13,6 @@ describe('AlcInformationTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-alr-alc-information-summary-template
         [data]="data"

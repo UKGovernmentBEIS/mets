@@ -24,7 +24,6 @@ describe('WasteQdrTaskReviewComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-waste-qdr-task-common [breadcrumb]="true" heading="Quarterly data report">
         <h2 class="govuk-heading-m">Sub header</h2>

@@ -11,7 +11,6 @@ import { defaultColumns } from './column-header-mapping';
 
 @Component({
   selector: 'app-aircraft-types-data-table',
-  imports: [GovukComponentsModule, NgSwitch, NgSwitchCase, NgSwitchDefault, CommonModule, SharedModule],
   templateUrl: './aircraft-types-data-table.component.html',
   styles: `
     .cell-container {
@@ -22,6 +21,8 @@ import { defaultColumns } from './column-header-mapping';
       text-align: left;
     }
   `,
+  standalone: true,
+  imports: [GovukComponentsModule, NgSwitch, NgSwitchCase, NgSwitchDefault, CommonModule, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AircraftTypesDataTableComponent implements OnInit, OnChanges {

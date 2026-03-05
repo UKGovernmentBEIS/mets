@@ -70,8 +70,6 @@ export function resolveRequestTaskActionType(
       return 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_PEER_REVIEW_DECISION';
     case 'BDR_APPLICATION_PEER_REVIEW':
       return 'BDR_SUBMIT_PEER_REVIEW_DECISION';
-    case 'BDRS2_APPLICATION_PEER_REVIEW':
-      return 'BDRS2_SUBMIT_PEER_REVIEW_DECISION';
     case 'HSE_TI_APPLICATION_PEER_REVIEW':
       return 'HSE_TI_SUBMIT_PEER_REVIEW_DECISION';
     case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW':
@@ -148,8 +146,6 @@ export function resolveRequestTaskActionPayloadType(
       return 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_PEER_REVIEW_DECISION_PAYLOAD';
     case 'BDR_APPLICATION_PEER_REVIEW':
       return 'BDR_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
-    case 'BDRS2_APPLICATION_PEER_REVIEW':
-      return 'BDRS2_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
     case 'HSE_TI_APPLICATION_PEER_REVIEW':
       return 'HSE_TI_PEER_REVIEW_DECISION_PAYLOAD';
     case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW':
@@ -223,8 +219,6 @@ export function resolveReturnToText(requestType: UrlRequestType, requestTaskType
       }
     case 'bdr':
       return 'Peer review baseline data report';
-    case 'bdrs2':
-      return 'Peer review stage 2 baseline data report';
     case 'permanent-cessation':
       return 'Peer review permanent cessation';
     case 'alr':

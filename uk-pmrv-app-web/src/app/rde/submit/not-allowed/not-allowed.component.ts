@@ -14,13 +14,12 @@ import { RdeStore } from '../../store/rde.store';
 
 @Component({
   selector: 'app-not-allowed',
-  standalone: false,
   template: `
     <app-page-heading>You can only have one active request at any given time.</app-page-heading>
     <button (click)="onClick()" govukSecondaryButton type="button">View the active request</button>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class NotAllowedComponent implements OnInit {
   constructor(

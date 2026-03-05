@@ -59,7 +59,6 @@ describe('SectionsContainerComponent', () => {
 
   @Component({
     selector: 'app-review-sections',
-    standalone: false,
     template: `
       <div>
         <div class="status-resolver">

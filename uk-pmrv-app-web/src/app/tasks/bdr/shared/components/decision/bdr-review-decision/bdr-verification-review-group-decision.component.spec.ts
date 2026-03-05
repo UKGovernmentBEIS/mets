@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, provideRouter } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -85,9 +86,8 @@ describe('BdrVerificationReviewGroupDecisionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, BdrTaskSharedModule],
+      imports: [SharedModule, BdrTaskSharedModule, RouterTestingModule],
       providers: [
-        provideRouter([]),
         { provide: TasksService, useValue: tasksService },
         { provide: ActivatedRoute, useValue: route },
       ],

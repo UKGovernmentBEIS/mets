@@ -22,8 +22,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-send-report-regulator',
-  imports: [SharedModule, ReturnToLinkComponent, RouterLink],
   templateUrl: './send-report-regulator.component.html',
+  imports: [SharedModule, ReturnToLinkComponent, RouterLink],
+  standalone: true,
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

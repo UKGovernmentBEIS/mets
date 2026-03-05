@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-page-heading',
-  standalone: false,
   template: `
     <span [class]="'govuk-caption-' + size" *ngIf="caption">{{ caption }}</span>
     <h1 [class]="'govuk-heading-' + size">

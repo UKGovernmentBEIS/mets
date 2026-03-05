@@ -14,10 +14,9 @@ import { defaultValueProvider } from './default-value.provider';
 
 @Component({
   selector: 'app-default-value',
-  standalone: false,
   templateUrl: './default-value.component.html',
-  providers: [defaultValueProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [defaultValueProvider],
 })
 export class DefaultValueComponent implements PendingRequest {
   readonly index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

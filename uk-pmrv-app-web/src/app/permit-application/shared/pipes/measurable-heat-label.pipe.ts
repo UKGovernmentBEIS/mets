@@ -7,7 +7,6 @@ import { Pipe, PipeTransform } from '@angular/core';
  */
 @Pipe({
   name: 'measurableHeatLabel',
-  standalone: false,
 })
 export class MeasurableHeatLabelPipe implements PipeTransform {
   transform(value: string, which: 'imported' | 'net'): string {

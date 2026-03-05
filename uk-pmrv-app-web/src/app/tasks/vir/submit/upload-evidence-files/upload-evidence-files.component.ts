@@ -15,7 +15,6 @@ import { OperatorImprovementResponse, VirApplicationSubmitRequestTaskPayload } f
 
 @Component({
   selector: 'app-upload-evidence-files',
-  standalone: false,
   templateUrl: './upload-evidence-files.component.html',
   providers: [uploadEvidenceFilesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

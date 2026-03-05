@@ -17,10 +17,9 @@ import { UserFullNamePipe } from '../../pipes/user-full-name.pipe';
 
 @Component({
   selector: 'app-decision',
-  standalone: false,
   templateUrl: './decision.component.html',
-  providers: [UserFullNamePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserFullNamePipe],
 })
 export class DecisionComponent {
   @Input() taskId: number;

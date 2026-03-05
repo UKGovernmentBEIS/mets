@@ -14,7 +14,6 @@ describe('AlcInformationTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-doal-alc-information-template [data]="data" [editable]="editable"></app-doal-alc-information-template>
     `,

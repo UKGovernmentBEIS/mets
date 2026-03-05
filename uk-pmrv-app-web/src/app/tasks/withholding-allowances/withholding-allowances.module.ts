@@ -22,7 +22,6 @@ import { WithdrawSummaryComponent } from './withdraw/withdraw-summary/withdraw-s
 import { WithholdingAllowancesRoutingModule } from './withholding-allowances-routing.module';
 
 @NgModule({
-  imports: [CommonModule, SharedModule, TaskSharedModule, WithholdingAllowancesRoutingModule],
   declarations: [
     CloseConfirmationComponent,
     NotifyOperatorComponent,
@@ -39,6 +38,7 @@ import { WithholdingAllowancesRoutingModule } from './withholding-allowances-rou
     WithdrawSummaryComponent,
     WithholdingAllowancesTaskComponent,
   ],
+  imports: [CommonModule, SharedModule, TaskSharedModule, WithholdingAllowancesRoutingModule],
   providers: [PeerReviewDecisionGuard],
 })
 export class WithholdingAllowancesModule {}

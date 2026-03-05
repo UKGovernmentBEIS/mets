@@ -4,7 +4,6 @@ import { SummaryOfConditions } from 'pmrv-api';
 
 @Component({
   selector: 'app-summary-of-conditions-group',
-  standalone: false,
   templateUrl: './summary-of-conditions-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

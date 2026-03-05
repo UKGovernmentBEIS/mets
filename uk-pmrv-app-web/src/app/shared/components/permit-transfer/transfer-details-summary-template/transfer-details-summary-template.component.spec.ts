@@ -38,7 +38,6 @@ describe('SummaryComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-permit-transfer-details-summary-template
         [allowChange]="isEditable$ | async"

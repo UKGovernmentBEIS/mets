@@ -12,7 +12,6 @@ import { preliminaryAllocationFormProvider } from './preliminary-allocation-form
 
 @Component({
   selector: 'app-preliminary-allocation',
-  standalone: false,
   template: `
     <app-doal-task [breadcrumb]="true">
       <app-preliminary-allocation-details-template
@@ -23,8 +22,8 @@ import { preliminaryAllocationFormProvider } from './preliminary-allocation-form
       <a govukLink routerLink="..">Return to: Provide allocation for each sub installation</a>
     </app-doal-task>
   `,
-  providers: [preliminaryAllocationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [preliminaryAllocationFormProvider],
 })
 export class PreliminaryAllocationComponent {
   editable$: Observable<boolean> = this.doalService.isEditable$;

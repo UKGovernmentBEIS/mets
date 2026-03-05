@@ -14,11 +14,8 @@ import { RequestTaskPayload } from './requestTaskPayload';
 
 export interface BDRS2ApplicationSubmitRequestTaskPayload extends RequestTaskPayload {
   bdrs2?: BDRS2;
-  verificationSectionsCompleted?: { [key: string]: Array<boolean> };
-  regulatorReviewSectionsCompleted?: { [key: string]: boolean };
+  verificationPerformed?: boolean;
   bdrs2SectionsCompleted?: { [key: string]: boolean };
   bdrs2Attachments?: { [key: string]: string };
   bdrs2FileVersion?: number;
-  verificationPerformed?: boolean;
-  verificationBodyId?: number;
 }

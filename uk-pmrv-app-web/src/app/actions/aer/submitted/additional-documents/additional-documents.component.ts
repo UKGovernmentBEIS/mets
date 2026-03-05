@@ -8,7 +8,6 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-additional-documents',
-  standalone: false,
   template: `
     <app-action-task header="Additional documents and information" [breadcrumb]="true">
       <app-documents-summary-template

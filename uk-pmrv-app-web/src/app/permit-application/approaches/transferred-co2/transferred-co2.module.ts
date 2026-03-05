@@ -18,7 +18,6 @@ import { SummaryComponent as TransportApproachSummaryComponent } from './transpo
 import { TransportApproachComponent } from './transport-approach/transport-approach.component';
 
 @NgModule({
-  imports: [SharedModule, SharedPermitModule, TransferredCO2RoutingModule],
   declarations: [
     AnswersComponent,
     DeductionsToAmountComponent,
@@ -34,5 +33,6 @@ import { TransportApproachComponent } from './transport-approach/transport-appro
     TransportApproachComponent,
     TransportApproachSummaryComponent,
   ],
+  imports: [SharedModule, SharedPermitModule, TransferredCO2RoutingModule],
 })
 export class TransferredCO2Module {}

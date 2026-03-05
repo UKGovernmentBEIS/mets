@@ -3,8 +3,9 @@
   [formGroup]="form"
   submitText="Continue"
   [hideSubmit]="false"
-  heading="Select the reference documents that are appropriate to the accreditation you hold"
-  class="govuk-!-width-two-thirds">
+  [heading]="'Select the reference documents that are appropriate to the accreditation you hold'"
+  class="govuk-!-width-two-thirds"
+>
   <h1 class="govuk-heading-m govuk-!-width-two-thirds">For UK Emissions Trading Scheme (ETS)</h1>
 
   <!-- For accredited verifiers -->
@@ -14,7 +15,8 @@
     <govuk-checkbox
       *ngFor="let type of aviationAerUkeEtsForAccreditedVerifiers"
       [value]="type"
-      [label]="type | accreditationReferenceDocumentName"></govuk-checkbox>
+      [label]="type | accreditationReferenceDocumentName"
+    ></govuk-checkbox>
   </div>
 
   <!-- For accredited verifiers that are also financial assurance providers -->
@@ -25,11 +27,13 @@
   <div
     formControlName="aviationAerUkeEtsForAccreditedVerifiersAndFinancialAssuranceProviders"
     govuk-checkboxes
-    class="govuk-!-width-two-thirds">
+    class="govuk-!-width-two-thirds"
+  >
     <govuk-checkbox
       *ngFor="let type of aviationAerUkeEtsForAccreditedVerifiersAndFinancialAssuranceProviders"
       [value]="type"
-      [label]="type | accreditationReferenceDocumentName"></govuk-checkbox>
+      [label]="type | accreditationReferenceDocumentName"
+    ></govuk-checkbox>
   </div>
 
   <!-- Rules of the UK ETS -->
@@ -39,7 +43,8 @@
     <govuk-checkbox
       *ngFor="let type of aviationAerUkeEtsRulesUkEts"
       [value]="type"
-      [label]="type | accreditationReferenceDocumentName"></govuk-checkbox>
+      [label]="type | accreditationReferenceDocumentName"
+    ></govuk-checkbox>
   </div>
 
   <!-- Other Reference -->
@@ -47,7 +52,8 @@
     <govuk-checkbox
       *ngFor="let type of aviationAerUkeEtsRulesUkEtsOther"
       [value]="type"
-      [label]="type | accreditationReferenceDocumentName">
+      [label]="type | accreditationReferenceDocumentName"
+    >
       <ng-container govukConditionalContent>
         <div formControlName="otherReference" govuk-textarea [maxLength]="10000" label="Reference details"></div>
       </ng-container>

@@ -7,7 +7,6 @@ import { AerService } from '@tasks/aer/core/aer.service';
 
 @Component({
   selector: 'app-source-streams',
-  standalone: false,
   templateUrl: './source-streams.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

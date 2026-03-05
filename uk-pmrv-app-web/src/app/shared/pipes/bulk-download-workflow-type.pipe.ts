@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { RequestDetailsDTO } from 'pmrv-api';
 
-@Pipe({ name: 'bulkDownloadWorkflowType', standalone: false })
+@Pipe({ name: 'bulkDownloadWorkflowType' })
 export class BulkDownloadWorkflowTypePipe implements PipeTransform {
   transform(type: RequestDetailsDTO['requestType']): string {
     switch (type) {

@@ -7,7 +7,6 @@ import { uncertaintyAssessmentFormProvider } from '@tasks/aer/verification-submi
 
 @Component({
   selector: 'app-uncertainty-assessment',
-  standalone: false,
   templateUrl: './uncertainty-assessment.component.html',
   providers: [uncertaintyAssessmentFormProvider, ComplianceEtsService],
   changeDetection: ChangeDetectionStrategy.OnPush,

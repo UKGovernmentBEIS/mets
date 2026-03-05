@@ -12,7 +12,6 @@ import { InstallationAccountDTO, InstallationAccountPermitDTO, InstallationAccou
 
 @Component({
   selector: 'app-fa-status',
-  standalone: false,
   template: `
     <app-page-heading size="l">Has the installation received free allocation?</app-page-heading>
 

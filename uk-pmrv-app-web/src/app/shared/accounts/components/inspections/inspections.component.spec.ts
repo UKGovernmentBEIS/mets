@@ -6,13 +6,13 @@ import { of } from 'rxjs';
 
 import { AuthStore } from '@core/store';
 import { SharedModule } from '@shared/shared.module';
-import { SharedUserModule } from '@shared-user/shared-user.module';
 import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
 
 import { RequestsService } from 'pmrv-api';
 
 import { AccountsModule } from '../../../../accounts/accounts.module';
 import { mockedAccount, mockedAccountPermit, mockInspectionsResults } from '../../../../accounts/testing/mock-data';
+import { SharedUserModule } from '../../../../shared-user/shared-user.module';
 import { InspectionsComponent } from './inspections.component';
 
 describe('InspectionsComponent', () => {

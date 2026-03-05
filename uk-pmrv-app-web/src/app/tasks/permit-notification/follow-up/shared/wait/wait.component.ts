@@ -14,7 +14,6 @@ import { SummaryList } from '../../model/model';
 
 @Component({
   selector: 'app-wait',
-  standalone: false,
   templateUrl: './wait.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -18,7 +18,6 @@ describe('AlrAuthoritySummaryTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-alr-authority-summary-template [data]="data"></app-alr-authority-summary-template>
     `,

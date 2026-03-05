@@ -95,7 +95,7 @@ describe('CompleteComponent', () => {
     });
     fixture.detectChanges();
     expect(hostElement.textContent.trim()).toEqual(
-      'Task completedYour reference code is: DOAL12345-2025-1 Return to dashboard',
+      'Task completedYour reference code is:DOAL12345-2025-1  Return to dashboard',
     );
   });
 });

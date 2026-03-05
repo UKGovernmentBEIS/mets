@@ -7,7 +7,6 @@ import { ComplianceEtsService } from '@tasks/aer/verification-submit/compliance-
 
 @Component({
   selector: 'app-monitoring-approach',
-  standalone: false,
   templateUrl: './monitoring-approach.component.html',
   providers: [monitoringApproachFormProvider, ComplianceEtsService],
   changeDetection: ChangeDetectionStrategy.OnPush,

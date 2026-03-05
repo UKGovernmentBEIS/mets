@@ -9,7 +9,6 @@ import { BackLinkService } from '@shared/back-link/back-link.service';
 
 @Component({
   selector: 'app-withdraw-completed',
-  standalone: false,
   templateUrl: './withdraw-completed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -8,8 +8,9 @@ import { EmpDataGaps } from 'pmrv-api';
 
 @Component({
   selector: 'app-data-gaps-summary-template',
-  imports: [CommonModule, RouterModule, SharedModule],
   templateUrl: './data-gaps-summary-template.component.html',
+  standalone: true,
+  imports: [CommonModule, RouterModule, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGapsSummaryTemplateComponent {

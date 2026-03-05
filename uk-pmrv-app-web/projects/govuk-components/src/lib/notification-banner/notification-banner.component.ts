@@ -2,7 +2,6 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, O
 
 @Component({
   selector: 'govuk-notification-banner',
-  standalone: false,
   templateUrl: './notification-banner.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

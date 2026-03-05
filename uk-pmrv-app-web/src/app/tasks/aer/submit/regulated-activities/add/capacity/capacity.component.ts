@@ -15,10 +15,9 @@ import { capacityFormProvider } from '@tasks/aer/submit/regulated-activities/add
 
 @Component({
   selector: 'app-regulated-activity-capacity',
-  standalone: false,
   templateUrl: './capacity.component.html',
-  providers: [capacityFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [capacityFormProvider],
 })
 export class CapacityComponent implements PendingRequest, OnInit {
   caption$ = combineLatest([this.aerService.getTask('regulatedActivities'), this.route.paramMap]).pipe(

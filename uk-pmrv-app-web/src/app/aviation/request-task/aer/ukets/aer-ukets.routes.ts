@@ -46,9 +46,9 @@ export const AER_CHILD_ROUTES: Routes = [
     path: 'aggregated-consumption-and-flight-data',
     providers: [{ provide: TASK_FORM_PROVIDER, useClass: AggregatedConsumptionFlightDataFormProvider }],
     loadChildren: () =>
-      import('@aviation/request-task/aer/shared/aggregated-consumption-flight-data/aggregated-consumption-flight-data.routes').then(
-        (r) => r.AER_AGGREGATED_CONSUMPTION_FLIGHT_DATA_ROUTES,
-      ),
+      import(
+        '@aviation/request-task/aer/shared/aggregated-consumption-flight-data/aggregated-consumption-flight-data.routes'
+      ).then((r) => r.AER_AGGREGATED_CONSUMPTION_FLIGHT_DATA_ROUTES),
   },
   {
     path: 'emissions-reduction-claim',

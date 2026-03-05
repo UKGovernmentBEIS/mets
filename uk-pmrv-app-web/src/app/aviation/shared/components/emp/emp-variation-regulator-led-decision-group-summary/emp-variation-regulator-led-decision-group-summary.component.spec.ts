@@ -12,7 +12,6 @@ describe('EmpVariationRegulatorLedDecisionGroupSummaryComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-emp-variation-regulator-led-decision-group-summary
         [data]="data"></app-emp-variation-regulator-led-decision-group-summary>

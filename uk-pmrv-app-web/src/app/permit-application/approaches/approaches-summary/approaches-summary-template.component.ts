@@ -9,7 +9,6 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-approaches-summary-template',
-  standalone: false,
   template: `
     <dl govuk-summary-list [class.dl--no-bottom-border]="!hasBottomBorder">
       <div govukSummaryListRow *ngFor="let monitoringApproach of monitoringApproaches$ | async">

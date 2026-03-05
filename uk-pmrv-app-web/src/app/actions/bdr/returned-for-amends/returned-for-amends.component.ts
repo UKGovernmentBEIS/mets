@@ -10,8 +10,9 @@ import { BdrActionService } from '../core/bdr.service';
 
 @Component({
   selector: 'app-bdr-returned-for-amends',
-  imports: [ActionSharedModule, NgIf, SharedModule],
   templateUrl: './returned-for-amends.component.html',
+  standalone: true,
+  imports: [ActionSharedModule, NgIf, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BdrReturnedForAmendsComponent {

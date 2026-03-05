@@ -26,10 +26,10 @@ export interface AviationAerUketsComplianceMonitoringFormModel {
 }
 
 @Injectable()
-export class ComplianceMonitoringFormProvider implements TaskFormProvider<
-  AviationAerComplianceMonitoringReportingRules,
-  AviationAerUketsComplianceMonitoringFormModel
-> {
+export class ComplianceMonitoringFormProvider
+  implements
+    TaskFormProvider<AviationAerComplianceMonitoringReportingRules, AviationAerUketsComplianceMonitoringFormModel>
+{
   private store = inject(RequestTaskStore);
   private fb = inject(FormBuilder);
   private _form: FormGroup<AviationAerUketsComplianceMonitoringFormModel>;

@@ -29,7 +29,6 @@ describe('PermitTaskComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-permit-task>
         <app-page-heading caption="Additional information">Additional documents and information</app-page-heading>

@@ -17,7 +17,6 @@ describe('SourceStreamDetailsTemplateComponent', () => {
   const destroySubject = mockClass(DestroySubject);
 
   @Component({
-    standalone: false,
     template: `
       <app-source-streams-details-template
         [form]="formGroup"

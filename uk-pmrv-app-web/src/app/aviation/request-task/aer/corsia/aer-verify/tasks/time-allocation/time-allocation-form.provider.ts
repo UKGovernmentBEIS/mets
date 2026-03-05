@@ -13,10 +13,9 @@ export interface AviationAerCorsiaTimeAllocationScopeFormModel {
 }
 
 @Injectable()
-export class TimeAllocationFormProvider implements TaskFormProvider<
-  AviationAerCorsiaTimeAllocationScope,
-  AviationAerCorsiaTimeAllocationScopeFormModel
-> {
+export class TimeAllocationFormProvider
+  implements TaskFormProvider<AviationAerCorsiaTimeAllocationScope, AviationAerCorsiaTimeAllocationScopeFormModel>
+{
   private _form: FormGroup<AviationAerCorsiaTimeAllocationScopeFormModel>;
 
   constructor(private fb: FormBuilder) {}

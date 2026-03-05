@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.reporting.domain.verification.OverallAssessmentType;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestMetadata;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestMetadataReportable;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRInitiationType;
 
 import java.time.Year;
 
@@ -23,7 +24,4 @@ public class BDRS2RequestMetadata extends RequestMetadata implements RequestMeta
     private Year year;
 
     private BDRS2InitiationType bdrs2InitiationType;
-
-    private OverallAssessmentType overallAssessmentType;
-
 }

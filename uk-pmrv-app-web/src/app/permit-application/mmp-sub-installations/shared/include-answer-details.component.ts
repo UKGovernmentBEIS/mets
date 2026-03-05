@@ -4,8 +4,9 @@ import { GovukComponentsModule } from 'govuk-components';
 
 @Component({
   selector: 'app-include-answer-details',
-  imports: [GovukComponentsModule],
   templateUrl: './include-answer-details.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IncludeAnswerDetailsComponent {}

@@ -13,7 +13,6 @@ import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplate
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
-import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.common.domain.EmpIssuanceDeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.submit.domain.EmpIssuanceUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
@@ -94,9 +93,7 @@ public class EmpIssuanceOfficialNoticeService {
                 List.of(requestPayload.getOfficialNotice(), requestPayload.getEmpDocument()) :
                 List.of(requestPayload.getOfficialNotice());
 
-        if(EmpIssuanceDeterminationType.APPROVED.equals(requestPayload.getDetermination().getType())) {
-            empIssuanceRegistryEventPublisherService.publishRegistryEvent(requestPayload, requestId, request.getAccountId());
-        }
+        empIssuanceRegistryEventPublisherService.publishRegistryEvent(requestPayload,requestId,request.getAccountId());
 
 		officialNoticeSendService.sendOfficialNotice(attachments, request,
 				decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification()),

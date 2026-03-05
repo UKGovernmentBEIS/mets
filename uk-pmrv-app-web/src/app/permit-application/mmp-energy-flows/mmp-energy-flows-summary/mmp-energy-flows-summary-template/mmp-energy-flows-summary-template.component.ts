@@ -19,9 +19,10 @@ interface ViewModel {
 
 @Component({
   selector: 'app-mmp-energy-flows-summary-template',
-  imports: [SharedModule, SharedPermitModule, RouterModule],
   templateUrl: './mmp-energy-flows-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [SharedModule, SharedPermitModule, RouterModule],
 })
 export class MmpEnergyFlowsSummaryTemplateComponent {
   @Input() showOriginal = false;

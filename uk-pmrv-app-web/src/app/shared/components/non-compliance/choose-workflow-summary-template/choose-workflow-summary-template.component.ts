@@ -4,7 +4,6 @@ import { RequestInfoDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-choose-workflow-summary-template',
-  standalone: false,
   templateUrl: './choose-workflow-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

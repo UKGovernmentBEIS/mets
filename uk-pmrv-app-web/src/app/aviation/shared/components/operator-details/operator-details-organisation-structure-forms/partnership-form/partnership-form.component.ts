@@ -11,6 +11,7 @@ import { GovukComponentsModule } from 'govuk-components';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-organisation-structure-partnership-form',
+  standalone: true,
   imports: [GovukComponentsModule, SharedModule, LocationStateFormComponent],
   templateUrl: './partnership-form.component.html',
   viewProviders: [existingControlContainer],

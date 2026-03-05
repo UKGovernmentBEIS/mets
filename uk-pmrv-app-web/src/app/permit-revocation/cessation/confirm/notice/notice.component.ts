@@ -17,7 +17,6 @@ import { OfficialNoticeTypeMap } from '../core/cessation';
 
 @Component({
   selector: 'app-revocation-cessation-notice',
-  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onContinue()"
@@ -37,8 +36,8 @@ import { OfficialNoticeTypeMap } from '../core/cessation';
     </app-wizard-step>
     <a govukLink routerLink="../..">Return to: Cessation</a>
   `,
-  providers: [permitRevocationCessationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [permitRevocationCessationFormProvider],
 })
 export class NoticeComponent implements PendingRequest, OnInit {
   readonly officialNoticeTypeMap = OfficialNoticeTypeMap;

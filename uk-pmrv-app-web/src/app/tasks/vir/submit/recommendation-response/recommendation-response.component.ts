@@ -15,7 +15,6 @@ import { OperatorImprovementResponse, VirApplicationSubmitRequestTaskPayload } f
 
 @Component({
   selector: 'app-recommendation-response',
-  standalone: false,
   template: `
     <app-vir-task [heading]="heading" returnToLink="../..">
       <app-reference-item-form

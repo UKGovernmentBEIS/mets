@@ -13,7 +13,9 @@
         [userId]="userId$ | async"
         [accountId]="accountId$ | async"
         [userName]="userFullName"
-        role="OPERATOR"></app-two-fa-link>
+        [role]="'OPERATOR'"
+      >
+      </app-two-fa-link>
 
       <button appPendingButton govukButton type="submit">Save</button>
     </form>

@@ -12,7 +12,9 @@ import { ReviewGroupStatusWrapperPipe } from './review-group-status-wrapper.pipe
 describe('ReviewGroupStatusWrapperPipe', () => {
   let pipe: ReviewGroupStatusWrapperPipe;
 
-  @Pipe({ name: 'mockPipe', standalone: false })
+  @Pipe({
+    name: 'mockPipe',
+  })
   class MockPipe implements PipeTransform {
     transform(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

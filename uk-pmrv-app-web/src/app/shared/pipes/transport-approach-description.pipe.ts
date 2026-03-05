@@ -4,7 +4,6 @@ import { TransferredCO2AndN2OMonitoringApproach } from 'pmrv-api';
 
 @Pipe({
   name: 'transportApproachDescription',
-  standalone: false,
 })
 export class TransportApproachDescriptionPipe implements PipeTransform {
   transform(value: TransferredCO2AndN2OMonitoringApproach['monitoringTransportNetworkApproach']): string {

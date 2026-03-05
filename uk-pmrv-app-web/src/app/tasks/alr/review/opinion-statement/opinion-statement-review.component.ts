@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
+import { ActivitySummaryTemplateComponent } from '@shared/components/alr';
 import { SharedModule } from '@shared/shared.module';
 import { AttachedFile } from '@shared/types/attached-file.type';
 import { AlrService } from '@tasks/alr/core';
@@ -12,15 +13,22 @@ import { ALRApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-alr-verification-opinion-statement-review',
-  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, AlrVerificationReviewGroupDecisionComponent],
   templateUrl: './opinion-statement-review.component.html',
+  standalone: true,
+  imports: [
+    SharedModule,
+    TaskSharedModule,
+    AlrTaskSharedModule,
+    ActivitySummaryTemplateComponent,
+    AlrVerificationReviewGroupDecisionComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrOpinionStatementReviewComponent {
-  readonly isEditable: Signal<boolean> = this.alrService.isEditable;
-  readonly alrPayload: Signal<ALRApplicationVerificationSubmitRequestTaskPayload> = this.alrService.payload;
+  isEditable: Signal<boolean> = this.alrService.isEditable;
+  alrPayload: Signal<ALRApplicationVerificationSubmitRequestTaskPayload> = this.alrService.payload;
 
-  readonly opinionStatementFile: Signal<AttachedFile> = computed(() => {
+  opinionStatementFile: Signal<AttachedFile> = computed(() => {
     const payload = this.alrPayload();
 
     return payload?.verificationReport?.opinionStatement?.opinionStatementFile

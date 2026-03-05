@@ -23,6 +23,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-waste-qdr-action-returned-for-amends',
+  standalone: true,
   imports: [ActionSharedModule, NgIf, ChangesRequestedTemplateComponent],
   template: `
     <ng-container *ngIf="vm() as vm">

@@ -9,7 +9,6 @@ import { DreService } from '../../core/dre.service';
 
 @Component({
   selector: 'app-dre-summary',
-  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">

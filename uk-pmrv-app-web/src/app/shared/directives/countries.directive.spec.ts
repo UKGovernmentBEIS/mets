@@ -14,7 +14,6 @@ describe('CountriesDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
     template: '<div govuk-select appCountries [formControl]="country" label="Country"> </div>',
   })
   class TestComponent {

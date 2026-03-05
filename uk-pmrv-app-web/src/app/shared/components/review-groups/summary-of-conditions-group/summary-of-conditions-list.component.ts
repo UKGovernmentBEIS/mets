@@ -6,7 +6,6 @@ import { VerifierComment } from 'pmrv-api';
 
 @Component({
   selector: 'app-summary-of-conditions-list',
-  standalone: false,
   templateUrl: './summary-of-conditions-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -6,7 +6,6 @@ import { AirApplicationSubmitRequestTaskPayload, AirImprovement } from 'pmrv-api
 
 @Component({
   selector: 'app-air-improvement-data-group',
-  standalone: false,
   template: `
     <ng-container *ngFor="let airImprovement of airImprovements | keyvalue: originalOrder">
       <h2 class="govuk-heading-s govuk-!-margin-0">

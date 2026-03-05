@@ -19,11 +19,10 @@ public class RequestReleaseService {
     
     @Transactional
     public void releaseRequest(RequestTask requestTask) {
-        if(!requestTask.getType().doesPopulateRequestAssignment()) {
+        if(requestTask.getType().isPeerReview()) {
             return;
         }
-        
-        Request request = requestTask.getRequest();
+            Request request = requestTask.getRequest();
         String requestTaskAssignee = requestTask.getAssignee();
 
         String requestTaskRoleType = authorizationRulesQueryService

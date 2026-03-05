@@ -62,10 +62,9 @@ export interface CorsiaOperatorDetailsFormModel {
 }
 
 @Injectable()
-export class OperatorDetailsCorsiaFormProvider implements TaskFormProvider<
-  EmpCorsiaOperatorDetails,
-  CorsiaOperatorDetailsFormModel
-> {
+export class OperatorDetailsCorsiaFormProvider
+  implements TaskFormProvider<EmpCorsiaOperatorDetails, CorsiaOperatorDetailsFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup;
 

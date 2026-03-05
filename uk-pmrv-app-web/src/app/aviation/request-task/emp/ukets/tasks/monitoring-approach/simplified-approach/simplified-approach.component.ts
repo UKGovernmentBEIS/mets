@@ -15,10 +15,11 @@ import { SimplifiedApproachFormComponent } from '../simplified-approach-form/sim
 
 @Component({
   selector: 'app-simplified-approach',
-  imports: [GovukComponentsModule, SharedModule, SimplifiedApproachFormComponent, ReturnToLinkComponent],
   templateUrl: './simplified-approach.component.html',
-  providers: [DestroySubject],
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, SimplifiedApproachFormComponent, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class SimplifiedApproachComponent extends BaseMonitoringApproachComponent implements OnInit, OnDestroy {
   form = this.formProvider.simplifiedApproachForm;

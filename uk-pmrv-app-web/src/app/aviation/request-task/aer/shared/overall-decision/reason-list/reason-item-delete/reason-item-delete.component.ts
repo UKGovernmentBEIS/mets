@@ -15,7 +15,6 @@ import { AviationAerVerifiedSatisfactoryWithCommentsDecision } from 'pmrv-api';
 
 @Component({
   selector: 'app-reason-item-delete',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   template: `
     <div class="govuk-!-width-two-thirds">
       <app-page-heading size="l">Are you sure you want to delete this item?</app-page-heading>
@@ -26,6 +25,8 @@ import { AviationAerVerifiedSatisfactoryWithCommentsDecision } from 'pmrv-api';
       <app-return-to-link></app-return-to-link>
     </div>
   `,
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReasonItemDeleteComponent {

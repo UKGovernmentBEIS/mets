@@ -22,9 +22,10 @@ import { AviationAerCorsiaUncorrectedNonConformities } from 'pmrv-api';
 
 @Component({
   selector: 'app-conformity-item',
-  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './conformity-item.component.html',
   providers: [DestroySubject, ConformityItemFormProvider],
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConformityItemComponent {

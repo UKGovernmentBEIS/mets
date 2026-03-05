@@ -9,7 +9,6 @@ import { sourceStreamEmissionStatus } from '../../shared/components/submit/emiss
 
 @Component({
   selector: 'app-pfc',
-  standalone: false,
   templateUrl: './pfc.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

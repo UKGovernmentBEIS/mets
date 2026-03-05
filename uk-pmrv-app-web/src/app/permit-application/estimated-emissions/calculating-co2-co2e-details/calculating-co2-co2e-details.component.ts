@@ -4,7 +4,6 @@ import { BackLinkService } from '../../../shared/back-link/back-link.service';
 
 @Component({
   selector: 'app-calculating-co2-co2e-details',
-  standalone: false,
   templateUrl: './calculating-co2-co2e-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

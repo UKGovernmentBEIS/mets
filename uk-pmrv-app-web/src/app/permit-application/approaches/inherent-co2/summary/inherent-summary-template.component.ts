@@ -7,10 +7,9 @@ import { isWizardComplete } from '../inherent-co2-wizard';
 
 @Component({
   selector: 'app-inherent-summary-template',
-  standalone: false,
   templateUrl: './inherent-summary-template.component.html',
-  styleUrl: './inherent-summary-template.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './inherent-summary-template.component.scss',
 })
 export class InherentSummaryTemplateComponent {
   @Input() data: Array<InherentReceivingTransferringInstallation>;

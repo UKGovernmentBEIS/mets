@@ -6,7 +6,6 @@ import { EnvironmentalPermitsAndLicences } from 'pmrv-api';
 
 @Component({
   selector: 'app-permits-summary-template',
-  standalone: false,
   template: `
     <dl
       *ngFor="let detail of _environmentalPermitsAndLicences"

@@ -10,10 +10,9 @@ import { officialNoticeReasonFormProvider } from './official-notice-reason-form.
 
 @Component({
   selector: 'app-official-notice-reason',
-  standalone: false,
   templateUrl: './official-notice-reason.component.html',
-  providers: [officialNoticeReasonFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [officialNoticeReasonFormProvider],
 })
 export class OfficialNoticeReasonComponent {
   private readonly nextWizardStep = 'monitoring-approaches';

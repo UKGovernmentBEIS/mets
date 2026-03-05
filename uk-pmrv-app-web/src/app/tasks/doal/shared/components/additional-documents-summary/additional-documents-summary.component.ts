@@ -6,7 +6,6 @@ import { DoalService } from '@tasks/doal/core/doal.service';
 
 @Component({
   selector: 'app-additional-documents-summary',
-  standalone: false,
   template: `
     <app-doal-task [breadcrumb]="true">
       <app-page-heading>Upload additional documents</app-page-heading>

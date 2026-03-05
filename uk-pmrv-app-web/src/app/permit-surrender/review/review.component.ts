@@ -22,10 +22,9 @@ import { needsReview } from './core/review-status';
 
 @Component({
   selector: 'app-review',
-  standalone: false,
   templateUrl: './review.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class ReviewComponent {
   readonly storeFirst$ = this.store.pipe(first());

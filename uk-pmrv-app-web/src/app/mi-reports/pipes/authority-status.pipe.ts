@@ -4,7 +4,6 @@ import { UserAuthorityInfoDTO } from 'pmrv-api';
 
 @Pipe({
   name: 'authorityStatus',
-  standalone: false,
 })
 export class AuthorityStatusPipe implements PipeTransform {
   transform(status?: UserAuthorityInfoDTO['authorityStatus']): string {

@@ -11,6 +11,7 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-conflict-interest',
+  standalone: true,
   imports: [ReturnToLinkComponent, SharedModule],
   templateUrl: './conflict-interest.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

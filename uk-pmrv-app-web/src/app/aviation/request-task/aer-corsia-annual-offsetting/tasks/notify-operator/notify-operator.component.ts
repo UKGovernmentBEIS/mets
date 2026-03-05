@@ -16,6 +16,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-annual-offsetting-requirements-notify-operator',
+  standalone: true,
   imports: [SharedModule],
   template: `
     <div class="govuk-grid-row" *ngIf="vm() as vm">

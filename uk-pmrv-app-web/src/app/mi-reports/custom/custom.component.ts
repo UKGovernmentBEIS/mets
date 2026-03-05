@@ -18,10 +18,9 @@ import { manipulateResultsAndExportToExcel } from '../core/mi-report';
 
 @Component({
   selector: 'app-custom',
-  standalone: false,
   templateUrl: './custom.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class CustomReportComponent implements OnInit {
   readonly isTemplateGenerationErrorDisplayed$ = new BehaviorSubject<boolean>(false);

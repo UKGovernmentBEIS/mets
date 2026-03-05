@@ -31,16 +31,15 @@ interface ViewModel {
 
 @Component({
   selector: 'app-request-action-page',
-  standalone: false,
   templateUrl: './request-action-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
   styles: `
     :host ::ng-deep .app-task-list {
       list-style-type: none;
       padding-left: 0;
     }
   `,
-  providers: [DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestActionPageComponent implements OnInit {
   hasReport$ = this.store.pipe(

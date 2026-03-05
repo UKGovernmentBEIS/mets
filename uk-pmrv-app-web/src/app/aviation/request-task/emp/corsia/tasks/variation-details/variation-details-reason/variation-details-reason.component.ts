@@ -5,12 +5,14 @@ import { VariationDetailsFormProvider } from '@aviation/request-task/emp/corsia/
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
+import { VariationDetailsReasonTypePipe } from '@aviation/shared/pipes/variation-details-reason-type.pipe';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-variation-details-reason',
-  imports: [RouterModule, SharedModule, ReturnToLinkComponent],
+  standalone: true,
+  imports: [RouterModule, SharedModule, ReturnToLinkComponent, VariationDetailsReasonTypePipe],
   templateUrl: './variation-details-reason.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -10,9 +10,8 @@ describe('DetailsComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
     template: `
-      <govuk-details [summary]="summary" />
+      <govuk-details [summary]="summary"></govuk-details>
     `,
   })
   class TestComponent {

@@ -32,6 +32,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-submit-task-list',
+  standalone: true,
   imports: [SharedModule, TaskSharedModule],
   templateUrl: './submit-task-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

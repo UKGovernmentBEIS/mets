@@ -10,7 +10,6 @@ import { Aer, AerApplicationSubmitRequestTaskPayload, AerMonitoringApproachEmiss
 
 @Component({
   selector: 'app-approaches-delete',
-  standalone: false,
   template: `
     <app-approaches-delete-template
       (delete)="delete()"

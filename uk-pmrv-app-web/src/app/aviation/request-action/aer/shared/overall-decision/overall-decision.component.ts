@@ -23,12 +23,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-overall-decision',
-  imports: [
-    SharedModule,
-    RequestActionTaskComponent,
-    OverallDecisionGroupComponent,
-    AerVerificationReviewDecisionGroupSummaryComponent,
-  ],
   // eslint-disable-next-line @angular-eslint/component-max-inline-declarations
   template: `
     <app-request-action-task
@@ -47,6 +41,13 @@ interface ViewModel {
       </ng-container>
     </app-request-action-task>
   `,
+  standalone: true,
+  imports: [
+    SharedModule,
+    RequestActionTaskComponent,
+    OverallDecisionGroupComponent,
+    AerVerificationReviewDecisionGroupSummaryComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class OverallDecisionComponent {

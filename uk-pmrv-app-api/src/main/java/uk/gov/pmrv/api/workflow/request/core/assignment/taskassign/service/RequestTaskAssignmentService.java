@@ -43,13 +43,9 @@ public class RequestTaskAssignmentService {
         //assign task to user
         doAssignTaskToUser(requestTask, userId);
 
-        //assign all other non cascadeable request tasks to user as well
-        if(requestTask.getType().doesCascadeReassignment()) {
-        	assignAllOtherCascadeableRequestTasksToUser(requestTask, userId);
-        }
-        
-        // assign request payload
-        if(requestTask.getType().doesPopulateRequestAssignment()) {
+        //assign request and all other request tasks to user as well, if request task is not peer review task
+        if(!requestTask.getType().isSupporting()) {
+            assignAllOtherRequestTasksToUser(requestTask, userId);
             requestAssignmentService.assignRequestToUser(requestTask.getRequest(), userId);
         }
 
@@ -60,9 +56,9 @@ public class RequestTaskAssignmentService {
         }
     }
 
-    private void assignAllOtherCascadeableRequestTasksToUser(RequestTask requestTask, String userId) {
+    private void assignAllOtherRequestTasksToUser(RequestTask requestTask, String userId) {
         UserRoleTypeDTO userRoleType = userRoleTypeService.getUserRoleTypeByUserId(userId);
-        List<RequestTask> requestTasksToBeAssigned = getAllOtherCascadeableRequestTasksByUserRoleType(requestTask, userRoleType.getRoleType());
+        List<RequestTask> requestTasksToBeAssigned = getAllOtherRequestTasksByUserRoleType(requestTask, userRoleType.getRoleType());
         requestTasksToBeAssigned.forEach(
             taskToBeAssigned -> {
                 if(!userId.equals(taskToBeAssigned.getAssignee()) &&
@@ -72,12 +68,13 @@ public class RequestTaskAssignmentService {
             });
     }
 
-    private List<RequestTask> getAllOtherCascadeableRequestTasksByUserRoleType(RequestTask task, String roleType) {
+    private List<RequestTask> getAllOtherRequestTasksByUserRoleType(RequestTask task, String roleType) {
         List<RequestTask> requestTasks = requestTaskService.findTasksByRequestIdAndRoleType(task.getRequest().getId(), roleType);
         requestTasks.remove(task);
 
+        //peer review task should not be returned for reassignment
         return requestTasks.stream()
-            .filter(requestTask -> requestTask.getType().doesCascadeReassignment())
+            .filter(requestTask -> !requestTask.getType().isSupporting())
             .collect(Collectors.toList());
     }
 

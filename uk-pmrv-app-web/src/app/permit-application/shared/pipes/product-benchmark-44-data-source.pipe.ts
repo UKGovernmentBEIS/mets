@@ -4,7 +4,6 @@ import { QuantityProductDataSource } from 'pmrv-api';
 
 @Pipe({
   name: 'productBenchmark44DataSource',
-  standalone: false,
 })
 export class ProductBenchmark44DataSourcePipe implements PipeTransform {
   transform(value: QuantityProductDataSource['quantityProduct']): string {

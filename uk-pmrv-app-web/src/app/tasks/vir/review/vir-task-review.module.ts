@@ -14,7 +14,6 @@ import { SummaryComponent as CreateSummarySummaryComponent } from './create-summ
 import { SendReportComponent } from './send-report/send-report.component';
 
 @NgModule({
-  imports: [SharedModule, TaskSharedModule, VirSharedModule, VirTaskReviewRoutingModule, VirTaskSharedModule],
   declarations: [
     CreateSummaryComponent,
     CreateSummarySummaryComponent,
@@ -23,5 +22,6 @@ import { SendReportComponent } from './send-report/send-report.component';
     SendReportComponent,
     SummaryComponent,
   ],
+  imports: [SharedModule, TaskSharedModule, VirSharedModule, VirTaskReviewRoutingModule, VirTaskSharedModule],
 })
 export class VirTaskReviewModule {}

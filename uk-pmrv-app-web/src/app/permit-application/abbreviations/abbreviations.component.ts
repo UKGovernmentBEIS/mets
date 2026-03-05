@@ -13,7 +13,6 @@ import { abbreviationsFormProvider } from './abbreviations-form.provider';
 
 @Component({
   selector: 'app-abbreviations',
-  standalone: false,
   template: `
     <app-permit-task reviewGroupTitle="Additional information" reviewGroupUrl="additional-info" [breadcrumb]="true">
       <app-abbreviations-template
@@ -26,8 +25,8 @@ import { abbreviationsFormProvider } from './abbreviations-form.provider';
         reviewGroupUrl="additional-info"></app-list-return-link>
     </app-permit-task>
   `,
-  providers: [abbreviationsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [abbreviationsFormProvider],
 })
 export class AbbreviationsComponent extends SectionComponent implements AfterContentChecked {
   constructor(

@@ -4,10 +4,6 @@ import {
   ALRVerifiedSatisfactoryOverallVerificationAssessment,
   ALRVerifiedWithCommentsOverallVerificationAssessment,
   BDRNotVerifiedOverallVerificationAssessment,
-  BDRS2NotVerifiedOverallVerificationAssessment,
-  BDRS2VerificationReport,
-  BDRS2VerifiedSatisfactoryOverallVerificationAssessment,
-  BDRS2VerifiedWithCommentsOverallVerificationAssessment,
   BDRVerificationReport,
   BDRVerifiedSatisfactoryOverallVerificationAssessment,
   BDRVerifiedWithCommentsOverallVerificationAssessment,
@@ -18,13 +14,10 @@ export type OverallVerificationAssessment = BDRVerifiedSatisfactoryOverallVerifi
   BDRNotVerifiedOverallVerificationAssessment &
   ALRVerifiedSatisfactoryOverallVerificationAssessment &
   ALRVerifiedWithCommentsOverallVerificationAssessment &
-  ALRNotVerifiedOverallVerificationAssessment &
-  BDRS2VerifiedSatisfactoryOverallVerificationAssessment &
-  BDRS2VerifiedWithCommentsOverallVerificationAssessment &
-  BDRS2NotVerifiedOverallVerificationAssessment;
+  ALRNotVerifiedOverallVerificationAssessment;
 
 export const overallDecisionWizardCompleted = (
-  overallAssessment: (BDRVerificationReport | ALRVerificationReport | BDRS2VerificationReport)['overallAssessment'],
+  overallAssessment: (BDRVerificationReport | ALRVerificationReport)['overallAssessment'],
 ) => {
   switch (overallAssessment?.type) {
     case 'VERIFIED_AS_SATISFACTORY':
@@ -32,14 +25,11 @@ export const overallDecisionWizardCompleted = (
     case 'VERIFIED_WITH_COMMENTS':
       return !!(
         overallAssessment as BDRVerifiedWithCommentsOverallVerificationAssessment &
-          ALRVerifiedWithCommentsOverallVerificationAssessment &
-          BDRS2VerifiedWithCommentsOverallVerificationAssessment
+          ALRVerifiedWithCommentsOverallVerificationAssessment
       )?.reasons;
     case 'NOT_VERIFIED':
       return !!(
-        overallAssessment as BDRNotVerifiedOverallVerificationAssessment &
-          ALRNotVerifiedOverallVerificationAssessment &
-          BDRS2NotVerifiedOverallVerificationAssessment
+        overallAssessment as BDRNotVerifiedOverallVerificationAssessment & ALRNotVerifiedOverallVerificationAssessment
       )?.reasons;
 
     default:

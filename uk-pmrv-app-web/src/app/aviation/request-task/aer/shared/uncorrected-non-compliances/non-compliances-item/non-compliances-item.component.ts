@@ -28,9 +28,10 @@ interface ViewModel {
 
 @Component({
   selector: 'app-non-compliances-item',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './non-compliances-item.component.html',
   providers: [DestroySubject, NonCompliancesItemFormProvider],
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NonCompliancesItemComponent {

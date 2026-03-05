@@ -15,7 +15,6 @@ import {
 import { RequestTaskRoutingModule } from './request-task-routing.module';
 
 @NgModule({
-  imports: [RequestTaskRoutingModule, SharedModule, VirTaskListComponent],
   declarations: [
     CancelComponent,
     ChangeAssigneeComponent,
@@ -24,6 +23,7 @@ import { RequestTaskRoutingModule } from './request-task-routing.module';
     SkipReviewComponent,
     SkipReviewConfirmationComponent,
   ],
+  imports: [RequestTaskRoutingModule, SharedModule, VirTaskListComponent],
   providers: [ChangeAssigneeGuard],
 })
 export class RequestTaskModule {}

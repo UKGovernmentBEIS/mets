@@ -24,8 +24,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-determination-summary',
-  imports: [SharedModule, AlrTaskSharedModule, AlrDeterminationSummaryTemplateComponent],
   templateUrl: './summary.component.html',
+  standalone: true,
+  imports: [SharedModule, AlrTaskSharedModule, AlrDeterminationSummaryTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrDeterminationSummaryComponent {

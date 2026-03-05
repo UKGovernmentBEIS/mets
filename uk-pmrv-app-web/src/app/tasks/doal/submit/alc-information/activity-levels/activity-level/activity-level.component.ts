@@ -12,10 +12,9 @@ import { doalActivityLevelFormProvider } from './activity-level-form.provider';
 
 @Component({
   selector: 'app-doal-activity-level',
-  standalone: false,
   templateUrl: './activity-level.component.html',
-  providers: [doalActivityLevelFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [doalActivityLevelFormProvider],
 })
 export class DoalActivityLevelComponent {
   editable$: Observable<boolean> = this.doalService.isEditable$;

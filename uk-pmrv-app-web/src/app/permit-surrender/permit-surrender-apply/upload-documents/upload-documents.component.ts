@@ -12,10 +12,9 @@ import { uploadDocumentsFormProvider } from './upload-documents-form.provider';
 
 @Component({
   selector: 'app-upload-documents',
-  standalone: false,
   templateUrl: './upload-documents.component.html',
-  providers: [uploadDocumentsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [uploadDocumentsFormProvider],
 })
 export class UploadDocumentsComponent implements PendingRequest {
   readonly isFileUploaded$: Observable<boolean> = this.form.get('documents').valueChanges.pipe(

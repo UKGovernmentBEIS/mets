@@ -18,10 +18,11 @@ import { AvoidDoubleCountFormProvider } from './avoid-double-count-form.provider
 
 @Component({
   selector: 'app-mmp-avoid-double-count',
+  standalone: true,
   imports: [SharedPermitModule, SharedModule],
   templateUrl: './avoid-double-count.component.html',
-  providers: [AvoidDoubleCountFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [AvoidDoubleCountFormProvider],
 })
 export class AvoidDoubleCountComponent {
   permitTask = toSignal(this.route.data.pipe(map((x) => x?.permitTask)));

@@ -13,7 +13,6 @@ describe('ReturnLinkComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
     template: `
       <app-return-link
         [home]="home"

@@ -10,7 +10,6 @@ import { canComplete, canNotifyOperator, canSendPeerReview } from './submit-acti
 
 @Component({
   selector: 'app-submit-container',
-  standalone: false,
   templateUrl: './submit-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

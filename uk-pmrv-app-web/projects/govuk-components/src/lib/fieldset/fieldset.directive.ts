@@ -1,12 +1,8 @@
-/* eslint-disable @angular-eslint/prefer-host-metadata-property */
 import { AfterContentInit, ContentChild, Directive, ElementRef, HostBinding, Input } from '@angular/core';
 
 import { FieldsetHintDirective } from './fieldset-hint.directive';
 
-@Directive({
-  selector: 'fieldset[govukFieldset]',
-  standalone: false,
-})
+@Directive({ selector: 'fieldset[govukFieldset]' })
 export class FieldsetDirective implements AfterContentInit {
   @Input() id = 'fieldset';
   @ContentChild(FieldsetHintDirective, { read: ElementRef, static: true }) hint: ElementRef<HTMLSpanElement>;

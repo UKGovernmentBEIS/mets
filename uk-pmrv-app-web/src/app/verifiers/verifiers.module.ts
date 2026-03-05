@@ -9,7 +9,7 @@ import { VerifiersComponent } from './verifiers.component';
 import { VerifiersRoutingModule } from './verifiers-routing.module';
 
 @NgModule({
-  imports: [SharedModule, SharedUserModule, VerifiersRoutingModule],
   declarations: [DeleteComponent, DetailsComponent, SiteContactsComponent, VerifiersComponent],
+  imports: [SharedModule, SharedUserModule, VerifiersRoutingModule],
 })
 export class VerifiersModule {}

@@ -18,10 +18,9 @@ import { activityDataFormProvider } from './activity-data-form.provider';
 
 @Component({
   selector: 'app-activity-data',
-  standalone: false,
   templateUrl: './activity-data.component.html',
-  providers: [activityDataFormProvider, DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [activityDataFormProvider, DestroySubject],
 })
 export class ActivityDataComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

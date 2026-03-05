@@ -12,10 +12,9 @@ import { PASSWORD_FORM, passwordFormFactory } from '../../shared-user/password/p
 
 @Component({
   selector: 'app-regulator-invitation',
-  standalone: false,
   templateUrl: './regulator-invitation.component.html',
-  providers: [passwordFormFactory, DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [passwordFormFactory, DestroySubject],
 })
 export class RegulatorInvitationComponent implements OnInit {
   isSummaryDisplayed = new BehaviorSubject(false);

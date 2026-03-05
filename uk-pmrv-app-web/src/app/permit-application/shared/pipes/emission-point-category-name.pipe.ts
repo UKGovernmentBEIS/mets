@@ -13,10 +13,7 @@ import { PermitApplicationState } from '../../store/permit-application.state';
 import { PermitApplicationStore } from '../../store/permit-application.store';
 import { FindEmissionPointPipe } from './find-emission-point.pipe';
 
-@Pipe({
-  name: 'emissionPointCategoryName',
-  standalone: false,
-})
+@Pipe({ name: 'emissionPointCategoryName' })
 export class EmissionPointCategoryNamePipe implements PipeTransform {
   constructor(
     private readonly store: PermitApplicationStore<PermitApplicationState>,

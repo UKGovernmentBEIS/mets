@@ -19,7 +19,7 @@
   <option *ngFor="let option of changeTypeLabelsMap | keyvalue" [value]="option.key">
     {{ option.value }}
   </option>
-  <option value="OTHER">Other</option>
+  <option [value]="'OTHER'">Other</option>
   <div govukConditionalContent>
     <div formControlName="otherChangeTypeName" govuk-text-input label="Provide a short name"></div>
   </div>

@@ -14,10 +14,9 @@ import { gasFormProvider } from './gas-form.provider';
 
 @Component({
   selector: 'app-gas',
-  standalone: false,
   templateUrl: './gas.component.html',
-  providers: [gasFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [gasFormProvider],
 })
 export class GasComponent {
   constructor(

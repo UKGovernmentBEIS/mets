@@ -19,7 +19,6 @@ describe('DecisionComponent', () => {
   tasksService.processRequestTaskAction.mockReturnValue(of({}));
 
   @Component({
-    standalone: false,
     template: `
       <app-decision [taskId]="taskId" (submitted)="submitted($event)"></app-decision>
     `,

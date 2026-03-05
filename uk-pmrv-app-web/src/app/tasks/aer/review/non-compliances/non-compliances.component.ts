@@ -9,7 +9,6 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-non-compliances',
-  standalone: false,
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Uncorrected non-compliances">
       <app-non-compliances-group

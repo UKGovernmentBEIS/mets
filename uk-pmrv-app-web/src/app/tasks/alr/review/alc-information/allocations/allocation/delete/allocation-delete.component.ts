@@ -9,9 +9,10 @@ import { AlrService } from '@tasks/alr/core';
 
 @Component({
   selector: 'app-alr-allocation-delete',
-  imports: [SharedModule, RouterLink],
   templateUrl: './allocation-delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [SharedModule, RouterLink],
 })
 export class AlrAllocationDeleteComponent {
   index = this.route.snapshot.paramMap.get('index');

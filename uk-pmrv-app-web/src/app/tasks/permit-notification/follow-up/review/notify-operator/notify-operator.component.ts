@@ -9,7 +9,6 @@ import { CommonTasksStore } from '../../../../store/common-tasks.store';
 
 @Component({
   selector: 'app-follow-up-review-notify-operator',
-  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <app-notify-operator

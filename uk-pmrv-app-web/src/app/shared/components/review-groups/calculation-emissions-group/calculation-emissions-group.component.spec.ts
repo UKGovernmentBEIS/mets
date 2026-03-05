@@ -16,7 +16,6 @@ describe('CalculationEmissionsGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-calculation-emissions-group
         [data]="data"

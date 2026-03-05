@@ -12,6 +12,7 @@
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 import { WithholdingOfAllowancesWithdrawalCloseJustification } from './withholdingOfAllowancesWithdrawalCloseJustification';
 
-export interface WithholdingOfAllowancesWithdrawalCloseApplicationRequestTaskActionPayload extends RequestTaskActionPayload {
+export interface WithholdingOfAllowancesWithdrawalCloseApplicationRequestTaskActionPayload
+  extends RequestTaskActionPayload {
   closeJustification: WithholdingOfAllowancesWithdrawalCloseJustification;
 }

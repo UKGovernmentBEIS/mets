@@ -7,10 +7,7 @@ import { PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload } from 'p
 import { PermitVariationStore } from '../../../store/permit-variation.store';
 import { AboutVariationGroupKey } from '../../../variation-types';
 
-@Pipe({
-  name: 'reviewGroupVariation',
-  standalone: false,
-})
+@Pipe({ name: 'reviewGroupVariation' })
 export class ReviewGroupVariationPipe implements PipeTransform {
   constructor(private readonly store: PermitVariationStore) {}
 

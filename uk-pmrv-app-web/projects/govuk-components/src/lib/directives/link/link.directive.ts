@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/prefer-host-metadata-property */
 import {
   ChangeDetectorRef,
   Directive,
@@ -16,9 +15,9 @@ import { filter, Subscription } from 'rxjs';
 
 @Directive({
   selector: 'a[govukLink]',
-  standalone: false,
 })
 export class LinkDirective implements OnDestroy, OnInit {
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('govukLink') navLinkType: 'header' | 'footer' | 'meta' | 'breadcrumb' | 'notification' | '' = '';
   // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('hidden-text') hiddenText: string = '';

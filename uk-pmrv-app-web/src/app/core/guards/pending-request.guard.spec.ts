@@ -16,18 +16,14 @@ describe('PendingRequestGuard', () => {
   let router: Router;
   let windowAlert: jest.SpyInstance;
 
-  @Component({
-    standalone: false,
-    template: '',
-    providers: [PendingRequestService],
-  })
+  @Component({ template: '', providers: [PendingRequestService] })
   class TestComponent implements PendingRequest {
     someRequest = timer(3000).pipe(this.pendingRequest.trackRequest());
 
     constructor(readonly pendingRequest: PendingRequestService) {}
   }
 
-  @Component({ standalone: false, template: '' })
+  @Component({ template: '' })
   class EmptyTestComponent {}
 
   beforeEach(() => {

@@ -10,7 +10,6 @@ import { WorkflowItemComponent } from './workflow-item.component';
 import { WorkflowItemRoutingModule } from './workflow-item-routing.module';
 
 @NgModule({
-  imports: [SharedModule, SharedUserModule, WorkflowItemRoutingModule],
   declarations: [
     DeleteRequestNoteComponent,
     RequestNoteComponent,
@@ -18,5 +17,6 @@ import { WorkflowItemRoutingModule } from './workflow-item-routing.module';
     WorkflowItemComponent,
     WorkflowRelatedCreateActionsComponent,
   ],
+  imports: [SharedModule, SharedUserModule, WorkflowItemRoutingModule],
 })
 export class WorkflowItemModule {}

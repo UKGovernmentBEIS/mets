@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'govuk-phase-banner',
-  standalone: false,
   templateUrl: './phase-banner.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .align-right {
       display: flex;
@@ -13,7 +13,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
       order: 2;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhaseBannerComponent {
   @Input() phase: string;

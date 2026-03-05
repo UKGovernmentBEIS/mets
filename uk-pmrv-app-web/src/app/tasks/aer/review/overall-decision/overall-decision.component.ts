@@ -9,7 +9,6 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-overall-decision',
-  standalone: false,
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Overall decision">
       <app-overall-decision-group [overallAssessment]="overallAssessmentInfo$ | async"></app-overall-decision-group>

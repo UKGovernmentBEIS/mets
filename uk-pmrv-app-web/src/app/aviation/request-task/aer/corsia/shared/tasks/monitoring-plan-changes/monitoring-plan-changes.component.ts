@@ -23,6 +23,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-monitoring-plan-changes',
+  standalone: true,
   imports: [
     ReturnToLinkComponent,
     SharedModule,

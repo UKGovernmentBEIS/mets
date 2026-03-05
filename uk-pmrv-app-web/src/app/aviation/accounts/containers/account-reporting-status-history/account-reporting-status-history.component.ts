@@ -25,10 +25,10 @@ interface ViewModel {
 
 @Component({
   selector: 'app-account-reporting-status-history',
-  standalone: false,
   templateUrl: './account-reporting-status-history.component.html',
-  providers: [DestroySubject],
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class AccountReportingStatusHistoryComponent implements OnInit {
   vm$: Observable<ViewModel> = combineLatest([

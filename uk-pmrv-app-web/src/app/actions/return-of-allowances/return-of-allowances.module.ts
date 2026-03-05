@@ -8,7 +8,7 @@ import { ReturnedComponent } from './returned/returned.component';
 import { SubmittedComponent } from './submitted/submitted.component';
 
 @NgModule({
-  imports: [ActionSharedModule, ReturnOfAllowancesRoutingModule, SharedModule],
   declarations: [PeerReviewDecisionComponent, ReturnedComponent, SubmittedComponent],
+  imports: [ActionSharedModule, ReturnOfAllowancesRoutingModule, SharedModule],
 })
 export class ReturnOfAllowancesModule {}

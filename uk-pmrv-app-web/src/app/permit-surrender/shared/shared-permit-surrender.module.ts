@@ -7,8 +7,8 @@ import { PermitSurrenderSummaryComponent } from './permit-surrender-summary/perm
 const declarations = [PermitSurrenderSummaryComponent];
 
 @NgModule({
-  imports: [RouterModule, SharedModule],
   declarations: declarations,
   exports: declarations,
+  imports: [RouterModule, SharedModule],
 })
 export class SharedPermitSurrenderModule {}

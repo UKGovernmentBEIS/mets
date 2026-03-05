@@ -32,6 +32,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-variation-details-summary',
+  standalone: true,
   imports: [
     SharedModule,
     GovukComponentsModule,

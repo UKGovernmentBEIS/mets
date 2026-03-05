@@ -12,7 +12,6 @@ import { DataGapsFormModel } from './data-gaps-form.model';
 
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection, @angular-eslint/use-component-selector
 @Component({
-  standalone: false,
   template: ``,
 })
 export class BaseDataGapsComponent implements OnInit, OnDestroy {

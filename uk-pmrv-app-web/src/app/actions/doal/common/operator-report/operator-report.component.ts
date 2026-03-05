@@ -9,7 +9,6 @@ import { DoalActionService } from '../../core/doal-action.service';
 
 @Component({
   selector: 'app-doal-operator-report',
-  standalone: false,
   template: `
     <app-doal-action-task header="Upload operator activity level report" [actionType]="requestActionType$ | async">
       <app-operator-report-summary-template

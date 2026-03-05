@@ -21,12 +21,13 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aircraft-types-data',
+  standalone: true,
   imports: [ReturnToLinkComponent, SharedModule, AircraftTypesDataTableComponent, AerReviewDecisionGroupComponent],
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <app-page-heading>{{ vm.heading }}</app-page-heading>
       <app-aircraft-types-data-table
-        headingText="File uploaded"
+        [headingText]="'File uploaded'"
         [aviationAerAircraftDataDetails]="vm.data"></app-aircraft-types-data-table>
       <app-aviation-aer-review-decision-group
         *ngIf="vm.showDecision"

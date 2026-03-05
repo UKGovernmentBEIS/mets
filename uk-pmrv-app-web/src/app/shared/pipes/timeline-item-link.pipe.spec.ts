@@ -126,10 +126,6 @@ describe('TimelineItemLinkPipe', () => {
       'BDR_APPLICATION_PEER_REVIEW_REQUESTED',
       'BDR_APPLICATION_RE_INITIATED',
 
-      'BDRS2_RECALLED_FROM_VERIFICATION',
-      'BDRS2_APPLICATION_RE_INITIATED',
-      'BDRS2_APPLICATION_PEER_REVIEW_REQUESTED',
-
       'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REQUESTED',
 
       'ALR_RECALLED_FROM_VERIFICATION',
@@ -194,23 +190,6 @@ describe('TimelineItemLinkPipe', () => {
       'cessation',
       'completed',
     ]);
-  });
-
-  it('should return link for sending emmisions to registry', () => {
-    requestAction.type = 'INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'registry', 'information-sent']);
-
-    requestAction.type = 'AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'registry',
-      'information-sent',
-    ]);
-
-    requestAction.type = 'WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'registry', 'information-sent']);
   });
 
   it('should return link for payment', () => {
@@ -1145,23 +1124,8 @@ describe('TimelineItemLinkPipe', () => {
     requestAction.type = 'BDRS2_APPLICATION_SENT_TO_VERIFIER';
     expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdrs2', 'submitted']);
 
-    requestAction.type = 'BDRS2_APPLICATION_AMENDS_SENT_TO_VERIFIER';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdrs2', 'submitted']);
-
     requestAction.type = 'BDRS2_APPLICATION_SENT_TO_REGULATOR';
     expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdrs2', 'submitted']);
-
-    requestAction.type = 'BDRS2_APPLICATION_COMPLETED';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdrs2', 'submitted']);
-
-    requestAction.type = 'BDRS2_VERIFICATION_RETURNED_TO_OPERATOR';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdrs2', 'returned-to-operator']);
-
-    requestAction.type = 'BDRS2_APPLICATION_VERIFICATION_SUBMITTED';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdrs2', 'submitted']);
-
-    requestAction.type = 'BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdrs2', 'return-for-amends']);
   });
 
   it('should return links for PERMANENT CESSATION', () => {
@@ -1199,32 +1163,6 @@ describe('TimelineItemLinkPipe', () => {
 
     requestAction.type = 'AVIATION_DOE_CORSIA_PEER_REVIEWER_REJECTED';
     expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
-  });
-
-  it('should return links for withholding of allowances', () => {
-    requestAction.type = 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_SUBMITTED';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'withholding-allowances', 'submitted']);
-
-    requestAction.type = 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_WITHDRAWN';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'withholding-allowances', 'withdrawn']);
-
-    requestAction.type = 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_CLOSED';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'withholding-allowances', 'closed']);
-
-    requestAction.type = 'WITHHOLDING_OF_ALLOWANCES_PEER_REVIEW_REQUESTED';
-    expect(pipe.transform(requestAction)).toBe(null);
-
-    requestAction.type = 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_CANCELLED';
-    expect(pipe.transform(requestAction)).toBe(null);
-
-    requestAction.type = 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_RE_INITIATED';
-    expect(pipe.transform(requestAction)).toBe(null);
-
-    requestAction.type = 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_ACCEPTED';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'withholding-allowances', 'peer-review-decision']);
-
-    requestAction.type = 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_REJECTED';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'withholding-allowances', 'peer-review-decision']);
   });
 
   it('should return links for activity level report (ALR)', () => {

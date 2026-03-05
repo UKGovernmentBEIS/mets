@@ -4,10 +4,7 @@ import { MeasurementDeviceOrMethod } from 'pmrv-api';
 
 import { MeasurementDevicesTypePipe } from '../../measurement-devices/measurement-devices-summary/measurement-devices-type.pipe';
 
-@Pipe({
-  name: 'measurementDeviceOrMethodName',
-  standalone: false,
-})
+@Pipe({ name: 'measurementDeviceOrMethodName' })
 export class MeasurementDeviceOrMethodNamePipe implements PipeTransform {
   constructor(private measurementDevicesTypePipe: MeasurementDevicesTypePipe) {}
 

@@ -9,8 +9,9 @@ import { ConfidentialityFormProvider } from '../confidentiality-form.provider';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-confidentiality-form',
-  imports: [SharedModule],
   templateUrl: './confidentiality-form.component.html',
+  imports: [SharedModule],
+  standalone: true,
   viewProviders: [existingControlContainer],
 })
 export class ConfidentialityFormComponent {

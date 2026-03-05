@@ -2,7 +2,5 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain;
 
 public enum BDRS2Outcome {
     SUBMITTED_TO_VERIFIER,
-    SUBMITTED_TO_REGULATOR,
-    VERIFICATION_SUBMITTED_TO_OPERATOR,
-    PEER_REVIEW_REQUIRED
+    SUBMITTED_TO_REGULATOR
 }

@@ -9,10 +9,7 @@ import {
   PermitVariationReviewDecision,
 } from 'pmrv-api';
 
-@Pipe({
-  name: 'reviewGroupDecision',
-  standalone: false,
-})
+@Pipe({ name: 'reviewGroupDecision' })
 export class ReviewGroupDecisionPipe implements PipeTransform {
   transform(
     value:

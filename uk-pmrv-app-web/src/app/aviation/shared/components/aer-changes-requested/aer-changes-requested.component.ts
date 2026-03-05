@@ -32,9 +32,10 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aer-changes-requested',
+  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent],
-  templateUrl: './aer-changes-requested.component.html',
   providers: [AerChangesRequestedFormProvider],
+  templateUrl: './aer-changes-requested.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerChangesRequestedComponent {

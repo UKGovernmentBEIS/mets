@@ -9,7 +9,6 @@ import { PermitApplicationState } from '../../store/permit-application.state';
 
 @Component({
   selector: 'app-transferred-co2',
-  standalone: false,
   templateUrl: './transferred-co2.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

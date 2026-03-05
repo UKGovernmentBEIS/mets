@@ -33,10 +33,9 @@ import { WorkflowItemAbstractComponent } from '../../workflow-item-abstract.comp
 
 @Component({
   selector: 'app-request-note',
-  standalone: false,
   templateUrl: './request-note.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class RequestNoteComponent extends WorkflowItemAbstractComponent implements OnInit {
   isErrorSummaryDisplayed$ = new BehaviorSubject<boolean>(false);

@@ -20,7 +20,6 @@ describe('UncorrectedItemGroupComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-uncorrected-item-group
         [isEditable]="isEditable"

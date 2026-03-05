@@ -4,7 +4,6 @@ import { etsSchemeMap } from '../../../installation-account-application/ets-sche
 
 @Pipe({
   name: 'etsScheme',
-  standalone: false,
 })
 export class EtsSchemePipe implements PipeTransform {
   transform(value: string): string {

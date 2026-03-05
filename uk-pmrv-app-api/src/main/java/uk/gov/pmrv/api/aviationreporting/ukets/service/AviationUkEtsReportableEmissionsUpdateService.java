@@ -50,7 +50,6 @@ public class AviationUkEtsReportableEmissionsUpdateService implements AviationRe
         		.reportableEmissions(saveParams.getReportableEmissions().getReportableEmissions())
         		.year(saveParams.getYear())
                 .isFromRegulator(saveParams.isFromRegulator())
-                .requestId(saveParams.getRequestId())
         		.build());
 	}
 

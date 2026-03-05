@@ -8,7 +8,6 @@ import { InstallationAccountApplicationStore } from '../store/installation-accou
 
 @Component({
   selector: 'app-installation-type',
-  standalone: false,
   template: `
     <app-wizard-step
       [formGroup]="form"

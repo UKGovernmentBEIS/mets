@@ -18,7 +18,6 @@ import {
 
 @Component({
   selector: 'app-per-plan-item',
-  standalone: false,
   templateUrl: './per-plan-item.component.html',
   providers: [perPlanItemFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

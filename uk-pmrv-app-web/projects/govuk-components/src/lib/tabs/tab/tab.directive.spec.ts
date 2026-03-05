@@ -14,7 +14,6 @@ describe('TabDirective', () => {
     let fixture: ComponentFixture<TestComponent>;
 
     @Component({
-      standalone: false,
       template: `
         <govuk-tabs>
           <ng-template govukTab *ngFor="let tab of tabs$ | async" [id]="tab.id" [label]="tab.label">
@@ -73,7 +72,6 @@ describe('TabDirective', () => {
     let fixture: ComponentFixture<TestComponent>;
 
     @Component({
-      standalone: false,
       template: `
         <govuk-tabs>
           <ng-template govukTab *ngFor="let tab of tabs$ | async" [id]="tab.id" [label]="tab.label">

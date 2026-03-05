@@ -9,10 +9,9 @@ import { DoalActionService } from '../core/doal-action.service';
 
 @Component({
   selector: 'app-doal-completed',
-  standalone: false,
   templateUrl: './completed.component.html',
-  providers: [UserInfoResolverPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserInfoResolverPipe],
 })
 export class CompletedComponent {
   actionType$ = this.commonActionsStore.requestActionType$;

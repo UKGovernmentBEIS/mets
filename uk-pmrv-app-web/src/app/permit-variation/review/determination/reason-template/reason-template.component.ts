@@ -14,10 +14,9 @@ import { reasonTemplateFormProvider } from './reason-template-form.provider';
 
 @Component({
   selector: 'app-reason-template',
-  standalone: false,
   templateUrl: './reason-template.component.html',
-  providers: [reasonTemplateFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [reasonTemplateFormProvider],
 })
 export class ReasonTemplateComponent implements PendingRequest, OnInit {
   determination$ = this.store.getDeterminationType$();

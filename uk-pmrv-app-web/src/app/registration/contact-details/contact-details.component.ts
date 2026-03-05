@@ -15,10 +15,9 @@ import { UserRegistrationStore } from '../store/user-registration.store';
 
 @Component({
   selector: 'app-contact-details',
-  standalone: false,
   templateUrl: './contact-details.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class ContactDetailsComponent implements OnInit {
   isSummaryDisplayed = false;

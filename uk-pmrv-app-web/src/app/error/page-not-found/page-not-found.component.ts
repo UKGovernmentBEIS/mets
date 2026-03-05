@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-page-not-found',
-  standalone: false,
   template: `
     <app-page-heading size="xl">Page Not Found</app-page-heading>
     <p class="govuk-body">If you typed the web address, check it is correct.</p>

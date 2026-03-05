@@ -8,6 +8,7 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-mmp-methods-summary-template',
+  standalone: true,
   imports: [PhysicalPartsTableComponent, SharedPermitModule, SharedModule, RouterLink],
   templateUrl: './methods-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

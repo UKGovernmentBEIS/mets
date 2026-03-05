@@ -8,7 +8,6 @@ import { DreService } from '../../core/dre.service';
 
 @Component({
   selector: 'app-information-sources',
-  standalone: false,
   templateUrl: './information-sources.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

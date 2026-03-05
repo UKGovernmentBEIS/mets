@@ -25,10 +25,9 @@ import { biomassCalculationFormProvider } from './biomass-calculation.provider';
 
 @Component({
   selector: 'app-biomass-calculation',
-  standalone: false,
   templateUrl: './biomass-calculation.component.html',
-  providers: [biomassCalculationFormProvider, DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [biomassCalculationFormProvider, DestroySubject],
 })
 export class BiomassCalculationComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

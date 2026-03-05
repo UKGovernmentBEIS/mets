@@ -13,6 +13,7 @@ import { BulkDownloadsService } from './core/bulk-downloads.service';
 
 @Component({
   selector: 'app-bulk-downloads',
+  standalone: true,
   imports: [SharedModule, RouterModule],
   templateUrl: './bulk-downloads.component.html',
   styles: `

@@ -30,12 +30,10 @@ interface SummaryDetails {
 }
 
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app-permit-notification-summary-details[notification][files]',
-  standalone: false,
   templateUrl: './summary-details.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class SummaryDetailsComponent {
   @Input() cssClass: string;

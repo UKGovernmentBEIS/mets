@@ -11,7 +11,6 @@ import { createRequestCreateActionProcessDTO } from '../../../workflow-item/shar
 
 @Component({
   selector: 'app-aer-reinitialize',
-  standalone: false,
   templateUrl: './aer-reinitialize.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

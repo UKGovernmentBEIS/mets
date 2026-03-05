@@ -8,7 +8,6 @@ import { DreService } from '../../../../core/dre.service';
 
 @Component({
   selector: 'app-information-source-delete',
-  standalone: false,
   templateUrl: './delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -14,7 +14,6 @@ import { monitoringApproachMap } from '../core/monitoringApproaches';
 
 @Component({
   selector: 'app-review-container',
-  standalone: false,
   templateUrl: './review-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -23,6 +22,8 @@ export class ReviewContainerComponent {
 
   requestTaskType$ = this.store.requestTaskType$;
   readonly daysRemaining$ = this.aerService.daysRemaining$;
+
+  yearEqualAfter25$ = this.aerService.yearEqualAfter2025$ as Observable<boolean>;
 
   baseUrl$ = this.aerService.getPayload().pipe(
     map((payload) => {

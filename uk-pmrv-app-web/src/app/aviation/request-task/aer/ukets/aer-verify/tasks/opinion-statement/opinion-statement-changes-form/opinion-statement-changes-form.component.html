@@ -3,7 +3,8 @@
   [formGroup]="changesGroup"
   submitText="Continue"
   [hideSubmit]="false"
-  heading="Other changes not covered in the approved emissions monitoring plans">
+  [heading]="'Other changes not covered in the approved emissions monitoring plans'"
+>
   <!-- AerMonitoringPlanVersions -->
   <app-aer-monitoring-plan-versions [planVersions]="aerMonitoringPlanVersions"></app-aer-monitoring-plan-versions>
 
@@ -46,7 +47,8 @@
             [maxLength]="2000"
             formControlName="additionalChangesNotCoveredDetails"
             govuk-textarea
-            label="List what has been agreed, plus the date and type of communication"></div>
+            label="List what has been agreed, plus the date and type of communication"
+          ></div>
         </ng-container>
       </ng-container>
     </govuk-radio-option>

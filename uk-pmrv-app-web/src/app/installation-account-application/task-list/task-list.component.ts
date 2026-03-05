@@ -10,7 +10,6 @@ import { InstallationAccountApplicationStore } from '../store/installation-accou
 
 @Component({
   selector: 'app-installation-task-list',
-  standalone: false,
   template: `
     <app-task-list
       (submitApplication)="submit()"

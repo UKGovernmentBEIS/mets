@@ -11,10 +11,9 @@ import { MonitoringApproachDescriptionPipe } from '../../../../shared/pipes/moni
 
 @Component({
   selector: 'app-monitoring-approaches-summary-template',
-  standalone: false,
   templateUrl: './monitoring-approaches-summary-template.component.html',
-  providers: [MonitoringApproachDescriptionPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [MonitoringApproachDescriptionPipe],
 })
 export class MonitoringApproachesSummaryTemplateComponent {
   @Input() approachEmissions: {

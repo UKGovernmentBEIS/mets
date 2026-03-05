@@ -16,7 +16,6 @@ import { EmissionPointsTableComponent } from './emission-points-table.component'
 
 describe('EmissionPointsTableComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <app-emission-points-table [data]="data" [isEditable]="isEditable"></app-emission-points-table>
     `,

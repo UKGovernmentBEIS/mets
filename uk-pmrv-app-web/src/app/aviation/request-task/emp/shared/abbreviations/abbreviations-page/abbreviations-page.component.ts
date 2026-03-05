@@ -25,6 +25,7 @@ import { AbbreviationsFormProvider } from '../abbreviations-form.provider';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-abbreviations-page',
+  standalone: true,
   imports: [SharedModule, AbbreviationsFormComponent, ReturnToLinkComponent],
   templateUrl: './abbreviations-page.component.html',
 })

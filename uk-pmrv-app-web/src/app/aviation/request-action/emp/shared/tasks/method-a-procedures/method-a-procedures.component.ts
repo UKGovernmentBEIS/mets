@@ -20,6 +20,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-method-a-procedures',
+  standalone: true,
   imports: [
     RequestActionTaskComponent,
     EmpReviewDecisionGroupSummaryComponent,

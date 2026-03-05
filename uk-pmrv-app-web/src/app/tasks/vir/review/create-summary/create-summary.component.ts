@@ -14,7 +14,6 @@ import { VirApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-create-summary',
-  standalone: false,
   templateUrl: './create-summary.component.html',
   providers: [createSummaryFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

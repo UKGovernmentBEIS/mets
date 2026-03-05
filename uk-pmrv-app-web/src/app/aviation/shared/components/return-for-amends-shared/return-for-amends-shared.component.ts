@@ -25,8 +25,9 @@ import { ReturnToLinkComponent } from '../return-to-link/return-to-link.componen
 
 @Component({
   selector: 'app-return-for-amends-shared',
-  imports: [GovukComponentsModule, SharedModule, ReactiveFormsModule, ReturnToLinkComponent, RouterLinkWithHref],
   templateUrl: './return-for-amends-shared.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, ReactiveFormsModule, ReturnToLinkComponent, RouterLinkWithHref],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReturnForAmendsSharedComponent implements PendingRequest {

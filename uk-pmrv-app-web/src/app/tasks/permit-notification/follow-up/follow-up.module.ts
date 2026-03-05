@@ -22,7 +22,6 @@ import { DueDateComponent } from './shared/wait/due-date/due-date.component';
 import { WaitComponent } from './shared/wait/wait.component';
 
 @NgModule({
-  imports: [FollowUpRoutingModule, PermitNotificationSharedModule, SharedModule, TaskSharedModule],
   declarations: [
     DetailsAmendsComponent,
     DueDateComponent,
@@ -40,5 +39,6 @@ import { WaitComponent } from './shared/wait/wait.component';
     SummaryContainerComponent,
     WaitComponent,
   ],
+  imports: [FollowUpRoutingModule, PermitNotificationSharedModule, SharedModule, TaskSharedModule],
 })
 export class FollowUpModule {}

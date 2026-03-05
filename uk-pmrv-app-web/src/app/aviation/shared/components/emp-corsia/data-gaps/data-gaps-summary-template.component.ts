@@ -8,8 +8,9 @@ import { EmpDataGapsCorsia, EmpEmissionsMonitoringApproachCorsia } from 'pmrv-ap
 
 @Component({
   selector: 'app-data-gaps-corsia-summary-template',
-  imports: [CommonModule, RouterModule, SharedModule],
   templateUrl: './data-gaps-summary-template.component.html',
+  standalone: true,
+  imports: [CommonModule, RouterModule, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGapsCorsiaSummaryTemplateComponent {

@@ -15,7 +15,6 @@ import { SubInstallation } from 'pmrv-api';
 
 @Component({
   selector: 'app-sub-installations-fallback-summary',
-  standalone: false,
   templateUrl: './sub-installations-fallback-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

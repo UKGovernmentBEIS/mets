@@ -8,7 +8,6 @@ import { DoalService } from '../../core/doal.service';
 
 @Component({
   selector: 'app-determination',
-  standalone: false,
   templateUrl: './determination.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

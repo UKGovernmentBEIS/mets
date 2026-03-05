@@ -1,3 +1,4 @@
+import { NgFor, NgForOf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -49,15 +50,18 @@ interface ViewModel {
 
 @Component({
   selector: 'app-management-procedures-summary',
+  templateUrl: './management-procedures-summary.component.html',
+  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
     ManagementProceduresSummaryTemplateComponent,
+    NgFor,
+    NgForOf,
     EmpVariationReviewDecisionGroupComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,
     EmpReviewDecisionGroupComponent,
   ],
-  templateUrl: './management-procedures-summary.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

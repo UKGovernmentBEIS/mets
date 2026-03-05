@@ -8,15 +8,14 @@ import { DestroySubject } from '@core/services/destroy-subject.service';
 
 @Component({
   selector: 'app-back-link',
-  standalone: false,
   template: `
     <govuk-back-link
       *ngIf="backlink$ | async as backlink"
       [link]="backlink.link"
       [route]="backlink.route"></govuk-back-link>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class BackLinkComponent {
   protected backlink$ = new BehaviorSubject<{ link: string; route: ActivatedRouteSnapshot }>(null);

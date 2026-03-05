@@ -14,10 +14,9 @@ import { PaymentStore } from '../../store/payment.store';
 
 @Component({
   selector: 'app-mark-paid',
-  standalone: false,
   templateUrl: './mark-paid.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class MarkPaidComponent implements OnInit {
   readonly shouldDisplayAmount$ = this.store.pipe(map((state) => !shouldHidePaymentAmount(state)));

@@ -20,6 +20,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-additional-documents-page',
+  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './additional-documents-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

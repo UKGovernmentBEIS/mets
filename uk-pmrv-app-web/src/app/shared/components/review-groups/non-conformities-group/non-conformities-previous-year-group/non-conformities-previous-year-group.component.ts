@@ -6,8 +6,8 @@ import { UncorrectedNonConformities } from 'pmrv-api';
 
 @Component({
   selector: 'app-non-conformities-previous-year-group',
-  standalone: false,
   templateUrl: './non-conformities-previous-year-group.component.html',
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NonConformitiesPreviousYearGroupComponent {

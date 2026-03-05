@@ -5,7 +5,8 @@
     caption="Management procedures"
     heading="Monitoring and reporting roles"
     submitText="Confirm and complete"
-    [hideSubmit]="(store.isEditable$ | async) === false">
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
     <p class="govuk-body">
       Provide details of the key roles that are responsible for monitoring and reporting on emissions and the main
       duties the holders of these roles carry out.
@@ -16,7 +17,8 @@
         *ngFor="let permit of roles.controls; index as i"
         [formGroupName]="i"
         govukFieldset
-        id="monitoring-role-{{ i }}">
+        id="monitoring-role-{{ i }}"
+      >
         <legend govukLegend>Role {{ i + 1 }}</legend>
         <button
           (click)="roles.removeAt(i)"
@@ -25,7 +27,8 @@
           appAddAnother
           govukSecondaryButton
           type="button"
-          #removeButton>
+          #removeButton
+        >
           Remove
         </button>
         <div formControlName="jobTitle" govuk-text-input label="Job title"></div>
@@ -39,16 +42,18 @@
 
     <app-multiple-file-input
       [baseDownloadUrl]="getDownloadUrl()"
-      listTitle="Uploaded organisation chart (optional)"
+      [listTitle]="'Uploaded organisation chart (optional)'"
       [label]="
         (isFileUploaded$ | async) === true
           ? 'Upload a different organisation chart'
           : 'Upload an organisation chart (optional)'
       "
-      formControlName="organisationCharts"></app-multiple-file-input>
+      formControlName="organisationCharts"
+    ></app-multiple-file-input>
   </app-wizard-step>
 
   <app-list-return-link
     reviewGroupTitle="Management procedures"
-    reviewGroupUrl="management-procedures"></app-list-return-link>
+    reviewGroupUrl="management-procedures"
+  ></app-list-return-link>
 </app-permit-task>

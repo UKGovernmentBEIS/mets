@@ -7,7 +7,6 @@ import { AuthService } from '@core/services/auth.service';
 import { AuthStore, UserState } from '@core/store/auth';
 import { ProcessActionsComponent } from '@shared/accounts';
 import { ItemLinkPipe } from '@shared/pipes/item-link.pipe';
-import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage, RouterStubComponent } from '@testing';
 
 import { ItemDTOResponse, RequestCreateActionProcessResponseDTO, RequestItemsService, RequestsService } from 'pmrv-api';
@@ -64,7 +63,6 @@ const createComponent = () => {
 const createModule = async () => {
   await TestBed.configureTestingModule({
     declarations: [ProcessActionsComponent],
-    imports: [SharedModule],
     providers: [
       provideRouter([{ path: 'dashboard', component: RouterStubComponent }]),
       { provide: ActivatedRoute, useValue: activatedRouteStub },

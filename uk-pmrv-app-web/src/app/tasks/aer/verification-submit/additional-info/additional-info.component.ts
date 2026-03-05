@@ -8,7 +8,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-additional-info',
-  standalone: false,
   template: `
     <app-page-heading>Additional information</app-page-heading>
     <app-additional-info-group

@@ -8,7 +8,6 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-source-stream-delete',
-  standalone: false,
   template: `
     <app-source-stream-delete-template
       (delete)="onDelete()"

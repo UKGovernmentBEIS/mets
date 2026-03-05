@@ -26,8 +26,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-uncorrected-non-compliances',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './uncorrected-non-compliances.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UncorrectedNonCompliancesComponent {

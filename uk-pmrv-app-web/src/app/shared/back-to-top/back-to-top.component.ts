@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-back-to-top',
-  standalone: false,
   templateUrl: './back-to-top.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,

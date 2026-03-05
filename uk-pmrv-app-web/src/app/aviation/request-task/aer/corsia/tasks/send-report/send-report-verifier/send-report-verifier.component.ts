@@ -31,8 +31,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-send-report-verifier',
-  imports: [SharedModule, ReturnToLinkComponent, RouterLink],
   templateUrl: './send-report-verifier.component.html',
+  imports: [SharedModule, ReturnToLinkComponent, RouterLink],
+  standalone: true,
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

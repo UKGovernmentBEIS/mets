@@ -14,10 +14,9 @@ import { ResponsibilityOption } from './responsibility';
 
 @Component({
   selector: 'app-confirm-responsibility',
-  standalone: false,
   templateUrl: './confirm-responsibility.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class ConfirmResponsibilityComponent implements OnInit {
   form: UntypedFormGroup = this.fb.group({

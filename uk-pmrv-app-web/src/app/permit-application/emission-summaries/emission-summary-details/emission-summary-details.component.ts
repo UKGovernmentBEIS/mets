@@ -11,10 +11,9 @@ import { emisionSummaryDetailsFormFactory } from './emission-summary-details-for
 
 @Component({
   selector: 'app-emission-summary-details',
-  standalone: false,
   templateUrl: './emission-summary-details.component.html',
-  providers: [emisionSummaryDetailsFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [emisionSummaryDetailsFormFactory],
 })
 export class EmissionSummaryDetailsComponent {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => !!paramMap.get('emissionSummaryIndex')));

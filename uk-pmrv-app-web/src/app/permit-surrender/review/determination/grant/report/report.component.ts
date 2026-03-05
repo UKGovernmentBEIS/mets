@@ -14,10 +14,9 @@ import { reportFormProvider } from './report-form.provider';
 
 @Component({
   selector: 'app-report',
-  standalone: false,
   templateUrl: './report.component.html',
-  providers: [reportFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [reportFormProvider],
 })
 export class ReportComponent implements PendingRequest {
   today = startOfDay(new Date());

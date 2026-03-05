@@ -21,6 +21,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-verify-emissions-reduction-claim',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
@@ -38,7 +40,6 @@ interface ViewModel {
     </ng-container>
     <app-return-to-link></app-return-to-link>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifyEmissionsReductionClaimComponent {
   private store = inject(RequestTaskStore);

@@ -20,10 +20,9 @@ import { WizardStepComponent } from '../../wizard/wizard-step.component';
 
 @Component({
   selector: 'app-additional-documents-shared',
-  standalone: false,
   templateUrl: './additional-documents.component.html',
-  providers: [DestroySubject, PendingRequestService],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject, PendingRequestService],
 })
 export class AdditionalDocumentsSharedComponent implements OnInit, PendingRequest {
   @Input() submitText = 'Confirm and complete';

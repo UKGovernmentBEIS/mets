@@ -29,6 +29,7 @@ import { ThreeYearOffsettingRequirementsFormProvider } from '../../aer-corsia-3y
 
 @Component({
   selector: 'app-3year-offsetting-requirements',
+  standalone: true,
   imports: [ReturnToLinkComponent, SharedModule, ThreeYearOffsettingRequirementsTableTemplateComponent],
   templateUrl: './offsetting-requirements.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

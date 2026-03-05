@@ -21,7 +21,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-ets-compliance-rules',
-  imports: [SharedModule, RequestActionTaskComponent, AerVerificationReviewDecisionGroupSummaryComponent],
   template: `
     <app-request-action-task
       *ngIf="vm$ | async as vm"
@@ -38,6 +37,8 @@ interface ViewModel {
       </ng-container>
     </app-request-action-task>
   `,
+  standalone: true,
+  imports: [SharedModule, RequestActionTaskComponent, AerVerificationReviewDecisionGroupSummaryComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class EtsComplianceRulesComponent {

@@ -33,6 +33,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-total-emissions',
+  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

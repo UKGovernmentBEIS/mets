@@ -7,7 +7,6 @@ import { AerService } from '@tasks/aer/core/aer.service';
 
 @Component({
   selector: 'app-source-stream-delete',
-  standalone: false,
   template: `
     <app-source-stream-delete-template
       (delete)="onDelete()"

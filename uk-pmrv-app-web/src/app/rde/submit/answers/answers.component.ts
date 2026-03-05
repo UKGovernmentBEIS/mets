@@ -22,10 +22,9 @@ import { RdeStore } from '../../store/rde.store';
 
 @Component({
   selector: 'app-answers',
-  standalone: false,
   templateUrl: './answers.component.html',
-  providers: [UserFullNamePipe, DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserFullNamePipe, DestroySubject],
 })
 export class AnswersComponent implements OnInit {
   readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

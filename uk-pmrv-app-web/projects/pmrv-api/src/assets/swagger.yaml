@@ -5019,16 +5019,9 @@ paths:
                     - BDR_APPLICATION_PEER_REVIEW
                     - BDR_WAIT_FOR_PEER_REVIEW
                     - BDRS2_APPLICATION_SUBMIT
-                    - BDRS2_APPLICATION_VERIFICATION_SUBMIT
                     - BDRS2_WAIT_FOR_REGULATOR_REVIEW
-                    - BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT
-                    - BDRS2_APPLICATION_PEER_REVIEW
-                    - BDRS2_WAIT_FOR_PEER_REVIEW
                     - BDRS2_WAIT_FOR_VERIFICATION
-                    - BDRS2_APPLICATION_AMENDS_SUBMIT
-                    - BDRS2_WAIT_FOR_AMENDS
-                    - BDRS2_AMEND_APPLICATION_VERIFICATION_SUBMIT
-                    - BDRS2_AMEND_WAIT_FOR_VERIFICATION
+                    - BDRS2_APPLICATION_VERIFICATION_SUBMIT
                     - PERMANENT_CESSATION_APPLICATION_SUBMIT
                     - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW
                     - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW
@@ -6122,16 +6115,9 @@ paths:
               - BDR_APPLICATION_PEER_REVIEW
               - BDR_WAIT_FOR_PEER_REVIEW
               - BDRS2_APPLICATION_SUBMIT
-              - BDRS2_APPLICATION_VERIFICATION_SUBMIT
               - BDRS2_WAIT_FOR_REGULATOR_REVIEW
-              - BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT
-              - BDRS2_APPLICATION_PEER_REVIEW
-              - BDRS2_WAIT_FOR_PEER_REVIEW
               - BDRS2_WAIT_FOR_VERIFICATION
-              - BDRS2_APPLICATION_AMENDS_SUBMIT
-              - BDRS2_WAIT_FOR_AMENDS
-              - BDRS2_AMEND_APPLICATION_VERIFICATION_SUBMIT
-              - BDRS2_AMEND_WAIT_FOR_VERIFICATION
+              - BDRS2_APPLICATION_VERIFICATION_SUBMIT
               - PERMANENT_CESSATION_APPLICATION_SUBMIT
               - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW
               - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW
@@ -7245,26 +7231,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /v1.0/mets/requests/withhold/reopen-available/{accountId}:
-    get:
-      tags:
-        - Withhold Flag Requests
-      summary: Check if the account can reopen a completed withhold flag workflow
-      operationId: isWithholdFlagReopenAvailable
-      parameters:
-        - name: accountId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: OK
-          content:
-            '*/*':
-              schema:
-                type: boolean
   /v1.0/mets/requests/alr/access-to-mark-as-not-required/{id}:
     get:
       tags:
@@ -7953,6 +7919,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ReferenceDataDTO'
       security: []
   /v1.0/company-information/{registrationNumber}:
     get:
@@ -13749,106 +13722,6 @@ components:
           $ref: '#/components/schemas/BDRS2Files'
         mmpFiles:
           $ref: '#/components/schemas/BDRS2Files'
-    BDRS2ApplicationAmendsSaveRequestTaskActionPayload:
-      required:
-        - bdrs2
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskActionPayload'
-        - type: object
-          properties:
-            bdrs2:
-              $ref: '#/components/schemas/BDRS2'
-            bdrs2SectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            regulatorReviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-    BDRS2ApplicationAmendsSubmitRequestTaskActionPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskActionPayload'
-        - type: object
-          properties:
-            bdrs2SectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            regulatorReviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-    BDRS2ApplicationAmendsSubmitToVerifierRequestTaskActionPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskActionPayload'
-        - type: object
-          properties:
-            verificationSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: array
-                items:
-                  type: boolean
-    BDRS2ApplicationRegulatorReviewOutcome:
-      required:
-        - freeAllocationOpinion
-      type: object
-      properties:
-        freeAllocationOpinion:
-          type: string
-          enum:
-            - SENT_TO_AUTHORITY
-            - WITHDRAWN
-        freeAllocationReviewNotes:
-          $ref: '#/components/schemas/BDRS2RegulatorReviewNotes'
-        covidAdjustmentsOpinion:
-          type: string
-          enum:
-            - SENT_TO_AUTHORITY
-            - NO_ADJUSTMENTS
-        covidAdjustmentsReviewNotes:
-          $ref: '#/components/schemas/BDRS2RegulatorReviewNotes'
-        installationSectorOpinion:
-          type: string
-          enum:
-            - IN_SCOPE_OF_CBAM
-            - CBAM_DOES_NOT_APPLY
-        installationSectorReviewNotes:
-          $ref: '#/components/schemas/BDRS2RegulatorReviewNotes'
-        cbamSplitOpinion:
-          type: string
-          enum:
-            - SENT_TO_AUTHORITY
-            - NO_SPLIT_APPLICABLE
-        cbamSplitReviewNotes:
-          $ref: '#/components/schemas/BDRS2RegulatorReviewNotes'
-        file:
-          type: string
-          format: uuid
-        supportingFiles:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-            format: uuid
-    BDRS2ApplicationRegulatorReviewSaveTaskActionPayload:
-      required:
-        - regulatorReviewOutcome
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskActionPayload'
-        - type: object
-          properties:
-            regulatorReviewOutcome:
-              $ref: '#/components/schemas/BDRS2ApplicationRegulatorReviewOutcome'
-            regulatorReviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
     BDRS2ApplicationSaveRequestTaskActionPayload:
       type: object
       allOf:
@@ -13911,21 +13784,6 @@ components:
                 type: array
                 items:
                   type: boolean
-    BDRS2Bdrs2DataRegulatorReviewDecision:
-      required:
-        - type
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/BDRS2ReviewDecision'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - ACCEPTED
-                - OPERATOR_AMENDS_NEEDED
-            details:
-              $ref: '#/components/schemas/BDRS2RegulatorReviewDecisionDetails'
     BDRS2Files:
       required:
         - file
@@ -13995,72 +13853,7 @@ components:
           VERIFIED_WITH_COMMENTS: >-
             #/components/schemas/BDRS2VerifiedWithCommentsOverallVerificationAssessment
           NOT_VERIFIED: '#/components/schemas/BDRS2NotVerifiedOverallVerificationAssessment'
-    BDRS2RegulatorReviewDecisionDetails:
-      type: object
-      properties:
-        notes:
-          maxLength: 10000
-          minLength: 0
-          type: string
-    BDRS2RegulatorReviewNotes:
-      type: object
-      properties:
-        operatorNotes:
-          type: string
-        internalNotes:
-          type: string
-    BDRS2RegulatorReviewReturnForAmendsTaskActionPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskActionPayload'
-        - type: object
-          properties:
-            bdrs2SectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-    BDRS2ReviewDecision:
-      type: object
-      properties:
-        reviewDataType:
-          type: string
-          enum:
-            - BDRS2_DATA
-            - VERIFICATION_REPORT_DATA
-      discriminator:
-        propertyName: reviewDataType
-        mapping:
-          BDRS2_DATA: '#/components/schemas/BDRS2Bdrs2DataRegulatorReviewDecision'
-          VERIFICATION_REPORT_DATA: >-
-            #/components/schemas/BDRS2VerificationReportDataRegulatorReviewDecision
-    BDRS2SaveRegulatorReviewGroupDecisionRequestTaskActionPayload:
-      required:
-        - decision
-        - group
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskActionPayload'
-        - type: object
-          properties:
-            group:
-              type: string
-              enum:
-                - BDRS2
-                - OPINION_STATEMENT
-                - OVERALL_DECISION
-            decision:
-              oneOf:
-                - $ref: '#/components/schemas/BDRS2ReviewDecision'
-                - $ref: '#/components/schemas/BDRS2Bdrs2DataRegulatorReviewDecision'
-                - $ref: >-
-                    #/components/schemas/BDRS2VerificationReportDataRegulatorReviewDecision
-            regulatorReviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
     BDRS2VerificationOpinionStatement:
-      required:
-        - opinionStatementFiles
       type: object
       properties:
         opinionStatementFiles:
@@ -14071,20 +13864,6 @@ components:
             format: uuid
         notes:
           type: string
-    BDRS2VerificationReportDataRegulatorReviewDecision:
-      required:
-        - type
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/BDRS2ReviewDecision'
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - ACCEPTED
-            details:
-              $ref: '#/components/schemas/BDRS2RegulatorReviewDecisionDetails'
     BDRS2VerifiedSatisfactoryOverallVerificationAssessment:
       required:
         - type
@@ -19155,7 +18934,7 @@ components:
             type: string
             format: uuid
         additionalInformation:
-          maxLength: 10000
+          maxLength: 255
           minLength: 0
           type: string
     InstallationInspectionOperatorRespondSaveRequestTaskActionPayload:
@@ -24975,14 +24754,6 @@ components:
             - BDRS2_SUBMIT_TO_VERIFIER_PAYLOAD
             - BDRS2_APPLICATION_SAVE_VERIFICATION_PAYLOAD
             - BDRS2_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD
-            - BDRS2_SAVE_REGULATOR_REVIEW_GROUP_DECISION_PAYLOAD
-            - BDRS2_REGULATOR_REVIEW_SAVE_PAYLOAD
-            - BDRS2_REQUEST_PEER_REVIEW_PAYLOAD
-            - BDRS2_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD
-            - BDRS2_APPLICATION_AMENDS_SAVE_PAYLOAD
-            - BDRS2_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER_PAYLOAD
-            - BDRS2_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD
-            - BDRS2_REGULATOR_REVIEW_RETURN_FOR_AMENDS_PAYLOAD
             - PERMANENT_CESSATION_SAVE_APPLICATION_PAYLOAD
             - PERMANENT_CESSATION_REQUEST_PEER_REVIEW_PAYLOAD
             - PERMANENT_CESSATION_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD
@@ -25361,21 +25132,7 @@ components:
             - BDRS2_UPLOAD_ATTACHMENT
             - BDRS2_SUBMIT_TO_VERIFIER
             - BDRS2_SUBMIT_TO_REGULATOR
-            - BDRS2_SAVE_APPLICATION_VERIFICATION
-            - BDRS2_VERIFICATION_UPLOAD_ATTACHMENT
-            - BDRS2_SUBMIT_VERIFICATION
-            - BDRS2_VERIFICATION_RETURN_TO_OPERATOR
             - BDRS2_RECALL_FROM_VERIFICATION
-            - BDRS2_SAVE_REGULATOR_REVIEW_GROUP_DECISION
-            - BDRS2_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT
-            - BDRS2_REGULATOR_REVIEW_SAVE
-            - BDRS2_REGULATOR_REVIEW_SUBMIT
-            - BDRS2_REQUEST_PEER_REVIEW
-            - BDRS2_SUBMIT_PEER_REVIEW_DECISION
-            - BDRS2_REGULATOR_REVIEW_RETURN_FOR_AMENDS
-            - BDRS2_APPLICATION_AMENDS_SAVE
-            - BDRS2_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
-            - BDRS2_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER
             - PERMANENT_CESSATION_CANCEL_APPLICATION
             - PERMANENT_CESSATION_SAVE_APPLICATION
             - PERMANENT_CESSATION_UPLOAD
@@ -25679,14 +25436,6 @@ components:
             - $ref: >-
                 #/components/schemas/BDRApplicationVerificationSaveRequestTaskActionPayload
             - $ref: >-
-                #/components/schemas/BDRS2ApplicationAmendsSaveRequestTaskActionPayload
-            - $ref: >-
-                #/components/schemas/BDRS2ApplicationAmendsSubmitRequestTaskActionPayload
-            - $ref: >-
-                #/components/schemas/BDRS2ApplicationAmendsSubmitToVerifierRequestTaskActionPayload
-            - $ref: >-
-                #/components/schemas/BDRS2ApplicationRegulatorReviewSaveTaskActionPayload
-            - $ref: >-
                 #/components/schemas/BDRS2ApplicationSaveRequestTaskActionPayload
             - $ref: >-
                 #/components/schemas/BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload
@@ -25694,10 +25443,6 @@ components:
                 #/components/schemas/BDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload
             - $ref: >-
                 #/components/schemas/BDRS2ApplicationVerificationSaveRequestTaskActionPayload
-            - $ref: >-
-                #/components/schemas/BDRS2RegulatorReviewReturnForAmendsTaskActionPayload
-            - $ref: >-
-                #/components/schemas/BDRS2SaveRegulatorReviewGroupDecisionRequestTaskActionPayload
             - $ref: >-
                 #/components/schemas/BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload
             - $ref: '#/components/schemas/DoalSaveApplicationRequestTaskActionPayload'
@@ -27712,21 +27457,7 @@ components:
             - BDRS2_UPLOAD_ATTACHMENT
             - BDRS2_SUBMIT_TO_VERIFIER
             - BDRS2_SUBMIT_TO_REGULATOR
-            - BDRS2_SAVE_APPLICATION_VERIFICATION
-            - BDRS2_VERIFICATION_UPLOAD_ATTACHMENT
-            - BDRS2_SUBMIT_VERIFICATION
-            - BDRS2_VERIFICATION_RETURN_TO_OPERATOR
             - BDRS2_RECALL_FROM_VERIFICATION
-            - BDRS2_SAVE_REGULATOR_REVIEW_GROUP_DECISION
-            - BDRS2_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT
-            - BDRS2_REGULATOR_REVIEW_SAVE
-            - BDRS2_REGULATOR_REVIEW_SUBMIT
-            - BDRS2_REQUEST_PEER_REVIEW
-            - BDRS2_SUBMIT_PEER_REVIEW_DECISION
-            - BDRS2_REGULATOR_REVIEW_RETURN_FOR_AMENDS
-            - BDRS2_APPLICATION_AMENDS_SAVE
-            - BDRS2_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
-            - BDRS2_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER
             - PERMANENT_CESSATION_CANCEL_APPLICATION
             - PERMANENT_CESSATION_SAVE_APPLICATION
             - PERMANENT_CESSATION_UPLOAD
@@ -28091,7 +27822,6 @@ components:
             - INSTALLATION_AUDIT_REQUEST_CREATE_ACTION_PAYLOAD
             - AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_CREATE_ACTION_PAYLOAD
             - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_CREATE_ACTION_PAYLOAD
-            - WITHHOLDING_OF_ALLOWANCES_RE_CREATE_ACTION_PAYLOAD
             - EMPTY_PAYLOAD
       discriminator:
         propertyName: payloadType
@@ -28119,7 +27849,6 @@ components:
             - AER
             - DRE
             - WITHHOLDING_OF_ALLOWANCES
-            - WITHHOLDING_OF_ALLOWANCES_RE_INITIATE
             - RETURN_OF_ALLOWANCES
             - AIR
             - HSE_TI
@@ -28151,19 +27880,7 @@ components:
             - $ref: '#/components/schemas/InstallationAuditRequestCreateActionPayload'
             - $ref: '#/components/schemas/ReportRelatedRequestCreateActionPayload'
             - $ref: '#/components/schemas/RequestCreateActionEmptyPayload'
-            - $ref: >-
-                #/components/schemas/WithholdingOfAllowancesReCreateActionPayload
       description: The request create action body
-    WithholdingOfAllowancesReCreateActionPayload:
-      required:
-        - requestId
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestCreateActionPayload'
-        - type: object
-          properties:
-            requestId:
-              type: string
     RequestCreateActionProcessResponseDTO:
       type: object
       properties:
@@ -28562,12 +28279,6 @@ components:
               enum:
                 - RE_INITIATED
                 - INITIATED
-            overallAssessmentType:
-              type: string
-              enum:
-                - VERIFIED_AS_SATISFACTORY
-                - VERIFIED_WITH_COMMENTS
-                - NOT_VERIFIED
     DoalRequestMetadata:
       required:
         - year
@@ -30479,16 +30190,9 @@ components:
             - BDR_APPLICATION_PEER_REVIEW
             - BDR_WAIT_FOR_PEER_REVIEW
             - BDRS2_APPLICATION_SUBMIT
-            - BDRS2_APPLICATION_VERIFICATION_SUBMIT
             - BDRS2_WAIT_FOR_REGULATOR_REVIEW
-            - BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT
-            - BDRS2_APPLICATION_PEER_REVIEW
-            - BDRS2_WAIT_FOR_PEER_REVIEW
             - BDRS2_WAIT_FOR_VERIFICATION
-            - BDRS2_APPLICATION_AMENDS_SUBMIT
-            - BDRS2_WAIT_FOR_AMENDS
-            - BDRS2_AMEND_APPLICATION_VERIFICATION_SUBMIT
-            - BDRS2_AMEND_WAIT_FOR_VERIFICATION
+            - BDRS2_APPLICATION_VERIFICATION_SUBMIT
             - PERMANENT_CESSATION_APPLICATION_SUBMIT
             - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW
             - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW
@@ -32425,105 +32129,6 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestTaskPayload'
-    BDRS2ApplicationAmendsSubmitRequestTaskPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskPayload'
-        - type: object
-          properties:
-            bdrs2:
-              $ref: '#/components/schemas/BDRS2'
-            verificationSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: array
-                items:
-                  type: boolean
-            regulatorReviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            bdrs2SectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            bdrs2Attachments:
-              type: object
-              additionalProperties:
-                type: string
-            bdrs2FileVersion:
-              type: integer
-              format: int32
-            verificationPerformed:
-              type: boolean
-            verificationBodyId:
-              type: integer
-              format: int64
-            regulatorReviewGroupDecisions:
-              type: object
-              additionalProperties:
-                oneOf:
-                  - $ref: '#/components/schemas/BDRS2ReviewDecision'
-                  - $ref: '#/components/schemas/BDRS2Bdrs2DataRegulatorReviewDecision'
-                  - $ref: >-
-                      #/components/schemas/BDRS2VerificationReportDataRegulatorReviewDecision
-            regulatorReviewAttachments:
-              type: object
-              additionalProperties:
-                type: string
-    BDRS2ApplicationRegulatorReviewSubmitRequestTaskPayload:
-      required:
-        - regulatorReviewOutcome
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskPayload'
-        - type: object
-          properties:
-            bdrs2:
-              $ref: '#/components/schemas/BDRS2'
-            verificationSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: array
-                items:
-                  type: boolean
-            regulatorReviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            bdrs2SectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            bdrs2Attachments:
-              type: object
-              additionalProperties:
-                type: string
-            bdrs2FileVersion:
-              type: integer
-              format: int32
-            verificationReport:
-              $ref: '#/components/schemas/BDRS2VerificationReport'
-            verificationAttachments:
-              type: object
-              additionalProperties:
-                type: string
-            verifiedBdrs2:
-              $ref: '#/components/schemas/BDRS2'
-            regulatorReviewOutcome:
-              $ref: '#/components/schemas/BDRS2ApplicationRegulatorReviewOutcome'
-            regulatorReviewGroupDecisions:
-              type: object
-              additionalProperties:
-                oneOf:
-                  - $ref: '#/components/schemas/BDRS2ReviewDecision'
-                  - $ref: '#/components/schemas/BDRS2Bdrs2DataRegulatorReviewDecision'
-                  - $ref: >-
-                      #/components/schemas/BDRS2VerificationReportDataRegulatorReviewDecision
-            regulatorReviewAttachments:
-              type: object
-              additionalProperties:
-                type: string
     BDRS2ApplicationSubmitRequestTaskPayload:
       type: object
       allOf:
@@ -32532,50 +32137,8 @@ components:
           properties:
             bdrs2:
               $ref: '#/components/schemas/BDRS2'
-            verificationSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: array
-                items:
-                  type: boolean
-            regulatorReviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            bdrs2SectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            bdrs2Attachments:
-              type: object
-              additionalProperties:
-                type: string
-            bdrs2FileVersion:
-              type: integer
-              format: int32
             verificationPerformed:
               type: boolean
-            verificationBodyId:
-              type: integer
-              format: int64
-    BDRS2ApplicationVerificationSubmitRequestTaskPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskPayload'
-        - type: object
-          properties:
-            bdrs2:
-              $ref: '#/components/schemas/BDRS2'
-            verificationSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: array
-                items:
-                  type: boolean
-            regulatorReviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
             bdrs2SectionsCompleted:
               type: object
               additionalProperties:
@@ -32587,37 +32150,6 @@ components:
             bdrs2FileVersion:
               type: integer
               format: int32
-            verificationReport:
-              $ref: '#/components/schemas/BDRS2VerificationReport'
-            verificationAttachments:
-              type: object
-              additionalProperties:
-                type: string
-    BDRS2ApplicationWaitForRegulatorReviewRequestTaskPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskPayload'
-    BDRS2VerificationReport:
-      required:
-        - opinionStatement
-        - overallAssessment
-      type: object
-      properties:
-        verificationBodyId:
-          type: integer
-          format: int64
-        verificationBodyDetails:
-          $ref: '#/components/schemas/VerificationBodyDetails'
-        opinionStatement:
-          $ref: '#/components/schemas/BDRS2VerificationOpinionStatement'
-        overallAssessment:
-          oneOf:
-            - $ref: >-
-                #/components/schemas/BDRS2NotVerifiedOverallVerificationAssessment
-            - $ref: >-
-                #/components/schemas/BDRS2VerifiedSatisfactoryOverallVerificationAssessment
-            - $ref: >-
-                #/components/schemas/BDRS2VerifiedWithCommentsOverallVerificationAssessment
     BDRVerificationReport:
       required:
         - opinionStatement
@@ -35470,16 +35002,9 @@ components:
             - BDR_APPLICATION_PEER_REVIEW
             - BDR_WAIT_FOR_PEER_REVIEW
             - BDRS2_APPLICATION_SUBMIT
-            - BDRS2_APPLICATION_VERIFICATION_SUBMIT
             - BDRS2_WAIT_FOR_REGULATOR_REVIEW
-            - BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT
-            - BDRS2_APPLICATION_PEER_REVIEW
-            - BDRS2_WAIT_FOR_PEER_REVIEW
             - BDRS2_WAIT_FOR_VERIFICATION
-            - BDRS2_APPLICATION_AMENDS_SUBMIT
-            - BDRS2_WAIT_FOR_AMENDS
-            - BDRS2_AMEND_APPLICATION_VERIFICATION_SUBMIT
-            - BDRS2_AMEND_WAIT_FOR_VERIFICATION
+            - BDRS2_APPLICATION_VERIFICATION_SUBMIT
             - PERMANENT_CESSATION_APPLICATION_SUBMIT
             - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW
             - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW
@@ -35692,15 +35217,7 @@ components:
                 #/components/schemas/BDRApplicationVerificationSubmitRequestTaskPayload
             - $ref: >-
                 #/components/schemas/BDRApplicationWaitForRegulatorReviewRequestTaskPayload
-            - $ref: >-
-                #/components/schemas/BDRS2ApplicationAmendsSubmitRequestTaskPayload
-            - $ref: >-
-                #/components/schemas/BDRS2ApplicationRegulatorReviewSubmitRequestTaskPayload
             - $ref: '#/components/schemas/BDRS2ApplicationSubmitRequestTaskPayload'
-            - $ref: >-
-                #/components/schemas/BDRS2ApplicationVerificationSubmitRequestTaskPayload
-            - $ref: >-
-                #/components/schemas/BDRS2ApplicationWaitForRegulatorReviewRequestTaskPayload
             - $ref: '#/components/schemas/DoalApplicationSubmitRequestTaskPayload'
             - $ref: '#/components/schemas/DoalAuthorityResponseRequestTaskPayload'
             - $ref: '#/components/schemas/DreApplicationSubmitRequestTaskPayload'
@@ -36102,21 +35619,7 @@ components:
               - BDRS2_UPLOAD_ATTACHMENT
               - BDRS2_SUBMIT_TO_VERIFIER
               - BDRS2_SUBMIT_TO_REGULATOR
-              - BDRS2_SAVE_APPLICATION_VERIFICATION
-              - BDRS2_VERIFICATION_UPLOAD_ATTACHMENT
-              - BDRS2_SUBMIT_VERIFICATION
-              - BDRS2_VERIFICATION_RETURN_TO_OPERATOR
               - BDRS2_RECALL_FROM_VERIFICATION
-              - BDRS2_SAVE_REGULATOR_REVIEW_GROUP_DECISION
-              - BDRS2_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT
-              - BDRS2_REGULATOR_REVIEW_SAVE
-              - BDRS2_REGULATOR_REVIEW_SUBMIT
-              - BDRS2_REQUEST_PEER_REVIEW
-              - BDRS2_SUBMIT_PEER_REVIEW_DECISION
-              - BDRS2_REGULATOR_REVIEW_RETURN_FOR_AMENDS
-              - BDRS2_APPLICATION_AMENDS_SAVE
-              - BDRS2_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
-              - BDRS2_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER
               - PERMANENT_CESSATION_CANCEL_APPLICATION
               - PERMANENT_CESSATION_SAVE_APPLICATION
               - PERMANENT_CESSATION_UPLOAD
@@ -36449,13 +35952,7 @@ components:
             - BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD
             - BDR_APPLICATION_PEER_REVIEW_PAYLOAD
             - BDRS2_APPLICATION_SUBMIT_PAYLOAD
-            - BDRS2_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD
             - BDRS2_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD
-            - BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD
-            - BDRS2_APPLICATION_PEER_REVIEW_PAYLOAD
-            - BDRS2_WAIT_FOR_PEER_REVIEW_PAYLOAD
-            - BDRS2_APPLICATION_AMENDS_SUBMIT_PAYLOAD
-            - BDRS2_WAIT_FOR_AMENDS_PAYLOAD
             - PERMANENT_CESSATION_SUBMIT_PAYLOAD
             - PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW_PAYLOAD
             - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_PAYLOAD
@@ -36713,15 +36210,6 @@ components:
           BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD: >-
             #/components/schemas/BDRApplicationRegulatorReviewSubmitRequestTaskPayload
           BDRS2_APPLICATION_SUBMIT_PAYLOAD: '#/components/schemas/BDRS2ApplicationSubmitRequestTaskPayload'
-          BDRS2_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD: >-
-            #/components/schemas/BDRS2ApplicationVerificationSubmitRequestTaskPayload
-          BDRS2_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD: >-
-            #/components/schemas/BDRS2ApplicationWaitForRegulatorReviewRequestTaskPayload
-          BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD: >-
-            #/components/schemas/BDRS2ApplicationRegulatorReviewSubmitRequestTaskPayload
-          BDRS2_APPLICATION_AMENDS_SUBMIT_PAYLOAD: '#/components/schemas/BDRS2ApplicationAmendsSubmitRequestTaskPayload'
-          BDRS2_WAIT_FOR_AMENDS_PAYLOAD: >-
-            #/components/schemas/BDRS2ApplicationRegulatorReviewSubmitRequestTaskPayload
           HSE_TI_APPLICATION_SUBMIT_PAYLOAD: '#/components/schemas/HSETIApplicationSubmitRequestTaskPayload'
           HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD: >-
             #/components/schemas/HSETIApplicationRegulatorReviewSubmitRequestTaskPayload
@@ -37364,8 +36852,6 @@ components:
         type:
           type: string
           enum:
-            - INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY
-            - AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY
             - INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED
             - INSTALLATION_ACCOUNT_OPENING_ACCEPTED
             - INSTALLATION_ACCOUNT_OPENING_REJECTED
@@ -37525,8 +37011,6 @@ components:
             - WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_REJECTED
             - WITHHOLDING_OF_ALLOWANCES_APPLICATION_WITHDRAWN
             - WITHHOLDING_OF_ALLOWANCES_APPLICATION_CLOSED
-            - WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY
-            - WITHHOLDING_OF_ALLOWANCES_APPLICATION_RE_INITIATED
             - RETURN_OF_ALLOWANCES_APPLICATION_SUBMITTED
             - RETURN_OF_ALLOWANCES_APPLICATION_CANCELLED
             - RETURN_OF_ALLOWANCES_PEER_REVIEW_REQUESTED
@@ -37558,15 +37042,6 @@ components:
             - BDRS2_APPLICATION_SENT_TO_VERIFIER
             - BDRS2_APPLICATION_SENT_TO_REGULATOR
             - BDRS2_RECALLED_FROM_VERIFICATION
-            - BDRS2_APPLICATION_VERIFICATION_SUBMITTED
-            - BDRS2_VERIFICATION_RETURNED_TO_OPERATOR
-            - BDRS2_APPLICATION_PEER_REVIEW_REQUESTED
-            - BDRS2_APPLICATION_PEER_REVIEW_ACCEPTED
-            - BDRS2_APPLICATION_PEER_REVIEW_REJECTED
-            - BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS
-            - BDRS2_APPLICATION_AMENDS_SENT_TO_VERIFIER
-            - BDRS2_APPLICATION_COMPLETED
-            - BDRS2_APPLICATION_RE_INITIATED
             - PERMANENT_CESSATION_APPLICATION_CANCELLED
             - PERMANENT_CESSATION_APPLICATION_SUBMITTED
             - PERMANENT_CESSATION_SUBMITTED
@@ -38817,32 +38292,6 @@ components:
                 - $ref: '#/components/schemas/LocationOffShoreDTO'
                 - $ref: '#/components/schemas/LocationOnShoreDTO'
                 - $ref: '#/components/schemas/LocationOnShoreStateDTO'
-    AviationReportableEmissionsOperatorDetails:
-      type: object
-      properties:
-        registryId:
-          type: integer
-          format: int32
-        firstYearOfReportingObligation:
-          type: integer
-          format: int32
-        emissionsPlanId:
-          type: string
-        operatorName:
-          type: string
-        reportableEmissions:
-          type: string
-        reportingYear:
-          type: integer
-          format: int16
-    AviationReportableEmissionsRegistryIntegrationRequestActionPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            operatorDetails:
-              $ref: '#/components/schemas/AviationReportableEmissionsOperatorDetails'
     AviationUpdateOperatorDetails:
       type: object
       properties:
@@ -39079,72 +38528,6 @@ components:
               type: object
               additionalProperties:
                 type: string
-    BDRS2ApplicationAmendsSubmittedRequestActionPayload:
-      required:
-        - bdrs2
-        - installationOperatorDetails
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            bdrs2:
-              $ref: '#/components/schemas/BDRS2'
-            installationOperatorDetails:
-              $ref: '#/components/schemas/InstallationOperatorDetails'
-            verificationPerformed:
-              type: boolean
-            verificationReport:
-              $ref: '#/components/schemas/BDRS2VerificationReport'
-            bdrs2Attachments:
-              type: object
-              additionalProperties:
-                type: string
-            verificationAttachments:
-              type: object
-              additionalProperties:
-                type: string
-    BDRS2ApplicationCompletedRequestActionPayload:
-      required:
-        - bdrs2
-        - installationOperatorDetails
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            bdrs2:
-              $ref: '#/components/schemas/BDRS2'
-            installationOperatorDetails:
-              $ref: '#/components/schemas/InstallationOperatorDetails'
-            verificationPerformed:
-              type: boolean
-            verificationReport:
-              $ref: '#/components/schemas/BDRS2VerificationReport'
-            bdrs2Attachments:
-              type: object
-              additionalProperties:
-                type: string
-            verificationAttachments:
-              type: object
-              additionalProperties:
-                type: string
-            verifiedBdrs2:
-              $ref: '#/components/schemas/BDRS2'
-            regulatorReviewOutcome:
-              $ref: '#/components/schemas/BDRS2ApplicationRegulatorReviewOutcome'
-            regulatorReviewGroupDecisions:
-              type: object
-              additionalProperties:
-                oneOf:
-                  - $ref: '#/components/schemas/BDRS2ReviewDecision'
-                  - $ref: '#/components/schemas/BDRS2Bdrs2DataRegulatorReviewDecision'
-                  - $ref: >-
-                      #/components/schemas/BDRS2VerificationReportDataRegulatorReviewDecision
-            regulatorReviewAttachments:
-              type: object
-              additionalProperties:
-                type: string
     BDRS2ApplicationSubmittedRequestActionPayload:
       required:
         - bdrs2
@@ -39170,61 +38553,27 @@ components:
               type: object
               additionalProperties:
                 type: string
-    BDRS2ApplicationVerificationSubmittedRequestActionPayload:
+    BDRS2VerificationReport:
       required:
-        - bdrs2
-        - installationOperatorDetails
+        - opinionStatement
+        - overallAssessment
       type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            bdrs2:
-              $ref: '#/components/schemas/BDRS2'
-            installationOperatorDetails:
-              $ref: '#/components/schemas/InstallationOperatorDetails'
-            verificationPerformed:
-              type: boolean
-            verificationReport:
-              $ref: '#/components/schemas/BDRS2VerificationReport'
-            bdrs2Attachments:
-              type: object
-              additionalProperties:
-                type: string
-            verificationAttachments:
-              type: object
-              additionalProperties:
-                type: string
-    BDRS2RegulatorReviewReturnedForAmendsRequestActionPayload:
-      required:
-        - regulatorReviewGroupDecisions
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            regulatorReviewGroupDecisions:
-              type: object
-              additionalProperties:
-                oneOf:
-                  - $ref: '#/components/schemas/BDRS2ReviewDecision'
-                  - $ref: '#/components/schemas/BDRS2Bdrs2DataRegulatorReviewDecision'
-                  - $ref: >-
-                      #/components/schemas/BDRS2VerificationReportDataRegulatorReviewDecision
-            regulatorReviewAttachments:
-              type: object
-              additionalProperties:
-                type: string
-    BDRS2VerificationReturnedToOperatorRequestActionPayload:
-      required:
-        - changesRequired
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            changesRequired:
-              type: string
+      properties:
+        verificationBodyId:
+          type: integer
+          format: int64
+        verificationBodyDetails:
+          $ref: '#/components/schemas/VerificationBodyDetails'
+        opinionStatement:
+          $ref: '#/components/schemas/BDRS2VerificationOpinionStatement'
+        overallAssessment:
+          oneOf:
+            - $ref: >-
+                #/components/schemas/BDRS2NotVerifiedOverallVerificationAssessment
+            - $ref: >-
+                #/components/schemas/BDRS2VerifiedSatisfactoryOverallVerificationAssessment
+            - $ref: >-
+                #/components/schemas/BDRS2VerifiedWithCommentsOverallVerificationAssessment
     BDRVerificationReturnedToOperatorRequestActionPayload:
       required:
         - changesRequired
@@ -40416,15 +39765,6 @@ components:
               type: object
               additionalProperties:
                 $ref: '#/components/schemas/FollowUpActionResponse'
-    InstallationReportableEmissionsRegistryIntegrationRequestActionPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            activePermit:
-              $ref: >-
-                #/components/schemas/RegistryIntegrationReportableEmissionsActivePermit
     NerApplicationAcceptedRequestActionPayload:
       required:
         - authorityResponse
@@ -41989,61 +41329,6 @@ components:
           LIMITED_COMPANY: '#/components/schemas/BusinessOrganisationDetails'
           PARTNERSHIP: '#/components/schemas/BusinessOrganisationDetails'
           OTHER: '#/components/schemas/BusinessOrganisationDetails'
-    RegistryIntegrationReportableEmissionsActivePermit:
-      type: object
-      properties:
-        permitId:
-          type: string
-        installationName:
-          type: string
-        operatorName:
-          type: string
-        firstYearOfReportingObligation:
-          type: integer
-          format: int32
-        regulatedActivity:
-          type: array
-          items:
-            type: string
-            enum:
-              - WASTE
-              - COMBUSTION
-              - UPSTREAM_GHG_REMOVAL
-              - MINERAL_OIL_REFINING
-              - COKE_PRODUCTION
-              - ORE_ROASTING_OR_SINTERING
-              - PIG_IRON_STEEL_PRODUCTION
-              - FERROUS_METALS_PRODUCTION
-              - NON_FERROUS_METALS_PRODUCTION
-              - PRIMARY_ALUMINIUM_PRODUCTION
-              - SECONDARY_ALUMINIUM_PRODUCTION
-              - CEMENT_CLINKER_PRODUCTION
-              - LIME_OR_CALCINATION_OF_DOLOMITE_OR_MAGNESITE
-              - CERAMICS_MANUFACTURING
-              - GYPSUM_OR_PLASTERBOARD_PRODUCTION
-              - GLASS_MANUFACTURING
-              - MINERAL_WOOL_MANUFACTURING
-              - PULP_PRODUCTION
-              - PAPER_OR_CARDBOARD_PRODUCTION
-              - CARBON_BLACK_PRODUCTION
-              - BULK_ORGANIC_CHEMICAL_PRODUCTION
-              - GLYOXAL_GLYOXYLIC_ACID_PRODUCTION
-              - NITRIC_ACID_PRODUCTION
-              - ADIPIC_ACID_PRODUCTION
-              - AMMONIA_PRODUCTION
-              - SODA_ASH_AND_SODIUM_BICARBONATE_PRODUCTION
-              - HYDROGEN_AND_SYNTHESIS_GAS_PRODUCTION
-              - CAPTURE_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE
-              - TRANSPORT_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE
-              - STORAGE_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE
-        registryId:
-          type: integer
-          format: int32
-        reportableEmissions:
-          type: string
-        reportingYear:
-          type: integer
-          format: int16
     ReissueCompletedRequestActionPayload:
       required:
         - document
@@ -42077,8 +41362,6 @@ components:
         type:
           type: string
           enum:
-            - INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY
-            - AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY
             - INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED
             - INSTALLATION_ACCOUNT_OPENING_ACCEPTED
             - INSTALLATION_ACCOUNT_OPENING_REJECTED
@@ -42238,8 +41521,6 @@ components:
             - WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_REJECTED
             - WITHHOLDING_OF_ALLOWANCES_APPLICATION_WITHDRAWN
             - WITHHOLDING_OF_ALLOWANCES_APPLICATION_CLOSED
-            - WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY
-            - WITHHOLDING_OF_ALLOWANCES_APPLICATION_RE_INITIATED
             - RETURN_OF_ALLOWANCES_APPLICATION_SUBMITTED
             - RETURN_OF_ALLOWANCES_APPLICATION_CANCELLED
             - RETURN_OF_ALLOWANCES_PEER_REVIEW_REQUESTED
@@ -42271,15 +41552,6 @@ components:
             - BDRS2_APPLICATION_SENT_TO_VERIFIER
             - BDRS2_APPLICATION_SENT_TO_REGULATOR
             - BDRS2_RECALLED_FROM_VERIFICATION
-            - BDRS2_APPLICATION_VERIFICATION_SUBMITTED
-            - BDRS2_VERIFICATION_RETURNED_TO_OPERATOR
-            - BDRS2_APPLICATION_PEER_REVIEW_REQUESTED
-            - BDRS2_APPLICATION_PEER_REVIEW_ACCEPTED
-            - BDRS2_APPLICATION_PEER_REVIEW_REJECTED
-            - BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS
-            - BDRS2_APPLICATION_AMENDS_SENT_TO_VERIFIER
-            - BDRS2_APPLICATION_COMPLETED
-            - BDRS2_APPLICATION_RE_INITIATED
             - PERMANENT_CESSATION_APPLICATION_CANCELLED
             - PERMANENT_CESSATION_APPLICATION_SUBMITTED
             - PERMANENT_CESSATION_SUBMITTED
@@ -42487,8 +41759,6 @@ components:
             - $ref: >-
                 #/components/schemas/AviationDreApplicationSubmittedRequestActionPayload
             - $ref: >-
-                #/components/schemas/AviationReportableEmissionsRegistryIntegrationRequestActionPayload
-            - $ref: >-
                 #/components/schemas/AviationVirApplicationRespondedToRegulatorCommentsRequestActionPayload
             - $ref: >-
                 #/components/schemas/AviationVirApplicationReviewedRequestActionPayload
@@ -42503,17 +41773,7 @@ components:
             - $ref: >-
                 #/components/schemas/BDRRegulatorReviewReturnedForAmendsRequestActionPayload
             - $ref: >-
-                #/components/schemas/BDRS2ApplicationAmendsSubmittedRequestActionPayload
-            - $ref: >-
-                #/components/schemas/BDRS2ApplicationCompletedRequestActionPayload
-            - $ref: >-
                 #/components/schemas/BDRS2ApplicationSubmittedRequestActionPayload
-            - $ref: >-
-                #/components/schemas/BDRS2ApplicationVerificationSubmittedRequestActionPayload
-            - $ref: >-
-                #/components/schemas/BDRS2RegulatorReviewReturnedForAmendsRequestActionPayload
-            - $ref: >-
-                #/components/schemas/BDRS2VerificationReturnedToOperatorRequestActionPayload
             - $ref: >-
                 #/components/schemas/BDRVerificationReturnedToOperatorRequestActionPayload
             - $ref: '#/components/schemas/BatchReissueCompletedRequestActionPayload'
@@ -42597,8 +41857,6 @@ components:
                 #/components/schemas/InstallationInspectionApplicationSubmittedRequestActionPayload
             - $ref: >-
                 #/components/schemas/InstallationInspectionOperatorRespondedRequestActionPayload
-            - $ref: >-
-                #/components/schemas/InstallationReportableEmissionsRegistryIntegrationRequestActionPayload
             - $ref: '#/components/schemas/NerApplicationAcceptedRequestActionPayload'
             - $ref: '#/components/schemas/NerApplicationEndedRequestActionPayload'
             - $ref: >-
@@ -42711,8 +41969,6 @@ components:
                 #/components/schemas/WithholdingOfAllowancesApplicationSubmittedRequestActionPayload
             - $ref: >-
                 #/components/schemas/WithholdingOfAllowancesApplicationWithdrawnRequestActionPayload
-            - $ref: >-
-                #/components/schemas/WithholdingOfAllowancesRegistryIntegrationRequestActionPayload
         requestId:
           type: string
         requestType:
@@ -42783,8 +42039,6 @@ components:
         payloadType:
           type: string
           enum:
-            - INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY_PAYLOAD
-            - AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY_PAYLOAD
             - INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED_PAYLOAD
             - INSTALLATION_ACCOUNT_OPENING_APPROVED_PAYLOAD
             - INSTALLATION_ACCOUNT_OPENING_DECISION_PAYLOAD
@@ -42881,7 +42135,6 @@ components:
             - WITHHOLDING_OF_ALLOWANCES_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
             - WITHHOLDING_OF_ALLOWANCES_APPLICATION_WITHDRAWN_PAYLOAD
             - WITHHOLDING_OF_ALLOWANCES_APPLICATION_CLOSED_PAYLOAD
-            - WITHHOLDING_OF_ALLOWANCES_REGISTRY_INTEGRATION_PAYLOAD
             - RETURN_OF_ALLOWANCES_APPLICATION_SUBMITTED_PAYLOAD
             - RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_COMPLETED_PAYLOAD
             - RETURN_OF_ALLOWANCES_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
@@ -42913,12 +42166,6 @@ components:
             - BDR_APPLICATION_COMPLETED_PAYLOAD
             - BDR_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
             - BDRS2_APPLICATION_SUBMITTED_PAYLOAD
-            - BDRS2_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD
-            - BDRS2_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD
-            - BDRS2_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
-            - BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD
-            - BDRS2_APPLICATION_AMENDS_SUBMITTED_PAYLOAD
-            - BDRS2_APPLICATION_COMPLETED_PAYLOAD
             - ALR_APPLICATION_SUBMITTED_PAYLOAD
             - ALR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD
             - ALR_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD
@@ -43023,10 +42270,6 @@ components:
             #/components/schemas/PermitIssuanceApplicationSubmittedRequestActionPayload
           PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD: >-
             #/components/schemas/InstallationAccountRegistryIntegrationRequestActionPayload
-          INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY_PAYLOAD: >-
-            #/components/schemas/InstallationReportableEmissionsRegistryIntegrationRequestActionPayload
-          AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY_PAYLOAD: >-
-            #/components/schemas/AviationReportableEmissionsRegistryIntegrationRequestActionPayload
           PERMIT_SURRENDER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
           PERMIT_SURRENDER_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD: >-
             #/components/schemas/PermitSurrenderApplicationDeemedWithdrawnRequestActionPayload
@@ -43167,8 +42410,6 @@ components:
             #/components/schemas/WithholdingOfAllowancesApplicationWithdrawnRequestActionPayload
           WITHHOLDING_OF_ALLOWANCES_APPLICATION_CLOSED_PAYLOAD: >-
             #/components/schemas/WithholdingOfAllowancesApplicationClosedRequestActionPayload
-          WITHHOLDING_OF_ALLOWANCES_REGISTRY_INTEGRATION_PAYLOAD: >-
-            #/components/schemas/WithholdingOfAllowancesRegistryIntegrationRequestActionPayload
           RETURN_OF_ALLOWANCES_APPLICATION_SUBMITTED_PAYLOAD: >-
             #/components/schemas/ReturnOfAllowancesApplicationSubmittedRequestActionPayload
           RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_COMPLETED_PAYLOAD: >-
@@ -43193,16 +42434,7 @@ components:
             #/components/schemas/BDRApplicationAmendsSubmittedRequestActionPayload
           BDR_APPLICATION_COMPLETED_PAYLOAD: '#/components/schemas/BDRApplicationCompletedRequestActionPayload'
           BDR_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
-          BDRS2_APPLICATION_SUBMITTED_PAYLOAD: '#/components/schemas/BDRS2ApplicationSubmittedRequestActionPayload'
-          BDRS2_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD: >-
-            #/components/schemas/BDRS2ApplicationVerificationSubmittedRequestActionPayload
-          BDRS2_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD: >-
-            #/components/schemas/BDRS2VerificationReturnedToOperatorRequestActionPayload
-          BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD: >-
-            #/components/schemas/BDRS2RegulatorReviewReturnedForAmendsRequestActionPayload
-          BDRS2_APPLICATION_AMENDS_SUBMITTED_PAYLOAD: >-
-            #/components/schemas/BDRS2ApplicationAmendsSubmittedRequestActionPayload
-          BDRS2_APPLICATION_COMPLETED_PAYLOAD: '#/components/schemas/BDRS2ApplicationCompletedRequestActionPayload'
+          BDRS2_APPLICATION_SUBMITTED_PAYLOAD: '#/components/schemas/BDRApplicationSubmittedRequestActionPayload'
           ALR_APPLICATION_SUBMITTED_PAYLOAD: '#/components/schemas/ALRApplicationSubmittedRequestActionPayload'
           ALR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD: >-
             #/components/schemas/ALRVerificationReturnedToOperatorRequestActionPayload
@@ -43664,20 +42896,6 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             officialNotice:
               $ref: '#/components/schemas/FileInfoDTO'
-    WithholdingOfAllowancesRegistryIntegrationRequestActionPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            registryId:
-              type: integer
-              format: int32
-            withholdFlag:
-              type: boolean
-            withholdYear:
-              type: integer
-              format: int16
     InventoryDataYearExistenceDTO:
       type: object
       properties:

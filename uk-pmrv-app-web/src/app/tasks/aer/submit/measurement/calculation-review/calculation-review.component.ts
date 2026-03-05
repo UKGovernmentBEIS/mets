@@ -17,10 +17,9 @@ import { calculationReviewFormProvider } from './calculation-review.provider';
 
 @Component({
   selector: 'app-calculation-review',
-  standalone: false,
   templateUrl: './calculation-review.component.html',
-  providers: [calculationReviewFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [calculationReviewFormProvider],
 })
 export class CalculationReviewComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

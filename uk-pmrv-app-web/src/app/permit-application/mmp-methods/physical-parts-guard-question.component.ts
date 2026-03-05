@@ -16,10 +16,11 @@ import { PhysicalPartsGuardQuestionFormProvider } from './physical-parts-guard-q
 
 @Component({
   selector: 'app-mmp-physical-parts-guard-question',
-  imports: [SharedModule, SharedPermitModule],
   templateUrl: './physical-parts-guard-question.component.html',
-  providers: [PhysicalPartsGuardQuestionFormProvider],
+  standalone: true,
+  imports: [SharedModule, SharedPermitModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [PhysicalPartsGuardQuestionFormProvider],
 })
 export class PhysicalPartsGuardQuestionComponent implements PendingRequest {
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));

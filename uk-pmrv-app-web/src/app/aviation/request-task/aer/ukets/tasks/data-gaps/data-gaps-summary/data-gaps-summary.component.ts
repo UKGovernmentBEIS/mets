@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable, take, tap } from 'rxjs';
 
@@ -22,14 +22,16 @@ import { calculateAffectedFlightsPercentage } from '../util/data-gaps.util';
 
 @Component({
   selector: 'app-data-gaps-summary',
+  templateUrl: './data-gaps-summary.component.html',
+  standalone: true,
   imports: [
     SharedModule,
+    RouterLinkWithHref,
     ReturnToLinkComponent,
     DataGapsListTemplateComponent,
     DataGapsSummaryTemplateComponent,
     AerReviewDecisionGroupComponent,
   ],
-  templateUrl: './data-gaps-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class DataGapsSummaryComponent {

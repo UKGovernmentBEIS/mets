@@ -13,7 +13,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, VerifiedWithComment
 
 @Component({
   selector: 'app-reason-item',
-  standalone: false,
   templateUrl: './reason-item.component.html',
   providers: [reasonItemFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

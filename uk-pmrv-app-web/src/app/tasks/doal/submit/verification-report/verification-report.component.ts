@@ -10,10 +10,9 @@ import { verificationReportFormProvider } from './verification-report-form.provi
 
 @Component({
   selector: 'app-verification-report',
-  standalone: false,
   templateUrl: './verification-report.component.html',
-  providers: [verificationReportFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [verificationReportFormProvider],
 })
 export class VerificationReportComponent {
   constructor(

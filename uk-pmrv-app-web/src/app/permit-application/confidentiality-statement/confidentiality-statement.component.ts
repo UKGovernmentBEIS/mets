@@ -24,19 +24,18 @@ import { confidentialityStatementFormProvider } from './confidentiality-statemen
 
 @Component({
   selector: 'app-confidentiality-statement',
-  standalone: false,
   template: `
     <app-permit-task reviewGroupTitle="Confidentiality" reviewGroupUrl="confidentiality" [breadcrumb]="true">
       <app-confidentiality-statement-template
         (formSubmit)="onSubmit()"
         [form]="form"
         [isEditable]="store.isEditable$ | async"
-        caption="Confidentiality statement"></app-confidentiality-statement-template>
+        [caption]="'Confidentiality statement'"></app-confidentiality-statement-template>
       <app-list-return-link reviewGroupTitle="Confidentiality" reviewGroupUrl="confidentiality"></app-list-return-link>
     </app-permit-task>
   `,
-  providers: [confidentialityStatementFormProvider, DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [confidentialityStatementFormProvider, DestroySubject],
 })
 export class ConfidentialityStatementComponent extends SectionComponent implements AfterContentChecked {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;

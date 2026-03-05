@@ -14,7 +14,6 @@ import { OpinionStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-emission-factors',
-  standalone: false,
   templateUrl: './emission-factors.component.html',
   providers: [emissionFactorsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

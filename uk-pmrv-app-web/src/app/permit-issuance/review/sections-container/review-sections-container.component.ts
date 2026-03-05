@@ -18,10 +18,9 @@ import { ReviewGroupStatusPermitIssuancePipe } from '../review-group-status-perm
 
 @Component({
   selector: 'app-issuance-review-sections-container',
-  standalone: false,
   templateUrl: './review-sections-container.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbstractComponent implements OnInit {
   decision$ = this.store.pipe(

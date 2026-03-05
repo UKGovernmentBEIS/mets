@@ -15,10 +15,9 @@ import { OpinionStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-site-visits',
-  standalone: false,
   templateUrl: './site-visits.component.html',
-  providers: [siteVisitsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [siteVisitsFormProvider],
 })
 export class SiteVisitsComponent implements PendingRequest {
   isEditable$ = this.aerService.isEditable$;

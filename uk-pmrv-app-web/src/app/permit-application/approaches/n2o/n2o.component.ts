@@ -13,7 +13,6 @@ import { areCategoryTierPrerequisitesMet } from './n2o-status';
 
 @Component({
   selector: 'app-n2o',
-  standalone: false,
   templateUrl: './n2o.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

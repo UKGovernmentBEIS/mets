@@ -15,7 +15,6 @@ import { AirService } from '../../core/air.service';
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

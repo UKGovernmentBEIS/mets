@@ -8,7 +8,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-fuels',
-  standalone: false,
   template: `
     <app-page-heading>Fuels and equipment inventory</app-page-heading>
     <app-fuels-group [aerData]="aerData$ | async"></app-fuels-group>

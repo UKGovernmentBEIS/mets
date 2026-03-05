@@ -39,6 +39,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-emissions-reduction-claim-summary',
+  standalone: true,
   imports: [
     SharedModule,
     EmissionsReductionClaimSummaryTemplateComponent,

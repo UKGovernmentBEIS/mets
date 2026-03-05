@@ -28,13 +28,14 @@ interface ViewModel {
 
 @Component({
   selector: 'app-compliance-monitoring-summary',
+  templateUrl: './compliance-monitoring-summary.component.html',
+  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
     ComplianceMonitoringGroupComponent,
     AerVerificationReviewDecisionGroupComponent,
   ],
-  templateUrl: './compliance-monitoring-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ComplianceMonitoringSummaryComponent {

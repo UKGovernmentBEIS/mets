@@ -8,7 +8,6 @@ import { ActivityLevelChangeInformation } from 'pmrv-api';
 
 @Component({
   selector: 'app-alc-information-summary',
-  standalone: false,
   template: `
     <app-doal-task [breadcrumb]="true">
       <app-page-heading>Provide information about this activity level change</app-page-heading>

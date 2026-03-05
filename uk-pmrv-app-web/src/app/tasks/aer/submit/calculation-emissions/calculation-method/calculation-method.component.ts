@@ -15,10 +15,9 @@ import { calculationMethodFormProvider } from './calculation-method.provider';
 
 @Component({
   selector: 'app-calculation-method',
-  standalone: false,
   templateUrl: './calculation-method.component.html',
-  providers: [calculationMethodFormProvider, DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [calculationMethodFormProvider, DestroySubject],
 })
 export class CalculationMethodComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

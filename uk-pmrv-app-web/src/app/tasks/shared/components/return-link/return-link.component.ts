@@ -4,7 +4,6 @@ import { RequestTaskDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-task-return-link',
-  standalone: false,
   template: `
     <a govukLink [routerLink]="link">Return to: {{ linkText }}</a>
   `,

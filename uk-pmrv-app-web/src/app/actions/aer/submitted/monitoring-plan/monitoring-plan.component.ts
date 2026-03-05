@@ -8,7 +8,6 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-monitoring-plan',
-  standalone: false,
   templateUrl: './monitoring-plan.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

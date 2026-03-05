@@ -16,7 +16,6 @@ import { MeasurementDevicesTableComponent } from './measurement-devices-table.co
 
 describe('MeasurementDevicesTableComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <app-measurement-devices-table
         [data]="data"

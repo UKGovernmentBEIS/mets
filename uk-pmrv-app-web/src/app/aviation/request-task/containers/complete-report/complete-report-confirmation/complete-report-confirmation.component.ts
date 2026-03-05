@@ -4,6 +4,7 @@ import { RouterLinkWithHref } from '@angular/router';
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
+import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { BaseSuccessComponent } from '@shared/base-success/base-success.component';
 import { SharedModule } from '@shared/shared.module';
@@ -14,8 +15,9 @@ export interface ConfirmationViewModel {
 
 @Component({
   selector: 'app-complete-report-confirmation',
-  imports: [SharedModule, RouterLinkWithHref],
   templateUrl: './complete-report-confirmation.component.html',
+  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent],
+  standalone: true,
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

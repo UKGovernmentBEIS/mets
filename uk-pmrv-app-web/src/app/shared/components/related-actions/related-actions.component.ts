@@ -9,7 +9,6 @@ import { AviationVirRequestMetadata, RequestInfoDTO, RequestTaskActionProcessDTO
 
 @Component({
   selector: 'app-related-actions',
-  standalone: false,
   template: `
     <aside class="app-related-items" role="complementary">
       <h2 class="govuk-heading-m" id="subsection-title">Related actions</h2>

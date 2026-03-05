@@ -17,8 +17,9 @@ import { ManagementProceduresFormProvider } from '../management-procedures-form.
 
 @Component({
   selector: 'app-management-procedures-environmental-management',
-  imports: [SharedModule, ReturnToLinkComponent, ManagementProceduresEnvironmentalManagementFormComponent],
   templateUrl: './management-procedures-environmental-management.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent, ManagementProceduresEnvironmentalManagementFormComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

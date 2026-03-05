@@ -23,8 +23,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-compliance-monitoring-page',
-  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './compliance-monitoring-page.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

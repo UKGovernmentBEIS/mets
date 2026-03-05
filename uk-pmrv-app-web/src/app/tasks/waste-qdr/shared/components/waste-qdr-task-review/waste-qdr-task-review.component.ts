@@ -10,7 +10,6 @@ import { WasteQdrReturnLinkComponent } from '../waste-qdr-return-link/waste-qdr-
 
 @Component({
   selector: 'app-waste-qdr-task-common',
-  imports: [RouterModule, SharedModule, WasteQdrReturnLinkComponent],
   template: `
     <div class="govuk-!-width-two-thirds">
       <govuk-notification-banner *ngIf="notification" type="success">
@@ -21,8 +20,10 @@ import { WasteQdrReturnLinkComponent } from '../waste-qdr-return-link/waste-qdr-
       <app-waste-qdr-return-link [returnLink]="returnLink" [title]="returnLinkTitle"></app-waste-qdr-return-link>
     </div>
   `,
-  providers: [DestroySubject],
+  standalone: true,
+  imports: [RouterModule, SharedModule, WasteQdrReturnLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class WasteQdrTaskReviewComponent implements OnInit {
   @Input() notification: any;

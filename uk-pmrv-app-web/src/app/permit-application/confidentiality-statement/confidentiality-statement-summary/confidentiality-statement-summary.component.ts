@@ -9,10 +9,9 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-confidentiality-statement-summary',
-  standalone: false,
   templateUrl: './confidentiality-statement-summary.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class ConfidentialityStatementSummaryComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;

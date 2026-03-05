@@ -15,14 +15,14 @@ import OpinionStatementEmissionsFormComponent from './opinion-statement-emission
 
 @Component({
   selector: 'app-mock-parent',
-  imports: [ReactiveFormsModule, OpinionStatementEmissionsFormComponent],
-  standalone: true,
   template: `
     <form [formGroup]="emissionsGroup">
       <app-opinion-statement-emissions-form
         [totalEmissionsProvided]="totalEmissionsProvided"></app-opinion-statement-emissions-form>
     </form>
   `,
+  standalone: true,
+  imports: [ReactiveFormsModule, OpinionStatementEmissionsFormComponent],
   providers: [
     { provide: TASK_FORM_PROVIDER, useClass: OpinionStatementFormProvider },
     { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },

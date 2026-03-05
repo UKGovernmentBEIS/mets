@@ -37,8 +37,7 @@ public class AviationAccountRegistryIntegrationPreviewService {
         Request request = requestService.findRequestById(requestId);
         RequestTask reviewTask = request.getRequestTasks().stream()
                 .filter(requestTask -> requestTask.getType().equals(RequestTaskType.EMP_ISSUANCE_UKETS_APPLICATION_REVIEW)
-                || requestTask.getType().equals(RequestTaskType.EMP_ISSUANCE_UKETS_WAIT_FOR_AMENDS)
-                || requestTask.getType().equals(RequestTaskType.EMP_ISSUANCE_UKETS_WAIT_FOR_PEER_REVIEW))
+                || requestTask.getType().equals(RequestTaskType.EMP_ISSUANCE_UKETS_WAIT_FOR_AMENDS))
                 .findFirst().orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
         EmpIssuanceUkEtsApplicationReviewRequestTaskPayload payload = (EmpIssuanceUkEtsApplicationReviewRequestTaskPayload) reviewTask.getPayload();
         AviationAccountDTO aviationAccountDTO = aviationAccountQueryService.getAviationAccountDTOById(request.getAccountId());

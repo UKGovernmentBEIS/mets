@@ -17,10 +17,9 @@ import { UserFullNamePipe } from '../../pipes/user-full-name.pipe';
 
 @Component({
   selector: 'app-assignment',
-  standalone: false,
   templateUrl: './assignment.component.html',
-  providers: [UserFullNamePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserFullNamePipe],
 })
 export class AssignmentComponent implements OnInit, OnChanges {
   @Input() info: RequestTaskItemDTO;

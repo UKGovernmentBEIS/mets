@@ -74,7 +74,6 @@ describe('UserInputComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <form id="national-group" [formGroup]="nationalForm">
         <app-user-input phoneType="national"></app-user-input>

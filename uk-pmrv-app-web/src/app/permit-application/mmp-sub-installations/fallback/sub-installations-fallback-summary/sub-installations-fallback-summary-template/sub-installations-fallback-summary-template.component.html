@@ -66,7 +66,7 @@
             <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true && !isPreview">
               <a
                 govukLink
-                routerLink="../annual-activity-levels-heat"
+                [routerLink]="'../annual-activity-levels-heat'"
                 [state]="{ changing: true }"
                 hidden-text="annual activity levels data source">
                 Change
@@ -546,7 +546,8 @@
             <dd govukSummaryListRowValue class="pre-wrap">
               @for (
                 activity of data?.measurableHeat?.measurableHeatImported?.measurableHeatImportedActivities;
-                track activity
+                track activity;
+                let i = $index
               ) {
                 {{ activity | measurableHeatLabel: 'imported' }}
                 <br />

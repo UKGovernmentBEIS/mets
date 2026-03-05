@@ -9,12 +9,11 @@ describe('ButtonDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
     template: `
-      <button type="button" #simple govukButton (click)="onClick()">Simple button</button>
-      <button type="button" #warn govukWarnButton>Warn button</button>
-      <button type="button" #secondary govukSecondaryButton>Secondary button</button>
-      <button type="button" #disabled govukButton disabled>Disabled button</button>
+      <button #simple govukButton (click)="onClick()">Simple button</button>
+      <button #warn govukWarnButton>Warn button</button>
+      <button #secondary govukSecondaryButton>Secondary button</button>
+      <button #disabled govukButton disabled>Disabled button</button>
     `,
   })
   class TestComponent {

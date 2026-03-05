@@ -4,7 +4,6 @@ import { TaskSection } from './task-list.interface';
 
 @Component({
   selector: 'app-task-list',
-  standalone: false,
   templateUrl: './task-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

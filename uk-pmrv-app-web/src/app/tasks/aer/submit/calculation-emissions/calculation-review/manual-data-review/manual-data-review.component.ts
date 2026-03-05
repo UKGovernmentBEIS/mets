@@ -20,10 +20,9 @@ import { manualDataReviewFormProvider } from './manual-data-review.provider';
 
 @Component({
   selector: 'app-inventory-data-review',
-  standalone: false,
   templateUrl: './manual-data-review.component.html',
-  providers: [manualDataReviewFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [manualDataReviewFormProvider],
 })
 export class ManualDataReviewComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

@@ -6,7 +6,6 @@ import { RecommendedImprovements } from 'pmrv-api';
 
 @Component({
   selector: 'app-recommended-improvements-group',
-  standalone: false,
   templateUrl: './recommended-improvements-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

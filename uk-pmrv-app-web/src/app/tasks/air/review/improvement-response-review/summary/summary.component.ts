@@ -18,7 +18,6 @@ import { AirApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
   providers: [improvementResponseReviewFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

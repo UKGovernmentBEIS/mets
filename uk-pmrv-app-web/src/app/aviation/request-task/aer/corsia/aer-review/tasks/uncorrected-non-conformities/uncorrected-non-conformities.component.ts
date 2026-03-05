@@ -21,14 +21,15 @@ interface ViewModel {
 
 @Component({
   selector: 'app-uncorrected-non-conformities',
+  standalone: true,
+  templateUrl: './uncorrected-non-conformities.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
     UncorrectedItemGroupComponent,
     AerVerificationReviewDecisionGroupComponent,
   ],
-  templateUrl: './uncorrected-non-conformities.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UncorrectedNonConformitiesComponent {
   private store = inject(RequestTaskStore);

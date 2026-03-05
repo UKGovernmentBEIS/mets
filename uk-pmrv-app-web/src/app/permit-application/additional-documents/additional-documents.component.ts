@@ -13,7 +13,6 @@ import { additionalDocumentsFormFactory } from './additional-documents-form.prov
 
 @Component({
   selector: 'app-additional-documents',
-  standalone: false,
   template: `
     <app-permit-task reviewGroupTitle="Additional information" reviewGroupUrl="additional-info" [breadcrumb]="true">
       <app-additional-documents-shared
@@ -26,8 +25,8 @@ import { additionalDocumentsFormFactory } from './additional-documents-form.prov
         reviewGroupUrl="additional-info"></app-list-return-link>
     </app-permit-task>
   `,
-  providers: [additionalDocumentsFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [additionalDocumentsFormFactory],
 })
 export class AdditionalDocumentsComponent extends SectionComponent {
   constructor(

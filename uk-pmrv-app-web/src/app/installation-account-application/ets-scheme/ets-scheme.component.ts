@@ -16,7 +16,6 @@ import { etsSchemeMap } from './ets-scheme';
 
 @Component({
   selector: 'app-ets-scheme',
-  standalone: false,
   template: `
     <app-wizard-step
       [formGroup]="form"
@@ -37,8 +36,8 @@ import { etsSchemeMap } from './ets-scheme';
       Return to: Request to open an installation account
     </a>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class EtsSchemeComponent implements OnInit {
   readonly originalOrder = originalOrder;

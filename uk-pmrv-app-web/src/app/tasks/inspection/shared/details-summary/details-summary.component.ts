@@ -27,10 +27,11 @@ import { isInstallationInspectionDetailsSubmitCompleted, onSiteInspectionDateVal
 
 @Component({
   selector: 'app-details-summary',
+  standalone: true,
   imports: [SharedModule, DetailsSubtaskHeaderPipe, DetailsSubtaskLinktextPipe, RouterLink],
+  providers: [detailsFormProvider, UserFullNamePipe],
   templateUrl: './details-summary.component.html',
   styleUrl: '../../shared/css/form-errors.scss',
-  providers: [detailsFormProvider, UserFullNamePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsSummaryComponent {

@@ -17,7 +17,6 @@ describe('NonSignificantChangeComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-non-significant-change formGroupName="notification"></app-non-significant-change>

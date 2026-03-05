@@ -30,6 +30,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-opinion-statement',
+  templateUrl: './opinion-statement.component.html',
+  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,
@@ -40,7 +42,6 @@ interface ViewModel {
     OpinionStatementSiteVerificationSummaryTemplateComponent,
     AerVerificationReviewDecisionGroupSummaryComponent,
   ],
-  templateUrl: './opinion-statement.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class OpinionStatementComponent {

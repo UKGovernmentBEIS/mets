@@ -1,7 +1,9 @@
+import { AsyncPipe, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { TotalEmissionsSchemeYearHeaderComponent } from '@aviation/request-task/aer/ukets/tasks/total-emissions/shared/total-emissions-scheme-year-header';
+import { TotalEmissionsStandardFuelsTableComponent } from '@aviation/request-task/aer/ukets/tasks/total-emissions/table/total-emissions-standard-fuels-table';
 import { TotalEmissionsFormProvider } from '@aviation/request-task/aer/ukets/tasks/total-emissions/total-emissions-form.provider';
 import { RequestTaskModule } from '@aviation/request-task/request-task.module';
 import { RequestTaskStore } from '@aviation/request-task/store';
@@ -14,9 +16,18 @@ import { AviationAerEmissionsCalculationDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-total-emissions-page',
-  imports: [SharedModule, ReturnToLinkComponent, RequestTaskModule, TotalEmissionsSchemeYearHeaderComponent],
   templateUrl: './total-emissions-page.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    AsyncPipe,
+    NgIf,
+    SharedModule,
+    ReturnToLinkComponent,
+    RequestTaskModule,
+    TotalEmissionsStandardFuelsTableComponent,
+    TotalEmissionsSchemeYearHeaderComponent,
+  ],
 })
 export class TotalEmissionsPageComponent {
   constructor(

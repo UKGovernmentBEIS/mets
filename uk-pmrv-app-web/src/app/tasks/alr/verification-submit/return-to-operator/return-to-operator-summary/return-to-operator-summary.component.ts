@@ -16,6 +16,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-return-to-operator-summary',
+  standalone: true,
   imports: [AlrTaskSharedModule, SharedModule, RouterLink],
   templateUrl: './return-to-operator-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

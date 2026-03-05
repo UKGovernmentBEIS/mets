@@ -26,10 +26,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-landing-page',
-  standalone: false,
   templateUrl: './landing-page.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class LandingPageComponent {
   vm$: Observable<ViewModel> = this.authStore.pipe(

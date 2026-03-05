@@ -1,3 +1,4 @@
+import { NgFor, NgIf } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
@@ -11,8 +12,9 @@ import { AviationDreFeeDetailsFormModel } from '../aviation-emissions-form.provi
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-aviation-emissions-charges-calculate-form',
-  imports: [GovukComponentsModule, SharedModule],
   templateUrl: './aviation-emissions-charges-calculate-form.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, NgIf, NgFor],
   viewProviders: [existingControlContainer],
 })
 export class AviationEmissionsChargesCalculateFormComponent implements OnInit {

@@ -14,5 +14,4 @@ import { RequestMetadata } from './requestMetadata';
 export interface BDRS2RequestMetadata extends RequestMetadata {
   year: number;
   bdrs2InitiationType?: 'RE_INITIATED' | 'INITIATED';
-  overallAssessmentType?: 'VERIFIED_AS_SATISFACTORY' | 'VERIFIED_WITH_COMMENTS' | 'NOT_VERIFIED';
 }

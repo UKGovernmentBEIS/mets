@@ -16,7 +16,6 @@ describe('PhoneInputComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <form [formGroup]="form">
         <div app-phone-input formControlName="firstPhone"></div>

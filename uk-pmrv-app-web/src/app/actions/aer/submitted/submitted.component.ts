@@ -11,7 +11,6 @@ import { getAerTitle } from './submitted';
 
 @Component({
   selector: 'app-aer-submitted',
-  standalone: false,
   templateUrl: './submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -21,6 +20,8 @@ export class SubmittedComponent {
   >;
 
   requestActionType$ = this.aerService.requestAction$.pipe(map((requestAction) => requestAction.type));
+
+  yearEqualAfter25$ = this.aerService.yearEqualAfter2025$ as Observable<boolean>;
 
   hasReport$ = this.requestActionType$.pipe(
     map((requestActionType) => reportableAerRequestActionTypes.includes(requestActionType)),

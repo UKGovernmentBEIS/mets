@@ -8,13 +8,14 @@ import { GovukComponentsModule } from 'govuk-components';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-data-gaps-exist-form',
-  imports: [GovukComponentsModule, ReactiveFormsModule],
   template: `
     <div formControlName="exist" govuk-radio class="govuk-!-width-two-thirds">
       <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
       <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
     </div>
   `,
+  standalone: true,
+  imports: [GovukComponentsModule, ReactiveFormsModule],
   viewProviders: [existingControlContainer],
 })
 export class DataGapsExistFormComponent {}

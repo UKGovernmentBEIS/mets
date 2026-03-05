@@ -14,7 +14,6 @@ import { transferFormProvider } from './transfer-co2-form.provider';
 
 @Component({
   selector: 'app-transfer-co2',
-  standalone: false,
   templateUrl: './transfer-co2.component.html',
   providers: [transferFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -25,10 +25,9 @@ export interface EmissionsReductionClaimFormModel {
 }
 
 @Injectable()
-export class EmissionsReductionClaimFormProvider implements TaskFormProvider<
-  AviationAerCorsiaEmissionsReductionClaim,
-  EmissionsReductionClaimFormModel
-> {
+export class EmissionsReductionClaimFormProvider
+  implements TaskFormProvider<AviationAerCorsiaEmissionsReductionClaim, EmissionsReductionClaimFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private store = inject(RequestTaskStore);

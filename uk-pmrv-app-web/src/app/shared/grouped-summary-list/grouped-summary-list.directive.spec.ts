@@ -11,10 +11,7 @@ describe('GroupedSummaryListDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let element: HTMLElement;
 
-  @Component({
-    standalone: false,
-    template: '<dl govuk-summary-list appGroupedSummaryList [details]="[]"></dl>',
-  })
+  @Component({ template: '<dl govuk-summary-list appGroupedSummaryList [details]="[]"></dl>' })
   class TestComponent {}
 
   beforeEach(async () => {

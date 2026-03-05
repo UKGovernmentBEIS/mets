@@ -8,10 +8,11 @@ import { GovukComponentsModule } from 'govuk-components';
 
 @Component({
   selector: 'app-operator-details-name-template',
+  standalone: true,
   imports: [GovukComponentsModule, SharedModule, ReactiveFormsModule],
   templateUrl: './operator-details-name-template.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class OperatorDetailsNameTemplateComponent implements OnInit {
   @Input() form: FormGroup<any>;

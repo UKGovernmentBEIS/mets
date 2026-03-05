@@ -23,7 +23,6 @@ import {
 
 @Component({
   selector: 'app-calculation-refinery-products',
-  standalone: false,
   templateUrl: './calculation-refinery-products.component.html',
   styleUrl: './calculation-refinery-products.component.scss',
   providers: [refineryProductsFormFactory],

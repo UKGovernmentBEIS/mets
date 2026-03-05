@@ -9,7 +9,6 @@ describe('FormService', () => {
   let service: FormService;
 
   @Component({
-    standalone: false,
     template: `
       <div [formGroup]="formGroup">
         <div govuk-text-input formControlName="test"></div>

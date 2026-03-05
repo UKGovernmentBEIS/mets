@@ -11,10 +11,9 @@ import { AerService } from '../core/aer.service';
 
 @Component({
   selector: 'app-aer-completed',
-  standalone: false,
   templateUrl: './completed.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class CompletedComponent {
   payload$ = this.aerService.getPayload() as Observable<AerApplicationCompletedRequestActionPayload>;

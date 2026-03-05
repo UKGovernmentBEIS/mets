@@ -4,20 +4,22 @@
     [formGroup]="form"
     heading="Choose task or workflow (optional)"
     submitText="Save and Continue"
-    [showBackLink]="true">
+    [showBackLink]="true"
+  >
     <div class="govuk-hint">Select the relevant item to which this non-compliance applies.</div>
 
     <ng-container *ngIf="requests?.length > 0">
       <app-choose-workflow-summary-template
         [editable]="nonComplianceService.isEditable$ | async"
         [data]="requests"
-        baseChangeLink="./"></app-choose-workflow-summary-template>
+        [baseChangeLink]="'./'"
+      ></app-choose-workflow-summary-template>
     </ng-container>
 
     <ng-container>
       <div *ngIf="nonComplianceService.isEditable$ | async">
         <div class="govuk-button-group">
-          <a routerLink="./add" govukSecondaryButton type="button" [state]="{ changing: true }">Add an item</a>
+          <a routerLink="./add" govukSecondaryButton type="button" [state]="{ changing: true }"> Add an item </a>
         </div>
       </div>
     </ng-container>

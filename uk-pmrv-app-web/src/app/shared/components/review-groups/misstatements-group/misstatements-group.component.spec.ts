@@ -26,7 +26,6 @@ describe('MisstatementsGroupComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-misstatements-group
         [isEditable]="isEditable"

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DetailsSummaryTemplateComponent } from '@shared/components/hseti/details-summary-template/details-summary-template.component';
@@ -13,32 +13,31 @@ import { HSETIApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-summary',
-  imports: [SharedModule, TaskSharedModule, HseTiTaskSharedModule, DetailsSummaryTemplateComponent],
   templateUrl: './summary.component.html',
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, RouterLink, HseTiTaskSharedModule, DetailsSummaryTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryComponent {
-  readonly isEditable: Signal<boolean> = this.hseTiService.isEditable;
-  readonly hsetiPayload: Signal<HSETIApplicationSubmitRequestTaskPayload> = this.hseTiService.payload;
-  readonly allocationPeriod: Signal<string> = this.hseTiService.allocationPeriod;
+  isEditable: Signal<boolean> = this.hseTiService.isEditable;
+  hsetiPayload: Signal<HSETIApplicationSubmitRequestTaskPayload> = this.hseTiService.payload;
+  allocationPeriod: Signal<string> = this.hseTiService.allocationPeriod;
 
-  readonly returnLink: Signal<string> = computed(
-    () => `Complete ${this.allocationPeriod()} HSE target increase application`,
-  );
+  returnLink: Signal<string> = computed(() => `Complete ${this.allocationPeriod()} HSE target increase application`);
 
-  readonly hsetiFile: Signal<AttachedFile> = computed(() => {
+  hsetiFile: Signal<AttachedFile> = computed(() => {
     const payload = this.hsetiPayload();
     return payload?.hseti?.hsetiFile
       ? this.hseTiService.getOperatorDownloadUrlHsetiFile(payload?.hseti?.hsetiFile)
       : null;
   });
 
-  readonly files: Signal<AttachedFile[]> = computed(() => {
+  files: Signal<AttachedFile[]> = computed(() => {
     const payload = this.hsetiPayload();
     return payload?.hseti?.files ? this.hseTiService.getOperatorDownloadUrlFiles(payload?.hseti?.files) : [];
   });
 
-  readonly hideSubmit: Signal<boolean> = computed(() => {
+  hideSubmit: Signal<boolean> = computed(() => {
     const isEditable = this.isEditable();
     return !isEditable || this.hsetiPayload().hsetiSectionsCompleted?.['details'];
   });

@@ -12,7 +12,6 @@ import { PermitApplicationStore } from '../../../store/permit-application.store'
 
 @Component({
   selector: 'app-answers',
-  standalone: false,
   template: `
     <app-permit-task [breadcrumb]="true">
       <app-page-heading caption="Uncertainty analysis">Check your answers</app-page-heading>
@@ -32,8 +31,8 @@ import { PermitApplicationStore } from '../../../store/permit-application.store'
         reviewGroupUrl="uncertainty-analysis"></app-list-return-link>
     </app-permit-task>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class AnswersComponent {
   private readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

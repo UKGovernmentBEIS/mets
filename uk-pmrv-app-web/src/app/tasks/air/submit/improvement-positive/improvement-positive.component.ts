@@ -13,7 +13,6 @@ import { AirApplicationSubmitRequestTaskPayload, OperatorAirImprovementYesRespon
 
 @Component({
   selector: 'app-improvement-positive',
-  standalone: false,
   templateUrl: './improvement-positive.component.html',
   providers: [improvementPositiveFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

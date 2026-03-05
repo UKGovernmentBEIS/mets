@@ -20,7 +20,6 @@ import { OperatorDetailsFormProvider } from './operator-details-form.provider';
 import { OperatorDetailsQuery } from './store/operator-details.selectors';
 
 @Component({
-  standalone: false,
   template: '',
 })
 export abstract class BaseOperatorDetailsComponent implements OnInit {

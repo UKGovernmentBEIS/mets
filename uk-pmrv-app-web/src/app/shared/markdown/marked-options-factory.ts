@@ -1,11 +1,11 @@
-import { MarkedOptions, Tokens } from 'marked';
+import { MarkedOptions } from 'marked';
 import { MarkedRenderer } from 'ngx-markdown';
 
 export function markedOptionsFactory(): MarkedOptions {
   const renderer = new MarkedRenderer();
 
-  renderer.heading = ({ tokens, depth, type, raw, text }): string => {
-    switch (depth) {
+  renderer.heading = (text: string, level: 1 | 2 | 3 | 4 | 5 | 6, raw: string): string => {
+    switch (level) {
       case 1:
         return `<h1 class="govuk-heading-xl">${text}</h1>`;
       case 2:
@@ -13,33 +13,24 @@ export function markedOptionsFactory(): MarkedOptions {
       case 3:
         return `<h3 class="govuk-heading-m">${text}</h3>`;
       default:
-        return MarkedRenderer.prototype.heading({ tokens, depth, type, raw, text });
+        return MarkedRenderer.prototype.heading(text, level, raw);
     }
   };
 
-  renderer.list = (token): string => {
-    const list = token.items.map((item) => `<li>${item.text}</li>`).reduce((prev, curr) => `${prev}${curr}`, '');
-
-    if (token.ordered) {
-      return `<ol class="govuk-list govuk-list--number">${list}</ol>`;
-    } else {
-      return `<ul class="govuk-list govuk-list--bullet">${list}</ul>`;
-    }
+  renderer.link = (href: string | null, title: string | null, text: string): string => {
+    return `<a href="${href}" routerLink="${href || ''}" govukLink>${text}</a>`;
   };
 
-  renderer.paragraph = ({ tokens }) => {
-    return tokens
-      .map((el) => {
-        const { text, href } = el as Tokens.Paragraph & Tokens.Link;
-
-        if (el.type === 'text') {
-          return text;
-        } else if (el.type === 'link') {
-          return `<a href="${href}" routerLink="${href || ''}" govukLink>${text}</a>`;
-        }
-      })
-      .reduce((prev, curr, i) => `${prev}${i === tokens.length - 1 ? curr + '</p>' : curr}`, '<p class="govuk-body">');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  renderer.list = (body: string, ordered: boolean, start: number): string => {
+    return ordered
+      ? `<ol class="govuk-list govuk-list--number">${body}</ol>`
+      : `<ul class="govuk-list govuk-list--bullet">${body}</ul>`;
   };
 
-  return { renderer };
+  renderer.paragraph = (text: string) => {
+    return `<p class="govuk-body">${text}</p>`;
+  };
+
+  return { renderer: renderer };
 }

@@ -10,7 +10,6 @@ import { DoalGrantAuthorityResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-preliminary-allocation-delete',
-  standalone: false,
   template: `
     <app-page-heading size="xl">Are you sure you want to delete this item?</app-page-heading>
 

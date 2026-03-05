@@ -22,12 +22,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-uncorrected-misstatements',
-  imports: [
-    SharedModule,
-    RequestActionTaskComponent,
-    UncorrectedItemGroupComponent,
-    AerVerificationReviewDecisionGroupSummaryComponent,
-  ],
   template: `
     <app-request-action-task
       *ngIf="vm$ | async as vm"
@@ -56,6 +50,13 @@ interface ViewModel {
       </ng-container>
     </app-request-action-task>
   `,
+  standalone: true,
+  imports: [
+    SharedModule,
+    RequestActionTaskComponent,
+    UncorrectedItemGroupComponent,
+    AerVerificationReviewDecisionGroupSummaryComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class UncorrectedMisstatementsComponent {

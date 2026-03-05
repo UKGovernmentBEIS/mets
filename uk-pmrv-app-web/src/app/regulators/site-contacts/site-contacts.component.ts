@@ -39,10 +39,9 @@ type TableData = AccountContactInfoDTO & { user: RegulatorUserAuthorityInfoDTO; 
 
 @Component({
   selector: 'app-site-contacts',
-  standalone: false,
   templateUrl: './site-contacts.component.html',
-  providers: [UserFullNamePipe, DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserFullNamePipe, DestroySubject],
 })
 export class SiteContactsComponent implements OnInit {
   private readonly isAviation = this.router.url.includes('/aviation/') ? '/aviation' : '';

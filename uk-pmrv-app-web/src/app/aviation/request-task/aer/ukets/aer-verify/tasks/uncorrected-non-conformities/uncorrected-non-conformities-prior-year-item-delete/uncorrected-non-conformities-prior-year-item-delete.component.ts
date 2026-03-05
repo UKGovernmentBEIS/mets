@@ -13,8 +13,9 @@ import { UncorrectedNonConformitiesFormProvider } from '../uncorrected-non-confo
 
 @Component({
   selector: 'app-uncorrected-non-conformities-prior-year-item-delete',
-  imports: [SharedModule],
   templateUrl: './uncorrected-non-conformities-prior-year-item-delete.component.html',
+  standalone: true,
+  imports: [SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class UncorrectedNonConformitiesPriorYearItemDeleteComponent implements OnInit {

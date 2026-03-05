@@ -4,7 +4,6 @@ import { AirImprovementAll } from '@shared/air-shared/types/air-improvement-all.
 
 @Component({
   selector: 'app-air-improvement-item',
-  standalone: false,
   templateUrl: './air-improvement-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

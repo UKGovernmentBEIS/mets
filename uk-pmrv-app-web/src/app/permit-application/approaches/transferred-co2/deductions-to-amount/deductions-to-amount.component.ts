@@ -15,10 +15,9 @@ import { deductionsToAmountFormProvider } from './deductions-to-amount-form.prov
 
 @Component({
   selector: 'app-deductions-to-amount',
-  standalone: false,
   templateUrl: './deductions-to-amount.component.html',
-  providers: [deductionsToAmountFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [deductionsToAmountFormProvider],
 })
 export class DeductionsToAmountComponent {
   taskKey$: Observable<string> = this.route.data.pipe(map((x) => x?.taskKey));

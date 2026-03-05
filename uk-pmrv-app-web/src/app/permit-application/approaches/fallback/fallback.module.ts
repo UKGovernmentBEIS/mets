@@ -14,7 +14,6 @@ import { FallbackRoutingModule } from './fallback-routing.module';
 import { SummaryComponent as UncertaintySummaryComponent } from './uncertainty/summary/summary.component';
 import { UncertaintyComponent } from './uncertainty/uncertainty.component';
 @NgModule({
-  imports: [FallbackRoutingModule, SharedModule, SharedPermitModule],
   declarations: [
     CategoryComponent,
     CategorySummaryComponent,
@@ -27,5 +26,6 @@ import { UncertaintyComponent } from './uncertainty/uncertainty.component';
     UncertaintyComponent,
     UncertaintySummaryComponent,
   ],
+  imports: [FallbackRoutingModule, SharedModule, SharedPermitModule],
 })
 export class FallbackModule {}

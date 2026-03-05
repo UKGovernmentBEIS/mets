@@ -62,7 +62,7 @@
       formControlName="requiresAdditionalSubInstallationSplitsForCbam"
       govuk-radio
       legend="Are additional sub-installation splits required because of the UK CBAM?"
-      legendSize="medium"
+      [legendSize]="'medium'"
       class="govuk-!-width-three-quarters">
       <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
       <govuk-radio-option [value]="false" label="No"></govuk-radio-option>

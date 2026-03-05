@@ -1,15 +1,12 @@
 package uk.gov.pmrv.api.account.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.Location;
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
@@ -18,6 +15,8 @@ import uk.gov.pmrv.api.account.domain.enumeration.AccountStatus;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.transform.AccountMapper;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.util.Optional;
 
@@ -287,32 +286,6 @@ class AccountQueryServiceTest {
 
         assertThat(be.getErrorCode()).isEqualTo(ErrorCode.RESOURCE_NOT_FOUND);
         verify(accountRepository, times(1)).findById(accountId);
-    }
-
-    @Test
-    void getRegistryIdByAccountId() {
-        Long accountId = 1L;
-        Integer registryId = 12345;
-
-        when(accountRepository.findRegistryIdByAccountId(accountId)).thenReturn(Optional.of(registryId));
-
-        Optional<Integer> result = accountQueryService.getRegistryIdByAccountId(accountId);
-
-        Assertions.assertTrue(result.isPresent());
-        assertEquals(registryId, result.get());
-        verify(accountRepository).findRegistryIdByAccountId(accountId);
-    }
-
-    @Test
-    void getRegistryIdByAccountId_returns_empty_when_not_found() {
-        Long accountId = 1L;
-
-        when(accountRepository.findRegistryIdByAccountId(accountId)).thenReturn(Optional.empty());
-
-        Optional<Integer> result = accountQueryService.getRegistryIdByAccountId(accountId);
-
-        Assertions.assertTrue(result.isEmpty());
-        verify(accountRepository).findRegistryIdByAccountId(accountId);
     }
 
     public enum TestAccountStatus implements AccountStatus {

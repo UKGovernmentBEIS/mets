@@ -4,7 +4,6 @@ import { WithholdingOfAllowancesWithdrawalApplicationSubmitRequestTaskPayload } 
 
 @Component({
   selector: 'app-wa-withdraw-summary-template',
-  standalone: false,
   templateUrl: './wa-withdraw-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

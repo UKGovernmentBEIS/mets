@@ -18,7 +18,6 @@ import { createTableColumns, createTablePage, manipulateResultsAndExportToExcel,
 
 @Component({
   selector: 'app-accounts-regulators-site-contacts',
-  standalone: false,
   template: `
     <app-page-heading size="xl">List of Accounts, Assigned Regulators and Site Contacts</app-page-heading>
     <div class="govuk-button-group">
@@ -40,8 +39,8 @@ import { createTableColumns, createTablePage, manipulateResultsAndExportToExcel,
       </ng-template>
     </div>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class AccountsRegulatorsSiteContactsComponent implements OnInit {
   readonly pageSize = pageSize;

@@ -1,13 +1,15 @@
 <app-wizard-step
   (formSubmit)="onSubmit()"
   [formGroup]="form"
-  heading="Complete the verification details"
-  submitText="Continue">
+  [heading]="'Complete the verification details'"
+  submitText="Continue"
+>
   <ng-container *ngIf="vm$ | async as vm">
     <app-aer-verifier-details-group-form
       [verificationReport]="vm.verificationReportData"
       [showVerifierDetails]="false"
-      [isEditable]="vm.isEditable">
+      [isEditable]="vm.isEditable"
+    >
       <h2 class="govuk-heading-m">Verifier contact</h2>
 
       <div class="govuk-body govuk-!-width-three-quarters">
@@ -26,7 +28,8 @@
           [maxLength]="10000"
           formControlName="etsTechnicalExperts"
           govuk-textarea
-          label="Technical Experts (ETS Auditor)"></div>
+          label="Technical Experts (ETS Auditor)"
+        ></div>
 
         <div formControlName="independentReviewer" govuk-text-input label="Independent Reviewer"></div>
 
@@ -34,7 +37,8 @@
           [maxLength]="10000"
           formControlName="technicalExperts"
           govuk-textarea
-          label="Technical Experts (Independent Review)"></div>
+          label="Technical Experts (Independent Review)"
+        ></div>
 
         <div formControlName="authorisedSignatoryName" govuk-text-input label="Name of authorised signatory"></div>
       </div>

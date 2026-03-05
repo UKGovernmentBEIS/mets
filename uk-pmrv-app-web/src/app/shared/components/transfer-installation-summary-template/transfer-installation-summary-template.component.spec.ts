@@ -16,7 +16,6 @@ describe('TransferInstallationSummaryTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-transfer-installation-summary-template [transfer]="transfer"></app-transfer-installation-summary-template>
     `,

@@ -4,7 +4,6 @@ import { MethodologiesToCloseDataGaps } from 'pmrv-api';
 
 @Component({
   selector: 'app-data-gaps-group',
-  standalone: false,
   templateUrl: './data-gaps-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

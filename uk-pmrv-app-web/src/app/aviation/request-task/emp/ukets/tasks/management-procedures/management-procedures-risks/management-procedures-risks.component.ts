@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { takeUntil } from 'rxjs';
 
@@ -16,8 +16,9 @@ import { ManagementProceduresFormProvider } from '../management-procedures-form.
 
 @Component({
   selector: 'app-management-procedures-risks',
-  imports: [SharedModule, ProcedureFormStepComponent, ProcedureFormPageHeaderDirective],
   templateUrl: './management-procedures-risks.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLinkWithHref, ProcedureFormStepComponent, ProcedureFormPageHeaderDirective],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

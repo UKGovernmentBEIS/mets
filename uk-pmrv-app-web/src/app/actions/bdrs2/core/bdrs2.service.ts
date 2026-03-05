@@ -6,14 +6,7 @@ import { Observable } from 'rxjs';
 import { CommonActionsStore } from '@actions/store/common-actions.store';
 import { AttachedFile } from '@shared/types/attached-file.type';
 
-import {
-  BDRS2ApplicationSubmittedRequestActionPayload,
-  BDRS2ApplicationVerificationSubmittedRequestActionPayload,
-  BDRS2RegulatorReviewReturnedForAmendsRequestActionPayload,
-  BDRS2VerificationReturnedToOperatorRequestActionPayload,
-  PeerReviewDecisionSubmittedRequestActionPayload,
-  RequestActionDTO,
-} from 'pmrv-api';
+import { BDRS2ApplicationSubmittedRequestActionPayload, RequestActionDTO } from 'pmrv-api';
 
 @Injectable({ providedIn: 'root' })
 export class Bdrs2ActionService {
@@ -39,12 +32,7 @@ export class Bdrs2ActionService {
     return this.store.payload$;
   }
 
-  get payload(): Signal<
-    | BDRS2ApplicationSubmittedRequestActionPayload
-    | BDRS2VerificationReturnedToOperatorRequestActionPayload
-    | BDRS2RegulatorReviewReturnedForAmendsRequestActionPayload
-    | PeerReviewDecisionSubmittedRequestActionPayload
-  > {
+  get payload(): Signal<BDRS2ApplicationSubmittedRequestActionPayload> {
     return toSignal(this.payload$);
   }
 
@@ -75,32 +63,6 @@ export class Bdrs2ActionService {
           fileName: attachments[bdrFile],
         }
       : null;
-  }
-
-  getVerifierDownloadUrlFiles(files: string[]): AttachedFile[] {
-    const attachments: { [key: string]: string } = (
-      this.store.getValue().action.payload as BDRS2ApplicationVerificationSubmittedRequestActionPayload
-    )?.verificationAttachments;
-    const url = this.getBaseFileDownloadUrl();
-    return (
-      files?.map((id) => ({
-        downloadUrl: url + `${id}`,
-        fileName: attachments[id],
-      })) ?? []
-    );
-  }
-
-  getRegulatorDownloadUrlFiles(files: string[]): AttachedFile[] {
-    const attachments: { [key: string]: string } = (
-      this.store.getValue().action.payload as BDRS2RegulatorReviewReturnedForAmendsRequestActionPayload
-    )?.regulatorReviewAttachments;
-    const url = this.getBaseFileDownloadUrl();
-    return (
-      files?.map((id) => ({
-        downloadUrl: url + `${id}`,
-        fileName: attachments[id],
-      })) ?? []
-    );
   }
 
   private getBaseFileDownloadUrl() {

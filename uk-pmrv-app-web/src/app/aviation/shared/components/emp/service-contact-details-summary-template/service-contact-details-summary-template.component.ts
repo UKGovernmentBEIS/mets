@@ -9,6 +9,7 @@ import { ServiceContactDetails } from 'pmrv-api';
 
 @Component({
   selector: 'app-service-contact-details-summary-template',
+  standalone: true,
   imports: [GovukComponentsModule, NgIf, SharedModule],
   templateUrl: './service-contact-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

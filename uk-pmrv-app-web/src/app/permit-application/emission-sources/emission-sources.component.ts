@@ -11,7 +11,6 @@ import { PermitApplicationStore } from '../store/permit-application.store';
 
 @Component({
   selector: 'app-emission-sources',
-  standalone: false,
   templateUrl: './emission-sources.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

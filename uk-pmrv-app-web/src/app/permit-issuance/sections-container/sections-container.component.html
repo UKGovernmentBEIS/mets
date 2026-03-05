@@ -14,11 +14,12 @@
         [daysRemaining]="store.select('daysRemaining') | async"></app-task-header-info>
     </app-page-heading>
 
-    <app-task-list [hideSubmit]="true">
-      <app-sections
-        [hideSubmit]="(store.select('isEditable') | async) === false || (permitType$ | async) === undefined"
-        (submitApplication)="onSubmit()"
-        [submitLabel]="(isTaskTypeAmendsSubmit$ | async) ? 'Resubmit' : 'Submit'"></app-sections>
+    <app-task-list
+      [hideSubmit]="(store.select('isEditable') | async) === false || (permitType$ | async) === undefined"
+      (submitApplication)="onSubmit()"
+      [submitLabel]="(isTaskTypeAmendsSubmit$ | async) ? 'Resubmit' : 'Submit'"
+      [hideCancel]="true">
+      <app-sections></app-sections>
     </app-task-list>
 
     <ng-container *ngIf="relatedTasks$ | async as relatedTasks">

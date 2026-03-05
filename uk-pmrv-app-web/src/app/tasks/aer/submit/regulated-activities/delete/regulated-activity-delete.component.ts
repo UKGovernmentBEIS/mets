@@ -7,7 +7,6 @@ import { AerService } from '@tasks/aer/core/aer.service';
 
 @Component({
   selector: 'app-regulated-activities-delete',
-  standalone: false,
   template: `
     <ng-container *ngIf="regulatedActivity$ | async as activity">
       <app-page-heading size="xl">

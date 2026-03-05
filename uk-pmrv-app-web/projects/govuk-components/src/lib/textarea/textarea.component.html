@@ -1,16 +1,16 @@
 <label
   [class.govuk-visually-hidden]="isLabelHidden"
   [for]="identifier"
-  [id]="`l.${identifier}`"
+  [id]="'l.' + identifier"
   [class]="currentLabelSize">
   {{ currentLabel }}
 </label>
-<div *ngIf="hint" [id]="`${identifier}-hint`" class="govuk-hint" [innerHTML]="hint"></div>
+<div *ngIf="hint" [id]="identifier + '-hint'" class="govuk-hint" [innerHTML]="hint"></div>
 <govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="identifier" />
 <textarea
   #textArea
   (blur)="handleBlur(getInputValue($event))"
-  [attr.aria-describedby]="hint ? `${identifier}-hint` : null"
+  [attr.aria-describedby]="hint ? identifier + '-hint' : null"
   [formControl]="control"
   [id]="identifier"
   [name]="identifier"
@@ -24,7 +24,7 @@
   *ngIf="maxLength"
   [class.govuk-error-message]="exceedsMaxLength(textArea.value?.length)"
   [class.govuk-hint]="!exceedsMaxLength(textArea.value?.length)"
-  [id]="`${identifier}-info`"
+  [id]="identifier + '-info'"
   aria-live="polite"
   class="govuk-character-count__message">
   <ng-template [ngIf]="exceedsMaxLength(textArea.value?.length)">

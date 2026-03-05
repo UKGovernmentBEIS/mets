@@ -13,7 +13,6 @@ describe('DeterminationCloseSummaryTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-alr-determination-close-summary-template
         [determination]="determination"

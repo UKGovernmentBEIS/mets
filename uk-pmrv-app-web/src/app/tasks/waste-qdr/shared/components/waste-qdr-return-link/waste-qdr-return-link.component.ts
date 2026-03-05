@@ -7,6 +7,7 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-waste-qdr-return-link',
+  standalone: true,
   imports: [RouterModule, SharedModule],
   template: '<a govukLink [routerLink]="link$ | async">Return to: {{ title }}</a>',
   changeDetection: ChangeDetectionStrategy.OnPush,

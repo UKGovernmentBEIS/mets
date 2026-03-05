@@ -14,7 +14,6 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-fallback',
-  standalone: false,
   templateUrl: './fallback.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

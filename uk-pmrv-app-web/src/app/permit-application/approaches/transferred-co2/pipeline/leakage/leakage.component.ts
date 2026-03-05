@@ -14,7 +14,6 @@ import { leakageFormProvider } from './leakage-form.provider';
 
 @Component({
   selector: 'app-leakage',
-  standalone: false,
   templateUrl: './leakage.component.html',
   providers: [leakageFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

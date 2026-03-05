@@ -9,7 +9,6 @@ import { pointsColumns } from './emission-points';
 
 @Component({
   selector: 'app-emission-points',
-  standalone: false,
   template: `
     <app-action-task header="Emission points" [breadcrumb]="true">
       <govuk-table [columns]="pointsColumns" [data]="emissionPoints$ | async"></govuk-table>

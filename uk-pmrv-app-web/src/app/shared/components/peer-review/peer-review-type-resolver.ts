@@ -74,8 +74,6 @@ export function resolveRequestTaskActionType(
       return 'AVIATION_DOE_CORSIA_REQUEST_PEER_REVIEW';
     case 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
       return 'ALR_REQUEST_PEER_REVIEW';
-    case 'BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT':
-      return 'BDRS2_REQUEST_PEER_REVIEW';
 
     default:
       return null;
@@ -152,8 +150,6 @@ export function resolveRequestTaskActionPayloadType(
       return 'AVIATION_DOE_CORSIA_REQUEST_PEER_REVIEW_PAYLOAD';
     case 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
       return 'ALR_REQUEST_PEER_REVIEW_PAYLOAD';
-    case 'BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT':
-      return 'BDRS2_REQUEST_PEER_REVIEW_PAYLOAD';
 
     default:
       return null;

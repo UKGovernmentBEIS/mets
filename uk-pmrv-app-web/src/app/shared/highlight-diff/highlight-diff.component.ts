@@ -15,12 +15,11 @@ import stripHtmlComments from 'strip-html-comments';
 
 @Component({
   selector: 'app-highlight-diff',
-  standalone: false,
   templateUrl: './highlight-diff.component.html',
   styleUrl: './highlight-diff.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HighlightDiffComponent implements AfterViewInit {
   @ViewChild('previous') previous: ElementRef<HTMLDivElement>;

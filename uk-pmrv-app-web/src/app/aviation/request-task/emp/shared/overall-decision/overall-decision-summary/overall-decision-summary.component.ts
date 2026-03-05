@@ -27,6 +27,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-overall-decision-summary-page',
+  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent, OverallDecisionSummaryTemplateComponent],
   templateUrl: './overall-decision-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

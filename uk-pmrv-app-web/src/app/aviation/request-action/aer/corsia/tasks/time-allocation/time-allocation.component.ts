@@ -21,6 +21,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-time-allocation',
+  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

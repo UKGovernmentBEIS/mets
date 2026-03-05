@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -13,6 +13,8 @@ import {
   ViewModel,
 } from '@aviation/shared/components/operator-details/utils/operator-details-summary.util';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
+import { OperatorDetailsFlightIdentificationTypePipe } from '@aviation/shared/pipes/operator-details-flight-identification-type.pipe';
+import { OperatorDetailsLegalStatusTypePipe } from '@aviation/shared/pipes/operator-details-legal-status-type.pipe';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { FileUpload } from '@shared/file-input/file-upload-event';
@@ -32,10 +34,19 @@ import { OperatorDetailsFormProvider } from '../operator-details-form.provider';
 
 @Component({
   selector: 'app-operator-details-summary-page',
-  imports: [SharedModule, GovukComponentsModule, ReturnToLinkComponent, OperatorDetailsSummaryTemplateComponent],
+  standalone: true,
+  imports: [
+    SharedModule,
+    GovukComponentsModule,
+    RouterLinkWithHref,
+    ReturnToLinkComponent,
+    OperatorDetailsFlightIdentificationTypePipe,
+    OperatorDetailsLegalStatusTypePipe,
+    OperatorDetailsSummaryTemplateComponent,
+  ],
   templateUrl: './operator-details-summary.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class OperatorDetailsSummaryComponent extends BaseOperatorDetailsComponent implements OnInit {
   form = this.formProvider.form;

@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { AuthorityResponse, DoalAuthorityResponse } from 'pmrv-api';
 
-@Pipe({
-  name: 'authorityDecisionType',
-  standalone: false,
-})
+@Pipe({ name: 'authorityDecisionType' })
 export class AuthorityDecisionTypePipe implements PipeTransform {
   transform(type: DoalAuthorityResponse['type'] | AuthorityResponse['type']): string {
     switch (type) {

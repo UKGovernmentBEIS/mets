@@ -45,6 +45,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-management-procedures',
+  standalone: true,
   imports: [
     RequestActionTaskComponent,
     EmpReviewDecisionGroupSummaryComponent,

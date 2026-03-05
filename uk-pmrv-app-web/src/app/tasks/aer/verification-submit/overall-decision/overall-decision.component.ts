@@ -11,7 +11,6 @@ import { OverallAssessment } from 'pmrv-api';
 
 @Component({
   selector: 'app-overall-decision',
-  standalone: false,
   templateUrl: './overall-decision.component.html',
   providers: [overallDecisionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

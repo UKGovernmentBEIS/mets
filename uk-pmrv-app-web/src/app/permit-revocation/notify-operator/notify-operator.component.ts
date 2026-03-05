@@ -10,7 +10,6 @@ import { PermitRevocationStore } from '../store/permit-revocation-store';
 
 @Component({
   selector: 'app-permit-revocation-notify-operator',
-  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

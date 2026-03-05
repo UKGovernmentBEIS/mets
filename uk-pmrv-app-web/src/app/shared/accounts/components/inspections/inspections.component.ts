@@ -21,6 +21,7 @@ import {
 
 @Component({
   selector: 'app-inspections',
+  standalone: true,
   imports: [CommonModule, SharedModule, RouterModule],
   templateUrl: './inspections.component.html',
   styles: `
@@ -28,8 +29,8 @@ import {
       float: right;
     }
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class InspectionsComponent extends BaseComponent implements OnInit {
   category: RequestSearchCriteria['category'] = 'INSPECTION';

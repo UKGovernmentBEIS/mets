@@ -18,10 +18,9 @@ import { calculationSteamCrackingAddFormFactory } from './calculation-steam-crac
 
 @Component({
   selector: 'app-calculation-steam-cracking',
-  standalone: false,
   templateUrl: './calculation-steam-cracking.component.html',
-  providers: [calculationSteamCrackingAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [calculationSteamCrackingAddFormFactory],
 })
 export class CalculationSteamCrackingComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -18,8 +18,9 @@ import { ConfidentialityFormComponent } from '../confidentiality-form/confidenti
 
 @Component({
   selector: 'app-confidentiality-page',
-  imports: [SharedModule, ReturnToLinkComponent, ConfidentialityFormComponent],
   templateUrl: './confidentiality-page.component.html',
+  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent, ConfidentialityFormComponent],
+  standalone: true,
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -9,7 +9,6 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-calculation-emissions',
-  standalone: false,
   template: `
     <app-aer-task-review
       [breadcrumb]="true"

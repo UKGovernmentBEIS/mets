@@ -17,7 +17,6 @@ type TableData = Pick<VerificationBodyInfoDTO, 'name' | 'status'> & { deleteBtn?
 
 @Component({
   selector: 'app-verification-bodies',
-  standalone: false,
   templateUrl: './verification-bodies.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

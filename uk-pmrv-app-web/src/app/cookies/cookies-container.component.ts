@@ -6,7 +6,6 @@ import { CookiesService } from './cookies.service';
 
 @Component({
   selector: 'app-cookies-container',
-  standalone: false,
   template: `
     <govuk-cookies-pop-up
       cookiesExpirationTime="1"

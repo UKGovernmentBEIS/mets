@@ -13,7 +13,6 @@ describe('RequestActionHeadingComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-request-action-heading [headerText]="headerText" [timelineCreationDate]="timelineCreationDate">
         <div>New content</div>

@@ -13,14 +13,14 @@
           <li
             *ngIf="isTaskTypeAmendsSubmit && (reviewGroupsForAmend$ | async | includes: 'INSTALLATION_DETAILS')"
             app-task-item
-            link="./amend/INSTALLATION_DETAILS/summary"
+            [link]="'./amend/INSTALLATION_DETAILS/summary'"
             [linkText]="'Amends needed for ' + ('INSTALLATION_DETAILS' | amendHeading)"
             [status]="'AMEND_INSTALLATION_DETAILS' | taskStatus | async"></li>
           <li
             app-task-item
             link="./installation-details"
             linkText="Installation and operator details"
-            status="complete"></li>
+            [status]="'complete'"></li>
           <li
             app-task-item
             link="./prtr/summary"
@@ -50,7 +50,7 @@
           <li
             *ngIf="isTaskTypeAmendsSubmit && (reviewGroupsForAmend$ | async | includes: 'FUELS_AND_EQUIPMENT')"
             app-task-item
-            link="./amend/FUELS_AND_EQUIPMENT/summary"
+            [link]="'./amend/FUELS_AND_EQUIPMENT/summary'"
             [linkText]="'Amends needed for ' + ('FUELS_AND_EQUIPMENT' | amendHeading)"
             [status]="'AMEND_FUELS_AND_EQUIPMENT' | taskStatus | async"></li>
           <li
@@ -77,7 +77,7 @@
           <li
             *ngIf="isTaskTypeAmendsSubmit && (reviewGroupsForAmend$ | async | includesAny: totalEmissions)"
             app-task-item
-            link="./amend/TOTAL_EMISSIONS/summary"
+            [link]="'./amend/TOTAL_EMISSIONS/summary'"
             [linkText]="'Amends needed for ' + ('TOTAL_EMISSIONS' | amendHeading)"
             [status]="'AMEND_TOTAL_EMISSIONS' | taskStatus | async"></li>
           <div *ngFor="let approach of monitoringApproaches$ | async">
@@ -102,7 +102,7 @@
           <li
             *ngIf="isTaskTypeAmendsSubmit && (reviewGroupsForAmend$ | async | includes: 'ADDITIONAL_INFORMATION')"
             app-task-item
-            link="./amend/ADDITIONAL_INFORMATION/summary"
+            [link]="'./amend/ADDITIONAL_INFORMATION/summary'"
             [linkText]="'Amends needed for ' + ('ADDITIONAL_INFORMATION' | amendHeading)"
             [status]="'AMEND_ADDITIONAL_INFORMATION' | taskStatus | async"></li>
           <li
@@ -128,7 +128,7 @@
           <li
             *ngIf="isTaskTypeAmendsSubmit && (reviewGroupsForAmend$ | async | includes: 'ACTIVITY_LEVEL_REPORT')"
             app-task-item
-            link="./amend/ACTIVITY_LEVEL_REPORT/summary"
+            [link]="'./amend/ACTIVITY_LEVEL_REPORT/summary'"
             [linkText]="'Amends needed for ' + ('ACTIVITY_LEVEL_REPORT' | amendHeading)"
             [status]="'AMEND_ACTIVITY_LEVEL_REPORT' | taskStatus | async"></li>
           <li

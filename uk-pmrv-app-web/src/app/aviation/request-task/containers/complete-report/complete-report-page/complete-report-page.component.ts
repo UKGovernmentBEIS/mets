@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { switchMap, take } from 'rxjs';
 
@@ -11,8 +11,9 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-complete-report-page',
-  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './complete-report-page.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

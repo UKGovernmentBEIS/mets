@@ -18,11 +18,10 @@ import { measurableHeatProducedAddFormFactory } from './measurable-heat-produced
 
 @Component({
   selector: 'app-measurable-heat-produced-fa',
-  standalone: false,
   templateUrl: './measurable-heat-produced.component.html',
-  styleUrl: './measurable-heat-produced.component.scss',
-  providers: [measurableHeatProducedAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [measurableHeatProducedAddFormFactory],
+  styleUrl: './measurable-heat-produced.component.scss',
 })
 export class MeasurableHeatProducedComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

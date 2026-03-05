@@ -9,10 +9,9 @@ import { extendDeterminationFormProvider, RDE_FORM } from './extend-determinatio
 
 @Component({
   selector: 'app-extend-determination',
-  standalone: false,
   templateUrl: './extend-determination.component.html',
-  providers: [extendDeterminationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [extendDeterminationFormProvider],
 })
 export class ExtendDeterminationComponent {
   constructor(

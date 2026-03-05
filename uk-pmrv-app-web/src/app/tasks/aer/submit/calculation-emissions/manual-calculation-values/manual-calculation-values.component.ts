@@ -25,7 +25,6 @@ import { parametersOptionsMap } from '../calculation-emissions-parameters';
 
 @Component({
   selector: 'app-calculation-values',
-  standalone: false,
   templateUrl: './manual-calculation-values.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

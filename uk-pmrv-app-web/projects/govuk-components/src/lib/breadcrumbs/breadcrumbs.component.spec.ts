@@ -8,7 +8,6 @@ import { BreadcrumbsComponent } from './breadcrumbs.component';
 
 describe('BreadcrumbsComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <govuk-breadcrumbs>
         <a govukLink="breadcrumb" href="#">Home</a>

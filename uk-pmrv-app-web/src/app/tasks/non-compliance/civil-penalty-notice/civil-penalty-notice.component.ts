@@ -11,7 +11,6 @@ import { resolveSectionStatus } from './section.status';
 
 @Component({
   selector: 'app-civil-penalty-notice',
-  standalone: false,
   templateUrl: './civil-penalty-notice.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

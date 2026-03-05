@@ -24,7 +24,6 @@ import { FileUpload, FileUploadEvent } from './file-upload-event';
  */
 @Component({
   selector: 'app-file-input',
-  standalone: false,
   templateUrl: './file-input.component.html',
   styleUrl: '../multiple-file-input/multiple-file-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

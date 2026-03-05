@@ -4,7 +4,6 @@ import { ImportedExportedMeasurableHeatEnergyFlowDataSource } from 'pmrv-api';
 
 @Pipe({
   name: 'productBenchmark45DataSource',
-  standalone: false,
 })
 export class ProductBenchmark45DataSourcePipe implements PipeTransform {
   transform(value: ImportedExportedMeasurableHeatEnergyFlowDataSource['measurableHeatImported']): string {

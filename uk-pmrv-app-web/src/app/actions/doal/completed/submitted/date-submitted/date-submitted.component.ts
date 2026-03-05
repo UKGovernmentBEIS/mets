@@ -7,7 +7,6 @@ import { DoalActionService } from '../../../core/doal-action.service';
 
 @Component({
   selector: 'app-doal-date-submitted',
-  standalone: false,
   template: `
     <app-doal-action-task
       header="Provide the date application was submitted to UK authorities"

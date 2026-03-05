@@ -16,7 +16,6 @@ describe('WizardStepComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-wizard-step
         [formGroup]="formGroup"

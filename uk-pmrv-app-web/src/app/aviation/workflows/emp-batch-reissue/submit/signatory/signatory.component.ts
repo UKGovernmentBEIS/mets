@@ -11,7 +11,6 @@ import { RegulatorUserAuthorityInfoDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-signatory',
-  standalone: false,
   templateUrl: './signatory.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

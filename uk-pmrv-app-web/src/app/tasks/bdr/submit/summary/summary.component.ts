@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { BaselineSummaryTemplateComponent } from '@shared/components/bdr/baseline-summary-template/baseline-summary-template.component';
@@ -13,34 +13,35 @@ import { BDRApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-summary',
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, BaselineSummaryTemplateComponent],
   templateUrl: './summary.component.html',
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, RouterLink, BaselineSummaryTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryComponent {
-  readonly isEditable: Signal<boolean> = this.bdrService.isEditable;
-  readonly bdrPayload: Signal<BDRApplicationSubmitRequestTaskPayload> = this.bdrService.payload;
+  isEditable: Signal<boolean> = this.bdrService.isEditable;
+  bdrPayload: Signal<BDRApplicationSubmitRequestTaskPayload> = this.bdrService.payload;
 
-  readonly bdrFiles: Signal<AttachedFile> = computed(() => {
+  bdrFiles: Signal<AttachedFile> = computed(() => {
     const payload = this.bdrPayload();
     return payload?.bdr?.bdrFile ? this.bdrService.getOperatorDownloadUrlBdrFile(payload?.bdr?.bdrFile) : null;
   });
 
-  readonly files: Signal<AttachedFile[]> = computed(() => {
+  files: Signal<AttachedFile[]> = computed(() => {
     const payload = this.bdrPayload();
     return payload?.bdr?.files ? this.bdrService.getOperatorDownloadUrlFiles(payload?.bdr?.files) : [];
   });
-  readonly mmpFiles: Signal<AttachedFile[]> = computed(() => {
+  mmpFiles: Signal<AttachedFile[]> = computed(() => {
     const payload = this.bdrPayload();
     return payload?.bdr?.mmpFiles ? this.bdrService.getOperatorDownloadUrlFiles(payload?.bdr?.mmpFiles) : [];
   });
 
-  readonly hideSubmit: Signal<boolean> = computed(() => {
+  hideSubmit: Signal<boolean> = computed(() => {
     const isEditable = this.isEditable();
     return !isEditable || this.bdrPayload().bdrSectionsCompleted?.['baseline'];
   });
 
-  readonly backlink = computed(() => {
+  backlink = computed(() => {
     return this.route.snapshot.data['backlink'] || '../../';
   });
 

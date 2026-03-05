@@ -6,7 +6,6 @@ import { AerService } from '../../../core/aer.service';
 
 @Component({
   selector: 'app-amend-summary-template',
-  standalone: false,
   templateUrl: './amend-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

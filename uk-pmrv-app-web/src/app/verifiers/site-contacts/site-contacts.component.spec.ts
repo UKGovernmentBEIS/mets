@@ -54,7 +54,6 @@ describe('SiteContactsComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-verifier-site-contacts
         [pageSize]="pageSize"

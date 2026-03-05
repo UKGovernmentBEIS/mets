@@ -9,12 +9,12 @@ import { monitoringApproachMap } from '../core/monitoringApproaches';
 
 @Component({
   selector: 'app-aer-reviewed',
-  standalone: false,
   templateUrl: './reviewed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReviewedComponent {
   payload$ = this.aerService.getPayload() as Observable<AerApplicationCompletedRequestActionPayload>;
+  yearEqualAfter25$ = this.aerService.yearEqualAfter2025$ as Observable<boolean>;
 
   requestAction$ = this.aerService.requestAction$;
   aerTitle$ = combineLatest([this.requestAction$, this.payload$]).pipe(

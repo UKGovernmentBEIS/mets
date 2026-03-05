@@ -21,10 +21,9 @@ import { notFoundVerificationBodyError } from '../../../error/business-errors';
 
 @Component({
   selector: 'app-verification',
-  standalone: false,
   templateUrl: './verification.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class VerificationComponent implements OnInit {
   isSubmitted$ = new BehaviorSubject(false);

@@ -12,7 +12,8 @@
 import { ALRAlrDataRegulatorReviewRequiredChange } from './aLRAlrDataRegulatorReviewRequiredChange';
 import { ALRRegulatorReviewDecisionDetails } from './aLRRegulatorReviewDecisionDetails';
 
-export interface ALRAlrDataRegulatorReviewOperatorAmendsNeededDecisionDetails extends ALRRegulatorReviewDecisionDetails {
+export interface ALRAlrDataRegulatorReviewOperatorAmendsNeededDecisionDetails
+  extends ALRRegulatorReviewDecisionDetails {
   verificationRequired?: boolean;
   requiredChanges: Array<ALRAlrDataRegulatorReviewRequiredChange>;
 }

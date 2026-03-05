@@ -14,19 +14,17 @@ import { submitVerificationWizardComplete } from '../verification.wizard';
 
 @Component({
   selector: 'app-send-bdr-report',
-  imports: [SharedModule, BdrTaskSharedModule, RouterLink],
   templateUrl: './send-report.component.html',
+  standalone: true,
+  imports: [SharedModule, BdrTaskSharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SendBdrReportComponent implements PendingRequest {
-  private readonly payload = this.bdrService.payload;
-
   isSubmitted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   requestId$: BehaviorSubject<string | null> = new BehaviorSubject(null);
 
   isSendReportAvailable: Signal<boolean> = computed(() => {
-    const payload = this.payload();
-
+    const payload = this.bdrService.payload();
     return submitVerificationWizardComplete(payload as BDRApplicationVerificationSubmitRequestTaskPayload);
   });
   isEditable: Signal<boolean> = this.bdrService.isEditable;

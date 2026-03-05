@@ -4,7 +4,6 @@ import { AnnualProductionLevel } from 'pmrv-api';
 
 @Pipe({
   name: 'annualQuantityDeterminationMethod',
-  standalone: false,
 })
 export class AnnualQuantityDeterminationMethodPipe implements PipeTransform {
   transform(value: AnnualProductionLevel['annualQuantityDeterminationMethod']): string {

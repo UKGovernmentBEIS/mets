@@ -10,9 +10,10 @@ import { AlrTaskSharedModule } from '@tasks/alr/shared/alr-task-shared.module';
 
 @Component({
   selector: 'app-alr-allocations',
-  imports: [SharedModule, AlrTaskSharedModule, RouterLink, AllocationListTemplateComponent],
   templateUrl: './allocations.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [SharedModule, AlrTaskSharedModule, RouterLink, AllocationListTemplateComponent],
 })
 export class AlrAllocationsComponent {
   allocations$ = this.alrService.payload$.pipe(map((payload) => payload?.regulatorReviewOutcome?.allocations));

@@ -25,10 +25,9 @@ const activeVerifierAdminValidator = GovukValidators.builder(
 
 @Component({
   selector: 'app-verifiers-table',
-  standalone: false,
   templateUrl: './verifiers-table.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class VerifiersTableComponent implements OnInit {
   @Input() verifiersAuthorities: Observable<UsersAuthoritiesInfoDTO>;

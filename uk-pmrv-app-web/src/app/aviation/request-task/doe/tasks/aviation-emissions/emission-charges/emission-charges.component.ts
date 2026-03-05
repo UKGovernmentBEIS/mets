@@ -1,3 +1,4 @@
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
@@ -10,10 +11,11 @@ import { BaseDoeCorsiaEmissionsComponent } from '../doe-corsia-base.component';
 
 @Component({
   selector: 'app-doe-emissions-charges',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './emission-charges.component.html',
-  providers: [DestroySubject],
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, NgIf, NgFor, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class EmissionsChargesComponent extends BaseDoeCorsiaEmissionsComponent {
   form = this.formProvider.chargeOperatorCtrl;

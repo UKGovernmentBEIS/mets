@@ -38,6 +38,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-abbreviations-summary',
+  templateUrl: './abbreviations-summary.component.html',
+  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
@@ -45,7 +47,7 @@ interface ViewModel {
     EmpReviewDecisionGroupComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,
   ],
-  templateUrl: './abbreviations-summary.component.html',
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AbbreviationsSummaryComponent {

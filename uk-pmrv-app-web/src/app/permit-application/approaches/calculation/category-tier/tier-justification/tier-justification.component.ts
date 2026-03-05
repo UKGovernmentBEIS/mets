@@ -15,10 +15,9 @@ import { tierJustificationProvider } from './tier-justification.provider';
 
 @Component({
   selector: 'app-tier-justification',
-  standalone: false,
   templateUrl: './tier-justification.component.html',
-  providers: [tierJustificationProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [tierJustificationProvider],
 })
 export class TierJustificationComponent implements PendingRequest {
   readonly index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

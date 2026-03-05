@@ -5,7 +5,6 @@ import { existingControlContainer } from '@shared/providers/control-container.fa
 
 @Component({
   selector: 'app-activity-level-template-form',
-  standalone: false,
   templateUrl: './activity-level-template-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [existingControlContainer],

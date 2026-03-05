@@ -11,8 +11,9 @@ import { ManagementProceduresCorsiaFormProvider } from '../management-procedures
 
 @Component({
   selector: 'app-management-procedures-revision-emissions',
-  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './management-procedures-revision-emissions.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementProceduresRevisionEmissionsComponent {

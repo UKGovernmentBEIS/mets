@@ -32,7 +32,6 @@ describe('AlrTaskComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-alr-task [breadcrumb]="true">
         <app-page-heading caption="Provide the activity level report">

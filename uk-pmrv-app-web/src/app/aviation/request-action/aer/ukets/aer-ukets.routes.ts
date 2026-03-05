@@ -63,7 +63,9 @@ export const AER_UKETS_ROUTES: Routes = [
             path: 'aggregated-consumption-and-flight-data',
             data: { pageTitle: 'Aggregated consumption and flight data', breadcrumb: true },
             loadComponent: () =>
-              import('@aviation/request-action/aer/shared/aggregated-consumption-and-flight-data/aggregated-consumption-and-flight-data.component'),
+              import(
+                '@aviation/request-action/aer/shared/aggregated-consumption-and-flight-data/aggregated-consumption-and-flight-data.component'
+              ),
           },
           {
             path: 'aircraft-types-data',
@@ -75,7 +77,9 @@ export const AER_UKETS_ROUTES: Routes = [
             path: 'emissions-reduction-claim',
             data: { pageTitle: 'Emissions reduction claim', breadcrumb: true },
             loadComponent: () =>
-              import('@aviation/request-action/aer/ukets/tasks/emissions-reduction-claim/emissions-reduction-claim.component'),
+              import(
+                '@aviation/request-action/aer/ukets/tasks/emissions-reduction-claim/emissions-reduction-claim.component'
+              ),
           },
           {
             path: 'data-gaps',
@@ -128,7 +132,9 @@ export const AER_UKETS_ROUTES: Routes = [
             path: 'verify-emissions-reduction-claim',
             data: { pageTitle: 'Verify the emissions reduction claim', breadcrumb: true },
             loadComponent: () =>
-              import('@aviation/request-action/aer/ukets/tasks/verify-emissions-reduction-claim/verify-emissions-reduction-claim.component'),
+              import(
+                '@aviation/request-action/aer/ukets/tasks/verify-emissions-reduction-claim/verify-emissions-reduction-claim.component'
+              ),
           },
           {
             path: 'overall-decision',
@@ -141,19 +147,25 @@ export const AER_UKETS_ROUTES: Routes = [
             path: 'uncorrected-misstatements',
             data: { pageTitle: 'Uncorrected misstatements', breadcrumb: true },
             loadComponent: () =>
-              import('@aviation/request-action/aer/shared/uncorrected-misstatements/uncorrected-misstatements.component'),
+              import(
+                '@aviation/request-action/aer/shared/uncorrected-misstatements/uncorrected-misstatements.component'
+              ),
           },
           {
             path: 'uncorrected-non-conformities',
             data: { pageTitle: 'Uncorrected non-conformities', breadcrumb: true },
             loadComponent: () =>
-              import('@aviation/request-action/aer/ukets/tasks/uncorrected-non-conformities/uncorrected-non-conformities.component'),
+              import(
+                '@aviation/request-action/aer/ukets/tasks/uncorrected-non-conformities/uncorrected-non-conformities.component'
+              ),
           },
           {
             path: 'uncorrected-non-compliances',
             data: { pageTitle: 'Uncorrected non-compliances', breadcrumb: true },
             loadComponent: () =>
-              import('@aviation/request-action/aer/ukets/tasks/uncorrected-non-compliances/uncorrected-non-compliances.component'),
+              import(
+                '@aviation/request-action/aer/ukets/tasks/uncorrected-non-compliances/uncorrected-non-compliances.component'
+              ),
           },
           {
             path: 'recommended-improvements',
@@ -165,7 +177,9 @@ export const AER_UKETS_ROUTES: Routes = [
             path: 'data-gaps-methodologies',
             data: { pageTitle: 'Methodologies to close data gaps', breadcrumb: true },
             loadComponent: () =>
-              import('@aviation/request-action/aer/ukets/tasks/data-gaps-methodologies/data-gaps-methodologies.component'),
+              import(
+                '@aviation/request-action/aer/ukets/tasks/data-gaps-methodologies/data-gaps-methodologies.component'
+              ),
           },
           {
             path: 'materiality-level',

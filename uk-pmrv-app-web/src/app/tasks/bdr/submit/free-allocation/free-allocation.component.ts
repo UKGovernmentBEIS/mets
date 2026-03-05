@@ -16,9 +16,10 @@ import { freeAllocationFormProvider } from './free-allocation-form.provider';
 
 @Component({
   selector: 'app-free-allocation',
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   templateUrl: './free-allocation.component.html',
   providers: [freeAllocationFormProvider],
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FreeAllocationComponent implements PendingRequest {

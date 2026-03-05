@@ -7,7 +7,6 @@ import { createTransferredDetailsFormGroup } from './transfer-details-form.compo
 
 @Component({
   selector: 'app-transfer-details-template',
-  standalone: false,
   templateUrl: './transfer-details-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

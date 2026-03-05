@@ -23,7 +23,6 @@ import { RfiStore } from '../../store/rfi.store';
 
 @Component({
   selector: 'app-answers',
-  standalone: false,
   templateUrl: './answers.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,

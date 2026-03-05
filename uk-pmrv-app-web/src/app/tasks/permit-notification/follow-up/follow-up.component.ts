@@ -9,7 +9,6 @@ import { CommonTasksStore } from '../../store/common-tasks.store';
 
 @Component({
   selector: 'app-follow-up',
-  standalone: false,
   templateUrl: './follow-up.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

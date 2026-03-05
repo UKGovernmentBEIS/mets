@@ -11,8 +11,9 @@ import { ProcedureFormComponent } from '../../../../shared/procedure-form';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-management-procedures-data-flow-form',
-  imports: [GovukComponentsModule, SharedModule, ProcedureFormComponent],
   templateUrl: './management-procedures-data-flow-form.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, SharedModule, ProcedureFormComponent],
   providers: [DestroySubject],
   viewProviders: [existingControlContainer],
 })

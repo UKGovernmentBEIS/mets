@@ -13,10 +13,9 @@ import { ErrorSummaryComponent } from './error-summary.component';
 
 describe('ErrorSummaryComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <form *ngIf="!isTemplate" [formGroup]="form">
-        <govuk-error-summary [form]="form" />
+        <govuk-error-summary [form]="form"></govuk-error-summary>
         <div govuk-text-input inputType="text" formControlName="topLevel"></div>
         <div formGroupName="secondLevelTop">
           <div govuk-text-input inputType="text" formControlName="secondLevelFirst"></div>
@@ -31,7 +30,7 @@ describe('ErrorSummaryComponent', () => {
       </form>
 
       <form #templateForm="ngForm" *ngIf="isTemplate">
-        <govuk-error-summary [form]="templateForm" />
+        <govuk-error-summary [form]="templateForm"></govuk-error-summary>
         <select [(ngModel)]="selectValue" name="someField" required></select>
       </form>
     `,

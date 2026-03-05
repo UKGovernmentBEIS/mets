@@ -13,8 +13,9 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-materiality-level-page',
-  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './materiality-level-page.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

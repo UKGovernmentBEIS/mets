@@ -65,10 +65,6 @@ public class PmrvRegulatorPermissionGroup {
     public static final String SUBMIT_BDR_REVIEW = "SUBMIT_BDR_REVIEW";
     public static final String PEER_REVIEW_BDR = "PEER_REVIEW_BDR";
 
-    //BDR
-    public static final String SUBMIT_BDRS2_REVIEW = "SUBMIT_BDRS2_REVIEW";
-    public static final String PEER_REVIEW_BDRS2 = "PEER_REVIEW_BDRS2";
-
     //HSETI
     public static final String SUBMIT_HSE_TI_REVIEW = "SUBMIT_HSE_TI_REVIEW";
     public static final String PEER_REVIEW_HSE_TI = "PEER_REVIEW_HSE_TI";

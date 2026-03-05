@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { VerifiersConclusionsFormProvider } from '@aviation/request-task/aer/corsia/aer-verify/tasks/verifiers-conclusions/verifiers-conclusions-form.provider';
 import { RequestTaskStore } from '@aviation/request-task/store';
@@ -11,7 +11,8 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-emissions-report',
-  imports: [ReturnToLinkComponent, SharedModule],
+  standalone: true,
+  imports: [ReturnToLinkComponent, SharedModule, RouterLink],
   templateUrl: './emissions-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

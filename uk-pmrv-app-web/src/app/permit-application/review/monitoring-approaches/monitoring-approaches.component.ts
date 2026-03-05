@@ -9,7 +9,6 @@ import { PermitApplicationState } from '../../store/permit-application.state';
 
 @Component({
   selector: 'app-monitoring-approaches',
-  standalone: false,
   templateUrl: './monitoring-approaches.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

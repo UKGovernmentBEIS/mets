@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { first, switchMap } from 'rxjs';
 
@@ -17,7 +17,8 @@ import { AviationAerCorsiaUncorrectedNonConformities } from 'pmrv-api';
 
 @Component({
   selector: 'app-uncorrected-non-conformities',
-  imports: [ReturnToLinkComponent, SharedModule],
+  standalone: true,
+  imports: [ReturnToLinkComponent, SharedModule, RouterLink],
   templateUrl: './uncorrected-non-conformities.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -21,7 +21,6 @@ describe('MonitoringApproachSummaryTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-monitoring-approach-summary-template
         [data]="data"

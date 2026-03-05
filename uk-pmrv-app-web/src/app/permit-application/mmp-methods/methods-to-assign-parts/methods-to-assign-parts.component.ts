@@ -18,10 +18,11 @@ import { MethodsToAssignPartsFormProvider } from './methods-to-assign-parts-form
 
 @Component({
   selector: 'app-mmp-methods-to-assign-parts',
+  standalone: true,
   imports: [SharedPermitModule, SharedModule],
   templateUrl: './methods-to-assign-parts.component.html',
-  providers: [MethodsToAssignPartsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [MethodsToAssignPartsFormProvider],
 })
 export class MethodsToAssignPartsComponent {
   permitTask = toSignal(this.route.data.pipe(map((x) => x?.permitTask)));

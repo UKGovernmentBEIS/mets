@@ -7,13 +7,10 @@ import { FormService } from '../form/form.service';
   eslint-disable
   @typescript-eslint/no-unused-vars,
   @angular-eslint/prefer-on-push-component-change-detection,
-  @typescript-eslint/no-empty-function,
-  @angular-eslint/component-selector,
-  @angular-eslint/prefer-host-metadata-property
+  @typescript-eslint/no-empty-function
 */
 @Component({
   selector: 'div[govukFileUpload],govuk-file-upload',
-  standalone: false,
   templateUrl: './file-upload.component.html',
 })
 export class FileUploadComponent implements ControlValueAccessor {

@@ -19,6 +19,7 @@ import { OperatorDetailsFormProvider } from '../operator-details-form.provider';
 
 @Component({
   selector: 'app-operator-details-flight-identification-page',
+  standalone: true,
   imports: [
     GovukComponentsModule,
     SharedModule,
@@ -26,8 +27,8 @@ import { OperatorDetailsFormProvider } from '../operator-details-form.provider';
     OperatorDetailsFlightIdentificationTemplateComponent,
   ],
   templateUrl: './operator-details-flight-identification.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class OperatorDetailsFlightIdentificationComponent extends BaseOperatorDetailsComponent implements OnInit {
   form = this.getform('flightIdentification');

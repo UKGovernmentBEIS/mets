@@ -13,6 +13,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-alc-information-submitted',
+  standalone: true,
   imports: [ActionSharedModule, AlrAlcInformationSummaryTemplateComponent, NgIf],
   template: `
     <ng-container *ngIf="vm() as vm">

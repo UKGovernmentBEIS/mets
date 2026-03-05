@@ -27,7 +27,6 @@ describe('MultipleFileInputComponent', () => {
   let control: FormControl;
 
   @Component({
-    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-multiple-file-input formControlName="file" [baseDownloadUrl]="getDownloadUrl()"></app-multiple-file-input>

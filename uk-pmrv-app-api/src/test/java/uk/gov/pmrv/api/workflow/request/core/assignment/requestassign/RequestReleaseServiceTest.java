@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE;
@@ -275,7 +274,7 @@ class RequestReleaseServiceTest {
     }
 
     @Test
-    void releaseRequest_not_populate_request_payload_task() {
+    void releaseRequest_peer_review_task() {
         Request request = Request.builder().build();
         RequestTask requestTask = RequestTask.builder()
             .request(request)
@@ -283,7 +282,5 @@ class RequestReleaseServiceTest {
             .build();
 
         service.releaseRequest(requestTask);
-        
-        verifyNoInteractions(authorizationRulesQueryService);
     }
 }

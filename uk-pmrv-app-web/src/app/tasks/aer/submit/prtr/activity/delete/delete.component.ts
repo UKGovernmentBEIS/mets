@@ -8,7 +8,6 @@ import { AerService } from '@tasks/aer/core/aer.service';
 
 @Component({
   selector: 'app-prtr-activity-delete',
-  standalone: false,
   template: `
     <app-page-heading size="xl">
       Are you sure you want to delete

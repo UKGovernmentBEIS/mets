@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { first, map, switchMap } from 'rxjs';
 
@@ -11,8 +11,6 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 @Component({
   selector: 'app-bdrs2-send-report-regulator',
-  imports: [SharedModule, BdrS2TaskSharedModule],
-  standalone: true,
   template: `
     <app-bdrs2-task returnLink="../.." [returnLinkTitle]="returnLinkTitle" [breadcrumb]="true">
       <app-page-heading>Send to regulator</app-page-heading>
@@ -31,6 +29,8 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
       </div>
     </app-bdrs2-task>
   `,
+  standalone: true,
+  imports: [SharedModule, BdrS2TaskSharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Bdrs2SendReportRegulatorComponent {
@@ -54,9 +54,6 @@ export class Bdrs2SendReportRegulatorComponent {
           switch (requestTaskType) {
             case 'BDRS2_APPLICATION_SUBMIT':
               actionType = 'BDRS2_SUBMIT_TO_REGULATOR';
-              break;
-            case 'BDRS2_APPLICATION_AMENDS_SUBMIT':
-              actionType = 'BDRS2_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR';
               break;
           }
 

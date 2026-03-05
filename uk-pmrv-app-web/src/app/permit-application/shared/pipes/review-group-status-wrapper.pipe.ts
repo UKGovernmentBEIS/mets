@@ -8,7 +8,6 @@ import { ReviewGroupDecisionStatus } from '../../review/types/review.permit.type
 
 @Pipe({
   name: 'reviewGroupStatusWrapper',
-  standalone: false,
 })
 export class ReviewGroupStatusWrapperPipe implements PipeTransform {
   transform(

@@ -7,7 +7,6 @@ import { PermitVariationStore } from '../../store/permit-variation.store';
 
 @Component({
   selector: 'app-about-variation-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

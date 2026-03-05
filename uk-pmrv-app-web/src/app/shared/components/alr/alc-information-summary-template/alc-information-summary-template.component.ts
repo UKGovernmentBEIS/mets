@@ -9,8 +9,9 @@ import { AllocationListTemplateComponent } from '../allocation-list-template/all
 
 @Component({
   selector: 'app-alr-alc-information-summary-template',
-  imports: [SharedModule, RouterLink, AllocationListTemplateComponent],
   templateUrl: './alc-information-summary-template.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLink, AllocationListTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrAlcInformationSummaryTemplateComponent {

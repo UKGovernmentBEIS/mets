@@ -16,10 +16,9 @@ import { importedMeasureableHeatFlowsAddFormFactory } from './imported-measureab
 
 @Component({
   selector: 'app-imported-measureable-heat-flows',
-  standalone: false,
   templateUrl: './imported-measureable-heat-flows.component.html',
-  providers: [importedMeasureableHeatFlowsAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [importedMeasureableHeatFlowsAddFormFactory],
 })
 export class ImportedMeasureableHeatFlowsComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

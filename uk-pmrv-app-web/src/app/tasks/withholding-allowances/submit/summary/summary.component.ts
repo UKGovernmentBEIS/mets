@@ -11,7 +11,6 @@ import { WithholdingAllowancesService } from '../../core/withholding-allowances.
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

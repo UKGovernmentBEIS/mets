@@ -4,7 +4,6 @@ import { OpinionStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-aer-regulated-activities-group',
-  standalone: false,
   template: `
     <h2 class="govuk-heading-m">Regulated activities</h2>
     <dl govuk-summary-list>

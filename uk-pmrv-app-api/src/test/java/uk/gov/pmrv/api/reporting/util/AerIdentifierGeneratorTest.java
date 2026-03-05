@@ -13,6 +13,6 @@ class AerIdentifierGeneratorTest {
 
         String aerId = AerIdentifierGenerator.generate(accountId, reportingYear);
 
-        assertThat(aerId).isEqualTo("AEM02353-2022");
+        assertThat(aerId).isEqualTo("AEM2353-2022");
     }
 }

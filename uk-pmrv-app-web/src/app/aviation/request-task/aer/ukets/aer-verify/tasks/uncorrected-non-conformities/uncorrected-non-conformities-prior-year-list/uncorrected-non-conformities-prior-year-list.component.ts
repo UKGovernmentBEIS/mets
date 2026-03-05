@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -25,9 +25,10 @@ interface ViewModel {
 
 @Component({
   selector: 'app-uncorrected-non-conformities-prior-year-list',
-  imports: [GovukComponentsModule, SharedModule, VerifierCommentGroupComponent, ReturnToLinkComponent],
   templateUrl: './uncorrected-non-conformities-prior-year-list.component.html',
+  standalone: true,
   providers: [DestroySubject],
+  imports: [GovukComponentsModule, SharedModule, RouterLink, VerifierCommentGroupComponent, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class UncorrectedNonConformitiesPriorYearListComponent {

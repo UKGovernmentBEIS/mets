@@ -9,7 +9,6 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-verifier-details',
-  standalone: false,
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Verifier details">
       <app-verifier-details-group [verificationReport]="verificationReportData$ | async"></app-verifier-details-group>

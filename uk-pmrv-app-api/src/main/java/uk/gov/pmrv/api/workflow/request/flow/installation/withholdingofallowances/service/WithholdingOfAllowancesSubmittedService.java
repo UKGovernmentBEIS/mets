@@ -1,10 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.integration.registry.withholdflag.installation.request.WithholdFlagRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -24,7 +22,6 @@ public class WithholdingOfAllowancesSubmittedService {
     private final RequestActionUserInfoResolver requestActionUserInfoResolver;
     private final RequestService requestService;
     private final WithholdingOfAllowancesOfficialNoticeService withholdingOfAllowancesOfficialNoticeService;
-    private final ApplicationEventPublisher applicationEventPublisher;
 
     public void submit(final String requestId) {
 
@@ -57,14 +54,6 @@ public class WithholdingOfAllowancesSubmittedService {
             actionPayload,
             RequestActionType.WITHHOLDING_OF_ALLOWANCES_APPLICATION_SUBMITTED,
             request.getPayload().getRegulatorAssignee());
-
-        // publish withhold event to registry
-        applicationEventPublisher.publishEvent(WithholdFlagRegistryEvent.builder()
-                .year(requestPayload.getWithholdingOfAllowances().getYear())
-                .accountId(request.getAccountId())
-                .withholdFlag(Boolean.TRUE)
-                .requestId(request.getId())
-                .build());
 
         // send official notice
         withholdingOfAllowancesOfficialNoticeService.sendOfficialNotice(

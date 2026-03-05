@@ -40,6 +40,9 @@ import { EmissionSourcesFormModel } from '../emission-sources-form.model';
 
 @Component({
   selector: 'app-emission-sources-summary',
+  templateUrl: './emission-sources-summary.component.html',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     SharedModule,
@@ -53,8 +56,6 @@ import { EmissionSourcesFormModel } from '../emission-sources-form.model';
     RouterModule,
     EmpVariationRegulatorLedDecisionGroupComponent,
   ],
-  templateUrl: './emission-sources-summary.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionSourcesSummaryComponent {
   private pendingRequestService = inject(PendingRequestService);

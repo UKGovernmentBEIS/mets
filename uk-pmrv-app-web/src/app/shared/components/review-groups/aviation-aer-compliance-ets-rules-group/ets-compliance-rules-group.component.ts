@@ -5,7 +5,6 @@ import { AviationAerEtsComplianceRules } from 'pmrv-api';
 
 @Component({
   selector: 'app-ets-compliance-rules-group',
-  standalone: false,
   templateUrl: './ets-compliance-rules-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

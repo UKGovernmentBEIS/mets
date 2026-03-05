@@ -9,12 +9,12 @@ import { DreSummaryComponent } from './submitted/dre-summary/dre-summary.compone
 import { SubmittedComponent } from './submitted/submitted.component';
 
 @NgModule({
-  imports: [ActionSharedModule, DreRoutingModule, SharedModule],
   declarations: [
     DreSummaryComponent,
     OfficialNoticeRecipientsComponent,
     PeerReviewDecisionComponent,
     SubmittedComponent,
   ],
+  imports: [ActionSharedModule, DreRoutingModule, SharedModule],
 })
 export class DreModule {}

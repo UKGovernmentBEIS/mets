@@ -4,7 +4,6 @@ import { FallbackEmissions } from 'pmrv-api';
 
 @Component({
   selector: 'app-fallback-emissions-group',
-  standalone: false,
   templateUrl: './fallback-emissions-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

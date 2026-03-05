@@ -27,10 +27,9 @@ export interface VariationDetailsFormModel {
 }
 
 @Injectable()
-export class VariationDetailsFormProvider implements TaskFormProvider<
-  EmpVariationCorsiaDetails,
-  VariationDetailsFormModel
-> {
+export class VariationDetailsFormProvider
+  implements TaskFormProvider<EmpVariationCorsiaDetails, VariationDetailsFormModel>
+{
   private _form: FormGroup<VariationDetailsFormModel>;
 
   constructor(

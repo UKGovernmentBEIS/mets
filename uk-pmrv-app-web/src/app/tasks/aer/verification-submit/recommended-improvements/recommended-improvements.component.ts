@@ -14,7 +14,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, RecommendedImprovem
 
 @Component({
   selector: 'app-recommended-improvements',
-  standalone: false,
   templateUrl: './recommended-improvements.component.html',
   providers: [recommendedImprovementsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

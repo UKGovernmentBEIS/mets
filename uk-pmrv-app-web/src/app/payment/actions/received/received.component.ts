@@ -7,7 +7,6 @@ import { PaymentStore } from '../../store/payment.store';
 
 @Component({
   selector: 'app-received',
-  standalone: false,
   template: `
     <ng-container *ngIf="store | async as state">
       <app-request-action-heading

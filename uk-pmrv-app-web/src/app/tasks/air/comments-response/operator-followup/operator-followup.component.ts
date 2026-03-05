@@ -19,7 +19,6 @@ import {
 
 @Component({
   selector: 'app-operator-followup',
-  standalone: false,
   templateUrl: './operator-followup.component.html',
   providers: [operatorFollowupFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

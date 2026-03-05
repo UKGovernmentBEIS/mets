@@ -14,7 +14,6 @@ import { emissionFactorFormProvider } from './emission-factor-form.provider';
 
 @Component({
   selector: 'app-emission-factor',
-  standalone: false,
   template: `
     <app-permit-task [breadcrumb]="[{ text: 'CALCULATION_PFC' | monitoringApproachDescription, link: ['pfc'] }]">
       <app-wizard-step
@@ -31,8 +30,8 @@ import { emissionFactorFormProvider } from './emission-factor-form.provider';
         reviewGroupUrl="pfc"></app-approach-return-link>
     </app-permit-task>
   `,
-  providers: [emissionFactorFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [emissionFactorFormProvider],
 })
 export class EmissionFactorComponent implements PendingRequest {
   constructor(

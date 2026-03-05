@@ -14,10 +14,9 @@ export interface TotalEmissionsFormModel {
 }
 
 @Injectable()
-export class TotalEmissionsFormProvider implements TaskFormProvider<
-  AviationAerTotalEmissionsConfidentiality,
-  TotalEmissionsFormModel
-> {
+export class TotalEmissionsFormProvider
+  implements TaskFormProvider<AviationAerTotalEmissionsConfidentiality, TotalEmissionsFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup;
 

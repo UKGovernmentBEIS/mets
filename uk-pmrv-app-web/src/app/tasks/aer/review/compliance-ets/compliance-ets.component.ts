@@ -9,7 +9,6 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-compliance-ets',
-  standalone: false,
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Compliance with ETS rules">
       <app-compliance-ets-group [etsComplianceRules]="etsComplianceRules$ | async"></app-compliance-ets-group>

@@ -36,7 +36,6 @@ interface Permissions {
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-root',
-  standalone: false,
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   providers: [DestroySubject],

@@ -12,8 +12,9 @@ import { EmissionSmallEmittersSupportFacilityFormValues } from './monitoring-app
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-monitoring-approach-summary-template',
-  imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref, MonitoringApproachTypePipe],
   templateUrl: './monitoring-approach-summary-template.component.html',
+  standalone: true,
+  imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref, MonitoringApproachTypePipe],
   viewProviders: [existingControlContainer],
 })
 export class MonitoringApproachSummaryTemplateComponent {

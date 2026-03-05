@@ -8,12 +8,12 @@ import { AerService } from '../../../../core/aer.service';
 
 @Component({
   selector: 'app-verifier-findings-report',
-  standalone: false,
   templateUrl: './verifier-findings-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifierFindingsReportComponent {
   payload$: Observable<AerApplicationVerificationSubmittedRequestActionPayload> = this.aerService.getPayload();
+  yearEqualAfter25$ = this.aerService.yearEqualAfter2025$ as Observable<boolean>;
 
   constructor(readonly aerService: AerService) {}
 }

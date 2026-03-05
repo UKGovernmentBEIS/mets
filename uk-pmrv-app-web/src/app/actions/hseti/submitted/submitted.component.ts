@@ -2,6 +2,7 @@ import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
+import { DetailsSummaryTemplateComponent } from '@shared/components/hseti/details-summary-template/details-summary-template.component';
 import { UserInfoResolverPipe } from '@shared/pipes/user-info-resolver.pipe';
 import { SharedModule } from '@shared/shared.module';
 import { AttachedFile } from '@shared/types/attached-file.type';
@@ -29,16 +30,17 @@ interface ViewModel {
 
 @Component({
   selector: 'app-hseti-action-submitted',
-  imports: [ActionSharedModule, NgIf, SharedModule],
+  standalone: true,
+  imports: [ActionSharedModule, DetailsSummaryTemplateComponent, NgIf, SharedModule],
+  providers: [UserInfoResolverPipe],
   templateUrl: './submitted.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     :host ::ng-deep .app-task-list {
       list-style-type: none;
       padding-left: 0;
     }
   `,
-  providers: [UserInfoResolverPipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HseTiSubmittedComponent {
   payload = this.hseTiActionService?.payload as Signal<HSETICompletedRequestActionPayload | undefined>;

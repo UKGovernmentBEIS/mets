@@ -20,10 +20,9 @@ import {
 } from '../emissions-reduction-claim-form.provider';
 
 @Injectable()
-export class aerEmissionsReductionClaimBatchItemFormProvider implements TaskFormProvider<
-  AviationAerSafPurchase,
-  AviationAerSafPurchaseFormModel
-> {
+export class aerEmissionsReductionClaimBatchItemFormProvider
+  implements TaskFormProvider<AviationAerSafPurchase, AviationAerSafPurchaseFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private requestTaskFileService = inject(RequestTaskFileService);

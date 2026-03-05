@@ -31,9 +31,6 @@ public interface RequestRepository extends JpaRepository<Request, String> {
     List<Request> findByAccountIdAndType(Long accountId, RequestType type);
 
     @Transactional(readOnly = true)
-    List<Request> findByAccountIdAndTypeInAndStatusIn(Long accountId, Set<RequestType> types, Set<RequestStatus> statuses);
-
-    @Transactional(readOnly = true)
     List<Request> findByAccountIdAndTypeAndStatus(Long accountId, RequestType type, RequestStatus status);
 
     @Transactional(readOnly = true)

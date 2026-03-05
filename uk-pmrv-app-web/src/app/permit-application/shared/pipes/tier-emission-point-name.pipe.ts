@@ -6,7 +6,6 @@ import { EmissionPoint, MeasurementOfCO2EmissionPointCategory, MeasurementOfN2OE
 
 @Pipe({
   name: 'tierEmissionPointName',
-  standalone: false,
 })
 export class TierEmissionPointNamePipe implements PipeTransform {
   constructor(private categoryTypeNamePipe: CategoryTypeNamePipe) {}

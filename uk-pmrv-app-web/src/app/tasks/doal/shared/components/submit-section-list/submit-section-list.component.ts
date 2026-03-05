@@ -9,7 +9,6 @@ import { resolveSectionStatus } from '@tasks/doal/submit/section-status';
 
 @Component({
   selector: 'app-submit-section-list',
-  standalone: false,
   templateUrl: './submit-section-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

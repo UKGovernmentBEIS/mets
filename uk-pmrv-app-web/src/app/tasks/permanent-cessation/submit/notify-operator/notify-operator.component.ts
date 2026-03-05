@@ -21,6 +21,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-permanent-cessation-notify-operator',
+  standalone: true,
   imports: [SharedModule],
   template: `
     <div class="govuk-grid-row" *ngIf="vm() as vm">

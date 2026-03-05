@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { AirImprovement, PermitMonitoringApproachSection } from 'pmrv-api';
 
-@Pipe({
-  name: 'monitoringApproachDescription',
-  standalone: false,
-})
+@Pipe({ name: 'monitoringApproachDescription' })
 export class MonitoringApproachDescriptionPipe implements PipeTransform {
   transform(value: PermitMonitoringApproachSection['type'] | AirImprovement['type']): string {
     switch (value) {

@@ -13,7 +13,6 @@ import { PermitSurrenderStore } from '../../../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-answers',
-  standalone: false,
   template: `
     <app-page-heading>Check your answers</app-page-heading>
     <app-grant-determination-summary-details
@@ -25,8 +24,8 @@ import { PermitSurrenderStore } from '../../../../store/permit-surrender.store';
     </div>
     <a govukLink routerLink="../../..">Return to: Surrender permit determination</a>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class AnswersComponent implements PendingRequest {
   grantDetermination$ = this.store.pipe(

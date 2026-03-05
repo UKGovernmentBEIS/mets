@@ -9,11 +9,17 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-materiality-level',
-  standalone: false,
   template: `
-    <app-action-task header="Materiality level and reference documents" [breadcrumb]="true">
+    <app-action-task
+      [header]="
+        (yearEqualAfter25$ | async)
+          ? 'Further information of relevance to the opinion'
+          : 'Materiality level and reference documents'
+      "
+      [breadcrumb]="true">
       <app-materiality-level-group
-        [materialityLevelInfo]="(payload$ | async).verificationReport.materialityLevel"></app-materiality-level-group>
+        [materialityLevelInfo]="(payload$ | async).verificationReport.materialityLevel"
+        [yearEqualAfter25]="yearEqualAfter25$ | async"></app-materiality-level-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -24,6 +30,7 @@ export class MaterialityLevelComponent {
   decisionData$ = combineLatest([this.payload$, this.route.data]).pipe(
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
+  yearEqualAfter25$ = this.aerService.yearEqualAfter2025$ as Observable<boolean>;
 
   constructor(
     private readonly aerService: AerService,

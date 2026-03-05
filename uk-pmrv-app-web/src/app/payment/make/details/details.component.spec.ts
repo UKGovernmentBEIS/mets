@@ -25,7 +25,6 @@ describe('DetailsComponent', () => {
 
   @Component({
     selector: 'app-make-payment-help',
-    standalone: false,
     template: `
       <div class="help">
         <p class="competentAuthority">{{ competentAuthority$ | async }}</p>

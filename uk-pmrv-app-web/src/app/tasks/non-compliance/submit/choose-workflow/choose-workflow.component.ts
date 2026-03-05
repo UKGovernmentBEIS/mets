@@ -14,7 +14,6 @@ import { NonComplianceService } from '../../core/non-compliance.service';
 
 @Component({
   selector: 'app-choose-workflow',
-  standalone: false,
   templateUrl: './choose-workflow.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

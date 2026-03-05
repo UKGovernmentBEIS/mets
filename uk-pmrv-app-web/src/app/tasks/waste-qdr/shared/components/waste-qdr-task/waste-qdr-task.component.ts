@@ -7,6 +7,7 @@ import { WasteQdrReturnLinkComponent } from '..';
 
 @Component({
   selector: 'app-waste-qdr-task',
+  standalone: true,
   imports: [SharedModule, WasteQdrReturnLinkComponent],
   template: `
     <app-page-heading *ngIf="heading" [caption]="caption">{{ heading }}</app-page-heading>

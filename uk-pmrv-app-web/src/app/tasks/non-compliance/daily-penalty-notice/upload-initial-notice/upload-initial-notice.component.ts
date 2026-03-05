@@ -17,10 +17,9 @@ import { uploadInitialNoticeFormProvider } from './upload-initial-notice-form.pr
 
 @Component({
   selector: 'app-upload-initial-notice',
-  standalone: false,
   templateUrl: './upload-initial-notice.component.html',
-  providers: [uploadInitialNoticeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [uploadInitialNoticeFormProvider],
 })
 export class UploadInitialNoticeComponent {
   currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));

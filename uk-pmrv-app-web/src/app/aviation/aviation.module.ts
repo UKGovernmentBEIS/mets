@@ -8,8 +8,8 @@ import { AviationAccountsModule } from './accounts/aviation-accounts.module';
 import { AviationRoutingModule } from './aviation-routing.module';
 
 @NgModule({
-  imports: [AviationAccountsModule, AviationRoutingModule, CommonModule],
   declarations: [],
+  imports: [AviationAccountsModule, AviationRoutingModule, CommonModule],
   providers: [WorkflowItemsService, { provide: ACCOUNT_TYPE, useValue: 'AVIATION' }],
 })
 export class AviationModule {}

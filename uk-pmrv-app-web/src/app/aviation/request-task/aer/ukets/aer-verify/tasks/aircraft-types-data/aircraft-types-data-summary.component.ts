@@ -1,5 +1,6 @@
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { RouterLink, RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, filter, map, Observable, startWith } from 'rxjs';
 
@@ -22,7 +23,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aircraft-types-data-summary',
-  imports: [SharedModule, GovukComponentsModule, NgIf, ReturnToLinkComponent, AircraftTypesDataTableComponent],
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
@@ -33,7 +33,7 @@ interface ViewModel {
         </div>
 
         <app-aircraft-types-data-table
-          headingText="File uploaded"
+          [headingText]="'File uploaded'"
           [aviationAerAircraftDataDetails]="vm.data.aviationAerAircraftDataDetails"></app-aircraft-types-data-table>
       </ng-container>
     </ng-container>
@@ -50,6 +50,17 @@ interface ViewModel {
       margin-left: auto;
     }
   `,
+  imports: [
+    SharedModule,
+    GovukComponentsModule,
+    NgFor,
+    NgIf,
+    RouterLinkWithHref,
+    ReturnToLinkComponent,
+    AircraftTypesDataTableComponent,
+    RouterLink,
+  ],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class AircraftTypesDataSummaryComponent {

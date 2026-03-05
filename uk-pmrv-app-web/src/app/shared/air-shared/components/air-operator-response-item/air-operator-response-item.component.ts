@@ -5,7 +5,6 @@ import { AttachedFile } from '@shared/types/attached-file.type';
 
 @Component({
   selector: 'app-air-operator-response-item',
-  standalone: false,
   templateUrl: './air-operator-response-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

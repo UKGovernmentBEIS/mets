@@ -1,4 +1,4 @@
-import { AsyncPipe, DOCUMENT, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, DOCUMENT, KeyValuePipe, NgForOf, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { AbstractControl, FormControlStatus, NgForm, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
+import { RouterLink } from '@angular/router';
 
 import { map, Observable, startWith, tap } from 'rxjs';
 
@@ -21,8 +22,10 @@ import { FormService } from 'govuk-components';
 
 @Component({
   selector: 'app-csv-data-error-summary',
-  imports: [AsyncPipe, NgIf, NgForOf, SharedModule],
   templateUrl: './csv-data-error-summary.component.html',
+  styles: [],
+  imports: [AsyncPipe, KeyValuePipe, NgTemplateOutlet, NgIf, NgForOf, RouterLink, SharedModule],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CsvDataErrorSummaryComponent implements OnChanges, AfterViewInit {

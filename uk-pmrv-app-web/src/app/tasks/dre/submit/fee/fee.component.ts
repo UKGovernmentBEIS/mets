@@ -13,10 +13,9 @@ import { feeFormProvider } from './fee-form.provider';
 
 @Component({
   selector: 'app-fee',
-  standalone: false,
   templateUrl: './fee.component.html',
-  providers: [feeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [feeFormProvider],
 })
 export class FeeComponent {
   private readonly nextWizardStep = 'summary';

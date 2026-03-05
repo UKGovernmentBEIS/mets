@@ -33,10 +33,9 @@ export interface AviationAerCorsiaVerifierDetailsFormModel {
 }
 
 @Injectable()
-export class VerifierDetailsFormProvider implements TaskFormProvider<
-  AviationAerCorsiaVerifierDetails,
-  AviationAerCorsiaVerifierDetailsFormModel
-> {
+export class VerifierDetailsFormProvider
+  implements TaskFormProvider<AviationAerCorsiaVerifierDetails, AviationAerCorsiaVerifierDetailsFormModel>
+{
   private _form: FormGroup<AviationAerCorsiaVerifierDetailsFormModel>;
   private destroy$ = new Subject<void>();
   private fb = inject(FormBuilder);

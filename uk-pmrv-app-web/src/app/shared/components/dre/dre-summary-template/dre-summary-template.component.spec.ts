@@ -14,7 +14,6 @@ describe('DreSummaryComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-dre-summary-template [dre]="dre" [isEditable]="isEditable"></app-dre-summary-template>
     `,

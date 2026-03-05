@@ -17,10 +17,9 @@ import { calculationEthyleneOxideGlycolsAddFormFactory } from './calculation-eth
 
 @Component({
   selector: 'app-calculation-ethylene-oxide-glycols',
-  standalone: false,
   templateUrl: './calculation-ethylene-oxide-glycols.component.html',
-  providers: [calculationEthyleneOxideGlycolsAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [calculationEthyleneOxideGlycolsAddFormFactory],
 })
 export class CalculationEthyleneOxideGlycolsComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

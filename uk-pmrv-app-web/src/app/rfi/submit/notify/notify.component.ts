@@ -21,10 +21,9 @@ import { NOTIFY_FORM, notifyFormFactory } from './notify-form.provider';
 
 @Component({
   selector: 'app-notify-operator',
-  standalone: false,
   templateUrl: './notify.component.html',
-  providers: [notifyFormFactory, UserFullNamePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [notifyFormFactory, UserFullNamePipe],
 })
 export class NotifyComponent implements OnInit {
   private readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

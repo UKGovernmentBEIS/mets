@@ -14,7 +14,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, UncorrectedNonConfo
 
 @Component({
   selector: 'app-per-plan',
-  standalone: false,
   templateUrl: './per-plan.component.html',
   providers: [perPlanFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

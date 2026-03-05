@@ -10,7 +10,6 @@ import { ForgotPasswordService } from 'pmrv-api';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-submit-email',
-  standalone: false,
   templateUrl: './submit-email.component.html',
 })
 export class SubmitEmailComponent implements OnInit {

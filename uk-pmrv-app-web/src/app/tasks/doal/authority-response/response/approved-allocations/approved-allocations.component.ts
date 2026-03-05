@@ -14,7 +14,6 @@ import { DoalGrantAuthorityResponse, PreliminaryAllocation } from 'pmrv-api';
 
 @Component({
   selector: 'app-approved-allocations',
-  standalone: false,
   templateUrl: './approved-allocations.component.html',
   providers: [approvedAllocationsComponentFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -27,9 +27,10 @@ interface ViewModel {
 
 @Component({
   selector: 'app-changes-requested',
+  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent],
-  templateUrl: './changes-requested.component.html',
   providers: [ChangesRequestedFormProvider],
+  templateUrl: './changes-requested.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangesRequestedComponent {

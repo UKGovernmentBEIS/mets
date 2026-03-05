@@ -14,9 +14,10 @@ import { RequestTaskActionPayload, TasksService } from 'pmrv-api';
 
 @Component({
   selector: 'app-account-closure-reason',
+  standalone: true,
   imports: [SharedModule, RouterModule],
-  templateUrl: './account-closure-submit.component.html',
   providers: [],
+  templateUrl: './account-closure-submit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountClosureSubmitComponent {

@@ -10,8 +10,8 @@ const DETERMINATION_REASON_SUBTYPE_SELECTION = {
 
 @Pipe({
   name: 'doeDeterminationReasonSubType',
-  standalone: true,
   pure: true,
+  standalone: true,
 })
 export class DoeDeterminationReasonSubTypePipe implements PipeTransform {
   transform(

@@ -10,8 +10,9 @@ import { SourceStream } from 'pmrv-api';
 
 @Component({
   selector: 'app-source-streams-table',
-  imports: [CommonModule, GovukComponentsModule, PipesModule, RouterLink],
   templateUrl: './source-streams-table.component.html',
+  standalone: true,
+  imports: [CommonModule, GovukComponentsModule, PipesModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SourceStreamsTableComponent {

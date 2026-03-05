@@ -12,10 +12,9 @@ import { estimatesFormProvider } from './estimates-form.provider';
 
 @Component({
   selector: 'app-estimates',
-  standalone: false,
   templateUrl: './estimates.component.html',
-  providers: [estimatesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [estimatesFormProvider],
 })
 export class EstimatesComponent {
   private readonly nextWizardStep = 'preliminary-allocations';

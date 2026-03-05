@@ -12,7 +12,6 @@ import { InstallationAccountDTO, InstallationAccountPermitDTO, InstallationAccou
 
 @Component({
   selector: 'app-sop-id',
-  standalone: false,
   template: `
     <app-page-heading size="l">Edit SOP ID</app-page-heading>
 
@@ -28,6 +27,7 @@ import { InstallationAccountDTO, InstallationAccountPermitDTO, InstallationAccou
 
     <a govukLink routerLink="../..">Return to: Installation details</a>
   `,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SopIdComponent implements OnInit {

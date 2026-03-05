@@ -4,8 +4,8 @@ import { AviationAerCorsiaVerifiersConclusions } from 'pmrv-api';
 
 @Pipe({
   name: 'materialityThresholdType',
-  standalone: true,
   pure: true,
+  standalone: true,
 })
 export class MaterialityThresholdTypePipe implements PipeTransform {
   transform(value: AviationAerCorsiaVerifiersConclusions['materialityThresholdType']): string | null {

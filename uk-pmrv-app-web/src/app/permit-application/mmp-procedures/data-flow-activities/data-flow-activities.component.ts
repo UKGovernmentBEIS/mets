@@ -14,10 +14,9 @@ import { DataFlowActivitiesFormProvider } from './data-flow-activities-form.prov
 
 @Component({
   selector: 'app-data-flow-activities',
-  standalone: false,
   templateUrl: './data-flow-activities.component.html',
-  providers: [DataFlowActivitiesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DataFlowActivitiesFormProvider],
 })
 export class DataFlowActivitiesComponent implements PendingRequest {
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));

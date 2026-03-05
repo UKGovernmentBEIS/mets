@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 
 @Directive({
   selector: 'router-outlet[appSkipLinkFocus]',
-  standalone: false,
 })
 export class SkipLinkFocusDirective {
   constructor(
@@ -12,7 +11,6 @@ export class SkipLinkFocusDirective {
     private readonly router: Router,
   ) {}
 
-  // eslint-disable-next-line @angular-eslint/prefer-host-metadata-property
   @HostListener('activate')
   onRouteActivation(): void {
     if (this.router.getCurrentNavigation()?.trigger !== 'popstate') {

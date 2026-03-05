@@ -10,7 +10,6 @@ import { PermitApplicationStore } from '../../../../../store/permit-application.
 
 @Component({
   selector: 'app-category-tier-emission-factor-summary-overview',
-  standalone: false,
   templateUrl: './summary-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

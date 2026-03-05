@@ -13,7 +13,7 @@ export function getAerVerifySections(
   payload?: AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload,
 ): TaskSection<any>[] {
   const assesmentSections = getVerifierAssessmentTasks(false, payload?.verificationReport?.safExists);
-  const findingsSections = getAerVerifyVerifierFindings(false);
+  const findingsSections = getAerVerifyVerifierFindings(false, null, payload?.reportingYear >= 2025);
   const sendReportSections = getAerVerifySendReportSection(false);
   const allSections = [...assesmentSections, ...findingsSections, ...sendReportSections];
 
@@ -66,7 +66,7 @@ export function getTaskStatusByTaskCompletionState(
 
   const sections = [
     ...getVerifierAssessmentTasks(false, payload.verificationReport.safExists),
-    ...getAerVerifyVerifierFindings(false),
+    ...getAerVerifyVerifierFindings(false, null, payload?.reportingYear >= 2025),
   ];
 
   switch (taskName) {

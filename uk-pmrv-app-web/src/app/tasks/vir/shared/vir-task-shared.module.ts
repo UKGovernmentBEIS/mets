@@ -10,7 +10,6 @@ import { SubmitRespondStatusPipe } from '@tasks/vir/shared/pipes/submit-respond-
 import { TaskStatusPipe } from '@tasks/vir/shared/pipes/task-status.pipe';
 
 @NgModule({
-  imports: [RouterModule, SharedModule, VirSharedModule],
   declarations: [
     SubmitRespondStatusPipe,
     TaskStatusPipe,
@@ -25,5 +24,6 @@ import { TaskStatusPipe } from '@tasks/vir/shared/pipes/task-status.pipe';
     VerificationDataGroupReviewComponent,
     VirTaskComponent,
   ],
+  imports: [RouterModule, SharedModule, VirSharedModule],
 })
 export class VirTaskSharedModule {}

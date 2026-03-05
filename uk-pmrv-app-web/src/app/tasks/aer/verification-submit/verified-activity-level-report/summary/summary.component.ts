@@ -10,7 +10,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   template: `
     <app-page-heading>Check your answers</app-page-heading>
     <app-activity-level-report-group

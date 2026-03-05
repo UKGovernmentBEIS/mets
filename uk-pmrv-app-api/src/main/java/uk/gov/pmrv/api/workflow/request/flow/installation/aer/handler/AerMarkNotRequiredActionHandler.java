@@ -58,7 +58,6 @@ public class AerMarkNotRequiredActionHandler {
                         .reportableEmissions(null)
                         .isFromDre(false)
                         .isFromRegulator(true)
-                        .requestId(requestId)
                         .build();
 
         reportableEmissionsService.saveReportableEmissions(emissionsSaveParams);

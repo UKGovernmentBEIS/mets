@@ -6,7 +6,6 @@ import { DoalAdditionalDocuments } from 'pmrv-api';
 
 @Component({
   selector: 'app-doal-additional-documents-summary-template',
-  standalone: false,
   templateUrl: './additional-documents-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

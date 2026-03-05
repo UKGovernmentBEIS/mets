@@ -1,5 +1,6 @@
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -26,17 +27,20 @@ export interface ViewModel {
 }
 @Component({
   selector: 'app-monitoring-approach-summary',
+  templateUrl: './monitoring-approach-summary.component.html',
+  standalone: true,
   imports: [
     SharedModule,
     GovukComponentsModule,
+    NgFor,
     NgIf,
+    RouterLinkWithHref,
     ReturnToLinkComponent,
     MonitoringApproachSummaryTemplateComponent,
     AerReviewDecisionGroupComponent,
   ],
-  templateUrl: './monitoring-approach-summary.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class MonitoringApproachSummaryComponent extends BaseMonitoringApproachComponent implements OnInit, OnDestroy {
   form = this.formProvider.form;

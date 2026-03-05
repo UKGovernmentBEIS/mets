@@ -7,7 +7,6 @@ import { RequestActionReportService } from '@shared/services/request-action-repo
 
 @Component({
   selector: 'app-request-action-report',
-  standalone: false,
   templateUrl: './request-action-report.component.html',
   styleUrl: './request-action-report.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

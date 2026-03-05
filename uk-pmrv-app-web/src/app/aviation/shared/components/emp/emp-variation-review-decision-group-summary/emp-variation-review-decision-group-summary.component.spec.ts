@@ -16,7 +16,6 @@ describe('EmpVariationReviewDecisionGroupSummaryComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-emp-variation-review-decision-group-summary
         [data]="data"

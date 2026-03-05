@@ -12,8 +12,9 @@ import { SharedPermitModule } from '../shared-permit.module';
 
 @Component({
   selector: 'app-measurement-devices-table',
-  imports: [CommonModule, GovukComponentsModule, PipesModule, SharedPermitModule, RouterLink],
   templateUrl: './measurement-devices-table.component.html',
+  standalone: true,
+  imports: [CommonModule, GovukComponentsModule, PipesModule, SharedPermitModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MeasurementDevicesTableComponent {

@@ -10,8 +10,9 @@ import { EmissionPoint } from 'pmrv-api';
 
 @Component({
   selector: 'app-emission-points-table',
-  imports: [CommonModule, GovukComponentsModule, PipesModule, RouterLink],
   templateUrl: './emission-points-table.component.html',
+  standalone: true,
+  imports: [CommonModule, GovukComponentsModule, PipesModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionPointsTableComponent {

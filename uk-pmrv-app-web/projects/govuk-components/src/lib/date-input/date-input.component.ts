@@ -20,7 +20,6 @@ import { DateInputValidators } from './date-input.validators';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'div[govuk-date-input]',
-  standalone: false,
   templateUrl: './date-input.component.html',
   providers: [DatePipe],
 })

@@ -3,13 +3,12 @@ package uk.gov.pmrv.api.user.operator.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import uk.gov.netz.api.authorization.core.domain.Authority;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityRoleDTO;
-import uk.gov.netz.api.authorization.core.repository.AuthorityRepository;
 import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.event.AccountContactRegistryEvent;
+import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.user.core.service.UserSecuritySetupService;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 
@@ -24,7 +23,7 @@ public class OperatorUserManagementService {
     private final OperatorAuthorityQueryService operatorAuthorityQueryService;
     private final UserSecuritySetupService userSecuritySetupService;
     private final ApplicationEventPublisher eventPublisher;
-    private final AuthorityRepository authorityRepository;
+    private final AccountQueryService accountQueryService;
 
     /**
      * Returns the Operator User.
@@ -43,7 +42,7 @@ public class OperatorUserManagementService {
         operatorUserAuthService.updateUser( operatorUserDTO);
         String userId = operatorUserAuthService.getUserIdByEmail(operatorUserDTO.getEmail()).orElseThrow();
         eventPublisher.publishEvent(AccountContactRegistryEvent.builder()
-                .accountsIds(authorityRepository.findByUserId(userId).stream().map(Authority::getAccountId).collect(Collectors.toList())).build());
+                .accountsIds(accountQueryService.getAccountIdsByUserId(userId)).build());
 
     }
 
@@ -62,7 +61,7 @@ public class OperatorUserManagementService {
 
         //publish account contacts to registry
         eventPublisher.publishEvent(AccountContactRegistryEvent.builder()
-                .accountsIds(authorityRepository.findByUserId(userId).stream().map(Authority::getAccountId).collect(Collectors.toList())).build());
+                .accountsIds(accountQueryService.getAccountIdsByUserId(userId)).build());
     }
     
 	public void resetOperator2Fa(Long accountId, String userId) {

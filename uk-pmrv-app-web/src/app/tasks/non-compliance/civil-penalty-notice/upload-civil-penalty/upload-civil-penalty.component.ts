@@ -17,10 +17,9 @@ import { uploadCivilPenaltyFormProvider } from './upload-civil-penalty-form.prov
 
 @Component({
   selector: 'app-upload-civil-penalty',
-  standalone: false,
   templateUrl: './upload-civil-penalty.component.html',
-  providers: [uploadCivilPenaltyFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [uploadCivilPenaltyFormProvider],
 })
 export class UploadCivilPenaltyComponent {
   currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));

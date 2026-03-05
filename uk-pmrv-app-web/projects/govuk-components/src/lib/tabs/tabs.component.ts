@@ -23,7 +23,6 @@ import { TabLazyDirective } from './tab/tab-lazy.directive';
 
 @Component({
   selector: 'govuk-tabs',
-  standalone: false,
   templateUrl: './tabs.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

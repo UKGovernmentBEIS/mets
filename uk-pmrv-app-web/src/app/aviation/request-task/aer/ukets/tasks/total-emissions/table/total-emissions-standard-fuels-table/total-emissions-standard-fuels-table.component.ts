@@ -15,11 +15,12 @@ interface ViewModel {
 
 @Component({
   selector: 'app-total-emissions-standard-fuels-table',
-  imports: [SharedModule, TotalEmissionsStandardFuelsTableTemplateComponent],
   template: `
     <app-total-emissions-standard-fuels-table-template
       [data]="(vm$ | async).data"></app-total-emissions-standard-fuels-table-template>
   `,
+  standalone: true,
+  imports: [SharedModule, TotalEmissionsStandardFuelsTableTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsStandardFuelsTableComponent {

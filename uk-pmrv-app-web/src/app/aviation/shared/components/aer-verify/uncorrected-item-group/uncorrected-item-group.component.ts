@@ -9,8 +9,9 @@ import { UncorrectedItem } from 'pmrv-api';
 
 @Component({
   selector: 'app-uncorrected-item-group',
-  imports: [GovukComponentsModule, SharedModule, RouterModule],
   templateUrl: './uncorrected-item-group.component.html',
+  imports: [GovukComponentsModule, SharedModule, RouterModule],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UncorrectedItemGroupComponent implements OnInit {

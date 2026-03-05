@@ -5,7 +5,6 @@ import { subInstallationNameLabelsMap } from '@shared/components/doal/activity-l
 
 @Component({
   selector: 'app-preliminary-allocation-details-template',
-  standalone: false,
   templateUrl: './preliminary-allocation-details-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

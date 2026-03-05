@@ -14,7 +14,6 @@ describe('ApproachesAddTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-approaches-add-template
         (formSubmit)="onSubmit()"

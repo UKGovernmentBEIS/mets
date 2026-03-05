@@ -15,7 +15,6 @@ describe('EmissionSourcesDeleteTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-emission-source-delete-template
         (delete)="onDelete()"

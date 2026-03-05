@@ -18,6 +18,9 @@ import { transformFiles } from '../utils/operator-details-summary.util';
 
 @Component({
   selector: 'app-operator-details-subsidiary-list',
+  templateUrl: './operator-details-subsidiary-list.component.html',
+  styleUrl: './operator-details-subsidiary-list.component.scss',
+  standalone: true,
   imports: [
     GovukComponentsModule,
     RouterLinkWithHref,
@@ -27,8 +30,6 @@ import { transformFiles } from '../utils/operator-details-summary.util';
     FlightIdentificationTypePipe,
     OperatorDetailsActivitiesDescriptionPipe,
   ],
-  templateUrl: './operator-details-subsidiary-list.component.html',
-  styleUrl: './operator-details-subsidiary-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorDetailsSubsidiaryListComponent implements OnInit {

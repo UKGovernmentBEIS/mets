@@ -10,8 +10,8 @@ import { SubmittedComponent } from './submitted.component';
 import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
-  imports: [ActionSharedModule, AirActionSubmittedRoutingModule, AirSharedModule, SharedModule],
   declarations: [SubmittedComponent, SummaryComponent],
+  imports: [ActionSharedModule, AirActionSubmittedRoutingModule, AirSharedModule, SharedModule],
   providers: [AirImprovementTitlePipe],
 })
 export class AirActionSubmittedModule {}

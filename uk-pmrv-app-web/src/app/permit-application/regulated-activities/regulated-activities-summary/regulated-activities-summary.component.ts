@@ -6,7 +6,6 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-regulated-activities-summary',
-  standalone: false,
   template: `
     <app-permit-task
       [notification]="notification"

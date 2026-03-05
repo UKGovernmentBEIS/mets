@@ -19,6 +19,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-create-summary',
+  standalone: true,
   imports: [ReturnToLinkComponent, SharedModule],
   templateUrl: './create-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

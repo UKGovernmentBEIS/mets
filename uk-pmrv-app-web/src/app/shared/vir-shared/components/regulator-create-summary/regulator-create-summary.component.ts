@@ -5,7 +5,6 @@ import { RegulatorReviewResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-regulator-create-summary',
-  standalone: false,
   templateUrl: './regulator-create-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

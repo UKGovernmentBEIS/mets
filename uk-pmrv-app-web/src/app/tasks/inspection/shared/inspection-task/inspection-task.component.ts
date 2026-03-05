@@ -10,7 +10,6 @@ import { InspectionService } from '@tasks/inspection/core/inspection.service';
 
 @Component({
   selector: 'app-inspection-task',
-  imports: [SharedModule, RouterLink],
   template: `
     @if (heading) {
       <app-page-heading [caption]="caption">{{ heading }}</app-page-heading>
@@ -18,6 +17,8 @@ import { InspectionService } from '@tasks/inspection/core/inspection.service';
     <ng-content></ng-content>
     <a govukLink [routerLink]="returnToLink">Return to: {{ returnLinkText | async }}</a>
   `,
+  standalone: true,
+  imports: [SharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InspectionTaskComponent {

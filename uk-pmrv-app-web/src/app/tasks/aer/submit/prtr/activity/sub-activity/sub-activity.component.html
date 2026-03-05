@@ -3,7 +3,7 @@
     (formSubmit)="onSubmit()"
     [formGroup]="form"
     caption="Add an EPRTR activity"
-    heading="Select the activity"
+    [heading]="'Select the activity'"
     [hideSubmit]="(isEditable$ | async) === false"
     submitText="Continue">
     <ng-container *ngIf="(hasSubActivities$ | async) === false; else statical">
@@ -17,164 +17,164 @@
     <ng-template #statical>
       <div formControlName="activity" govuk-radio>
         @if ((sector$ | async) === '_2') {
-          <govuk-radio-option [label]="'_2_A' | i18nSelect: activityItemNameMap" value="_2_A"></govuk-radio-option>
-          <govuk-radio-option [label]="'_2_B' | i18nSelect: activityItemNameMap" value="_2_B"></govuk-radio-option>
+          <govuk-radio-option [label]="'_2_A' | i18nSelect: activityItemNameMap" [value]="'_2_A'"></govuk-radio-option>
+          <govuk-radio-option [label]="'_2_B' | i18nSelect: activityItemNameMap" [value]="'_2_B'"></govuk-radio-option>
 
-          <govuk-radio-option [label]="'_2_C' | i18nSelect: activityItemNameMap" value="_2_C">
+          <govuk-radio-option [label]="'_2_C' | i18nSelect: activityItemNameMap" [value]="'_2_C'">
             <ng-container govukConditionalContent>
               <div formControlName="subActivity_2_C" govuk-radio>
                 <govuk-radio-option
-                  value="_2_C_1"
+                  [value]="'_2_C_1'"
                   [label]="'_2_C_1' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_2_C_2"
+                  [value]="'_2_C_2'"
                   [label]="'_2_C_2' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_2_C_3"
+                  [value]="'_2_C_3'"
                   [label]="'_2_C_3' | i18nSelect: activityItemNameMap"></govuk-radio-option>
               </div>
             </ng-container>
           </govuk-radio-option>
 
-          <govuk-radio-option [label]="'_2_D' | i18nSelect: activityItemNameMap" value="_2_D"></govuk-radio-option>
+          <govuk-radio-option [label]="'_2_D' | i18nSelect: activityItemNameMap" [value]="'_2_D'"></govuk-radio-option>
 
-          <govuk-radio-option [label]="'_2_E' | i18nSelect: activityItemNameMap" value="_2_E">
+          <govuk-radio-option [label]="'_2_E' | i18nSelect: activityItemNameMap" [value]="'_2_E'">
             <ng-container govukConditionalContent>
               <div formControlName="subActivity_2_E" govuk-radio>
                 <govuk-radio-option
-                  value="_2_E_1"
+                  [value]="'_2_E_1'"
                   [label]="'_2_E_1' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_2_E_2"
+                  [value]="'_2_E_2'"
                   [label]="'_2_E_2' | i18nSelect: activityItemNameMap"></govuk-radio-option>
               </div>
             </ng-container>
           </govuk-radio-option>
 
-          <govuk-radio-option [label]="'_2_F' | i18nSelect: activityItemNameMap" value="_2_F"></govuk-radio-option>
+          <govuk-radio-option [label]="'_2_F' | i18nSelect: activityItemNameMap" [value]="'_2_F'"></govuk-radio-option>
         } @else if ((sector$ | async) === '_3') {
-          <govuk-radio-option [label]="'_3_A' | i18nSelect: activityItemNameMap" value="_3_A"></govuk-radio-option>
-          <govuk-radio-option [label]="'_3_B' | i18nSelect: activityItemNameMap" value="_3_B"></govuk-radio-option>
+          <govuk-radio-option [label]="'_3_A' | i18nSelect: activityItemNameMap" [value]="'_3_A'"></govuk-radio-option>
+          <govuk-radio-option [label]="'_3_B' | i18nSelect: activityItemNameMap" [value]="'_3_B'"></govuk-radio-option>
 
-          <govuk-radio-option [label]="'_3_C' | i18nSelect: activityItemNameMap" value="_3_C">
+          <govuk-radio-option [label]="'_3_C' | i18nSelect: activityItemNameMap" [value]="'_3_C'">
             <ng-container govukConditionalContent>
               <div formControlName="subActivity_3_C" govuk-radio>
                 <govuk-radio-option
-                  value="_3_C_1"
+                  [value]="'_3_C_1'"
                   [label]="'_3_C_1' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_3_C_2"
+                  [value]="'_3_C_2'"
                   [label]="'_3_C_2' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_3_C_3"
+                  [value]="'_3_C_3'"
                   [label]="'_3_C_3' | i18nSelect: activityItemNameMap"></govuk-radio-option>
               </div>
             </ng-container>
           </govuk-radio-option>
 
-          <govuk-radio-option [label]="'_3_D' | i18nSelect: activityItemNameMap" value="_3_D"></govuk-radio-option>
-          <govuk-radio-option [label]="'_3_E' | i18nSelect: activityItemNameMap" value="_3_E"></govuk-radio-option>
-          <govuk-radio-option [label]="'_3_F' | i18nSelect: activityItemNameMap" value="_3_F"></govuk-radio-option>
-          <govuk-radio-option [label]="'_3_G' | i18nSelect: activityItemNameMap" value="_3_G"></govuk-radio-option>
+          <govuk-radio-option [label]="'_3_D' | i18nSelect: activityItemNameMap" [value]="'_3_D'"></govuk-radio-option>
+          <govuk-radio-option [label]="'_3_E' | i18nSelect: activityItemNameMap" [value]="'_3_E'"></govuk-radio-option>
+          <govuk-radio-option [label]="'_3_F' | i18nSelect: activityItemNameMap" [value]="'_3_F'"></govuk-radio-option>
+          <govuk-radio-option [label]="'_3_G' | i18nSelect: activityItemNameMap" [value]="'_3_G'"></govuk-radio-option>
         } @else if ((sector$ | async) === '_4') {
-          <govuk-radio-option [label]="'_4_A' | i18nSelect: activityItemNameMap" value="_4_A">
+          <govuk-radio-option [label]="'_4_A' | i18nSelect: activityItemNameMap" [value]="'_4_A'">
             <ng-container govukConditionalContent>
               <div formControlName="subActivity_4_A" govuk-radio>
                 <govuk-radio-option
-                  value="_4_A_1"
+                  [value]="'_4_A_1'"
                   [label]="'_4_A_1' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_A_2"
+                  [value]="'_4_A_2'"
                   [label]="'_4_A_2' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_A_3"
+                  [value]="'_4_A_3'"
                   [label]="'_4_A_3' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_A_4"
+                  [value]="'_4_A_4'"
                   [label]="'_4_A_4' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_A_5"
+                  [value]="'_4_A_5'"
                   [label]="'_4_A_5' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_A_6"
+                  [value]="'_4_A_6'"
                   [label]="'_4_A_6' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_A_7"
+                  [value]="'_4_A_7'"
                   [label]="'_4_A_7' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_A_8"
+                  [value]="'_4_A_8'"
                   [label]="'_4_A_8' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_A_9"
+                  [value]="'_4_A_9'"
                   [label]="'_4_A_9' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_A_10"
+                  [value]="'_4_A_10'"
                   [label]="'_4_A_10' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_A_11"
+                  [value]="'_4_A_11'"
                   [label]="'_4_A_11' | i18nSelect: activityItemNameMap"></govuk-radio-option>
               </div>
             </ng-container>
           </govuk-radio-option>
 
-          <govuk-radio-option [label]="'_4_B' | i18nSelect: activityItemNameMap" value="_4_B">
+          <govuk-radio-option [label]="'_4_B' | i18nSelect: activityItemNameMap" [value]="'_4_B'">
             <ng-container govukConditionalContent>
               <div formControlName="subActivity_4_B" govuk-radio>
                 <govuk-radio-option
-                  value="_4_B_1"
+                  [value]="'_4_B_1'"
                   [label]="'_4_B_1' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_B_2"
+                  [value]="'_4_B_2'"
                   [label]="'_4_B_2' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_B_3"
+                  [value]="'_4_B_3'"
                   [label]="'_4_B_3' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_B_4"
+                  [value]="'_4_B_4'"
                   [label]="'_4_B_4' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_4_B_5"
+                  [value]="'_4_B_5'"
                   [label]="'_4_B_5' | i18nSelect: activityItemNameMap"></govuk-radio-option>
               </div>
             </ng-container>
           </govuk-radio-option>
 
-          <govuk-radio-option [label]="'_4_C' | i18nSelect: activityItemNameMap" value="_4_C"></govuk-radio-option>
-          <govuk-radio-option [label]="'_4_D' | i18nSelect: activityItemNameMap" value="_4_D"></govuk-radio-option>
-          <govuk-radio-option [label]="'_4_E' | i18nSelect: activityItemNameMap" value="_4_E"></govuk-radio-option>
-          <govuk-radio-option [label]="'_4_F' | i18nSelect: activityItemNameMap" value="_4_F"></govuk-radio-option>
+          <govuk-radio-option [label]="'_4_C' | i18nSelect: activityItemNameMap" [value]="'_4_C'"></govuk-radio-option>
+          <govuk-radio-option [label]="'_4_D' | i18nSelect: activityItemNameMap" [value]="'_4_D'"></govuk-radio-option>
+          <govuk-radio-option [label]="'_4_E' | i18nSelect: activityItemNameMap" [value]="'_4_E'"></govuk-radio-option>
+          <govuk-radio-option [label]="'_4_F' | i18nSelect: activityItemNameMap" [value]="'_4_F'"></govuk-radio-option>
         } @else if ((sector$ | async) === '_7') {
-          <govuk-radio-option [label]="'_7_A' | i18nSelect: activityItemNameMap" value="_7_A">
+          <govuk-radio-option [label]="'_7_A' | i18nSelect: activityItemNameMap" [value]="'_7_A'">
             <ng-container govukConditionalContent>
               <div formControlName="subActivity_7_A" govuk-radio>
                 <govuk-radio-option
-                  value="_7_A_1"
+                  [value]="'_7_A_1'"
                   [label]="'_7_A_1' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_7_A_2"
+                  [value]="'_7_A_2'"
                   [label]="'_7_A_2' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_7_A_3"
+                  [value]="'_7_A_3'"
                   [label]="'_7_A_3' | i18nSelect: activityItemNameMap"></govuk-radio-option>
               </div>
             </ng-container>
           </govuk-radio-option>
-          <govuk-radio-option [label]="'_7_B' | i18nSelect: activityItemNameMap" value="_7_B"></govuk-radio-option>
+          <govuk-radio-option [label]="'_7_B' | i18nSelect: activityItemNameMap" [value]="'_7_B'"></govuk-radio-option>
         } @else if ((sector$ | async) === '_8') {
-          <govuk-radio-option [label]="'_8_A' | i18nSelect: activityItemNameMap" value="_8_A"></govuk-radio-option>
-          <govuk-radio-option [label]="'_8_B' | i18nSelect: activityItemNameMap" value="_8_B">
+          <govuk-radio-option [label]="'_8_A' | i18nSelect: activityItemNameMap" [value]="'_8_A'"></govuk-radio-option>
+          <govuk-radio-option [label]="'_8_B' | i18nSelect: activityItemNameMap" [value]="'_8_B'">
             <ng-container govukConditionalContent>
               <div formControlName="subActivity_8_B" govuk-radio>
                 <govuk-radio-option
-                  value="_8_B_1"
+                  [value]="'_8_B_1'"
                   [label]="'_8_B_1' | i18nSelect: activityItemNameMap"></govuk-radio-option>
                 <govuk-radio-option
-                  value="_8_B_2"
+                  [value]="'_8_B_2'"
                   [label]="'_8_B_2' | i18nSelect: activityItemNameMap"></govuk-radio-option>
               </div>
             </ng-container>
           </govuk-radio-option>
-          <govuk-radio-option [label]="'_8_C' | i18nSelect: activityItemNameMap" value="_8_C"></govuk-radio-option>
+          <govuk-radio-option [label]="'_8_C' | i18nSelect: activityItemNameMap" [value]="'_8_C'"></govuk-radio-option>
         }
       </div>
     </ng-template>

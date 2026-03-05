@@ -14,6 +14,7 @@ import { AbbreviationsFormProvider } from '../abbreviations-form.provider';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-abbreviations-form',
+  standalone: true,
   imports: [GovukComponentsModule, NgIf, NgFor, SharedModule],
   templateUrl: './abbreviations-form.component.html',
   providers: [DestroySubject],

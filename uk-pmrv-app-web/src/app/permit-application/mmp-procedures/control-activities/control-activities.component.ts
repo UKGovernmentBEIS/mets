@@ -14,10 +14,9 @@ import { ControlActivitiesFormProvider } from './control-activities-form.provide
 
 @Component({
   selector: 'app-control-activities',
-  standalone: false,
   templateUrl: './control-activities.component.html',
-  providers: [ControlActivitiesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ControlActivitiesFormProvider],
 })
 export class ControlActivitiesComponent implements PendingRequest {
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));

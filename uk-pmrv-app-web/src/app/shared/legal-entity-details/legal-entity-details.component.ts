@@ -25,10 +25,9 @@ import { InstallationAccountApplicationStore } from '../../installation-account-
 
 @Component({
   selector: 'app-legal-entity-details',
-  standalone: false,
   templateUrl: './legal-entity-details.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class LegalEntityDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('noRefNoReason', { read: ElementRef }) noRefNoReason: ElementRef;

@@ -6,7 +6,6 @@ import { articleReasonItemsLabelsMap } from '../determination-proceed-authority.
 
 @Component({
   selector: 'app-determination-proceed-authority-reason-template',
-  standalone: false,
   templateUrl: './determination-proceed-authority-reason-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { BDRS2BaselineSummaryTemplateComponent } from '@shared/components/bdrs2/baseline-summary-template/baseline-summary-template.component';
@@ -13,9 +13,10 @@ import { BDRS2ApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-summary',
-  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule, BDRS2BaselineSummaryTemplateComponent],
-  standalone: true,
   templateUrl: './summary.component.html',
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule, RouterLink, BDRS2BaselineSummaryTemplateComponent],
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BDRS2SummaryComponent {

@@ -9,7 +9,6 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 @Component({
   selector: 'app-peer-review',
-  standalone: false,
   templateUrl: './peer-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

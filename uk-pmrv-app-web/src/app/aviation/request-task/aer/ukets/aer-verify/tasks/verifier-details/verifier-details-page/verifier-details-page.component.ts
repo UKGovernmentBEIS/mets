@@ -24,8 +24,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aer-verifier-details-page',
-  imports: [SharedModule, ReturnToLinkComponent, AerVerifierDetailsGroupFormComponent],
   templateUrl: './verifier-details-page.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent, AerVerifierDetailsGroupFormComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

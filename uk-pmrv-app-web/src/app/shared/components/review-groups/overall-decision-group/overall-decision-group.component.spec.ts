@@ -28,7 +28,6 @@ describe('OverallDecisionGroupComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-overall-decision-group
         [isEditable]="isEditable"

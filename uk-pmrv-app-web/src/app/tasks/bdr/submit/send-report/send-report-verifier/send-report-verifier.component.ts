@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { first, iif, map, of, switchMap, tap, withLatestFrom } from 'rxjs';
 
@@ -21,7 +21,6 @@ import {
 
 @Component({
   selector: 'app-send-report-verifier',
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   template: `
     <app-bdr-task>
       <app-page-heading>Send report for verification</app-page-heading>
@@ -39,8 +38,10 @@ import {
       <app-bdr-return-link returnLink="../../"></app-bdr-return-link>
     </app-bdr-task>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, RouterLink],
+  providers: [DestroySubject],
 })
 export class SendReportVerifierComponent {
   assignedVerifier$ = this.bdrService.requestAccountId$.pipe(

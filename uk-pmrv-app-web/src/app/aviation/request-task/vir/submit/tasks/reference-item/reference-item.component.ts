@@ -24,6 +24,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-reference-item',
+  standalone: true,
   imports: [AsyncPipe, VirSharedModule, ReturnToLinkComponent, NgIf],
   template: `
     <app-reference-item-form

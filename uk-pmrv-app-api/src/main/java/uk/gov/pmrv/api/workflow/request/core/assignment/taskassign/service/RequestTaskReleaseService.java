@@ -37,7 +37,7 @@ public class RequestTaskReleaseService {
         // Release tasks not Supporting per user role type
         List<RequestTask> requestTasksToRelease = new ArrayList<>();
         requestTasksToRelease.add(task);
-        if(task.getType().doesCascadeReassignment()) {
+        if(!task.getType().isSupporting()) {
             requestTasksToRelease.addAll(getAdditionalTasksToRelease(task, roleType));
         }
 
@@ -48,7 +48,7 @@ public class RequestTaskReleaseService {
     private List<RequestTask> getAdditionalTasksToRelease(RequestTask task, String roleType) {
         return requestTaskService
                 .findTasksByRequestIdAndRoleType(task.getRequest().getId(), roleType).stream()
-                .filter(requestTask -> requestTask.getType().doesCascadeReassignment()
+                .filter(requestTask -> !requestTask.getType().isSupporting()
                         && !requestTask.getId().equals(task.getId()))
                 .collect(Collectors.toList());
     }

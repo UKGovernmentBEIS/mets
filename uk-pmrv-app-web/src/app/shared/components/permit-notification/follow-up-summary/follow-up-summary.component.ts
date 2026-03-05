@@ -6,7 +6,6 @@ import { SummaryList } from '@tasks/permit-notification/follow-up/model/model';
 
 @Component({
   selector: 'app-follow-up-summary',
-  standalone: false,
   templateUrl: './follow-up-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

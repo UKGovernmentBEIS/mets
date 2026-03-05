@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { BackLinkComponent } from './back-link.component';
 
 describe('BackLinkComponent', () => {
-  @Component({ standalone: false, template: '<govuk-back-link [link]="link" [route]="route" />' })
+  @Component({ template: '<govuk-back-link [link]="link" [route]="route"></govuk-back-link>' })
   class MockParentComponent {
     link = '../back';
     route = inject(ActivatedRoute).snapshot;

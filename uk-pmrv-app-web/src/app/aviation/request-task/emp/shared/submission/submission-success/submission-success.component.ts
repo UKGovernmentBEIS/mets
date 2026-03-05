@@ -9,6 +9,7 @@ import { EMP_SUBMIT_TASK_TYPES, VARIATION_OPERATOR_LED_SUBMIT_TASK_TYPES } from 
 
 @Component({
   selector: 'app-submission-success',
+  standalone: true,
   imports: [SharedModule, RouterLink],
   templateUrl: './submission-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

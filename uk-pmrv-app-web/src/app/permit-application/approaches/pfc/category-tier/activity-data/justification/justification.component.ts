@@ -16,10 +16,9 @@ import { justificationFormProvider } from './justification-form.provider';
 
 @Component({
   selector: 'app-justification',
-  standalone: false,
   templateUrl: './justification.component.html',
-  providers: [justificationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [justificationFormProvider],
 })
 export class JustificationComponent implements PendingRequest {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

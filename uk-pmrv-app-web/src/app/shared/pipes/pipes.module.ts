@@ -81,12 +81,12 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
 @NgModule({
   imports: [
     CessationScopePipePipe,
+    FreeAllocationTypePipe,
     OverallDecisionTypePipe,
     QuarterNamePipe,
     ReviewBdrAlrGroupDecisionPipe,
     StatusApplicationTypePipe,
     TaskTypeToBreadcrumbPipe,
-    FreeAllocationTypePipe,
   ],
   declarations: [
     AccountStatusPipe,

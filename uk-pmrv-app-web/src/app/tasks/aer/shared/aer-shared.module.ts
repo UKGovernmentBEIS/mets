@@ -21,7 +21,6 @@ import { TaskPipe } from './pipes/task.pipe';
 import { TaskStatusPipe } from './pipes/task-status.pipe';
 
 @NgModule({
-  imports: [RouterModule, SharedModule, TaskSharedModule],
   declarations: [
     AerInherentSummaryTemplateComponent,
     AerReviewGroupDecisionComponent,
@@ -55,5 +54,6 @@ import { TaskStatusPipe } from './pipes/task-status.pipe';
     TiersReasonComponent,
     VerificationReviewGroupDecisionComponent,
   ],
+  imports: [RouterModule, SharedModule, TaskSharedModule],
 })
 export class AerSharedModule {}

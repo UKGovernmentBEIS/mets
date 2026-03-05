@@ -20,6 +20,7 @@ import { EmpTaskKey, requestTaskQuery, RequestTaskStore, SectionsCompletedMap } 
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-emp-variation-regulator-led-decision-group',
+  standalone: true,
   imports: [
     SharedModule,
     EmpVariationRegulatorLedDecisionGroupFormComponent,

@@ -8,7 +8,6 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-installation-details',
-  standalone: false,
   template: `
     <app-action-task header="Installation and operator details" [breadcrumb]="true">
       <app-installation-details-summary

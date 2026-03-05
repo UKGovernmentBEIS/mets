@@ -4,7 +4,6 @@ import { EmissionSource } from 'pmrv-api';
 
 @Component({
   selector: 'app-emission-source-delete-template',
-  standalone: false,
   template: `
     <ng-container *ngIf="emissionSource">
       <app-page-heading size="xl">
@@ -20,12 +19,12 @@ import { EmissionSource } from 'pmrv-api';
       </div>
     </ng-container>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .nowrap {
       white-space: nowrap;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionSourceDeleteTemplateComponent {
   @Input() emissionSource: EmissionSource;

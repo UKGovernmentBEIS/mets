@@ -6,7 +6,6 @@ import { AerMonitoringApproachEmissions, PermitMonitoringApproachSection } from 
 
 @Component({
   selector: 'app-approaches-used-summary-template',
-  standalone: false,
   template: `
     <dl govuk-summary-list [class]="cssClass">
       <div govukSummaryListRow>

@@ -27,8 +27,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-verify-emissions-reduction-claim-summary',
-  imports: [SharedModule, ReturnToLinkComponent, AerVerificationReviewDecisionGroupComponent],
   templateUrl: './verify-emissions-reduction-claim-summary.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent, AerVerificationReviewDecisionGroupComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class VerifyEmissionsReductionClaimSummaryComponent {

@@ -11,7 +11,6 @@ import { InherentCo2RoutingModule } from '@tasks/aer/submit/inherent-co2/inheren
 import { InstrumentsComponent } from '@tasks/aer/submit/inherent-co2/instruments/instruments.component';
 
 @NgModule({
-  imports: [AerSharedModule, InherentCo2RoutingModule, SharedModule],
   declarations: [
     DeleteComponent,
     DetailsComponent,
@@ -20,5 +19,6 @@ import { InstrumentsComponent } from '@tasks/aer/submit/inherent-co2/instruments
     InherentCo2Component,
     InstrumentsComponent,
   ],
+  imports: [AerSharedModule, InherentCo2RoutingModule, SharedModule],
 })
 export class InherentCo2Module {}

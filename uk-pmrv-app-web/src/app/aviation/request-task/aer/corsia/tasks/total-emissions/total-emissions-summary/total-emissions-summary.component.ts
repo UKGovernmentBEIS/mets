@@ -20,8 +20,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-total-emissions-summary',
-  imports: [SharedModule, ReturnToLinkComponent, RequestTaskModule, TotalEmissionsSchemeCorsiaComponent],
   templateUrl: './total-emissions-summary.component.html',
+  imports: [SharedModule, ReturnToLinkComponent, RequestTaskModule, TotalEmissionsSchemeCorsiaComponent],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsSummaryComponent {

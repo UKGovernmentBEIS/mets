@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { SharedPermitModule } from '@permit-application/shared/shared-permit.module';
 import { PermitApplicationState } from '@permit-application/store/permit-application.state';
@@ -16,14 +16,15 @@ interface ViewModel {
 
 @Component({
   selector: 'app-mmp-physical-parts-list',
-  imports: [PhysicalPartsTableComponent, SharedPermitModule, SharedModule],
   templateUrl: './physical-parts-list.component.html',
+  standalone: true,
+  imports: [PhysicalPartsTableComponent, SharedPermitModule, SharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhysicalPartsListComponent {
-  readonly state = toSignal(this.store.asObservable());
+  state = toSignal(this.store.asObservable());
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const isEditable = this.state().isEditable;
 
     return {

@@ -4,7 +4,6 @@ import { DoalProceedToAuthorityDetermination } from 'pmrv-api';
 
 @Component({
   selector: 'app-doal-determination-proceed-authority-summary-template',
-  standalone: false,
   templateUrl: './determination-proceed-authority-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -15,7 +15,6 @@ import { SourceStreamsTableComponent } from './source-streams-table.component';
 
 describe('SourceStreamsTableComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <app-source-streams-table [data]="data" [isEditable]="isEditable"></app-source-streams-table>
     `,

@@ -11,7 +11,6 @@ import { createTablePage, miReportTypeDescriptionMap, miReportTypeLinkMap } from
 
 @Component({
   selector: 'app-mi-reports',
-  standalone: false,
   templateUrl: './mi-reports.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

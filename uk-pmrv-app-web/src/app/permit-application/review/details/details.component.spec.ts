@@ -38,7 +38,6 @@ describe('DetailsComponent', () => {
 
   @Component({
     selector: 'app-review-group-decision-container',
-    standalone: false,
     template: `
       <div>
         Review group decision component.

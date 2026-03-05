@@ -39,7 +39,6 @@ describe('ActionTaskComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-action-task [breadcrumb]="breadcrumb" header="Abbreviations and definitions">
         <h2 app-summary-header changeRoute=".." class="govuk-heading-m">
@@ -63,6 +62,7 @@ describe('ActionTaskComponent', () => {
   const createComponent = () => {
     fixture = TestBed.createComponent(TestComponent);
     hostComponent = fixture.componentInstance;
+    fixture.nativeElement;
     page = new Page(fixture);
     fixture.detectChanges();
   };

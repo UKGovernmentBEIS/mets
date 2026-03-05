@@ -48,8 +48,7 @@
       <dt govukSummaryListRowKey>National accreditation body</dt>
       <dd govukSummaryListRowValue>
         <span *ngFor="let emissionScheme of verificationReport.verificationBodyDetails.emissionTradingSchemes">
-          {{ emissionScheme | verificationBodyType }}
-          <br />
+          {{ emissionScheme | verificationBodyType }}<br />
         </span>
       </dd>
     </div>
@@ -66,7 +65,7 @@
           <dt govukSummaryListRowKey>Name</dt>
           <dd govukSummaryListRowValue>{{ verificationReport.verifierContact.name }}</dd>
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
           </dd>
         </div>
 
@@ -74,7 +73,7 @@
           <dt govukSummaryListRowKey>Email</dt>
           <dd govukSummaryListRowValue>{{ verificationReport.verifierContact.email }}</dd>
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
           </dd>
         </div>
 
@@ -82,7 +81,7 @@
           <dt govukSummaryListRowKey>Telephone number</dt>
           <dd govukSummaryListRowValue>{{ verificationReport.verifierContact.phoneNumber }}</dd>
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
           </dd>
         </div>
       </dl>
@@ -98,7 +97,7 @@
           <dt govukSummaryListRowKey>Lead ETS Auditor</dt>
           <dd govukSummaryListRowValue>{{ verificationReport.verificationTeamDetails.leadEtsAuditor }}</dd>
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
           </dd>
         </div>
 
@@ -109,7 +108,7 @@
           </dd>
 
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
           </dd>
         </div>
 
@@ -120,7 +119,7 @@
           </dd>
 
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
           </dd>
         </div>
 
@@ -128,7 +127,7 @@
           <dt govukSummaryListRowKey>Independent Reviewer</dt>
           <dd govukSummaryListRowValue>{{ verificationReport.verificationTeamDetails.independentReviewer }}</dd>
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
           </dd>
         </div>
 
@@ -139,7 +138,7 @@
           </dd>
 
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
           </dd>
         </div>
 
@@ -147,7 +146,7 @@
           <dt govukSummaryListRowKey>Name of authorised signatory</dt>
           <dd govukSummaryListRowValue>{{ verificationReport.verificationTeamDetails.authorisedSignatoryName }}</dd>
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
           </dd>
         </div>
       </dl>

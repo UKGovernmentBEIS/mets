@@ -13,10 +13,9 @@ import { PermitSurrenderStore } from '../store/permit-surrender.store';
 
 @Component({
   selector: 'app-permit-surrender-task-list',
-  standalone: false,
   templateUrl: './permit-surrender-task-list.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class PermitSurrenderTaskListComponent implements OnInit {
   navigationState = { returnUrl: this.router.url };

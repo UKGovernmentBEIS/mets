@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { AerRegulatedActivity } from 'pmrv-api';
 
-@Pipe({
-  name: 'crfActivityItemName',
-  standalone: false,
-})
+@Pipe({ name: 'crfActivityItemName' })
 export class CrfActivityItemNamePipe implements PipeTransform {
   transform(activityItem?: AerRegulatedActivity['energyCrf'] | AerRegulatedActivity['industrialCrf']): string {
     switch (activityItem) {

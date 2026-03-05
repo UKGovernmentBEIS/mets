@@ -9,8 +9,9 @@ import { alrArticleReasonItemsLabelsMap } from '../alr-determination-proceed-aut
 
 @Component({
   selector: 'app-alr-determination-proceed-authority-summary-template',
-  imports: [SharedModule, RouterLink],
   templateUrl: './determination-proceed-authority-summary-template.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeterminationProceedAuthoritySummaryTemplateComponent {

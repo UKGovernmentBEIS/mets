@@ -123,7 +123,7 @@ describe('SendReportVerificationComponent', () => {
     expect(page.panelBody.textContent.trim()).toEqual('Your reference code is: AEM00055-2022');
     expect(page.heading3.textContent.trim()).toEqual('What happens next');
     expect(page.paragraphsContent).toEqual([
-      'Your report has been sent to Verifier. You can recall your report at any time before Verifier returns it to you.  Verifier will return the report to you once they have added an opinion statement. You will then be able to submit your report to the .',
+      'Your report has been sent to Verifier. You can recall your report at any time before Verifier returns it to you. Verifier will return the report to you once they have added an opinion statement. You will then be able to submit your report to the .',
     ]);
     expect(page.submitButton).toBeFalsy();
   });

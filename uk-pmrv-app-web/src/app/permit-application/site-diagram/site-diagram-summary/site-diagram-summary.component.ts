@@ -6,7 +6,6 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-site-diagram-summary',
-  standalone: false,
   templateUrl: './site-diagram-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

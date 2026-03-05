@@ -10,7 +10,6 @@ import { CommonTasksStore } from '../../store/common-tasks.store';
 
 @Component({
   selector: 'app-verification-wait',
-  standalone: false,
   templateUrl: './verification-wait.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

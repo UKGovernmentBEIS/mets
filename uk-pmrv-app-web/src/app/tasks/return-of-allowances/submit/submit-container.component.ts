@@ -10,7 +10,6 @@ import { resolveSectionStatus } from '../core/section-status';
 
 @Component({
   selector: 'app-submit-container',
-  standalone: false,
   templateUrl: './submit-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

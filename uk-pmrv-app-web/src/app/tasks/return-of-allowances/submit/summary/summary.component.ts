@@ -14,10 +14,9 @@ import { summaryFormFactory } from './summary-form.provider';
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
-  providers: [summaryFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [summaryFormFactory],
 })
 export class SummaryComponent implements OnInit {
   notification = this.router.getCurrentNavigation()?.extras?.state?.notification;

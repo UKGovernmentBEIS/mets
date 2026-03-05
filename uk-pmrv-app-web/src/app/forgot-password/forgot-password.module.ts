@@ -12,7 +12,6 @@ import { SubmitEmailComponent } from './submit-email/submit-email.component';
 import { SubmitOtpComponent } from './submit-otp/submit-otp.component';
 
 @NgModule({
-  imports: [CommonModule, ForgotPasswordRoutingModule, SharedModule, SharedUserModule],
   declarations: [
     EmailLinkInvalidComponent,
     EmailSentComponent,
@@ -20,5 +19,6 @@ import { SubmitOtpComponent } from './submit-otp/submit-otp.component';
     SubmitEmailComponent,
     SubmitOtpComponent,
   ],
+  imports: [CommonModule, ForgotPasswordRoutingModule, SharedModule, SharedUserModule],
 })
 export class ForgotPasswordModule {}

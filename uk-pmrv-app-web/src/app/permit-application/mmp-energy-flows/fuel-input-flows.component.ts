@@ -21,11 +21,12 @@ import { fuelInputFlowsAddFormFactory } from './fuel-input-flows-form.provider';
 
 @Component({
   selector: 'app-fuel-input-flows',
-  imports: [SharedModule, SharedPermitModule, IncludeAnswerDetailsComponent],
   templateUrl: './fuel-input-flows.component.html',
-  styleUrl: './fuel-input-flows.component.scss',
+  standalone: true,
+  imports: [SharedModule, SharedPermitModule, IncludeAnswerDetailsComponent],
   providers: [fuelInputFlowsAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './fuel-input-flows.component.scss',
 })
 export class FuelInputFlowsComponent implements PendingRequest {
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;

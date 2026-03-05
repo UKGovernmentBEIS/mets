@@ -31,7 +31,6 @@ const standaloneComponents: Type<any>[] = [
 ];
 
 @NgModule({
-  imports: [AccountsRoutingModule, SharedModule, SharedUserModule, ...standaloneComponents],
   declarations: [
     AccountComponent,
     AddressComponent,
@@ -48,6 +47,7 @@ const standaloneComponents: Type<any>[] = [
     TriggerAirComponent,
     TriggerDoalComponent,
   ],
+  imports: [AccountsRoutingModule, SharedModule, SharedUserModule, ...standaloneComponents],
   providers: [ItemLinkPipe, legalEntityFormRegFactory],
 })
 export class AccountsModule {}

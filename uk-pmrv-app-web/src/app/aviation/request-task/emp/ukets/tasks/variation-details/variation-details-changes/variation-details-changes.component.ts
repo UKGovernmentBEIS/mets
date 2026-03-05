@@ -23,6 +23,7 @@ import { checkboxSectionsValidator, VariationDetailsFormProvider } from '../vari
 
 @Component({
   selector: 'app-variation-details-changes',
+  standalone: true,
   imports: [RouterModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './variation-details-changes.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

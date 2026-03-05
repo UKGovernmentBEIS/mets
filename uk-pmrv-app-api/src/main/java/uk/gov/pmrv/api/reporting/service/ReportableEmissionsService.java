@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.Year;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -68,7 +69,6 @@ public class ReportableEmissionsService {
         		.reportableEmissions(params.getReportableEmissions())
         		.year(params.getYear())
                 .isFromRegulator(params.isFromRegulator())
-                .requestId(params.getRequestId())
         		.build());
 	}
 }

@@ -17,18 +17,12 @@ import {
   subInstallationsNotExists,
 } from './physical-parts-list/physical-parts-list';
 
-const hasOneSubinstallationWithPhysicalParts = (state: PermitApplicationState): boolean => {
-  const methodTask = state.permit.monitoringMethodologyPlans?.digitizedPlan?.methodTask;
-  return getCompletedSubinstallationTypes(state).length === 1 && methodTask?.physicalPartsAndUnitsAnswer !== undefined;
-};
-
 export function mmpMethodsStatus(state: PermitApplicationState): TaskItemStatus {
   const digitizedPlan = state.permit?.monitoringMethodologyPlans?.digitizedPlan;
   const mmpMethods = digitizedPlan?.methodTask;
-  const hasError =
-    mmpMethods?.connections
-      ?.map((connection) => subInstallationsNotExists(connection.itemId, state))
-      .find((error) => error) || hasOneSubinstallationWithPhysicalParts(state);
+  const hasError = mmpMethods?.connections
+    ?.map((connection) => subInstallationsNotExists(connection.itemId, state))
+    .find((error) => error);
 
   return state.permitSectionsCompleted?.mmpMethods?.[0] && isMethodsWizardCompleted(state) && !hasError
     ? 'complete'

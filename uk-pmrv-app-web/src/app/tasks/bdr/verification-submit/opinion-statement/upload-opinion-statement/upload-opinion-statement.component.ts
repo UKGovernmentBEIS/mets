@@ -17,8 +17,9 @@ import { opinionStatementFormProvider } from './upload-opinion-statement-form.pr
 
 @Component({
   selector: 'app-upload-opinion-statement',
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   templateUrl: './upload-opinion-statement.component.html',
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   providers: [opinionStatementFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

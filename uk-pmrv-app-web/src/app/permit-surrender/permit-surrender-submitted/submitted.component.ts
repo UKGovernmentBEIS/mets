@@ -5,7 +5,6 @@ import { PermitSurrenderStore } from '../store/permit-surrender.store';
 
 @Component({
   selector: 'app-submitted',
-  standalone: false,
   template: `
     <app-request-action-heading
       headerText="Surrender your permit"

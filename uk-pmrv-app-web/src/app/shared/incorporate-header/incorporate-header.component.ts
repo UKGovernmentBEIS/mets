@@ -19,7 +19,6 @@ import { IncorporateHeaderStore } from './store/incorporate-header.store';
 
 @Component({
   selector: 'app-incorporate-header',
-  standalone: false,
   template: `
     <div *ngIf="(currentDomain$ | async) === 'INSTALLATION'; else aviationHeader">
       <div class="govuk-phase-banner" *ngIf="accountDetails$ | async as accountDetails">

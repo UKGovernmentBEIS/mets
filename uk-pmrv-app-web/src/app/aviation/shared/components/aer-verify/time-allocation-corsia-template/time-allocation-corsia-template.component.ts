@@ -7,8 +7,9 @@ import { AviationAerCorsiaTimeAllocationScope } from 'pmrv-api';
 
 @Component({
   selector: 'app-time-allocation-corsia-template',
-  imports: [SharedModule, RouterLink],
   templateUrl: './time-allocation-corsia-template.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimeAllocationCorsiaTemplateComponent {

@@ -15,10 +15,9 @@ export interface FlightProceduresFormModel {
 }
 
 @Injectable()
-export class FlightProceduresFormProvider implements TaskFormProvider<
-  EmpFlightAndAircraftProcedures,
-  FlightProceduresFormModel
-> {
+export class FlightProceduresFormProvider
+  implements TaskFormProvider<EmpFlightAndAircraftProcedures, FlightProceduresFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup<FlightProceduresFormModel>;
 

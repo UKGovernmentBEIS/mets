@@ -8,7 +8,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-activity-level-report',
-  standalone: false,
   template: `
     <app-page-heading>Activity level report</app-page-heading>
     <app-activity-level-report-group

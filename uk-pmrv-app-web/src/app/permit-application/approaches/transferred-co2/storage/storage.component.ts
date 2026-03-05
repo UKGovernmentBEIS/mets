@@ -14,10 +14,9 @@ import { storageFormProvider } from './storage-form.provider';
 
 @Component({
   selector: 'app-storage',
-  standalone: false,
   templateUrl: './storage.component.html',
-  providers: [storageFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [storageFormProvider],
 })
 export class StorageComponent {
   taskKey$: Observable<string> = this.route.data.pipe(map((x) => x?.taskKey));

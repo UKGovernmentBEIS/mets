@@ -18,7 +18,6 @@ import { SummaryDetailsComponent } from './confirm/summary/summary-details.compo
 import { NotifyOperatorComponent } from './notify-operator/notify-operator.component';
 
 @NgModule({
-  imports: [CessationRoutingModule, SharedModule, SharedPermitSurrenderModule],
   declarations: [
     AllowancesDateComponent,
     AllowancesNumberComponent,
@@ -34,5 +33,6 @@ import { NotifyOperatorComponent } from './notify-operator/notify-operator.compo
     SummaryComponent,
     SummaryDetailsComponent,
   ],
+  imports: [CessationRoutingModule, SharedModule, SharedPermitSurrenderModule],
 })
 export class CessationModule {}

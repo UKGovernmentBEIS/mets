@@ -14,9 +14,10 @@ import { EmissionSourcesFormModel } from '../emission-sources-form.model';
 
 @Component({
   selector: 'app-monitoring-methodology',
-  imports: [RouterModule, SharedModule, ReturnToLinkComponent, ProcedureFormComponent],
   templateUrl: './monitoring-methodology.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterModule, SharedModule, ReturnToLinkComponent, ProcedureFormComponent],
 })
 export class MonitoringMethodologyComponent {
   emissionSourcesForm = inject<FormGroup<EmissionSourcesFormModel>>(TASK_FORM_PROVIDER);

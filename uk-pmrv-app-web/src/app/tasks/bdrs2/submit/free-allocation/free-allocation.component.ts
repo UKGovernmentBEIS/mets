@@ -5,7 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
 import { SharedModule } from '@shared/shared.module';
-import { BDRS2_TASK_FORM, BdrS2Service } from '@tasks/bdrs2/core';
+import { BDRS2_TASK_FORM } from '@tasks/bdrs2/core';
+import { BdrS2Service } from '@tasks/bdrs2/core';
 import { BdrS2TaskSharedModule } from '@tasks/bdrs2/shared/bdrs2-task-shared.module';
 import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 
@@ -15,10 +16,10 @@ import { freeAllocationFormProvider } from './free-allocation-form.provider';
 
 @Component({
   selector: 'app-free-allocation',
-  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule],
-  standalone: true,
   templateUrl: './free-allocation.component.html',
   providers: [freeAllocationFormProvider],
+  standalone: true,
+  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FreeAllocationComponent implements PendingRequest {

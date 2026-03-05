@@ -11,6 +11,7 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-emissions-reduction-claim',
+  standalone: true,
   imports: [ReturnToLinkComponent, SharedModule, RouterLink, RouterLinkActive],
   templateUrl: './emissions-reduction-claim.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

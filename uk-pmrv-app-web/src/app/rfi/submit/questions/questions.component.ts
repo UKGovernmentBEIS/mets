@@ -22,10 +22,9 @@ import { createAnotherQuestion, questionFormProvider, RFI_FORM } from './questio
 
 @Component({
   selector: 'app-questions',
-  standalone: false,
   templateUrl: './questions.component.html',
-  providers: [DestroySubject, questionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject, questionFormProvider],
 })
 export class QuestionsComponent implements AfterViewInit, AfterContentChecked {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;

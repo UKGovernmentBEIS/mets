@@ -9,7 +9,6 @@ import { CommonActionsStore } from '../../../store/common-actions.store';
 
 @Component({
   selector: 'app-noi-peer-review-decision',
-  standalone: false,
   templateUrl: './peer-review-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

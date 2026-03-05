@@ -10,7 +10,6 @@ import { VirService } from '@tasks/vir/core/vir.service';
 
 @Component({
   selector: 'app-send-report',
-  standalone: false,
   templateUrl: './send-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

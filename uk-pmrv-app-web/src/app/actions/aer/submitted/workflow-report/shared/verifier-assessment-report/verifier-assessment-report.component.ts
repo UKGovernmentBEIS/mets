@@ -8,7 +8,6 @@ import { AerService } from '../../../../core/aer.service';
 
 @Component({
   selector: 'app-verifier-assessment-report',
-  standalone: false,
   templateUrl: './verifier-assessment-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

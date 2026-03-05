@@ -21,6 +21,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-independent-review',
+  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,

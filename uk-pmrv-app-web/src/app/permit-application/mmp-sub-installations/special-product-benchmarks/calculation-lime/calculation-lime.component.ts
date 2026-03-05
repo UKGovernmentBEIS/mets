@@ -18,10 +18,9 @@ import { calculationLimeAddFormFactory } from './calculation-lime-form.provider'
 
 @Component({
   selector: 'app-calculation-lime',
-  standalone: false,
   templateUrl: './calculation-lime.component.html',
-  providers: [calculationLimeAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [calculationLimeAddFormFactory],
 })
 export class CalculationLimeComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

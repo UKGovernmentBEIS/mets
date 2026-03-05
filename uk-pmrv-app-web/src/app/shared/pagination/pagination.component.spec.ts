@@ -14,7 +14,6 @@ describe('PaginationComponent', () => {
   let route: ActivatedRoute;
 
   @Component({
-    standalone: false,
     template: `
       <app-pagination
         [count]="count"
@@ -28,7 +27,7 @@ describe('PaginationComponent', () => {
     currentPage;
   }
 
-  @Component({ standalone: false, template: '<router-outlet></router-outlet>' })
+  @Component({ template: '<router-outlet></router-outlet>' })
   class RouterComponent {}
 
   beforeEach(async () => {

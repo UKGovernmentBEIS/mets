@@ -15,7 +15,6 @@ describe('ComplianceMonitoringGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-compliance-monitoring-group
         [isEditable]="isEditable"

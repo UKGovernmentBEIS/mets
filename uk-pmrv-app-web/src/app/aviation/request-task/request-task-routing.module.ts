@@ -227,9 +227,9 @@ const routes: Routes = [
           {
             path: '3year-offsetting-requirements',
             loadChildren: () =>
-              import('@aviation/request-task/aer-corsia-3year-period-offsetting/aer-corsia-3year-period-offsetting.routes').then(
-                (r) => r.AER_CORSIA_3YEAR_PERIOD_OFFSETTING_ROUTES,
-              ),
+              import(
+                '@aviation/request-task/aer-corsia-3year-period-offsetting/aer-corsia-3year-period-offsetting.routes'
+              ).then((r) => r.AER_CORSIA_3YEAR_PERIOD_OFFSETTING_ROUTES),
           },
           {
             path: 'manual-push-to-registry',

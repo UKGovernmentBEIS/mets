@@ -8,8 +8,9 @@ import { GovukComponentsModule } from 'govuk-components';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-ets-compliance-rules-form',
-  imports: [GovukComponentsModule, ReactiveFormsModule],
   templateUrl: './ets-compliance-rules-form.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, ReactiveFormsModule],
   viewProviders: [existingControlContainer],
 })
 export class EtsComplianceRulesFormComponent {}

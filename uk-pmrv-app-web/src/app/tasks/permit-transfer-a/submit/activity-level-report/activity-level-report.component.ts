@@ -15,6 +15,7 @@ import { activityLevelReportFormProvider } from './activity-level-report-form.pr
 
 @Component({
   selector: 'app-transfer-a-activity-level-report',
+  standalone: true,
   imports: [SharedModule, RouterLink],
   template: `
     <app-wizard-step
@@ -32,8 +33,8 @@ import { activityLevelReportFormProvider } from './activity-level-report-form.pr
 
     <a govukLink routerLink="..">Return to: Permit transfer application</a>
   `,
-  providers: [activityLevelReportFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [activityLevelReportFormProvider],
 })
 export class TransferAActivityLevelReportComponent {
   hideSubmit$ = this.permitTransferAService.isEditable$.pipe(map((isEditable) => !isEditable));

@@ -5,10 +5,7 @@ import { catchError, EmptyError, of, take, tap } from 'rxjs';
 import { CountryService } from '../../core/services/country.service';
 
 // eslint-disable-next-line @angular-eslint/no-pipe-impure
-@Pipe({
-  name: 'country',
-  standalone: false,
-})
+@Pipe({ name: 'country', pure: false })
 export class CountryPipe implements PipeTransform {
   private latestValue = '';
 

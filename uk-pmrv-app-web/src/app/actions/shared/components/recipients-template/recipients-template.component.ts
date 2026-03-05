@@ -16,6 +16,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-action-recipients-template',
+  standalone: true,
   imports: [SharedModule],
   templateUrl: './recipients-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

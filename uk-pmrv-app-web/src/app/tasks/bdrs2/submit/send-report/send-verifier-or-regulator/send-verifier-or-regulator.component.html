@@ -3,11 +3,11 @@
     <app-wizard-step
       (formSubmit)="onContinue()"
       [formGroup]="form"
-      heading="Send your report"
+      heading="Submit your report"
       [hideSubmit]="isEditable() === false"
       [showBackLink]="true">
       <p class="govuk-body">
-        You can either send the BDR to a verifier or send it directly to your Regulator ({{
+        You can either send the BDR to verifier for verification opinion or send it directly to your Regulator ({{
           bdrs2Service.competentAuthority$ | async | competentAuthority
         }}).
       </p>
@@ -16,7 +16,7 @@
         formControlName="needsVerification"
         govuk-radio
         legend="Do you want to send this report to a verifier?"
-        legendSize="medium"
+        [legendSize]="'medium'"
         class="govuk-!-width-three-quarters">
         <govuk-radio-option [value]="true" label="Yes, send the report to a verifier"></govuk-radio-option>
         <govuk-radio-option

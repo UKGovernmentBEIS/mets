@@ -13,7 +13,6 @@ import { sourceStreamFormProvider } from './source-stream-form.provider';
 
 @Component({
   selector: 'app-source-streams-details',
-  standalone: false,
   template: `
     <app-aer-task>
       <app-source-streams-details-template
@@ -22,8 +21,8 @@ import { sourceStreamFormProvider } from './source-stream-form.provider';
         [isEditing]="isEditing$ | async"></app-source-streams-details-template>
     </app-aer-task>
   `,
-  providers: [sourceStreamFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [sourceStreamFormProvider],
 })
 export class SourceStreamDetailsComponent {
   isEditing$ = this.aerService

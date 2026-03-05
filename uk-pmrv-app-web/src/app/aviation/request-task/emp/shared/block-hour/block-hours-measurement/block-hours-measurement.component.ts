@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { ProcedureFormStepComponent } from '@aviation/request-task/emp/shared/pr
 import { ProcedureFormPageHeaderDirective } from '@aviation/request-task/emp/shared/procedure-form-step/procedure-form-page-header.directive';
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
+import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
 
@@ -17,8 +18,17 @@ import { BlockHourProceduresFormProvider } from '../block-hour-procedures-form.p
 
 @Component({
   selector: 'app-block-hours-measurement',
-  imports: [SharedModule, GovukComponentsModule, NgIf, ProcedureFormPageHeaderDirective, ProcedureFormStepComponent],
   templateUrl: './block-hours-measurement.component.html',
+  standalone: true,
+  imports: [
+    SharedModule,
+    GovukComponentsModule,
+    NgIf,
+    NgFor,
+    ReturnToLinkComponent,
+    ProcedureFormPageHeaderDirective,
+    ProcedureFormStepComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockHoursMeasurementComponent {

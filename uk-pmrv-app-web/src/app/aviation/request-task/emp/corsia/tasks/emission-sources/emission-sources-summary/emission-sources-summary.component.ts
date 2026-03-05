@@ -29,6 +29,7 @@ import {
 } from '@aviation/shared/components/emp/emission-sources/aircraft-type/table/aircraft-type-table.component';
 import { isFUMM } from '@aviation/shared/components/emp/emission-sources/isFUMM';
 import { MultipleMethodsSummaryTemplateComponent } from '@aviation/shared/components/emp/emission-sources/multiple-methods-summary/multiple-methods-summary.component';
+import { ProcedureFormSummaryComponent } from '@aviation/shared/components/procedure-form-summary';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
@@ -38,20 +39,22 @@ import { EmissionSourcesFormModelCorsia } from '../emission-sources-form.model';
 
 @Component({
   selector: 'app-emission-sources-summary',
+  templateUrl: './emission-sources-summary.component.html',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     SharedModule,
     AircraftTypeTableComponent,
     EmissionFactorsSummaryComponent,
     MultipleMethodsSummaryTemplateComponent,
+    ProcedureFormSummaryComponent,
     ReturnToLinkComponent,
     EmpReviewDecisionGroupComponent,
     EmpVariationReviewDecisionGroupComponent,
     RouterModule,
     EmpVariationRegulatorLedDecisionGroupComponent,
   ],
-  templateUrl: './emission-sources-summary.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionSourcesSummaryComponent {
   private pendingRequestService = inject(PendingRequestService);

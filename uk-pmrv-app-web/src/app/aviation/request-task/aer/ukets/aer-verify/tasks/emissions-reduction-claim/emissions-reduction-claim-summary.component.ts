@@ -1,5 +1,6 @@
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -26,10 +27,13 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aer-emissions-reduction-claim-summary',
+  standalone: true,
   imports: [
     SharedModule,
     GovukComponentsModule,
+    NgFor,
     NgIf,
+    RouterLinkWithHref,
     ReturnToLinkComponent,
     EmissionsReductionClaimSummaryTemplateComponent,
   ],

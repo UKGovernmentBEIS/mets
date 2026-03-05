@@ -16,7 +16,6 @@ describe('PaymentSummaryComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-payment-summary [details]="details" [shouldDisplayAmount]="shouldDisplayAmount"></app-payment-summary>
     `,

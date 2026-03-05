@@ -10,7 +10,6 @@ import { NonComplianceService } from '../../core/non-compliance.service';
 
 @Component({
   selector: 'app-confirmation',
-  standalone: false,
   templateUrl: './confirmation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

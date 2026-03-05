@@ -8,8 +8,9 @@ import { AviationAerCorsiaEmissionsReductionClaim } from 'pmrv-api';
 
 @Component({
   selector: 'app-aer-emissions-reduction-claim-corsia-template',
-  imports: [SharedModule, RouterLink],
   templateUrl: './aer-emissions-reduction-claim-corsia-template.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerEmissionsReductionClaimCorsiaTemplateComponent {

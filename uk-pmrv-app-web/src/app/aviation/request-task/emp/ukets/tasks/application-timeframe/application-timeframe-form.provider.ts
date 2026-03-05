@@ -16,10 +16,9 @@ export interface EmpApplicationTimeframeFormModel {
 }
 
 @Injectable()
-export class ApplicationTimeframeFormProvider implements TaskFormProvider<
-  EmpApplicationTimeframeInfo,
-  EmpApplicationTimeframeFormModel
-> {
+export class ApplicationTimeframeFormProvider
+  implements TaskFormProvider<EmpApplicationTimeframeInfo, EmpApplicationTimeframeFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup;
 

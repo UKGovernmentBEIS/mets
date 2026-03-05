@@ -25,7 +25,6 @@ describe('AboutVariationComponent', () => {
 
   @Component({
     selector: 'app-variation-regulator-led-review-group-decision',
-    standalone: false,
     template: `
       <div>
         Review group decision regulator led component.
@@ -40,7 +39,6 @@ describe('AboutVariationComponent', () => {
 
   @Component({
     selector: 'app-variation-operator-led-review-group-decision',
-    standalone: false,
     template: `
       <div>
         Review group decision operator led component.

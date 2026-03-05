@@ -8,7 +8,6 @@ import { PaymentStore } from '../../store/payment.store';
 
 @Component({
   selector: 'app-cancelled',
-  standalone: false,
   template: `
     <ng-container *ngIf="details$ | async as details">
       <app-request-action-heading

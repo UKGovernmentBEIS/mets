@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-pfc-approach-description-summary-template',
-  standalone: false,
   template: `
     <dl
       *ngIf="

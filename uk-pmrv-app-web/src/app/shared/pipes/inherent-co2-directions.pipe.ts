@@ -4,7 +4,6 @@ import { InherentReceivingTransferringInstallation } from 'pmrv-api';
 
 @Pipe({
   name: 'inherentCo2Directions',
-  standalone: false,
 })
 export class InherentCo2DirectionsPipe implements PipeTransform {
   transform(value: InherentReceivingTransferringInstallation['inherentCO2Direction']): string {

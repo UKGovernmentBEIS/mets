@@ -27,10 +27,9 @@ import { parametersOptionsMap } from '../calculation-emissions-parameters';
 
 @Component({
   selector: 'app-tiers-used',
-  standalone: false,
   templateUrl: './tiers-used.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class TiersUsedComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

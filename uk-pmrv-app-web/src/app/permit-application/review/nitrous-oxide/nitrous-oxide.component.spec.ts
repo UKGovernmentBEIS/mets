@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload } from 'pmrv-api';
 
@@ -28,7 +29,6 @@ describe('NitrousOxideComponent', () => {
 
   @Component({
     selector: 'app-review-group-decision-container',
-    standalone: false,
     template: `
       <div>
         Review group decision component.
@@ -55,7 +55,7 @@ describe('NitrousOxideComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, SharedPermitModule, RouterLink],
+      imports: [SharedModule, SharedPermitModule, RouterTestingModule],
       providers: [
         { provide: ActivatedRoute, useValue: route },
         {

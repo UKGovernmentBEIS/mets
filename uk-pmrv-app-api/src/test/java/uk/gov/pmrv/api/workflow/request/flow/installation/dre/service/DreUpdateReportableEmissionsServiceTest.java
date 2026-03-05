@@ -74,7 +74,6 @@ class DreUpdateReportableEmissionsServiceTest {
                 .year(Year.of(2022))
                 .reportableEmissions(((DreRequestPayload)request.getPayload()).getDre().getTotalReportableEmissions())
                 .isFromDre(true)
-				.requestId(requestId)
                 .build());
     }
 }

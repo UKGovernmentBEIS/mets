@@ -13,7 +13,6 @@ import { RegulatorRoutingModule } from './regulators-routing.module';
 import { SiteContactsComponent } from './site-contacts/site-contacts.component';
 
 @NgModule({
-  imports: [RegulatorRoutingModule, SharedModule, SharedUserModule],
   declarations: [
     DeleteComponent,
     DetailsComponent,
@@ -24,5 +23,6 @@ import { SiteContactsComponent } from './site-contacts/site-contacts.component';
     SignatureFileDownloadComponent,
     SiteContactsComponent,
   ],
+  imports: [RegulatorRoutingModule, SharedModule, SharedUserModule],
 })
 export class RegulatorsModule {}

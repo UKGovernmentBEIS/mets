@@ -16,7 +16,6 @@ describe('EmissionsSummaryGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <app-emissions-summary-group [data]="data"></app-emissions-summary-group>
     `,

@@ -9,7 +9,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, VerifiedWithComment
 
 @Component({
   selector: 'app-reason-list',
-  standalone: false,
   templateUrl: './reason-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

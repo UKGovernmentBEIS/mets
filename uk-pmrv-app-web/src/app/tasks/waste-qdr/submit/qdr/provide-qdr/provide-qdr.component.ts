@@ -13,10 +13,11 @@ import { provideQdrFormProvider } from './provide-qdr-form.provider';
 
 @Component({
   selector: 'app-waste-qdr-provide-qdr',
+  standalone: true,
   imports: [SharedModule, WasteQdrTaskComponent],
   templateUrl: './provide-qdr.component.html',
-  providers: [provideQdrFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideQdrFormProvider],
 })
 export class WasteQdrProvideQdrComponent {
   isEditable = this.wasteQdrService.isEditable;

@@ -23,10 +23,9 @@ export interface ReferenceItemFormModel {
 }
 
 @Injectable()
-export class ReferenceItemFormProvider implements TaskFormProvider<
-  OperatorImprovementResponse,
-  ReferenceItemFormModel
-> {
+export class ReferenceItemFormProvider
+  implements TaskFormProvider<OperatorImprovementResponse, ReferenceItemFormModel>
+{
   private _form: FormGroup<ReferenceItemFormModel>;
   private destroy$ = new Subject<void>();
 

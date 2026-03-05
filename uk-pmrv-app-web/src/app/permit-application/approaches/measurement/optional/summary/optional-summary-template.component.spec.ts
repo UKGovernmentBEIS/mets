@@ -35,7 +35,6 @@ describe('OptionalSummaryTemplateComponent', () => {
   const taskKey: TaskKey = 'monitoringApproaches.MEASUREMENT_CO2.gasFlowCalculation';
 
   @Component({
-    standalone: false,
     template: `
       <app-measurement-optional-summary-template
         [procedureOptionalForm]="procedureOptionalForm"

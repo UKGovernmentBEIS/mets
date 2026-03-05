@@ -4,7 +4,7 @@
     [formGroup]="form"
     [hideSubmit]="(isEditable$ | async) === false"
     [showBackLink]="true">
-    <span class="govuk-caption-l">Provide the baseline data report and details</span>
+    <span [class]="'govuk-caption-l'">Provide the baseline data report and details</span>
     <div
       formControlName="hasMmp"
       legendSize="heading"

@@ -12,7 +12,8 @@
 import { PermitVariationRegulatorLedGrantDetermination } from './permitVariationRegulatorLedGrantDetermination';
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface PermitVariationSaveReviewDeterminationRegulatorLedRequestTaskActionPayload extends RequestTaskActionPayload {
+export interface PermitVariationSaveReviewDeterminationRegulatorLedRequestTaskActionPayload
+  extends RequestTaskActionPayload {
   determination: PermitVariationRegulatorLedGrantDetermination;
   reviewSectionsCompleted?: { [key: string]: boolean };
 }

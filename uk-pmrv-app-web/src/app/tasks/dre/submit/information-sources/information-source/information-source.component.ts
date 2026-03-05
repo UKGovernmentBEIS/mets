@@ -12,10 +12,9 @@ import { informationSourceFormProvider } from './information-source-form.provide
 
 @Component({
   selector: 'app-information-source',
-  standalone: false,
   templateUrl: './information-source.component.html',
-  providers: [informationSourceFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [informationSourceFormProvider],
 })
 export class InformationSourceComponent {
   private readonly nextWizardStep = 'information-sources';

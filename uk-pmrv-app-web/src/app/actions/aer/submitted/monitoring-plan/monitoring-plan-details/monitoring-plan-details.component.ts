@@ -4,7 +4,6 @@ import { AerApplicationCompletedRequestActionPayload, AerApplicationSubmittedReq
 
 @Component({
   selector: 'app-monitoring-plan-details',
-  standalone: false,
   templateUrl: './monitoring-plan-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

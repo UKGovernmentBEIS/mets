@@ -5,7 +5,6 @@ import { existingControlContainer } from '@shared/providers/control-container.fa
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-aviation-account-form',
-  standalone: false,
   templateUrl: './aviation-account-form.component.html',
   viewProviders: [existingControlContainer],
 })

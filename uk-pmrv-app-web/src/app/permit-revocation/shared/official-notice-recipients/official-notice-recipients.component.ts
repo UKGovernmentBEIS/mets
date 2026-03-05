@@ -4,7 +4,6 @@ import { PermitRevocationState } from '@permit-revocation/store/permit-revocatio
 
 @Component({
   selector: 'app-official-notice-recipients',
-  standalone: false,
   templateUrl: './official-notice-recipients.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

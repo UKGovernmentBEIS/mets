@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
+import { ProcedureFormStepComponent } from '@aviation/request-task/emp/shared/procedure-form-step';
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
@@ -15,10 +16,18 @@ import { EmissionsReductionClaimFormProvider } from '../emissions-reduction-clai
 
 @Component({
   selector: 'app-upload-template',
-  imports: [SharedModule, GovukComponentsModule, ReturnToLinkComponent, ReactiveFormsModule],
+  standalone: true,
+  imports: [
+    SharedModule,
+    GovukComponentsModule,
+    ProcedureFormStepComponent,
+    RouterLinkWithHref,
+    ReturnToLinkComponent,
+    ReactiveFormsModule,
+  ],
   templateUrl: './upload-template.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class UploadTemplateComponent {
   downloadUrl = `${this.store.aerDelegate.baseFileAttachmentDownloadUrl}/`;

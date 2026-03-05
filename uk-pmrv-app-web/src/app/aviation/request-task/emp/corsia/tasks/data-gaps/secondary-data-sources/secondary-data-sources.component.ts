@@ -7,8 +7,9 @@ import { BaseDataGapsComponent } from '../base-data-gaps.component';
 
 @Component({
   selector: 'app-secondary-data-sources',
-  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './secondary-data-sources.component.html',
+  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SecondaryDataSourcesComponent extends BaseDataGapsComponent {

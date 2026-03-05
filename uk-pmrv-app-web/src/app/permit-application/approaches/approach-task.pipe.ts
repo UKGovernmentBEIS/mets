@@ -7,10 +7,7 @@ import { PermitMonitoringApproachSection } from 'pmrv-api';
 import { PermitApplicationState } from '../store/permit-application.state';
 import { PermitApplicationStore } from '../store/permit-application.store';
 
-@Pipe({
-  name: 'monitoringApproachTask',
-  standalone: false,
-})
+@Pipe({ name: 'monitoringApproachTask' })
 export class ApproachTaskPipe implements PipeTransform {
   constructor(private readonly store: PermitApplicationStore<PermitApplicationState>) {}
 

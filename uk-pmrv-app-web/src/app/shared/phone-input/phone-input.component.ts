@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/prefer-host-metadata-property */
 import { Component, DoCheck, HostBinding, Input, OnInit, Optional, Self } from '@angular/core';
 import {
   ControlContainer,
@@ -25,7 +24,6 @@ import { UKCountryCodes } from '../types/country-codes';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'div[app-phone-input]',
-  standalone: false,
   templateUrl: './phone-input.component.html',
   providers: [DestroySubject],
 })

@@ -12,7 +12,6 @@ import { getSectionStatus } from './withdraw';
 
 @Component({
   selector: 'app-withdraw',
-  standalone: false,
   templateUrl: './withdraw.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

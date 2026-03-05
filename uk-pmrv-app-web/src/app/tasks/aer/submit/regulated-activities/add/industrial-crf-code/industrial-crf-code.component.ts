@@ -14,10 +14,9 @@ import { industrialCrfCodeFormProvider } from '@tasks/aer/submit/regulated-activ
 
 @Component({
   selector: 'app-regulated-activity-industrial-crf-code',
-  standalone: false,
   templateUrl: './industrial-crf-code.component.html',
-  providers: [industrialCrfCodeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [industrialCrfCodeFormProvider],
 })
 export class IndustrialCrfCodeComponent implements PendingRequest, AfterViewInit {
   caption$ = combineLatest([this.aerService.getTask('regulatedActivities'), this.route.paramMap]).pipe(

@@ -26,8 +26,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-waste-qdr-changes-requested',
-  imports: [ChangesRequestedTemplateComponent, SharedModule, WasteQdrTaskComponent],
   standalone: true,
+  imports: [ChangesRequestedTemplateComponent, SharedModule, WasteQdrTaskComponent],
   templateUrl: './changes-requested.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

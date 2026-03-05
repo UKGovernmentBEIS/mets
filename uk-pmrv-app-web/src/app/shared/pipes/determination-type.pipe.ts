@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'determinationType',
-  standalone: false,
 })
 export class DeterminationTypePipe implements PipeTransform {
   transform(value: string): string {

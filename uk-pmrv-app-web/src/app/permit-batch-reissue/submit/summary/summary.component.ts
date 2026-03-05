@@ -25,7 +25,6 @@ import { PermitBatchReissueStore } from '../store/permit-batch-reissue.store';
 
 @Component({
   selector: 'app-summary',
-  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

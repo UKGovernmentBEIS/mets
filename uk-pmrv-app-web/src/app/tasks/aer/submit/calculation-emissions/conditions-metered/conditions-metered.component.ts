@@ -18,10 +18,9 @@ import { conditionsMeteredFormProvider } from './conditions-metered.provider';
 
 @Component({
   selector: 'app-conditions-metered',
-  standalone: false,
   templateUrl: './conditions-metered.component.html',
-  providers: [conditionsMeteredFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [conditionsMeteredFormProvider],
 })
 export class ConditionsMeteredComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

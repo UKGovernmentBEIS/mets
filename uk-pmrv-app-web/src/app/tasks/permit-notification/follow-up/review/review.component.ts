@@ -11,7 +11,6 @@ import { resolveFollowUpReviewDecisionStatus } from '../../core/section-status';
 
 @Component({
   selector: 'app-follow-review',
-  standalone: false,
   templateUrl: './review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

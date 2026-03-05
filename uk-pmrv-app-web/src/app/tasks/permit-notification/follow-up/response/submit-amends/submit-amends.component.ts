@@ -14,7 +14,6 @@ import { PermitNotificationService } from '../../../core/permit-notification.ser
 
 @Component({
   selector: 'app-submit-amends',
-  standalone: false,
   template: `
     <app-submit
       [allowSubmit]="allowSubmit$ | async"

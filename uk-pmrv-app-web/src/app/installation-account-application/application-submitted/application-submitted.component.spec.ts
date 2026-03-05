@@ -11,7 +11,6 @@ describe('ApplicationSubmittedComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
     template: '<app-application-submitted></app-application-submitted>',
   })
   class TestComponent {}

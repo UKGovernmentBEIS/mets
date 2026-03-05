@@ -21,6 +21,9 @@ interface ViewModel {
 }
 @Component({
   selector: 'app-recommended-improvements-list',
+  templateUrl: './recommended-improvements-list.component.html',
+  standalone: true,
+  providers: [DestroySubject],
   imports: [
     GovukComponentsModule,
     SharedModule,
@@ -28,8 +31,6 @@ interface ViewModel {
     RecommendedImprovementsGroupComponent,
     ReturnToLinkComponent,
   ],
-  templateUrl: './recommended-improvements-list.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecommendedImprovementsListComponent {

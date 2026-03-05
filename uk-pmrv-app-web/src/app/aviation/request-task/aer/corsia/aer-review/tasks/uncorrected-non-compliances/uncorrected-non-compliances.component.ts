@@ -22,6 +22,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-non-compliances',
+  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,

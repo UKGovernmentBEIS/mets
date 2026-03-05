@@ -16,7 +16,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, OpinionStatement } 
 
 @Component({
   selector: 'app-combustion-source-add',
-  standalone: false,
   template: `
     <app-aer-task-review heading="Add a combustion source" returnToLink="../../..">
       <app-wizard-step

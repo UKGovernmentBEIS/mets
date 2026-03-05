@@ -19,16 +19,10 @@ describe('ApproachReturnLinkComponent', () => {
 
   const tasksService = mockClass(TasksService);
 
-  @Component({
-    standalone: false,
-    template: '<router-outlet></router-outlet>',
-  })
+  @Component({ template: '<router-outlet></router-outlet>' })
   class TestComponent {}
 
-  @Component({
-    standalone: false,
-    template: '<app-approach-return-link reviewGroupUrl="CALCULATION_CO2"></app-approach-return-link>',
-  })
+  @Component({ template: '<app-approach-return-link reviewGroupUrl="CALCULATION_CO2"></app-approach-return-link>' })
   class ChildComponent {}
 
   class Page extends BasePage<TestComponent> {

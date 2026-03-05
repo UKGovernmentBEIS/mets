@@ -7,7 +7,6 @@ import { AccountNoteDto, AccountNotesService } from 'pmrv-api';
 
 @Component({
   selector: 'app-account-notes',
-  standalone: false,
   templateUrl: './account-notes.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

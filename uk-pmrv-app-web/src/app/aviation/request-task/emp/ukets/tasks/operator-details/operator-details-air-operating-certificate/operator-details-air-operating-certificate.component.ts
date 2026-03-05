@@ -19,6 +19,7 @@ import { OperatorDetailsFormProvider } from '../operator-details-form.provider';
 
 @Component({
   selector: 'app-operator-details-air-operating-certificate-page',
+  standalone: true,
   imports: [
     GovukComponentsModule,
     SharedModule,
@@ -26,8 +27,8 @@ import { OperatorDetailsFormProvider } from '../operator-details-form.provider';
     ReturnToLinkComponent,
   ],
   templateUrl: './operator-details-air-operating-certificate.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class OperatorDetailsAirOperatingCertificateComponent extends BaseOperatorDetailsComponent implements OnInit {
   form = this.getform('airOperatingCertificate');

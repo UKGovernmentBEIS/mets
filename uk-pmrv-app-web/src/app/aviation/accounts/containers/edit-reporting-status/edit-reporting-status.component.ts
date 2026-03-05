@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { DestroySubject } from '@core/services/destroy-subject.service';
+
 import { GovukSelectOption, GovukValidators } from 'govuk-components';
 
 import { AviationAccountReportingStatusHistoryCreationDTO } from 'pmrv-api';
@@ -15,9 +17,10 @@ interface FormModel {
 
 @Component({
   selector: 'app-edit-reporting-status',
-  standalone: false,
   templateUrl: './edit-reporting-status.component.html',
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class EditReportingStatusComponent {
   statusOptions: GovukSelectOption[] = [

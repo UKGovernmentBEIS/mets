@@ -19,7 +19,6 @@ import { UncertaintyAssessmentComponent } from '@tasks/aer/verification-submit/c
 import { ComplianceEtsRoutingModule } from './compliance-ets-routing.module';
 
 @NgModule({
-  imports: [AerSharedModule, ComplianceEtsRoutingModule, SharedModule],
   declarations: [
     CompetentAuthorityGuidanceComponent,
     ComplianceEtsComponent,
@@ -35,5 +34,6 @@ import { ComplianceEtsRoutingModule } from './compliance-ets-routing.module';
     SummaryComponent,
     UncertaintyAssessmentComponent,
   ],
+  imports: [AerSharedModule, ComplianceEtsRoutingModule, SharedModule],
 })
 export class ComplianceEtsModule {}

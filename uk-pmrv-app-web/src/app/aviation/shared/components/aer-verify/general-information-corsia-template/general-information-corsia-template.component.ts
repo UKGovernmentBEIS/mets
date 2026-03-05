@@ -7,8 +7,9 @@ import { AviationAerCorsiaGeneralInformation } from 'pmrv-api';
 
 @Component({
   selector: 'app-general-information-corsia-template',
-  imports: [SharedModule, RouterLink],
   templateUrl: './general-information-corsia-template.component.html',
+  standalone: true,
+  imports: [SharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GeneralInformationCorsiaTemplateComponent {

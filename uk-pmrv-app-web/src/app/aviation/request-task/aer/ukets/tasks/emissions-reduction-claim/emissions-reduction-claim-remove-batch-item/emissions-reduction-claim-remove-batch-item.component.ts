@@ -11,9 +11,10 @@ import { AerEmissionsReductionClaimFormProvider } from '../emissions-reduction-c
 
 @Component({
   selector: 'app-emissions-reduction-claim-remove-batch-item',
-  imports: [RouterModule, SharedModule],
   templateUrl: './emissions-reduction-claim-remove-batch-item.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterModule, SharedModule],
 })
 export class EmissionsReductionClaimRemoveBatchItemComponent implements OnInit, OnDestroy {
   private previousRouteSegments =

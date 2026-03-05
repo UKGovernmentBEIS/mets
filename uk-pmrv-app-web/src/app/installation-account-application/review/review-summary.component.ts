@@ -8,7 +8,6 @@ import { legalEntityTypeMap } from '../../shared/interfaces/legal-entity';
 
 @Component({
   selector: 'app-review-summary',
-  standalone: false,
   templateUrl: './review-summary.component.html',
   styles: `
     del.diffmod {
@@ -19,9 +18,9 @@ import { legalEntityTypeMap } from '../../shared/interfaces/legal-entity';
       background-color: #fff7bf !important;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReviewSummaryComponent implements OnInit {
   @Input() item: any;

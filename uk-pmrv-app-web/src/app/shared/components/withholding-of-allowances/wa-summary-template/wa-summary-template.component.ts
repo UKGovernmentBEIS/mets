@@ -8,7 +8,6 @@ import {
 
 @Component({
   selector: 'app-wa-summary-template',
-  standalone: false,
   templateUrl: './wa-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

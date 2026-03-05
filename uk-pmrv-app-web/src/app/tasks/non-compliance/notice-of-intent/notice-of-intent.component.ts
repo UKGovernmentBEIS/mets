@@ -12,7 +12,6 @@ import { resolveSectionStatus } from './section.status';
 
 @Component({
   selector: 'app-notice-of-intent',
-  standalone: false,
   templateUrl: './notice-of-intent.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

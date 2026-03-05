@@ -13,7 +13,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, SummaryOfConditions
 
 @Component({
   selector: 'app-summary-of-conditions',
-  standalone: false,
   templateUrl: './summary-of-conditions.component.html',
   providers: [summaryOfConditionsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

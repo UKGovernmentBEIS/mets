@@ -21,11 +21,12 @@ import { wasteGasFlowsAddFormFactory } from './waste-gas-flows-form.provider';
 
 @Component({
   selector: 'app-waste-gas-flows',
-  imports: [SharedPermitModule, SharedModule, IncludeAnswerDetailsComponent, RouterModule],
   templateUrl: './waste-gas-flows.component.html',
-  styleUrl: './waste-gas-flows.component.scss',
-  providers: [wasteGasFlowsAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [wasteGasFlowsAddFormFactory],
+  standalone: true,
+  imports: [SharedPermitModule, SharedModule, IncludeAnswerDetailsComponent, RouterModule],
+  styleUrl: './waste-gas-flows.component.scss',
 })
 export class WasteGasFlowsComponent implements PendingRequest {
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;

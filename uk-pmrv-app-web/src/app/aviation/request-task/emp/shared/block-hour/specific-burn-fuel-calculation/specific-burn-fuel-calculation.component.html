@@ -11,12 +11,13 @@
 
   <div formControlName="fuelBurnCalculationTypes" govuk-checkboxes class="govuk-!-width-two-thirds">
     <govuk-checkbox
-      value="CLEAR_DISTINGUISHION"
+      [value]="'CLEAR_DISTINGUISHION'"
       [label]="
         isCorsia()
           ? 'You can clearly distinguish between fuel uplifts for international and domestic flights on a flight by flight basis'
           : 'You can clearly distinguish between fuel uplifts for UK ETS flights and flights not within the scope of UK ETS on a flight by flight basis'
-      ">
+      "
+    >
       <ng-container govukConditionalContent>
         <h1 class="govuk-heading-s">
           List the relevant aircraft types, by ICAO designator, for which this statement is true
@@ -25,7 +26,8 @@
         <div
           formControlName="clearDistinguishionIcaoAircraftDesignators"
           govuk-textarea
-          hint="Enter one code per line. You can copy and paste from a CSV file, but check there are no commas or empty lines."></div>
+          hint="Enter one code per line. You can copy and paste from a CSV file, but check there are no commas or empty lines."
+        ></div>
 
         <h1 class="govuk-heading-s">Assignment and adjustment for flights with zero fuel uplift</h1>
 
@@ -37,17 +39,19 @@
             isCorsia()
               ? 'Describe the data handling and calculations necessary to meet the adjustment requirements for international flights with zero uplift and the following flights.'
               : 'Describe the data handling and calculations necessary to meet the adjustment requirements for UK ETS flights with zero uplift and the following flights.'
-          "></div>
+          "
+        ></div>
       </ng-container>
     </govuk-checkbox>
 
     <govuk-checkbox
-      value="NOT_CLEAR_DISTINGUISHION"
+      [value]="'NOT_CLEAR_DISTINGUISHION'"
       [label]="
         isCorsia()
           ? 'You cannot clearly distinguish between international and domestic fuel uplifts on a flight by flight basis'
           : 'You cannot clearly distinguish between fuel uplifts for UK ETS flights and flights not within the scope of UK ETS on a flight by flight basis'
-      ">
+      "
+    >
       <ng-container govukConditionalContent>
         <h1 class="govuk-heading-s">
           List the relevant aircraft types, by ICAO designator, for which this statement is true
@@ -56,7 +60,8 @@
         <div
           formControlName="notClearDistinguishionIcaoAircraftDesignators"
           govuk-textarea
-          hint="Enter one code per line. You can copy and paste from a CSV file, but check there are no commas or empty lines."></div>
+          hint="Enter one code per line. You can copy and paste from a CSV file, but check there are no commas or empty lines."
+        ></div>
       </ng-container>
     </govuk-checkbox>
   </div>

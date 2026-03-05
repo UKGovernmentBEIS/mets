@@ -11,10 +11,9 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-amend-summary-template',
-  standalone: false,
   templateUrl: './amend-summary-template.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class AmendSummaryTemplateComponent {
   returnTo: string = this.store.getApplyForHeader();

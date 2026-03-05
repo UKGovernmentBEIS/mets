@@ -6,7 +6,7 @@ import { ChangeTaskAssigneeRoutingModule } from './change-task-assignee-routing.
 import { ChangeAssigneeComponent } from './components';
 
 @NgModule({
-  imports: [ChangeTaskAssigneeRoutingModule, SharedModule],
   declarations: [ChangeAssigneeComponent],
+  imports: [ChangeTaskAssigneeRoutingModule, SharedModule],
 })
 export class ChangeTaskAssigneeModule {}

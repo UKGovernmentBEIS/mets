@@ -14,7 +14,6 @@ describe('DocumentTemplateDetailsTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    standalone: false,
     template: `
       <app-document-template-details-template
         [documentTemplate]="documentTemplate"></app-document-template-details-template>

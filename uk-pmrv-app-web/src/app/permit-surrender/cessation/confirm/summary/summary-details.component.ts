@@ -10,7 +10,6 @@ import { OfficialNoticeTypeMap } from '../../core/cessation';
 
 @Component({
   selector: 'app-cessation-summary-details',
-  standalone: false,
   templateUrl: './summary-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

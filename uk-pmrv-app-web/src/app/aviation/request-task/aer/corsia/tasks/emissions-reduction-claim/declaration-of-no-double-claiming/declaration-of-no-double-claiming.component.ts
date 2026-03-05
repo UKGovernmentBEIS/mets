@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
+import { ProcedureFormStepComponent } from '@aviation/request-task/emp/shared/procedure-form-step';
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
@@ -20,11 +21,19 @@ import {
 
 @Component({
   selector: 'app-declaration-of-no-double-claiming',
-  imports: [SharedModule, GovukComponentsModule, ReturnToLinkComponent, ReactiveFormsModule],
+  standalone: true,
+  imports: [
+    SharedModule,
+    GovukComponentsModule,
+    ProcedureFormStepComponent,
+    RouterLinkWithHref,
+    ReturnToLinkComponent,
+    ReactiveFormsModule,
+  ],
   templateUrl: './declaration-of-no-double-claiming.component.html',
-  providers: [DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [existingControlContainer],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class DeclarationOfNoDoubleClaimingComponent {
   private router = inject(Router);

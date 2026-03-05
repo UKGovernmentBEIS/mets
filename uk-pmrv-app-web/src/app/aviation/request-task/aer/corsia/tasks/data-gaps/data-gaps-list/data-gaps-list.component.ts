@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { first, switchMap } from 'rxjs';
 
@@ -19,10 +19,11 @@ import { DataGapsFormProvider } from '../data-gaps-form.provider';
 
 @Component({
   selector: 'app-data-gaps-list',
-  imports: [SharedModule, ReturnToLinkComponent, DataGapsListTemplateComponent],
   templateUrl: './data-gaps-list.component.html',
-  providers: [DestroySubject],
+  standalone: true,
+  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent, DataGapsListTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export default class DataGapsListComponent implements OnInit {
   protected dataGaps: AviationAerDataGap[];

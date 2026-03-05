@@ -12,7 +12,6 @@ import { InstrumentsComponent } from './instruments/instruments.component';
 import { InherentSummaryComponent } from './summary/inherent-summary.component';
 
 @NgModule({
-  imports: [InherentCo2RoutingModule, SharedModule, SharedPermitModule],
   declarations: [
     DeleteComponent,
 
@@ -23,5 +22,6 @@ import { InherentSummaryComponent } from './summary/inherent-summary.component';
     InherentSummaryComponent,
     InstrumentsComponent,
   ],
+  imports: [InherentCo2RoutingModule, SharedModule, SharedPermitModule],
 })
 export class InherentCo2Module {}

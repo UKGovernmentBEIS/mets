@@ -13,7 +13,6 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-misstatements-item',
-  standalone: false,
   templateUrl: './misstatements-item.component.html',
   providers: [misstatementsItemFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

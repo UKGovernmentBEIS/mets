@@ -29,8 +29,8 @@ const OPERATION_SCOPES: OperationScope = {
 
 @Pipe({
   name: 'activitiesDescription',
-  standalone: true,
   pure: true,
+  standalone: true,
 })
 export class OperatorDetailsActivitiesDescriptionPipe implements PipeTransform {
   transform(value: string): string | null {

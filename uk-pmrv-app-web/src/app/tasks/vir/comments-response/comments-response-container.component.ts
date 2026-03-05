@@ -9,7 +9,6 @@ import { VirApplicationRespondToRegulatorCommentsRequestTaskPayload, VirRequestM
 
 @Component({
   selector: 'app-comments-response-container',
-  standalone: false,
   templateUrl: './comments-response-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

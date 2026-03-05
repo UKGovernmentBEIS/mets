@@ -36,7 +36,7 @@ public enum RequestType {
     VIR("PROCESS_VIR", "Verifier Improvements Report", RequestHistoryCategory.REPORTING, AccountType.INSTALLATION, false, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR)),
     AIR("PROCESS_AIR", "Annual Improvements Report", RequestHistoryCategory.REPORTING, AccountType.INSTALLATION, false, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR)),
     DRE("PROCESS_DRE", "DRE", RequestHistoryCategory.REPORTING, AccountType.INSTALLATION, false, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR)),
-    WITHHOLDING_OF_ALLOWANCES("PROCESS_WITHHOLDING_OF_ALLOWANCES", "Withholding of allowances", RequestHistoryCategory.PERMIT, AccountType.INSTALLATION, true, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR)),
+    WITHHOLDING_OF_ALLOWANCES("PROCESS_WITHHOLDING_OF_ALLOWANCES", "Withholding of allowances", RequestHistoryCategory.PERMIT, AccountType.INSTALLATION, false, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR)),
     RETURN_OF_ALLOWANCES("PROCESS_RETURN_OF_ALLOWANCES", "Return of allowances", RequestHistoryCategory.PERMIT, AccountType.INSTALLATION, false, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR)),
     INSTALLATION_ONSITE_INSPECTION("PROCESS_INSTALLATION_ONSITE_INSPECTION","Installation onsite inspection",RequestHistoryCategory.INSPECTION,AccountType.INSTALLATION,false,true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR)),
     INSTALLATION_AUDIT("PROCESS_INSTALLATION_AUDIT","Installation audit",RequestHistoryCategory.INSPECTION,AccountType.INSTALLATION,false,true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR)),
@@ -174,14 +174,6 @@ public enum RequestType {
          Set<RequestType> requestTypes = Set.of(BDR);
 
             return requestTypes.stream()
-                .filter(requestType -> accountType.equals(requestType.getAccountType()))
-                .collect(Collectors.toSet());
-    }
-
-    public static Set<RequestType> getAvailableForBDRS2CreateRequestTypes(@NotNull AccountType accountType) {
-        Set<RequestType> requestTypes = Set.of(BDRS2);
-
-        return requestTypes.stream()
                 .filter(requestType -> accountType.equals(requestType.getAccountType()))
                 .collect(Collectors.toSet());
     }

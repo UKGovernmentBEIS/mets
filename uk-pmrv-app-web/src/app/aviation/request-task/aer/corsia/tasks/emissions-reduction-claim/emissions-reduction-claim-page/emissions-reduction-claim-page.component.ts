@@ -16,10 +16,11 @@ import { EmissionsReductionClaimFormComponent } from '../emissions-reduction-cla
 
 @Component({
   selector: 'app-emissions-reduction-claim-page',
+  standalone: true,
   imports: [SharedModule, EmissionsReductionClaimFormComponent, ReturnToLinkComponent],
   templateUrl: './emissions-reduction-claim-page.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class EmissionsReductionClaimPageComponent {
   private router = inject(Router);

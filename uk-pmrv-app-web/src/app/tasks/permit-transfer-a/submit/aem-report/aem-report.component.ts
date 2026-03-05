@@ -14,7 +14,6 @@ import { aemReportFormProvider } from './aem-report-form.provider';
 
 @Component({
   selector: 'app-aem-report',
-  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onSubmit()"
@@ -30,8 +29,8 @@ import { aemReportFormProvider } from './aem-report-form.provider';
     </app-wizard-step>
     <a govukLink routerLink="..">Return to: Permit transfer application</a>
   `,
-  providers: [aemReportFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [aemReportFormProvider],
 })
 export class TransferAAemReportComponent {
   hideSubmit$ = this.permitTransferAService.isEditable$.pipe(map((isEditable) => !isEditable));

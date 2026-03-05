@@ -12,14 +12,10 @@ import {
   AviationAerRequestMetadata,
   AviationDoECorsiaRequestMetadata,
   BDRRequestMetadata,
-  BDRS2RequestMetadata,
   RequestMetadata,
 } from 'pmrv-api';
 
-@Pipe({
-  name: 'reportingSubheading',
-  standalone: false,
-})
+@Pipe({ name: 'reportingSubheading' })
 export class ReportingSubheadingPipe implements PipeTransform {
   private readonly assessmentTypePipe = new OverallAssessmentTypePipe();
   private readonly overallDecisionTypePipe = new OverallDecisionTypePipe();
@@ -79,8 +75,6 @@ export class ReportingSubheadingPipe implements PipeTransform {
       }
       case 'BDR':
         return this.assessmentTypePipe.transform((metadata as BDRRequestMetadata)?.overallAssessmentType);
-      case 'BDRS2':
-        return this.assessmentTypePipe.transform((metadata as BDRS2RequestMetadata)?.overallAssessmentType);
 
       case 'AVIATION_DOE_CORSIA': {
         const corsiaMetadata = metadata as AviationDoECorsiaRequestMetadata;

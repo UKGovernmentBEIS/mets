@@ -23,6 +23,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-additional-docs',
+  standalone: true,
   imports: [ReturnToLinkComponent, SharedModule, AerReviewDecisionGroupComponent],
   template: `
     <ng-container *ngIf="vm$ | async as vm">

@@ -44,7 +44,6 @@ import { SamplingPlanComponent } from './sampling-plan/sampling-plan.component';
 import { SummaryComponent as SamplingPlanSummaryComponent } from './sampling-plan/summary/summary.component';
 
 @NgModule({
-  imports: [CalculationRoutingModule, SharedModule, SharedPermitModule],
   declarations: [
     ActivityDataAnswersComponent,
     ActivityDataComponent,
@@ -86,5 +85,6 @@ import { SummaryComponent as SamplingPlanSummaryComponent } from './sampling-pla
     TierJustificationComponent,
     TransferredCo2DetailsComponent,
   ],
+  imports: [CalculationRoutingModule, SharedModule, SharedPermitModule],
 })
 export class CalculationModule {}

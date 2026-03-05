@@ -7,7 +7,6 @@ import { ComplianceEtsService } from '@tasks/aer/verification-submit/compliance-
 
 @Component({
   selector: 'app-detail-source-data',
-  standalone: false,
   templateUrl: './detail-source-data.component.html',
   providers: [detailSourceDataFormProvider, ComplianceEtsService],
   changeDetection: ChangeDetectionStrategy.OnPush,

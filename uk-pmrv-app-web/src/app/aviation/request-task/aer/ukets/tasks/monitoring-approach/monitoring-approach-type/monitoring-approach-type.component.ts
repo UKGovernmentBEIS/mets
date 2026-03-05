@@ -1,3 +1,4 @@
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
@@ -11,10 +12,18 @@ import { GovukComponentsModule } from 'govuk-components';
 
 @Component({
   selector: 'app-monitoring-approach-type',
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent, MonitoringApproachTypeFormComponent],
   templateUrl: './monitoring-approach-type.component.html',
-  providers: [DestroySubject],
+  standalone: true,
+  imports: [
+    GovukComponentsModule,
+    NgIf,
+    NgFor,
+    SharedModule,
+    ReturnToLinkComponent,
+    MonitoringApproachTypeFormComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class MonitoringApproachTypeComponent extends BaseMonitoringApproachComponent implements OnInit, OnDestroy {
   form = new FormGroup({ monitoringApproachType: this.formProvider.monitoringApproachTypeCtrl });

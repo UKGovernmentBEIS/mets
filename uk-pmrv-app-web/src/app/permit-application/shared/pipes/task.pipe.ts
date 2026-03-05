@@ -7,10 +7,7 @@ import { Permit } from 'pmrv-api';
 import { PermitApplicationState } from '../../store/permit-application.state';
 import { PermitApplicationStore } from '../../store/permit-application.store';
 
-@Pipe({
-  name: 'task',
-  standalone: false,
-})
+@Pipe({ name: 'task' })
 export class TaskPipe implements PipeTransform {
   constructor(private readonly store: PermitApplicationStore<PermitApplicationState>) {}
 

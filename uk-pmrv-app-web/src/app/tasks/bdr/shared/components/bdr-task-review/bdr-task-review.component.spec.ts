@@ -24,7 +24,6 @@ describe('BdrTaskReviewComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-bdr-task-review [breadcrumb]="true" heading="Verify baseline data report">
         <h2 class="govuk-heading-m">Baseline data report and details</h2>

@@ -13,7 +13,6 @@ import { ResetPasswordStore } from '../store/reset-password.store';
 
 @Component({
   selector: 'app-reset-password',
-  standalone: false,
   templateUrl: './reset-password.component.html',
   providers: [passwordFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,

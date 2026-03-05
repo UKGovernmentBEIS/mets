@@ -10,7 +10,6 @@ import { getMeasurementHeading } from '../approaches-tier/approaches-tier';
 
 @Component({
   selector: 'app-measurement-tier',
-  standalone: false,
   template: `
     <app-action-task [header]="heading$ | async" [breadcrumb]="true">
       <app-measurement-tier-summary

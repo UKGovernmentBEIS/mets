@@ -16,7 +16,6 @@ import { SummaryComponent } from './summary.component';
 describe('SummaryComponent', () => {
   @Component({
     selector: 'app-revocation-cessation-summary-details',
-    standalone: false,
     template: '<p>Mock cessation summary details</p>',
   })
   class MockCessationSummaryDetailsComponent {

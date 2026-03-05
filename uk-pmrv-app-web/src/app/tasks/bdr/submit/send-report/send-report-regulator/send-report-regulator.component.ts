@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { first, map, switchMap } from 'rxjs';
 
@@ -12,7 +12,6 @@ import { CommonTasksStore } from '../../../../store/common-tasks.store';
 
 @Component({
   selector: 'app-send-report-regulator',
-  imports: [SharedModule, BdrTaskSharedModule],
   template: `
     <app-bdr-task>
       <app-page-heading>Send to regulator</app-page-heading>
@@ -26,6 +25,8 @@ import { CommonTasksStore } from '../../../../store/common-tasks.store';
       <app-bdr-return-link returnLink="../../"></app-bdr-return-link>
     </app-bdr-task>
   `,
+  standalone: true,
+  imports: [SharedModule, BdrTaskSharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SendReportRegulatorComponent {

@@ -10,8 +10,9 @@ import { AlrApplicationMarkNotRequiredRequestActionPayload, RequestActionsServic
 
 @Component({
   selector: 'app-alr-not-required-details',
-  imports: [ActionSharedModule, SharedModule],
   templateUrl: './marked-as-not-required.component.html',
+  standalone: true,
+  imports: [ActionSharedModule, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrMarkedAsNotRequiredDetailsComponent {

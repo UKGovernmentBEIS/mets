@@ -8,7 +8,6 @@ import { MultiSelectItemComponent } from './multi-select-item.component';
 
 describe('MultipleSelectItemComponent', () => {
   @Component({
-    standalone: false,
     template: `
       <div app-multi-select [formControl]="control" label="Test label">
         <div app-multi-select-item itemName="testName" itemValue="1" label="Test label 1"></div>

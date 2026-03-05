@@ -12,6 +12,7 @@ import { AerReviewDecisionGroupFormProvider } from '../aer-review-decision-group
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-aviation-aer-review-decision-group-form',
+  standalone: true,
   imports: [SharedModule],
   templateUrl: './aer-review-decision-group-form.component.html',
   viewProviders: [existingControlContainer],

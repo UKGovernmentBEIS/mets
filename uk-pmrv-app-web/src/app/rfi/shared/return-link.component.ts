@@ -7,7 +7,6 @@ import { RfiStore } from '../store/rfi.store';
 
 @Component({
   selector: 'app-return-link',
-  standalone: false,
   template: `
     <a govukLink [routerLink]="returnLink$ | async">Return to: {{ returnText$ | async }}</a>
   `,

@@ -38,7 +38,6 @@ describe('AerTaskComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-aer-task [breadcrumb]="true">
         <app-page-heading caption="Additional information">Abbreviations and definitions</app-page-heading>

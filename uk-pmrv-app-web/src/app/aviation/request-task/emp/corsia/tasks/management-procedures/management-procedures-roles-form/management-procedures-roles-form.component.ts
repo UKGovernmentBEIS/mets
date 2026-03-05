@@ -14,8 +14,9 @@ import { ManagementProceduresCorsiaFormProvider } from '../management-procedures
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-management-procedures-roles-form',
-  imports: [GovukComponentsModule, NgIf, NgFor, SharedModule],
   templateUrl: './management-procedures-roles-form.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, NgIf, NgFor, SharedModule],
   providers: [DestroySubject],
   viewProviders: [existingControlContainer],
 })

@@ -7,7 +7,6 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-emission-factors-summary',
-  imports: [CommonModule, RouterModule, SharedModule, EmissionFactorsSummaryTemplateComponent],
   template: `
     <div>
       <app-emission-factors-summary-template
@@ -16,7 +15,9 @@ import { SharedModule } from '@shared/shared.module';
         [changeUrlQueryParams]="{ change: true }"></app-emission-factors-summary-template>
     </div>
   `,
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, RouterModule, SharedModule, EmissionFactorsSummaryTemplateComponent],
 })
 export class EmissionFactorsSummaryComponent {
   @Input() editable = true;

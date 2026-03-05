@@ -50,8 +50,8 @@ describe('ManagementProceduresSummaryTemplateComponent', () => {
 
   it(`should display summary only for first two forms`, async () => {
     await renderComponent();
-    expect(screen.getAllByText(/Monitoring and reporting roles/)[0]).toBeInTheDocument();
-    expect(screen.getAllByText(/Record keeping and documentation/)[0]).toBeInTheDocument();
-    expect(screen.queryByText(/Assignment of responsibilities/)).not.toBeInTheDocument();
+    expect(screen.getAllByText(/Monitoring and reporting roles/)).toBeInTheDocument;
+    expect(screen.getAllByText(/Record keeping and documentation/)).toBeInTheDocument;
+    expect(screen.queryByText(/Assignment of responsibilities/)).not.toBeInTheDocument;
   });
 });

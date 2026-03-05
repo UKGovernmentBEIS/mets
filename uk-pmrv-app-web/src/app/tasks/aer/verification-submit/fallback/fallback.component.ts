@@ -10,7 +10,6 @@ import { AerApplicationSubmitRequestTaskPayload, FallbackEmissions } from 'pmrv-
 
 @Component({
   selector: 'app-fallback',
-  standalone: false,
   template: `
     <app-page-heading>{{ 'FALLBACK' | monitoringApproachEmissionDescription }}</app-page-heading>
     <app-fallback-emissions-group

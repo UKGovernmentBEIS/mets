@@ -28,10 +28,9 @@ import { createAnotherRequiredChange } from './review-group-decision-form-utils'
 
 @Component({
   selector: 'app-review-group-decision',
-  standalone: false,
   templateUrl: './review-group-decision.component.html',
-  providers: [DestroySubject, reviewGroupDecisionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject, reviewGroupDecisionFormProvider],
 })
 export class ReviewGroupDecisionComponent implements OnInit, PendingRequest {
   @Input() groupKey: PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload['group'];

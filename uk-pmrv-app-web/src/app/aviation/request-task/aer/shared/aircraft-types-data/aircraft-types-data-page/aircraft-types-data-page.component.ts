@@ -41,9 +41,10 @@ import { AircraftTypesDataFormProvider } from '../aircraft-types-data-form.provi
 
 @Component({
   selector: 'app-aircraft-types-data-page',
-  imports: [SharedModule, ReturnToLinkComponent, CsvDataWizardStepComponent, AircraftTypesDataTableComponent],
   templateUrl: './aircraft-types-data-page.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, ReturnToLinkComponent, CsvDataWizardStepComponent, AircraftTypesDataTableComponent],
 })
 export class AircraftTypesDataPageComponent implements OnInit, OnDestroy {
   form = this.formProvider.form;

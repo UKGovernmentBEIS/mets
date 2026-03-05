@@ -7,10 +7,7 @@ import { PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload } from 'p
 import { PermitApplicationState } from '../../store/permit-application.state';
 import { PermitApplicationStore } from '../../store/permit-application.store';
 
-@Pipe({
-  name: 'reviewGroup',
-  standalone: false,
-})
+@Pipe({ name: 'reviewGroup' })
 export class ReviewGroupPipe implements PipeTransform {
   constructor(private readonly store: PermitApplicationStore<PermitApplicationState>) {}
 

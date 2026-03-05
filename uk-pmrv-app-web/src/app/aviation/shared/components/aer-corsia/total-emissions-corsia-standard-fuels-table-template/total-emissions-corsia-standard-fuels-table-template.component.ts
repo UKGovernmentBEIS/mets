@@ -16,8 +16,9 @@ import {
 
 @Component({
   selector: 'app-total-emissions-corsia-standard-fuels-table-template',
-  imports: [CommonModule, GovukComponentsModule],
   templateUrl: './total-emissions-corsia-standard-fuels-table-template.component.html',
+  standalone: true,
+  imports: [CommonModule, GovukComponentsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsCorsiaStandardFuelsTableTemplateComponent {

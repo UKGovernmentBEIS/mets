@@ -21,11 +21,12 @@ import { electricityFlowsAddFormFactory } from './electricity-flows-form.provide
 
 @Component({
   selector: 'app-electricity-flows',
-  imports: [SharedPermitModule, SharedModule, IncludeAnswerDetailsComponent, RouterModule],
   templateUrl: './electricity-flows.component.html',
-  styleUrl: './electricity-flows.component.scss',
-  providers: [electricityFlowsAddFormFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [electricityFlowsAddFormFactory],
+  standalone: true,
+  imports: [SharedPermitModule, SharedModule, IncludeAnswerDetailsComponent, RouterModule],
+  styleUrl: './electricity-flows.component.scss',
 })
 export class ElectricityFlowsComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

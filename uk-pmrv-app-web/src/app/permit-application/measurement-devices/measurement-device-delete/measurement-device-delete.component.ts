@@ -8,14 +8,13 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-measurement-device-delete',
-  standalone: false,
   templateUrl: './measurement-device-delete.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .nowrap {
       white-space: nowrap;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MeasurementDeviceDeleteComponent {
   measurementDevice$ = combineLatest([this.store.getTask('measurementDevicesOrMethods'), this.route.paramMap]).pipe(

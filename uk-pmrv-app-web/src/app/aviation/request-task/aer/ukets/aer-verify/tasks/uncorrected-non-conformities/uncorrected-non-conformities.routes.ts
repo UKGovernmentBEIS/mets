@@ -53,7 +53,9 @@ export const AER_UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
         data: { pageTitle: 'Non-conformities from the previous year not resolved' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
-          import('./uncorrected-non-conformities-prior-year-issues/uncorrected-non-conformities-prior-year-issues.component'),
+          import(
+            './uncorrected-non-conformities-prior-year-issues/uncorrected-non-conformities-prior-year-issues.component'
+          ),
       },
       {
         path: 'prior-year-issues-list',
@@ -64,21 +66,27 @@ export const AER_UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
             data: { pageTitle: 'Non-conformities from the previous year not resolved' },
             canActivate: [canActivateTaskForm, canActivatePriorYearIssuesList],
             loadComponent: () =>
-              import('./uncorrected-non-conformities-prior-year-list/uncorrected-non-conformities-prior-year-list.component'),
+              import(
+                './uncorrected-non-conformities-prior-year-list/uncorrected-non-conformities-prior-year-list.component'
+              ),
           },
           {
             path: ':index',
             data: { pageTitle: 'Add a non-conformity from the previous year not resolved', backlink: '../' },
             canActivate: [canActivateTaskForm],
             loadComponent: () =>
-              import('./uncorrected-non-conformities-prior-year-item/uncorrected-non-conformities-prior-year-item.component'),
+              import(
+                './uncorrected-non-conformities-prior-year-item/uncorrected-non-conformities-prior-year-item.component'
+              ),
           },
           {
             path: ':index/delete',
             data: { pageTitle: 'Are you sure you want to delete this item?', backlink: '../../' },
             canActivate: [canActivateTaskForm],
             loadComponent: () =>
-              import('./uncorrected-non-conformities-prior-year-item-delete/uncorrected-non-conformities-prior-year-item-delete.component'),
+              import(
+                './uncorrected-non-conformities-prior-year-item-delete/uncorrected-non-conformities-prior-year-item-delete.component'
+              ),
           },
         ],
       },

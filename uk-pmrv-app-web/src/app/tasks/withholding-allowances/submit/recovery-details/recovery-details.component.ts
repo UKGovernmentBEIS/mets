@@ -12,10 +12,9 @@ import { recommendationResponseFormProvider } from './recovery-details-form.prov
 
 @Component({
   selector: 'app-recovery-details',
-  standalone: false,
   templateUrl: './recovery-details.component.html',
-  providers: [PendingRequestService, recommendationResponseFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [PendingRequestService, recommendationResponseFormProvider],
 })
 export class RecoveryDetailsComponent {
   years = years;

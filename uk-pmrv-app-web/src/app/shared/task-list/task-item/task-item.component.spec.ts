@@ -10,7 +10,6 @@ describe('TaskItemComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
     template: `
       <ul class="app-task-list__items">
         <li

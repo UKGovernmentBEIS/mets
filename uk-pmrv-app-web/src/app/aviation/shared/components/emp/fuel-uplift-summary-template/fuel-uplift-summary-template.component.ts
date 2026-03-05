@@ -11,6 +11,8 @@ import { EmpFuelUpliftMethodProcedures } from 'pmrv-api';
 
 @Component({
   selector: 'app-fuel-uplift-summary-template',
+  templateUrl: './fuel-uplift-summary-template.component.html',
+  standalone: true,
   imports: [
     GovukComponentsModule,
     ProcedureFormSummaryComponent,
@@ -18,7 +20,6 @@ import { EmpFuelUpliftMethodProcedures } from 'pmrv-api';
     FuelUpliftSupplierRecordTypePipe,
     NgIf,
   ],
-  templateUrl: './fuel-uplift-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FuelUpliftSummaryTemplateComponent {

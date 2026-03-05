@@ -4,7 +4,6 @@ import { AirService } from '@tasks/air/shared/services/air.service';
 
 @Component({
   selector: 'app-review-wait',
-  standalone: false,
   template: `
     <app-base-task-container-component
       [header]="title$ | async"

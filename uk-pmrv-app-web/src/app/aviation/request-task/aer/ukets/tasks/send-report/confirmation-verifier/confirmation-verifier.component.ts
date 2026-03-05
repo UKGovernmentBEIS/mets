@@ -4,6 +4,7 @@ import { RouterLinkWithHref } from '@angular/router';
 import { combineLatest, map, Observable, switchMap } from 'rxjs';
 
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
+import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { BaseSuccessComponent } from '@shared/base-success/base-success.component';
 import { SharedModule } from '@shared/shared.module';
@@ -19,8 +20,9 @@ export interface ConfirmationVerifierViewModel {
 
 @Component({
   selector: 'app-confirmation-verifier',
-  imports: [SharedModule, RouterLinkWithHref],
   templateUrl: './confirmation-verifier.component.html',
+  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent],
+  standalone: true,
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

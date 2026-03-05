@@ -10,6 +10,9 @@ import { AviationCorsiaOperatorDetails, EmpCorsiaOperatorDetails, EmpOperatorDet
 
 @Component({
   selector: 'app-operator-details-summary-template',
+  templateUrl: './operator-details-summary-template.component.html',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     RouterLink,
     SharedModule,
@@ -17,8 +20,6 @@ import { AviationCorsiaOperatorDetails, EmpCorsiaOperatorDetails, EmpOperatorDet
     OperatorDetailsLegalStatusTypePipe,
     OperatorDetailsActivitiesDescriptionPipe,
   ],
-  templateUrl: './operator-details-summary-template.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorDetailsSummaryTemplateComponent {
   @Input() isEditable = false;

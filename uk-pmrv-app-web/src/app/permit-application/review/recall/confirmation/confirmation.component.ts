@@ -8,7 +8,6 @@ import { PermitApplicationState } from '../../../store/permit-application.state'
 
 @Component({
   selector: 'app-confirmation',
-  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

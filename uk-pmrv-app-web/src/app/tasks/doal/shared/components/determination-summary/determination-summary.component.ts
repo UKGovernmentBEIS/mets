@@ -6,7 +6,6 @@ import { DoalService } from '@tasks/doal/core/doal.service';
 
 @Component({
   selector: 'app-determination-summary',
-  standalone: false,
   template: `
     <app-doal-task [breadcrumb]="true">
       <app-page-heading>Provide determination of activity level</app-page-heading>

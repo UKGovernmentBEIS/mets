@@ -33,7 +33,6 @@ describe('SummaryOfConditionsGroupComponent', () => {
   }
 
   @Component({
-    standalone: false,
     template: `
       <app-summary-of-conditions-group
         [isEditable]="isEditable"

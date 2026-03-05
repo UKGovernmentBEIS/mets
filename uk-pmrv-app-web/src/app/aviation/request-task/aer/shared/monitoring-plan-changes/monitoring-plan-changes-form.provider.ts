@@ -15,10 +15,9 @@ export interface MonitoringPlanChangesFormModel {
 }
 
 @Injectable()
-export class MonitoringPlanChangesFormProvider implements TaskFormProvider<
-  AviationAerMonitoringPlanChanges,
-  MonitoringPlanChangesFormModel
-> {
+export class MonitoringPlanChangesFormProvider
+  implements TaskFormProvider<AviationAerMonitoringPlanChanges, MonitoringPlanChangesFormModel>
+{
   private fb = inject(FormBuilder);
   private _form: FormGroup;
 

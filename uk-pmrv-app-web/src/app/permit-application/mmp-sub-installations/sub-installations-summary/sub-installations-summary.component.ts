@@ -16,7 +16,6 @@ import { isProductBenchmark } from '../mmp-sub-installations-status';
 
 @Component({
   selector: 'app-sub-installations-summary',
-  standalone: false,
   templateUrl: './sub-installations-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

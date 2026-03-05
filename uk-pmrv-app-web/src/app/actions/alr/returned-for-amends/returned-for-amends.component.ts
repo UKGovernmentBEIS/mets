@@ -16,6 +16,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-returned-for-amends',
+  standalone: true,
   imports: [ActionSharedModule, SharedModule],
   templateUrl: './returned-for-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

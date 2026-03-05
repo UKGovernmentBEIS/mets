@@ -8,7 +8,6 @@ import { WithholdingAllowancesService } from '../../../core/withholding-allowanc
 
 @Component({
   selector: 'app-summary-details',
-  standalone: false,
   template: `
     <app-wa-summary-template [payload]="payload$ | async" [isEditable]="isEditable$ | async"></app-wa-summary-template>
     <a govukLink routerLink="..">Return to: Peer review withholding of allowances</a>

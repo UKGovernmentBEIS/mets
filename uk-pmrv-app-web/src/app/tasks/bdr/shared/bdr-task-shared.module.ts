@@ -14,6 +14,13 @@ import { TaskStatusPipe } from './pipes/task-status.pipe';
 import { BdrService } from './services/bdr.service';
 
 @NgModule({
+  exports: [
+    BDRReturnLinkComponent,
+    BdrReviewGroupDecisionComponent,
+    BdrTaskComponent,
+    BdrTaskReviewComponent,
+    TaskStatusPipe,
+  ],
   imports: [
     BDRReturnLinkComponent,
     BdrReviewGroupDecisionComponent,
@@ -24,12 +31,5 @@ import { BdrService } from './services/bdr.service';
     TaskStatusPipe,
   ],
   providers: [BdrService, CapitalizeFirstPipe, ItemNamePipe, TaskTypeToBreadcrumbPipe],
-  exports: [
-    BDRReturnLinkComponent,
-    BdrReviewGroupDecisionComponent,
-    BdrTaskComponent,
-    BdrTaskReviewComponent,
-    TaskStatusPipe,
-  ],
 })
 export class BdrTaskSharedModule {}

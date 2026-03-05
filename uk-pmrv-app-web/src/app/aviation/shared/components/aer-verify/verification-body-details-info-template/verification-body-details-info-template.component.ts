@@ -6,8 +6,9 @@ import { VerificationBodyDetails } from 'pmrv-api';
 
 @Component({
   selector: 'app-verification-body-details-info-template',
-  imports: [SharedModule],
   templateUrl: './verification-body-details-info-template.component.html',
+  standalone: true,
+  imports: [SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerificationBodyDetailsInfoTemplateComponent {

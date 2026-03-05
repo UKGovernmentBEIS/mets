@@ -9,7 +9,6 @@ const ETS_NAMES_MAP = {
 
 @Pipe({
   name: 'etsName',
-  standalone: false,
   pure: true,
 })
 export class EtsNamePipe implements PipeTransform {

@@ -29,6 +29,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-uncorrected-non-conformities-summary',
+  templateUrl: './uncorrected-non-conformities-summary.component.html',
+  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
@@ -37,7 +39,6 @@ interface ViewModel {
     VerifierCommentGroupComponent,
     AerVerificationReviewDecisionGroupComponent,
   ],
-  templateUrl: './uncorrected-non-conformities-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class UncorrectedNonConformitiesSummaryComponent {

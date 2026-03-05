@@ -9,8 +9,9 @@ import { defaultColumns } from './column-header-mapping';
 
 @Component({
   selector: 'app-aircraft-fuel-burn-ratio-table',
-  imports: [GovukComponentsModule, CommonModule],
   templateUrl: './aircraft-fuel-burn-ratio-table.component.html',
+  standalone: true,
+  imports: [GovukComponentsModule, CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AircraftFuelBurnRatioTableComponent implements OnChanges {

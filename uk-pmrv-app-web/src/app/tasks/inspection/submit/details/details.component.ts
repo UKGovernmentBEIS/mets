@@ -30,6 +30,7 @@ import { createAnotherOfficer, detailsFormProvider } from './details-form.provid
 
 @Component({
   selector: 'app-details',
+  standalone: true,
   imports: [
     InspectionTaskComponent,
     SharedModule,
@@ -39,8 +40,8 @@ import { createAnotherOfficer, detailsFormProvider } from './details-form.provid
   ],
   templateUrl: './details.component.html',
   styleUrl: './details.component.scss',
-  providers: [detailsFormProvider, FieldsetDirective, UserFullNamePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [detailsFormProvider, FieldsetDirective, UserFullNamePipe],
 })
 export class DetailsComponent {
   private readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

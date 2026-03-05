@@ -15,10 +15,9 @@ import { transportApproachFormProvider } from './transport-approach-form.provide
 
 @Component({
   selector: 'app-transport-approach',
-  standalone: false,
   templateUrl: './transport-approach.component.html',
-  providers: [transportApproachFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [transportApproachFormProvider],
 })
 export class TransportApproachComponent {
   approachOptions = [

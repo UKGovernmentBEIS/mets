@@ -9,10 +9,9 @@ import { SummaryDetailsAbstractComponent } from '../../review/determination/summ
 
 @Component({
   selector: 'app-permit-application-determination-summary-details',
-  standalone: false,
   templateUrl: './summary-details.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
 })
 export class ReviewDeterminationSummaryDetailsComponent extends SummaryDetailsAbstractComponent {
   @Input() cssClass: string;

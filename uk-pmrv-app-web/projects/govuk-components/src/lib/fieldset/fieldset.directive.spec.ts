@@ -11,7 +11,6 @@ describe('FieldsetDirective', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
     template: `
       <fieldset govukFieldset>
         <legend>Legend</legend>
