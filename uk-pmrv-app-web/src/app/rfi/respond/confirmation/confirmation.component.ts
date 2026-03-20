@@ -5,6 +5,7 @@ import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 @Component({
   selector: 'app-not-allowed',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

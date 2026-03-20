@@ -15,6 +15,7 @@ import { PreviousYearItemComponent } from '@tasks/aer/verification-submit/non-co
 import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
+  imports: [AerSharedModule, NonConformitiesRoutingModule, SharedModule],
   declarations: [
     PerPlanComponent,
     PerPlanDeleteComponent,
@@ -26,6 +27,5 @@ import { SummaryComponent } from './summary/summary.component';
     PreviousYearListComponent,
     SummaryComponent,
   ],
-  imports: [AerSharedModule, NonConformitiesRoutingModule, SharedModule],
 })
 export class NonConformitiesModule {}

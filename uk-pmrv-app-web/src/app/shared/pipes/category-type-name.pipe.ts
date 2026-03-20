@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { AirImprovement, MeasurementOfCO2EmissionPointCategory, MeasurementOfN2OEmissionPointCategory } from 'pmrv-api';
 
-@Pipe({ name: 'categoryTypeName' })
+@Pipe({
+  name: 'categoryTypeName',
+  standalone: false,
+})
 export class CategoryTypeNamePipe implements PipeTransform {
   transform(
     value:

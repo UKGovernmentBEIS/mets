@@ -16,11 +16,12 @@ import { WorkflowItemsListComponent } from './workflow-items-list.component';
 /* eslint-disable @angular-eslint/component-selector */
 @Component({
   selector: '',
+  standalone: false,
   template: `
     <app-workflow-items-list
       [items]="items"
       [tableColumns]="tableColumns"
-      [unassignedLabel]="'Unassigned'"></app-workflow-items-list>
+      unassignedLabel="Unassigned"></app-workflow-items-list>
   `,
 })
 class TestParentComponent {

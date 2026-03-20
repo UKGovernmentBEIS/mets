@@ -11,6 +11,7 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-permit-surrender-cessation-notify-operator',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -20,7 +21,7 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
           requestTaskActionType="PERMIT_SURRENDER_CESSATION_NOTIFY_OPERATOR_FOR_DECISION"
           [pendingRfi]="pendingRfi$ | async"
           [pendingRde]="pendingRde$ | async"
-          [confirmationMessage]="'Cessation complete'"></app-notify-operator>
+          confirmationMessage="Cessation complete"></app-notify-operator>
       </div>
     </div>
   `,

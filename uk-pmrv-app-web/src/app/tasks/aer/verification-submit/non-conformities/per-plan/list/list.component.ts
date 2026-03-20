@@ -11,6 +11,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-list',
+  standalone: false,
   template: `
     <app-aer-task-review heading="Non-conformities with the approved monitoring plan" returnToLink="../../..">
       <app-non-conformities-per-plan-group

@@ -20,6 +20,7 @@ import {
 
 @Component({
   selector: 'app-permit-revocation-tasklist',
+  standalone: false,
   templateUrl: './permit-revocation-tasklist.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,

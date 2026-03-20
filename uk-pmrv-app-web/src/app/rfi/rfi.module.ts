@@ -17,6 +17,7 @@ import { VerifyComponent as CancelVerifyComponent } from './wait/verify/verify.c
 import { WaitComponent } from './wait/wait.component';
 
 @NgModule({
+  imports: [RfiRoutingModule, SharedModule],
   declarations: [
     AnswersComponent,
     CancelConfirmationComponent,
@@ -31,7 +32,6 @@ import { WaitComponent } from './wait/wait.component';
     SubmitConfirmationComponent,
     WaitComponent,
   ],
-  imports: [RfiRoutingModule, SharedModule],
   providers: [PaymentCompletedGuard],
 })
 export class RfiModule {}

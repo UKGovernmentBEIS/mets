@@ -19,7 +19,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-opinion-statement-summary',
-  standalone: true,
   imports: [AlrTaskSharedModule, SharedModule],
   templateUrl: './opinion-statement-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

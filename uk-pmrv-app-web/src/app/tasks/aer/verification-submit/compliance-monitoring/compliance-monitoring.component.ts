@@ -9,6 +9,7 @@ import { complianceMonitoringFormProvider } from '@tasks/aer/verification-submit
 
 @Component({
   selector: 'app-compliance-monitoring',
+  standalone: false,
   templateUrl: './compliance-monitoring.component.html',
   providers: [complianceMonitoringFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

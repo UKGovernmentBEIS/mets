@@ -13,9 +13,10 @@ import { changesFormProvider } from './changes-form.provider';
 
 @Component({
   selector: 'app-changes',
+  standalone: false,
   templateUrl: './changes.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [changesFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangesComponent {
   nonSignificantChanges = nonSignificantChanges;

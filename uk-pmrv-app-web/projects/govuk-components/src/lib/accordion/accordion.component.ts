@@ -16,6 +16,7 @@ import { AccordionItemComponent } from './accordion-item/accordion-item.componen
 
 @Component({
   selector: 'govuk-accordion',
+  standalone: false,
   template: `
     <div class="govuk-accordion" [id]="id">
       <div class="govuk-accordion__controls">

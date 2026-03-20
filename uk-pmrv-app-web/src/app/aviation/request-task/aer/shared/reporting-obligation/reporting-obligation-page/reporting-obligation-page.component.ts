@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -21,9 +21,8 @@ import { ReportingObligationFormComponent } from '../reporting-obligation-form/r
 
 @Component({
   selector: 'app-reporting-obligation-page',
+  imports: [SharedModule, ReturnToLinkComponent, ReportingObligationFormComponent],
   templateUrl: './reporting-obligation-page.component.html',
-  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent, ReportingObligationFormComponent],
-  standalone: true,
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

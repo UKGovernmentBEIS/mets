@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
@@ -10,9 +9,8 @@ import { GovukComponentsModule } from 'govuk-components';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-management-procedures-data-form',
+  imports: [GovukComponentsModule, SharedModule],
   templateUrl: './management-procedures-data-form.component.html',
-  standalone: true,
-  imports: [GovukComponentsModule, NgIf, NgFor, SharedModule],
   providers: [DestroySubject],
   viewProviders: [existingControlContainer],
 })

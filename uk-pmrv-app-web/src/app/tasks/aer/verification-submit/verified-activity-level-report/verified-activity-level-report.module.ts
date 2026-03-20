@@ -8,7 +8,7 @@ import { VerifiedActivityLevelReportComponent } from './verified-activity-level-
 import { VerifiedActivityLevelReportRoutingModule } from './verified-activity-level-report-routing.module';
 
 @NgModule({
-  declarations: [SummaryComponent, VerifiedActivityLevelReportComponent],
   imports: [AerSharedModule, SharedModule, VerifiedActivityLevelReportRoutingModule],
+  declarations: [SummaryComponent, VerifiedActivityLevelReportComponent],
 })
 export class VerifiedActivityLevelReportModule {}

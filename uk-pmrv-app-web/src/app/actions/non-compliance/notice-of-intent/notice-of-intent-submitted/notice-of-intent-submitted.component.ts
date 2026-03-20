@@ -14,9 +14,10 @@ import {
 
 @Component({
   selector: 'app-notice-of-intent-submitted',
+  standalone: false,
   templateUrl: './notice-of-intent-submitted.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UserInfoResolverPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NoticeOfIntentSubmittedComponent {
   payload$ = (

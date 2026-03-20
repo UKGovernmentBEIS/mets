@@ -16,9 +16,10 @@ export interface RecommendedImprovementsFormModel {
 }
 
 @Injectable()
-export class RecommendedImprovementsFormProvider
-  implements TaskFormProvider<AviationAerRecommendedImprovements, RecommendedImprovementsFormModel>
-{
+export class RecommendedImprovementsFormProvider implements TaskFormProvider<
+  AviationAerRecommendedImprovements,
+  RecommendedImprovementsFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private destroy$ = new Subject<void>();

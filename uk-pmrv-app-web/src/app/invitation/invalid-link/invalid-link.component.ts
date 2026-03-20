@@ -5,6 +5,7 @@ import { map } from 'rxjs';
 
 @Component({
   selector: 'app-invalid-link',
+  standalone: false,
   templateUrl: './invalid-link.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -13,9 +13,10 @@ import { DOCUMENT_TEMPLATE_FORM, DocumentTemplateFormProvider } from './document
 
 @Component({
   selector: 'app-document-template',
+  standalone: false,
   templateUrl: './document-template.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DocumentTemplateFormProvider, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DocumentTemplateComponent implements OnInit {
   documentTemplate$: Observable<DocumentTemplateDTO> = this.route.data.pipe(map((x) => x?.documentTemplate));

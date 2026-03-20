@@ -11,7 +11,6 @@ import { PermitBatchReissueStore } from '../store/permit-batch-reissue.store';
 
 @Component({
   selector: 'app-changes',
-  standalone: true,
   imports: [SharedModule],
   templateUrl: './changes.component.html',
   styles: ``,

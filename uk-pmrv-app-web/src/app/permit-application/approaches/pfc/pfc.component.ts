@@ -13,6 +13,7 @@ import { areCategoryTierPrerequisitesMet } from './pfc-status';
 
 @Component({
   selector: 'app-pfc',
+  standalone: false,
   templateUrl: './pfc.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

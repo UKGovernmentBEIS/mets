@@ -2,7 +2,7 @@
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
-    [heading]="'Imported measurable heat flows from non-ETS'"
+    heading="Imported measurable heat flows from non-ETS"
     [caption]="productBenchmarkType$ | async | subInstallationType"
     submitText="Continue">
     <div class="govuk-!-width-two-thirds">
@@ -22,7 +22,7 @@
         formControlName="exist"
         govuk-radio
         legend="Are there any measurable heat flows imported from non-ETS installations or entities?"
-        [legendSize]="'medium'">
+        legendSize="medium">
         <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
         <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
       </div>
@@ -48,5 +48,5 @@
     </div>
   </app-wizard-step>
 
-  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+  <a govukLink routerLink="../../">Return to: Sub-installations</a>
 </app-permit-task>

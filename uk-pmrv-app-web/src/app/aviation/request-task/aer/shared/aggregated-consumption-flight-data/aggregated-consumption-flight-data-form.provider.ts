@@ -25,13 +25,10 @@ export interface AviationAerAggregatedEmissionDataFormModel {
 }
 
 @Injectable()
-export class AggregatedConsumptionFlightDataFormProvider
-  implements
-    TaskFormProvider<
-      AviationAerUkEtsAggregatedEmissionsData | AviationAerCorsiaAggregatedEmissionsData,
-      AviationAerAggregatedEmissionDataFormModel
-    >
-{
+export class AggregatedConsumptionFlightDataFormProvider implements TaskFormProvider<
+  AviationAerUkEtsAggregatedEmissionsData | AviationAerCorsiaAggregatedEmissionsData,
+  AviationAerAggregatedEmissionDataFormModel
+> {
   constructor(
     private aviationReportedAirportsService: AviationReportedAirportsService,
     private store: RequestTaskStore,

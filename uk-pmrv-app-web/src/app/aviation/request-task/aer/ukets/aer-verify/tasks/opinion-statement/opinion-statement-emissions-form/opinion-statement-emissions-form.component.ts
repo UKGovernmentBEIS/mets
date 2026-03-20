@@ -12,9 +12,8 @@ import { OpinionStatementFormProvider } from '../opinion-statement-form.provider
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-opinion-statement-emissions-form',
-  templateUrl: './opinion-statement-emissions-form.component.html',
-  standalone: true,
   imports: [GovukComponentsModule, ReactiveFormsModule, NgIf],
+  templateUrl: './opinion-statement-emissions-form.component.html',
   viewProviders: [existingControlContainer],
 })
 export default class OpinionStatementEmissionsFormComponent {

@@ -18,6 +18,7 @@ import {
 
 @Component({
   selector: 'app-previous-year-item',
+  standalone: false,
   templateUrl: './previous-year-item.component.html',
   providers: [previousYearItemFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

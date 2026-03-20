@@ -5,12 +5,13 @@ import { decisionFormProvider, REVIEW_FORM } from '../decision/decision-form.pro
 
 @Component({
   selector: 'app-permit-notification-review-invalid-data',
+  standalone: false,
   template: `
     <govuk-error-summary [form]="form"></govuk-error-summary>
     <a govukLink routerLink="..">Return to permit notification</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [decisionFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvalidDataComponent {
   constructor(@Inject(REVIEW_FORM) readonly form: UntypedFormGroup) {}

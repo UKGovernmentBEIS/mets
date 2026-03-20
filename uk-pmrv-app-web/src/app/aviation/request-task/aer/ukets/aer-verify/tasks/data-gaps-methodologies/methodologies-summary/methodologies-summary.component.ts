@@ -1,6 +1,6 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 
@@ -32,13 +32,10 @@ interface ViewModel {
 
 @Component({
   selector: 'app-methodologies-summary',
-  standalone: true,
   imports: [
     SharedModule,
     GovukComponentsModule,
-    NgFor,
     NgIf,
-    RouterLinkWithHref,
     ReturnToLinkComponent,
     DataGapsMethodologiesGroupComponent,
     AerVerificationReviewDecisionGroupComponent,

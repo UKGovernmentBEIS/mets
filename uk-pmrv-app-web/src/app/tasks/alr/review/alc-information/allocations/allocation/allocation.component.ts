@@ -13,7 +13,6 @@ import { allocationFormProvider } from './allocation-form.provider';
 
 @Component({
   selector: 'app-alr-allocation',
-  standalone: true,
   imports: [SharedModule, AlrTaskSharedModule],
   template: `
     <app-alr-task-common
@@ -29,8 +28,8 @@ import { allocationFormProvider } from './allocation-form.provider';
         [isAlr]="true"></app-preliminary-allocation-details-template>
     </app-alr-task-common>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [allocationFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrAllocationComponent {
   editable$: Observable<boolean> = this.alrService.isEditable$;

@@ -13,6 +13,7 @@ import { areCategoryTierPrerequisitesMet } from './calculation-status';
 
 @Component({
   selector: 'app-calculation',
+  standalone: false,
   templateUrl: './calculation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

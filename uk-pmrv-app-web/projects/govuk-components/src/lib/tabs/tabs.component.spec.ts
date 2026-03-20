@@ -16,6 +16,7 @@ describe('TabsComponent', () => {
   let router: Router;
 
   @Component({
+    standalone: false,
     template: `
       <govuk-tabs>
         <ng-template govukTab *ngFor="let tab of tabs$ | async" [id]="tab.id" [label]="tab.label">
@@ -24,7 +25,7 @@ describe('TabsComponent', () => {
         <ng-template govukTab id="paragraph2" label="Another paragraph">
           <p>This is another paragraph</p>
         </ng-template>
-        <ng-template govukTab [id]="syncTab.id" [label]="syncTab.label"></ng-template>
+        <ng-template govukTab [id]="syncTab.id" [label]="syncTab.label" />
       </govuk-tabs>
     `,
   })

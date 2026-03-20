@@ -13,6 +13,7 @@ import { ConditionalContentDirective } from '../../directives';
 
 @Component({
   selector: 'govuk-checkbox',
+  standalone: false,
   templateUrl: './checkbox.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

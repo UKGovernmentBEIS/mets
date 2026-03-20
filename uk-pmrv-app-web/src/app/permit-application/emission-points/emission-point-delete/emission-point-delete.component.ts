@@ -8,17 +8,18 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-emission-point-delete',
+  standalone: false,
   template: `
     <app-emission-point-delete-template
       (delete)="onDelete()"
       [emissionPoint]="emissionPoint$ | async"></app-emission-point-delete-template>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .nowrap {
       white-space: nowrap;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionPointDeleteComponent {
   emissionPoint$ = combineLatest([this.store.getTask('emissionPoints'), this.route.paramMap]).pipe(

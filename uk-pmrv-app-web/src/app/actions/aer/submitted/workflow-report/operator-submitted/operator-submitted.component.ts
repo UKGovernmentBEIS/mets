@@ -15,6 +15,7 @@ import { getAerTitle } from '../../submitted';
 
 @Component({
   selector: 'app-operator-submitted',
+  standalone: false,
   templateUrl: './operator-submitted.component.html',
   styleUrl: './operator-submitted.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

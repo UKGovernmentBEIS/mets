@@ -12,10 +12,9 @@ import { EmissionSourcesFormModel } from '../emission-sources-form.model';
 
 @Component({
   selector: 'app-multiple-methods',
-  templateUrl: './multiple-methods.component.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule, SharedModule, ReturnToLinkComponent],
+  templateUrl: './multiple-methods.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultipleMethodsComponent {
   emissionSourcesForm = inject<FormGroup<EmissionSourcesFormModel>>(TASK_FORM_PROVIDER);

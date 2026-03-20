@@ -4,6 +4,7 @@ import { UncorrectedNonConformities } from 'pmrv-api';
 
 @Component({
   selector: 'app-non-conformities-group',
+  standalone: false,
   template: `
     <app-non-conformities-per-plan-group
       [isEditable]="isEditable"

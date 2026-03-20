@@ -12,6 +12,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-determination',
+  standalone: false,
   templateUrl: './determination.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

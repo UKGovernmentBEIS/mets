@@ -20,9 +20,10 @@ import { detailsOfBreanchFormProvider } from './details-of-breach-form.provider'
 
 @Component({
   selector: 'app-details-of-breach',
+  standalone: false,
   templateUrl: './details-of-breach.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [detailsOfBreanchFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsOfBreachComponent implements OnInit {
   reasonOptions: NonComplianceApplicationSubmitRequestTaskPayload['reason'][] = [

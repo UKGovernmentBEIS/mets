@@ -11,6 +11,7 @@ import { PermitNotificationService } from '../core/permit-notification.service';
 
 @Component({
   selector: 'app-action-notification-completed',
+  standalone: false,
   templateUrl: './completed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

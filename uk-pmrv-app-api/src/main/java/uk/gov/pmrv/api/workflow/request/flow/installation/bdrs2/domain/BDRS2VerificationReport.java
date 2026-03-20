@@ -12,6 +12,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import uk.gov.pmrv.api.verificationbody.domain.verificationreport.VerificationReport;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,21 +29,26 @@ public class BDRS2VerificationReport extends VerificationReport {
 
     @JsonIgnore
     public Set<UUID> getVerificationReportAttachments() {
-        if (fileAttachmentExists()) {
-            return Collections.unmodifiableSet(verificationData.getOpinionStatement().getOpinionStatementFiles());
+        if (!hasOpinionStatement()) {
+            return Collections.emptySet();
         }
-        return Collections.emptySet();
+
+        Set<UUID> attachments = new HashSet<>();
+
+        UUID opinionFile = verificationData.getOpinionStatement().getOpinionStatementFile();
+        if (opinionFile != null) {
+            attachments.add(opinionFile);
+        }
+
+        Set<UUID> supportingFiles = verificationData.getOpinionStatement().getSupportingFiles();
+        if (ObjectUtils.isNotEmpty(supportingFiles)) {
+            attachments.addAll(supportingFiles);
+        }
+
+        return attachments;
     }
 
-    private boolean fileAttachmentExists() {
-        if (ObjectUtils.isEmpty(verificationData)){
-            return false;
-        }
-
-        if (ObjectUtils.isEmpty(verificationData.getOpinionStatement())){
-            return false;
-        }
-
-        return ObjectUtils.isNotEmpty(verificationData.getOpinionStatement().getOpinionStatementFiles());
+    private boolean hasOpinionStatement() {
+        return verificationData != null && verificationData.getOpinionStatement() != null;
     }
 }

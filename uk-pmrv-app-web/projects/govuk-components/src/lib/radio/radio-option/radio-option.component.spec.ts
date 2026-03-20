@@ -11,9 +11,10 @@ describe('RadioOptionComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <div govuk-radio [formControl]="control">
-        <govuk-radio-option [value]="1" label="First"></govuk-radio-option>
+        <govuk-radio-option [value]="1" label="First" />
         <govuk-radio-option [value]="2">
           <ng-container govukLabel>Second</ng-container>
           <ng-container govukConditionalContent>

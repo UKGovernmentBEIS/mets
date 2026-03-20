@@ -35,9 +35,9 @@ export const EMP_MANAGEMENT_PROCEDURES_CORSIA_ROUTES: Routes = [
         data: { backlink: '../data-management' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
-          import(
-            './management-procedures-documentation-record/management-procedures-documentation-record.component'
-          ).then((c) => c.ManagementProceduresDocumentationRecordComponent),
+          import('./management-procedures-documentation-record/management-procedures-documentation-record.component').then(
+            (c) => c.ManagementProceduresDocumentationRecordComponent,
+          ),
       },
       {
         path: 'explanation-risks',

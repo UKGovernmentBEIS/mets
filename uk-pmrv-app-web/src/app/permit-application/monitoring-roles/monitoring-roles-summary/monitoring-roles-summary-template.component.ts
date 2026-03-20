@@ -11,6 +11,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-monitoring-roles-summary-template',
+  standalone: false,
   templateUrl: './monitoring-roles-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

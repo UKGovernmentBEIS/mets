@@ -8,6 +8,7 @@ import { AerService } from '@tasks/aer/core/aer.service';
 
 @Component({
   selector: 'app-recall',
+  standalone: false,
   templateUrl: './recall.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

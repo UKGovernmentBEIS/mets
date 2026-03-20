@@ -8,6 +8,7 @@ import {
 
 @Component({
   selector: 'app-installation-details-group',
+  standalone: false,
   templateUrl: './installation-details-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

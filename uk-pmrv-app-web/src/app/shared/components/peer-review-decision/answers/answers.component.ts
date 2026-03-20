@@ -24,6 +24,7 @@ import {
 
 @Component({
   selector: 'app-answers',
+  standalone: false,
   templateUrl: './answers.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

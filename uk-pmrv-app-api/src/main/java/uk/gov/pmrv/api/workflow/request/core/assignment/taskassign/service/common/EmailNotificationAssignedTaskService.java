@@ -92,7 +92,12 @@ public class EmailNotificationAssignedTaskService {
             case PERMIT_ISSUANCE_APPLICATION_REVIEW:
             case PERMIT_ISSUANCE_TRACK_PAYMENT:
             case PERMIT_ISSUANCE_CONFIRM_PAYMENT:
-            case PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW: return true;
+            case PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW:
+            case PERMIT_VARIATION_APPLICATION_REVIEW:
+            case PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT:
+            case PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW:
+            case PERMIT_VARIATION_APPLICATION_PEER_REVIEW:
+                return true;
             default: return false;
         }
     }

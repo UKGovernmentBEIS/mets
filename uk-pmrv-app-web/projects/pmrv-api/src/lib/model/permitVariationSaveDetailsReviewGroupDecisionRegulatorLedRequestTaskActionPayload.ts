@@ -12,7 +12,6 @@
 import { PermitAcceptedVariationDecisionDetails } from './permitAcceptedVariationDecisionDetails';
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface PermitVariationSaveDetailsReviewGroupDecisionRegulatorLedRequestTaskActionPayload
-  extends RequestTaskActionPayload {
+export interface PermitVariationSaveDetailsReviewGroupDecisionRegulatorLedRequestTaskActionPayload extends RequestTaskActionPayload {
   decision: PermitAcceptedVariationDecisionDetails;
 }

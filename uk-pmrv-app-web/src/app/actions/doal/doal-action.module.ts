@@ -21,6 +21,7 @@ import { ProceededComponent } from './proceeded/proceeded.component';
 import { DoalActionTaskComponent } from './shared/doal-action-task.component';
 
 @NgModule({
+  imports: [ActionSharedModule, DoalActionRoutingModule, SharedModule],
   declarations: [
     AdditionalDocumentsComponent,
     AlcInformationComponent,
@@ -38,6 +39,5 @@ import { DoalActionTaskComponent } from './shared/doal-action-task.component';
     SubmittedComponent,
     VerificationReportComponent,
   ],
-  imports: [ActionSharedModule, DoalActionRoutingModule, SharedModule],
 })
 export class DoalActionModule {}

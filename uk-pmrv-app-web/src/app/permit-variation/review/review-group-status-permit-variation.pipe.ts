@@ -10,6 +10,7 @@ import { PermitVariationStore } from '../store/permit-variation.store';
 
 @Pipe({
   name: 'reviewGroupStatusPermitVariation',
+  standalone: false,
 })
 export class ReviewGroupStatusPermitVariationPipe implements PipeTransform {
   constructor(private readonly store: PermitVariationStore) {}

@@ -5,6 +5,7 @@ import { OperatorImprovementFollowUpResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-operator-followup-item',
+  standalone: false,
   templateUrl: './operator-followup-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

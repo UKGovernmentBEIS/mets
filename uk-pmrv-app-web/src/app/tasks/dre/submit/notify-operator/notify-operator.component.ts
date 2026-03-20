@@ -8,6 +8,7 @@ import { getPreviewDocumentsInfo } from '@tasks/dre/shared/previewDocumentsDre.u
 
 @Component({
   selector: 'app-determine-reportable-emissions-notify-operator',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -15,7 +16,7 @@ import { getPreviewDocumentsInfo } from '@tasks/dre/shared/previewDocumentsDre.u
           [taskId]="taskId$ | async"
           [accountId]="accountId$ | async"
           requestTaskActionType="DRE_SUBMIT_NOTIFY_OPERATOR"
-          [confirmationMessage]="'Reportable emissions updated'"
+          confirmationMessage="Reportable emissions updated"
           [referenceCode]="requestId$ | async"
           [previewDocuments]="previewDocuments"></app-notify-operator>
       </div>

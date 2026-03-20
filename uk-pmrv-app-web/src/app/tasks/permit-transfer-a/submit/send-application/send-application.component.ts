@@ -11,6 +11,7 @@ import { PermitTransferAApplicationRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-transfer-send-application',
+  standalone: false,
   templateUrl: './send-application.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

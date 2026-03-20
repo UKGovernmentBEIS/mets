@@ -17,7 +17,10 @@ import {
   AerApplicationVerificationSubmitRequestTaskPayload,
 } from 'pmrv-api';
 
-@Pipe({ name: 'taskStatus' })
+@Pipe({
+  name: 'taskStatus',
+  standalone: false,
+})
 export class TaskStatusPipe implements PipeTransform {
   constructor(private readonly aerService: AerService) {}
 

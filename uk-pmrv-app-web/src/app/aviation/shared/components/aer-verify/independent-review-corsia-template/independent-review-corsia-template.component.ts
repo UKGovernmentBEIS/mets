@@ -7,9 +7,8 @@ import { AviationAerCorsiaIndependentReview } from 'pmrv-api';
 
 @Component({
   selector: 'app-independent-review-corsia-template',
-  templateUrl: './independent-review-corsia-template.component.html',
-  standalone: true,
   imports: [SharedModule, RouterLink],
+  templateUrl: './independent-review-corsia-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IndependentReviewCorsiaTemplateComponent {

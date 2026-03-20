@@ -13,8 +13,6 @@ import { HSETIApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-details-review',
-  templateUrl: './details-review.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     TaskSharedModule,
@@ -22,6 +20,7 @@ import { HSETIApplicationSubmitRequestTaskPayload } from 'pmrv-api';
     DetailsSummaryTemplateComponent,
     HsetiReviewGroupDecisionComponent,
   ],
+  templateUrl: './details-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsReviewComponent {

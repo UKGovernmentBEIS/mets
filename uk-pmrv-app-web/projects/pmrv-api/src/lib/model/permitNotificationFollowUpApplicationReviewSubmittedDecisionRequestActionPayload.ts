@@ -14,8 +14,7 @@ import { PermitNotificationFollowUpReviewDecision } from './permitNotificationFo
 import { RequestActionPayload } from './requestActionPayload';
 import { RequestActionUserInfo } from './requestActionUserInfo';
 
-export interface PermitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActionPayload
-  extends RequestActionPayload {
+export interface PermitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActionPayload extends RequestActionPayload {
   permitNotificationType:
     | 'TEMPORARY_FACTOR'
     | 'TEMPORARY_CHANGE'

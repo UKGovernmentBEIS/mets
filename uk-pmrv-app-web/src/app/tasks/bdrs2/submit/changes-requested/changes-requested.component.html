@@ -1,0 +1,29 @@
+<app-bdrs2-task [breadcrumb]="true">
+  <app-page-heading>Changes requested by the regulator</app-page-heading>
+
+  @if (displayErrorSummary$ | async) {
+    <govuk-error-summary [form]="form"></govuk-error-summary>
+  }
+
+  <h2 app-summary-header class="govuk-heading-m">Stage 2 baseline data report details</h2>
+
+  @if (payload(); as payload) {
+    <app-changes-requested-template
+      [requiredChanges]="payload.regulatorReviewGroupDecisions?.BDRS2?.['details']?.requiredChanges"
+      [reviewAttachments]="payload.regulatorReviewAttachments"
+      [downloadUrl]="bdrs2Service.getBaseFileDownloadUrl()"></app-changes-requested-template>
+  }
+
+  <form (ngSubmit)="confirm()" [formGroup]="form">
+    <div formControlName="changesRequested" govuk-checkboxes>
+      <govuk-checkbox
+        [value]="true"
+        label="I have made changes and want to mark this task as complete"></govuk-checkbox>
+    </div>
+    @if (isEditable()) {
+      <div class="govuk-button-group">
+        <button appPendingButton govukButton type="submit">Confirm and complete</button>
+      </div>
+    }
+  </form>
+</app-bdrs2-task>

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-approaches-template',
+  standalone: false,
   templateUrl: './approaches-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

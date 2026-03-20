@@ -9,6 +9,7 @@ import { VirApplicationReviewRequestTaskPayload, VirRequestMetadata } from 'pmrv
 
 @Component({
   selector: 'app-review-container',
+  standalone: false,
   templateUrl: './review-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

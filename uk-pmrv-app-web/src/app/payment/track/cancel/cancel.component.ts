@@ -15,9 +15,10 @@ import { PaymentStore } from '../../store/payment.store';
 
 @Component({
   selector: 'app-cancel',
+  standalone: false,
   templateUrl: './cancel.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CancelComponent implements OnInit {
   readonly shouldDisplayCancelHintInfo$ = this.store.pipe(

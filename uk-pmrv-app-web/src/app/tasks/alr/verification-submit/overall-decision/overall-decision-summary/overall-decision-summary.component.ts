@@ -16,7 +16,6 @@ export interface ViewModel {
 }
 @Component({
   selector: 'app-alr-overall-decision-summary',
-  standalone: true,
   imports: [AlrTaskSharedModule, SharedModule],
   template: `
     <app-alr-task-common

@@ -7,6 +7,7 @@ import { RequestNoteDto, RequestNotesService } from 'pmrv-api';
 
 @Component({
   selector: 'app-request-notes',
+  standalone: false,
   templateUrl: './request-notes.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

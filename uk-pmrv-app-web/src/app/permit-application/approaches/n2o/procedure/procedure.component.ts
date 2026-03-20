@@ -15,9 +15,10 @@ import { procedureFormProvider } from './procedure-form.provider';
 
 @Component({
   selector: 'app-procedure',
+  standalone: false,
   templateUrl: './procedure.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [procedureFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProcedureComponent {
   taskKey$: Observable<string> = this.route.data.pipe(map((x) => x?.taskKey));

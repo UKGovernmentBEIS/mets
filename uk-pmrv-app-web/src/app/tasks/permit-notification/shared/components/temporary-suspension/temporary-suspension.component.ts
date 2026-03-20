@@ -11,6 +11,7 @@ import { TemporarySuspension } from 'pmrv-api';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-temporary-suspension',
+  standalone: false,
   templateUrl: './temporary-suspension.component.html',
   providers: [existingControlContainer],
   viewProviders: [existingControlContainer],

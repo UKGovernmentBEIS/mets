@@ -10,7 +10,6 @@ import { GovukComponentsModule } from 'govuk-components';
 
 @Component({
   selector: 'app-return-to-link',
-  standalone: true,
   imports: [CommonModule, RouterLinkWithHref, GovukComponentsModule],
   template: `
     <a govukLink [routerLink]="returnToUrl$ | async">Return to: {{ returnText$ | async }}</a>

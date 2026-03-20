@@ -9,7 +9,7 @@ import { SubmittedWithdrawnComponent } from './submitted-withdrawn/submitted-wit
 import { WithholdingAllowancesRoutingModule } from './withholding-allowances-routing.module';
 
 @NgModule({
-  declarations: [ClosedComponent, PeerReviewDecisionComponent, SubmittedWithdrawnComponent],
   imports: [ActionSharedModule, SharedModule, WithholdingAllowancesRoutingModule],
+  declarations: [ClosedComponent, PeerReviewDecisionComponent, SubmittedWithdrawnComponent],
 })
 export class WithholdingAllowancesModule {}

@@ -10,6 +10,7 @@ import { FiltersModel } from '../filters.model';
 
 @Component({
   selector: 'app-permit-batch-reissue-filters-template',
+  standalone: false,
   templateUrl: './filters-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

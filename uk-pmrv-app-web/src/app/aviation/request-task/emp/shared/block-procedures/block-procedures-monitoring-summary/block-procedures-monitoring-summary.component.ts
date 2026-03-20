@@ -43,8 +43,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-block-procedures-monitoring-summary',
-  templateUrl: './block-procedures-monitoring-summary.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
@@ -53,6 +51,7 @@ interface ViewModel {
     EmpReviewDecisionGroupComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,
   ],
+  templateUrl: './block-procedures-monitoring-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockProceduresMonitoringSummaryComponent {

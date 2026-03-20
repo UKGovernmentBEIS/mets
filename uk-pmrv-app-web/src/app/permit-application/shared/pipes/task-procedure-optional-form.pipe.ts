@@ -8,7 +8,10 @@ import { PermitApplicationState } from '../../store/permit-application.state';
 import { PermitApplicationStore } from '../../store/permit-application.store';
 import { Path } from '../types/permit-task.type';
 
-@Pipe({ name: 'taskProcedureOptionalForm' })
+@Pipe({
+  name: 'taskProcedureOptionalForm',
+  standalone: false,
+})
 export class TaskProcedureOptionalFormPipe implements PipeTransform {
   constructor(private readonly store: PermitApplicationStore<PermitApplicationState>) {}
 

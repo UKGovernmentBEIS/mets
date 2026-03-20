@@ -21,15 +21,14 @@ export const AER_BATCH_ITEM_FORM = new InjectionToken<{ form: AviationAerSafPurc
 
 @Component({
   selector: 'app-emissions-reduction-claim-add-batch-item',
-  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent],
+  templateUrl: './emissions-reduction-claim-add-batch-item.component.html',
   providers: [
     {
       provide: AER_BATCH_ITEM_FORM,
       useClass: aerEmissionsReductionClaimBatchItemFormProvider,
     },
   ],
-  imports: [SharedModule, ReturnToLinkComponent],
-  templateUrl: './emissions-reduction-claim-add-batch-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionsReductionClaimAddBatchItemComponent implements OnInit {

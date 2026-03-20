@@ -12,8 +12,7 @@
             [formGroupName]="i"
             [disabled]="(isEditable$ | async) === false"
             govukFieldset
-            id="variation-schedule-items-{{ i }}"
-          >
+            id="variation-schedule-items-{{ i }}">
             <legend class="govuk-heading-s">Item {{ i + 1 }}</legend>
             <button
               (click)="removeVariationScheduleItems(i)"
@@ -23,8 +22,7 @@
               appAddAnother
               govukSecondaryButton
               type="button"
-              #removeButton
-            >
+              #removeButton>
               Remove
             </button>
             <div govuk-textarea [maxLength]="10000" formControlName="item"></div>
@@ -34,8 +32,7 @@
             (click)="addOtherVariationScheduleItem()"
             [disabled]="(isEditable$ | async) === false"
             govukSecondaryButton
-            type="button"
-          >
+            type="button">
             Add another item
           </button>
         </div>
@@ -45,15 +42,14 @@
             (click)="addVariationScheduleItem()"
             [disabled]="(isEditable$ | async) === false"
             govukSecondaryButton
-            type="button"
-          >
+            type="button">
             Add item
           </button>
         </ng-template>
       </div>
     </div>
   </govuk-radio-option>
-  <govuk-radio-option value="REJECTED" label="Rejected"> </govuk-radio-option>
+  <govuk-radio-option value="REJECTED" label="Rejected"></govuk-radio-option>
   <govuk-radio-option value="OPERATOR_AMENDS_NEEDED" label="Operator changes required">
     <div govukConditionalContent>
       <div>
@@ -65,8 +61,7 @@
             *ngFor="let requiredChange of requiredChangeCtrl.controls; index as i"
             [formGroupName]="i"
             govukFieldset
-            id="required=changes-{{ i }}"
-          >
+            id="required=changes-{{ i }}">
             <legend class="govuk-heading-s">Required change {{ i + 1 }}</legend>
             <button
               (click)="removeRequiredChangeCtrl(i)"
@@ -75,8 +70,7 @@
               appAddAnother
               govukSecondaryButton
               type="button"
-              #removeButton
-            >
+              #removeButton>
               Remove
             </button>
             <div govuk-textarea [maxLength]="10000" formControlName="reason"></div>
@@ -85,9 +79,8 @@
               [baseDownloadUrl]="getDownloadUrl()"
               [label]="(uploadedFiles[i] | async) === true ? 'Upload a different file' : 'Upload a file (optional)'"
               headerSize="s"
-              [listTitle]="'Uploaded attachments for the operator'"
-              formControlName="files"
-            ></app-multiple-file-input>
+              listTitle="Uploaded attachments for the operator"
+              formControlName="files"></app-multiple-file-input>
           </fieldset>
 
           <button (click)="addRequiredChangeCtrl()" govukSecondaryButton type="button">
@@ -104,5 +97,4 @@
   [maxLength]="10000"
   formControlName="notes"
   label="Notes"
-  hint="The operator cannot view this"
-></div>
+  hint="The operator cannot view this"></div>

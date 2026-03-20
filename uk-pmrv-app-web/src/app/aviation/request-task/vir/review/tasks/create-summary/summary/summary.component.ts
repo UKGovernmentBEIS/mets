@@ -23,7 +23,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-summary',
-  standalone: true,
+  imports: [VirSharedModule, SharedModule, ReturnToLinkComponent],
   template: `
     <ng-container *ngIf="vm$ | async as vm">
       <app-page-heading>{{ vm.heading }}</app-page-heading>
@@ -40,7 +40,6 @@ interface ViewModel {
     <app-return-to-link></app-return-to-link>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [VirSharedModule, SharedModule, ReturnToLinkComponent],
 })
 export class SummaryComponent {
   vm$: Observable<ViewModel> = combineLatest([

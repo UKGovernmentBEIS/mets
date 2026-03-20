@@ -20,9 +20,10 @@ import { responseDeadlineFormProvider } from './response-deadline-form.provider'
 
 @Component({
   selector: 'app-response-deadline',
+  imports: [InspectionTaskComponent, SharedModule],
   template: `
-    <app-inspection-task [returnToLink]="'..'">
-      <span [class]="'govuk-caption-l'">Follow-up actions for the operator</span>
+    <app-inspection-task returnToLink="..">
+      <span class="govuk-caption-l">Follow-up actions for the operator</span>
       <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" submitText="Continue" [hideSubmit]="!isEditable()">
         <div
           formControlName="responseDeadline"
@@ -35,8 +36,6 @@ import { responseDeadlineFormProvider } from './response-deadline-form.provider'
       </app-wizard-step>
     </app-inspection-task>
   `,
-  standalone: true,
-  imports: [InspectionTaskComponent, SharedModule],
   providers: [responseDeadlineFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -22,10 +22,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-summary',
-  standalone: true,
+  imports: [SharedModule, ReturnToLinkComponent, RouterLink, UncorrectedItemGroupComponent],
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, ReturnToLinkComponent, RouterLink, UncorrectedItemGroupComponent],
 })
 export class SummaryComponent {
   vm$: Observable<ViewModel> = combineLatest([

@@ -28,9 +28,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-overall-decision',
-  templateUrl: './overall-decision.component.html',
-  standalone: true,
   imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent, OverallDecisionTypePipe],
+  templateUrl: './overall-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverallDecisionComponent {

@@ -13,10 +13,13 @@ describe('ALRReturnLinkComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
   let page: Page;
 
-  @Component({ template: '<router-outlet></router-outlet>' })
+  @Component({
+    standalone: false,
+    template: '<router-outlet></router-outlet>',
+  })
   class TestComponent {}
 
-  @Component({ template: '<app-alr-return-link></app-alr-return-link>' })
+  @Component({ standalone: false, template: '<app-alr-return-link></app-alr-return-link>' })
   class ChildComponent {}
 
   class Page extends BasePage<TestComponent> {

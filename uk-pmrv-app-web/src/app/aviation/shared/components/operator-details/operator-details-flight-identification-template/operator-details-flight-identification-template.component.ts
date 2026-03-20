@@ -9,11 +9,10 @@ import { GovukComponentsModule } from 'govuk-components';
 
 @Component({
   selector: 'app-operator-details-flight-identification-template',
-  standalone: true,
   imports: [GovukComponentsModule, SharedModule, ReactiveFormsModule, OperatorDetailsFlightIdentificationTypePipe],
   templateUrl: './operator-details-flight-identification-template.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorDetailsFlightIdentificationTemplateComponent implements OnInit {
   @Input() form: FormGroup<any>;

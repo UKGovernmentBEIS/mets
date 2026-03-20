@@ -12,6 +12,7 @@ import { statusMap } from './status.map';
 
 @Component({
   selector: 'li[app-task-item]',
+  standalone: false,
   template: `
     <span class="app-task-list__task-name" [class.govuk-!-margin-bottom-3]="hasContent">
       <a *ngIf="link; else plainText" [routerLink]="link" govukLink>{{ linkText }}</a>
@@ -38,6 +39,7 @@ export class TaskItemComponent {
     | FollowUpDecisionStatus;
   @Input() hasContent: boolean;
 
+  // eslint-disable-next-line @angular-eslint/prefer-host-metadata-property
   @HostBinding('class.app-task-list__item') readonly taskListItem = true;
 
   statusMap = statusMap;

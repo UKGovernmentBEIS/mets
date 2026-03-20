@@ -15,9 +15,8 @@ import { DataGapsFormProvider } from '../data-gaps-form.provider';
 
 @Component({
   selector: 'app-threshold-page',
+  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './threshold-page.component.html',
-  standalone: true,
-  imports: [SharedModule, ReturnToLinkComponent, ThresholdPageComponent],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -127,6 +127,15 @@ import { PfcVerificationComponent } from './verification-submit/pfc/pfc-verifica
 import { RecallComponent } from './verification-wait/recall/recall.component';
 
 @NgModule({
+  imports: [
+    AerRoutingModule,
+    AerSharedModule,
+    EmissionPointsTableComponent,
+    EmissionSourceTableComponent,
+    SharedModule,
+    SourceStreamsTableComponent,
+    TaskSharedModule,
+  ],
   declarations: [
     AbbreviationsComponent,
     ActivityComponent,
@@ -245,15 +254,6 @@ import { RecallComponent } from './verification-wait/recall/recall.component';
     VerifierEmissionsSummary,
     VerifierSendReportComponent,
     WasteCrfCodeComponent,
-  ],
-  imports: [
-    AerRoutingModule,
-    AerSharedModule,
-    EmissionPointsTableComponent,
-    EmissionSourceTableComponent,
-    SharedModule,
-    SourceStreamsTableComponent,
-    TaskSharedModule,
   ],
 })
 export class AerModule {}

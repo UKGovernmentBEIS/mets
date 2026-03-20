@@ -26,9 +26,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-regulator-approved',
-  templateUrl: './regulator-approved.component.html',
-  standalone: true,
   imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
+  templateUrl: './regulator-approved.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegulatorApprovedComponent {

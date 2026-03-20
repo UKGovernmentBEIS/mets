@@ -4,6 +4,7 @@ import { TransferCO2, TransferN2O } from 'pmrv-api';
 
 @Component({
   selector: 'app-transfer-installation-summary-template',
+  standalone: false,
   templateUrl: './transfer-installation-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

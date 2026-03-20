@@ -13,9 +13,10 @@ export interface AviationAerCorsiaGeneralInformationFormModel {
 }
 
 @Injectable()
-export class GeneralInformationFormProvider
-  implements TaskFormProvider<AviationAerCorsiaGeneralInformation, AviationAerCorsiaGeneralInformationFormModel>
-{
+export class GeneralInformationFormProvider implements TaskFormProvider<
+  AviationAerCorsiaGeneralInformation,
+  AviationAerCorsiaGeneralInformationFormModel
+> {
   private _form: FormGroup<AviationAerCorsiaGeneralInformationFormModel>;
 
   constructor(private fb: FormBuilder) {}

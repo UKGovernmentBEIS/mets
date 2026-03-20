@@ -15,7 +15,6 @@ import { InstallationAccountPermitDTO, InstallationAccountUpdateService } from '
 
 @Component({
   selector: 'app-account-edit-reporting-first-year',
-  standalone: true,
   imports: [SharedModule],
   templateUrl: './reporting-first-year.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

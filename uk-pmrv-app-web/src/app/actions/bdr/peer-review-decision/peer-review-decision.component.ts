@@ -19,7 +19,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-action-bdr-peer-review-decision',
-  standalone: true,
   imports: [ActionSharedModule, NgIf],
   template: `
     <ng-container *ngIf="vm() as vm">

@@ -16,6 +16,7 @@ import { PermitRevocationStore } from '../../../store/permit-revocation-store';
 
 @Component({
   selector: 'app-revocation-cessation-notes',
+  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onContinue()"
@@ -34,8 +35,8 @@ import { PermitRevocationStore } from '../../../store/permit-revocation-store';
     </app-wizard-step>
     <a govukLink routerLink="../..">Return to: Cessation</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [permitRevocationCessationFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotesComponent implements PendingRequest, OnInit {
   constructor(

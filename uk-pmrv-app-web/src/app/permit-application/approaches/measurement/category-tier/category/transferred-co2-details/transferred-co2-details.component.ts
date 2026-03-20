@@ -13,6 +13,7 @@ import { MeasurementOfCO2EmissionPointCategoryAppliedTier, MeasurementOfCO2Monit
 
 @Component({
   selector: 'app-transferred-co2-details',
+  standalone: false,
   templateUrl: './transferred-co2-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

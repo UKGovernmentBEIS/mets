@@ -62,10 +62,16 @@ import { BDRApplicationSaveRequestTaskActionPayload } from './bDRApplicationSave
 import { BDRApplicationSubmitToVerifierRequestTaskActionPayload } from './bDRApplicationSubmitToVerifierRequestTaskActionPayload';
 import { BDRApplicationVerificationReturnToOperatorRequestTaskActionPayload } from './bDRApplicationVerificationReturnToOperatorRequestTaskActionPayload';
 import { BDRApplicationVerificationSaveRequestTaskActionPayload } from './bDRApplicationVerificationSaveRequestTaskActionPayload';
+import { BDRS2ApplicationAmendsSaveRequestTaskActionPayload } from './bDRS2ApplicationAmendsSaveRequestTaskActionPayload';
+import { BDRS2ApplicationAmendsSubmitRequestTaskActionPayload } from './bDRS2ApplicationAmendsSubmitRequestTaskActionPayload';
+import { BDRS2ApplicationAmendsSubmitToVerifierRequestTaskActionPayload } from './bDRS2ApplicationAmendsSubmitToVerifierRequestTaskActionPayload';
+import { BDRS2ApplicationRegulatorReviewSaveTaskActionPayload } from './bDRS2ApplicationRegulatorReviewSaveTaskActionPayload';
 import { BDRS2ApplicationSaveRequestTaskActionPayload } from './bDRS2ApplicationSaveRequestTaskActionPayload';
 import { BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload } from './bDRS2ApplicationSubmitToVerifierRequestTaskActionPayload';
 import { BDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload } from './bDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload';
 import { BDRS2ApplicationVerificationSaveRequestTaskActionPayload } from './bDRS2ApplicationVerificationSaveRequestTaskActionPayload';
+import { BDRS2RegulatorReviewReturnForAmendsTaskActionPayload } from './bDRS2RegulatorReviewReturnForAmendsTaskActionPayload';
+import { BDRS2SaveRegulatorReviewGroupDecisionRequestTaskActionPayload } from './bDRS2SaveRegulatorReviewGroupDecisionRequestTaskActionPayload';
 import { BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload } from './bDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload';
 import { DoalSaveApplicationRequestTaskActionPayload } from './doalSaveApplicationRequestTaskActionPayload';
 import { DoalSaveAuthorityResponseTaskActionPayload } from './doalSaveAuthorityResponseTaskActionPayload';
@@ -427,7 +433,21 @@ export interface RequestTaskActionProcessDTO {
     | 'BDRS2_UPLOAD_ATTACHMENT'
     | 'BDRS2_SUBMIT_TO_VERIFIER'
     | 'BDRS2_SUBMIT_TO_REGULATOR'
+    | 'BDRS2_SAVE_APPLICATION_VERIFICATION'
+    | 'BDRS2_VERIFICATION_UPLOAD_ATTACHMENT'
+    | 'BDRS2_SUBMIT_VERIFICATION'
+    | 'BDRS2_VERIFICATION_RETURN_TO_OPERATOR'
     | 'BDRS2_RECALL_FROM_VERIFICATION'
+    | 'BDRS2_SAVE_REGULATOR_REVIEW_GROUP_DECISION'
+    | 'BDRS2_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT'
+    | 'BDRS2_REGULATOR_REVIEW_SAVE'
+    | 'BDRS2_REGULATOR_REVIEW_SUBMIT'
+    | 'BDRS2_REQUEST_PEER_REVIEW'
+    | 'BDRS2_SUBMIT_PEER_REVIEW_DECISION'
+    | 'BDRS2_REGULATOR_REVIEW_RETURN_FOR_AMENDS'
+    | 'BDRS2_APPLICATION_AMENDS_SAVE'
+    | 'BDRS2_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR'
+    | 'BDRS2_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER'
     | 'PERMANENT_CESSATION_CANCEL_APPLICATION'
     | 'PERMANENT_CESSATION_SAVE_APPLICATION'
     | 'PERMANENT_CESSATION_UPLOAD'
@@ -679,10 +699,16 @@ export interface RequestTaskActionProcessDTO {
     | BDRApplicationSubmitToVerifierRequestTaskActionPayload
     | BDRApplicationVerificationReturnToOperatorRequestTaskActionPayload
     | BDRApplicationVerificationSaveRequestTaskActionPayload
+    | BDRS2ApplicationAmendsSaveRequestTaskActionPayload
+    | BDRS2ApplicationAmendsSubmitRequestTaskActionPayload
+    | BDRS2ApplicationAmendsSubmitToVerifierRequestTaskActionPayload
+    | BDRS2ApplicationRegulatorReviewSaveTaskActionPayload
     | BDRS2ApplicationSaveRequestTaskActionPayload
     | BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload
     | BDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload
     | BDRS2ApplicationVerificationSaveRequestTaskActionPayload
+    | BDRS2RegulatorReviewReturnForAmendsTaskActionPayload
+    | BDRS2SaveRegulatorReviewGroupDecisionRequestTaskActionPayload
     | BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload
     | DoalSaveApplicationRequestTaskActionPayload
     | DoalSaveAuthorityResponseTaskActionPayload

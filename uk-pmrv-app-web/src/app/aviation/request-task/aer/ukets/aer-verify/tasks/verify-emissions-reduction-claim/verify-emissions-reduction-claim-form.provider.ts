@@ -15,13 +15,10 @@ import { createReviewResultsForm } from './util/review-results-form.helper';
 import { AviationAerEmissionsReductionClaimVerificationFormModel } from './verify-emissions-reduction-claim.interface';
 
 @Injectable()
-export class VerifyEmissionsReductionClaimFormProvider
-  implements
-    TaskFormProvider<
-      AviationAerEmissionsReductionClaimVerification,
-      AviationAerEmissionsReductionClaimVerificationFormModel
-    >
-{
+export class VerifyEmissionsReductionClaimFormProvider implements TaskFormProvider<
+  AviationAerEmissionsReductionClaimVerification,
+  AviationAerEmissionsReductionClaimVerificationFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private destroy$ = new Subject<void>();

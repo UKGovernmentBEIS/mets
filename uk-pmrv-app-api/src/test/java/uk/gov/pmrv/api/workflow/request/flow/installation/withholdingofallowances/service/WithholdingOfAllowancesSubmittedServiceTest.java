@@ -5,7 +5,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.integration.registry.withholdflag.installation.request.WithholdFlagRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -37,6 +39,9 @@ class WithholdingOfAllowancesSubmittedServiceTest {
 
     @Mock
     private WithholdingOfAllowancesOfficialNoticeService withholdingOfAllowancesOfficialNoticeService;
+
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @InjectMocks
     private WithholdingOfAllowancesSubmittedService service;
@@ -83,5 +88,6 @@ class WithholdingOfAllowancesSubmittedServiceTest {
             eq(RequestActionType.WITHHOLDING_OF_ALLOWANCES_APPLICATION_SUBMITTED), any());
         verify(withholdingOfAllowancesOfficialNoticeService).sendOfficialNotice(request, officialNotice,
             decisionNotification);
+        verify(applicationEventPublisher).publishEvent(any(WithholdFlagRegistryEvent.class));
     }
 }

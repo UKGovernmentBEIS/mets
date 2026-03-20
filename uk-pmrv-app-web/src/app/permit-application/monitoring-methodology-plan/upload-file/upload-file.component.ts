@@ -13,9 +13,10 @@ import { uploadMonitoringMethodologyFileProvider } from './upload-file.provider'
 
 @Component({
   selector: 'app-upload-file',
+  standalone: false,
   templateUrl: './upload-file.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [uploadMonitoringMethodologyFileProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UploadFileComponent {
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));

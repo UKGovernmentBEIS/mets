@@ -9,6 +9,7 @@ import { ReturnOfAllowancesService } from '../core/return-of-allowances.service'
 
 @Component({
   selector: 'app-return-of-allowances-notify-operator',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -16,7 +17,7 @@ import { ReturnOfAllowancesService } from '../core/return-of-allowances.service'
           [taskId]="taskId$ | async"
           [accountId]="accountId$ | async"
           requestTaskActionType="RETURN_OF_ALLOWANCES_NOTIFY_OPERATOR_FOR_DECISION"
-          [confirmationMessage]="'Notification sent successfully'"
+          confirmationMessage="Notification sent successfully"
           [referenceCode]="requestId$ | async"></app-notify-operator>
       </div>
     </div>

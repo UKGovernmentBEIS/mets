@@ -16,9 +16,10 @@ import { directionFormProvider } from './direction-form.provider';
 
 @Component({
   selector: 'app-direction',
+  standalone: false,
   templateUrl: './direction.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [directionFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DirectionComponent implements PendingRequest {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

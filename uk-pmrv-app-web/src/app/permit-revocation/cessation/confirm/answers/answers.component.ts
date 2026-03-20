@@ -13,6 +13,7 @@ import { PermitRevocationStore } from '../../../store/permit-revocation-store';
 
 @Component({
   selector: 'app-revocation-cessation-answers',
+  standalone: false,
   template: `
     <app-page-heading>Check your answers</app-page-heading>
     <app-revocation-cessation-summary-details
@@ -26,8 +27,8 @@ import { PermitRevocationStore } from '../../../store/permit-revocation-store';
     </div>
     <a govukLink routerLink="../..">Return to: Revocation cessation</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnswersComponent implements OnInit, PendingRequest {
   constructor(

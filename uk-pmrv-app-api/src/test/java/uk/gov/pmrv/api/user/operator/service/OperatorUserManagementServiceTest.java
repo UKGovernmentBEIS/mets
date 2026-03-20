@@ -7,12 +7,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import uk.gov.netz.api.authorization.core.domain.Authority;
 import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
 import uk.gov.netz.api.authorization.core.domain.dto.AuthorityRoleDTO;
+import uk.gov.netz.api.authorization.core.repository.AuthorityRepository;
 import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.user.core.service.UserSecuritySetupService;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 
@@ -44,7 +45,7 @@ class OperatorUserManagementServiceTest {
 	private UserSecuritySetupService userSecuritySetupService;
 
 	@Mock
-	private AccountQueryService accountQueryService;
+	private AuthorityRepository authorityRepository;
 
 	@Mock
 	private ApplicationEventPublisher applicationEventPublisher;
@@ -54,7 +55,7 @@ class OperatorUserManagementServiceTest {
 		OperatorUserDTO operatorUserDTO = buildOperatorUserDTO();
 
 		when(operatorUserAuthService.getUserIdByEmail(anyString())).thenReturn(Optional.of("userId"));
-		when(accountQueryService.getAccountIdsByUserId("userId")).thenReturn(List.of(1L));
+		when(authorityRepository.findByUserId("userId")).thenReturn(List.of(Authority.builder().accountId(1L).build()));
 
 		service.updateOperatorUser(operatorUserDTO);
 

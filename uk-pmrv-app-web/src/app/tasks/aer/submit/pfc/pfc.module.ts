@@ -12,6 +12,7 @@ import { SummaryComponent } from './summary/summary.component';
 import { TiersUsedComponent } from './tiers-used/tiers-used.component';
 
 @NgModule({
+  imports: [AerSharedModule, PfcRoutingModule, SharedModule],
   declarations: [
     CalculationReviewComponent,
     EmissionNetworkComponent,
@@ -21,6 +22,5 @@ import { TiersUsedComponent } from './tiers-used/tiers-used.component';
     SummaryComponent,
     TiersUsedComponent,
   ],
-  imports: [AerSharedModule, PfcRoutingModule, SharedModule],
 })
 export class PfcModule {}

@@ -14,6 +14,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, UncorrectedMisstate
 
 @Component({
   selector: 'app-misstatements',
+  standalone: false,
   templateUrl: './misstatements.component.html',
   providers: [misstatementsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

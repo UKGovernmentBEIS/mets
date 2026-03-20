@@ -17,6 +17,7 @@ import { ResetPasswordStore } from '../store/reset-password.store';
 
 @Component({
   selector: 'app-submit-otp',
+  standalone: false,
   templateUrl: './submit-otp.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

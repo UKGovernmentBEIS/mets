@@ -7,7 +7,7 @@
       </dt>
       <dd govukSummaryListRowValue>{{ data.exist ? 'Yes' : 'No' }}</dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
     <div govukSummaryListRow *ngIf="data?.exist">
@@ -16,7 +16,7 @@
         <app-summary-download-files [files]="[declarationFile]"></app-summary-download-files>
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../declaration'" [queryParams]="queryParams">Change</a>
+        <a govukLink routerLink="../declaration" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
   </dl>
@@ -27,8 +27,7 @@
   <app-emissions-reduction-claim-list-template
     [data]="purchases"
     [isEditable]="isEditable"
-    [queryParams]="queryParams"
-  ></app-emissions-reduction-claim-list-template>
+    [queryParams]="queryParams"></app-emissions-reduction-claim-list-template>
 
   <ng-container *ngIf="data?.safDetails">
     <h2 class="govuk-heading-m">Totals</h2>

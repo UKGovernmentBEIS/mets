@@ -9,6 +9,7 @@ import { DoalActionService } from '../../core/doal-action.service';
 
 @Component({
   selector: 'app-doal-additional-documents',
+  standalone: false,
   template: `
     <app-doal-action-task header="Upload additional documents" [actionType]="requestActionType$ | async">
       <app-doal-additional-documents-summary-template

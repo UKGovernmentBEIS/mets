@@ -30,7 +30,8 @@ public class DreInitiateValidator extends RequestCreateAerRelatedValidator {
 		return Set.of(
 				InstallationAccountStatus.LIVE,
 				InstallationAccountStatus.AWAITING_REVOCATION,
-				InstallationAccountStatus.AWAITING_SURRENDER);
+				InstallationAccountStatus.AWAITING_SURRENDER,
+				InstallationAccountStatus.TRANSFERRED);
 	}
 
 	@Override

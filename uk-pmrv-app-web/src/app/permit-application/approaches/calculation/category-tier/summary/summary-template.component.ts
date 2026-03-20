@@ -13,6 +13,7 @@ import { referenceMap } from '../reference/reference.map';
 
 @Component({
   selector: 'app-calculation-category-tier-subtasks-summary-template',
+  standalone: false,
   templateUrl: './summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

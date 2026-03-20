@@ -107,10 +107,16 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationReturnToOperatorRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RegulatorReviewReturnForAmendsTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationAmendsSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationAmendsSubmitRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationAmendsSubmitToVerifierRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationRegulatorReviewSaveTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationVerificationSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2SaveRegulatorReviewGroupDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitSaveCessationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalSaveAuthorityResponseTaskActionPayload;
@@ -378,6 +384,14 @@ import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RfiSubmitRequestTaskActi
     @JsonSubTypes.Type(value = BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload.class, name = "BDRS2_SUBMIT_TO_VERIFIER_PAYLOAD"),
     @JsonSubTypes.Type(value = BDRS2ApplicationVerificationSaveRequestTaskActionPayload.class, name = "BDRS2_APPLICATION_SAVE_VERIFICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = BDRS2ApplicationVerificationReturnToOperatorRequestTaskActionPayload.class, name = "BDRS2_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRS2SaveRegulatorReviewGroupDecisionRequestTaskActionPayload.class, name = "BDRS2_SAVE_REGULATOR_REVIEW_GROUP_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRS2ApplicationRegulatorReviewSaveTaskActionPayload.class, name = "BDRS2_REGULATOR_REVIEW_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "BDRS2_REQUEST_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "BDRS2_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRS2ApplicationAmendsSaveRequestTaskActionPayload.class, name = "BDRS2_APPLICATION_AMENDS_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRS2ApplicationAmendsSubmitToVerifierRequestTaskActionPayload.class, name = "BDRS2_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRS2ApplicationAmendsSubmitRequestTaskActionPayload.class, name = "BDRS2_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRS2RegulatorReviewReturnForAmendsTaskActionPayload.class, name = "BDRS2_REGULATOR_REVIEW_RETURN_FOR_AMENDS_PAYLOAD"),
 
     @JsonSubTypes.Type(value = PermanentCessationSaveApplicationRequestTaskActionPayload.class, name = "PERMANENT_CESSATION_SAVE_APPLICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD"),

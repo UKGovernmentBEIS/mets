@@ -9,6 +9,7 @@ import { ItemDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-related-tasks',
+  standalone: false,
   templateUrl: './related-tasks.component.html',
   styles: `
     .govuk-body {

@@ -20,11 +20,10 @@ import { alrProceedAuthorityReasonFormProvider } from './proceed-authority-reaso
 
 @Component({
   selector: 'app-alr-proceed-authority-reason',
-  templateUrl: './proceed-authority-reason.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [SharedModule, AlrTaskSharedModule],
+  templateUrl: './proceed-authority-reason.component.html',
   providers: [alrProceedAuthorityReasonFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrProceedAuthorityReasonComponent implements OnInit {
   isEditable = this.alrService.isEditable;

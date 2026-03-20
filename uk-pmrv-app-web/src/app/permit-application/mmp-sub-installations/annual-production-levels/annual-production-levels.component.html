@@ -2,7 +2,7 @@
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
-    [heading]="'Annual production levels (activity)'"
+    heading="Annual production levels (activity)"
     [caption]="productBenchmarkType$ | async | subInstallationType"
     submitText="Continue">
     <div class="govuk-!-width-two-thirds">
@@ -55,7 +55,7 @@
               govuk-select
               label="Quantities of products"
               widthClass="govuk-!-width-full">
-              <option [value]="''">Select an option</option>
+              <option value="">Select an option</option>
               <option *ngFor="let quantityProductType of quantityProductTypes" [value]="quantityProductType">
                 {{ quantityProductType | productBenchmark44DataSource }}
               </option>
@@ -77,12 +77,12 @@
         govuk-radio
         legend="Method used to determine the annual quantity of products"
         hint="Select the method used, in line with section 5 of Annex VII of the FAR."
-        [legendSize]="'medium'">
+        legendSize="medium">
         <govuk-radio-option
-          [value]="'CONTINUAL_METERING_PROCESS'"
+          value="CONTINUAL_METERING_PROCESS"
           label="5. (a) based on continual metering at the process where the material is consumed or produced"></govuk-radio-option>
         <govuk-radio-option
-          [value]="'AGGREGATION_METERING_QUANTITIES'"
+          value="AGGREGATION_METERING_QUANTITIES"
           label="5. (b) based on aggregation of metering of quantities separately delivered or produced taking into account relevant stock changes"></govuk-radio-option>
       </div>
 
@@ -107,7 +107,7 @@
           govuk-radio
           legend="Has the hierarchical order been followed?"
           hint="Select yes if the data source with the highest rank within the hierarchy has been used, as set out in section 4 of Annex VII of the FAR."
-          [legendSize]="'medium'">
+          legendSize="medium">
           <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
           <govuk-radio-option [value]="false" label="No">
             <ng-container govukConditionalContent>
@@ -116,13 +116,13 @@
                 govuk-radio
                 legend="Reason for not following the hierarchy">
                 <govuk-radio-option
-                  [value]="'OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY'"
+                  value="OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY"
                   label="Other data sources lead to lower uncertainty according to the simplified uncertainty assessment in line with Article 7(2) of the FAR"></govuk-radio-option>
                 <govuk-radio-option
-                  [value]="'USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE'"
+                  value="USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE"
                   label="Use of better data sources is technically infeasible"></govuk-radio-option>
                 <govuk-radio-option
-                  [value]="'USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS'"
+                  value="USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS"
                   label="Use of better data sources would incur unreasonable costs"></govuk-radio-option>
               </div>
               <div
@@ -152,5 +152,5 @@
     </div>
   </app-wizard-step>
 
-  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+  <a govukLink routerLink="../../">Return to: Sub-installations</a>
 </app-permit-task>

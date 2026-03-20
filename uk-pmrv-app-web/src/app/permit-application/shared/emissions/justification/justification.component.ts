@@ -19,9 +19,10 @@ import { JUSTIFICATION_FORM, justificationFormProvider } from './justification-f
 
 @Component({
   selector: 'app-justification',
+  standalone: false,
   templateUrl: './justification.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [justificationFormProvider, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class JustificationComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

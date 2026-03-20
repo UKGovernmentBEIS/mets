@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload } from 'pmrv-api';
 
@@ -29,6 +28,7 @@ describe('MeasurementComponent', () => {
 
   @Component({
     selector: 'app-review-group-decision-container',
+    standalone: false,
     template: `
       <div>
         Review group decision component.
@@ -55,7 +55,7 @@ describe('MeasurementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, SharedPermitModule, RouterTestingModule],
+      imports: [SharedModule, SharedPermitModule, RouterLink],
       providers: [
         { provide: ActivatedRoute, useValue: route },
         {

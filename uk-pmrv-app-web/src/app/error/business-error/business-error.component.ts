@@ -4,6 +4,7 @@ import { BusinessErrorService } from './business-error.service';
 
 @Component({
   selector: 'app-business-error',
+  standalone: false,
   template: `
     <app-error-page *ngIf="businessErrorService.error$ | async as error" [heading]="error.heading">
       <p class="govuk-body">

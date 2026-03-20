@@ -14,6 +14,7 @@ import { CessationNotification } from 'pmrv-api';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-permanent-cessation',
+  standalone: false,
   templateUrl: './permanent-cessation.component.html',
   providers: [existingControlContainer],
   viewProviders: [existingControlContainer],

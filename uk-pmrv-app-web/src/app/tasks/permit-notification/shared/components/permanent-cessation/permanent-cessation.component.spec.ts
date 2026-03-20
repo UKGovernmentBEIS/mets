@@ -17,6 +17,7 @@ describe('PermanentCessationComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-permanent-cessation formGroupName="notification" [today]="today" [form]="form"></app-permanent-cessation>

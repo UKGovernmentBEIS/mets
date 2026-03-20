@@ -34,7 +34,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-send-report',
-  standalone: true,
   imports: [SharedModule, ALRReturnLinkComponent],
   templateUrl: './send-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

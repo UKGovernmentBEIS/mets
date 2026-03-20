@@ -5,6 +5,7 @@ import { DoalService } from '@tasks/doal/core/doal.service';
 
 @Component({
   selector: 'app-peer-review-wait',
+  standalone: false,
   template: `
     <app-base-task-container-component
       [header]="title"

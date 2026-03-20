@@ -13,6 +13,7 @@ describe('AllocationListTemplateComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-alr-allocation-list-template [data]="data" [editable]="editable"></app-alr-allocation-list-template>
     `,

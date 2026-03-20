@@ -11,6 +11,7 @@ import { resolveSectionStatus } from '../core/section-status';
 
 @Component({
   selector: 'app-peer-review',
+  standalone: false,
   templateUrl: './peer-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

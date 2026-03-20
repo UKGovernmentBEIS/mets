@@ -25,7 +25,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-confidentiality',
-  standalone: true,
   imports: [
     ReturnToLinkComponent,
     SharedModule,

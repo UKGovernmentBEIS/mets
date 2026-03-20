@@ -18,9 +18,10 @@ import { disabledVerificationBodyError } from '../../errors/business-error';
 
 @Component({
   selector: 'app-add',
+  standalone: false,
   templateUrl: './add.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddComponent implements OnInit {
   readonly isSummaryDisplayed$ = new BehaviorSubject<boolean>(false);

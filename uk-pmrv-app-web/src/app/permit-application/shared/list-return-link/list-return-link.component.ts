@@ -8,6 +8,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-list-return-link',
+  standalone: false,
   template: '<a govukLink [routerLink]="link$ | async">Return to: {{ title }}</a>',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

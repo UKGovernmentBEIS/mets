@@ -8,6 +8,7 @@ import { DestroySubject } from '../../core/services/destroy-subject.service';
 
 @Directive({
   selector: 'govuk-text-input[appAsyncValidationField],[govuk-text-input][appAsyncValidationField]',
+  standalone: false,
   providers: [DestroySubject],
 })
 export class AsyncValidationFieldDirective implements OnInit {

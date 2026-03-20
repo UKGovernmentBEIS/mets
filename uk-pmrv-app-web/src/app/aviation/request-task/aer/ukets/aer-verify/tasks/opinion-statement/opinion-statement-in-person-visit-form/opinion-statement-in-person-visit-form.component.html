@@ -3,9 +3,8 @@
   [formGroup]="inPersonSiteVisitGroup"
   submitText="Continue"
   [hideSubmit]="false"
-  [heading]="'In-person site visit details'"
-  class="govuk-!-width-two-thirds"
->
+  heading="In-person site visit details"
+  class="govuk-!-width-two-thirds">
   <!-- VisitDates -->
   <div formArrayName="visitDates" class="govuk-!-width-two-thirds">
     <fieldset govukFieldset *ngFor="let _ of visitDatesCtrl.controls; index as i" [formGroupName]="i">
@@ -16,8 +15,7 @@
         [heading]="heading"
         appAddAnother
         govukSecondaryButton
-        type="button"
-      >
+        type="button">
         Remove
       </button>
 
@@ -31,8 +29,7 @@
         govuk-text-input
         inputType="number"
         label="How many days were your team on site?"
-        widthClass="govuk-input--width-4"
-      ></div>
+        widthClass="govuk-input--width-4"></div>
     </fieldset>
   </div>
 
@@ -45,8 +42,7 @@
       formControlName="teamMembers"
       govuk-textarea
       hint="Include the names of the lead auditors and any technical experts involved"
-      class="govuk-!-width-two-thirds"
-    ></div>
+      class="govuk-!-width-two-thirds"></div>
 
     <button (click)="addVisitDatesCtrl()" govukSecondaryButton type="button">Add another visit</button>
   </div>

@@ -55,10 +55,10 @@ describe('ManagementProceduresSummaryTemplateComponent', () => {
 
   it(`should display summary only for first two forms`, async () => {
     await renderComponent();
-    expect(screen.getAllByText(/Monitoring and reporting roles/)).toBeInTheDocument;
-    expect(screen.getAllByText(/Data management/)).toBeInTheDocument;
-    expect(screen.getAllByText(/Documentation and record keeping plan/)).toBeInTheDocument;
-    expect(screen.getAllByText(/Explanation of risks/)).toBeInTheDocument;
-    expect(screen.getAllByText(/Revisions of emissions monitoring plan/)).toBeInTheDocument;
+    expect(screen.getAllByText(/Monitoring and reporting roles/)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/Data management/)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/Documentation and record keeping plan/)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/Explanation of risks/)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/Revisions of emissions monitoring plan/)[0]).toBeInTheDocument();
   });
 });

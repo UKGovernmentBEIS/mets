@@ -22,7 +22,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-reporting-obligation',
-  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

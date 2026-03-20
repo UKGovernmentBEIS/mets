@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'applicationType',
+  standalone: false,
 })
 export class ApplicationTypePipe implements PipeTransform {
   transform(value: string): string {

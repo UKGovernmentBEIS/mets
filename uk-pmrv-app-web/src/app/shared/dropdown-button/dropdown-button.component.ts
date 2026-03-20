@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'div[app-dropdown-button]',
+  standalone: false,
   template: `
     <div class="dropdown-button-container">
       <button type="button" class="govuk-button main-button" (click)="click()">

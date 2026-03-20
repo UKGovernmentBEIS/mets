@@ -12,10 +12,11 @@ import { noticeDateFormProvider } from '../notice-date/notice-date-form.provider
 
 @Component({
   selector: 'app-grant-determination-summary-details',
+  standalone: false,
   templateUrl: './summary-details.component.html',
   styleUrl: './summary-details.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [noticeDateFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryDetailsComponent {
   @Input() grantDetermination$: Observable<PermitSurrenderReviewDeterminationGrant>;

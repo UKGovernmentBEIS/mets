@@ -40,6 +40,7 @@ import { savePartiallyNotFoundSiteContactsError, savePartiallyNotFoundVerifierEr
 
 @Component({
   selector: 'app-verifiers',
+  standalone: false,
   templateUrl: './verifiers.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

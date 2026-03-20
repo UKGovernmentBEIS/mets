@@ -17,9 +17,10 @@ import { calculationSynthesisGasAddFormFactory } from './calculation-synthesis-g
 
 @Component({
   selector: 'app-calculation-synthesis-gas',
+  standalone: false,
   templateUrl: './calculation-synthesis-gas.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [calculationSynthesisGasAddFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalculationSynthesisGasComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

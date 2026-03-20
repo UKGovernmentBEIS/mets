@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-related-content',
+  standalone: false,
   template: `
     <aside class="app-related-items" role="complementary">
       <h2 class="govuk-heading-m" id="subsection-title">{{ header }}</h2>

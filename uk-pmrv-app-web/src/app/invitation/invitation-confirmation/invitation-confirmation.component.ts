@@ -4,6 +4,7 @@ import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-regulator-confirmation',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

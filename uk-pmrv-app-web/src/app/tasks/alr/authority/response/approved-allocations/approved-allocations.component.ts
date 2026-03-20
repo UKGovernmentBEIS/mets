@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, map, startWith, switchMap } from 'rxjs';
 
@@ -17,10 +17,9 @@ import { alrApprovedAllocationsFormProvider } from './approved-allocations-form.
 
 @Component({
   selector: 'app-alr-approved-allocations',
+  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule],
   templateUrl: './approved-allocations.component.html',
   providers: [alrApprovedAllocationsFormProvider],
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrApprovedAllocationsComponent {

@@ -10,6 +10,7 @@ import { getSectionStatus } from './submit';
 
 @Component({
   selector: 'app-submit',
+  standalone: false,
   templateUrl: './submit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

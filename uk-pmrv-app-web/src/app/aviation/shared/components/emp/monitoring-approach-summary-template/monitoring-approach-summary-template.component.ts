@@ -10,8 +10,6 @@ import { GovukComponentsModule } from 'govuk-components';
 
 import { EmpEmissionsMonitoringApproach } from 'pmrv-api';
 
-import { ProcedureFormSummaryComponent } from '../../procedure-form-summary';
-
 type EmissionsMonitoringApproachFormValues = {
   monitoringApproachType: EmpEmissionsMonitoringApproach['monitoringApproachType'];
   simplifiedApproach?: SimplifiedMonitoringApproach;
@@ -19,16 +17,7 @@ type EmissionsMonitoringApproachFormValues = {
 
 @Component({
   selector: 'app-monitoring-approach-summary-template',
-  standalone: true,
-  imports: [
-    GovukComponentsModule,
-    RouterLinkWithHref,
-    ProcedureFormSummaryComponent,
-    RouterLink,
-    NgIf,
-    MonitoringApproachTypePipe,
-    SharedModule,
-  ],
+  imports: [GovukComponentsModule, RouterLinkWithHref, RouterLink, NgIf, MonitoringApproachTypePipe, SharedModule],
   templateUrl: './monitoring-approach-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

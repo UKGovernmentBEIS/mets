@@ -18,13 +18,13 @@ async function setup() {
 
 @Component({
   selector: 'app-mock-parent',
+  imports: [ReactiveFormsModule, AbbreviationsFormComponent],
+  standalone: true,
   template: `
     <form [formGroup]="form">
       <app-abbreviations-form [heading]="heading"></app-abbreviations-form>
     </form>
   `,
-  standalone: true,
-  imports: [ReactiveFormsModule, AbbreviationsFormComponent],
   providers: [{ provide: TASK_FORM_PROVIDER, useClass: AbbreviationsFormProvider }],
 })
 class MockParentComponent {

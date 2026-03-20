@@ -9,6 +9,7 @@ describe('RelatedContentComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-related-content header="Related content header">
         <li>

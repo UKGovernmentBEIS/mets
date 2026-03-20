@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { EmissionPoint } from 'pmrv-api';
 
-@Pipe({ name: 'emissionPoint' })
+@Pipe({
+  name: 'emissionPoint',
+  standalone: false,
+})
 export class EmissionPointPipe implements PipeTransform {
   transform(emissionPoints: EmissionPoint[], emissionPointId: string): EmissionPoint {
     return emissionPoints.find((point) => point.id === emissionPointId);

@@ -9,9 +9,8 @@ import { FollowUpAction, FollowUpActionResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-follow-up-item',
-  templateUrl: './follow-up-item.component.html',
-  standalone: true,
   imports: [SharedModule, RouterLink, FollowUpActionTypePipe],
+  templateUrl: './follow-up-item.component.html',
   styles: `
     .govuk-grid-column-one-quarter {
       text-align: right;

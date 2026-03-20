@@ -12,6 +12,7 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-wait-review',
+  standalone: false,
   templateUrl: './wait-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

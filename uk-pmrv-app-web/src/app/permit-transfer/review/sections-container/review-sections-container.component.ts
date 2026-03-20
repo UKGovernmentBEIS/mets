@@ -18,6 +18,7 @@ import { ReviewGroupStatusPermitTransferPipe } from '../review-group-status-perm
 
 @Component({
   selector: 'app-transfer-review-sections-container',
+  standalone: false,
   templateUrl: './review-sections-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

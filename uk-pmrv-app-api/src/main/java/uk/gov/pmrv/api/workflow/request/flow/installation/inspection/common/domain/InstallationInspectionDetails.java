@@ -38,7 +38,7 @@ public class InstallationInspectionDetails {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<UUID> regulatorExtraFiles = new HashSet<>();
 
-    @Size(max = 255)
+    @Size(max = 10000)
     private String additionalInformation;
 
 }

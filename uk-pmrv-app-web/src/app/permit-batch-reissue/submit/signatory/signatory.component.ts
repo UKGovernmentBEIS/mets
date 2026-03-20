@@ -11,6 +11,7 @@ import { PermitBatchReissueStore } from '../store/permit-batch-reissue.store';
 
 @Component({
   selector: 'app-signatory',
+  standalone: false,
   templateUrl: './signatory.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -22,6 +22,7 @@ public enum RequestCreateActionType {
     AER(RequestType.AER),
     DRE(RequestType.DRE),
     WITHHOLDING_OF_ALLOWANCES(RequestType.WITHHOLDING_OF_ALLOWANCES),
+    WITHHOLDING_OF_ALLOWANCES_RE_INITIATE(RequestType.WITHHOLDING_OF_ALLOWANCES),
     RETURN_OF_ALLOWANCES(RequestType.RETURN_OF_ALLOWANCES),
     AIR(RequestType.AIR),
     HSE_TI(RequestType.HSE_TI),

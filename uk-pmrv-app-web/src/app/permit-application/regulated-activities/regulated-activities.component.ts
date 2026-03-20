@@ -28,9 +28,10 @@ import { regulatedActivitiesFormProvider } from './regulated-activities-form.pro
 
 @Component({
   selector: 'app-regulated-activities',
+  standalone: false,
   templateUrl: './regulated-activities.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject, regulatedActivitiesFormProvider, IdGeneratorService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegulatedActivitiesComponent extends SectionComponent implements PendingRequest, OnInit {
   readonly originalOrder = originalOrder;

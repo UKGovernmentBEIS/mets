@@ -11,9 +11,8 @@ import { AviationAerSmallEmittersMonitoringApproachFormModel } from '../monitori
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-monitoring-approach-number-flights-form',
-  templateUrl: './monitoring-approach-number-flights-form.component.html',
-  standalone: true,
   imports: [GovukComponentsModule, SharedModule],
+  templateUrl: './monitoring-approach-number-flights-form.component.html',
   viewProviders: [existingControlContainer],
 })
 export class MonitoringApproachNumberFlightsFormComponent implements OnInit {

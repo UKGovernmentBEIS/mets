@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, RouterLink } from '@angular/router';
 
 import { PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload } from 'pmrv-api';
 
@@ -37,6 +37,7 @@ describe('CalculationComponent', () => {
 
   @Component({
     selector: 'app-review-group-decision-container',
+    standalone: false,
     template: `
       <div>
         Review group decision component.
@@ -61,9 +62,10 @@ describe('CalculationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, CalculationModule, SharedPermitModule, RouterTestingModule],
+      imports: [SharedModule, CalculationModule, SharedPermitModule, RouterLink],
       declarations: [CalculationComponent, MockDecisionComponent],
       providers: [
+        provideRouter([]),
         {
           provide: PermitApplicationStore,
           useExisting: PermitIssuanceStore,

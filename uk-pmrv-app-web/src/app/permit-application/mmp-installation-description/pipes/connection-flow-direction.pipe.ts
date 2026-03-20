@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { InstallationConnection } from 'pmrv-api';
 
-@Pipe({ name: 'flowDirectionType' })
+@Pipe({
+  name: 'flowDirectionType',
+  standalone: false,
+})
 export class ConnectionFlowDirectionTypePipe implements PipeTransform {
   transform(value: InstallationConnection['flowDirection']): string {
     switch (value) {

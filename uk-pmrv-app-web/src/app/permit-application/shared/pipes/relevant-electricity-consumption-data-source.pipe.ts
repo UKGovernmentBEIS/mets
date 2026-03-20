@@ -4,6 +4,7 @@ import { FuelAndElectricityExchangeabilityEnergyFlowDataSource } from 'pmrv-api'
 
 @Pipe({
   name: 'relevantElectricityConsumptionDataSource',
+  standalone: false,
 })
 export class RelevantElectricityConsumptionDataSourcePipe implements PipeTransform {
   transform(value: FuelAndElectricityExchangeabilityEnergyFlowDataSource['relevantElectricityConsumption']): string {

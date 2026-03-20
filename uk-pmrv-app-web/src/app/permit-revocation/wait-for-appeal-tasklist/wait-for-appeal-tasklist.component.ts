@@ -11,6 +11,7 @@ import { RequestActionInfoDTO, RequestActionsService, RequestTaskItemDTO } from 
 
 @Component({
   selector: 'app-wait-for-appeal-tasklist',
+  standalone: false,
   templateUrl: './wait-for-appeal-tasklist.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

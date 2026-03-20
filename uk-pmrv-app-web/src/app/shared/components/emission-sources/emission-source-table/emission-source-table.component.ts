@@ -10,9 +10,8 @@ import { EmissionSource } from 'pmrv-api';
 
 @Component({
   selector: 'app-emission-source-table',
-  templateUrl: './emission-source-table.component.html',
-  standalone: true,
   imports: [CommonModule, GovukComponentsModule, PipesModule, RouterLink],
+  templateUrl: './emission-source-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionSourceTableComponent {

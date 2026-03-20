@@ -1,6 +1,6 @@
-import { NgFor, NgForOf, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map, mergeMap, Observable, of } from 'rxjs';
 
@@ -39,20 +39,16 @@ interface ViewModel {
 }
 @Component({
   selector: 'app-flight-procedures-summary',
-  templateUrl: './flight-procedures-summary.component.html',
-  standalone: true,
   imports: [
     SharedModule,
-    NgFor,
     NgIf,
-    NgForOf,
-    RouterLinkWithHref,
     ReturnToLinkComponent,
     EmpReviewDecisionGroupComponent,
     EmpVariationReviewDecisionGroupComponent,
     ProcedureFormSummaryComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,
   ],
+  templateUrl: './flight-procedures-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlightProceduresSummaryComponent {

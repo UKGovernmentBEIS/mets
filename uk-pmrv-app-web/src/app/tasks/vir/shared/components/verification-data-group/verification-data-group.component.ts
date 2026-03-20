@@ -6,6 +6,7 @@ import { VirApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-verification-data-group',
+  standalone: false,
   templateUrl: './verification-data-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

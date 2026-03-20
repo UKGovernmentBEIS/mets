@@ -1,3 +1,4 @@
+import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
@@ -15,6 +16,28 @@ describe('InformationSentToRegistryComponent', () => {
   let store: CommonActionsStore;
   let component: InformationSentToRegistryComponent;
   let fixture: ComponentFixture<InformationSentToRegistryComponent>;
+
+  const runOnPushChangeDetection = async (fixture: ComponentFixture<any>): Promise<void> => {
+    const changeDetectorRef = fixture.debugElement.injector.get<ChangeDetectorRef>(ChangeDetectorRef);
+    changeDetectorRef.detectChanges();
+    return fixture.whenStable();
+  };
+
+  const setState = (value?: any) => {
+    const { type, payload } = value || {};
+
+    store.setState({
+      storeInitialized: true,
+      action: {
+        type,
+        requestId: 'HSETI00164-2021_2025',
+        payload: {
+          payloadType: `${type}_PAYLOAD`,
+          ...payload,
+        },
+      },
+    } as CommonActionsState);
+  };
 
   class Page extends BasePage<InformationSentToRegistryComponent> {
     get heading(): string {
@@ -34,36 +57,31 @@ describe('InformationSentToRegistryComponent', () => {
     }).compileComponents();
 
     store = TestBed.inject(CommonActionsStore);
-    store.setState({
-      storeInitialized: true,
-      action: {
-        type: 'HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS',
-        requestId: 'HSETI00164-2021_2025',
-        payload: {
-          payloadType: 'PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD',
-          activePermit: {
-            emitterId: 'EM00206',
-            permitId: 'UK-E-IN-00206',
-            installationName: 'operator 36 onshore',
-            operatorName: 'operator36',
-            regulator: 'EA',
-            firstYearOfReportingObligation: 2022,
-            regulatedActivity: ['AMMONIA_PRODUCTION'],
+    setState({
+      type: 'PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED',
+      payload: {
+        activePermit: {
+          emitterId: 'EM00206',
+          permitId: 'UK-E-IN-00206',
+          installationName: 'operator 36 onshore',
+          operatorName: 'operator36',
+          regulator: 'EA',
+          firstYearOfReportingObligation: 2022,
+          regulatedActivity: ['AMMONIA_PRODUCTION'],
+        },
+        organizationDetails: {
+          organisationLegalStatus: 'LIMITED_COMPANY',
+          registeredAddress: {
+            line1: '108 Navigation Walk',
+            line2: '2323',
+            city: '2442',
+            country: 'BY',
+            postcode: '124',
           },
-          organizationDetails: {
-            organisationLegalStatus: 'LIMITED_COMPANY',
-            registeredAddress: {
-              line1: '108 Navigation Walk',
-              line2: '2323',
-              city: '2442',
-              country: 'BY',
-              postcode: '124',
-            },
-            companyRegistrationNumber: '11112233',
-          },
+          companyRegistrationNumber: '11112233',
         },
       },
-    } as CommonActionsState);
+    });
 
     fixture = TestBed.createComponent(InformationSentToRegistryComponent);
     component = fixture.componentInstance;
@@ -75,7 +93,7 @@ describe('InformationSentToRegistryComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show summary details', () => {
+  it('should show summary details for PERMIT_ISSUANCE_REGISTRY_INTEGRATION_ACCOUNT_CREATED action type', () => {
     expect(page.heading).toEqual('Information sent to Registry by system');
     expect(page.summaryListValues).toHaveLength(10);
     expect(page.summaryListValues).toEqual([
@@ -89,6 +107,38 @@ describe('InformationSentToRegistryComponent', () => {
       ['Organisation legal status', 'Limited Company'],
       ['Company registration number', '11112233'],
       ['Registered address', '108 Navigation Walk , 23232442124'],
+    ]);
+  });
+
+  it('should show summary details for INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY action type', async () => {
+    setState({
+      type: 'INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY',
+      payload: { activePermit: { registryId: '123456789', reportableEmissions: 'Emissions', reportingYear: '2026' } },
+    });
+    await runOnPushChangeDetection(fixture);
+
+    expect(page.heading).toEqual('Information sent to Registry by system');
+    expect(page.summaryListValues).toHaveLength(3);
+    expect(page.summaryListValues).toEqual([
+      ['UK ETS Registry ID', '123456789'],
+      ['Emissions year', '2026'],
+      ['Emissions value', 'Emissions tCO2'],
+    ]);
+  });
+
+  it('should show summary details for WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY action type', async () => {
+    setState({
+      type: 'WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY',
+      payload: { registryId: '123456789', withholdFlag: true, withholdYear: '2026' },
+    });
+    await runOnPushChangeDetection(fixture);
+
+    expect(page.heading).toEqual('Information sent to Registry by system');
+    expect(page.summaryListValues).toHaveLength(3);
+    expect(page.summaryListValues).toEqual([
+      ['Registry ID', '123456789'],
+      ['Withhold flag', 'Yes'],
+      ['Withhold year', '2026'],
     ]);
   });
 });

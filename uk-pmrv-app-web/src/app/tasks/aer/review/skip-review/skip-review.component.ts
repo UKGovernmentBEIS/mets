@@ -20,9 +20,10 @@ import { AerSkipReviewDecision } from 'pmrv-api';
 
 @Component({
   selector: 'app-skip-review',
+  standalone: false,
   templateUrl: './skip-review.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [aerSkipReviewFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SkipReviewComponent {
   requestTaskType$ = this.store.requestTaskType$;

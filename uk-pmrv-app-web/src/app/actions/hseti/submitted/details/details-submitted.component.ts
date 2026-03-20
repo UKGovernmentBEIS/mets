@@ -26,7 +26,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-hseti-details-submitted',
-  standalone: true,
   imports: [ActionSharedModule, DetailsSummaryTemplateComponent, NgIf, SharedModule],
   templateUrl: './details-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

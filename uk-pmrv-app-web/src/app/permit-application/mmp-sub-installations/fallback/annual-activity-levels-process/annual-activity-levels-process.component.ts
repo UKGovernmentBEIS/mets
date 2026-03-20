@@ -16,9 +16,10 @@ import { annualActivityProcessAddFormFactory } from './annual-activity-levels-pr
 
 @Component({
   selector: 'app-annual-activity-levels-process',
+  standalone: false,
   templateUrl: './annual-activity-levels-process.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [annualActivityProcessAddFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnnualActivityLevelsProcessComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

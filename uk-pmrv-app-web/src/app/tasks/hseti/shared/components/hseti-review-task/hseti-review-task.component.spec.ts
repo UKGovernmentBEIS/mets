@@ -24,6 +24,7 @@ describe('HsetiTaskReviewComponent', () => {
   }
 
   @Component({
+    standalone: false,
     template: `
       <app-hseti-task-review [breadcrumb]="true" heading="Check your answers">
         <h2 class="govuk-heading-m">2021-2025 HSE target increase details</h2>

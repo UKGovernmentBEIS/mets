@@ -14,6 +14,7 @@ import { SiteEmissionItem } from './site-emission-item';
 
 @Component({
   selector: 'app-site-emissions',
+  standalone: false,
   templateUrl: './site-emissions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

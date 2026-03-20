@@ -18,11 +18,16 @@ interface ViewModel {
   requestActionType: RequestActionDTO['type'];
   pageHeader: string;
   materialityLevel: AviationAerMaterialityLevel;
-  yearEqualAfter25: boolean;
 }
 
 @Component({
   selector: 'app-materiality-level',
+  imports: [
+    SharedModule,
+    RequestActionTaskComponent,
+    AerVerifyMaterialityLevelGroupComponent,
+    AerVerificationReviewDecisionGroupSummaryComponent,
+  ],
   template: `
     <app-request-action-task
       *ngIf="vm$ | async as vm"
@@ -30,8 +35,8 @@ interface ViewModel {
       [requestActionType]="vm.requestActionType"
       [breadcrumb]="true">
       <app-aer-verify-materiality-level-group
-        [materialityLevel]="vm.materialityLevel"
-        [yearEqualAfter25]="vm.yearEqualAfter25"></app-aer-verify-materiality-level-group>
+        [materialityLevel]="vm.materialityLevel"></app-aer-verify-materiality-level-group>
+
       <ng-container *ngIf="vm.showDecision">
         <h2 app-summary-header class="govuk-heading-m">Decision Summary</h2>
         <app-aer-verification-review-decision-group-summary
@@ -39,13 +44,6 @@ interface ViewModel {
       </ng-container>
     </app-request-action-task>
   `,
-  standalone: true,
-  imports: [
-    SharedModule,
-    RequestActionTaskComponent,
-    AerVerifyMaterialityLevelGroupComponent,
-    AerVerificationReviewDecisionGroupSummaryComponent,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class MaterialityLevelComponent {
@@ -59,14 +57,10 @@ export default class MaterialityLevelComponent {
     map(([payload, requestActionType, regulatorViewer]) => {
       return {
         requestActionType,
-        pageHeader:
-          payload?.reportingYear >= 2025
-            ? 'Further information of relevance to the opinion'
-            : aerVerifyHeaderTaskMap['materialityLevel'],
+        pageHeader: aerVerifyHeaderTaskMap['materialityLevel'],
         materialityLevel: {
           ...payload.verificationReport.materialityLevel,
         },
-        yearEqualAfter25: payload.reportingYear >= 2025,
         ...getAerDecisionReview(payload, requestActionType, regulatorViewer, 'materialityLevel', false),
       };
     }),

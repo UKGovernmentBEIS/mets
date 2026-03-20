@@ -23,11 +23,10 @@ export interface ViewModel {
 
 @Component({
   selector: 'app-decision-reason',
-  templateUrl: './decision-reason.component.html',
-  standalone: true,
   imports: [SharedModule, TaskSharedModule, HseTiTaskSharedModule, HsetiTaskReviewComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './decision-reason.component.html',
   providers: [decisionReasonFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HSETIOverallDecisionReviewReasonComponent {
   isEditable: Signal<boolean> = this.hsetiService.isEditable;

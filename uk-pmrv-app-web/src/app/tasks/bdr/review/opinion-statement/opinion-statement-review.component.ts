@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
-import { BaselineSummaryTemplateComponent } from '@shared/components/bdr/baseline-summary-template/baseline-summary-template.component';
 import { SharedModule } from '@shared/shared.module';
 import { AttachedFile } from '@shared/types/attached-file.type';
 import { BdrTaskSharedModule } from '@tasks/bdr/shared/bdr-task-shared.module';
@@ -13,22 +12,15 @@ import { BDRApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-bdr-verification-opinion-statement-review',
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, BdrVerificationReviewGroupDecisionComponent],
   templateUrl: './opinion-statement-review.component.html',
-  standalone: true,
-  imports: [
-    SharedModule,
-    TaskSharedModule,
-    BdrTaskSharedModule,
-    BaselineSummaryTemplateComponent,
-    BdrVerificationReviewGroupDecisionComponent,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BdrOpinionStatementReviewComponent {
-  isEditable: Signal<boolean> = this.bdrService.isEditable;
-  bdrPayload: Signal<BDRApplicationVerificationSubmitRequestTaskPayload> = this.bdrService.payload;
+  readonly isEditable: Signal<boolean> = this.bdrService.isEditable;
+  readonly bdrPayload: Signal<BDRApplicationVerificationSubmitRequestTaskPayload> = this.bdrService.payload;
 
-  opinionStatementFiles: Signal<AttachedFile[]> = computed(() => {
+  readonly opinionStatementFiles: Signal<AttachedFile[]> = computed(() => {
     const payload = this.bdrPayload();
 
     return payload?.verificationReport?.opinionStatement?.opinionStatementFiles

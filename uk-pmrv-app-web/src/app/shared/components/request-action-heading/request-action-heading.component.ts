@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-request-action-heading',
+  standalone: false,
   template: `
     <app-page-heading>{{ headerText }}</app-page-heading>
     <p class="govuk-caption-m">{{ timelineCreationDate | govukDate: 'datetime' }}</p>

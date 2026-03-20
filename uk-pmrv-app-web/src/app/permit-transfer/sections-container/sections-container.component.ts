@@ -16,6 +16,7 @@ import { transferDetailsStatus } from '../transfer-status';
 
 @Component({
   selector: 'app-transfer-sections-container',
+  standalone: false,
   templateUrl: './sections-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

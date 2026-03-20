@@ -4,6 +4,7 @@ import { NonComplianceApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Pipe({
   name: 'nonComplianceReason',
+  standalone: false,
 })
 export class NonComplianceReasonPipe implements PipeTransform {
   transform(value: NonComplianceApplicationSubmitRequestTaskPayload['reason']): string {

@@ -8,6 +8,7 @@ import { subInstallationNameLabelsMap } from '../activity-level-label.map';
 
 @Component({
   selector: 'app-doal-preliminary-allocation-list-template',
+  standalone: false,
   templateUrl: './preliminary-allocation-list-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

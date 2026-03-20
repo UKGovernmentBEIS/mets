@@ -5,7 +5,10 @@ import { RequestActionUserInfo } from 'pmrv-api';
 import { UserContactPipe } from './user-contact.pipe';
 import { UserRolePipe } from './user-role.pipe';
 
-@Pipe({ name: 'userInfoResolver' })
+@Pipe({
+  name: 'userInfoResolver',
+  standalone: false,
+})
 export class UserInfoResolverPipe implements PipeTransform {
   constructor(
     private userContact: UserContactPipe,

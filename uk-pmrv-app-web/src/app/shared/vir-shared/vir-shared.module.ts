@@ -16,6 +16,7 @@ import { VerificationRecommendationItemComponent } from './components/verificati
 import { VerificationReferenceTitlePipe } from './pipes/verification-reference-title.pipe';
 
 @NgModule({
+  imports: [RouterModule, SharedModule],
   declarations: [
     OperatorFollowupItemComponent,
     OperatorResponseDataItemComponent,
@@ -42,6 +43,5 @@ import { VerificationReferenceTitlePipe } from './pipes/verification-reference-t
     VerificationRecommendationItemComponent,
     VerificationReferenceTitlePipe,
   ],
-  imports: [RouterModule, SharedModule],
 })
 export class VirSharedModule {}

@@ -16,6 +16,7 @@ import {
 
 @Pipe({
   name: 'sectionStatus',
+  standalone: false,
 })
 export class SectionStatusPipe implements PipeTransform {
   constructor(private readonly permitNotificationService: PermitNotificationService) {}

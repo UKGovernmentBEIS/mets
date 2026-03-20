@@ -130,11 +130,7 @@ export function getAerVerifyCorsiaVerifiedEmissions(aer: AviationAerCorsia, isRe
   ];
 }
 
-export function getAerVerifyVerifierFindings(
-  isCorsia: boolean,
-  isReview?: boolean,
-  yearEqualAfter25?: boolean,
-): TaskSection<any>[] {
+export function getAerVerifyVerifierFindings(isCorsia: boolean, isReview?: boolean): TaskSection<any>[] {
   const prefixedLink = isReview ? 'aer-review-corsia' : isCorsia ? 'aer-verify-corsia' : 'aer-verify';
 
   return [
@@ -171,9 +167,7 @@ export function getAerVerifyVerifierFindings(
               },
               {
                 name: 'materialityLevel',
-                linkText: yearEqualAfter25
-                  ? 'Further information of relevance to the opinion'
-                  : aerVerifyHeaderTaskMap['materialityLevel'],
+                linkText: aerVerifyHeaderTaskMap['materialityLevel'],
                 link: `${prefixedLink}/materiality-level`,
               },
             ]),

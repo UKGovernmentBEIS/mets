@@ -9,15 +9,13 @@
       formControlName="note"
       govuk-textarea
       [maxLength]="10000"
-      hint="This will only be visible to other regulators"
-    ></div>
+      hint="This will only be visible to other regulators"></div>
 
     <app-multiple-file-input
       [baseDownloadUrl]="getDownloadUrl()"
-      [listTitle]="'Uploaded files'"
+      listTitle="Uploaded files"
       label="Upload a file"
-      formControlName="files"
-    ></app-multiple-file-input>
+      formControlName="files"></app-multiple-file-input>
 
     <button appPendingButton govukButton type="submit">Confirm and complete</button>
   </form>

@@ -12,9 +12,10 @@ import { crfCodesFormProvider } from '@tasks/aer/submit/regulated-activities/add
 
 @Component({
   selector: 'app-regulated-activity-crf-code',
+  standalone: false,
   templateUrl: './crf-codes.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [crfCodesFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrfCodesComponent implements PendingRequest {
   caption$ = combineLatest([this.aerService.getTask('regulatedActivities'), this.route.paramMap]).pipe(

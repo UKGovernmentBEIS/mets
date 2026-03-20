@@ -10,9 +10,10 @@ import { provideConclusionFormProvider } from './provide-conclusion-form.provide
 
 @Component({
   selector: 'app-provide-conclusion',
+  standalone: false,
   templateUrl: './provide-conclusion.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideConclusionFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProvideConclusionComponent {
   businessErrorService: any;

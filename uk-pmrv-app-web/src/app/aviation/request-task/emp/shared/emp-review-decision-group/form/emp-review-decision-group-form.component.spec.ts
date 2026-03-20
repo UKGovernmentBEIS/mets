@@ -17,13 +17,13 @@ async function setup() {
 
 @Component({
   selector: 'app-mock-parent',
+  imports: [ReactiveFormsModule, EmpReviewDecisionGroupFormComponent],
+  standalone: true,
   template: `
     <form [formGroup]="form">
       <app-emp-review-decision-group-form></app-emp-review-decision-group-form>
     </form>
   `,
-  standalone: true,
-  imports: [ReactiveFormsModule, EmpReviewDecisionGroupFormComponent],
   providers: [EmpReviewDecisionGroupFormProvider],
 })
 class MockParentComponent {

@@ -19,9 +19,10 @@ export interface EmpFuelUpliftMethodProceduresFormModel {
 }
 
 @Injectable()
-export class FuelUpliftProceduresFormProvider
-  implements TaskFormProvider<EmpFuelUpliftMethodProcedures, EmpFuelUpliftMethodProceduresFormModel>
-{
+export class FuelUpliftProceduresFormProvider implements TaskFormProvider<
+  EmpFuelUpliftMethodProcedures,
+  EmpFuelUpliftMethodProceduresFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup<EmpFuelUpliftMethodProceduresFormModel>;
   private destroy$ = new Subject<void>();

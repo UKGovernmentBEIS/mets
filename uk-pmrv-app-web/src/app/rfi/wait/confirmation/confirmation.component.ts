@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cancel-confirmation',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

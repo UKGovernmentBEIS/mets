@@ -13,7 +13,6 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-verifier-details',
-  standalone: true,
   imports: [ReturnToLinkComponent, SharedModule, VerificationBodyDetailsInfoTemplateComponent],
   templateUrl: './verifier-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

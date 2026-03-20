@@ -12,7 +12,6 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-variation-details-reason',
-  standalone: true,
   imports: [RouterModule, SharedModule, ReturnToLinkComponent, VariationDetailsReasonTypePipe],
   templateUrl: './variation-details-reason.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -4,6 +4,7 @@ import { AttachedFile } from '@shared/types/attached-file.type';
 
 @Component({
   selector: 'app-opinion-statement-summary-template',
+  standalone: false,
   templateUrl: './opinion-statement-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

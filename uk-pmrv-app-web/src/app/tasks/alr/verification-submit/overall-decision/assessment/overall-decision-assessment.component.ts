@@ -12,10 +12,9 @@ import { overallAssessmentFormProvider } from './overall-decision-assessment-for
 
 @Component({
   selector: 'app-alr-overall-decision-assessment',
-  standalone: true,
   imports: [AlrTaskSharedModule, SharedModule],
-  providers: [overallAssessmentFormProvider],
   templateUrl: './overall-decision-assessment.component.html',
+  providers: [overallAssessmentFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverallDecisionAssessmentComponent {

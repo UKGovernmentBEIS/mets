@@ -11,15 +11,16 @@ import { regulatedActivitiesFormFactory } from '@tasks/aer/submit/regulated-acti
 
 @Component({
   selector: 'app-regulated-activities',
+  standalone: false,
   templateUrl: './regulated-activities.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [regulatedActivitiesFormFactory],
   styles: `
     .float-right {
       float: right;
       cursor: pointer;
     }
   `,
+  providers: [regulatedActivitiesFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegulatedActivitiesComponent {
   displayErrorSummary$ = new BehaviorSubject(false);

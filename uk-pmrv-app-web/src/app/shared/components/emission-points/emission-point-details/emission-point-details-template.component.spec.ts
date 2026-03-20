@@ -16,6 +16,7 @@ describe('EmissionPointDetailsTemplateComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-emission-point-details-template
         [form]="formGroup"

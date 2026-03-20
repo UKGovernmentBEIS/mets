@@ -9,6 +9,7 @@ import { OpinionStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-regulated-activities',
+  standalone: false,
   templateUrl: './regulated-activities.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

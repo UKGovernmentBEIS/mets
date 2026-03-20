@@ -11,7 +11,10 @@ describe('AssignmentConfirmationComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
   let hostComponent: TestComponent;
 
-  @Component({ template: '<app-assignment-confirmation [user]="user"></app-assignment-confirmation>' })
+  @Component({
+    standalone: false,
+    template: '<app-assignment-confirmation [user]="user"></app-assignment-confirmation>',
+  })
   class TestComponent {
     user: string;
   }

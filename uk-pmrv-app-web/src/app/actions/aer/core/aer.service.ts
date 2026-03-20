@@ -25,10 +25,6 @@ export class AerService {
     return this.store.payload$.pipe(map((payload) => payload));
   }
 
-  get yearEqualAfter2025$(): Observable<boolean> {
-    return this.store.payload$.pipe(map((payload) => payload.reportingYear >= 2025));
-  }
-
   getDownloadUrlFiles(files: string[], isVerification = false): { downloadUrl: string; fileName: string }[] {
     const aerAttachments = isVerification ? this.verificationAttachments : this.attachments;
 

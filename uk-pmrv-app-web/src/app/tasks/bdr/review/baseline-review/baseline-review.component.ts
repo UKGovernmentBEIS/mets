@@ -16,8 +16,6 @@ import {
 
 @Component({
   selector: 'app-baseline-review',
-  templateUrl: './baseline-review.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     TaskSharedModule,
@@ -25,6 +23,7 @@ import {
     BaselineSummaryTemplateComponent,
     BdrReviewGroupDecisionComponent,
   ],
+  templateUrl: './baseline-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaselineReviewComponent {

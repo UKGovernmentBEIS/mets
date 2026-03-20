@@ -23,6 +23,7 @@ describe('MeasuredEmissionsOverviewComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-measured-emissions-overview [measuredEmissions]="measuredEmissions"></app-measured-emissions-overview>
     `,

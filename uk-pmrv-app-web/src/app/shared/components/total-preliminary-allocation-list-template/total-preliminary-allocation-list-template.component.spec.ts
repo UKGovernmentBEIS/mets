@@ -14,6 +14,7 @@ describe('TotalPreliminaryAllocationListTemplateComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-total-preliminary-allocation-list-template [data]="data"></app-total-preliminary-allocation-list-template>
     `,

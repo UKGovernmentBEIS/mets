@@ -15,6 +15,7 @@ import { PermitRevocationStore } from '@permit-revocation/store/permit-revocatio
 
 @Component({
   selector: 'app-report',
+  standalone: false,
   templateUrl: './report.component.html',
   providers: [permitRevocationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

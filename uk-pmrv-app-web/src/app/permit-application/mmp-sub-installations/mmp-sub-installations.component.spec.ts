@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, RouterLink } from '@angular/router';
 
 import { SharedPermitModule } from '@permit-application/shared/shared-permit.module';
 import { PermitApplicationState } from '@permit-application/store/permit-application.state';
@@ -39,8 +39,9 @@ describe('MmpSubInstallationsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MmpSubInstallationsComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [SharedModule, SharedPermitModule, RouterLink],
       providers: [
+        provideRouter([]),
         {
           provide: PermitApplicationStore,
           useExisting: PermitIssuanceStore,

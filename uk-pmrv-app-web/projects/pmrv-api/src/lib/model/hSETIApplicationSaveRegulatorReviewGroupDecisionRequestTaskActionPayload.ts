@@ -12,8 +12,7 @@
 import { HSETIRegulatorReviewDecision } from './hSETIRegulatorReviewDecision';
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface HSETIApplicationSaveRegulatorReviewGroupDecisionRequestTaskActionPayload
-  extends RequestTaskActionPayload {
+export interface HSETIApplicationSaveRegulatorReviewGroupDecisionRequestTaskActionPayload extends RequestTaskActionPayload {
   group: 'HSETI';
   decision: HSETIRegulatorReviewDecision;
   regulatorReviewSectionsCompleted?: { [key: string]: boolean };

@@ -4,8 +4,8 @@ import { AviationAerCorsiaCertDetails } from 'pmrv-api';
 
 @Pipe({
   name: 'certDetailsFlightType',
-  pure: true,
   standalone: true,
+  pure: true,
 })
 export class CertDetailsFlightTypePipe implements PipeTransform {
   transform(value: AviationAerCorsiaCertDetails['flightType']): string | null {

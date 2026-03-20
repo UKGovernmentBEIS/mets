@@ -12,6 +12,7 @@ import { UserRegistrationStore } from '../store/user-registration.store';
 
 @Component({
   selector: 'app-summary',
+  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

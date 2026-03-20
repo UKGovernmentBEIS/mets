@@ -9,6 +9,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-measurement-verification',
+  standalone: false,
   template: `
     <app-page-heading>{{ taskKey | monitoringApproachEmissionDescription }}</app-page-heading>
     <app-measurement-group [data]="aerData$ | async" [taskKey]="taskKey"></app-measurement-group>

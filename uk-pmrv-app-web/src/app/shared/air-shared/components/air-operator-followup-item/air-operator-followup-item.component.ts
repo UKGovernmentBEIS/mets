@@ -6,6 +6,7 @@ import { OperatorAirImprovementFollowUpResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-air-operator-followup-item',
+  standalone: false,
   templateUrl: './air-operator-followup-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

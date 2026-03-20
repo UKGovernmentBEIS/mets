@@ -11,6 +11,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-verifier-details',
+  standalone: false,
   template: `
     <app-action-task header="Verifier details" [breadcrumb]="true">
       <app-verifier-details-group [verificationReport]="verificationReportData$ | async"></app-verifier-details-group>

@@ -52,9 +52,10 @@ import {
 
 @Component({
   selector: 'app-peer-review-shared',
+  standalone: false,
   templateUrl: './peer-review.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [peerReviewFormFactory, UserFullNamePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PeerReviewComponent implements OnInit {
   private readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

@@ -25,11 +25,10 @@ export interface ViewModel {
 }
 @Component({
   selector: 'app-monitoring-approach-summary',
-  templateUrl: './monitoring-approach-summary.component.html',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent, MonitoringApproachCorsiaSummaryTemplateComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './monitoring-approach-summary.component.html',
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonitoringApproachSummaryComponent {
   private formProvider = inject<AviationAerCorsiaMonitoringApproachFormProvider>(TASK_FORM_PROVIDER);

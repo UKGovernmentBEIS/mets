@@ -4,6 +4,7 @@ import { InherentReceivingTransferringInstallation } from 'pmrv-api';
 
 @Pipe({
   name: 'inherentCo2Instruments',
+  standalone: false,
 })
 export class InherentCo2InstrumentsPipe implements PipeTransform {
   transform(value: InherentReceivingTransferringInstallation['measurementInstrumentOwnerTypes'][number]): string {

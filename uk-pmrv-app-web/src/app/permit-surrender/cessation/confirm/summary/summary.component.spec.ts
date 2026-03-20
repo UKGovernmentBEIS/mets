@@ -18,6 +18,7 @@ import { SummaryComponent } from './summary.component';
 describe('SummaryComponent', () => {
   @Component({
     selector: 'app-cessation-summary-details',
+    standalone: false,
     template: '<p>Mock cessation summary details</p>',
   })
   class MockCessationSummaryDetailsComponent {

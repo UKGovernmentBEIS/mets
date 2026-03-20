@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, iif, map, Observable, of, switchMap, take, tap, withLatestFrom } from 'rxjs';
 
@@ -26,9 +26,8 @@ export interface SendReportVerificationViewModel {
 
 @Component({
   selector: 'app-send-report-verification',
+  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './send-report-verification.component.html',
-  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent],
-  standalone: true,
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

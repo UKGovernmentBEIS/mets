@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { RequestActionInfoDTO } from 'pmrv-api';
 
-@Pipe({ name: 'itemActionType' })
+@Pipe({
+  name: 'itemActionType',
+  standalone: false,
+})
 export class ItemActionTypePipe implements PipeTransform {
   transform(type: RequestActionInfoDTO['type']): string {
     switch (type) {
@@ -14,6 +17,11 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'The regulator rejected the installation account application';
       case 'INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED':
         return 'Original application';
+
+      case 'INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY':
+      case 'AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY':
+      case 'WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY':
+        return 'Information sent to Registry by system';
 
       case 'PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMITTED':
         return 'Amended permit application submitted';
@@ -385,6 +393,8 @@ export class ItemActionTypePipe implements PipeTransform {
         return `Peer review disagreement submitted`;
       case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_CANCELLED':
         return `Withholding of allowances cancelled`;
+      case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_RE_INITIATED':
+        return 'Withholding of allowances reopened';
 
       case 'AVIATION_ACCOUNT_CLOSURE_CANCELLED':
         return 'Account closure cancelled';
@@ -532,9 +542,28 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'Peer review disagreement submitted';
 
       case 'BDRS2_APPLICATION_SENT_TO_VERIFIER':
+      case 'BDRS2_APPLICATION_AMENDS_SENT_TO_VERIFIER':
         return 'Stage 2 baseline data report submitted to verifier';
       case 'BDRS2_APPLICATION_SENT_TO_REGULATOR':
         return 'Stage 2 baseline data report submitted to regulator';
+      case 'BDRS2_RECALLED_FROM_VERIFICATION':
+        return 'Stage 2 baseline data report recalled';
+      case 'BDRS2_VERIFICATION_RETURNED_TO_OPERATOR':
+        return 'Stage 2 baseline data report returned to operator for changes';
+      case 'BDRS2_APPLICATION_VERIFICATION_SUBMITTED':
+        return 'Stage 2 baseline data report verification statement submitted to operator';
+      case 'BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+        return 'Stage 2 baseline data report returned to operator';
+      case 'BDRS2_APPLICATION_PEER_REVIEW_REQUESTED':
+        return 'Peer review requested';
+      case 'BDRS2_APPLICATION_COMPLETED':
+        return 'Stage 2 baseline data report reviewed';
+      case 'BDRS2_APPLICATION_RE_INITIATED':
+        return 'Stage 2 baseline data report reopened';
+      case 'BDRS2_APPLICATION_PEER_REVIEW_ACCEPTED':
+        return 'Peer review agreement submitted';
+      case 'BDRS2_APPLICATION_PEER_REVIEW_REJECTED':
+        return 'Peer review disagreement submitted';
 
       case 'PERMANENT_CESSATION_SUBMITTED':
         return 'Permanent cessation started';

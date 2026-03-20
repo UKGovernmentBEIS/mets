@@ -20,10 +20,11 @@ import { TimeoutBannerService } from './timeout-banner.service';
 
 @Component({
   selector: 'app-timeout-banner',
+  standalone: false,
   templateUrl: './timeout-banner.component.html',
   styleUrl: './timeout-banner.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimeoutBannerComponent implements OnInit, AfterViewInit {
   @Input() timeOffsetSeconds: number;

@@ -13,6 +13,7 @@ import { NonComplianceService } from '../../core/non-compliance.service';
 
 @Component({
   selector: 'app-non-compliance-notify-operator',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div
@@ -22,7 +23,7 @@ import { NonComplianceService } from '../../core/non-compliance.service';
           [taskId]="taskId$ | async"
           [accountId]="accountId$ | async"
           requestTaskActionType="NON_COMPLIANCE_NOTICE_OF_INTENT_NOTIFY_OPERATOR"
-          [confirmationMessage]="'Notice of intent sent to operator'"
+          confirmationMessage="Notice of intent sent to operator"
           [referenceCode]="requestId$ | async"
           [hasSignature]="false"></app-notify-operator>
       </div>

@@ -14,8 +14,8 @@ const EMP_CERT_MONITORING_APPROACH = {
 
 @Pipe({
   name: 'monitoringApproachCorsiaTypes',
-  pure: true,
   standalone: true,
+  pure: true,
 })
 export class MonitoringApproachTypeCorsiaPipe implements PipeTransform {
   transform(

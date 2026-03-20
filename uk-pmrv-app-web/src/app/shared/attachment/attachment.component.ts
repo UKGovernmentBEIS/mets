@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-attachment',
+  standalone: false,
   templateUrl: './attachment.component.html',
   styleUrl: './attachment.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

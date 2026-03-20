@@ -20,10 +20,11 @@ import { fuelInputRelevantEmissionFactorAddFormFactory } from './measurable-heat
 
 @Component({
   selector: 'app-measurable-heat-exported',
+  standalone: false,
   templateUrl: './measurable-heat-exported.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [fuelInputRelevantEmissionFactorAddFormFactory],
   styleUrl: './measurable-heat-exported.component.scss',
+  providers: [fuelInputRelevantEmissionFactorAddFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MeasurableHeatExportedComponent extends ProductBenchmarkComponent implements PendingRequest {
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;

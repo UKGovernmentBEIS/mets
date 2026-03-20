@@ -2,7 +2,7 @@
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
-    [heading]="'Waste gas balance'"
+    heading="Waste gas balance"
     [caption]="(productBenchmarkType$ | async | subInstallationType) + ': benchmark improvement rate'"
     submitText="Continue">
     <div class="govuk-!-width-two-thirds">
@@ -21,17 +21,17 @@
         legendSize="medium"
         hint="Select all that apply."
         formControlName="wasteGasActivities">
-        <govuk-checkbox [value]="'WASTE_GAS_PRODUCED'" label="Waste gas produced"></govuk-checkbox>
+        <govuk-checkbox value="WASTE_GAS_PRODUCED" label="Waste gas produced"></govuk-checkbox>
         <govuk-checkbox
-          [value]="'WASTE_GAS_CONSUMED'"
+          value="WASTE_GAS_CONSUMED"
           label="Waste gas consumed, including safety flaring"></govuk-checkbox>
         <govuk-checkbox
-          [value]="'WASTE_GAS_FLARED'"
+          value="WASTE_GAS_FLARED"
           label="Waste gas flared, not including safety flaring"></govuk-checkbox>
-        <govuk-checkbox [value]="'WASTE_GAS_IMPORTED'" label="Waste gas imported"></govuk-checkbox>
-        <govuk-checkbox [value]="'WASTE_GAS_EXPORTED'" label="Waste gas exported"></govuk-checkbox>
+        <govuk-checkbox value="WASTE_GAS_IMPORTED" label="Waste gas imported"></govuk-checkbox>
+        <govuk-checkbox value="WASTE_GAS_EXPORTED" label="Waste gas exported"></govuk-checkbox>
         <govuk-checkbox
-          [value]="'NO_WASTE_GAS_ACTIVITIES'"
+          value="NO_WASTE_GAS_ACTIVITIES"
           label="No, there are no waste gas activities at this sub-installation"
           divider="or"></govuk-checkbox>
       </div>
@@ -92,7 +92,7 @@
                 <ng-container formGroupName="WASTE_GAS_PRODUCED">
                   <div class="govuk-body">Waste gases produced</div>
                   <div formControlName="entity" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource44Type of dataSource44Types" [value]="dataSource44Type">
                       {{ dataSource44Type | productBenchmark44DataSource }}
                     </option>
@@ -100,7 +100,7 @@
 
                   <div class="govuk-body">Energy content of waste gases produced</div>
                   <div formControlName="energyContent" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
                       {{ dataSource46Type | productBenchmark46DataSource }}
                     </option>
@@ -108,7 +108,7 @@
 
                   <div class="govuk-body">Emission factor of waste gases produced</div>
                   <div formControlName="emissionFactor" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
                       {{ dataSource46Type | productBenchmark46DataSource }}
                     </option>
@@ -124,7 +124,7 @@
                 <ng-container formGroupName="WASTE_GAS_CONSUMED">
                   <div class="govuk-body">Waste gases consumed, including safety flaring</div>
                   <div formControlName="entity" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource44Type of dataSource44Types" [value]="dataSource44Type">
                       {{ dataSource44Type | productBenchmark44DataSource }}
                     </option>
@@ -132,7 +132,7 @@
 
                   <div class="govuk-body">Energy content of waste gases consumed</div>
                   <div formControlName="energyContent" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
                       {{ dataSource46Type | productBenchmark46DataSource }}
                     </option>
@@ -140,7 +140,7 @@
 
                   <div class="govuk-body">Emission factor of waste gases consumed</div>
                   <div formControlName="emissionFactor" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
                       {{ dataSource46Type | productBenchmark46DataSource }}
                     </option>
@@ -156,7 +156,7 @@
                 <ng-container formGroupName="WASTE_GAS_FLARED">
                   <div class="govuk-body">Waste gases flared, not including safety flaring</div>
                   <div formControlName="entity" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource44Type of dataSource44Types" [value]="dataSource44Type">
                       {{ dataSource44Type | productBenchmark44DataSource }}
                     </option>
@@ -164,7 +164,7 @@
 
                   <div class="govuk-body">Energy content of waste gases flared</div>
                   <div formControlName="energyContent" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
                       {{ dataSource46Type | productBenchmark46DataSource }}
                     </option>
@@ -172,7 +172,7 @@
 
                   <div class="govuk-body">Emission factor of waste gases flared</div>
                   <div formControlName="emissionFactor" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
                       {{ dataSource46Type | productBenchmark46DataSource }}
                     </option>
@@ -188,7 +188,7 @@
                 <ng-container formGroupName="WASTE_GAS_IMPORTED">
                   <div class="govuk-body">Waste gases imported</div>
                   <div formControlName="entity" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource44Type of dataSource44Types" [value]="dataSource44Type">
                       {{ dataSource44Type | productBenchmark44DataSource }}
                     </option>
@@ -196,7 +196,7 @@
 
                   <div class="govuk-body">Energy content of waste gases imported</div>
                   <div formControlName="energyContent" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
                       {{ dataSource46Type | productBenchmark46DataSource }}
                     </option>
@@ -204,7 +204,7 @@
 
                   <div class="govuk-body">Emission factor of waste gases imported</div>
                   <div formControlName="emissionFactor" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
                       {{ dataSource46Type | productBenchmark46DataSource }}
                     </option>
@@ -220,7 +220,7 @@
                 <ng-container formGroupName="WASTE_GAS_EXPORTED">
                   <div class="govuk-body">Waste gases exported</div>
                   <div formControlName="entity" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource44Type of dataSource44Types" [value]="dataSource44Type">
                       {{ dataSource44Type | productBenchmark44DataSource }}
                     </option>
@@ -228,7 +228,7 @@
 
                   <div class="govuk-body">Energy content of waste gases exported</div>
                   <div formControlName="energyContent" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
                       {{ dataSource46Type | productBenchmark46DataSource }}
                     </option>
@@ -236,7 +236,7 @@
 
                   <div class="govuk-body">Emission factor of waste gases exported</div>
                   <div formControlName="emissionFactor" govuk-select widthClass="govuk-!-width-full">
-                    <option [value]="''">Select an option if relevant</option>
+                    <option value="">Select an option if relevant</option>
                     <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
                       {{ dataSource46Type | productBenchmark46DataSource }}
                     </option>
@@ -274,7 +274,7 @@
           govuk-radio
           legend="Has the hierarchical order been followed?"
           hint="Select yes if the data source with the highest rank within the hierarchy has been used, as set out in section 4 of Annex VII of the FAR."
-          [legendSize]="'medium'">
+          legendSize="medium">
           <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
           <govuk-radio-option [value]="false" label="No">
             <ng-container govukConditionalContent>
@@ -283,13 +283,13 @@
                 govuk-radio
                 legend="Reason for not following the hierarchy">
                 <govuk-radio-option
-                  [value]="'OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY'"
+                  value="OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY"
                   label="Other data sources lead to lower uncertainty according to the simplified uncertainty assessment in line with Article 7(2) of the FAR"></govuk-radio-option>
                 <govuk-radio-option
-                  [value]="'USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE'"
+                  value="USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE"
                   label="Use of better data sources is technically infeasible"></govuk-radio-option>
                 <govuk-radio-option
-                  [value]="'USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS'"
+                  value="USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS"
                   label="Use of better data sources would incur unreasonable costs"></govuk-radio-option>
               </div>
               <div
@@ -311,5 +311,5 @@
     }
   </app-wizard-step>
 
-  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+  <a govukLink routerLink="../../">Return to: Sub-installations</a>
 </app-permit-task>

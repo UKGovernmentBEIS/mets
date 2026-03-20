@@ -9,12 +9,13 @@ import { noticeDateFormProvider } from '../determination/grant/notice-date/notic
 
 @Component({
   selector: 'app-invalid-data',
+  standalone: false,
   template: `
     <govuk-error-summary *ngIf="invalidNoticeDate$ | async" [form]="form"></govuk-error-summary>
     <a govukLink routerLink="..">Return to surrender permit determination</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [noticeDateFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvalidDataComponent {
   invalidNoticeDate$ = this.store.pipe(

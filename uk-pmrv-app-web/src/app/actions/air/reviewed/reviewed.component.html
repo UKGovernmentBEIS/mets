@@ -1,16 +1,14 @@
 <app-base-action-container-component
   [header]="airTitle$ | async"
   [customContentTemplate]="customContentTemplate"
-  [expectedActionType]="['AIR_APPLICATION_REVIEWED']"
->
-</app-base-action-container-component>
+  [expectedActionType]="['AIR_APPLICATION_REVIEWED']"></app-base-action-container-component>
 <ng-template #customContentTemplate>
   <h2 app-summary-header class="govuk-heading-m">Details</h2>
   <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Annual improvement report</dt>
       <dd govukSummaryListRowValue>
-        <a govukLink [routerLink]="'response-list'">Annual improvement report</a>
+        <a govukLink routerLink="response-list">Annual improvement report</a>
       </dd>
     </div>
   </dl>

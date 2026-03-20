@@ -13,6 +13,7 @@ describe('OverallDecisionReasonListComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-overall-decision-list [isEditable]="isEditable" [list]="list"></app-overall-decision-list>
     `,

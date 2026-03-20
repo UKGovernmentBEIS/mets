@@ -4,6 +4,7 @@ import { AerAmendGroup } from '../../core/aer.amend.types';
 
 @Pipe({
   name: 'amendHeading',
+  standalone: false,
 })
 export class AmendHeadingPipe implements PipeTransform {
   transform(value: AerAmendGroup): string {

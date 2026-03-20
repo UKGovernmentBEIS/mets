@@ -9,6 +9,7 @@ import { emissionSummariesColumns } from '../emission-summaries';
 
 @Component({
   selector: 'app-emission-summaries-summary',
+  standalone: false,
   templateUrl: './emission-summaries-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -8,6 +8,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-nace-codes',
+  standalone: false,
   template: `
     <app-action-task header="NACE codes" [breadcrumb]="true">
       <app-nace-codes-summary-template [naceCodes]="naceCodes$ | async"></app-nace-codes-summary-template>

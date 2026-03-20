@@ -10,6 +10,7 @@ import { PaymentStore } from '../../store/payment.store';
 
 @Component({
   selector: 'app-mark-paid',
+  standalone: false,
   template: `
     <app-page-heading>Are you sure you want to mark this payment as paid?</app-page-heading>
     <div class="govuk-button-group" *ngIf="(store.isEditable$ | async) === true">

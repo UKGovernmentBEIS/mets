@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
@@ -8,6 +7,8 @@ import { PipesModule } from '@shared/pipes/pipes.module';
 import { SharedModule } from '@shared/shared.module';
 
 import {
+  AviationReportableEmissionsOperatorDetails,
+  AviationReportableEmissionsRegistryIntegrationRequestActionPayload,
   EmpIssuanceIndividualCompanyDetails,
   EmpIssuanceLimitedCompanyDetails,
   EmpIssuanceOperatorDetails,
@@ -27,7 +28,7 @@ import { RegistryActionService } from '../core/registry.service';
 
 interface ViewModel {
   expectedActionType: Array<RequestActionDTO['type']>;
-  operatorDetails: EmpIssuanceOperatorDetails;
+  operatorDetails: EmpIssuanceOperatorDetails & AviationReportableEmissionsOperatorDetails;
   organizationDetails: Partial<
     EmpIssuanceOrganisationDetails &
       EmpIssuanceIndividualCompanyDetails &
@@ -39,24 +40,33 @@ interface ViewModel {
 
 @Component({
   selector: 'app-information-sent',
-  standalone: true,
-  imports: [ActionSharedModule, NgIf, PipesModule, SharedModule, OperatorDetailsLegalStatusTypePipe],
+  imports: [ActionSharedModule, PipesModule, SharedModule, OperatorDetailsLegalStatusTypePipe],
   templateUrl: './information-sent.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InformationSentToRegistryComponent {
   payload = this.registryActionService.payload as Signal<
-    EmpIssuanceRegistryIntegrationRequestActionPayload | EmpVariationRegistryIntegrationRequestActionPayload
+    | EmpIssuanceRegistryIntegrationRequestActionPayload
+    | EmpVariationRegistryIntegrationRequestActionPayload
+    | AviationReportableEmissionsRegistryIntegrationRequestActionPayload
   >;
   private readonly requestActionType = this.registryActionService.requestActionType;
 
   vm: Signal<ViewModel> = computed(() => {
     const payload = this.payload();
-    const operatorDetails = payload.operatorDetails;
-    const organizationDetails = payload.organisationDetails;
+    const expectedActionType = this.requestActionType();
+    const operatorDetails =
+      expectedActionType === 'AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY'
+        ? (payload as AviationReportableEmissionsRegistryIntegrationRequestActionPayload)
+        : (
+            payload as
+              | EmpIssuanceRegistryIntegrationRequestActionPayload
+              | EmpVariationRegistryIntegrationRequestActionPayload
+          ).operatorDetails;
+    const organizationDetails = (payload as EmpIssuanceRegistryIntegrationRequestActionPayload).organisationDetails;
 
     return {
-      expectedActionType: [this.requestActionType()],
+      expectedActionType: [expectedActionType],
       operatorDetails,
       organizationDetails,
       address:

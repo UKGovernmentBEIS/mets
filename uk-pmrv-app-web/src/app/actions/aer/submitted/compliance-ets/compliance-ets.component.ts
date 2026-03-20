@@ -8,6 +8,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-compliance-ets',
+  standalone: false,
   template: `
     <app-action-task header="Compliance with ETS rules" [breadcrumb]="true">
       <app-compliance-ets-group [etsComplianceRules]="etsComplianceRules$ | async"></app-compliance-ets-group>

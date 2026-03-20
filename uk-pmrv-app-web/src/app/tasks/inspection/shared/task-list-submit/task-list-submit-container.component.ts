@@ -40,9 +40,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-task-list-submit-container',
-  templateUrl: './task-list-submit-container.component.html',
-  standalone: true,
   imports: [SharedModule, TaskSharedModule, DetailsSubtaskHeaderPipe, DetailsSubtaskLinktextPipe],
+  templateUrl: './task-list-submit-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskListSubmitContainerComponent {

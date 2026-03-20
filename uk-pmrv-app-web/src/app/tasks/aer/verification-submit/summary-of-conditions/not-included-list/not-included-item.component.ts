@@ -13,6 +13,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-not-included-item',
+  standalone: false,
   templateUrl: './not-included-item.component.html',
   providers: [notIncludedItemFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

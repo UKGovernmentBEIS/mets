@@ -22,7 +22,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-recommended-improvements',
-  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,

@@ -270,7 +270,7 @@ const routerOptions: ExtraOptions = {
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, routerOptions)],
-  exports: [RouterModule],
   providers: [InstallationAccountApplicationGuard, LandingPageGuard],
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}

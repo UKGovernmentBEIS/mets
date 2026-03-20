@@ -5,6 +5,7 @@ import { PermitNotificationService } from '../core/permit-notification.service';
 
 @Component({
   selector: 'app-permit-notification-submitted',
+  standalone: false,
   template: `
     <app-base-action-container-component
       [header]="(route.data | async)?.pageTitle"

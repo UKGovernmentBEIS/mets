@@ -45,8 +45,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-fuel-uplift-summary',
-  templateUrl: './fuel-uplift-summary.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     GovukComponentsModule,
@@ -56,6 +54,7 @@ interface ViewModel {
     FuelUpliftSummaryTemplateComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,
   ],
+  templateUrl: './fuel-uplift-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FuelUpliftSummaryComponent {

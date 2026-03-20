@@ -14,6 +14,7 @@ import { paymentFormProvider } from './payment-form.provider';
 
 @Component({
   selector: 'app-payment',
+  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onSubmit()"
@@ -31,8 +32,8 @@ import { paymentFormProvider } from './payment-form.provider';
     </app-wizard-step>
     <a govukLink routerLink="..">Return to: Permit transfer application</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [paymentFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransferAPaymentComponent {
   hideSubmit$ = this.permitTransferAService.isEditable$.pipe(map((isEditable) => !isEditable));

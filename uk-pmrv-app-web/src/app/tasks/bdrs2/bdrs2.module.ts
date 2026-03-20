@@ -7,10 +7,13 @@ import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 
 import { BdrS2RoutingModule } from './bdrs2-routing.module';
 import { BdrS2Service } from './core';
-import { BDRS2BaselineStepGuard } from './submit/guards/baseline-step-guard';
-import { BDRS2BaselineSummaryGuard } from './submit/guards/baseline-summary-guard';
-import { Bdrs2SendReportGuard } from './submit/guards/send-report-guard';
-import { Bdrs2SendReportVerifierGuard } from './submit/guards/send-report-verifier-guard';
+import {
+  BDRS2BaselineStepGuard,
+  BDRS2BaselineSummaryGuard,
+  Bdrs2SendReportGuard,
+  Bdrs2SendReportVerifierGuard,
+} from './submit';
+import { OpinionStatementSummaryGuard } from './verification-submit';
 
 @NgModule({
   imports: [BdrS2RoutingModule, SharedModule, TaskSharedModule],
@@ -22,6 +25,7 @@ import { Bdrs2SendReportVerifierGuard } from './submit/guards/send-report-verifi
     BdrS2Service,
     CapitalizeFirstPipe,
     ItemNamePipe,
+    OpinionStatementSummaryGuard,
   ],
 })
 export class BdrS2Module {}

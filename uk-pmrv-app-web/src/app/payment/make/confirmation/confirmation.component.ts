@@ -24,6 +24,7 @@ export interface PaymentDetailsItem {
 
 @Component({
   selector: 'app-confirmation',
+  standalone: false,
   template: `
     <ng-container *ngIf="details$ | async as details">
       <div class="govuk-grid-row">
@@ -37,8 +38,8 @@ export interface PaymentDetailsItem {
     </ng-container>
     <app-return-link [requestType]="(store | async).requestType" [home]="true"></app-return-link>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmationComponent implements OnInit {
   readonly shouldDisplayAmount$ = this.store.pipe(map((state) => !shouldHidePaymentAmount(state)));

@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.core.domain.enumeration;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -539,7 +540,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_VARIATION_REGULATOR_LED_MAKE_PAYMENT(true, RequestType.PERMIT_VARIATION, SupportingTaskType.DEFAULT) {
+    PERMIT_VARIATION_REGULATOR_LED_MAKE_PAYMENT(true, RequestType.PERMIT_VARIATION) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
@@ -1779,6 +1780,9 @@ public enum RequestTaskType {
         }
     },
 
+    /**
+     * BDRS2
+     */
     BDRS2_APPLICATION_SUBMIT(true, RequestType.BDRS2, RequestExpirationType.BDRS2) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
@@ -1790,8 +1794,49 @@ public enum RequestTaskType {
             );
         }
     },
+    BDRS2_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.BDRS2) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.BDRS2_SAVE_APPLICATION_VERIFICATION,
+                    RequestTaskActionType.BDRS2_VERIFICATION_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.BDRS2_VERIFICATION_RETURN_TO_OPERATOR,
+                    RequestTaskActionType.BDRS2_SUBMIT_VERIFICATION
+            );
+        }
+    },
 
     BDRS2_WAIT_FOR_REGULATOR_REVIEW(true, RequestType.BDRS2) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+    BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT(true, RequestType.BDRS2) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.BDRS2_SAVE_REGULATOR_REVIEW_GROUP_DECISION,
+                    RequestTaskActionType.BDRS2_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT,
+                    RequestTaskActionType.BDRS2_REGULATOR_REVIEW_SAVE,
+                    RequestTaskActionType.BDRS2_REGULATOR_REVIEW_SUBMIT,
+                    RequestTaskActionType.BDRS2_REQUEST_PEER_REVIEW,
+                    RequestTaskActionType.BDRS2_REGULATOR_REVIEW_RETURN_FOR_AMENDS
+            );
+        }
+    },
+
+    BDRS2_APPLICATION_PEER_REVIEW(true, RequestType.BDRS2, SupportingTaskType.PEER_REVIEW) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.BDRS2_SUBMIT_PEER_REVIEW_DECISION
+            );
+        }
+    },
+
+    BDRS2_WAIT_FOR_PEER_REVIEW(true, RequestType.BDRS2) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of();
@@ -1806,12 +1851,42 @@ public enum RequestTaskType {
             );
         }
     },
-    BDRS2_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.BDRS2) {
+
+    BDRS2_APPLICATION_AMENDS_SUBMIT(true, RequestType.BDRS2) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
-                    //TODO: filled in next steps
+                    RequestTaskActionType.BDRS2_APPLICATION_AMENDS_SAVE,
+                    RequestTaskActionType.BDRS2_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR,
+                    RequestTaskActionType.BDRS2_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER,
+                    RequestTaskActionType.BDRS2_UPLOAD_ATTACHMENT
             );
+        }
+    },
+
+    BDRS2_WAIT_FOR_AMENDS(true, RequestType.BDRS2) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+    BDRS2_AMEND_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.BDRS2) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.BDRS2_SAVE_APPLICATION_VERIFICATION,
+                    RequestTaskActionType.BDRS2_SUBMIT_VERIFICATION,
+                    RequestTaskActionType.BDRS2_VERIFICATION_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.BDRS2_VERIFICATION_RETURN_TO_OPERATOR
+                    );
+        }
+    },
+
+    BDRS2_AMEND_WAIT_FOR_VERIFICATION(true, RequestType.BDRS2) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(RequestTaskActionType.BDRS2_RECALL_FROM_VERIFICATION);
         }
     },
 
@@ -2371,7 +2446,8 @@ public enum RequestTaskType {
     EMP_ISSUANCE_UKETS_WAIT_FOR_PEER_REVIEW(true, RequestType.EMP_ISSUANCE_UKETS, RequestExpirationType.APPLICATION_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
-            return List.of(RequestTaskActionType.RDE_SUBMIT);
+            return List.of(RequestTaskActionType.RDE_SUBMIT,
+                    RequestTaskActionType.EMP_ISSUANCE_UKETS_MANUAL_ACCOUNT_OPENING_REGISTRY);
         }
     },
 
@@ -2392,7 +2468,7 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_VARIATION_UKETS_REGULATOR_LED_MAKE_PAYMENT(true, RequestType.EMP_VARIATION_UKETS, SupportingTaskType.DEFAULT) {
+    EMP_VARIATION_UKETS_REGULATOR_LED_MAKE_PAYMENT(true, RequestType.EMP_VARIATION_UKETS) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
@@ -3066,7 +3142,7 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_VARIATION_CORSIA_REGULATOR_LED_MAKE_PAYMENT(true, RequestType.EMP_VARIATION_CORSIA, SupportingTaskType.DEFAULT) {
+    EMP_VARIATION_CORSIA_REGULATOR_LED_MAKE_PAYMENT(true, RequestType.EMP_VARIATION_CORSIA) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
@@ -3265,6 +3341,8 @@ public enum RequestTaskType {
     private final boolean assignable;
 	private final RequestType requestType;
     private final RequestExpirationType expirationKey;
+    
+    @Getter(AccessLevel.NONE)
     private final SupportingTaskType supporting;
 
     private RequestTaskType(boolean assignable, RequestType requestType, SupportingTaskType supporting) {
@@ -3372,7 +3450,11 @@ public enum RequestTaskType {
         return supporting == SupportingTaskType.PEER_REVIEW;
     }
 
-    public boolean isSupporting() {
-        return supporting != null;
+    public boolean doesCascadeReassignment() {
+    	return supporting == null;
+    }
+    
+    public boolean doesPopulateRequestAssignment() {
+    	return supporting == null;
     }
 }

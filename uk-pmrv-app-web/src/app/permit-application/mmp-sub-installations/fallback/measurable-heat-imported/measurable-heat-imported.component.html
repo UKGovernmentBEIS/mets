@@ -2,7 +2,7 @@
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
-    [heading]="'Measurable heat imported'"
+    heading="Measurable heat imported"
     [caption]="(productBenchmarkType$ | async | subInstallationType) + ': benchmark improvement rate'"
     submitText="Continue">
     <div class="govuk-!-width-two-thirds">
@@ -18,27 +18,27 @@
         hint="Select all that apply."
         formControlName="measurableHeatImportedActivities">
         <govuk-checkbox
-          [value]="'MEASURABLE_HEAT_IMPORTED_OTHER_SOURCES'"
+          value="MEASURABLE_HEAT_IMPORTED_OTHER_SOURCES"
           label="Imported from other sources"
           hint="Including heat imported from other installations, or, where measurable heat is consumed by more than one sub-installation, including measurbale heat exported <br />Do not include measurable heat imported from fuel benchmark sub-installations or from waste gases."></govuk-checkbox>
         <govuk-checkbox
-          [value]="'MEASURABLE_HEAT_IMPORTED_PRODUCT_BENCHMARK'"
+          value="MEASURABLE_HEAT_IMPORTED_PRODUCT_BENCHMARK"
           label="Imported from product benchmark"
           hint="Including heat imported from other installations, or, where measurable heat is consumed by more than one sub-installation, including measurbale heat exported <br />Do not include measurable heat from sub-installations producing pulp."></govuk-checkbox>
         <govuk-checkbox
-          [value]="'MEASURABLE_HEAT_IMPORTED_PULP'"
+          value="MEASURABLE_HEAT_IMPORTED_PULP"
           label="Imported from pulp"
           hint="Including heat imported from sub-installations producing pulp."></govuk-checkbox>
         <govuk-checkbox
-          [value]="'MEASURABLE_HEAT_IMPORTED_FUEL_BENCHMARK'"
+          value="MEASURABLE_HEAT_IMPORTED_FUEL_BENCHMARK"
           label="Imported from fuel benchmark"
           hint="Including measurable heat recovered from waste heat from fuel benchmark sub-installations."></govuk-checkbox>
         <govuk-checkbox
-          [value]="'MEASURABLE_HEAT_IMPORTED_WASTE_GAS'"
+          value="MEASURABLE_HEAT_IMPORTED_WASTE_GAS"
           label="Imported from waste gas"
           hint="Including measurable heat produced from waste gases."></govuk-checkbox>
         <govuk-checkbox
-          [value]="'MEASURABLE_HEAT_NO_MEASURABLE_HEAT_IMPORTED'"
+          value="MEASURABLE_HEAT_NO_MEASURABLE_HEAT_IMPORTED"
           label="No, we do not have any measurable heat imported"
           divider="or"></govuk-checkbox>
       </div>
@@ -103,7 +103,7 @@
                         {{ activityKey | measurableHeatLabel: 'imported' }}
                       </div>
                       <div formControlName="entity" govuk-select widthClass="govuk-!-width-full">
-                        <option [value]="''">
+                        <option value="">
                           @if (i === 0) {
                             Select an option
                           } @else {
@@ -119,7 +119,7 @@
                         {{ activityKey | measurableHeatLabel: 'net' }}
                       </div>
                       <div formControlName="netContent" govuk-select widthClass="govuk-!-width-full">
-                        <option [value]="''">
+                        <option value="">
                           @if (i === 0) {
                             Select an option
                           } @else {
@@ -156,7 +156,7 @@
             govuk-radio
             legend="Has the hierarchical order been followed?"
             hint="Select yes if the data source with the highest rank within the hierarchy has been used, as set out in section 4 of Annex VII of the FAR."
-            [legendSize]="'medium'">
+            legendSize="medium">
             <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
             <govuk-radio-option [value]="false" label="No">
               <ng-container govukConditionalContent>
@@ -165,13 +165,13 @@
                   govuk-radio
                   legend="Reason for not following the hierarchy">
                   <govuk-radio-option
-                    [value]="'OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY'"
+                    value="OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY"
                     label="Other data sources lead to lower uncertainty according to the simplified uncertainty assessment in line with Article 7(2) of the FAR"></govuk-radio-option>
                   <govuk-radio-option
-                    [value]="'USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE'"
+                    value="USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE"
                     label="Use of better data sources is technically infeasible"></govuk-radio-option>
                   <govuk-radio-option
-                    [value]="'USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS'"
+                    value="USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS"
                     label="Use of better data sources would incur unreasonable costs"></govuk-radio-option>
                 </div>
                 <div
@@ -211,5 +211,5 @@
     </div>
   </app-wizard-step>
 
-  <a govukLink [routerLink]="'../../../'">Return to: Sub-installations</a>
+  <a govukLink routerLink="../../../">Return to: Sub-installations</a>
 </app-permit-task>

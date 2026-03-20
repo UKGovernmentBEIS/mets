@@ -9,6 +9,7 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-compliance-monitoring',
+  standalone: false,
   template: `
     <app-aer-task-review
       [breadcrumb]="true"

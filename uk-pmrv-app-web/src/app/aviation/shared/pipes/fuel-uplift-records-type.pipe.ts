@@ -9,8 +9,8 @@ const FUEL_UPLIFT_SUPPLIER_RECORDS_SELECTION = {
 
 @Pipe({
   name: 'fuelUpliftSupplierRecordType',
-  pure: true,
   standalone: true,
+  pure: true,
 })
 export class FuelUpliftSupplierRecordTypePipe implements PipeTransform {
   transform(value: EmpFuelUpliftMethodProcedures['fuelUpliftSupplierRecordType']): string | null {

@@ -13,11 +13,10 @@ import { alrCommentsFormProvider } from './comments-form.provider';
 
 @Component({
   selector: 'app-comments',
-  templateUrl: './comments.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [SharedModule, AlrTaskSharedModule],
+  templateUrl: './comments.component.html',
   providers: [alrCommentsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrCommentsComponent {
   private readonly nextWizardStep = 'summary';

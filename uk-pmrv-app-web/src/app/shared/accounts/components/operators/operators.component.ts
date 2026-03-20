@@ -38,9 +38,10 @@ import { savePartiallyNotFoundOperatorError } from './errors/business-error';
 
 @Component({
   selector: 'app-operators',
+  standalone: false,
   templateUrl: './operators.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorsComponent implements OnInit {
   @Input() currentTab$: Observable<string>;

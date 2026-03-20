@@ -11,9 +11,10 @@ import { activitiesChildSection, activityItemNameMap, activitySections } from '@
 
 @Component({
   selector: 'app-prtr-activity',
+  standalone: false,
   templateUrl: './activity.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [activityFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActivityComponent {
   isEditable$ = this.aerService.isEditable$;

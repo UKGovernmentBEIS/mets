@@ -11,9 +11,10 @@ import { withholdingFormProvider } from './withholding-form.provider';
 
 @Component({
   selector: 'app-withholding',
+  standalone: false,
   templateUrl: './withholding.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [withholdingFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WithholdingComponent {
   private readonly nextWizardStep = 'official-notice';

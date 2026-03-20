@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'govuk-header-nav-list',
+  standalone: false,
   templateUrl: './nav-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

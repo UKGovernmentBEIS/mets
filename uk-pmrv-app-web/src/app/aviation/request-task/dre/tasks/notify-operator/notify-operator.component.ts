@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 
@@ -23,9 +23,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-dre-notify-operator',
+  imports: [GovukComponentsModule, SharedModule],
   templateUrl: './notify-operator.component.html',
-  standalone: true,
-  imports: [GovukComponentsModule, SharedModule, RouterLinkWithHref],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DreNotifyOperatorComponent {

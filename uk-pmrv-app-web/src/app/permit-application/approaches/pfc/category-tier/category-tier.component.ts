@@ -11,6 +11,7 @@ import { areCategoryTierPrerequisitesMet } from '../pfc-status';
 
 @Component({
   selector: 'app-category-tier',
+  standalone: false,
   templateUrl: './category-tier.component.html',
   styles: `
     app-page-heading button {

@@ -4,6 +4,7 @@ import { SubInstallation } from 'pmrv-api';
 
 @Pipe({
   name: 'carbonLeakage',
+  standalone: false,
 })
 export class CarbonLeakagePipe implements PipeTransform {
   transform(value: SubInstallation['subInstallationType']): string {

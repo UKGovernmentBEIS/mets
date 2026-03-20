@@ -23,6 +23,7 @@ import { MarkPaidComponent as TrackMarkPaidComponent } from './track/mark-paid/m
 import { TrackComponent } from './track/track.component';
 
 @NgModule({
+  imports: [PaymentRoutingModule, SharedModule],
   declarations: [
     BankTransferComponent,
     CancelComponent,
@@ -43,6 +44,5 @@ import { TrackComponent } from './track/track.component';
     TrackComponent,
     TrackMarkPaidComponent,
   ],
-  imports: [PaymentRoutingModule, SharedModule],
 })
 export class PaymentModule {}

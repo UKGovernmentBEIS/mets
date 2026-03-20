@@ -7,6 +7,7 @@ import { PermitSurrenderStore } from '../../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-summary',
+  standalone: false,
   template: `
     <app-page-heading>Surrender cessation</app-page-heading>
 

@@ -12,8 +12,7 @@
 import { EmpVariationReviewDecision } from './empVariationReviewDecision';
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface EmpVariationUkEtsSaveDetailsReviewGroupDecisionRequestTaskActionPayload
-  extends RequestTaskActionPayload {
+export interface EmpVariationUkEtsSaveDetailsReviewGroupDecisionRequestTaskActionPayload extends RequestTaskActionPayload {
   empVariationDetailsCompleted?: boolean;
   empVariationDetailsReviewCompleted?: boolean;
   decision: EmpVariationReviewDecision;

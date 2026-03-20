@@ -4,8 +4,7 @@
     [formGroup]="form"
     heading="Reportable emissions"
     submitText="Continue"
-    [showBackLink]="true"
-  >
+    [showBackLink]="true">
     <div class="govuk-hint">Complete the reportable emissions for each of the selected monitoring approaches.</div>
 
     <ng-container formGroupName="calculationOfCO2" *ngIf="$any((monitoringApproaches$ | async)['CALCULATION_CO2'])">
@@ -14,51 +13,45 @@
         <div
           formControlName="reportableEmissions"
           govuk-text-input
-          [label]="'Reportable emissions (include non-sustainable biomass)'"
+          label="Reportable emissions (include non-sustainable biomass)"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
         <div
           formControlName="sustainableBiomass"
           govuk-text-input
-          [label]="'Sustainable biomass'"
+          label="Sustainable biomass"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
       </fieldset>
       <fieldset govukFieldset formGroupName="processEmissions">
         <legend size="medium" govukLegend>Calculation of process emissions</legend>
         <div
           formControlName="reportableEmissions"
           govuk-text-input
-          [label]="'Reportable emissions (include non-sustainable biomass)'"
+          label="Reportable emissions (include non-sustainable biomass)"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
         <div
           formControlName="sustainableBiomass"
           govuk-text-input
-          [label]="'Sustainable biomass'"
+          label="Sustainable biomass"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
       </fieldset>
       <fieldset govukFieldset formGroupName="massBalanceEmissions">
         <legend size="medium" govukLegend>Calculation of mass balance emissions</legend>
         <div
           formControlName="reportableEmissions"
           govuk-text-input
-          [label]="'Reportable emissions (include non-sustainable biomass)'"
+          label="Reportable emissions (include non-sustainable biomass)"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
         <div
           formControlName="sustainableBiomass"
           govuk-text-input
-          [label]="'Sustainable biomass'"
+          label="Sustainable biomass"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
       </fieldset>
       <ng-container *ngIf="$any((monitoringApproaches$ | async)['CALCULATION_CO2'])?.calculateTransferredCO2 === true">
         <fieldset govukFieldset formGroupName="transferredCO2Emissions">
@@ -66,17 +59,15 @@
           <div
             formControlName="reportableEmissions"
             govuk-text-input
-            [label]="'Reportable emissions (include non-sustainable biomass)'"
+            label="Reportable emissions (include non-sustainable biomass)"
             [suffix]="emissionSuffixLabel"
-            widthClass="govuk-!-width-one-third"
-          ></div>
+            widthClass="govuk-!-width-one-third"></div>
           <div
             formControlName="sustainableBiomass"
             govuk-text-input
-            [label]="'Sustainable biomass'"
+            label="Sustainable biomass"
             [suffix]="emissionSuffixLabel"
-            widthClass="govuk-!-width-one-third"
-          ></div>
+            widthClass="govuk-!-width-one-third"></div>
         </fieldset>
       </ng-container>
     </ng-container>
@@ -87,17 +78,15 @@
         <div
           formControlName="reportableEmissions"
           govuk-text-input
-          [label]="'Reportable emissions (include non-sustainable biomass)'"
+          label="Reportable emissions (include non-sustainable biomass)"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
         <div
           formControlName="sustainableBiomass"
           govuk-text-input
-          [label]="'Sustainable biomass'"
+          label="Sustainable biomass"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
       </fieldset>
       <ng-container *ngIf="$any((monitoringApproaches$ | async)['MEASUREMENT_CO2'])?.measureTransferredCO2 === true">
         <fieldset govukFieldset formGroupName="transferredCO2Emissions">
@@ -105,17 +94,15 @@
           <div
             formControlName="reportableEmissions"
             govuk-text-input
-            [label]="'Reportable emissions (include non-sustainable biomass)'"
+            label="Reportable emissions (include non-sustainable biomass)"
             [suffix]="emissionSuffixLabel"
-            widthClass="govuk-!-width-one-third"
-          ></div>
+            widthClass="govuk-!-width-one-third"></div>
           <div
             formControlName="sustainableBiomass"
             govuk-text-input
-            [label]="'Sustainable biomass'"
+            label="Sustainable biomass"
             [suffix]="emissionSuffixLabel"
-            widthClass="govuk-!-width-one-third"
-          ></div>
+            widthClass="govuk-!-width-one-third"></div>
         </fieldset>
       </ng-container>
     </ng-container>
@@ -126,17 +113,15 @@
         <div
           formControlName="reportableEmissions"
           govuk-text-input
-          [label]="'Reportable emissions (include non-sustainable biomass)'"
+          label="Reportable emissions (include non-sustainable biomass)"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
         <div
           formControlName="sustainableBiomass"
           govuk-text-input
-          [label]="'Sustainable biomass'"
+          label="Sustainable biomass"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
       </fieldset>
       <ng-container *ngIf="$any((monitoringApproaches$ | async)['MEASUREMENT_N2O'])?.measureTransferredN2O === true">
         <fieldset govukFieldset formGroupName="transferredN2OEmissions">
@@ -144,17 +129,15 @@
           <div
             formControlName="reportableEmissions"
             govuk-text-input
-            [label]="'Reportable emissions (include non-sustainable biomass)'"
+            label="Reportable emissions (include non-sustainable biomass)"
             [suffix]="emissionSuffixLabel"
-            widthClass="govuk-!-width-one-third"
-          ></div>
+            widthClass="govuk-!-width-one-third"></div>
           <div
             formControlName="sustainableBiomass"
             govuk-text-input
-            [label]="'Sustainable biomass'"
+            label="Sustainable biomass"
             [suffix]="emissionSuffixLabel"
-            widthClass="govuk-!-width-one-third"
-          ></div>
+            widthClass="govuk-!-width-one-third"></div>
         </fieldset>
       </ng-container>
     </ng-container>
@@ -165,10 +148,9 @@
         <div
           formControlName="reportableEmissions"
           govuk-text-input
-          [label]="'Total Reportable Emissions'"
+          label="Total Reportable Emissions"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
       </fieldset>
     </ng-container>
 
@@ -178,10 +160,9 @@
         <div
           formControlName="reportableEmissions"
           govuk-text-input
-          [label]="'Total Reportable Emissions'"
+          label="Total Reportable Emissions"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
       </fieldset>
     </ng-container>
 
@@ -191,23 +172,23 @@
         <div
           formControlName="reportableEmissions"
           govuk-text-input
-          [label]="'Reportable emissions (include non-sustainable biomass)'"
+          label="Reportable emissions (include non-sustainable biomass)"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
         <div
           formControlName="sustainableBiomass"
           govuk-text-input
-          [label]="'Sustainable biomass'"
+          label="Sustainable biomass"
           [suffix]="emissionSuffixLabel"
-          widthClass="govuk-!-width-one-third"
-        ></div>
+          widthClass="govuk-!-width-one-third"></div>
       </fieldset>
     </ng-container>
 
     <h2 class="govuk-heading-m">Calculated emissions</h2>
-    <p class="govuk-body">Reportable emissions: {{ totalReportableEmissions$ | async | bigNumber : 0 }} tonnes CO2e</p>
-    <p class="govuk-body">Sustainable biomass: {{ totalSustainableBiomassEmissions$ | async | bigNumber : 0  }} tonnes CO2e</p>
+    <p class="govuk-body">Reportable emissions: {{ totalReportableEmissions$ | async | bigNumber: 0 }} tonnes CO2e</p>
+    <p class="govuk-body">
+      Sustainable biomass: {{ totalSustainableBiomassEmissions$ | async | bigNumber: 0 }} tonnes CO2e
+    </p>
   </app-wizard-step>
 
   <a govukLink routerLink="..">Return to: reportable emissions task</a>

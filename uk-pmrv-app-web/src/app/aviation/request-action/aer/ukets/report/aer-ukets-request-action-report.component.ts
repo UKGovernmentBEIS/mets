@@ -81,8 +81,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aer-ukets-request-action-report.component',
-  templateUrl: './aer-ukets-request-action-report.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     AerVerifierDetailsGroupFormComponent,
@@ -114,6 +112,7 @@ interface ViewModel {
     TotalEmissionsSchemeYearSummaryComponent,
     AerMonitoringPlanChangesSummaryTemplateComponent,
   ],
+  templateUrl: './aer-ukets-request-action-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerUketsRequestActionReportComponent implements OnInit, AfterViewInit {

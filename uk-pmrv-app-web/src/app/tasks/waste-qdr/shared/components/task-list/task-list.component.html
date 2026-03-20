@@ -27,7 +27,7 @@
     <h2 class="govuk-heading-m">Details</h2>
 
     <ul app-task-item-list>
-      <li app-task-item [link]="'./qdr'" linkText="Quarterly data report" [status]="vm.detailsSectionStatus"></li>
+      <li app-task-item link="./qdr" linkText="Quarterly data report" [status]="vm.detailsSectionStatus"></li>
     </ul>
 
     @if (vm.isSubmitRequestTask) {

@@ -8,6 +8,7 @@ import { AirService } from '@tasks/air/shared/services/air.service';
 
 @Component({
   selector: 'app-air-task',
+  standalone: false,
   template: `
     <app-page-heading>{{ heading }}</app-page-heading>
     <ng-content></ng-content>

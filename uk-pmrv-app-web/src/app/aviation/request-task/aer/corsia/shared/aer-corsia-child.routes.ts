@@ -7,9 +7,9 @@ export const AER_CORSIA_CHILD_ROUTES: Routes = [
     path: 'service-contact-details',
     data: { pageTitle: aerReviewCorsiaHeaderTaskMap.serviceContactDetails, breadcrumb: true },
     loadComponent: () =>
-      import(
-        '@aviation/request-task/aer/corsia/shared/tasks/service-contact-details/service-contact-details.component'
-      ).then((c) => c.ServiceContactDetailsComponent),
+      import('@aviation/request-task/aer/corsia/shared/tasks/service-contact-details/service-contact-details.component').then(
+        (c) => c.ServiceContactDetailsComponent,
+      ),
   },
   {
     path: 'operator-details',
@@ -23,9 +23,9 @@ export const AER_CORSIA_CHILD_ROUTES: Routes = [
     path: 'monitoring-plan-changes',
     data: { pageTitle: aerReviewCorsiaHeaderTaskMap.aerMonitoringPlanChanges, breadcrumb: true },
     loadComponent: () =>
-      import(
-        '@aviation/request-task/aer/corsia/shared/tasks/monitoring-plan-changes/monitoring-plan-changes.component'
-      ).then((c) => c.MonitoringPlanChangesComponent),
+      import('@aviation/request-task/aer/corsia/shared/tasks/monitoring-plan-changes/monitoring-plan-changes.component').then(
+        (c) => c.MonitoringPlanChangesComponent,
+      ),
   },
   {
     path: 'monitoring-approach',
@@ -39,9 +39,9 @@ export const AER_CORSIA_CHILD_ROUTES: Routes = [
     path: 'aggregated-consumption-and-flight-data',
     data: { pageTitle: aerReviewCorsiaHeaderTaskMap.aggregatedEmissionsData, breadcrumb: true },
     loadComponent: () =>
-      import(
-        '@aviation/request-task/aer/corsia/shared/tasks/aggregated-consumption-and-flight-data/aggregated-consumption-and-flight-data.component'
-      ).then((c) => c.AggregatedConsumptionAndFlightDataComponent),
+      import('@aviation/request-task/aer/corsia/shared/tasks/aggregated-consumption-and-flight-data/aggregated-consumption-and-flight-data.component').then(
+        (c) => c.AggregatedConsumptionAndFlightDataComponent,
+      ),
   },
   {
     path: 'aircraft-types-data',
@@ -55,9 +55,9 @@ export const AER_CORSIA_CHILD_ROUTES: Routes = [
     path: 'emissions-reduction-claim',
     data: { pageTitle: aerReviewCorsiaHeaderTaskMap.emissionsReductionClaim, breadcrumb: true },
     loadComponent: () =>
-      import(
-        '@aviation/request-task/aer/corsia/shared/tasks/emissions-reduction-claim/emissions-reduction-claim.component'
-      ).then((c) => c.EmissionsReductionClaimComponent),
+      import('@aviation/request-task/aer/corsia/shared/tasks/emissions-reduction-claim/emissions-reduction-claim.component').then(
+        (c) => c.EmissionsReductionClaimComponent,
+      ),
   },
   {
     path: 'data-gaps',

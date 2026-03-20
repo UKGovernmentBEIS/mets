@@ -18,11 +18,10 @@ import { PermitRevocation } from 'pmrv-api';
 
 @Component({
   selector: 'app-revocation-final-alr',
-  standalone: true,
   imports: [SharedModule, RouterLink],
   templateUrl: './final-alr.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [permitRevocationFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RevocationFinalAlrComponent {
   today = startOfDay(new Date());

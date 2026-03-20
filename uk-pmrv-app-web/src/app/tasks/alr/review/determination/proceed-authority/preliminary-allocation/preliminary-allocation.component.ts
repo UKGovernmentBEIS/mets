@@ -13,7 +13,6 @@ import { alrPreliminaryAllocationFormProvider } from './preliminary-allocation-f
 
 @Component({
   selector: 'app-alr-preliminary-allocation',
-  standalone: true,
   imports: [SharedModule, AlrTaskSharedModule],
   template: `
     <app-alr-task-common [breadcrumb]="true" returnLink="../../../">
@@ -31,8 +30,8 @@ import { alrPreliminaryAllocationFormProvider } from './preliminary-allocation-f
       </app-wizard-step>
     </app-alr-task-common>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [alrPreliminaryAllocationFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrPreliminaryAllocationComponent {
   isEditable = this.alrService.isEditable;

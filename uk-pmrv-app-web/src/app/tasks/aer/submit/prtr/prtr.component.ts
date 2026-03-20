@@ -9,9 +9,10 @@ import { prtrFormProvider } from '@tasks/aer/submit/prtr/prtr-form.provider';
 
 @Component({
   selector: 'app-prtr',
+  standalone: false,
   templateUrl: './prtr.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [prtrFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PrtrComponent {
   isEditable$ = this.aerService.isEditable$;

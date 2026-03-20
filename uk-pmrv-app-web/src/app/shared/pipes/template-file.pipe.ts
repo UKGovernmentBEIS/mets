@@ -1,6 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'templateFile' })
+@Pipe({
+  name: 'templateFile',
+  standalone: false,
+})
 export class TemplateFilePipe implements PipeTransform {
   transform(type: 'UNREASONABLE_COST' | 'MMP' | 'RULES_SAMPLING'): string {
     switch (type) {

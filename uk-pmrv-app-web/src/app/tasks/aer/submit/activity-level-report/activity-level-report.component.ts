@@ -13,6 +13,7 @@ import { Aer, AerApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-activity-level-report',
+  standalone: false,
   templateUrl: './activity-level-report.component.html',
   providers: [activityLevelReportFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

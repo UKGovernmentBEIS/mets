@@ -31,9 +31,9 @@ export const EMP_OPERATOR_DETAILS_ROUTES: Routes = [
         data: { pageTitle: 'Air Operating Certificate', backlink: '../flight-identification' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
-          import(
-            './operator-details-air-operating-certificate/operator-details-air-operating-certificate.component'
-          ).then((c) => c.OperatorDetailsAirOperatingCertificateComponent),
+          import('./operator-details-air-operating-certificate/operator-details-air-operating-certificate.component').then(
+            (c) => c.OperatorDetailsAirOperatingCertificateComponent,
+          ),
       },
       {
         path: 'organisation-structure',

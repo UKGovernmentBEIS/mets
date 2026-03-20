@@ -16,6 +16,7 @@ describe('DashboardFiltersComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-dashboard-filters
         [order]="this.currentOrder"

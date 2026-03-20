@@ -26,10 +26,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-account-closure-reason',
-  standalone: true,
   imports: [ReactiveFormsModule, SharedModule, RouterModule],
-  providers: [accountClosureFormProvider],
   templateUrl: './account-closure-reason.component.html',
+  providers: [accountClosureFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountClosureReasonComponent {

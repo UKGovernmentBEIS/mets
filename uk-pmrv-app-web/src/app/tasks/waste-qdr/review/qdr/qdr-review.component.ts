@@ -23,7 +23,6 @@ interface ViewModel {
 }
 @Component({
   selector: 'app-qdr-review',
-  standalone: true,
   imports: [
     SharedModule,
     TaskSharedModule,

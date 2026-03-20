@@ -20,6 +20,7 @@ describe('RecommendedImprovementsGroupComponent', () => {
   }
 
   @Component({
+    standalone: false,
     template: `
       <app-recommended-improvements-group-template
         [isEditable]="isEditable"

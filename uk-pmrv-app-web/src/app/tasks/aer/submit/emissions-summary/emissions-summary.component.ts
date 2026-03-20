@@ -8,6 +8,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-emissions-summary',
+  standalone: false,
   templateUrl: './emissions-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

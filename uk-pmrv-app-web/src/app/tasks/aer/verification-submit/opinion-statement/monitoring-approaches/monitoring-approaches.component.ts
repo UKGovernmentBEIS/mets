@@ -14,6 +14,7 @@ import { OpinionStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-monitoring-approaches',
+  standalone: false,
   templateUrl: './monitoring-approaches.component.html',
   providers: [monitoringApproachesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

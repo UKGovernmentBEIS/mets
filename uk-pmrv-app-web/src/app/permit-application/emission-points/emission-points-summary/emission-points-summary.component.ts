@@ -6,6 +6,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-emission-points-summary',
+  standalone: false,
   templateUrl: './emission-points-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -16,9 +16,10 @@ import { pipelineFormProvider } from './pipeline-form.provider';
 
 @Component({
   selector: 'app-pipeline',
+  standalone: false,
   templateUrl: './pipeline.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [pipelineFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PipelineComponent {
   taskKey$: Observable<string> = this.route.data.pipe(map((x) => x?.taskKey));

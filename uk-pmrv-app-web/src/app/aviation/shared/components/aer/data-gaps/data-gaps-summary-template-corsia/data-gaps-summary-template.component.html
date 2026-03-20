@@ -3,7 +3,7 @@
     <dt govukSummaryListRowKey>Did any flights with offsetting obligations have data gaps during the scheme year?</dt>
     <dd govukSummaryListRowValue>{{ data.exist ? 'Yes' : 'No' }}</dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+      <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
     </dd>
   </div>
 
@@ -20,7 +20,7 @@
         }}
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../threshold'" [queryParams]="{ change: true }">Change</a>
+        <a govukLink routerLink="../threshold" [queryParams]="{ change: true }">Change</a>
       </dd>
     </div>
   </ng-container>

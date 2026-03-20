@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -22,11 +21,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-independent-review',
-  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,
-    RouterLink,
     IndependentReviewCorsiaTemplateComponent,
     AerVerificationReviewDecisionGroupSummaryComponent,
   ],

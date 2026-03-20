@@ -22,7 +22,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-action-response',
-  standalone: true,
   imports: [ActionSharedModule, SharedModule, NgIf, AlrAuthoritySummaryTemplateComponent],
   template: `
     <ng-container *ngIf="vm() as vm">

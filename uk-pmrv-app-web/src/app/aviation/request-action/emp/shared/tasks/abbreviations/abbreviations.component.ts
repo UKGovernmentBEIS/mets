@@ -19,7 +19,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-abbreviations',
-  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

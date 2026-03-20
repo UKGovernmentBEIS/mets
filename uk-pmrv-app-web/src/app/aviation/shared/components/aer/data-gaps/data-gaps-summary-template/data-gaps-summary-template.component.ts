@@ -10,9 +10,8 @@ import { AviationAerDataGaps } from 'pmrv-api';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-data-gaps-summary-template',
-  templateUrl: './data-gaps-summary-template.component.html',
-  standalone: true,
   imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref],
+  templateUrl: './data-gaps-summary-template.component.html',
 })
 export class DataGapsSummaryTemplateComponent {
   @Input() data: AviationAerDataGaps;

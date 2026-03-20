@@ -10,6 +10,7 @@ import { NonComplianceService } from '../../core/non-compliance.service';
 
 @Component({
   selector: 'app-summary',
+  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

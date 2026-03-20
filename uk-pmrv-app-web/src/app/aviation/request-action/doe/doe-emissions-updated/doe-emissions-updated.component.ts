@@ -1,14 +1,12 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
-import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
 import { requestActionQuery, RequestActionStore } from '@aviation/request-action/store';
 import { DoeEmissionsSummaryTemplateComponent } from '@aviation/shared/components/doe/doe-emissions-summary-template/doe-emissions-summary-template.component';
-import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { UserInfoResolverPipe } from '@shared/pipes/user-info-resolver.pipe';
 import { SharedModule } from '@shared/shared.module';
 
@@ -24,18 +22,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-doe-emissions-updated',
+  imports: [SharedModule, RouterModule, NgIf, DoeEmissionsSummaryTemplateComponent, ActionSharedModule],
   templateUrl: './doe-emissions-updated.component.html',
-  standalone: true,
-  imports: [
-    SharedModule,
-    RequestActionTaskComponent,
-    RouterModule,
-    NgIf,
-    NgFor,
-    ReturnToLinkComponent,
-    DoeEmissionsSummaryTemplateComponent,
-    ActionSharedModule,
-  ],
   providers: [UserInfoResolverPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

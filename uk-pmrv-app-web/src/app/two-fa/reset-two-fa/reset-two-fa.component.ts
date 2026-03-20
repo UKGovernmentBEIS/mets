@@ -8,6 +8,7 @@ import { OperatorUsersService, RegulatorUsersService, VerifierUsersService } fro
 
 @Component({
   selector: 'app-reset-two-fa',
+  standalone: false,
   templateUrl: './reset-two-fa.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -17,6 +17,7 @@ import { saveNotFoundExternalContactError } from '../../errors/business-error';
 
 @Component({
   selector: 'app-details',
+  standalone: false,
   templateUrl: './details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

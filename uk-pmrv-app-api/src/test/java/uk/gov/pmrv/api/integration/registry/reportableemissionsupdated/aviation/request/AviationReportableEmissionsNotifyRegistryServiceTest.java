@@ -14,12 +14,12 @@ import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
-import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationReportableEmissionsEntity;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationReportableEmissionsUpdatedEvent;
 import uk.gov.pmrv.api.aviationreporting.common.repository.AviationReportableEmissionsRepository;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.AccountEmissionsUpdatedRequestEvent;
+import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.request.requestaction.AviationReportableEmissionsAddRequestActionService;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.response.AviationRegistryIntegrationEmailProperties;
 import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -70,22 +70,23 @@ class AviationReportableEmissionsNotifyRegistryServiceTest {
 	private AviationAerRequestQueryService aviationAerRequestQueryService;
 
 	@Mock
-	private AccountRepository accountRepository;
-
-	@Mock
 	private NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
 
 	@Mock
 	private AviationRegistryIntegrationEmailProperties emailProperties;
+
+	@Mock
+	private AviationReportableEmissionsAddRequestActionService aviationReportableEmissionsAddRequestActionService;
 
 
 	@Test
     void notifyRegistry_dre() {
     	Long accountId = 1L;
 		Integer registryId = 1234567;
-		Integer year = 2000;
+		Year year = Year.now().minusYears(1);
+		Integer yearValue = year.getValue();
 		Double totalEmissions = 10.34;
-		AviationReportableEmissionsUpdatedEvent event = createEvent(accountId, year, totalEmissions, true,true);
+		AviationReportableEmissionsUpdatedEvent event = createEvent(accountId, yearValue, totalEmissions, true,true);
 		AviationAccountInfoDTO account = createAccount(accountId, registryId);
 		
 		AccountEmissionsUpdatedRequestEvent
@@ -94,22 +95,26 @@ class AviationReportableEmissionsNotifyRegistryServiceTest {
 		
 		when(aviationAccountQueryService.getAviationAccountInfoDTOById(accountId)).thenReturn(account);
 		when(aviationReportableEmissionsRepository.findByAccountIdAndYear(event.getAccountId(), event.getYear()))
-				.thenReturn(reportableEmissions(accountId, year));
+				.thenReturn(reportableEmissions(accountId, yearValue));
+		when(aviationAerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, year)).thenReturn(Optional
+				.of(getDummyAerRequest(true)));
 
 		cut.notifyRegistry(event);
 		
 		verify(aviationAccountQueryService, times(1)).getAviationAccountInfoDTOById(accountId);
 		verify(reportableEmissionsSendToRegistryProducer, times(1)).produce(accountEmissionsUpdatedRequestEvent,
 				aviationAccountEmissionsUpdatedKafkaTemplate);
+		verify(aviationAerRequestQueryService, times(1)).findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, year);
     }
 
 	@Test
 	void notifyRegistry_longValue_dre() {
 		Long accountId = 1L;
 		Integer registryId = 1234567;
-		Integer year = 2000;
+		Year year = Year.now().minusYears(1);
+		Integer yearValue = year.getValue();
 		Double totalEmissions = 1234567890123.34;
-		AviationReportableEmissionsUpdatedEvent event = createEvent(accountId, year, totalEmissions, true,true);
+		AviationReportableEmissionsUpdatedEvent event = createEvent(accountId, yearValue, totalEmissions, true,true);
 		AviationAccountInfoDTO account = createAccount(accountId, registryId);
 
 		AccountEmissionsUpdatedRequestEvent
@@ -117,14 +122,18 @@ class AviationReportableEmissionsNotifyRegistryServiceTest {
 			.reportableEmissions(event.getReportableEmissions().setScale(0, RoundingMode.HALF_UP).toString()).reportingYear(event.getYear()).build();
 
 		when(aviationAccountQueryService.getAviationAccountInfoDTOById(accountId)).thenReturn(account);
+		when(aviationAerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, year)).thenReturn(Optional
+				.of(getDummyAerRequest(true)));
 		when(aviationReportableEmissionsRepository.findByAccountIdAndYear(event.getAccountId(), event.getYear()))
-			.thenReturn(reportableEmissions(accountId, year));
+			.thenReturn(reportableEmissions(accountId, yearValue));
 
 		cut.notifyRegistry(event);
 
 		verify(aviationAccountQueryService, times(1)).getAviationAccountInfoDTOById(accountId);
 		verify(reportableEmissionsSendToRegistryProducer, times(1)).produce(accountEmissionsUpdatedRequestEvent,
 			aviationAccountEmissionsUpdatedKafkaTemplate);
+		verify(aviationAerRequestQueryService, times(1)).findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, year);
+
 	}
 	
 	@Test
@@ -220,15 +229,18 @@ class AviationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void not_notifyRegistry_no_registry_id_exist() {
-		Year validYear = Year.now().minusYears(1);
+		Year year = Year.now().minusYears(1);
+		Integer yearValue = year.getValue();
 		Long accountId = 1L;
 		Double totalEmissions = 10.23;
-		AviationReportableEmissionsUpdatedEvent event = createEvent(accountId, validYear.getValue(), totalEmissions, false, true);
+		AviationReportableEmissionsUpdatedEvent event = createEvent(accountId, yearValue, totalEmissions, false, true);
 		event.setFromDre(true);
 		Integer registryId = null;
 		when(aviationAccountQueryService.getAviationAccountInfoDTOById(accountId)).thenReturn(createAccount(accountId, registryId));
 		when(aviationReportableEmissionsRepository.findByAccountIdAndYear(event.getAccountId(), event.getYear()))
-				.thenReturn(reportableEmissions(accountId, validYear.getValue()));
+				.thenReturn(reportableEmissions(accountId, yearValue));
+		when(aviationAerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, year)).thenReturn(Optional
+				.of(getDummyAerRequest(true)));
 		when(emailProperties.getEmail()).thenReturn(Map.of(ENGLAND.getCode(),"mail@m.co"));
 
 		cut.notifyRegistry(event);
@@ -238,26 +250,31 @@ class AviationReportableEmissionsNotifyRegistryServiceTest {
 				any(),
 				any()
 		);
+		verify(aviationAerRequestQueryService, times(1)).findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, year);
 	}
 
 	@Test
 	void notifyRegistry_isFromDre_registryId_exist_andYearIsEarlier() {
-		Year validYear = Year.now().minusYears(2);
+		Year year = Year.now().minusYears(2);
+		Integer yearValue = year.getValue();
 		Long accountId = 1L;
 		Double totalEmissions = 10.23;
-		AviationReportableEmissionsUpdatedEvent event = createEvent(accountId, validYear.getValue(), totalEmissions, false, true);
+		AviationReportableEmissionsUpdatedEvent event = createEvent(accountId, yearValue, totalEmissions, false, true);
 		event.setFromDre(true);
 		Integer registryId = 123456;
 		when(aviationAccountQueryService.getAviationAccountInfoDTOById(accountId)).thenReturn(createAccount(accountId, registryId));
 		when(aviationReportableEmissionsRepository.findByAccountIdAndYear(event.getAccountId(), event.getYear()))
-				.thenReturn(reportableEmissions(accountId, validYear.getValue()));
+				.thenReturn(reportableEmissions(accountId, yearValue));
+		when(aviationAerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, year)).thenReturn(Optional
+				.of(getDummyAerRequest(true)));
 
 		cut.notifyRegistry(event);
 
 		verify(aviationAccountQueryService, times(1)).getAviationAccountInfoDTOById(accountId);
 		verify(reportableEmissionsSendToRegistryProducer, times(1))
-				.produce(producedAccountEvent(registryId, new BigDecimal(totalEmissions),validYear.getValue()),
+				.produce(producedAccountEvent(registryId, new BigDecimal(totalEmissions), yearValue),
 						aviationAccountEmissionsUpdatedKafkaTemplate);
+		verify(aviationAerRequestQueryService, times(1)).findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, year);
 	}
 
 	@Test

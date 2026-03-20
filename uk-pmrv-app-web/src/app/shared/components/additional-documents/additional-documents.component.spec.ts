@@ -28,6 +28,7 @@ describe('AdditionalDocumentsComponent', () => {
   const requestTaskFileService = mockClass(RequestTaskFileService);
 
   @Component({
+    standalone: false,
     template: `
       <app-additional-documents-shared
         [form]="form"

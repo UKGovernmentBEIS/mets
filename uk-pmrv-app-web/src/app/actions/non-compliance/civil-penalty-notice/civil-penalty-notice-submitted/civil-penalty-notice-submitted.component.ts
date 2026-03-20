@@ -15,9 +15,10 @@ import { NonComplianceService } from '../../core/non-compliance.service';
 
 @Component({
   selector: 'app-civil-penalty-notice-submitted',
+  standalone: false,
   templateUrl: './civil-penalty-notice-submitted.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UserInfoResolverPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CivilPenaltyNoticeSubmittedComponent {
   payload$ = (

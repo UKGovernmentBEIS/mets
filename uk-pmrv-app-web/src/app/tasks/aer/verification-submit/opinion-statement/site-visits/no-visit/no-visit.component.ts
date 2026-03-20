@@ -14,6 +14,7 @@ import { NoSiteVisit, OpinionStatement } from 'pmrv-api';
 
 @Component({
   selector: 'app-no-visit',
+  standalone: false,
   templateUrl: './no-visit.component.html',
   providers: [noVisitFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

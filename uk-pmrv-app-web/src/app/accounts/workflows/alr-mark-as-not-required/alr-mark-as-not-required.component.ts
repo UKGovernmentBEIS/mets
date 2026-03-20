@@ -13,9 +13,10 @@ import { ALR_NOT_REQUIRE_FORM, alrReasonProvider } from './alr-mark-as-not-requi
 
 @Component({
   selector: 'app-alr-mark-as-not-required',
+  standalone: false,
   templateUrl: './alr-mark-as-not-required.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject, alrReasonProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrMarkAsNotRequiredComponent {
   isMarkedAsNotRequired$ = new BehaviorSubject<boolean>(false);

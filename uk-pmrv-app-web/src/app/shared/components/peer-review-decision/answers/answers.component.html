@@ -1,5 +1,5 @@
 <app-page-heading>Check your answers</app-page-heading>
-<h2 app-summary-header (changeClick)="changeClick()" [changeRoute]="'..'" class="govuk-heading-m">
+<h2 app-summary-header (changeClick)="changeClick()" changeRoute=".." class="govuk-heading-m">
   <span class="govuk-visually-hidden">Check your answers</span>
 </h2>
 <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
@@ -17,5 +17,5 @@
 </div>
 
 <ng-container *ngIf="returnTo$ | async as returnTo">
-  <a govukLink routerLink="../.."> Return to: {{ returnTo }}</a>
+  <a govukLink routerLink="../..">Return to: {{ returnTo }}</a>
 </ng-container>

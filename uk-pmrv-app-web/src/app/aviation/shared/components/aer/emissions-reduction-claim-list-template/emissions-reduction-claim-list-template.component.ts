@@ -9,7 +9,6 @@ import { AviationAerSafPurchase } from 'pmrv-api';
 
 @Component({
   selector: 'app-emissions-reduction-claim-list-template',
-  standalone: true,
   imports: [SharedModule, RouterModule],
   templateUrl: './emissions-reduction-claim-list-template.component.html',
   styles: `

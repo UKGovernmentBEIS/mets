@@ -13,6 +13,7 @@ import { PermitApplicationStore } from '../store/permit-application.store';
 
 @Component({
   selector: 'app-approaches',
+  standalone: false,
   templateUrl: './approaches.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

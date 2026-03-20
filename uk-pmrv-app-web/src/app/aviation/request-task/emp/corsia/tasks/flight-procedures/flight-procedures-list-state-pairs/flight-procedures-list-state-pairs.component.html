@@ -3,8 +3,7 @@
   aria-labelledby="error-summary-title"
   class="govuk-error-summary"
   role="alert"
-  tabindex="-1"
->
+  tabindex="-1">
   <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
 
   <div class="govuk-error-summary__body">
@@ -25,8 +24,7 @@
   [formGroup]="form"
   heading="List the state pairs that you operate"
   submitText="Continue"
-  [hideSubmit]="!fileLoaded || !parsedData"
->
+  [hideSubmit]="!fileLoaded || !parsedData">
   <p class="govuk-body govuk-!-width-three-quarters">
     Upload a comma-separated values (.csv) file containing a list of the state pairs for international flights that you
     operate.
@@ -39,8 +37,9 @@
   <p class="govuk-body govuk-!-width-three-quarters">
     When you create the file, use the list of short names of the
     <a class="govuk-link" href="https://www.icao.int/about-icao/pages/member-states.aspx/" rel="noreferrer noopener">
-      ICAO contracting states</a
-    >.
+      ICAO contracting states
+    </a>
+    .
   </p>
 
   <input type="file" (change)="onFileSelect($event)" style="display: none" #fileInput />
@@ -53,10 +52,9 @@
 
   <div *ngIf="!fileLoaded || !parsedData" class="govuk-!-width-three-quarters">
     <app-flight-procedures-data-table
-      [headingText]="'Your CSV file needs to look like this example'"
+      headingText="Your CSV file needs to look like this example"
       [customColumns]="exampleTableColumns"
-      [operatingStatePairsCorsiaDetails]="exampleTableData"
-    ></app-flight-procedures-data-table>
+      [operatingStatePairsCorsiaDetails]="exampleTableData"></app-flight-procedures-data-table>
   </div>
 
   <input type="text" [hidden]="true" formControlName="operatingStatePairsCorsiaDetails" />
@@ -64,8 +62,7 @@
   <div *ngIf="fileLoaded && parsedData" class="govuk-!-width-three-quarters">
     <app-flight-procedures-data-table
       [headingText]="fileName"
-      [operatingStatePairsCorsiaDetails]="parsedData"
-    ></app-flight-procedures-data-table>
+      [operatingStatePairsCorsiaDetails]="parsedData"></app-flight-procedures-data-table>
   </div>
 </app-csv-data-wizard-step>
 

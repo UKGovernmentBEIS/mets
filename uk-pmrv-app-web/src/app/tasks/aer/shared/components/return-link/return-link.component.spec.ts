@@ -14,10 +14,13 @@ describe('ListReturnLinkComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
   let page: Page;
 
-  @Component({ template: '<router-outlet></router-outlet>' })
+  @Component({
+    standalone: false,
+    template: '<router-outlet></router-outlet>',
+  })
   class TestComponent {}
 
-  @Component({ template: '<app-return-link></app-return-link>' })
+  @Component({ standalone: false, template: '<app-return-link></app-return-link>' })
   class ChildComponent {}
 
   class Page extends BasePage<TestComponent> {

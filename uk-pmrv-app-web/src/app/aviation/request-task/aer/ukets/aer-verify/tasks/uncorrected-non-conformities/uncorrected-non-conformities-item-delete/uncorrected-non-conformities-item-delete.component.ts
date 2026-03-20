@@ -13,9 +13,8 @@ import { UncorrectedNonConformitiesFormProvider } from '../uncorrected-non-confo
 
 @Component({
   selector: 'app-uncorrected-non-conformities-item-delete',
-  templateUrl: './uncorrected-non-conformities-item-delete.component.html',
-  standalone: true,
   imports: [SharedModule],
+  templateUrl: './uncorrected-non-conformities-item-delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class UncorrectedNonConformitiesItemDeleteComponent implements OnInit {

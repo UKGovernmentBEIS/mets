@@ -14,6 +14,7 @@ describe('OpinionStatementChangesNotCoveredInEMPSummaryTemplateComponent', () =>
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-opinion-statement-changes-not-covered-in-emp-summary-template
         [aerMonitoringPlanChanges]="aerMonitoringPlanChanges"

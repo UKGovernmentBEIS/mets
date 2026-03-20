@@ -11,8 +11,8 @@ import { PasswordService } from './password/password.service';
 import { SubmitIfEmptyPipe } from './pipes/submit-if-empty.pipe';
 
 @NgModule({
-  declarations: [PasswordComponent, SubmitIfEmptyPipe, VerifiersTableComponent],
   imports: [PasswordStrengthMeterComponent, RouterModule, SharedModule],
+  declarations: [PasswordComponent, SubmitIfEmptyPipe, VerifiersTableComponent],
   providers: [PasswordService, provideZxvbnServiceForPSM()],
   exports: [PasswordComponent, SubmitIfEmptyPipe, VerifiersTableComponent],
 })

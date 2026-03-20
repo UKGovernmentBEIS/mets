@@ -16,9 +16,10 @@ import {
 } from '../opinion-statement-form.provider';
 
 @Injectable()
-export class OpinionStatementInPersonVisitFormProvider
-  implements TaskFormProvider<AviationAerInPersonSiteVisit, AviationAerInPersonSiteVisitFormModel>
-{
+export class OpinionStatementInPersonVisitFormProvider implements TaskFormProvider<
+  AviationAerInPersonSiteVisit,
+  AviationAerInPersonSiteVisitFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private parentFormProvider = inject<OpinionStatementFormProvider>(TASK_FORM_PROVIDER);

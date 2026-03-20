@@ -18,6 +18,7 @@ describe('TaskLayoutComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
+    standalone: false,
     template: `
       <app-task-layout
         [header]="header"

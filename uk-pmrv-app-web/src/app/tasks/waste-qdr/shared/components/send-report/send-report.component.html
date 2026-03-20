@@ -14,12 +14,12 @@
     <div class="govuk-button-group" *ngIf="vm.isEditable">
       <button (click)="onSubmit()" appPendingButton govukButton type="submit">Confirm and send</button>
     </div>
-    <app-waste-qdr-return-link returnLink="../" [title]="'Complete quarterly data report'"></app-waste-qdr-return-link>
+    <app-waste-qdr-return-link returnLink="../" title="Complete quarterly data report"></app-waste-qdr-return-link>
   </ng-container>
 
   <ng-template #submittedTemplate>
     <app-confirmation-shared
-      [title]="'Sent to regulator for review'"
+      title="Sent to regulator for review"
       titleContent="Your reference number"
       [titleContentId]="vm.requestId"></app-confirmation-shared>
   </ng-template>

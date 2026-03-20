@@ -80,6 +80,7 @@ class AerServiceTest {
                 .year(reportingYear)
                 .reportableEmissions(totalEmissions)
                 .isFromRegulator(true)
+                .requestId("AEM14567-2020")
                 .build();
 
         when(reportableEmissionsCalculationService.calculateYearEmissions(aerContainer))

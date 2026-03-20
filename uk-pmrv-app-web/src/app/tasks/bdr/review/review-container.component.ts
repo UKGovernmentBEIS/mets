@@ -16,16 +16,15 @@ import { submitReviewWizardComplete } from './review.wizard';
 
 @Component({
   selector: 'app-bdr-review-container',
-  templateUrl: './review-container.component.html',
-  standalone: true,
   imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './review-container.component.html',
   styles: `
     :host ::ng-deep .app-task-list {
       list-style-type: none;
       padding-left: 0;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReviewContainerComponent {
   requestTaskType = toSignal(this.store.requestTaskType$);

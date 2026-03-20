@@ -1,6 +1,6 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
 import { of } from 'rxjs';
@@ -18,13 +18,13 @@ describe('AlrMarkedAsNotRequiredDetailsComponent', () => {
   let mockedRequestActionsService: jest.Mocked<RequestActionsService>;
   let mockedBackLinkService: jest.Mocked<BackLinkService>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     mockedRequestActionsService = mockClass(RequestActionsService);
     mockedBackLinkService = mockClass(BackLinkService);
 
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+    await TestBed.configureTestingModule({
       providers: [
+        provideHttpClient(),
         { provide: RequestActionsService, useValue: mockedRequestActionsService },
         { provide: BackLinkService, useValue: mockedBackLinkService },
         {
@@ -38,7 +38,7 @@ describe('AlrMarkedAsNotRequiredDetailsComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AlrMarkedAsNotRequiredDetailsComponent);

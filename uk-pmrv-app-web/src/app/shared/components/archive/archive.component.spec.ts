@@ -16,6 +16,7 @@ describe('ArchiveComponent', () => {
   tasksService.processRequestTaskAction.mockReturnValue(of({}));
 
   @Component({
+    standalone: false,
     template: `
       <app-archive
         [type]="type"

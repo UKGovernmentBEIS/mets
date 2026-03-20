@@ -12,6 +12,7 @@ describe('PreliminaryAllocationListTemplateComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-doal-preliminary-allocation-list-template
         [data]="data"

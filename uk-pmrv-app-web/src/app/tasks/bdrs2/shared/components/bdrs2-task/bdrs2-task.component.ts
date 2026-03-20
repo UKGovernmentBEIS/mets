@@ -9,6 +9,8 @@ import { BDRS2ReturnLinkComponent } from '../return-link/return-link.component';
 
 @Component({
   selector: 'app-bdrs2-task',
+  imports: [RouterModule, SharedModule, BDRS2ReturnLinkComponent],
+  standalone: true,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -20,10 +22,8 @@ import { BDRS2ReturnLinkComponent } from '../return-link/return-link.component';
     </div>
     <app-bdrs2-return-link [returnLink]="returnLink" [title]="returnLinkTitle"></app-bdrs2-return-link>
   `,
-  standalone: true,
-  imports: [RouterModule, SharedModule, BDRS2ReturnLinkComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BdrS2TaskComponent {
   @Input() notification: any;

@@ -6,6 +6,7 @@ import { SourceStream } from 'pmrv-api';
 
 @Component({
   selector: 'app-source-streams-summary-table',
+  standalone: false,
   template: `
     <govuk-table [columns]="columns" [data]="data" [class.no-bottom-border]="!bottomBorder">
       <ng-template let-column="column" let-row="row">

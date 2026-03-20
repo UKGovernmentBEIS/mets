@@ -24,7 +24,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-data-gaps',
-  standalone: true,
   imports: [
     ReturnToLinkComponent,
     SharedModule,

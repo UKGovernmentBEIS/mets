@@ -10,11 +10,10 @@ import { alrQuestionFormProvider } from './question-form.provider';
 
 @Component({
   selector: 'app-alr-send-report-question',
-  standalone: true,
   imports: [AlrTaskComponent, SharedModule],
   templateUrl: './question.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [alrQuestionFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrSendReportQuestionComponent {
   isEditable = this.alrService.isEditable;

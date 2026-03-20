@@ -1,6 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'specialProductsBasisDescription' })
+@Pipe({
+  name: 'specialProductsBasisDescription',
+  standalone: false,
+})
 export class SpecialProductsBasisDescriptionPipe implements PipeTransform {
   private readonly basisDescriptions: { [key: string]: string } = {
     F: 'Net fresh feed',

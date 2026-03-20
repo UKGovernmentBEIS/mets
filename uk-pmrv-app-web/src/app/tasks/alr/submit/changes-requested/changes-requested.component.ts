@@ -16,7 +16,6 @@ import { ALRApplicationAmendsSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-alr-submit-changes-requested',
-  standalone: true,
   imports: [AlrTaskSharedModule, ChangesRequestedTemplateComponent, SharedModule],
   templateUrl: './changes-requested.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

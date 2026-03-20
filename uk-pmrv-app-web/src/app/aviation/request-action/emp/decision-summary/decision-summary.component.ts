@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { empQuery } from '@aviation/request-action/emp/emp.selectors';
-import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
 import { requestActionQuery, RequestActionStore } from '@aviation/request-action/store';
 import { variationRegulatorLedaApprovedRequestActionTypes } from '@aviation/request-action/util';
 import { OverallDecisionSummaryTemplateComponent } from '@aviation/shared/components/emp/overall-decision-summary-template/overall-decision-summary-template.component';
@@ -39,8 +38,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-decision-summary',
-  standalone: true,
-  imports: [SharedModule, RequestActionTaskComponent, RouterModule, OverallDecisionSummaryTemplateComponent],
+  imports: [SharedModule, RouterModule, OverallDecisionSummaryTemplateComponent],
   templateUrl: './decision-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

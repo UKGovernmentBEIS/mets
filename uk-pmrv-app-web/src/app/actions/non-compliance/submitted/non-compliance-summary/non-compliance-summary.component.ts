@@ -14,6 +14,7 @@ import { NonComplianceService } from '../../core/non-compliance.service';
 
 @Component({
   selector: 'app-non-compliance-summary',
+  standalone: false,
   templateUrl: './non-compliance-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

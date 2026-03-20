@@ -11,6 +11,7 @@ import { PermitApplicationState } from '../../store/permit-application.state';
 
 @Component({
   selector: 'app-inherent-co2',
+  standalone: false,
   templateUrl: './inherent-co2.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

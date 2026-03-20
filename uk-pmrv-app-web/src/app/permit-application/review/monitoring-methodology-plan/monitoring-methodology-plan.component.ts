@@ -17,6 +17,7 @@ import { SubInstallation } from 'pmrv-api';
 
 @Component({
   selector: 'app-monitoring-methodology-plan',
+  standalone: false,
   templateUrl: './monitoring-methodology-plan.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

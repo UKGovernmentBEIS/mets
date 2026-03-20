@@ -149,10 +149,7 @@ function getAerVerifySubTasks(payload: AerUkEtsRequestActionPayload): TaskSectio
         },
         {
           name: 'materialityLevel',
-          linkText:
-            payload?.reportingYear >= 2025
-              ? 'Further information of relevance to the opinion'
-              : aerVerifyHeaderTaskMap['materialityLevel'],
+          linkText: aerVerifyHeaderTaskMap['materialityLevel'],
           link: 'aer/verify-submitted/materiality-level',
         },
       ],

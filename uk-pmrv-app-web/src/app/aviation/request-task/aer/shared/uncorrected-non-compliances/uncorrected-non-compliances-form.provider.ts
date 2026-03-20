@@ -18,9 +18,10 @@ export interface UncorrectedNonCompliancesFormModel {
 }
 
 @Injectable()
-export class UncorrectedNonCompliancesFormProvider
-  implements TaskFormProvider<AviationAerUncorrectedNonCompliances, UncorrectedNonCompliancesFormModel>
-{
+export class UncorrectedNonCompliancesFormProvider implements TaskFormProvider<
+  AviationAerUncorrectedNonCompliances,
+  UncorrectedNonCompliancesFormModel
+> {
   private fb = inject(FormBuilder);
   private store = inject(RequestTaskStore);
   private _form: FormGroup;

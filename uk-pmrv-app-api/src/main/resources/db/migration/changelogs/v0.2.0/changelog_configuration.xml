@@ -170,4 +170,20 @@
             insert into configuration(key, value, type) values ('ui.features.bdrEnabled', false, 'BOOLEAN');
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_add_configuration_bdrs2_trigger_date" author="dridakisc@unisystems.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('ui.features.bdrs2TriggerDate', '2026/01/01', 'STRING');
+        </sql>
+        <rollback>
+            delete from configuration where key = 'ui.features.bdrs2TriggerDate';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_correct_configuration_key_bdrs2_trigger_date" author="dridakisc@unisystems.gr">
+        <sql>
+            update configuration set key = 'bdrs2.trigger.date' where key = 'ui.features.bdrs2TriggerDate';
+        </sql>
+        <rollback>
+            update configuration set key = 'ui.features.bdrs2TriggerDate' where key = 'bdrs2.trigger.date';
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

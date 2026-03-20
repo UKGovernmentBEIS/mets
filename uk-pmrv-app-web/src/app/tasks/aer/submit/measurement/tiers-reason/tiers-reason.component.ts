@@ -16,9 +16,10 @@ import { tiersReasonFormProvider } from './tiers-reason-form.provider';
 
 @Component({
   selector: 'app-tiers-reason',
+  standalone: false,
   templateUrl: './tiers-reason.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [tiersReasonFormProvider, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TiersReasonComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

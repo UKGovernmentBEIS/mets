@@ -5,6 +5,7 @@ import { map } from 'rxjs';
 
 @Component({
   selector: 'app-return-link',
+  standalone: false,
   template: '<a govukLink [routerLink]="link$ | async">Return to: {{ title }}</a>',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

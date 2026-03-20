@@ -6,7 +6,10 @@ import { AerService } from '@tasks/aer/core/aer.service';
 
 import { Aer } from 'pmrv-api';
 
-@Pipe({ name: 'task' })
+@Pipe({
+  name: 'task',
+  standalone: false,
+})
 export class TaskPipe implements PipeTransform {
   constructor(private readonly aerService: AerService) {}
 

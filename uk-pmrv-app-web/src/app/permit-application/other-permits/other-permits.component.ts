@@ -27,9 +27,10 @@ import { createAnotherPermit, otherPermitsFormProvider } from './other-permits-f
 
 @Component({
   selector: 'app-other-permits',
+  standalone: false,
   templateUrl: './other-permits.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [otherPermitsFormProvider, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OtherPermitsComponent
   extends SectionComponent

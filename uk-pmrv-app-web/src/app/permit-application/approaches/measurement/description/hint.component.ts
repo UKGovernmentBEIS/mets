@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-hint',
+  standalone: false,
   template: `
     <p class="govuk-body">Include:</p>
     <ul class="govuk-list govuk-list--bullet">

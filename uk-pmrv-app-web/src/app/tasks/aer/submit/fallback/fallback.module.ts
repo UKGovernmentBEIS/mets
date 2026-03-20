@@ -10,6 +10,7 @@ import { TotalEmissionsComponent } from '@tasks/aer/submit/fallback/total-emissi
 import { UploadDocumentsComponent } from '@tasks/aer/submit/fallback/upload-documents/upload-documents.component';
 
 @NgModule({
+  imports: [AerSharedModule, FallbackRoutingModule, SharedModule],
   declarations: [
     DescriptionComponent,
     FallbackComponent,
@@ -17,6 +18,5 @@ import { UploadDocumentsComponent } from '@tasks/aer/submit/fallback/upload-docu
     TotalEmissionsComponent,
     UploadDocumentsComponent,
   ],
-  imports: [AerSharedModule, FallbackRoutingModule, SharedModule],
 })
 export class FallbackModule {}

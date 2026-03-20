@@ -10,7 +10,7 @@
           <br />
           <ng-container *ngIf="requiredChange?.files?.length > 0">
             <app-summary-download-files
-              [files]="getDownloadUrlFiles(this.requiredChange?.files)"></app-summary-download-files>
+              [files]="getDownloadUrlFiles(requiredChange?.files)"></app-summary-download-files>
           </ng-container>
         </div>
         <br *ngIf="!isLast" />

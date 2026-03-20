@@ -58,12 +58,7 @@ export function getCalculationReviewFormControls(sourceStreamEmission, disabled)
   };
 }
 
-export function getEmissionsElements(
-  sourceStreamEmission,
-  calculatedEmissions,
-  calculationFactor = null,
-  isSm3 = false,
-) {
+export function getEmissionsElements(sourceStreamEmission, calculatedEmissions, calculationFactor = null) {
   const parameters = sourceStreamEmission?.parameterMonitoringTiers;
   const calculationActivityDataCalculationMethod =
     sourceStreamEmission?.parameterCalculationMethod?.calculationActivityDataCalculationMethod;
@@ -82,7 +77,7 @@ export function getEmissionsElements(
           ? [
               {
                 label: 'Total fuel or material used:',
-                value: `${calculationActivityDataCalculationMethod?.totalMaterial} ${isSm3 ? 'standard cubic metres (Sm3) at 15°C (metering conditions)' : activityParameterMeasurementUnit}`,
+                value: `${calculationActivityDataCalculationMethod?.totalMaterial} ${activityParameterMeasurementUnit}`,
               },
               {
                 label: 'Value adjusted to 0ºC standard conditions:',

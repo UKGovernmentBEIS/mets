@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { LegalEntityDTO } from 'pmrv-api';
 
-@Pipe({ name: 'legalEntityType' })
+@Pipe({
+  name: 'legalEntityType',
+  standalone: false,
+})
 export class LegalEntityTypePipe implements PipeTransform {
   transform(status?: LegalEntityDTO['type']): string {
     switch (status) {

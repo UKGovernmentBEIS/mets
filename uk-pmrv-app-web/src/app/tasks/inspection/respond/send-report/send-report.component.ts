@@ -21,7 +21,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-follow-up-respond-send-report',
-  standalone: true,
   imports: [InspectionTaskComponent, SharedModule],
   templateUrl: './send-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

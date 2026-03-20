@@ -8,6 +8,7 @@ import { PermitTransferStore } from '../../store/permit-transfer.store';
 
 @Component({
   selector: 'app-transfer-details-summary',
+  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -13,10 +13,12 @@
     <ng-template #confirmation>
       <div>
         <govuk-panel title="Task completed">
-          <strong>Your reference code is:</strong><br />{{ requestId$ | async }}
+          <strong>Your reference code is:</strong>
+          <br />
+          {{ requestId$ | async }}
         </govuk-panel>
 
-        <a govukLink [routerLink]="'/dashboard'"> Return to dashboard </a>
+        <a govukLink routerLink="/dashboard">Return to dashboard</a>
       </div>
     </ng-template>
   </div>

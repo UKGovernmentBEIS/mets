@@ -22,6 +22,7 @@ import {
 
 @Component({
   selector: 'app-reference-documents',
+  standalone: false,
   templateUrl: './reference-documents.component.html',
   providers: [referenceDocumentsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

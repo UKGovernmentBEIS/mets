@@ -24,9 +24,10 @@ import { WizardStepComponent } from '@shared/wizard/wizard-step.component';
 
 @Component({
   selector: 'app-confidentiality-statement-template',
+  standalone: false,
   templateUrl: './confidentiality-statement-template.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfidentialityStatementTemplateComponent implements AfterViewInit, AfterContentChecked {
   @Input() submitText = 'Confirm and complete';

@@ -16,6 +16,7 @@ import { EmissionSourceTableComponent } from './emission-source-table.component'
 
 describe('EmissionSourceTableComponent', () => {
   @Component({
+    standalone: false,
     template: `
       <app-emission-source-table [data]="data" [isEditable]="isEditable"></app-emission-source-table>
     `,

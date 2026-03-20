@@ -39,6 +39,7 @@ import { ProcedureComponent } from './procedure/procedure.component';
 import { SummaryComponent as ProcedureSummaryComponent } from './procedure/summary/summary.component';
 
 @NgModule({
+  imports: [MeasurementRoutingModule, SharedModule, SharedPermitModule],
   declarations: [
     AnalysisMethodComponent,
     AnalysisMethodDeleteComponent,
@@ -73,7 +74,6 @@ import { SummaryComponent as ProcedureSummaryComponent } from './procedure/summa
     TierJustificationComponent,
     TransferredCo2DetailsComponent,
   ],
-  imports: [MeasurementRoutingModule, SharedModule, SharedPermitModule],
   providers: [AnswersGuard, WizardStepGuard],
 })
 export class MeasurementModule {}

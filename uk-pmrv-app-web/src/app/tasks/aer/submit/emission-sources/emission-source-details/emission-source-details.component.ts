@@ -12,6 +12,7 @@ import { emissionSourcesAddFormFactory } from './emission-source-details-form.pr
 
 @Component({
   selector: 'app-emission-source-details',
+  standalone: false,
   template: `
     <app-aer-task>
       <app-emission-source-details-template
@@ -20,8 +21,8 @@ import { emissionSourcesAddFormFactory } from './emission-source-details-form.pr
         [isEditing]="isEditing$ | async"></app-emission-source-details-template>
     </app-aer-task>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [emissionSourcesAddFormFactory, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionSourceDetailsComponent {
   isEditing$ = this.aerService

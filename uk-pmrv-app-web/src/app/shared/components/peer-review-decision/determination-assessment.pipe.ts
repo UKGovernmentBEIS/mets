@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { PeerReviewDecision } from 'pmrv-api';
 
-@Pipe({ name: 'determinationAssessment' })
+@Pipe({
+  name: 'determinationAssessment',
+  standalone: false,
+})
 export class DeterminationAssessmentPipe implements PipeTransform {
   transform(value: PeerReviewDecision['type']): string {
     switch (value) {

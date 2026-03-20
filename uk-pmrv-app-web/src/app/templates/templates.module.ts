@@ -12,6 +12,7 @@ import { TemplatesComponent } from './templates.component';
 import { TemplatesRoutingModule } from './templates-routing.module';
 
 @NgModule({
+  imports: [SharedModule, TemplatesRoutingModule],
   declarations: [
     DocumentTemplateComponent,
     DocumentTemplateDetailsTemplateComponent,
@@ -22,6 +23,5 @@ import { TemplatesRoutingModule } from './templates-routing.module';
     TemplateFileDownloadComponent,
     TemplatesComponent,
   ],
-  imports: [SharedModule, TemplatesRoutingModule],
 })
 export class TemplatesModule {}

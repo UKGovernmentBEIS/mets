@@ -12,6 +12,7 @@ import { InstallationAccountApplicationStore } from '../store/installation-accou
 
 @Component({
   selector: 'app-gas-emissions-details',
+  standalone: false,
   template: `
     <app-wizard-step
       [showBackLink]="true"

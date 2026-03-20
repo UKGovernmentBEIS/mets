@@ -6,6 +6,7 @@ import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 @Component({
   selector: 'app-aer-task-review',
+  standalone: false,
   template: `
     <govuk-notification-banner *ngIf="notification" type="success">
       <h1 class="govuk-notification-banner__heading">Details updated</h1>
@@ -14,8 +15,8 @@ import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
     <ng-content></ng-content>
     <a govukLink [routerLink]="returnToLink">Return to: {{ linkText }}</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerTaskReviewComponent implements OnInit {
   @Input() notification: any;

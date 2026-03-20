@@ -9,7 +9,7 @@ import { SignatoryComponent } from './submit/signatory/signatory.component';
 import { SummaryComponent } from './submit/summary/summary.component';
 
 @NgModule({
-  declarations: [FiltersComponent, RequestsComponent, SignatoryComponent, SummaryComponent],
   imports: [PermitBatchReissueRoutingModule, SharedModule, SharedUserModule],
+  declarations: [FiltersComponent, RequestsComponent, SignatoryComponent, SummaryComponent],
 })
 export class PermitBatchReissueModule {}

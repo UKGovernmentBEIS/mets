@@ -2,9 +2,8 @@
   <app-wizard-step
     (formSubmit)="onContinue()"
     [formGroup]="form"
-    [heading]="'Review the calculated emissions'"
-    [hideSubmit]="(isEditable$ | async) === false"
-  >
+    heading="Review the calculated emissions"
+    [hideSubmit]="(isEditable$ | async) === false">
     <ng-container *ngFor="let element of emissionsElements$ | async">
       <h2 class="govuk-heading-m">{{ element.label }}</h2>
       <ng-container *ngFor="let content of element.content">
@@ -16,17 +15,15 @@
       formControlName="calculationCorrect"
       govuk-radio
       legend="Are the calculated emissions correct?"
-      legendSize="medium"
-    >
-      <govuk-radio-option [value]="true" label="Yes, the emissions are correct"> </govuk-radio-option>
+      legendSize="medium">
+      <govuk-radio-option [value]="true" label="Yes, the emissions are correct"></govuk-radio-option>
       <govuk-radio-option [value]="false" label="No, I want to provide my own emissions figures">
         <ng-container govukConditionalContent>
           <div
             formControlName="reasonForProvidingManualEmissions"
             govuk-textarea
             [maxLength]="10000"
-            label="Explain why you are providing your own emission figures"
-          ></div>
+            label="Explain why you are providing your own emission figures"></div>
           <div
             formControlName="totalProvidedReportableEmissions"
             govuk-text-input
@@ -36,21 +33,19 @@
                 : 'Total reportable emissions'
             "
             widthClass="govuk-input--width-10"
-            suffix="tonnes CO2e"
-          ></div>
+            suffix="tonnes CO2e"></div>
           <ng-container *ngIf="(sourceStreamEmission$ | async)?.biomassPercentages?.contains">
             <div
               formControlName="totalProvidedSustainableBiomassEmissions"
               govuk-text-input
               label="Total sustainable biomass emissions"
               widthClass="govuk-input--width-10"
-              suffix="tonnes CO2e"
-            ></div>
+              suffix="tonnes CO2e"></div>
           </ng-container>
         </ng-container>
       </govuk-radio-option>
     </div>
   </app-wizard-step>
 
-  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }}</a>
 </app-aer-task>

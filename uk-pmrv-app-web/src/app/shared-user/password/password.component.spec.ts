@@ -25,6 +25,7 @@ describe('PasswordComponent', () => {
   let passwordService: PasswordService;
 
   @Component({
+    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-password></app-password>

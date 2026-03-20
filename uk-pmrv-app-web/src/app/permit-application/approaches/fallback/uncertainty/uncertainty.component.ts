@@ -14,9 +14,10 @@ import { uncertaintyFormProvider } from './uncertainty-form.provider';
 
 @Component({
   selector: 'app-uncertainty',
+  standalone: false,
   templateUrl: './uncertainty.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [uncertaintyFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UncertaintyComponent {
   constructor(

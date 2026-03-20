@@ -15,9 +15,10 @@ import { NonComplianceService } from '../../core/non-compliance.service';
 
 @Component({
   selector: 'app-daily-penalty-notice-submitted',
+  standalone: false,
   templateUrl: './daily-penalty-notice-submitted.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UserInfoResolverPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DailyPenaltyNoticeSubmittedComponent {
   payload$ = (

@@ -17,9 +17,8 @@ import { isInstallationInspectionFollowUpSubmitCompleted } from '../submit.wizar
 
 @Component({
   selector: 'app-follow-up-actions',
-  templateUrl: './follow-up-actions.component.html',
-  standalone: true,
   imports: [InspectionTaskComponent, FollowUpItemComponent, SharedModule, RouterLink],
+  templateUrl: './follow-up-actions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FollowUpActionsComponent {

@@ -16,9 +16,10 @@ import { naceCodeInstallationActivityFormProvider } from '@tasks/aer/submit/nace
 
 @Component({
   selector: 'app-nace-code-installation-activity',
+  standalone: false,
   templateUrl: './nace-code-installation-activity.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [naceCodeInstallationActivityFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NaceCodeInstallationActivityComponent implements OnInit {
   installationActivityOptions: [string, string | any][];

@@ -10,6 +10,7 @@ import { transferDetailsStatus } from '../../transfer-status';
 
 @Component({
   selector: 'app-transfer-details-review',
+  standalone: false,
   templateUrl: './transfer-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

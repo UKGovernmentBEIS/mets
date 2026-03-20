@@ -12,7 +12,10 @@ import { RequestDetailsDTO } from 'pmrv-api';
 
 import { TaskItemStatus } from '../task-list/task-list.interface';
 
-@Pipe({ name: 'tagColor' })
+@Pipe({
+  name: 'tagColor',
+  standalone: false,
+})
 export class TagColorPipe implements PipeTransform {
   transform(
     status:

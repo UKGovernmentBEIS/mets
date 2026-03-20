@@ -12,7 +12,6 @@ import { requestTaskQuery, RequestTaskStore } from '../../../../store';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-emp-variation-regulator-led-decision-group-form',
-  standalone: true,
   imports: [SharedModule],
   templateUrl: './emp-variation-regulator-led-decision-group-form.component.html',
   viewProviders: [existingControlContainer],

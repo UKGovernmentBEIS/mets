@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, iif, map, of, switchMap, tap, withLatestFrom } from 'rxjs';
 
@@ -21,6 +21,8 @@ import {
 
 @Component({
   selector: 'app-bdrs2-send-report-verifier',
+  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule],
+  standalone: true,
   template: `
     <app-bdrs2-task returnLink="../.." [returnLinkTitle]="returnLinkTitle" [breadcrumb]="true">
       <app-page-heading>Send report for verification</app-page-heading>
@@ -37,10 +39,8 @@ import {
       </div>
     </app-bdrs2-task>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule, RouterLink],
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Bdrs2SendReportVerifierComponent {
   assignedVerifier$ = this.bdrs2Service.requestAccountId$.pipe(
@@ -100,6 +100,9 @@ export class Bdrs2SendReportVerifierComponent {
           switch (requestTaskType) {
             case 'BDRS2_APPLICATION_SUBMIT':
               actionType = 'BDRS2_SUBMIT_TO_VERIFIER';
+              break;
+            case 'BDRS2_APPLICATION_AMENDS_SUBMIT':
+              actionType = 'BDRS2_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER';
               break;
           }
 

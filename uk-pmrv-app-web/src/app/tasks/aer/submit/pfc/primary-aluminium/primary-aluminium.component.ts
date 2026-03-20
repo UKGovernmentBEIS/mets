@@ -15,9 +15,10 @@ import { primaryAluminiumFormProvider } from './primary-aluminium.provider';
 
 @Component({
   selector: 'app-primary-aluminium',
+  standalone: false,
   templateUrl: './primary-aluminium.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [primaryAluminiumFormProvider, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PrimaryAluminiumComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

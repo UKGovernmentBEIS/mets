@@ -21,26 +21,31 @@ import { createRequestCreateActionProcessDTO, requestCreateActionTypeLabelMap } 
 
 @Component({
   selector: 'app-workflow-related-create-actions',
+  standalone: false,
   template: `
     <aside class="app-related-items" role="complementary">
       <h2 class="govuk-heading-m" id="subsection-title">Related actions</h2>
       <nav role="navigation" aria-labelledby="subsection-title">
         <ul class="govuk-list govuk-!-font-size-16">
-          <li *ngFor="let requestCreateActionType of requestCreateActionsTypes$ | async">
-            <a govukLink routerLink="." (click)="onClick(requestCreateActionType)">
-              {{ requestCreateActionType | i18nSelect: requestCreateActionTypeLabelMap }}
-            </a>
-          </li>
-          <li *ngIf="hasMarkAsNotRequiredAccess$ | async">
-            <a govukLink routerLink="." (click)="onMarkAsNotRequired()">Mark workflow as not required</a>
-          </li>
+          @for (requestCreateActionType of requestCreateActionsTypes$ | async; track requestCreateActionType) {
+            <li>
+              <a govukLink routerLink="." (click)="onClick(requestCreateActionType)">
+                {{ requestCreateActionType | i18nSelect: requestCreateActionTypeLabelMap }}
+              </a>
+            </li>
+          }
+          @if (hasMarkAsNotRequiredAccess$ | async) {
+            <li>
+              <a govukLink routerLink="." (click)="onMarkAsNotRequired()">Mark workflow as not required</a>
+            </li>
+          }
         </ul>
       </nav>
     </aside>
   `,
   styleUrl: './workflow-related-create-actions.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkflowRelatedCreateActionsComponent implements OnInit {
   @Input() accountId$: Observable<number>;

@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { CalculationActivityData, FallbackSourceStreamCategory } from 'pmrv-api';
 
-@Pipe({ name: 'meteringUncertaintyName' })
+@Pipe({
+  name: 'meteringUncertaintyName',
+  standalone: false,
+})
 export class MeteringUncertaintyNamePipe implements PipeTransform {
   transform(value: FallbackSourceStreamCategory['uncertainty'] | CalculationActivityData['uncertainty']): string {
     switch (value) {

@@ -11,8 +11,7 @@
  */
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface PermitNotificationFollowUpSaveApplicationAmendRequestTaskActionPayload
-  extends RequestTaskActionPayload {
+export interface PermitNotificationFollowUpSaveApplicationAmendRequestTaskActionPayload extends RequestTaskActionPayload {
   response: string;
   files?: Array<string>;
   followUpSectionsCompleted?: { [key: string]: boolean };

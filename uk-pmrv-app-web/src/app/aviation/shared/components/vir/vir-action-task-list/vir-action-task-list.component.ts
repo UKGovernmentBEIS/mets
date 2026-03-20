@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { VirTaskStatusPipe } from '@aviation/shared/pipes/vir-task-status.pipe';
 import { SharedModule } from '@shared/shared.module';
 import { VerificationDataItem } from '@shared/vir-shared/types/verification-data-item.type';
 import { VirSharedModule } from '@shared/vir-shared/vir-shared.module';
@@ -15,10 +14,9 @@ import {
 
 @Component({
   selector: 'app-vir-action-task-list',
+  imports: [VirSharedModule, SharedModule],
   templateUrl: './vir-action-task-list.component.html',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [VirSharedModule, SharedModule, VirTaskStatusPipe],
 })
 export class VirActionTaskListComponent {
   virRequestActionPayload: RequestActionPayload &

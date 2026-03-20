@@ -28,7 +28,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-3year-offsetting-requirements-summary',
-  standalone: true,
   imports: [ReturnToLinkComponent, RouterLink, SharedModule, ThreeYearOffsettingRequirementsTableTemplateComponent],
   templateUrl: './offsetting-requirements-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

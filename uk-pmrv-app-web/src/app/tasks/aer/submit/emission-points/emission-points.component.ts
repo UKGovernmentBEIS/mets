@@ -7,6 +7,7 @@ import { AerService } from '@tasks/aer/core/aer.service';
 
 @Component({
   selector: 'app-emission-points',
+  standalone: false,
   templateUrl: './emission-points.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

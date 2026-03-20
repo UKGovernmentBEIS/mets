@@ -18,9 +18,10 @@ import { reasonFormProvider } from './reason-form.provider';
 
 @Component({
   selector: 'app-proceed-authority-reason',
+  standalone: false,
   templateUrl: './reason.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [reasonFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReasonComponent implements OnInit {
   private readonly nextWizardStep = 'withholding';

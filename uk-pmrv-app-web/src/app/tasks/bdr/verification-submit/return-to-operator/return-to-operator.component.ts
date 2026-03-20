@@ -8,7 +8,6 @@ import { BdrService, BdrTaskSharedModule } from '@tasks/bdr/shared';
 
 @Component({
   selector: 'app-bdr-verifier-return-to-operator',
-  standalone: true,
   imports: [BdrTaskSharedModule, SharedModule],
   template: `
     <app-bdr-task-review

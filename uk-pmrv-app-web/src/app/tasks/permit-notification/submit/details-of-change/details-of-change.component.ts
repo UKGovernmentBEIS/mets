@@ -15,9 +15,10 @@ import { detailsOfChangeFromProvider } from './details-of-change-from.provider';
 
 @Component({
   selector: 'app-details-of-change',
+  standalone: false,
   templateUrl: './details-of-change.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [detailsOfChangeFromProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsOfChangeComponent implements PendingRequest {
   taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

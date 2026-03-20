@@ -11,6 +11,7 @@ import { AccountNotesService } from 'pmrv-api';
 
 @Component({
   selector: 'app-delete-account-note',
+  standalone: false,
   templateUrl: './delete-account-note.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

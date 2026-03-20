@@ -7,6 +7,7 @@ import { nonSignificantChanges, significantChangesMonitoringPlan } from '../abou
 
 @Component({
   selector: 'app-about-variation-summary-details',
+  standalone: false,
   templateUrl: './summary-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

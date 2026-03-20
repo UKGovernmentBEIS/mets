@@ -16,6 +16,7 @@ import { AerApplicationSubmitRequestTaskPayload, OpinionStatement } from 'pmrv-a
 
 @Component({
   selector: 'app-review-emissions',
+  standalone: false,
   templateUrl: './review-emissions.component.html',
   providers: [reviewEmissionsFormProvider, OpinionStatementEmissionsCalculationService],
   changeDetection: ChangeDetectionStrategy.OnPush,

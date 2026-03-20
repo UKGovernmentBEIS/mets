@@ -7,6 +7,7 @@ import { OperatorImprovementResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-operator-response-item',
+  standalone: false,
   templateUrl: './operator-response-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -18,6 +18,7 @@ import {
 
 @Pipe({
   name: 'reviewNotificationStatus',
+  standalone: false,
 })
 export class ReviewNotificationStatusPipe implements PipeTransform {
   constructor(private readonly permitNotificationService: PermitNotificationService) {}

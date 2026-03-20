@@ -10,9 +10,10 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 @Component({
   selector: 'app-answers',
+  standalone: false,
   templateUrl: './answers.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnswersComponent {
   taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

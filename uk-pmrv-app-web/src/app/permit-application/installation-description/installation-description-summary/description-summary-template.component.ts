@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-description-summary-template',
+  standalone: false,
   template: `
     <dl
       *ngIf="'installationDescription' | task: !showOriginal | async as task"

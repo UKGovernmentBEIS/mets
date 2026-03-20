@@ -1,4 +1,4 @@
-import { NgForOf, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLinkWithHref } from '@angular/router';
 
@@ -6,8 +6,7 @@ import { GovukComponentsModule } from 'govuk-components';
 
 @Component({
   selector: 'app-multiple-methods-summary-template',
-  standalone: true,
-  imports: [GovukComponentsModule, RouterLinkWithHref, NgForOf, NgIf],
+  imports: [GovukComponentsModule, RouterLinkWithHref, NgIf],
   template: `
     <h2 class="govuk-heading-m">Using multiple methods</h2>
     <dl govuk-summary-list>

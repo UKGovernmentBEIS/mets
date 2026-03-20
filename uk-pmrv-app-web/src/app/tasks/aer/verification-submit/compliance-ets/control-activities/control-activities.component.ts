@@ -7,6 +7,7 @@ import { ComplianceEtsService } from '@tasks/aer/verification-submit/compliance-
 
 @Component({
   selector: 'app-control-activities',
+  standalone: false,
   templateUrl: './control-activities.component.html',
   providers: [controlActivitiesFormProvider, ComplianceEtsService],
   changeDetection: ChangeDetectionStrategy.OnPush,

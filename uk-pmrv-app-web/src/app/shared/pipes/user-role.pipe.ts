@@ -1,7 +1,10 @@
 import { Injectable, Pipe, PipeTransform } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-@Pipe({ name: 'userRole' })
+@Pipe({
+  name: 'userRole',
+  standalone: false,
+})
 export class UserRolePipe implements PipeTransform {
   transform(role): string {
     switch (role) {

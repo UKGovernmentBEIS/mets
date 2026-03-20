@@ -18,9 +18,10 @@ import { calculationDolimeAddFormFactory } from './calculation-dolime-form.provi
 
 @Component({
   selector: 'app-calculation-dolime',
+  standalone: false,
   templateUrl: './calculation-dolime.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [calculationDolimeAddFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalculationDolimeComponent extends ProductBenchmarkComponent implements PendingRequest {
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));

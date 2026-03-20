@@ -11,6 +11,7 @@ describe('ReviewSummaryComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
+    standalone: false,
     template: `
       <app-review-summary [item]="item" [taskId]="taskId"></app-review-summary>
     `,

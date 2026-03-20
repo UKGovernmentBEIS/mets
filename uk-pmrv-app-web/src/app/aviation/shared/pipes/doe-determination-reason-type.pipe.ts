@@ -9,8 +9,8 @@ const DETERMINATION_REASON_TYPE_SELECTION = {
 
 @Pipe({
   name: 'doeDeterminationReasonType',
-  pure: true,
   standalone: true,
+  pure: true,
 })
 export class DoeDeterminationReasonTypePipe implements PipeTransform {
   transform(value: AviationDoECorsiaDeterminationReason['type']): string | null {

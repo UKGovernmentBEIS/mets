@@ -12,6 +12,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-amend',
+  standalone: false,
   templateUrl: './amend.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

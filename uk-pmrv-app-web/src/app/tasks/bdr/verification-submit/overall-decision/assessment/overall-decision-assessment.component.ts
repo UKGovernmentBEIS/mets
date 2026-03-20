@@ -12,10 +12,9 @@ import { overallAssessmentFormProvider } from './overall-decision-assessment-for
 
 @Component({
   selector: 'app-bdr-overall-decision-assessment',
-  standalone: true,
   imports: [BdrTaskSharedModule, SharedModule],
-  providers: [overallAssessmentFormProvider],
   templateUrl: './overall-decision-assessment.component.html',
+  providers: [overallAssessmentFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverallDecisionAssessmentComponent {

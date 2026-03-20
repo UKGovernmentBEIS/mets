@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-review-group-decision-summary',
+  standalone: false,
   template: `
     <h2 app-summary-header class="govuk-heading-m">Decision Summary</h2>
     <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">

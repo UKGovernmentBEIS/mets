@@ -7,7 +7,7 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+        <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
       </dd>
     </div>
     <div govukSummaryListRow *ngIf="$any(data)?.emissionsMonitoringApproach?.certEmissionsType">
@@ -17,7 +17,7 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+        <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
       </dd>
     </div>
   </dl>
@@ -28,20 +28,19 @@
       <dd class="pre-wrap" govukSummaryListRowValue>{{ $any(data).simplifiedApproach.explanation }}</dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../simplified-approach'" [queryParams]="{ change: true }">Change</a>
+        <a govukLink routerLink="../simplified-approach" [queryParams]="{ change: true }">Change</a>
       </dd>
     </div>
     <div
       govukSummaryListRow
-      *ngIf="files?.length > 0 && $any(data).simplifiedApproach?.supportingEvidenceFiles.length > 0"
-    >
+      *ngIf="files?.length > 0 && $any(data).simplifiedApproach?.supportingEvidenceFiles.length > 0">
       <dt govukSummaryListRowKey>Supporting evidence</dt>
       <dd govukSummaryListRowValue>
         <app-summary-download-files [files]="files"></app-summary-download-files>
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../simplified-approach'" [queryParams]="{ change: true }">Change</a>
+        <a govukLink routerLink="../simplified-approach" [queryParams]="{ change: true }">Change</a>
       </dd>
     </div>
   </dl>

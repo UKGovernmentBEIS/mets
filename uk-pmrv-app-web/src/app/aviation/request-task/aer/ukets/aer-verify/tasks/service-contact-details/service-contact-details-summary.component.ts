@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -18,6 +17,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-service-contact-details-summary',
+  imports: [SharedModule, ReturnToLinkComponent],
   // eslint-disable-next-line @angular-eslint/component-max-inline-declarations
   template: `
     <ng-container *ngIf="vm$ | async as vm">
@@ -43,8 +43,6 @@ interface ViewModel {
 
     <app-return-to-link></app-return-to-link>
   `,
-  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent],
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ServiceContactDetailsSummaryComponent {

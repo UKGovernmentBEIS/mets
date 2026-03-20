@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { ItemDTO } from 'pmrv-api';
 
-@Pipe({ name: 'itemLink' })
+@Pipe({
+  name: 'itemLink',
+  standalone: false,
+})
 export class ItemLinkPipe implements PipeTransform {
   transform(value: ItemDTO, isAviation: boolean, isWorkflow?: boolean): any[] {
     if (isWorkflow) {
@@ -652,9 +655,20 @@ export class ItemLinkPipe implements PipeTransform {
       case 'BDRS2': {
         switch (value?.taskType) {
           case 'BDRS2_APPLICATION_SUBMIT':
+          case 'BDRS2_APPLICATION_AMENDS_SUBMIT':
           case 'BDRS2_WAIT_FOR_VERIFICATION':
           case 'BDRS2_WAIT_FOR_REGULATOR_REVIEW':
+          case 'BDRS2_AMEND_WAIT_FOR_VERIFICATION':
             return [routerLooks + 'tasks', value.taskId, 'bdrs2', 'submit'];
+          case 'BDRS2_APPLICATION_VERIFICATION_SUBMIT':
+          case 'BDRS2_AMEND_APPLICATION_VERIFICATION_SUBMIT':
+            return [routerLooks + 'tasks', value.taskId, 'bdrs2', 'verification-submit'];
+          case 'BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+          case 'BDRS2_WAIT_FOR_AMENDS':
+          case 'BDRS2_APPLICATION_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'bdrs2', 'review'];
+          case 'BDRS2_WAIT_FOR_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'bdrs2', 'peer-review-wait'];
           default:
             return ['.'];
         }

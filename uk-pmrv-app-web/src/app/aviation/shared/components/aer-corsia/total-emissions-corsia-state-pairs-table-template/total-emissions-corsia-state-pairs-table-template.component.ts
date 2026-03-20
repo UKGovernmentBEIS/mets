@@ -21,9 +21,8 @@ import { createTablePage } from '../../../../../mi-reports/core/mi-report';
 
 @Component({
   selector: 'app-total-emissions-corsia-state-pairs-table-template',
-  templateUrl: './total-emissions-corsia-state-pairs-table-template.component.html',
-  standalone: true,
   imports: [SharedModule],
+  templateUrl: './total-emissions-corsia-state-pairs-table-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsCorsiaStatePairsTableTemplateComponent {

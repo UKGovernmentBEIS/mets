@@ -47,7 +47,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-alr-review-task-list',
-  standalone: true,
   imports: [SharedModule, TaskSharedModule],
   templateUrl: './review-task-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

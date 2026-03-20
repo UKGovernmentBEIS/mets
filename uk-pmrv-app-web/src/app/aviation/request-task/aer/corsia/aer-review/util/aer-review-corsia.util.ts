@@ -61,7 +61,7 @@ function getVerifierSections(payload: AviationAerCorsiaApplicationReviewRequestT
   return [
     ...getVerifierAssessmentTasks(true, false, true),
     ...getAerVerifyCorsiaVerifiedEmissions(payload.aer, true),
-    ...getAerVerifyVerifierFindings(true, true, payload?.reportingYear >= 2025),
+    ...getAerVerifyVerifierFindings(true, true),
     ...getAerVerifyCorsiaVerifierSummary(true),
   ];
 }

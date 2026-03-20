@@ -10,6 +10,7 @@ import { sourceStreamEmissionStatus } from '../../shared/components/submit/emiss
 
 @Component({
   selector: 'app-calculation-emissions',
+  standalone: false,
   templateUrl: './calculation-emissions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -9,7 +9,6 @@ import { AviationAerMonitoringPlanVersion } from 'pmrv-api';
 
 @Component({
   selector: 'app-aer-monitoring-plan-versions',
-  standalone: true,
   imports: [GovukComponentsModule, NgIf, NgFor, SharedModule],
   templateUrl: './monitoring-plan-versions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

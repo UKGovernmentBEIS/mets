@@ -30,9 +30,10 @@ export interface AviationAerCorsiaDataGapFormModel {
 }
 
 @Injectable()
-export class DataGapsFormProvider
-  implements TaskFormProvider<AviationAerCorsiaDataGaps, AviationAerCorsiaDataGapsFormModel>
-{
+export class DataGapsFormProvider implements TaskFormProvider<
+  AviationAerCorsiaDataGaps,
+  AviationAerCorsiaDataGapsFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup<AviationAerCorsiaDataGapsFormModel>;
   private destroy$ = new Subject<void>();

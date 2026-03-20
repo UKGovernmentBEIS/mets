@@ -12,6 +12,7 @@ import { ConditionalContentDirective, FormService, GovukTextWidthClass } from 'g
 
 @Component({
   selector: 'app-select-other',
+  standalone: false,
   templateUrl: './select-other.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -18,6 +18,7 @@ import { PermitSurrenderTaskListComponent } from './permit-surrender-task-list/p
 import { SharedPermitSurrenderModule } from './shared/shared-permit-surrender.module';
 
 @NgModule({
+  imports: [PermitSurrenderRoutingModule, SharedModule, SharedPermitSurrenderModule],
   declarations: [
     AnswersComponent,
     DeterminationSubmittedComponent,
@@ -32,6 +33,5 @@ import { SharedPermitSurrenderModule } from './shared/shared-permit-surrender.mo
     TaskStatusPipe,
     UploadDocumentsComponent,
   ],
-  imports: [PermitSurrenderRoutingModule, SharedModule, SharedPermitSurrenderModule],
 })
 export class PermitSurrenderModule {}

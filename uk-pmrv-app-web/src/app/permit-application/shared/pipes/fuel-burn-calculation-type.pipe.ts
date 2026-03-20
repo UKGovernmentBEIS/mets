@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'fuelBurnCalculationType',
+  standalone: false,
 })
 export class FuelBurnCalculationTypePipe implements PipeTransform {
   transform(

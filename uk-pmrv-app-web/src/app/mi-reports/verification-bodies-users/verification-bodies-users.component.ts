@@ -18,6 +18,7 @@ import { VerificationBodyStatusPipe } from '../pipes/verification-body-status.pi
 
 @Component({
   selector: 'app-verification-bodies-users',
+  standalone: false,
   template: `
     <app-page-heading size="xl">List of Verification bodies and Users</app-page-heading>
     <div class="govuk-button-group">
@@ -36,8 +37,8 @@ import { VerificationBodyStatusPipe } from '../pipes/verification-body-status.pi
       </ng-container>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerificationBodiesUsersComponent implements OnInit {
   private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, take(1));

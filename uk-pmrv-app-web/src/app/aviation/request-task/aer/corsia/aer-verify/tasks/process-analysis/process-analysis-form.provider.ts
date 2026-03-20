@@ -16,9 +16,10 @@ export interface AviationAerCorsiaProcessAnalysisFormModel {
 }
 
 @Injectable()
-export class ProcessAnalysisFormProvider
-  implements TaskFormProvider<AviationAerCorsiaProcessAnalysis, AviationAerCorsiaProcessAnalysisFormModel>
-{
+export class ProcessAnalysisFormProvider implements TaskFormProvider<
+  AviationAerCorsiaProcessAnalysis,
+  AviationAerCorsiaProcessAnalysisFormModel
+> {
   private _form: FormGroup<AviationAerCorsiaProcessAnalysisFormModel>;
 
   constructor(private fb: FormBuilder) {}

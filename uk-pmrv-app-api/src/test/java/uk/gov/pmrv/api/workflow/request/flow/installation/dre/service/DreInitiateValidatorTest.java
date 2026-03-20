@@ -51,7 +51,8 @@ class DreInitiateValidatorTest {
         assertThat(cut.getApplicableAccountStatuses()).isEqualTo(Set.of(
 				InstallationAccountStatus.LIVE,
 				InstallationAccountStatus.AWAITING_REVOCATION,
-				InstallationAccountStatus.AWAITING_SURRENDER));
+				InstallationAccountStatus.AWAITING_SURRENDER,
+                InstallationAccountStatus.TRANSFERRED));
     }
 
     @Test
@@ -98,7 +99,8 @@ class DreInitiateValidatorTest {
                 .build();
         final Set<AccountStatus> applicableAccountStatuses = Set.of(InstallationAccountStatus.LIVE,
 				InstallationAccountStatus.AWAITING_REVOCATION,
-				InstallationAccountStatus.AWAITING_SURRENDER);
+				InstallationAccountStatus.AWAITING_SURRENDER,
+                InstallationAccountStatus.TRANSFERRED);
         final RequestDetailsDTO requestDetailsDTO = new RequestDetailsDTO(requestId, RequestType.AER, RequestStatus.COMPLETED,
                 LocalDateTime.now(), AerRequestMetadata.builder().year(year).build());
 
@@ -142,7 +144,8 @@ class DreInitiateValidatorTest {
         
         final Set<AccountStatus> applicableAccountStatuses = Set.of(InstallationAccountStatus.LIVE,
 				InstallationAccountStatus.AWAITING_REVOCATION,
-				InstallationAccountStatus.AWAITING_SURRENDER);
+				InstallationAccountStatus.AWAITING_SURRENDER,
+                InstallationAccountStatus.TRANSFERRED);
         
         RequestCreateAccountStatusValidationResult accountStatusValidationResult = RequestCreateAccountStatusValidationResult.builder()
         		.valid(false)
@@ -180,7 +183,8 @@ class DreInitiateValidatorTest {
                 .build();
         final Set<AccountStatus> applicableAccountStatuses = Set.of(InstallationAccountStatus.LIVE,
 				InstallationAccountStatus.AWAITING_REVOCATION,
-				InstallationAccountStatus.AWAITING_SURRENDER);
+				InstallationAccountStatus.AWAITING_SURRENDER,
+                InstallationAccountStatus.TRANSFERRED);
         final RequestDetailsDTO requestDetailsDTO = new RequestDetailsDTO(requestId, RequestType.AER, RequestStatus.COMPLETED,
                 LocalDateTime.now(), null);
 
@@ -214,7 +218,8 @@ class DreInitiateValidatorTest {
                 .build();
         final Set<AccountStatus> applicableAccountStatuses = Set.of(InstallationAccountStatus.LIVE,
 				InstallationAccountStatus.AWAITING_REVOCATION,
-				InstallationAccountStatus.AWAITING_SURRENDER);
+				InstallationAccountStatus.AWAITING_SURRENDER,
+                InstallationAccountStatus.TRANSFERRED);
         final RequestDetailsDTO requestDetailsDTO = new RequestDetailsDTO(requestId, RequestType.AER, RequestStatus.COMPLETED,
                 LocalDateTime.now(), AerRequestMetadata.builder().year(year).build());
 

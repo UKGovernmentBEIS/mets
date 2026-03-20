@@ -13,10 +13,9 @@ import {
 
 @Component({
   selector: 'app-flight-data-table',
+  imports: [GovukComponentsModule, NgSwitch, NgSwitchCase, NgSwitchDefault, CommonModule],
   templateUrl: './flight-data-table.component.html',
   styleUrl: './flight-data-table.component.scss',
-  standalone: true,
-  imports: [GovukComponentsModule, NgSwitch, NgSwitchCase, NgSwitchDefault, CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlightDataTableComponent implements OnInit, OnChanges {

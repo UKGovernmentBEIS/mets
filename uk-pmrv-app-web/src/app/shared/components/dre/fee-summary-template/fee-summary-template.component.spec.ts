@@ -17,6 +17,7 @@ describe('FeeSummaryTemplateComponent', () => {
   let hostComponent: TestComponent;
 
   @Component({
+    standalone: false,
     template: `
       <app-fee-summary-template [fee]="dre.fee" [editable]="editable"></app-fee-summary-template>
     `,

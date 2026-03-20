@@ -11,7 +11,7 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
 import { KeycloakService } from 'keycloak-angular';
 
-import { CalculationActivityDataAggregationMeteringCalcMethod, TasksService } from 'pmrv-api';
+import { TasksService } from 'pmrv-api';
 
 import { mockAerApplyPayload } from '../../../testing/mock-aer-apply-action';
 import { mockPostBuild, mockStateBuild } from '../../../testing/mock-state';
@@ -54,6 +54,14 @@ describe('ActivityCalculationAggregationComponent', () => {
   };
 
   class Page extends BasePage<ActivityCalculationAggregationComponent> {
+    get measurementUnitValue() {
+      return this.getInputValue('#measurementUnit');
+    }
+
+    set measurementUnitValue(value: string) {
+      this.setInputValue('#measurementUnit', value);
+    }
+
     get materialOpeningQuantityValue() {
       return this.getInputValue('#materialOpeningQuantity');
     }
@@ -144,8 +152,7 @@ describe('ActivityCalculationAggregationComponent', () => {
                       type: 'NATIONAL_INVENTORY_DATA',
                       calculationActivityDataCalculationMethod: {
                         type: 'CONTINUOUS_METERING',
-                        measurementUnit: 'TONNES',
-                      } as CalculationActivityDataAggregationMeteringCalcMethod,
+                      },
                     },
                     parameterMonitoringTiers,
                   },
@@ -176,6 +183,7 @@ describe('ActivityCalculationAggregationComponent', () => {
 
       expect(page.errorSummary).toBeTruthy();
       expect(page.errorSummaryLinks).toEqual([
+        'Please select a measurement unit',
         'Please state the opening quantity of fuel',
         'Please state the closing quantity of fuel',
         'Select yes or no',
@@ -183,6 +191,8 @@ describe('ActivityCalculationAggregationComponent', () => {
 
       page.submitButton.click();
       fixture.detectChanges();
+
+      page.measurementUnitValue = 'TONNES';
 
       page.materialOpeningQuantityValue = '396.11486498888888888';
       page.materialClosingQuantityValue = '377.4220725';
@@ -287,6 +297,7 @@ describe('ActivityCalculationAggregationComponent', () => {
     it('should  fill the form with data from the store', () => {
       expect(page.errorSummary).toBeFalsy();
 
+      expect(page.measurementUnitValue).toEqual('TONNES');
       expect(page.materialOpeningQuantityValue).toEqual('30');
       expect(page.materialClosingQuantityValue).toEqual('10');
       expect(page.materialImportedQuantityValue).toEqual('0');

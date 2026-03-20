@@ -10,6 +10,7 @@ import { VirService } from '@tasks/vir/core/vir.service';
 
 @Component({
   selector: 'app-summary',
+  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

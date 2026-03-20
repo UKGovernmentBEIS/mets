@@ -40,7 +40,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-manual-account-opening',
-  standalone: true,
   imports: [NgIf, PipesModule, SharedModule, OperatorDetailsLegalStatusTypePipe, ReturnToLinkComponent],
   templateUrl: './manual-account-opening.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

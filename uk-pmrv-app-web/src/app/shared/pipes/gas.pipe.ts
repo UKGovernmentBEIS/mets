@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { RegulatedActivity } from 'pmrv-api';
 
-@Pipe({ name: 'gas' })
+@Pipe({
+  name: 'gas',
+  standalone: false,
+})
 export class GasPipe implements PipeTransform {
   transform(value: RegulatedActivity['type']): string {
     switch (value) {

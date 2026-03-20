@@ -5,6 +5,7 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-permit-surrender-summary-details',
+  standalone: false,
   templateUrl: './summary-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

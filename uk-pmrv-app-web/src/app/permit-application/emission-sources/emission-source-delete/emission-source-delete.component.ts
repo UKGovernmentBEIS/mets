@@ -8,6 +8,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-emission-source-delete',
+  standalone: false,
   template: `
     <app-emission-source-delete-template
       [emissionSource]="emissionSource$ | async"

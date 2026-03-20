@@ -1,6 +1,6 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, filter, map, Observable, startWith } from 'rxjs';
 
@@ -12,7 +12,6 @@ import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviat
 import { AircraftTypesDataTableComponent } from '@aviation/shared/components/aer/aircraft-types-table/aircraft-types-data-table.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
-import { BackLinkService } from '@shared/back-link/back-link.service';
 import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule } from 'govuk-components';
@@ -31,19 +30,15 @@ interface ViewModel {
 
 @Component({
   selector: 'app-aircraft-types-data-summary',
-  templateUrl: './aircraft-types-data-summary.component.html',
   imports: [
     SharedModule,
     GovukComponentsModule,
-    NgFor,
     NgIf,
-    RouterLinkWithHref,
     ReturnToLinkComponent,
     AircraftTypesDataTableComponent,
-    RouterLink,
     AerReviewDecisionGroupComponent,
   ],
-  standalone: true,
+  templateUrl: './aircraft-types-data-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AircraftTypesDataSummaryComponent {
@@ -73,7 +68,6 @@ export class AircraftTypesDataSummaryComponent {
   constructor(
     @Inject(TASK_FORM_PROVIDER) private formProvider: AircraftTypesDataFormProvider,
     private store: RequestTaskStore,
-    private backLinkService: BackLinkService,
     private pendingRequestService: PendingRequestService,
     private router: Router,
     private route: ActivatedRoute,

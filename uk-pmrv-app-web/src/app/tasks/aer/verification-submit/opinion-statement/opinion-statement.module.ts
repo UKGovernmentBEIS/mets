@@ -24,6 +24,7 @@ import { VirtualVisitComponent } from './site-visits/virtual-visit/virtual-visit
 import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
+  imports: [AerSharedModule, OpinionStatementRoutingModule, SharedModule],
   declarations: [
     AdditionalChangesComponent,
     CombustionSourceAddComponent,
@@ -44,6 +45,5 @@ import { SummaryComponent } from './summary/summary.component';
     SummaryComponent,
     VirtualVisitComponent,
   ],
-  imports: [AerSharedModule, OpinionStatementRoutingModule, SharedModule],
 })
 export class OpinionStatementModule {}

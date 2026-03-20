@@ -1,13 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
-import { ActivitySummaryTemplateComponent } from '@shared/components/alr';
 import { OverallVerificationAssessment } from '@shared/components/overall-decision-summary-template/overall-decision';
 import { SharedModule } from '@shared/shared.module';
 import { AlrService } from '@tasks/alr/core';
 import { AlrTaskSharedModule } from '@tasks/alr/shared/alr-task-shared.module';
 import { AlrVerificationReviewGroupDecisionComponent } from '@tasks/alr/shared/components/decision/alr-verification-review-group-decision/alr-verification-review-group-decision.component';
-import { OverallDecisionSummaryComponent } from '@tasks/alr/verification-submit';
 import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 
 import { ALRApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
@@ -20,6 +18,7 @@ export interface ViewModel {
 
 @Component({
   selector: 'app-alr-verification-opinion-statement-review',
+  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, AlrVerificationReviewGroupDecisionComponent],
   template: `
     <app-alr-task-common returnLink="../" [breadcrumb]="true">
       <app-page-heading caption="Overall decision">Review the overall decision</app-page-heading>
@@ -28,22 +27,13 @@ export interface ViewModel {
       <app-alr-verification-review-group-decision></app-alr-verification-review-group-decision>
     </app-alr-task-common>
   `,
-  standalone: true,
-  imports: [
-    SharedModule,
-    TaskSharedModule,
-    AlrTaskSharedModule,
-    ActivitySummaryTemplateComponent,
-    OverallDecisionSummaryComponent,
-    AlrVerificationReviewGroupDecisionComponent,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrOverallDecisionReviewComponent {
-  isEditable: Signal<boolean> = this.alrService.isEditable;
-  alrPayload: Signal<ALRApplicationVerificationSubmitRequestTaskPayload> = this.alrService.payload;
+  readonly isEditable: Signal<boolean> = this.alrService.isEditable;
+  readonly alrPayload: Signal<ALRApplicationVerificationSubmitRequestTaskPayload> = this.alrService.payload;
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const isEditable = this.isEditable();
     const payload = this.alrPayload();
 

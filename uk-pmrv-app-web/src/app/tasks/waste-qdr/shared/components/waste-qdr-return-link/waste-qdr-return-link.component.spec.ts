@@ -13,10 +13,14 @@ describe('WasteQdrReturnLinkComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
   let page: Page;
 
-  @Component({ selector: 'app-test-component', template: '<router-outlet></router-outlet>' })
+  @Component({ selector: 'app-test-component', standalone: false, template: '<router-outlet></router-outlet>' })
   class TestComponent {}
 
-  @Component({ selector: 'app-child-component', template: '<app-waste-qdr-return-link></app-waste-qdr-return-link>' })
+  @Component({
+    selector: 'app-child-component',
+    standalone: false,
+    template: '<app-waste-qdr-return-link></app-waste-qdr-return-link>',
+  })
   class ChildComponent {}
 
   class Page extends BasePage<TestComponent> {

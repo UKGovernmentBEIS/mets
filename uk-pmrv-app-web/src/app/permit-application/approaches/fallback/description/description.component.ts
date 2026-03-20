@@ -14,9 +14,10 @@ import { descriptionFormProvider } from './description-form.provider';
 
 @Component({
   selector: 'app-description',
+  standalone: false,
   templateUrl: './description.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [descriptionFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DescriptionComponent {
   isFileUploaded$: Observable<boolean> = this.form.get('files').valueChanges.pipe(

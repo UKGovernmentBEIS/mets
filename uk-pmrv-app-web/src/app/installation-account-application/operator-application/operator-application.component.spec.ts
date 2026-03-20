@@ -7,7 +7,10 @@ import { SharedModule } from '../../shared/shared.module';
 import { OperatorApplicationComponent } from './operator-application.component';
 
 describe('OperatorApplicationComponent', () => {
-  @Component({ template: '<app-operator-application></app-operator-application>' })
+  @Component({
+    standalone: false,
+    template: '<app-operator-application></app-operator-application>',
+  })
   class TestComponent {}
 
   let component: OperatorApplicationComponent;

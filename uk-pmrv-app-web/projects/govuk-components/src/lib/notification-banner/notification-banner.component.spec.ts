@@ -12,6 +12,7 @@ describe('NotificationBannerComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <govuk-notification-banner [type]="type" [heading]="heading">
         <h3 class="govuk-notification-banner__heading">Training outcome recorded and trainee withdrawn</h3>

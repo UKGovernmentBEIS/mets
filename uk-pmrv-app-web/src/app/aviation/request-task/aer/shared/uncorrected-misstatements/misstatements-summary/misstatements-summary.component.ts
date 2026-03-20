@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
@@ -27,11 +27,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-misstatements-summary',
-  standalone: true,
   imports: [
     SharedModule,
     GovukComponentsModule,
-    NgFor,
     NgIf,
     RouterLinkWithHref,
     ReturnToLinkComponent,

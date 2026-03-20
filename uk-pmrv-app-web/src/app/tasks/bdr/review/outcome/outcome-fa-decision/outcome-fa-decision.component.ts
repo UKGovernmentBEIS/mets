@@ -16,10 +16,9 @@ import { freeAllocationFormProvider } from './outcome-fa-decision-form.provider'
 
 @Component({
   selector: 'app-outcome-fa-decision',
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   templateUrl: './outcome-fa-decision.component.html',
   providers: [freeAllocationFormProvider],
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OutcomeFaDecisionComponent implements PendingRequest {

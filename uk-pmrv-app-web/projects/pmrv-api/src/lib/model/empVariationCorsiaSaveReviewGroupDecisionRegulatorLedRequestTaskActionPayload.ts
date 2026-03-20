@@ -12,8 +12,7 @@
 import { EmpAcceptedVariationDecisionDetails } from './empAcceptedVariationDecisionDetails';
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface EmpVariationCorsiaSaveReviewGroupDecisionRegulatorLedRequestTaskActionPayload
-  extends RequestTaskActionPayload {
+export interface EmpVariationCorsiaSaveReviewGroupDecisionRegulatorLedRequestTaskActionPayload extends RequestTaskActionPayload {
   group:
     | 'SERVICE_CONTACT_DETAILS'
     | 'OPERATOR_DETAILS'

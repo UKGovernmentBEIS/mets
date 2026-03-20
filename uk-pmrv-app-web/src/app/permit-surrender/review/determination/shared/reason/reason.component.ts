@@ -16,9 +16,10 @@ import { reasonFormProvider } from './reason-form.provider';
 
 @Component({
   selector: 'app-reason',
+  standalone: false,
   templateUrl: './reason.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [reasonFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReasonComponent implements PendingRequest, OnInit {
   determinationType$ = this.store.pipe(map((state) => state?.reviewDetermination?.type));

@@ -39,9 +39,10 @@ export interface MonitoringApproachCorsiaValues {
 }
 
 @Injectable()
-export class MonitoringApproachCorsiaFormProvider
-  implements TaskFormProvider<CertMonitoringApproach | FuelMonitoringApproachCorsia, MonitoringApproachFormModel>
-{
+export class MonitoringApproachCorsiaFormProvider implements TaskFormProvider<
+  CertMonitoringApproach | FuelMonitoringApproachCorsia,
+  MonitoringApproachFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private store = inject(RequestTaskStore);

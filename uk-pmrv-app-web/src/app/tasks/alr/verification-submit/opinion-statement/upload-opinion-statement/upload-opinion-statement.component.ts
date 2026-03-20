@@ -14,11 +14,10 @@ import { alrOpinionStatementFormProvider } from './upload-opinion-statement-form
 
 @Component({
   selector: 'app-alr-verification-upload-opinion-statement',
-  standalone: true,
   imports: [AlrTaskSharedModule, SharedModule],
   templateUrl: './upload-opinion-statement.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [alrOpinionStatementFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrUploadOpinionStatementComponent {
   isEditable = this.alrService.isEditable;

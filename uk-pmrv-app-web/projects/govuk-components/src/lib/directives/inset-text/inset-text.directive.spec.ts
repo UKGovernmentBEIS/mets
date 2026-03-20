@@ -9,6 +9,7 @@ describe('InsetTextDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
+    standalone: false,
     template: `
       <div #insetText govukInsetText>Some text</div>
     `,

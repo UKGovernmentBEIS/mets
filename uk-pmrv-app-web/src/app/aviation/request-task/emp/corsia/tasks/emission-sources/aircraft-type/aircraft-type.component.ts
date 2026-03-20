@@ -5,9 +5,8 @@ import { AircraftTypeFormProvider } from './aircraft-type-form.provider';
 
 @Component({
   selector: 'app-aircraft-type',
-  templateUrl: './aircraft-type.component.html',
-  standalone: true,
   imports: [RouterModule],
+  templateUrl: './aircraft-type.component.html',
   providers: [AircraftTypeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

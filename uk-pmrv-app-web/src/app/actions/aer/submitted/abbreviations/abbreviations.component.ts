@@ -8,6 +8,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-abbreviations',
+  standalone: false,
   template: `
     <app-action-task header="Abbreviations and definitions" [breadcrumb]="true">
       <app-abbreviations-summary-template [data]="abbreviations$ | async"></app-abbreviations-summary-template>

@@ -1,6 +1,14 @@
 <app-page-heading *ngIf="heading" size="xl">{{ heading }}</app-page-heading>
 
-<ol class="app-task-list">
+@if (sections) {
+  <ol class="app-task-list">
+    <ng-container *ngTemplateOutlet="mainTemplate" />
+  </ol>
+} @else {
+  <ng-container *ngTemplateOutlet="mainTemplate" />
+}
+
+<ng-template #mainTemplate>
   <li *ngFor="let section of sections" app-task-section [title]="section.title" [tasks]="section.tasks"></li>
 
   <ng-content></ng-content>
@@ -16,8 +24,7 @@
             [disabled]="isSubmitDisabled"
             class="govuk-!-margin-bottom-0"
             govukButton
-            type="button"
-          >
+            type="button">
             {{ submitButtonLabel }}
           </button>
         </span>
@@ -28,4 +35,4 @@
       </li>
     </ul>
   </li>
-</ol>
+</ng-template>

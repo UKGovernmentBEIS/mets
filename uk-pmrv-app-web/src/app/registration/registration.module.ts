@@ -17,6 +17,7 @@ import { UserRegistrationComponent } from './user-registration/user-registration
 import { VerificationSentComponent } from './verification-sent/verification-sent.component';
 
 @NgModule({
+  imports: [RegistrationRoutingModule, SharedModule, SharedUserModule],
   declarations: [
     ChoosePasswordComponent,
     ContactDetailsComponent,
@@ -31,6 +32,5 @@ import { VerificationSentComponent } from './verification-sent/verification-sent
     UserRegistrationComponent,
     VerificationSentComponent,
   ],
-  imports: [RegistrationRoutingModule, SharedModule, SharedUserModule],
 })
 export class RegistrationModule {}

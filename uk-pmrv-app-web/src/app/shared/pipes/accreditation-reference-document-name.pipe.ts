@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { MaterialityLevel } from 'pmrv-api';
 
-@Pipe({ name: 'accreditationReferenceDocumentName' })
+@Pipe({
+  name: 'accreditationReferenceDocumentName',
+  standalone: false,
+})
 export class AccreditationReferenceDocumentNamePipe implements PipeTransform {
   transform(documentType?: MaterialityLevel['accreditationReferenceDocumentTypes'][0]): string {
     switch (documentType) {

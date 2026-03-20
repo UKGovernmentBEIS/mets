@@ -10,7 +10,7 @@
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a
           govukLink
-          [routerLink]="'../'"
+          routerLink="../"
           [queryParams]="changeUrlQueryParams"
           hidden-text="reason for estimating emissions">
           Change
@@ -30,7 +30,7 @@
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a
           govukLink
-          [routerLink]="'../'"
+          routerLink="../"
           [queryParams]="changeUrlQueryParams"
           hidden-text="emissions that are being corrected">
           Change
@@ -45,7 +45,7 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams" hidden-text="further details">Change</a>
+        <a govukLink routerLink="../" [queryParams]="changeUrlQueryParams" hidden-text="further details">Change</a>
       </dd>
     </div>
   </dl>
@@ -61,7 +61,7 @@
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a
           govukLink
-          [routerLink]="'../estimated-emissions'"
+          routerLink="../estimated-emissions"
           [queryParams]="changeUrlQueryParams"
           hidden-text="total emissions on all international flights">
           Change
@@ -76,7 +76,7 @@
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a
           govukLink
-          [routerLink]="'../estimated-emissions'"
+          routerLink="../estimated-emissions"
           [queryParams]="changeUrlQueryParams"
           hidden-text="emissions from flights with offsetting requirements">
           Change
@@ -91,7 +91,7 @@
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a
           govukLink
-          [routerLink]="'../estimated-emissions'"
+          routerLink="../estimated-emissions"
           [queryParams]="changeUrlQueryParams"
           hidden-text="emissions related to a claim from CORSIA eligible fuels">
           Change
@@ -108,7 +108,7 @@
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a
           govukLink
-          [routerLink]="'../estimated-emissions'"
+          routerLink="../estimated-emissions"
           [queryParams]="changeUrlQueryParams"
           hidden-text="how have you estimated or corrected the emissions">
           Change
@@ -146,11 +146,7 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a
-          govukLink
-          [routerLink]="'../emission-charges'"
-          [queryParams]="changeUrlQueryParams"
-          hidden-text="operator fee">
+        <a govukLink routerLink="../emission-charges" [queryParams]="changeUrlQueryParams" hidden-text="operator fee">
           Change
         </a>
       </dd>
@@ -164,7 +160,7 @@
         <dd govukSummaryListRowActions *ngIf="isEditable">
           <a
             govukLink
-            [routerLink]="'../emission-charges-calculation'"
+            routerLink="../emission-charges-calculation"
             [queryParams]="changeUrlQueryParams"
             hidden-text="total billable hours">
             Change
@@ -178,7 +174,7 @@
         <dd govukSummaryListRowActions *ngIf="isEditable">
           <a
             govukLink
-            [routerLink]="'../emission-charges-calculation'"
+            routerLink="../emission-charges-calculation"
             [queryParams]="changeUrlQueryParams"
             hidden-text="hourly rate">
             Change
@@ -194,7 +190,7 @@
         <dd govukSummaryListRowActions *ngIf="isEditable">
           <a
             govukLink
-            [routerLink]="'../emission-charges-calculation'"
+            routerLink="../emission-charges-calculation"
             [queryParams]="changeUrlQueryParams"
             hidden-text="due date for the payment">
             Change
@@ -210,7 +206,7 @@
         <dd govukSummaryListRowActions *ngIf="isEditable">
           <a
             govukLink
-            [routerLink]="'../emission-charges-calculation'"
+            routerLink="../emission-charges-calculation"
             [queryParams]="changeUrlQueryParams"
             hidden-text="regulator comments">
             Change

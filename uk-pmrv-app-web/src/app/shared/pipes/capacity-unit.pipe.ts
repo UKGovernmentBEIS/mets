@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { RegulatedActivity } from 'pmrv-api';
 
-@Pipe({ name: 'capacityUnit' })
+@Pipe({
+  name: 'capacityUnit',
+  standalone: false,
+})
 export class CapacityUnitPipe implements PipeTransform {
   transform(value: RegulatedActivity['capacityUnit']): string {
     switch (value) {

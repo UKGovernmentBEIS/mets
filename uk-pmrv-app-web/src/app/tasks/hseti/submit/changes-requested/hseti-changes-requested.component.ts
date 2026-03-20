@@ -16,9 +16,8 @@ import { HSETIApplicationAmendsSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-hseti-changes-requested',
-  templateUrl: './hseti-changes-requested.component.html',
-  standalone: true,
   imports: [SharedModule, TaskSharedModule, HseTiTaskSharedModule],
+  templateUrl: './hseti-changes-requested.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HsetiChangesRequestedComponent {

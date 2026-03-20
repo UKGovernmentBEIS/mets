@@ -10,6 +10,7 @@ import { abbreviationsFormProvider } from '@tasks/aer/submit/abbreviations/abbre
 
 @Component({
   selector: 'app-abbreviations',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -23,8 +24,8 @@ import { abbreviationsFormProvider } from '@tasks/aer/submit/abbreviations/abbre
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [abbreviationsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AbbreviationsComponent implements OnInit, PendingRequest {
   constructor(

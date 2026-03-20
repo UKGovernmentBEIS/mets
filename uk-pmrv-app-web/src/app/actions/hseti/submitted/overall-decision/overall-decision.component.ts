@@ -14,7 +14,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-hseti-overall-decision-submitted',
-  standalone: true,
   imports: [ActionSharedModule, NgIf, SharedModule, OverallDecisionSummaryTemplateComponent],
   template: `
     <ng-container *ngIf="vm() as vm">
@@ -25,7 +24,6 @@ interface ViewModel {
       </app-action-task>
     </ng-container>
   `,
-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HsetiOverallDecisionSubmittedComponent {

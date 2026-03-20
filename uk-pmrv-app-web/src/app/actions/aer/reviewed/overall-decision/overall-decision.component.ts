@@ -9,6 +9,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-overall-decision',
+  standalone: false,
   template: `
     <app-action-task header="Overall decision" [breadcrumb]="true">
       <app-overall-decision-group

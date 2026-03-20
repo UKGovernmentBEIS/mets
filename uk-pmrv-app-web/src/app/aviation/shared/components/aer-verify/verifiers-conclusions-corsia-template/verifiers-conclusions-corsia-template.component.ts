@@ -8,9 +8,8 @@ import { AviationAerCorsiaVerifiersConclusions } from 'pmrv-api';
 
 @Component({
   selector: 'app-verifiers-conclusions-corsia-template',
-  templateUrl: './verifiers-conclusions-corsia-template.component.html',
-  standalone: true,
   imports: [SharedModule, RouterLink, MaterialityThresholdTypePipe],
+  templateUrl: './verifiers-conclusions-corsia-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifiersConclusionsCorsiaTemplateComponent {

@@ -4,6 +4,7 @@ import { PermitMonitoringApproachSection } from 'pmrv-api';
 
 @Component({
   selector: 'app-approaches-delete-template',
+  standalone: false,
   template: `
     <ng-container *ngIf="monitoringApproach">
       <app-page-heading size="xl">
@@ -22,12 +23,12 @@ import { PermitMonitoringApproachSection } from 'pmrv-api';
       </div>
     </ng-container>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .nowrap {
       white-space: nowrap;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApproachesDeleteTemplateComponent {
   @Input() monitoringApproach: PermitMonitoringApproachSection['type'];

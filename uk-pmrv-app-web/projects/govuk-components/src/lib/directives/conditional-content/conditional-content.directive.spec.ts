@@ -12,6 +12,7 @@ describe('ConditionalContentDirective', () => {
   let hostComponent: TestComponent;
 
   @Component({
+    standalone: false,
     template: `
       <form [formGroup]="form">
         <div govukConditionalContent>

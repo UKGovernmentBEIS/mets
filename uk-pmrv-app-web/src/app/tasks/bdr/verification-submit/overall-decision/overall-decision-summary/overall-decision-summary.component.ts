@@ -15,7 +15,6 @@ export interface ViewModel {
 }
 @Component({
   selector: 'app-bdr-overall-decision-summary',
-  standalone: true,
   imports: [BdrTaskSharedModule, SharedModule],
   template: `
     <app-bdr-task-review

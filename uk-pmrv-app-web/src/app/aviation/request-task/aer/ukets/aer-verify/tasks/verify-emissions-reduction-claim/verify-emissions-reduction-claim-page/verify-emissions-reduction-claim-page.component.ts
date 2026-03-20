@@ -14,9 +14,8 @@ import { VerifyEmissionsReductionClaimFormProvider } from '../verify-emissions-r
 
 @Component({
   selector: 'app-verify-emissions-reduction-claim-page',
-  templateUrl: './verify-emissions-reduction-claim-page.component.html',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent, VerifyEmissionReductionClaimFormComponent],
+  templateUrl: './verify-emissions-reduction-claim-page.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

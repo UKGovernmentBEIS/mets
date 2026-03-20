@@ -1,10 +1,14 @@
-import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, HostListener, Injector } from '@angular/core';
+import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, Injector } from '@angular/core';
 
 import { RouterLinkComponent } from './router-link.component';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'markdown,[markdown]',
+  standalone: false,
+  host: {
+    '(ready)': 'processAnchors()',
+  },
 })
 export class ConvertLinksDirective {
   constructor(
@@ -14,7 +18,6 @@ export class ConvertLinksDirective {
     private element: ElementRef<HTMLElement>,
   ) {}
 
-  @HostListener('ready')
   processAnchors(): void {
     this.element.nativeElement.querySelectorAll('a[routerLink]').forEach((a) => {
       const component = this.componentFactoryResolver

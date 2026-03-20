@@ -3,7 +3,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 export const vbTypes = ['UK_ETS_INSTALLATIONS', 'EU_ETS_INSTALLATIONS', 'UK_ETS_AVIATION', 'CORSIA'] as const;
 export type VerificationBodyType = (typeof vbTypes)[number];
 
-@Pipe({ name: 'verificationBodyType' })
+@Pipe({
+  name: 'verificationBodyType',
+  standalone: false,
+})
 export class VerificationBodyTypePipe implements PipeTransform {
   transform(value: VerificationBodyType): string {
     switch (value) {

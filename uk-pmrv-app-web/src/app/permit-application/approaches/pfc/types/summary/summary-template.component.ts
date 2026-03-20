@@ -9,6 +9,7 @@ import { PermitApplicationStore } from '../../../../store/permit-application.sto
 
 @Component({
   selector: 'app-pfc-approach-types-summary-template',
+  standalone: false,
   template: `
     <dl
       *ngFor="let cellAnodeType of cellAnodeTypes$ | async"

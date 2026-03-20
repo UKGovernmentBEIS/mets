@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { combineLatest, map, Observable } from 'rxjs';
@@ -26,18 +26,16 @@ export interface ViewModel {
 }
 @Component({
   selector: 'app-aviation-emissions-summary',
-  templateUrl: './aviation-emissions-summary.component.html',
-  standalone: true,
   imports: [
     GovukComponentsModule,
     SharedModule,
     NgIf,
-    NgFor,
     ReturnToLinkComponent,
     AviationEmissionsSummaryTemplateComponent,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './aviation-emissions-summary.component.html',
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AviationEmissionsSummaryComponent extends BaseAviationEmissionsComponent {
   form = this.formProvider.form;

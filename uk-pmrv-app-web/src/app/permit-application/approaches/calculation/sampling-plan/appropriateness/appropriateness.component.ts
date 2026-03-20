@@ -13,9 +13,10 @@ import { APPROPRIATENESS_FORM, appropriatenessFormProvider } from './appropriate
 
 @Component({
   selector: 'app-appropriateness',
+  standalone: false,
   templateUrl: './appropriateness.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [appropriatenessFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppropriatenessComponent implements PendingRequest {
   constructor(

@@ -8,6 +8,7 @@ import { ReturnOfAllowancesService } from '../../core/return-of-allowances.servi
 
 @Component({
   selector: 'app-summary-details',
+  standalone: false,
   template: `
     <h2 class="govuk-heading-l">Details of return of allowances</h2>
     <app-ra-summary-template [payload]="payload$ | async" [isEditable]="isEditable$ | async"></app-ra-summary-template>

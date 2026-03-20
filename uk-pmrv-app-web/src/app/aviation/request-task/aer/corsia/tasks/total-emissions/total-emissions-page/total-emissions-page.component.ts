@@ -10,10 +10,9 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-total-emissions-page',
-  templateUrl: './total-emissions-page.component.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SharedModule, ReturnToLinkComponent, RequestTaskModule, TotalEmissionsSchemeCorsiaComponent],
+  templateUrl: './total-emissions-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TotalEmissionsPageComponent {
   private store = inject(RequestTaskStore);

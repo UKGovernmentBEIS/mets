@@ -14,9 +14,10 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, OpinionStatement } 
 
 @Component({
   selector: 'app-additional-changes',
+  standalone: false,
   templateUrl: './additional-changes.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [additionalChangesFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdditionalChangesComponent implements PendingRequest {
   isEditable$ = this.aerService.isEditable$;

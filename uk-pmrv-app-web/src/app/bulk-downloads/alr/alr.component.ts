@@ -11,7 +11,6 @@ import { BulkDownloadsService } from '../core/bulk-downloads.service';
 
 @Component({
   selector: 'app-alr-bulk-downloads',
-  standalone: true,
   imports: [SharedModule, RouterModule],
   templateUrl: './alr.component.html',
   styles: `

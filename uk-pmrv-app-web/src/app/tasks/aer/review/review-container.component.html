@@ -148,11 +148,7 @@
               <li
                 app-task-item
                 [link]="baseUrl + 'materiality-level'"
-                [linkText]="
-                  (yearEqualAfter25$ | async)
-                    ? 'Further information of relevance to the opinion'
-                    : 'Materiality level and reference documents'
-                "
+                linkText="Materiality level and reference documents"
                 [status]="'MATERIALITY_LEVEL' | taskStatus | async"></li>
               <li
                 app-task-item

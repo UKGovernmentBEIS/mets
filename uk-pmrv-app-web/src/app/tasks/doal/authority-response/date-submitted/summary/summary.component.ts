@@ -8,6 +8,7 @@ import { DoalService } from '@tasks/doal/core/doal.service';
 
 @Component({
   selector: 'app-summary',
+  standalone: false,
   template: `
     <app-doal-task [breadcrumb]="true">
       <app-page-heading>Check your answers</app-page-heading>

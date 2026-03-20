@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,8 +7,6 @@ import { map, Observable } from 'rxjs';
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { parseCsv } from '@aviation/request-task/util';
-import { OperatorDetailsNameTemplateComponent } from '@aviation/shared/components/operator-details/operator-details-name-template/operator-details-name-template.component';
-import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { OperatorDetailsFlightIdentificationTypePipe } from '@aviation/shared/pipes/operator-details-flight-identification-type.pipe';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { CountryService } from '@core/services/country.service';
@@ -26,17 +23,8 @@ import { OperatorDetailsCorsiaFormProvider } from '../../operator-details-form.p
 
 @Component({
   selector: 'app-add-subsidiary-company',
+  imports: [GovukComponentsModule, SharedModule, OperatorDetailsFlightIdentificationTypePipe],
   templateUrl: './add-subsidiary-company.component.html',
-  standalone: true,
-  imports: [
-    GovukComponentsModule,
-    NgIf,
-    NgFor,
-    SharedModule,
-    ReturnToLinkComponent,
-    OperatorDetailsNameTemplateComponent,
-    OperatorDetailsFlightIdentificationTypePipe,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddSubsidiaryCompanyComponent extends BaseOperatorDetailsComponent implements OnInit, OnDestroy {

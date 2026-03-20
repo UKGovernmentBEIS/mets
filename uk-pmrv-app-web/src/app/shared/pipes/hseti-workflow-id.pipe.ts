@@ -1,6 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'hsetiWorkflowId' })
+@Pipe({
+  name: 'hsetiWorkflowId',
+  standalone: false,
+})
 export class HsetiWorkFlowIdPipe implements PipeTransform {
   transform(value: string): string {
     if (value.startsWith('HSETI') && value.split('-')?.[1]?.split('_')?.[0].length === 2) {

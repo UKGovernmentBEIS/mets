@@ -5,6 +5,7 @@ import { BaseSuccessComponent } from '@shared/base-success/base-success.componen
 
 @Component({
   selector: 'app-skip-review-confirmation-aviation',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

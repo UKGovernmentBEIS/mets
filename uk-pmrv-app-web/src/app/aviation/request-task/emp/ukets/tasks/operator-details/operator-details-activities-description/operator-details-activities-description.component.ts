@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
@@ -15,11 +15,10 @@ import { OperatorDetailsFormProvider } from '../operator-details-form.provider';
 
 @Component({
   selector: 'app-operator-details-activities-description',
-  standalone: true,
-  imports: [GovukComponentsModule, SharedModule, RouterLinkWithHref, ReturnToLinkComponent],
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './operator-details-activities-description.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorDetailsActivitiesDescriptionComponent extends BaseOperatorDetailsComponent implements OnInit {
   form = this.getform('activitiesDescription');

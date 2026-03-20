@@ -18,6 +18,7 @@ interface BatchReissue {
 
 @Component({
   selector: 'app-batch-reissue-requests',
+  standalone: false,
   templateUrl: './batch-reissue-requests.component.html',
   styles: `
     button.start-batch-variation {

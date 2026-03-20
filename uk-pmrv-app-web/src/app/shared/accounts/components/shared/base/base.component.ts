@@ -31,6 +31,7 @@ export interface Inspections {
 }
 
 @Component({
+  standalone: false,
   template: '',
 })
 export abstract class BaseComponent implements OnInit {

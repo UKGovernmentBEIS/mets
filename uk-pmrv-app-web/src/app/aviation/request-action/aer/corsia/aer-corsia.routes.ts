@@ -36,17 +36,13 @@ const AER_VERIFY_RELATED_CORSIA_ROUTES: Routes = [
     path: 'verify-monitoring-approach',
     data: { pageTitle: 'Monitoring approach and emissions', breadcrumb: true },
     loadComponent: () =>
-      import(
-        '@aviation/request-action/aer/corsia/tasks/verify-monitoring-approach/verify-monitoring-approach.component'
-      ),
+      import('@aviation/request-action/aer/corsia/tasks/verify-monitoring-approach/verify-monitoring-approach.component'),
   },
   {
     path: 'verify-emissions-reduction-claim',
     data: { pageTitle: 'Verify the emissions reduction claim', breadcrumb: true },
     loadComponent: () =>
-      import(
-        '@aviation/request-action/aer/corsia/tasks/verify-emissions-reduction-claim/verify-emissions-reduction-claim.component'
-      ),
+      import('@aviation/request-action/aer/corsia/tasks/verify-emissions-reduction-claim/verify-emissions-reduction-claim.component'),
   },
   {
     path: 'uncorrected-misstatements',
@@ -58,17 +54,13 @@ const AER_VERIFY_RELATED_CORSIA_ROUTES: Routes = [
     path: 'uncorrected-non-conformities',
     data: { pageTitle: 'Uncorrected non-conformities', breadcrumb: true },
     loadComponent: () =>
-      import(
-        '@aviation/request-action/aer/corsia/tasks/uncorrected-non-conformities/uncorrected-non-conformities.component'
-      ),
+      import('@aviation/request-action/aer/corsia/tasks/uncorrected-non-conformities/uncorrected-non-conformities.component'),
   },
   {
     path: 'uncorrected-non-compliances',
     data: { pageTitle: 'Uncorrected non-compliances', breadcrumb: true },
     loadComponent: () =>
-      import(
-        '@aviation/request-action/aer/corsia/tasks/uncorrected-non-compliances/uncorrected-non-compliances.component'
-      ),
+      import('@aviation/request-action/aer/corsia/tasks/uncorrected-non-compliances/uncorrected-non-compliances.component'),
   },
   {
     path: 'recommended-improvements',
@@ -130,9 +122,7 @@ const AER_RELATED_CORSIA_ROUTES: Routes = [
     path: 'aggregated-consumption-and-flight-data',
     data: { pageTitle: 'Aggregated consumption and flight data', breadcrumb: true },
     loadComponent: () =>
-      import(
-        '@aviation/request-action/aer/shared/aggregated-consumption-and-flight-data/aggregated-consumption-and-flight-data.component'
-      ),
+      import('@aviation/request-action/aer/shared/aggregated-consumption-and-flight-data/aggregated-consumption-and-flight-data.component'),
   },
   {
     path: 'aircraft-types-data',

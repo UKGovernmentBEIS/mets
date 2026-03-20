@@ -14,9 +14,8 @@ import { UncorrectedNonConformitiesFormProvider } from '../uncorrected-non-confo
 
 @Component({
   selector: 'app-uncorrected-non-conformities-page',
-  templateUrl: './uncorrected-non-conformities-page.component.html',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent],
+  templateUrl: './uncorrected-non-conformities-page.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

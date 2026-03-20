@@ -8,6 +8,7 @@ import { VirService } from '../core/vir.service';
 
 @Component({
   selector: 'app-responded',
+  standalone: false,
   templateUrl: './responded.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

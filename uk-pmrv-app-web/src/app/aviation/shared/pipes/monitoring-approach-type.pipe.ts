@@ -18,8 +18,8 @@ type Section = 'emp' | 'aer';
 
 @Pipe({
   name: 'monitoringApproachType',
-  pure: true,
   standalone: true,
+  pure: true,
 })
 export class MonitoringApproachTypePipe implements PipeTransform {
   transform(

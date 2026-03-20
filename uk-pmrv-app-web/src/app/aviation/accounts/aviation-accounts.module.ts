@@ -38,6 +38,7 @@ import { AviationAccountFormProvider } from './services';
 import { AviationAccountsStore } from './store';
 
 @NgModule({
+  imports: [AviationAccountsRoutingModule, CommonModule, LocationStateFormComponent, SharedModule],
   declarations: [
     AccountReportingStatusComponent,
     AccountReportingStatusHistoryComponent,
@@ -57,7 +58,6 @@ import { AviationAccountsStore } from './store';
     EtsNamePipe,
     ViewAviationAccountComponent,
   ],
-  imports: [AviationAccountsRoutingModule, CommonModule, LocationStateFormComponent, SharedModule],
   providers: [
     AviationAccountFormProvider,
     AviationAccountGuard,

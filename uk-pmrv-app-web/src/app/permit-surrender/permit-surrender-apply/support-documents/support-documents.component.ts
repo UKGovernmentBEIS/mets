@@ -12,6 +12,7 @@ import { supportDocumentsFormProvider } from './support-documents-form.provider'
 
 @Component({
   selector: 'app-support-documents',
+  standalone: false,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -28,8 +29,8 @@ import { supportDocumentsFormProvider } from './support-documents-form.provider'
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [supportDocumentsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SupportDocumentsComponent implements PendingRequest, OnInit {
   private documentsExist: boolean;

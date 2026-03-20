@@ -11,12 +11,12 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-summary',
+  standalone: false,
   template: `
     <app-page-heading>Check your answers</app-page-heading>
     <app-materiality-level-group
       [isEditable]="isEditable$ | async"
-      [materialityLevelInfo]="materialityLevelInfo$ | async"
-      [yearEqualAfter25]="yearEqualAfter25$ | async"></app-materiality-level-group>
+      [materialityLevelInfo]="materialityLevelInfo$ | async"></app-materiality-level-group>
     <div *ngIf="(isEditable$ | async) === true" class="govuk-button-group">
       <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
     </div>
@@ -29,7 +29,6 @@ export class SummaryComponent implements OnInit {
     this.aerService.getPayload() as Observable<AerApplicationVerificationSubmitRequestTaskPayload>
   ).pipe(map((payload) => payload.verificationReport.materialityLevel));
   isEditable$ = this.aerService.isEditable$;
-  yearEqualAfter25$ = this.aerService.yearEqualAfter2025$ as Observable<boolean>;
 
   constructor(
     readonly pendingRequest: PendingRequestService,

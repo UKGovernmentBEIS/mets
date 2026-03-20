@@ -15,6 +15,7 @@ import { NonComplianceSummaryComponent } from './submitted/non-compliance-summar
 import { SubmittedComponent } from './submitted/submitted.component';
 
 @NgModule({
+  imports: [ActionSharedModule, NonComplianceRoutingModule, SharedModule],
   declarations: [
     CivilPenaltyNoticeSubmittedComponent,
     CivilPenaltyPeerReviewDecisionComponent,
@@ -27,7 +28,6 @@ import { SubmittedComponent } from './submitted/submitted.component';
     NoticeOfIntentSubmittedComponent,
     SubmittedComponent,
   ],
-  imports: [ActionSharedModule, NonComplianceRoutingModule, SharedModule],
   exports: [
     CivilPenaltyNoticeSubmittedComponent,
     CivilPenaltyPeerReviewDecisionComponent,

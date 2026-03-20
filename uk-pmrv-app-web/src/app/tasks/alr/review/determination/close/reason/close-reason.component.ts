@@ -13,6 +13,7 @@ import { alrReasonFormProvider } from './close-reason-form.provider';
 
 @Component({
   selector: 'app-alr-close-reason',
+  imports: [SharedModule, AlrTaskSharedModule],
   template: `
     <app-alr-task-common [breadcrumb]="true" returnLink="../../../">
       <app-wizard-step
@@ -26,10 +27,8 @@ import { alrReasonFormProvider } from './close-reason-form.provider';
       </app-wizard-step>
     </app-alr-task-common>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [SharedModule, AlrTaskSharedModule],
   providers: [alrReasonFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrReasonComponent {
   isEditable = this.alrService.isEditable;

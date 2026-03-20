@@ -13,10 +13,13 @@ describe('HSETIReturnLinkComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
   let page: Page;
 
-  @Component({ template: '<router-outlet></router-outlet>' })
+  @Component({
+    standalone: false,
+    template: '<router-outlet></router-outlet>',
+  })
   class TestComponent {}
 
-  @Component({ template: '<app-hseti-return-link></app-hseti-return-link>' })
+  @Component({ standalone: false, template: '<app-hseti-return-link></app-hseti-return-link>' })
   class ChildComponent {}
 
   class Page extends BasePage<TestComponent> {

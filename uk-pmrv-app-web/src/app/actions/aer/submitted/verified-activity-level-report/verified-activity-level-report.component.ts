@@ -11,6 +11,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-verified-activity-level-report',
+  standalone: false,
   template: `
     <app-action-task header="Verification report of the activity level report" [breadcrumb]="true">
       <app-activity-level-report-group

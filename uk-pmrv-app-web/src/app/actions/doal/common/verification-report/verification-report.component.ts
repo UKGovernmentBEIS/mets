@@ -9,6 +9,7 @@ import { DoalActionService } from '../../core/doal-action.service';
 
 @Component({
   selector: 'app-doal-verification-report',
+  standalone: false,
   template: `
     <app-doal-action-task
       header="Upload verification report of the activity level report"

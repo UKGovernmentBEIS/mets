@@ -15,9 +15,8 @@ import { HSETIApplicationRegulatorReviewSubmitRequestTaskPayload } from 'pmrv-ap
 
 @Component({
   selector: 'app-hseti-return-for-amends',
-  templateUrl: './return-for-amends.component.html',
-  standalone: true,
   imports: [SharedModule, TaskSharedModule, HseTiTaskSharedModule, RouterLink],
+  templateUrl: './return-for-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HsetiReturnForAmendsComponent {

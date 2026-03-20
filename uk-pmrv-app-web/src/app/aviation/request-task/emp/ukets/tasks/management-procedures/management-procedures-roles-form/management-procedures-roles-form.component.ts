@@ -14,9 +14,8 @@ import { ManagementProceduresFormProvider } from '../management-procedures-form.
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-management-procedures-roles-form',
-  templateUrl: './management-procedures-roles-form.component.html',
-  standalone: true,
   imports: [GovukComponentsModule, NgIf, NgFor, SharedModule],
+  templateUrl: './management-procedures-roles-form.component.html',
   providers: [DestroySubject],
   viewProviders: [existingControlContainer],
 })

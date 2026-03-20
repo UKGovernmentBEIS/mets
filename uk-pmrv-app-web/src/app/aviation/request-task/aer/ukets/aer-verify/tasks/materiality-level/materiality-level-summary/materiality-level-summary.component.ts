@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -24,20 +24,17 @@ interface ViewModel {
   materialityLevel: AviationAerMaterialityLevel;
   hideSubmit: boolean;
   showDecision: boolean;
-  yearEqualAfter25: boolean;
 }
 
 @Component({
   selector: 'app-materiality-level-summary',
-  templateUrl: './materiality-level-summary.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
-    RouterLinkWithHref,
     AerVerifyMaterialityLevelGroupComponent,
     AerVerificationReviewDecisionGroupComponent,
   ],
+  templateUrl: './materiality-level-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class MaterialityLevelSummaryComponent {
@@ -53,16 +50,11 @@ export default class MaterialityLevelSummaryComponent {
     this.store.pipe(requestTaskQuery.selectRequestTaskType),
     this.store.pipe(requestTaskQuery.selectIsEditable),
     this.store.pipe(aerVerifyQuery.selectStatusForTask('materialityLevel')),
-    this.store.pipe(aerVerifyQuery.selectPayload),
   ]).pipe(
-    map(([type, isEditable, taskStatus, payload]) => {
+    map(([type, isEditable, taskStatus]) => {
       return {
-        pageHeader:
-          type === 'AVIATION_AER_UKETS_APPLICATION_REVIEW' && payload?.reportingYear >= 2025
-            ? 'Further information of relevance to the opinion'
-            : getSummaryHeaderForTaskType(type, 'materialityLevel'),
+        pageHeader: getSummaryHeaderForTaskType(type, 'materialityLevel'),
         isEditable,
-        yearEqualAfter25: payload?.reportingYear >= 2025,
         materialityLevel: this.formProvider.getFormValue(),
         hideSubmit: !isEditable || ['complete', 'cannot start yet'].includes(taskStatus),
         showDecision: showReviewDecisionComponent.includes(type),

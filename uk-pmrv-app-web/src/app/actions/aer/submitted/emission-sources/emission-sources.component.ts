@@ -9,6 +9,7 @@ import { sourcesColumns } from './emission-sources';
 
 @Component({
   selector: 'app-emission-sources',
+  standalone: false,
   template: `
     <app-action-task header="Emission sources" [breadcrumb]="true">
       <govuk-table [columns]="sourcesColumns" [data]="emissionSources$ | async"></govuk-table>

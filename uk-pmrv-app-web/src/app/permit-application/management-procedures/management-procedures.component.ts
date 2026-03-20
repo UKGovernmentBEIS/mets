@@ -15,9 +15,10 @@ import { managementProceduresFormProvider } from './management-procedures-form.p
 
 @Component({
   selector: 'app-management-procedures',
+  standalone: false,
   templateUrl: './management-procedures.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [managementProceduresFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementProceduresComponent extends SectionComponent {
   permitTask$ = this.route.data.pipe(

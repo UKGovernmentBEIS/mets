@@ -11,6 +11,7 @@ import { AviationAccountDetails, AviationAccountsStore, selectAccount, selectAcc
 
 @Component({
   selector: 'app-edit-aviation-account',
+  standalone: false,
   templateUrl: './edit-aviation-account.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

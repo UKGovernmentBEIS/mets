@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/prefer-host-metadata-property */
 import {
   AfterViewInit,
   Directive,
@@ -9,7 +10,10 @@ import {
   SimpleChanges,
 } from '@angular/core';
 
-@Directive({ selector: '[appAddAnother]' })
+@Directive({
+  selector: '[appAddAnother]',
+  standalone: false,
+})
 export class AddAnotherDirective implements AfterViewInit, OnChanges {
   @Input() heading: HTMLElement;
 

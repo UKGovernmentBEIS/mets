@@ -23,7 +23,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-additional-docs',
-  standalone: true,
   imports: [SharedModule, RequestActionTaskComponent, AerReviewDecisionGroupSummaryComponent],
   // eslint-disable-next-line @angular-eslint/component-max-inline-declarations
   template: `

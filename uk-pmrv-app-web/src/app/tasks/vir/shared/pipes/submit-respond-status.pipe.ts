@@ -6,6 +6,7 @@ import { VirApplicationRespondToRegulatorCommentsRequestTaskPayload } from 'pmrv
 
 @Pipe({
   name: 'submitRespondStatus',
+  standalone: false,
 })
 export class SubmitRespondStatusPipe implements PipeTransform {
   transform(virPayload: VirApplicationRespondToRegulatorCommentsRequestTaskPayload, statusKey: string): TaskItemStatus {

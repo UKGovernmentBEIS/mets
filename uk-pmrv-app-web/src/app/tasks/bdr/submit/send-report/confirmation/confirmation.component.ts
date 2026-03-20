@@ -7,7 +7,6 @@ import { BdrService } from '@tasks/bdr/shared';
 
 @Component({
   selector: 'app-bdr-send-report-confirmation',
-  standalone: true,
   imports: [SharedModule, RouterLink],
   template: `
     <div class="govuk-grid-row">

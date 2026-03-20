@@ -11,6 +11,7 @@ import { CsvDataErrorSummaryComponent } from './csv-data-error-summary.component
 
 describe('CsvDataErrorSummaryComponent', () => {
   @Component({
+    standalone: false,
     template: `
       <app-csv-data-error-summary></app-csv-data-error-summary>
     `,

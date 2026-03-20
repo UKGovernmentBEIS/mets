@@ -1,0 +1,13 @@
+<app-bdrs2-task-review returnToLink="../../" [breadcrumb]="true">
+  <app-page-heading caption="Stage 2 BDR verification opinion statement">Check your answers</app-page-heading>
+  <app-opinion-statement-summary-template
+    [notes]="bdrs2Payload()?.verificationReport?.opinionStatement?.notes"
+    [supportingFiles]="supportingFiles()"
+    [opinionStatementFile]="opinionStatementFile()"
+    [isEditable]="isEditable()"
+    opinionStatementFilesText="Uploaded stage 2 BDR verification opinion statement"></app-opinion-statement-summary-template>
+
+  <div *ngIf="isEditable() && hideSubmit() === false" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+</app-bdrs2-task-review>

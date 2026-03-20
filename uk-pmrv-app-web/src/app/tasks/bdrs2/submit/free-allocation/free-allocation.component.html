@@ -9,15 +9,15 @@
       [showBackLink]="true">
       <div formControlName="continueApplicationForFreeAllocationType" govuk-radio>
         <govuk-radio-option
-          [value]="'CONTINUE_AS_MAIN_SCHEME_PARTICIPANT'"
-          label="Yes, I hold a GHGE permit and want to continue my application for free allocation as a main scheme participant, or I currently hold HSE status and want to become a main scheme participant from 2027"
-          hint="Apply to remain a main scheme participant if you have a GHGE permit, or to rejoin the main scheme from 2027 if you have HSE status"></govuk-radio-option>
+          value="CONTINUE_AS_MAIN_SCHEME_PARTICIPANT"
+          label="Yes, I hold a GHGE permit and want to continue my application for free allocation as a main scheme participant, or I currently hold HSE status and want to become a main scheme participant from 2027 to 2030"
+          hint="Apply to remain a main scheme participant if you have a GHGE permit, or to rejoin the main scheme from 2027 to 2030 if you have HSE status"></govuk-radio-option>
         <govuk-radio-option
-          [value]="'CONTINUE_AS_HSE'"
+          value="CONTINUE_AS_HSE"
           label="Yes, I currently hold HSE status and want to continue my application for free allocation but remain on the HSE list"
           hint="Apply to receive free allocation under Schedule 8A to the Order if you exceed your HSE emissions threshold in the 2026 to 2030 period"></govuk-radio-option>
         <govuk-radio-option
-          [value]="'WITHDRAW'"
+          value="WITHDRAW"
           label="No, I want to withdraw my application for free allocation"
           hint="You will not be eligible to receive any free allocation at any point in the 2027 to 2030 allocation period after withdrawing your application">
           <ng-container govukConditionalContent>

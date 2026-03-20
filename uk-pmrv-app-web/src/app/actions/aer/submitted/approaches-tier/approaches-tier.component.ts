@@ -10,6 +10,7 @@ import { getCalculationHeading } from './approaches-tier';
 
 @Component({
   selector: 'app-approaches-tier',
+  standalone: false,
   templateUrl: './approaches-tier.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -9,9 +9,10 @@ import { provideDetailsFormProvider } from './provide-details-form.provider';
 
 @Component({
   selector: 'app-provide-details',
+  standalone: false,
   templateUrl: './provide-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideDetailsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProvideDetailsComponent {
   years: number[] = [2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];

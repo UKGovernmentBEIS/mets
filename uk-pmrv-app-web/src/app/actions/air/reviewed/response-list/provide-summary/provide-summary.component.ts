@@ -8,6 +8,7 @@ import { AirService } from '../../../core/air.service';
 
 @Component({
   selector: 'app-provide-summary',
+  standalone: false,
   template: `
     <app-action-task header="Review summary" [breadcrumb]="true">
       <app-air-regulator-provide-summary

@@ -10,6 +10,7 @@ import { getSubtaskData, statusKeyToSubtaskNameMapper } from '../category-tier';
 
 @Component({
   selector: 'app-analysis-method-list-template',
+  standalone: false,
   templateUrl: './analysis-method-list-template.component.html',
   styleUrl: './analysis-method-list-template.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

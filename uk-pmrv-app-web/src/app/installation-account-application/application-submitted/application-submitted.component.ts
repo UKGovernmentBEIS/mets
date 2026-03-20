@@ -4,6 +4,7 @@ import { BaseSuccessComponent } from '@shared/base-success/base-success.componen
 
 @Component({
   selector: 'app-application-submitted',
+  standalone: false,
   templateUrl: './application-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

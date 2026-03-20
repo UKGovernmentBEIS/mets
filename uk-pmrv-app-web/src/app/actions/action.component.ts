@@ -5,11 +5,12 @@ import { DestroySubject } from '../core/services/destroy-subject.service';
 
 @Component({
   selector: 'app-actions-component',
+  standalone: false,
   template: `
     <router-outlet></router-outlet>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActionComponent implements OnInit {
   constructor(private readonly router: Router) {}

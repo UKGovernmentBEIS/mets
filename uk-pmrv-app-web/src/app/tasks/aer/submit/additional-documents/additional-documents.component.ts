@@ -10,6 +10,7 @@ import { additionalDocumentsFormFactory } from './additional-documents-form.prov
 
 @Component({
   selector: 'app-additional-documents',
+  standalone: false,
   template: `
     <app-additional-documents-shared
       [form]="form"
@@ -19,8 +20,8 @@ import { additionalDocumentsFormFactory } from './additional-documents-form.prov
       submitText="Continue"></app-additional-documents-shared>
     <app-return-link></app-return-link>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [additionalDocumentsFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdditionalDocumentsComponent {
   constructor(

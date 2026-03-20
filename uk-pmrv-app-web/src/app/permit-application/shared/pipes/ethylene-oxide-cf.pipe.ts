@@ -1,6 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'ethyleneOxideCF' })
+@Pipe({
+  name: 'ethyleneOxideCF',
+  standalone: false,
+})
 export class EthyleneOxideCFPipe implements PipeTransform {
   private readonly cfValues: { [key: string]: string } = {
     ETHYLEN_OXIDE: '1.000',

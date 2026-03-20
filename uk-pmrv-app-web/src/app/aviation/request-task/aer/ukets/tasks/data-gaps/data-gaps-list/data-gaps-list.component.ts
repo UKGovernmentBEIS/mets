@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { map, take } from 'rxjs';
 
@@ -7,7 +7,6 @@ import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { DataGapsListTemplateComponent } from '@aviation/shared/components/aer/data-gaps/data-gaps-list-template';
-import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
 import { cloneDeep } from 'lodash-es';
@@ -19,9 +18,8 @@ import { calculateAffectedFlightsPercentage } from '../util/data-gaps.util';
 
 @Component({
   selector: 'app-data-gaps-list',
+  imports: [SharedModule, DataGapsListTemplateComponent],
   templateUrl: './data-gaps-list.component.html',
-  standalone: true,
-  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent, DataGapsListTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class DataGapsListComponent implements OnInit {

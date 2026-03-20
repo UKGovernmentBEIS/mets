@@ -39,5 +39,6 @@
     <include file="changelog_reporting_2025.xml" relativeToChangelogFile="true" />
 	<include file="changelog_account_aviation_data_migration.xml" relativeToChangelogFile="true" />
 	<include file="changelog_baseline_data_report.xml" relativeToChangelogFile="true" />
+	<include file="changelog_withholding_of_allowances_data_migration.xml" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

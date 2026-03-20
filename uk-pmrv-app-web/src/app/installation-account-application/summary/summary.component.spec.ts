@@ -43,7 +43,7 @@ describe('SummaryComponent', () => {
   let router: Router;
   let activatedRoute: ActivatedRoute;
 
-  @Component({ template: '<router-outlet></router-outlet>' })
+  @Component({ standalone: false, template: '<router-outlet></router-outlet>' })
   class RouterComponent {}
 
   const operator: LegalEntity = {

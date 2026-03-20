@@ -22,7 +22,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-data-gaps',
-  standalone: true,
   imports: [
     SharedModule,
     RequestActionTaskComponent,

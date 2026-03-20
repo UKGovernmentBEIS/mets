@@ -9,9 +9,10 @@ import { RdeStore } from '../../store/rde.store';
 
 @Component({
   selector: 'app-submit-timeline',
+  standalone: false,
   templateUrl: './timeline.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimelineComponent implements OnInit {
   isAviation = this.router.url.includes('/aviation/') ? '/aviation' : '';

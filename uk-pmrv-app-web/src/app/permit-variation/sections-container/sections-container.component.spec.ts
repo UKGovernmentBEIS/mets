@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, RouterLink } from '@angular/router';
 
 import { of } from 'rxjs';
+
+import { SharedPermitModule } from '@permit-application/shared/shared-permit.module';
 
 import { RequestActionsService, RequestItemsService } from 'pmrv-api';
 
@@ -25,7 +27,8 @@ describe('SectionsContainerComponent', () => {
   let store: PermitVariationStore;
 
   @Component({
-    selector: 'app-sections',
+    selector: 'app-test-sections',
+    standalone: false,
     template: `
       permit sections
     `,
@@ -42,15 +45,16 @@ describe('SectionsContainerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SectionsContainerComponent, MockPermitSectionsComponent, TaskStatusPipe],
-      imports: [RouterTestingModule, SharedModule],
+      imports: [SharedModule, SharedPermitModule, RouterLink],
       providers: [
         { provide: RequestItemsService, useValue: requestItemsService },
         { provide: RequestActionsService, useValue: requestActionsService },
         { provide: TaskStatusPipe },
         {
           provide: PermitApplicationStore,
-          useValue: store,
+          useExisting: PermitVariationStore,
         },
+        provideRouter([]),
       ],
     }).compileComponents();
   });
@@ -90,10 +94,10 @@ describe('SectionsContainerComponent', () => {
     });
 
     it('should not display submit link', () => {
-      expect(hostElement.querySelector('app-task-list > ol > li[title="Submit"] ul > li a')).toBeNull();
-      expect(
-        hostElement.querySelector('app-task-list > ol > li[title="Submit"] ul > li > govuk-tag').textContent.trim(),
-      ).toEqual('cannot start yet');
+      expect(hostElement.querySelector('ol > li:last-child ul > li a')).toBeNull();
+      expect(hostElement.querySelector('ol > li:last-child ul > li > govuk-tag').textContent.trim()).toEqual(
+        'cannot start yet',
+      );
     });
   });
 
@@ -137,10 +141,10 @@ describe('SectionsContainerComponent', () => {
     });
 
     it('should display submit link', () => {
-      expect(hostElement.querySelector('app-task-list > ol > li[title="Submit"] ul > li a')).toBeTruthy();
-      expect(
-        hostElement.querySelector('app-task-list > ol > li[title="Submit"] ul > li > govuk-tag').textContent.trim(),
-      ).toEqual('not started');
+      expect(hostElement.querySelector('ol > li:last-child ul > li a')).toBeTruthy();
+      expect(hostElement.querySelector('ol > li:last-child ul > li > govuk-tag').textContent.trim()).toEqual(
+        'not started',
+      );
     });
   });
 
@@ -197,9 +201,9 @@ describe('SectionsContainerComponent', () => {
     });
 
     it('should not display submit link', () => {
-      expect(
-        hostElement.querySelector('app-task-list > ol > li[title="Submit"] ul > li > govuk-tag').textContent.trim(),
-      ).toEqual('cannot start yet');
+      expect(hostElement.querySelector('ol > li:last-child ul > li > govuk-tag').textContent.trim()).toEqual(
+        'cannot start yet',
+      );
     });
   });
 
@@ -256,9 +260,9 @@ describe('SectionsContainerComponent', () => {
     });
 
     it('should display submit link', () => {
-      expect(
-        hostElement.querySelector('app-task-list > ol > li[title="Submit"] ul > li > govuk-tag').textContent.trim(),
-      ).toEqual('not started');
+      expect(hostElement.querySelector('ol > li:last-child ul > li > govuk-tag').textContent.trim()).toEqual(
+        'not started',
+      );
     });
   });
 });

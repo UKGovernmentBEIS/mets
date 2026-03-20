@@ -11,9 +11,10 @@ import { PermitVariationStore } from '../../../store/permit-variation.store';
 
 @Component({
   selector: 'app-permit-variation-determination-summary-details',
+  standalone: false,
   templateUrl: './summary-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryDetailsComponent extends SummaryDetailsAbstractComponent {
   @Input() cssClass: string;

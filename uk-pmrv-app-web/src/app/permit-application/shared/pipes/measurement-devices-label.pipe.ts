@@ -8,6 +8,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Pipe({
   name: 'measurementDevicesLabel',
+  standalone: false,
 })
 export class MeasurementDevicesLabelPipe implements PipeTransform {
   constructor(private readonly store: PermitApplicationStore<PermitApplicationState>) {}

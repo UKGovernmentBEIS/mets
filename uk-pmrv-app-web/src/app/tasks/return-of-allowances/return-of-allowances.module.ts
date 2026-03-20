@@ -18,6 +18,7 @@ import { SubmitContainerComponent } from './submit/submit-container.component';
 import { SummaryComponent } from './submit/summary/summary.component';
 
 @NgModule({
+  imports: [CommonModule, ReturnOfAllowancesRoutingModule, SharedModule, TaskSharedModule],
   declarations: [
     ConfirmationComponent,
     NotifyOperatorComponent,
@@ -31,7 +32,6 @@ import { SummaryComponent } from './submit/summary/summary.component';
     SummaryComponent,
     SummaryDetailsComponent,
   ],
-  imports: [CommonModule, ReturnOfAllowancesRoutingModule, SharedModule, TaskSharedModule],
   providers: [PeerReviewDecisionGuard],
 })
 export class ReturnOfAllowancesModule {}

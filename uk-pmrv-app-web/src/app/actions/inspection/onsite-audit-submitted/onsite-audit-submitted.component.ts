@@ -17,11 +17,10 @@ import { InspectionActionService } from '../core/inspection-action.service';
 
 @Component({
   selector: 'app-onsite-audit-submitted',
-  standalone: true,
   imports: [FollowUpItemComponent, SharedModule, ActionSharedModule, RouterModule],
   templateUrl: './onsite-audit-submitted.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UserInfoResolverPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnsiteAuditSubmittedComponent {
   expectedActionType: RequestActionDTO['type'][] = [

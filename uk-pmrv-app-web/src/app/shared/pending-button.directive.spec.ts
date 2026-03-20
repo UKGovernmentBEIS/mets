@@ -16,6 +16,7 @@ describe('PendingButtonDirective', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <button appPendingButton govukButton type="submit" (click)="startRequest()">Submit</button>
     `,

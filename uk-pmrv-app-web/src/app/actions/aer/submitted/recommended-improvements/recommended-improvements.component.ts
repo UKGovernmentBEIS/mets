@@ -8,6 +8,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-recommended-improvements',
+  standalone: false,
   template: `
     <app-action-task header="Recommended improvements" [breadcrumb]="true">
       <app-recommended-improvements-group

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'govuk-footer-meta-info',
+  standalone: false,
   templateUrl: './meta-info.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

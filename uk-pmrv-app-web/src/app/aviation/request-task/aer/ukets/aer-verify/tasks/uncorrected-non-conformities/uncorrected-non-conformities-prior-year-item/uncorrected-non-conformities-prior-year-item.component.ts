@@ -13,9 +13,8 @@ import { UncorrectedNonConformitiesFormProvider } from '../uncorrected-non-confo
 
 @Component({
   selector: 'app-uncorrected-non-conformities-prior-year-item',
-  templateUrl: './uncorrected-non-conformities-prior-year-item.component.html',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent],
+  templateUrl: './uncorrected-non-conformities-prior-year-item.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

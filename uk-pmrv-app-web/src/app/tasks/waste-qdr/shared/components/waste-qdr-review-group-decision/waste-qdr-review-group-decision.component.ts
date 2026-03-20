@@ -42,11 +42,11 @@ interface ViewModel {
 }
 @Component({
   selector: 'app-waste-qdr-review-group-decision',
-  templateUrl: './waste-qdr-review-group-decision.component.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SharedModule, TaskSharedModule, ChangesRequestedTemplateComponent],
+  standalone: true,
+  templateUrl: './waste-qdr-review-group-decision.component.html',
   providers: [wasteQDRReviewGroupDecisionFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WasteQdrReviewGroupDecisionComponent implements OnInit, PendingRequest {
   @Output() readonly notification = new EventEmitter<boolean>();

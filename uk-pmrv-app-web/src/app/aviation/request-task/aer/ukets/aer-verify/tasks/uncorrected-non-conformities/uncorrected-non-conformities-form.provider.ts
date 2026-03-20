@@ -12,9 +12,10 @@ import { AviationAerUncorrectedNonConformities, UncorrectedItem, VerifierComment
 import { AviationAerUncorrectedNonConformitiesFormModel } from './uncorrected-non-conformities.interface';
 
 @Injectable()
-export class UncorrectedNonConformitiesFormProvider
-  implements TaskFormProvider<AviationAerUncorrectedNonConformities, AviationAerUncorrectedNonConformitiesFormModel>
-{
+export class UncorrectedNonConformitiesFormProvider implements TaskFormProvider<
+  AviationAerUncorrectedNonConformities,
+  AviationAerUncorrectedNonConformitiesFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup;
   private destroy$ = new Subject<void>();

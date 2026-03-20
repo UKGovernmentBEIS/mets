@@ -8,10 +8,9 @@ import { EmpApplicationTimeframeInfo } from 'pmrv-api';
 
 @Component({
   selector: 'app-application-timeframe-summary-template',
-  templateUrl: './application-timeframe-summary-template.component.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DatePipe, GovukComponentsModule, NgIf, RouterLink],
+  templateUrl: './application-timeframe-summary-template.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApplicationTimeframeSummaryTemplateComponent {
   @Input() isEditable = false;

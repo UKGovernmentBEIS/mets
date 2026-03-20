@@ -1,4 +1,4 @@
-<ng-container *ngIf="vm() as vm">
+@if (vm(); as vm) {
   <ng-container *ngTemplateOutlet="actionContainer"></ng-container>
 
   <ng-template #actionContainer>
@@ -15,6 +15,28 @@
           <li app-task-item link="baseline" linkText="Provide stage 2 baseline data report"></li>
         </ul>
       </li>
+
+      @if (vm.hasVerificationReport) {
+        <li app-task-section title="Verification opinion statement">
+          <ul app-task-item-list>
+            <li app-task-item link="opinion-statement" linkText="Stage 2 BDR verification opinion statement"></li>
+          </ul>
+        </li>
+
+        <li app-task-section title="Overall decision">
+          <ul app-task-item-list>
+            <li app-task-item link="overall-decision" linkText="Overall decision"></li>
+          </ul>
+        </li>
+      }
+
+      @if (vm.hasOutcome) {
+        <li app-task-section title="Outcome of regulator review">
+          <ul app-task-item-list>
+            <li app-task-item link="outcome" linkText="Outcome of regulator review"></li>
+          </ul>
+        </li>
+      }
     </ul>
   </ng-template>
-</ng-container>
+}

@@ -4,6 +4,7 @@ import { EmissionPoint } from 'pmrv-api';
 
 @Component({
   selector: 'app-emission-point-delete-template',
+  standalone: false,
   template: `
     <ng-container *ngIf="emissionPoint">
       <app-page-heading size="xl">
@@ -19,12 +20,12 @@ import { EmissionPoint } from 'pmrv-api';
       </div>
     </ng-container>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .nowrap {
       white-space: nowrap;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionPointDeleteTemplateComponent {
   @Input() emissionPoint: EmissionPoint;

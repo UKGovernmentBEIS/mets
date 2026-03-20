@@ -8,6 +8,7 @@ import { OperatorImprovementResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-recommendation-response-item-form',
+  standalone: false,
   templateUrl: './recommendation-response-item-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

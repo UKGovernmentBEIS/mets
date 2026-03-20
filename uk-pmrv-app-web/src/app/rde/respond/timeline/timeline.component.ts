@@ -9,6 +9,7 @@ import { RdeStore } from '../../store/rde.store';
 
 @Component({
   selector: 'app-timeline-rde-submitted',
+  standalone: false,
   template: `
     <app-request-action-heading
       headerText="Response to request for deadline extension"
@@ -24,8 +25,8 @@ import { RdeStore } from '../../store/rde.store';
       </div>
     </dl>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimelineComponent implements OnInit {
   constructor(

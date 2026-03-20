@@ -8,6 +8,7 @@ import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-timed-out',
+  standalone: false,
   template: `
     <app-page-heading size="xl">Your session has timed out</app-page-heading>
     <p class="govuk-body">

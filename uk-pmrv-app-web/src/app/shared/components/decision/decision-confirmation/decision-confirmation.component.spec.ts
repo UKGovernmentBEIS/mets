@@ -11,7 +11,10 @@ describe('DecisionConfirmationComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
   let hostComponent: TestComponent;
 
-  @Component({ template: '<app-decision-confirmation [isAccepted]="isAccepted"></app-decision-confirmation>' })
+  @Component({
+    standalone: false,
+    template: '<app-decision-confirmation [isAccepted]="isAccepted"></app-decision-confirmation>',
+  })
   class TestComponent {
     isAccepted: boolean;
   }

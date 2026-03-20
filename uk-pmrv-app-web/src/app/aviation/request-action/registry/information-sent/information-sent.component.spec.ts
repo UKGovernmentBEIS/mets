@@ -273,4 +273,57 @@ describe('InformationSentToRegistryComponent', () => {
       ]);
     });
   });
+
+  describe('account update LIMITED_COMPANY for Aviation only', () => {
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [ActionSharedModule, PipesModule, SharedModule],
+      }).compileComponents();
+
+      store = TestBed.inject(CommonActionsStore);
+      store.setState({
+        storeInitialized: true,
+        action: {
+          type: 'AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY',
+          requestId: '671',
+          submitter: 'system',
+          payload: {
+            payloadType: 'AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY_PAYLOAD',
+            registryId: 1234567,
+            reportableEmissions: '1000',
+            reportingYear: 2024,
+            organisationDetails: {
+              registeredAddress: {
+                city: 'test',
+                type: 'ONSHORE_STATE',
+                line1: 'test',
+                country: 'GH',
+              },
+              organisationLegalStatus: 'LIMITED_COMPANY',
+              companyRegistrationNumber: 'test',
+            },
+          },
+        },
+      } as CommonActionsState);
+
+      fixture = TestBed.createComponent(InformationSentToRegistryComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      page = new Page(fixture);
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should show summary details', () => {
+      expect(page.heading).toEqual('Information sent to Registry by system');
+      expect(page.summaryListValues).toHaveLength(3);
+      expect(page.summaryListValues).toEqual([
+        ['UK ETS Registry ID', '1234567'],
+        ['Reporting year', '2024'],
+        ['Emissions value', '1000 tCO2'],
+      ]);
+    });
+  });
 });

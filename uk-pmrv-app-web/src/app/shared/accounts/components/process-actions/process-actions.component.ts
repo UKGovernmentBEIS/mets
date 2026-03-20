@@ -22,6 +22,7 @@ import { WorkflowArray, WorkflowLabel, WorkflowLabelProperties } from './process
 
 @Component({
   selector: 'app-process-actions',
+  standalone: false,
   templateUrl: './process-actions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -349,6 +350,10 @@ export class ProcessActionsComponent implements OnInit {
       const accountStatusString = new AccountStatusPipe().transform(status)?.toUpperCase();
 
       return [`You cannot start ${typeString} while the account status is ${accountStatusString}.`];
+    } else if (requestType === 'WITHHOLDING_OF_ALLOWANCES') {
+      return [
+        'You cannot start a withholding of allowances as there is already one in progress or completed. You can reopen the completed workflows.',
+      ];
     } else {
       return result?.requests?.length > 0
         ? [

@@ -22,9 +22,8 @@
     *ngIf="vm.uncorrectedNonConformities?.existUncorrectedNonConformities"
     [isEditable]="vm.isEditable"
     [uncorrectedItems]="vm.uncorrectedNonConformities?.uncorrectedNonConformities"
-    [baseUrl]="'../list'"
-    [queryParams]="{ change: true }"
-  ></app-uncorrected-item-group>
+    baseUrl="../list"
+    [queryParams]="{ change: true }"></app-uncorrected-item-group>
 
   <div class="govuk-button-group">
     <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">

@@ -4,7 +4,10 @@ import { RequestActionInfoDTO } from 'pmrv-api';
 
 import { ItemActionTypePipe } from './item-action-type.pipe';
 
-@Pipe({ name: 'itemActionHeader' })
+@Pipe({
+  name: 'itemActionHeader',
+  standalone: false,
+})
 export class ItemActionHeaderPipe implements PipeTransform {
   transform(item: RequestActionInfoDTO, year?: string | number): string {
     const itemActionTypePipe = new ItemActionTypePipe();
@@ -223,6 +226,7 @@ export class ItemActionHeaderPipe implements PipeTransform {
       case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_ACCEPTED':
       case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_REJECTED':
       case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_CANCELLED':
+      case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_RE_INITIATED':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
       case 'AVIATION_ACCOUNT_CLOSURE_CANCELLED':
@@ -315,6 +319,16 @@ export class ItemActionHeaderPipe implements PipeTransform {
 
       case 'BDRS2_APPLICATION_SENT_TO_VERIFIER':
       case 'BDRS2_APPLICATION_SENT_TO_REGULATOR':
+      case 'BDRS2_RECALLED_FROM_VERIFICATION':
+      case 'BDRS2_VERIFICATION_RETURNED_TO_OPERATOR':
+      case 'BDRS2_APPLICATION_VERIFICATION_SUBMITTED':
+      case 'BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+      case 'BDRS2_APPLICATION_AMENDS_SENT_TO_VERIFIER':
+      case 'BDRS2_APPLICATION_PEER_REVIEW_REQUESTED':
+      case 'BDRS2_APPLICATION_COMPLETED':
+      case 'BDRS2_APPLICATION_RE_INITIATED':
+      case 'BDRS2_APPLICATION_PEER_REVIEW_ACCEPTED':
+      case 'BDRS2_APPLICATION_PEER_REVIEW_REJECTED':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
       case 'PERMANENT_CESSATION_APPLICATION_CANCELLED':

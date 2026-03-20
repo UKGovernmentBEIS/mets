@@ -12,9 +12,10 @@ import { PASSWORD_FORM, passwordFormFactory } from '../../shared-user/password/p
 
 @Component({
   selector: 'app-verifier-invitation',
+  standalone: false,
   templateUrl: './verifier-invitation.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [passwordFormFactory, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifierInvitationComponent implements OnInit {
   isSummaryDisplayed = new BehaviorSubject(false);

@@ -19,6 +19,7 @@ import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.integration.registry.accountcreated.common.validation.SetOperatorIdResponseValidator;
 import uk.gov.pmrv.api.integration.registry.accountupdated.aviation.request.AviationAccountUpdatedRegistryEvent;
 import uk.gov.pmrv.api.integration.registry.setoperator.aviation.AviationSetOperatorIdExemptStatusUpdateService;
+import uk.gov.pmrv.api.integration.registry.setoperator.installation.InstallationSetOperatorIdWithholdFlagUpdateService;
 
 import java.util.Collections;
 import java.util.List;
@@ -49,6 +50,9 @@ class OperatorIdEventOutcomeServiceTest {
 
     @Mock
     private SetOperatorIdResponseValidator setOperatorIdResponseValidator;
+
+    @Mock
+    private InstallationSetOperatorIdWithholdFlagUpdateService installationSetOperatorIdWithholdFlagUpdateService;
 
     @Test
     void getAviationOperatorIdEventOutcome_whenValidationSucceedsAndAccountExists_setsRegistryIdAndReturnsSuccessOutcome() {

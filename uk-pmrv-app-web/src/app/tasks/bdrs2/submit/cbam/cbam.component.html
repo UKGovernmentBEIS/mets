@@ -16,12 +16,25 @@
 
     <govuk-details summary="More information about the UK CBAM">
       <p class="govuk-body govuk-!-width-three-quarters">
-        The CBAM will be phased in gradually and will initially apply to imports of goods from specific sectors defined
-        in
-        <a href="#" rel="noreferrer noopener" target="_blank">Reference</a>
-        . These are summarised in
-        <a href="#" rel="noreferrer noopener" target="_blank">Reference</a>
-        . The goods included are identified using the Combined Nomenclature (CN) codes.
+        The CBAM will apply to imports of goods from specific sectors listed in
+        <a
+          href="https://www.legislation.gov.uk/uksi/2026/278/article/26/made"
+          rel="noreferrer noopener"
+          target="_blank">
+          Annex 9 to the Free Allocation Regulation as inserted by the UK ETS Order
+        </a>
+        . A process serves the production of a UK CBAM good where the PRODCOM code of the product produced is listed in
+        column B of the relevant table in Annex 9, or where the product produced is covered by the definition of a
+        product benchmark listed in column C of the relevant table, or both, excluding any exceptions provided for in
+        the table. These are summarised alongside further guidance in the updated version of UK ETS Technical Guidance
+        11 which can be found
+        <a
+          href="https://www.gov.uk/government/collections/uk-emissions-trading-scheme-uk-ets-technical-guidance-and-tools"
+          rel="noreferrer noopener"
+          target="_blank">
+          here
+        </a>
+        .
       </p>
 
       <p class="govuk-body govuk-!-width-three-quarters">
@@ -37,12 +50,12 @@
         For fall-back sub-installations, when the heat benchmark, fuel benchmark, and/or the process emissions approach
         are involved, the application of the CBAM factor will depend on whether the heat, fuel or process emissions are
         associated with a process manufacturing CBAM goods. Heat exported to a non-ETS installation, where it is used to
-        produce a CBAM good, will be included in a CBAM sub-installation. Therefore, the respective CL sub-installations
-        for these 3 approaches may require an additional split to be made, to provide separate allocation calculations
-        for CBAM goods and non-CBAM goods. This will lead to additional sub-installations, resulting in up to 3 heat
-        sub-installations (CL_CBAM, CL, non-CBAM and non-CL), and similarly up to 3 fuel sub-installations and up to 3
-        process emissions sub-installations. The district heating sub-installation will not be impacted by the CBAM and
-        will remain unchanged.
+        produce a CBAM good, will be included in a CBAM sub-installation. Therefore, the respective carbon leakage (CL)
+        sub-installations for these 3 approaches may require an additional split to be made, to provide separate
+        allocation calculations for CBAM goods and non-CBAM goods. This will lead to additional sub-installations,
+        resulting in up to 3 heat sub-installations (CL_CBAM, CL_non-CBAM and non-CL), and similarly up to 3 fuel
+        sub-installations and up to 3 process emissions sub-installations. The district heating sub-installation will
+        not be impacted by the CBAM and will remain unchanged.
       </p>
 
       <p class="govuk-body govuk-!-width-three-quarters">
@@ -62,7 +75,7 @@
       formControlName="requiresAdditionalSubInstallationSplitsForCbam"
       govuk-radio
       legend="Are additional sub-installation splits required because of the UK CBAM?"
-      [legendSize]="'medium'"
+      legendSize="medium"
       class="govuk-!-width-three-quarters">
       <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
       <govuk-radio-option [value]="false" label="No"></govuk-radio-option>

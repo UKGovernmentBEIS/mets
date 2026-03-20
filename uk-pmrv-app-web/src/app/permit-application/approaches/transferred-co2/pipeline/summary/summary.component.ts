@@ -12,6 +12,7 @@ import { headingMap } from '../../heading';
 
 @Component({
   selector: 'app-transferred-co2-pipeline-summary',
+  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

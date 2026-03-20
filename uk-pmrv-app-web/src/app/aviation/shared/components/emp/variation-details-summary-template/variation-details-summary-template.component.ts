@@ -14,7 +14,6 @@ import { EmpVariationUkEtsDetails, EmpVariationUkEtsRegulatorLedReason } from 'p
 
 @Component({
   selector: 'app-variation-details-summary-template',
-  standalone: true,
   imports: [GovukComponentsModule, NgIf, RouterLink, NgFor, VariationDetailsReasonTypePipe],
   templateUrl: './variation-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

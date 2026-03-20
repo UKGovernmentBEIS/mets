@@ -33,9 +33,10 @@ const additionalChangesNotCoveredDetailsValidators = [
 ];
 
 @Injectable()
-export class OpinionStatementFormProvider
-  implements TaskFormProvider<AviationAerOpinionStatement, AviationAerOpinionStatementFormModel>
-{
+export class OpinionStatementFormProvider implements TaskFormProvider<
+  AviationAerOpinionStatement,
+  AviationAerOpinionStatementFormModel
+> {
   private store = inject(RequestTaskStore);
   private fb = inject(FormBuilder);
   private _form: FormGroup;

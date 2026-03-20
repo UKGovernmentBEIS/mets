@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { ItemDTO } from 'pmrv-api';
 
-@Pipe({ name: 'itemType' })
+@Pipe({
+  name: 'itemType',
+  standalone: false,
+})
 export class ItemTypePipe implements PipeTransform {
   transform(value: ItemDTO['requestType']): string {
     switch (value) {

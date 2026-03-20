@@ -1,9 +1,7 @@
 <app-base-action-container-component
-  [header]="'Non compliance'"
+  header="Non compliance"
   [customContentTemplate]="customContentTemplate"
-  [expectedActionType]="['NON_COMPLIANCE_APPLICATION_SUBMITTED']"
->
-</app-base-action-container-component>
+  [expectedActionType]="['NON_COMPLIANCE_APPLICATION_SUBMITTED']"></app-base-action-container-component>
 
 <ng-template #customContentTemplate>
   <ol class="app-task-list">
@@ -12,8 +10,7 @@
         <li
           app-task-item
           [link]="(isAviation$ | async) ? './non-compliance/submitted/summary' : './summary'"
-          linkText="Details of breach"
-        ></li>
+          linkText="Details of breach"></li>
       </ul>
     </li>
   </ol>

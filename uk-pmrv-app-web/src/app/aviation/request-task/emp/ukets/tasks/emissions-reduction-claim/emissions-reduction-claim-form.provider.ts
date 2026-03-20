@@ -18,9 +18,10 @@ export interface EmissionsReductionClaimFormModel {
 }
 
 @Injectable()
-export class EmissionsReductionClaimFormProvider
-  implements TaskFormProvider<EmpEmissionsReductionClaim, EmissionsReductionClaimFormModel>
-{
+export class EmissionsReductionClaimFormProvider implements TaskFormProvider<
+  EmpEmissionsReductionClaim,
+  EmissionsReductionClaimFormModel
+> {
   private fb = inject(FormBuilder);
   private _form: FormGroup<EmissionsReductionClaimFormModel>;
 

@@ -8,6 +8,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-prtr',
+  standalone: false,
   template: `
     <app-action-task header="Pollutant Release and Transfer Register codes (PRTR)" [breadcrumb]="true">
       <app-prtr-summary-template [activities]="activities$ | async"></app-prtr-summary-template>

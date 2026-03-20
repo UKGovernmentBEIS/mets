@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/prefer-host-metadata-property */
 import { Directive, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import {
   ControlContainer,

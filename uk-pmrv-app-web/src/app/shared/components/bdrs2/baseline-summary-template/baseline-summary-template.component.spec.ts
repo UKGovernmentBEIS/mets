@@ -66,7 +66,7 @@ describe('BDRS2BaselineSummaryTemplateComponent', () => {
 
     expect(page.pageContents).toEqual([
       'Do you want to continue with your application for free allocation?',
-      'Yes, I hold a GHGE permit and want to continue my application for free allocation as a main scheme participant, or I currently hold HSE status and want to become a main scheme participant from 2027',
+      'Yes, I hold a GHGE permit and want to continue my application for free allocation as a main scheme participant, or I currently hold HSE status and want to become a main scheme participant from 2027 to 2030',
       'Change  decision for free allocation',
       'Are you making COVID adjustments?',
       'Yes',

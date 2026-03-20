@@ -11,6 +11,7 @@ import { GroupBuilderConfig } from '../../../../../shared/types';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'app-temporary-change',
+  standalone: false,
   templateUrl: './temporary-change.component.html',
   providers: [existingControlContainer],
   viewProviders: [existingControlContainer],

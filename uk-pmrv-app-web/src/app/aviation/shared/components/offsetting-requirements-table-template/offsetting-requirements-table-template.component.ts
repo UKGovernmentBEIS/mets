@@ -9,7 +9,6 @@ import { GovukTableColumn } from 'govuk-components';
 import { AviationAerCorsia3YearPeriodOffsettingYearlyOffsettingData } from 'pmrv-api';
 @Component({
   selector: 'app-3year-offsetting-requirements-table-template',
-  standalone: true,
   imports: [SharedModule],
   templateUrl: './offsetting-requirements-table-template.component.html',
   styles: `

@@ -10,6 +10,7 @@ type ActivityLevelType = ActivityLevel & HistoricalActivityLevel & ALRActivityLe
 
 @Component({
   selector: 'app-activity-level-list-template',
+  standalone: false,
   templateUrl: './activity-level-list-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

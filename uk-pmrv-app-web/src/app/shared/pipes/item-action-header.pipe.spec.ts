@@ -1342,7 +1342,7 @@ describe('ItemActionHeaderPipe', () => {
     ).toEqual('Baseline data report reopened by John Bolt');
   });
 
-  it('should return baseline data report', () => {
+  it('should return stage 2 baseline data report', () => {
     expect(
       pipe.transform({
         ...baseRequestAction,
@@ -1356,6 +1356,76 @@ describe('ItemActionHeaderPipe', () => {
         type: 'BDRS2_APPLICATION_SENT_TO_REGULATOR',
       }),
     ).toEqual('Stage 2 baseline data report submitted to regulator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDRS2_RECALLED_FROM_VERIFICATION',
+      }),
+    ).toEqual('Stage 2 baseline data report recalled by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDRS2_VERIFICATION_RETURNED_TO_OPERATOR',
+      }),
+    ).toEqual('Stage 2 baseline data report returned to operator for changes by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDRS2_APPLICATION_VERIFICATION_SUBMITTED',
+      }),
+    ).toEqual('Stage 2 baseline data report verification statement submitted to operator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDRS2_REGULATOR_REVIEW_RETURNED_FOR_AMENDS',
+      }),
+    ).toEqual('Stage 2 baseline data report returned to operator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDRS2_APPLICATION_AMENDS_SENT_TO_VERIFIER',
+      }),
+    ).toEqual('Stage 2 baseline data report submitted to verifier by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDRS2_APPLICATION_COMPLETED',
+      }),
+    ).toEqual('Stage 2 baseline data report reviewed by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDRS2_APPLICATION_RE_INITIATED',
+      }),
+    ).toEqual('Stage 2 baseline data report reopened by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDRS2_APPLICATION_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review requested by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDRS2_APPLICATION_PEER_REVIEW_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDRS2_APPLICATION_PEER_REVIEW_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement submitted by John Bolt');
   });
 
   it('should return permanent cessation', () => {
@@ -1437,6 +1507,64 @@ describe('ItemActionHeaderPipe', () => {
         type: 'AVIATION_DOE_CORSIA_PEER_REVIEWER_REJECTED',
       }),
     ).toEqual('Peer review disagreement submitted by John Bolt');
+  });
+
+  it('should return withholding of allowances', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_SUBMITTED',
+      }),
+    ).toEqual('Withholding of allowances submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_WITHDRAWN',
+      }),
+    ).toEqual('Withholding of allowances notice withdrawn by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_CLOSED',
+      }),
+    ).toEqual('Withholding of allowances closed by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'WITHHOLDING_OF_ALLOWANCES_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review requested by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_CANCELLED',
+      }),
+    ).toEqual('Withholding of allowances cancelled by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_RE_INITIATED',
+      }),
+    ).toEqual('Withholding of allowances reopened by John Bolt');
   });
 
   it('should return activity level report', () => {

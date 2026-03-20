@@ -20,10 +20,9 @@ interface ViewModel {
 }
 @Component({
   selector: 'app-reason-list',
-  templateUrl: './reason-list.component.html',
-  standalone: true,
-  providers: [DestroySubject],
   imports: [GovukComponentsModule, SharedModule, RouterModule, ReturnToLinkComponent],
+  templateUrl: './reason-list.component.html',
+  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReasonListComponent {

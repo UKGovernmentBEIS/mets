@@ -1,5 +1,5 @@
-<ng-container *ngIf="currentTab === 'notes'">
-  <ng-container *ngIf="requestNotes$ | async as result">
+@if (currentTab === 'notes') {
+  @if (requestNotes$ | async; as result) {
     <ul class="govuk-list">
       <li>
         <dl govuk-summary-list>
@@ -10,31 +10,34 @@
           </div>
         </dl>
       </li>
-      <li *ngFor="let note of result.requestNotes">
-        <dl govuk-summary-list>
-          <div govukSummaryListRow>
-            <dd govukSummaryListRowValue>
-              <div class="pre-wrap">{{ note.payload.note }}</div>
-              <div>
-                <app-summary-download-files [files]="getDownloadUrlFiles(note)"> </app-summary-download-files>
-              </div>
-              <div>
-                <p class="govuk-caption-m">{{ note.submitter }}, {{ note.lastUpdatedOn | govukDate: 'datetime' }}</p>
-              </div>
-            </dd>
-            <dd govukSummaryListRowActions>
-              <a routerLink="./notes/{{ note.id }}/edit" govukLink> Edit </a> &nbsp;
-              <a routerLink="./notes/{{ note.id }}/delete" govukLink> Delete </a>
-            </dd>
-          </div>
-        </dl>
-      </li>
+      @for (note of result.requestNotes; track note) {
+        <li>
+          <dl govuk-summary-list>
+            <div govukSummaryListRow>
+              <dd govukSummaryListRowValue>
+                <div class="pre-wrap">{{ note.payload.note }}</div>
+                <div>
+                  <app-summary-download-files [files]="getDownloadUrlFiles(note)"></app-summary-download-files>
+                </div>
+                <div>
+                  <p class="govuk-caption-m">{{ note.submitter }}, {{ note.lastUpdatedOn | govukDate: 'datetime' }}</p>
+                </div>
+              </dd>
+              <dd govukSummaryListRowActions>
+                <a routerLink="./notes/{{ note.id }}/edit" govukLink>Edit</a>
+                &nbsp;
+                <a routerLink="./notes/{{ note.id }}/delete" govukLink>Delete</a>
+              </dd>
+            </div>
+          </dl>
+        </li>
+      }
     </ul>
-    <app-pagination
-      *ngIf="result.totalItems > pageSize"
-      [count]="result.totalItems"
-      (currentPageChange)="page$.next($event)"
-      [pageSize]="pageSize"
-    ></app-pagination>
-  </ng-container>
-</ng-container>
+    @if (result.totalItems > pageSize) {
+      <app-pagination
+        [count]="result.totalItems"
+        (currentPageChange)="page$.next($event)"
+        [pageSize]="pageSize"></app-pagination>
+    }
+  }
+}

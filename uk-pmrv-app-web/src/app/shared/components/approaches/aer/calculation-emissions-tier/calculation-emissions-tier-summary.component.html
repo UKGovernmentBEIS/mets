@@ -53,7 +53,9 @@
     [transfer]="sourceStreamEmission.transfer"
     [hasBorders]="true"
     [isEditable]="isEditable"
-    cssClass="cssClass"></app-transfer-installation-summary-template>
+    cssClass="cssClass"
+  >
+  </app-transfer-installation-summary-template>
 </ng-container>
 
 <ng-container *ngIf="sourceStreamEmission?.parameterCalculationMethod as parameterCalculationMethod">
@@ -132,8 +134,7 @@
       <dt govukSummaryListRowKey>Reason</dt>
       <dd govukSummaryListRowValue>
         <ng-container *ngIf="reason?.type === 'DATA_GAP'">
-          Due to a data gap
-          <br />
+          Due to a data gap <br />
           <br />
           {{ reason?.reason }}
         </ng-container>
@@ -169,7 +170,8 @@
       *ngIf="
         sourceStreamEmission?.parameterCalculationMethod
           ?.calculationActivityDataCalculationMethod as calculationActivityDataCalculationMethod
-      ">
+      "
+    >
       <h2 class="govuk-heading-m">Activity data</h2>
       <dl govuk-summary-list>
         <ng-container *ngFor="let permitTier of permitParamMonitoringTiers">
@@ -204,21 +206,19 @@
           <dt govukSummaryListRowKey>Total fuel or material used</dt>
           <dd govukSummaryListRowValue>
             {{ calculationActivityDataCalculationMethod?.totalMaterial }}
-            {{
-              (isSm3 | async)
-                ? 'standard cubic metres (Sm3) at 15°C (metering conditions)'
-                : (calculationActivityDataCalculationMethod?.measurementUnit | measurementUnitType)
-            }}
+            {{ calculationActivityDataCalculationMethod?.measurementUnit | measurementUnitType }}
           </dd>
           <dd govukSummaryListRowActions *ngIf="isEditable">
             <ng-container
-              *ngIf="calculationActivityDataCalculationMethod?.type === 'AGGREGATION_OF_METERING_QUANTITIES'">
-              <a govukLink [routerLink]="['../activity-calculation-aggregation']" [state]="{ changing: true }">
-                Change
-              </a>
+              *ngIf="calculationActivityDataCalculationMethod?.type === 'AGGREGATION_OF_METERING_QUANTITIES'"
+            >
+              <a govukLink [routerLink]="['../activity-calculation-aggregation']" [state]="{ changing: true }"
+                >Change</a
+              >
             </ng-container>
             <ng-container
-              *ngIf="calculationActivityDataCalculationMethod?.type !== 'AGGREGATION_OF_METERING_QUANTITIES'">
+              *ngIf="calculationActivityDataCalculationMethod?.type !== 'AGGREGATION_OF_METERING_QUANTITIES'"
+            >
               <a govukLink [routerLink]="['../activity-calculation-continuous']" [state]="{ changing: true }">Change</a>
             </ng-container>
           </dd>
@@ -228,7 +228,8 @@
           *ngIf="
             $any(sourceStreamEmission?.parameterCalculationMethod)?.fuelMeteringConditionType === 'CELSIUS_15' &&
             $any(sourceStreamEmission?.parameterCalculationMethod)?.type === 'REGIONAL_DATA'
-          ">
+          "
+        >
           <div govukSummaryListRow>
             <dt govukSummaryListRowKey>Value adjusted to 0ºC standard conditions</dt>
             <dd govukSummaryListRowValue>
@@ -256,7 +257,8 @@
     *ngIf="
       $any(sourceStreamEmission?.parameterCalculationMethod)
         ?.emissionCalculationParamValues as emissionCalculationParamValues
-    ">
+    "
+  >
     <ng-container
       *ngIf="
         [
@@ -265,9 +267,10 @@
           'OXIDATION_FACTOR',
           'BIOMASS_FRACTION',
           'CARBON_CONTENT',
-          'CONVERSION_FACTOR',
+          'CONVERSION_FACTOR'
         ].includes(parameter?.type)
-      ">
+      "
+    >
       <h2 class="govuk-heading-m">{{ parameter?.type | parameterType }}</h2>
       <dl govuk-summary-list>
         <ng-container *ngFor="let permitTier of permitParamMonitoringTiers">
@@ -295,9 +298,10 @@
               'NET_CALORIFIC_VALUE',
               'OXIDATION_FACTOR',
               'CARBON_CONTENT',
-              'CONVERSION_FACTOR',
+              'CONVERSION_FACTOR'
             ].includes(parameter?.type)
-          ">
+          "
+        >
           <div govukSummaryListRow>
             <dt govukSummaryListRowKey>Value</dt>
             <dd govukSummaryListRowValue>
@@ -331,7 +335,8 @@
         <ng-container *ngIf="['BIOMASS_FRACTION'].includes(parameter?.type)">
           <div
             govukSummaryListRow
-            *ngIf="sourceStreamEmission?.biomassPercentages?.biomassPercentage as biomassPercentage">
+            *ngIf="sourceStreamEmission?.biomassPercentages?.biomassPercentage as biomassPercentage"
+          >
             <dt govukSummaryListRowKey>Biomass percentage</dt>
             <dd govukSummaryListRowValue>{{ sourceStreamEmission.biomassPercentages.biomassPercentage }}%</dd>
 
@@ -350,7 +355,8 @@
             *ngIf="
               sourceStreamEmission?.biomassPercentages
                 ?.nonSustainableBiomassPercentage as nonSustainableBiomassPercentage
-            ">
+            "
+          >
             <dt govukSummaryListRowKey>Non sustainable biomass percentage</dt>
             <dd govukSummaryListRowValue>{{ nonSustainableBiomassPercentage }}%</dd>
 
@@ -373,7 +379,8 @@
   *ngIf="
     $any(sourceStreamEmission?.parameterCalculationMethod)
       ?.emissionCalculationParamValues as emissionCalculationParamValues
-  ">
+  "
+>
   <h2 class="govuk-heading-m">Calculated emissions</h2>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
@@ -386,7 +393,8 @@
 
     <div
       govukSummaryListRow
-      *ngIf="emissionCalculationParamValues?.totalSustainableBiomassEmissions as totalSustainableBiomassEmissions">
+      *ngIf="emissionCalculationParamValues?.totalSustainableBiomassEmissions as totalSustainableBiomassEmissions"
+    >
       <dt govukSummaryListRowKey>Sustainable biomass</dt>
       <dd govukSummaryListRowValue>{{ totalSustainableBiomassEmissions | bigNumber }} tonnes CO2e</dd>
       <dd govukSummaryListRowActions></dd>
@@ -403,11 +411,11 @@
           [routerLink]="[
             sourceStreamEmission?.parameterCalculationMethod?.type === 'MANUAL'
               ? '../manual-data-review'
-              : '../inventory-data-review',
+              : '../inventory-data-review'
           ]"
-          [state]="{ changing: true }">
-          Change
-        </a>
+          [state]="{ changing: true }"
+          >Change</a
+        >
       </dd>
     </div>
   </dl>
@@ -426,11 +434,11 @@
             [routerLink]="[
               sourceStreamEmission?.parameterCalculationMethod?.type === 'MANUAL'
                 ? '../manual-data-review'
-                : '../inventory-data-review',
+                : '../inventory-data-review'
             ]"
-            [state]="{ changing: true }">
-            Change
-          </a>
+            [state]="{ changing: true }"
+            >Change</a
+          >
         </dd>
       </div>
       <div govukSummaryListRow>
@@ -445,11 +453,11 @@
             [routerLink]="[
               sourceStreamEmission?.parameterCalculationMethod?.type === 'MANUAL'
                 ? '../manual-data-review'
-                : '../inventory-data-review',
+                : '../inventory-data-review'
             ]"
-            [state]="{ changing: true }">
-            Change
-          </a>
+            [state]="{ changing: true }"
+            >Change</a
+          >
         </dd>
       </div>
       <div govukSummaryListRow *ngIf="sourceStreamEmission?.biomassPercentages?.contains">
@@ -464,11 +472,11 @@
             [routerLink]="[
               sourceStreamEmission?.parameterCalculationMethod?.type === 'MANUAL'
                 ? '../manual-data-review'
-                : '../inventory-data-review',
+                : '../inventory-data-review'
             ]"
-            [state]="{ changing: true }">
-            Change
-          </a>
+            [state]="{ changing: true }"
+            >Change</a
+          >
         </dd>
       </div>
     </dl>

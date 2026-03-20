@@ -27,9 +27,10 @@ import { closeFormProvider } from './close-form.provider';
 
 @Component({
   selector: 'app-close',
+  standalone: false,
   templateUrl: './close.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [closeFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CloseComponent implements OnInit, OnDestroy {
   currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));

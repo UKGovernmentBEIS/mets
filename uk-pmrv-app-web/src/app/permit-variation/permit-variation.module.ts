@@ -26,6 +26,7 @@ import { SharedPermitVariationModule } from './shared/shared-permit-variation.mo
 import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
+  imports: [PermitVariationRoutingModule, SharedModule, SharedPermitModule, SharedPermitVariationModule],
   declarations: [
     AboutVariationAnswersComponent,
     AboutVariationChangesComponent,
@@ -43,7 +44,6 @@ import { SummaryComponent } from './summary/summary.component';
 
     SummaryDetailsComponent,
   ],
-  imports: [PermitVariationRoutingModule, SharedModule, SharedPermitModule, SharedPermitVariationModule],
   providers: [
     {
       provide: PermitApplicationStore,

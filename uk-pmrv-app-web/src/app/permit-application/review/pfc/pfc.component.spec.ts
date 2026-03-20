@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, RouterLink } from '@angular/router';
 
 import { PermitIssuanceStore } from '@permit-issuance/store/permit-issuance.store';
 import { SharedModule } from '@shared/shared.module';
@@ -27,6 +27,7 @@ describe('PfcComponent', () => {
 
   @Component({
     selector: 'app-review-group-decision-container',
+    standalone: false,
     template: `
       <div>
         Review group decision component.
@@ -65,9 +66,10 @@ describe('PfcComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, PFCModule, SharedPermitModule, RouterTestingModule],
+      imports: [SharedModule, PFCModule, SharedPermitModule, RouterLink],
       declarations: [PfcComponent, MockDecisionComponent],
       providers: [
+        provideRouter([]),
         {
           provide: PermitApplicationStore,
           useExisting: PermitIssuanceStore,

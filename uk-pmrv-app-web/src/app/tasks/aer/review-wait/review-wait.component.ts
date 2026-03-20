@@ -8,6 +8,7 @@ import { AerRequestMetadata } from 'pmrv-api';
 
 @Component({
   selector: 'app-review-wait',
+  standalone: false,
   templateUrl: './review-wait.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

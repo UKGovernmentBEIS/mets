@@ -5,6 +5,7 @@ import { RegulatorImprovementResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-regulator-response-item',
+  standalone: false,
   templateUrl: './regulator-response-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

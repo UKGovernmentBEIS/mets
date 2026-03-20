@@ -25,9 +25,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-verification-submit-task-list',
-  templateUrl: './verification-submit-task-list.component.html',
-  standalone: true,
   imports: [SharedModule, TaskSharedModule],
+  templateUrl: './verification-submit-task-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerificationSubmitTaskListComponent {

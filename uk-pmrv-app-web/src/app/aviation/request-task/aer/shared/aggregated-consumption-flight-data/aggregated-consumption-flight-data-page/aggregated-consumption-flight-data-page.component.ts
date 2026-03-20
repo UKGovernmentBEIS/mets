@@ -19,7 +19,6 @@ import { CsvDataWizardStepComponent } from '@aviation/shared/components/aer/csv-
 import { exampleColumns, exampleData } from '@aviation/shared/components/aer/flight-data-table/column-header-mapping';
 import { FlightDataTableComponent } from '@aviation/shared/components/aer/flight-data-table/flight-data-table.component';
 import { mapFuelType } from '@aviation/shared/components/emp/emission-sources/aircraft-type/fuel-types';
-import { AircraftTypeTableComponent } from '@aviation/shared/components/emp/emission-sources/aircraft-type/table/aircraft-type-table.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import {
   emptyFileValidator,
@@ -45,16 +44,9 @@ import { AggregatedConsumptionFlightDataFormProvider } from '../aggregated-consu
 
 @Component({
   selector: 'app-aggregated-consumption-flight-data-page',
+  imports: [SharedModule, ReturnToLinkComponent, FlightDataTableComponent, CsvDataWizardStepComponent],
   templateUrl: './aggregated-consumption-flight-data-page.component.html',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    SharedModule,
-    ReturnToLinkComponent,
-    AircraftTypeTableComponent,
-    FlightDataTableComponent,
-    CsvDataWizardStepComponent,
-  ],
 })
 export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnDestroy {
   form = this.formProvider.form;

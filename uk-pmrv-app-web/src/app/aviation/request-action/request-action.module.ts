@@ -21,7 +21,6 @@ import { CompletedComponent as ReissueCompletedComponent } from './emp-batch-rei
 import { RequestActionRoutingModule } from './request-action-routing.module';
 
 @NgModule({
-  declarations: [RequestActionPageComponent],
   imports: [
     AccountClosedSubmittedComponent,
     ActionSharedModule,
@@ -41,5 +40,6 @@ import { RequestActionRoutingModule } from './request-action-routing.module';
     ThreeYearPeriodOffsettingRequirementsSubmittedComponent,
     VirActionTaskListComponent,
   ],
+  declarations: [RequestActionPageComponent],
 })
 export class RequestActionModule {}

@@ -10,6 +10,7 @@ import { HSETIReturnLinkComponent } from '../hseti-return-link/hseti-return-link
 
 @Component({
   selector: 'app-hseti-task',
+  imports: [RouterModule, SharedModule, HSETIReturnLinkComponent],
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -21,10 +22,8 @@ import { HSETIReturnLinkComponent } from '../hseti-return-link/hseti-return-link
     </div>
     <app-hseti-return-link [returnLink]="returnLink" [title]="returnLinkTitle()"></app-hseti-return-link>
   `,
-  standalone: true,
-  imports: [RouterModule, SharedModule, HSETIReturnLinkComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HseTiTaskComponent {
   @Input() notification: any;

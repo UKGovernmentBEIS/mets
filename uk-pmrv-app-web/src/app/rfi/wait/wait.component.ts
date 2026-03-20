@@ -12,6 +12,7 @@ import { RfiStore } from '../store/rfi.store';
 
 @Component({
   selector: 'app-cancel-rfi',
+  standalone: false,
   templateUrl: './wait.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -10,6 +10,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-identified-changes-list',
+  standalone: false,
   template: `
     <app-aer-task-review
       heading="Changes not reported to the regulator by the end of the reporting period?"

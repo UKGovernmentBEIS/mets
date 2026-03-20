@@ -18,6 +18,7 @@ export interface SourceStreamOption {
 
 @Component({
   selector: 'app-source-streams-details-template',
+  standalone: false,
   templateUrl: './source-streams-details-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

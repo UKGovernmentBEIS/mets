@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
-import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
@@ -29,15 +28,8 @@ interface ViewModel {
 
 @Component({
   selector: 'app-confidentiality-summary',
+  imports: [SharedModule, ReturnToLinkComponent, ConfidentialitySummaryTemplateComponent],
   templateUrl: './confidentiality-summary.component.html',
-  standalone: true,
-  imports: [
-    SharedModule,
-    ReturnToLinkComponent,
-    RouterLinkWithHref,
-    ConfidentialitySummaryTemplateComponent,
-    AerReviewDecisionGroupComponent,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfidentialitySummaryComponent {

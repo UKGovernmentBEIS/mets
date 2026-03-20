@@ -14,8 +14,8 @@ import { ItemLinkPipe } from '../../shared/pipes/item-link.pipe';
 
 @Component({
   selector: 'app-trigger-doal',
+  standalone: false,
   templateUrl: './trigger-doal.component.html',
-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TriggerDoalComponent {

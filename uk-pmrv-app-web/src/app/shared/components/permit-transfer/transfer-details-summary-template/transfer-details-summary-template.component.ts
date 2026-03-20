@@ -4,6 +4,7 @@ import { PermitTransferAApplicationRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-permit-transfer-details-summary-template',
+  standalone: false,
   templateUrl: './transfer-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

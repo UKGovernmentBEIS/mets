@@ -134,11 +134,12 @@ describe('MeasurementTierSummaryComponent', () => {
   } as AerApplicationSubmitRequestTaskPayload;
 
   @Component({
+    standalone: false,
     template: `
       <app-measurement-tier-summary
         [isEditable]="isEditable"
         [payload]="payload"
-        [taskKey]="'MEASUREMENT_CO2'"
+        taskKey="MEASUREMENT_CO2"
         [index]="0"></app-measurement-tier-summary>
     `,
   })

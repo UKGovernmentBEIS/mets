@@ -10,6 +10,7 @@ import { resolveReturnedSectionStatus } from '../core/section-status';
 
 @Component({
   selector: 'app-returned-allowances',
+  standalone: false,
   templateUrl: './returned-allowances.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

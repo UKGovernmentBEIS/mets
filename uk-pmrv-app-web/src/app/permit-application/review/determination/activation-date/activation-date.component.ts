@@ -16,6 +16,7 @@ import { activationDateFormProvider } from './activation-date-form.provider';
 
 @Component({
   selector: 'app-reason',
+  standalone: false,
   template: `
     <app-permit-task [breadcrumb]="true">
       <app-wizard-step
@@ -32,8 +33,8 @@ import { activationDateFormProvider } from './activation-date-form.provider';
       <a govukLink routerLink="../..">Return to: {{ determinationHeader }}</a>
     </app-permit-task>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [activationDateFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActivationDateComponent implements PendingRequest {
   taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

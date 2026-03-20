@@ -10,6 +10,7 @@ import { AerApplicationReviewRequestTaskPayload, AerApplicationVerificationSubmi
 
 @Component({
   selector: 'app-approaches-tier-review-summary',
+  standalone: false,
   templateUrl: './approaches-tier-review-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -4,8 +4,7 @@
       *ngFor="let question of questions.controls; index as i"
       [formGroupName]="i"
       govukFieldset
-      id="question-{{ i }}"
-    >
+      id="question-{{ i }}">
       <legend govukLegend>Question</legend>
       <button
         (click)="questions.removeAt(i)"
@@ -14,8 +13,7 @@
         appAddAnother
         govukSecondaryButton
         type="button"
-        #removeButton
-      >
+        #removeButton>
         Remove
       </button>
       <div formControlName="question" govuk-textarea [maxLength]="10000" label=""></div>
@@ -26,10 +24,9 @@
 
   <app-multiple-file-input
     [baseDownloadUrl]="getDownloadUrl()"
-    [listTitle]="'Uploaded files'"
+    listTitle="Uploaded files"
     [label]="(isFileUploaded$ | async) ? 'Upload a different file' : 'Upload files (optional)'"
-    formControlName="files"
-  ></app-multiple-file-input>
+    formControlName="files"></app-multiple-file-input>
 
   <div
     formControlName="deadline"
@@ -37,7 +34,6 @@
     hint="For example, 27 3 2022"
     govuk-date-input
     [min]="tomorrow"
-    [isRequired]="true"
-  ></div>
+    [isRequired]="true"></div>
 </app-wizard-step>
 <app-return-link></app-return-link>

@@ -6,6 +6,7 @@ import { PermitSurrenderReviewDecision } from 'pmrv-api';
 
 @Component({
   selector: 'app-permit-surrender-decision-summary',
+  standalone: false,
   templateUrl: './decision-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

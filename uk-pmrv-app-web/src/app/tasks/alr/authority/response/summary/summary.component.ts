@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { map } from 'rxjs';
 
@@ -14,6 +14,7 @@ import { ALRGrantAuthorityResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-alr-authority-summary',
+  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, AlrAuthoritySummaryTemplateComponent],
   template: `
     <app-alr-task-common
       returnLink="../../"
@@ -31,8 +32,6 @@ import { ALRGrantAuthorityResponse } from 'pmrv-api';
       </div>
     </app-alr-task-common>
   `,
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule, AlrAuthoritySummaryTemplateComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrResponseSummaryComponent {

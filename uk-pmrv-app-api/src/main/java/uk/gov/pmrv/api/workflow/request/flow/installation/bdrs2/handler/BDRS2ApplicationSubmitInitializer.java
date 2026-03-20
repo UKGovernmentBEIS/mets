@@ -2,6 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
@@ -24,12 +25,19 @@ public class BDRS2ApplicationSubmitInitializer implements InitializeRequestTaskH
 
         final BDRS2ApplicationSubmitRequestTaskPayload taskPayload;
 
+        Long verificationBodyId = !ObjectUtils.isEmpty(requestPayload.getVerificationReport()) ?
+                requestPayload.getVerificationReport().getVerificationBodyId() :
+                null;
+
         taskPayload = BDRS2ApplicationSubmitRequestTaskPayload.builder()
                 .payloadType(RequestTaskPayloadType.BDRS2_APPLICATION_SUBMIT_PAYLOAD)
                 .bdrs2(requestPayload.getBdrs2())
                 .bdrs2Attachments(requestPayload.getBdrs2Attachments())
                 .bdrs2SectionsCompleted(requestPayload.getBdrs2SectionsCompleted())
                 .bdrs2FileVersion(requestPayload.getBdrs2FileVersion())
+                .verificationPerformed(requestPayload.isVerificationPerformed())
+                .verificationSectionsCompleted(requestPayload.getVerificationSectionsCompleted())
+                .verificationBodyId(verificationBodyId)
                 .build();
 
         return taskPayload;

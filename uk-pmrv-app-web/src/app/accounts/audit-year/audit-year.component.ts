@@ -13,8 +13,8 @@ import { RequestItemsService, RequestsService } from 'pmrv-api';
 
 @Component({
   selector: 'app-audit-year',
+  standalone: false,
   templateUrl: './audit-year.component.html',
-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuditYearComponent implements OnInit {

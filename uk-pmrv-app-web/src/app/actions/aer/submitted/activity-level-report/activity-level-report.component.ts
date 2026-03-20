@@ -8,6 +8,7 @@ import { AerService } from '../../core/aer.service';
 
 @Component({
   selector: 'app-activity-level-report',
+  standalone: false,
   template: `
     <app-action-task header="Activity level report" [breadcrumb]="true">
       <app-activity-level-report-group

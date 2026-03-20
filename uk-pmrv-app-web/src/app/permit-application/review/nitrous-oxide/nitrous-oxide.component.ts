@@ -15,6 +15,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-nitrous-oxide',
+  standalone: false,
   templateUrl: './nitrous-oxide.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

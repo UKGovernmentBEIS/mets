@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterLinkWithHref } from '@angular/router';
 
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { DestroySubject } from '@core/services/destroy-subject.service';
@@ -12,9 +11,8 @@ export interface ConfirmationViewModel {
 
 @Component({
   selector: 'app-registry-confirmation',
+  imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './registry-confirmation.component.html',
-  imports: [SharedModule, RouterLinkWithHref, ReturnToLinkComponent],
-  standalone: true,
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

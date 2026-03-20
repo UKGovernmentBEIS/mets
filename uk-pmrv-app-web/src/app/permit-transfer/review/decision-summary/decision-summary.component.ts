@@ -14,9 +14,10 @@ import { getDecisionNameMap, getDeterminationTypeMap } from '../decisionMap';
 
 @Component({
   selector: 'app-decision-summary',
+  standalone: false,
   templateUrl: './decision-summary.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransferDecisionSummaryComponent implements OnInit {
   urlRequestType = this.store.urlRequestType;

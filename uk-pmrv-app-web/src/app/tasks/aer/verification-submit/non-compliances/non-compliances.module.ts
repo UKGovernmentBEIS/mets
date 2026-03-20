@@ -10,6 +10,7 @@ import { NonCompliancesRoutingModule } from '@tasks/aer/verification-submit/non-
 import { SummaryComponent } from '@tasks/aer/verification-submit/non-compliances/summary/summary.component';
 
 @NgModule({
+  imports: [AerSharedModule, NonCompliancesRoutingModule, SharedModule],
   declarations: [
     DeleteComponent,
     ListComponent,
@@ -17,6 +18,5 @@ import { SummaryComponent } from '@tasks/aer/verification-submit/non-compliances
     NonCompliancesItemComponent,
     SummaryComponent,
   ],
-  imports: [AerSharedModule, NonCompliancesRoutingModule, SharedModule],
 })
 export class NonCompliancesModule {}

@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
@@ -13,19 +12,16 @@ import { BaseDoeCorsiaEmissionsComponent } from '../doe-corsia-base.component';
 
 @Component({
   selector: 'app-doe-emissions-reasons',
-  templateUrl: './doe-emissions-reasons.component.html',
-  standalone: true,
   imports: [
     GovukComponentsModule,
     SharedModule,
-    NgIf,
-    NgFor,
     ReturnToLinkComponent,
     DoeDeterminationReasonTypePipe,
     DoeDeterminationReasonSubTypePipe,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './doe-emissions-reasons.component.html',
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DoeEmissionsReasonsComponent extends BaseDoeCorsiaEmissionsComponent {
   form = this.formProvider?.determinationReasonCtrl;

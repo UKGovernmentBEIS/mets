@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
-import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SharedModule } from '@shared/shared.module';
@@ -13,11 +12,10 @@ import { MethodAProceduresFormProvider } from '../method-a-procedures-form.provi
 
 @Component({
   selector: 'app-method-a-procedures-fuel-consumption',
-  standalone: true,
-  imports: [SharedModule, ReturnToLinkComponent, ProcedureFormStepComponent],
+  imports: [SharedModule, ProcedureFormStepComponent],
   templateUrl: './method-a-procedures-fuel-consumption.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MethodAProceduresFuelConsumptionComponent {
   private router = inject(Router);

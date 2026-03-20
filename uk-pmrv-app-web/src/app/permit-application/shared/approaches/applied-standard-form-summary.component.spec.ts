@@ -14,6 +14,7 @@ describe('AppliedStandardFormSummaryComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-applied-standard-form-summary [appliedStandard]="appliedStandard"></app-applied-standard-form-summary>
     `,

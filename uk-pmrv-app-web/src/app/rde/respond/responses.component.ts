@@ -25,9 +25,10 @@ import { RDE_FORM, responseFormProvider } from './responses-form.provider';
 
 @Component({
   selector: 'app-responses',
+  standalone: false,
   templateUrl: './responses.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [responseFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResponsesComponent {
   taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));

@@ -7,7 +7,6 @@ import { RequiredChange } from './changes-requested-template.type';
 
 @Component({
   selector: 'app-changes-requested-template',
-  standalone: true,
   imports: [SharedModule],
   templateUrl: './changes-requested-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

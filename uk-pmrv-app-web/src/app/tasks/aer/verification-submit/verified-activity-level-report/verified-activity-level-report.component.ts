@@ -13,6 +13,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, AerVerificationRepo
 
 @Component({
   selector: 'app-verified-activity-level-report',
+  standalone: false,
   templateUrl: './verified-activity-level-report.component.html',
   providers: [verifiedActivityLevelReportFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -20,6 +20,7 @@ import { resolveConfirmSectionStatus } from './confirm/core/cessation-status';
 
 @Component({
   selector: 'app-cessation',
+  standalone: false,
   templateUrl: './cessation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

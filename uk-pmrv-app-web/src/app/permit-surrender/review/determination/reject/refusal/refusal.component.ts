@@ -12,9 +12,10 @@ import { refusalFormProvider } from './refusal-form.provider';
 
 @Component({
   selector: 'app-refusal',
+  standalone: false,
   templateUrl: './refusal.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [refusalFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RefusalComponent implements PendingRequest {
   constructor(

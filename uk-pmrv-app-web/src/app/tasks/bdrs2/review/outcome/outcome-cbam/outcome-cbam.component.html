@@ -1,0 +1,39 @@
+<app-bdrs2-task-review
+  [breadcrumb]="true"
+  returnToLink="../.."
+  heading="What is your decision on the sub-installation splits required because of the UK CBAM?"
+  caption="Outcome of regulator review">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()">
+    <div class="govuk-!-width-two-thirds">
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key govuk-!-width-two-thirds">
+            Are additional sub-installation splits required because of the UK CBAM?
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{
+              bdrPayload()?.bdrs2?.bdrs2guardQuestions?.requiresAdditionalSubInstallationSplitsForCbam ? 'Yes' : 'No'
+            }}
+          </dd>
+        </div>
+      </dl>
+
+      <div
+        formControlName="cbamSplitOpinion"
+        govuk-radio
+        legend="What is your opinion on sub-installation splits required because of the UK CBAM?"
+        legendSize="medium">
+        <govuk-radio-option
+          value="SENT_TO_AUTHORITY"
+          label="Regulator has sent CBAM classifications to the UK ETS authority for final assessment"></govuk-radio-option>
+        <govuk-radio-option value="NO_SPLIT_APPLICABLE" label="No CBAM split is applicable"></govuk-radio-option>
+      </div>
+
+      <h2 class="govuk-heading-m govuk-!-margin-0">Review notes (visible to the operator)</h2>
+      <div formControlName="operatorNotes" govuk-textarea [maxLength]="10000" rows="5"></div>
+
+      <h2 class="govuk-heading-m govuk-!-margin-0">Review notes (not visible to the operator)</h2>
+      <div formControlName="internalNotes" govuk-textarea [maxLength]="10000" rows="5"></div>
+    </div>
+  </app-wizard-step>
+</app-bdrs2-task-review>

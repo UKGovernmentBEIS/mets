@@ -23,8 +23,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-verify-monitoring-approach',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
@@ -46,6 +44,7 @@ interface ViewModel {
     </ng-container>
     <app-return-to-link></app-return-to-link>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifyMonitoringApproachComponent {
   private store = inject(RequestTaskStore);

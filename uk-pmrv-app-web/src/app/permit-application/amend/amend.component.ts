@@ -14,6 +14,7 @@ import { PermitApplicationStore } from '../store/permit-application.store';
 
 @Component({
   selector: 'app-amend',
+  standalone: false,
   templateUrl: './amend.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

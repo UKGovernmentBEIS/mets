@@ -6,7 +6,6 @@ import { combineLatest, map, Observable } from 'rxjs';
 import { ReissueCompletedRequestActionPayload } from 'pmrv-api';
 
 import { SharedModule } from '../../../../../shared/shared.module';
-import { RequestActionTaskComponent } from '../../../shared/components/request-action-task/request-action-task.component';
 import { requestActionQuery, RequestActionStore } from '../../../store';
 import { query } from '../../emp-batch-reissue.selectors';
 
@@ -19,8 +18,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-emp-reissue-completed',
-  standalone: true,
-  imports: [SharedModule, RequestActionTaskComponent, RouterLink],
+  imports: [SharedModule, RouterLink],
   templateUrl: './completed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

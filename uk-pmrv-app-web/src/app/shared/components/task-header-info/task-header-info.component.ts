@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-task-header-info',
+  standalone: false,
   template: `
     <div class="govuk-!-margin-top-2">
       <p class="govuk-body">

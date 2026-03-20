@@ -13,4 +13,5 @@
 export interface BDRS2RequestMetadataAllOf {
   year?: number;
   bdrs2InitiationType?: 'RE_INITIATED' | 'INITIATED';
+  overallAssessmentType?: 'VERIFIED_AS_SATISFACTORY' | 'VERIFIED_WITH_COMMENTS' | 'NOT_VERIFIED';
 }

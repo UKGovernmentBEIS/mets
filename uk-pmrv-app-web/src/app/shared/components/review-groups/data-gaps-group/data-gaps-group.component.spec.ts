@@ -22,6 +22,7 @@ describe('DataGapsGroupComponent', () => {
   }
 
   @Component({
+    standalone: false,
     template: `
       <app-data-gaps-group [isEditable]="isEditable" [dataGapsInfo]="dataGapsInfo"></app-data-gaps-group>
     `,

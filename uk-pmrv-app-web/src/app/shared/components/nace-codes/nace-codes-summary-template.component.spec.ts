@@ -15,6 +15,7 @@ describe('NaceCodesSummaryTemplateComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-nace-codes-summary-template
         [naceCodes]="naceCodes"

@@ -7,6 +7,7 @@ import { AerService } from '@tasks/aer/core/aer.service';
 
 @Component({
   selector: 'app-emission-source-delete',
+  standalone: false,
   template: `
     <app-emission-source-delete-template
       [emissionSource]="emissionSource$ | async"

@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -16,18 +15,10 @@ import { MonitoringApproachTypeFormComponent } from '../monitoring-approach-type
 
 @Component({
   selector: 'app-monitoring-approach-type',
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent, MonitoringApproachTypeFormComponent],
   templateUrl: './monitoring-approach-type.component.html',
-  standalone: true,
-  imports: [
-    GovukComponentsModule,
-    NgIf,
-    NgFor,
-    SharedModule,
-    ReturnToLinkComponent,
-    MonitoringApproachTypeFormComponent,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonitoringApproachTypeComponent implements OnInit {
   form = this.formProvider.monitoringApproachTypeForm;

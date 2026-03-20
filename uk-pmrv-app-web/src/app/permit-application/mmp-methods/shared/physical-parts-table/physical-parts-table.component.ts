@@ -22,7 +22,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-mmp-physical-parts-table',
-  standalone: true,
   imports: [SharedModule, SharedPermitModule, RouterLink],
   templateUrl: './physical-parts-table.component.html',
   styleUrl: './physical-parts-table.component.scss',

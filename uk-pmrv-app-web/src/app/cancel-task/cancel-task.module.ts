@@ -6,7 +6,7 @@ import { CancelTaskRoutingModule } from './cancel-task-routing.module';
 import { CancelComponent, ConfirmationComponent } from './components';
 
 @NgModule({
-  declarations: [CancelComponent, ConfirmationComponent],
   imports: [CancelTaskRoutingModule, SharedModule],
+  declarations: [CancelComponent, ConfirmationComponent],
 })
 export class CancelTaskModule {}

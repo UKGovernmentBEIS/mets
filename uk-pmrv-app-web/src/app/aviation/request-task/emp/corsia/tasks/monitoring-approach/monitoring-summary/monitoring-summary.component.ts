@@ -1,4 +1,3 @@
-import { NgFor, NgForOf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -52,18 +51,15 @@ interface ViewModel {
 
 @Component({
   selector: 'app-monitoring-summary',
-  templateUrl: './monitoring-summary.component.html',
-  standalone: true,
   imports: [
     SharedModule,
     ReturnToLinkComponent,
     MonitoringApproachCorsiaSummaryTemplateComponent,
-    NgFor,
-    NgForOf,
     EmpVariationReviewDecisionGroupComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,
     EmpReviewDecisionGroupComponent,
   ],
+  templateUrl: './monitoring-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonitoringSummaryComponent {

@@ -6,9 +6,8 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-reporting-obligation-summary-template',
-  templateUrl: './reporting-obligation-summary-template.component.html',
-  standalone: true,
   imports: [SharedModule, RouterLinkWithHref],
+  templateUrl: './reporting-obligation-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportingObligationSummaryTemplateComponent {

@@ -11,8 +11,7 @@
  */
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface NonComplianceDailyPenaltyNoticeSaveApplicationRequestTaskActionPayload
-  extends RequestTaskActionPayload {
+export interface NonComplianceDailyPenaltyNoticeSaveApplicationRequestTaskActionPayload extends RequestTaskActionPayload {
   dailyPenaltyNotice: string;
   comments?: string;
   dailyPenaltyCompleted?: boolean;

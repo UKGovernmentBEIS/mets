@@ -21,7 +21,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-waste-qdr-return-for-amends',
-  standalone: true,
   imports: [ChangesRequestedTemplateComponent, SharedModule, WasteQdrTaskComponent],
   templateUrl: './return-for-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

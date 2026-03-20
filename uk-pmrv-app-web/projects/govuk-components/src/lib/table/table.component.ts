@@ -13,6 +13,7 @@ import { GovukTableColumn, SortEvent } from './table.interface';
 
 @Component({
   selector: 'govuk-table',
+  standalone: false,
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

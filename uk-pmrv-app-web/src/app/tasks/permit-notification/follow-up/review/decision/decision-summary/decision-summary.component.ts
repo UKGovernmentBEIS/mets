@@ -4,6 +4,7 @@ import { PermitNotificationService } from '../../../../core/permit-notification.
 
 @Component({
   selector: 'app-decision-summary',
+  standalone: false,
   templateUrl: './decision-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

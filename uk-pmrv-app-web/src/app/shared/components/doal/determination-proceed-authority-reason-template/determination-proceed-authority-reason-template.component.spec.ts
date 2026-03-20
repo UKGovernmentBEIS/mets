@@ -13,6 +13,7 @@ describe('DeterminationProceedAuthorityReasonTemplateComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-determination-proceed-authority-reason-template
         [determination]="determination"

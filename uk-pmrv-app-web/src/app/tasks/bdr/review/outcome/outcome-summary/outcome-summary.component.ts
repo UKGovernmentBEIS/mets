@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
@@ -16,16 +16,15 @@ import {
 
 @Component({
   selector: 'app-outcome-summary',
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, OutcomeSummaryTemplateComponent],
   templateUrl: './outcome-summary.component.html',
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, OutcomeSummaryTemplateComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OutcomeSummaryComponent {
-  isEditable: Signal<boolean> = this.bdrService.isEditable;
+  readonly isEditable: Signal<boolean> = this.bdrService.isEditable;
   bdrPayload = this.bdrService.payload as Signal<BDRApplicationRegulatorReviewSubmitRequestTaskPayload>;
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const outcome = this.bdrPayload().regulatorReviewOutcome;
 
     return {
@@ -37,7 +36,7 @@ export class OutcomeSummaryComponent {
     };
   });
 
-  hideSubmit: Signal<boolean> = computed(() => {
+  readonly hideSubmit: Signal<boolean> = computed(() => {
     const isEditable = this.isEditable();
     return !isEditable || this.bdrPayload().regulatorReviewSectionsCompleted?.['outcome'];
   });

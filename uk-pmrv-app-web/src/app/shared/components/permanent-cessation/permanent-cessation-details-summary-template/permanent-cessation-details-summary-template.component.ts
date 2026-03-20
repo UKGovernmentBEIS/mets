@@ -8,7 +8,6 @@ import { PermanentCessation } from 'pmrv-api';
 
 @Component({
   selector: 'app-permanent-cessation-details-summary-template',
-  standalone: true,
   imports: [SharedModule, RouterLink],
   templateUrl: './permanent-cessation-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

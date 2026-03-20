@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
@@ -13,11 +13,10 @@ import { EmissionsReductionClaimFormProvider } from '../emissions-reduction-clai
 
 @Component({
   selector: 'app-saf-monitoring-systems-processes',
-  standalone: true,
-  imports: [SharedModule, ProcedureFormStepComponent, RouterLinkWithHref],
+  imports: [SharedModule, ProcedureFormStepComponent],
   templateUrl: './saf-monitoring-systems-processes.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SafMonitoringSystemsProcessesComponent implements OnInit, OnDestroy {
   private backLinkService = inject(BackLinkService);

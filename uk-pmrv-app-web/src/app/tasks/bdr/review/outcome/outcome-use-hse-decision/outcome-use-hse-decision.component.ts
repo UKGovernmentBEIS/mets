@@ -16,10 +16,9 @@ import { freeAllocationFormProvider } from './outcome-use-hse-decision-form.prov
 
 @Component({
   selector: 'app-outcome-use-hse-decision',
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   templateUrl: './outcome-use-hse-decision.component.html',
   providers: [freeAllocationFormProvider],
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OutcomeUseHseDecisionComponent implements PendingRequest {

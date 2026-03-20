@@ -4,6 +4,7 @@ import { AerVerificationReport } from 'pmrv-api';
 
 @Component({
   selector: 'app-verifier-details-group',
+  standalone: false,
   templateUrl: './verifier-details-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

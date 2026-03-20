@@ -18,6 +18,7 @@ describe('SummaryTemplateComponent', () => {
   let store: PermitApplicationStore<PermitApplicationState>;
 
   @Component({
+    standalone: false,
     template: `
       <app-n2o-approach-gas-summary-template></app-n2o-approach-gas-summary-template>
     `,

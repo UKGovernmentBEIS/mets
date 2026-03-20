@@ -27,7 +27,7 @@ describe('MethodAProceduresFuelDensityComponent', () => {
       ],
     }).compileComponents();
 
-    TestBed.inject<MethodAProceduresFormProvider>(TASK_FORM_PROVIDER).form;
+    TestBed.inject<MethodAProceduresFormProvider>(TASK_FORM_PROVIDER);
 
     component = TestBed.createComponent(MethodAProceduresFuelDensityComponent).componentInstance;
   });

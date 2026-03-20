@@ -20,6 +20,7 @@ import { measurableHeatImportedAddFormFactory } from './measurable-heat-imported
 
 @Component({
   selector: 'app-measurable-heat-imported',
+  standalone: false,
   templateUrl: './measurable-heat-imported.component.html',
   styleUrl: './measurable-heat-imported.component.scss',
   providers: [measurableHeatImportedAddFormFactory],

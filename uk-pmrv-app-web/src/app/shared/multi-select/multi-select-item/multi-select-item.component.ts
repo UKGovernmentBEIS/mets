@@ -3,6 +3,7 @@ import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/fo
 
 @Component({
   selector: 'div[app-multi-select-item]',
+  standalone: false,
   template: `
     <input
       type="checkbox"
@@ -22,6 +23,7 @@ export class MultiSelectItemComponent implements ControlValueAccessor {
   @Input() label: string;
   @Input() itemValue: string;
 
+  // eslint-disable-next-line @angular-eslint/prefer-host-metadata-property
   @HostBinding('class.govuk-checkboxes__item') readonly govukCheckboxesItem = true;
 
   isChecked: boolean;

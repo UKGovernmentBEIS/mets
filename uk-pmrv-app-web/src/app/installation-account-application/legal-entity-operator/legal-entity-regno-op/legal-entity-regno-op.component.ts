@@ -14,6 +14,7 @@ import { InstallationAccountApplicationStore } from '../../store/installation-ac
 
 @Component({
   selector: 'app-legal-entity-regno-op',
+  standalone: false,
   templateUrl: './legal-entity-regno-op.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

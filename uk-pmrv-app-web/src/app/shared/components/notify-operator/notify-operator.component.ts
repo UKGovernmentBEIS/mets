@@ -56,9 +56,10 @@ import { NOTIFY_OPERATOR_FORM, notifyOperatorFormFactory } from './notify-operat
 
 @Component({
   selector: 'app-notify-operator',
+  standalone: false,
   templateUrl: './notify-operator.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [notifyOperatorFormFactory, UserFullNamePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotifyOperatorComponent implements PendingRequest, OnInit {
   @Input() taskId: number;

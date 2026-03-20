@@ -17,6 +17,7 @@ import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInfoResolver;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Validated
 @Service
@@ -89,6 +90,11 @@ public class RequestService {
     @Transactional
     public void paymentCompleted(final String requestId) {
         this.findRequestById(requestId).getPayload().setPaymentCompleted(true);
+    }
+
+    @Transactional
+    public List<Request> getByAccountIdAndType(Long accountId, RequestType requestType) {
+       return requestRepository.findByAccountIdAndType(accountId, requestType);
     }
 
     private void closeRequest(Request request) {

@@ -10,14 +10,12 @@ import { AviationAerMaterialityLevel } from 'pmrv-api';
 
 @Component({
   selector: 'app-aer-verify-materiality-level-group',
-  templateUrl: './materiality-level-group.component.html',
-  standalone: true,
   imports: [GovukComponentsModule, SharedModule, RouterModule, AccreditationReferenceDocumentNamePipe],
+  templateUrl: './materiality-level-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerVerifyMaterialityLevelGroupComponent {
   @Input() isEditable = false;
   @Input() materialityLevel: AviationAerMaterialityLevel;
   @Input() queryParams = {};
-  @Input() yearEqualAfter25 = false;
 }

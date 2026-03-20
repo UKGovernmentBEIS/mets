@@ -17,6 +17,7 @@ describe('MmpProcedureFormComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <form [formGroup]="form">
         <app-mmp-procedure-form formGroupName="procedureForm"></app-mmp-procedure-form>

@@ -5,6 +5,7 @@ import { BackLinkService } from '@shared/back-link/back-link.service';
 
 @Component({
   selector: 'app-review-wait',
+  standalone: false,
   templateUrl: './review-wait.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { OtherFactor } from 'pmrv-api';
 
-@Pipe({ name: 'reportingType' })
+@Pipe({
+  name: 'reportingType',
+  standalone: false,
+})
 export class ReportingTypePipe implements PipeTransform {
   transform(type: OtherFactor['reportingType']): string {
     switch (type) {

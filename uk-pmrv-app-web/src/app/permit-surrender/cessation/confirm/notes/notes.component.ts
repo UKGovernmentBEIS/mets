@@ -16,6 +16,7 @@ import { notesFormProvider } from './notes-form.provider';
 
 @Component({
   selector: 'app-notes',
+  standalone: false,
   template: `
     <app-wizard-step
       (formSubmit)="onContinue()"
@@ -34,8 +35,8 @@ import { notesFormProvider } from './notes-form.provider';
     </app-wizard-step>
     <a govukLink routerLink="../..">Return to: Cessation</a>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [notesFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotesComponent implements PendingRequest, OnInit {
   constructor(

@@ -19,6 +19,7 @@ import { AuthorityStatusPipe } from '../pipes/authority-status.pipe';
 
 @Component({
   selector: 'app-accounts-users-contacts',
+  standalone: false,
   template: `
     <app-page-heading size="xl">List of Accounts, Users and Contacts</app-page-heading>
     <div class="govuk-button-group">
@@ -37,8 +38,8 @@ import { AuthorityStatusPipe } from '../pipes/authority-status.pipe';
       </ng-container>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountsUsersContactsComponent implements OnInit {
   readonly pageSize = pageSize;

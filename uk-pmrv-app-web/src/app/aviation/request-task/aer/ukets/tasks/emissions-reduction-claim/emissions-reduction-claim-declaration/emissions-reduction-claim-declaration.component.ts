@@ -14,7 +14,6 @@ import { AerEmissionsReductionClaimFormProvider } from '../emissions-reduction-c
 
 @Component({
   selector: 'app-emissions-reduction-claim-declaration',
-  standalone: true,
   imports: [SharedModule, ReturnToLinkComponent],
   templateUrl: './emissions-reduction-claim-declaration.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

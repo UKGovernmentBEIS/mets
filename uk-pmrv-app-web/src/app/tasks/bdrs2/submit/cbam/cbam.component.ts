@@ -16,10 +16,10 @@ import { cbamFormProvider } from './cbam-form.provider';
 
 @Component({
   selector: 'app-cbam',
+  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule],
+  standalone: true,
   templateUrl: './cbam.component.html',
   providers: [cbamFormProvider],
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, BdrS2TaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CBAMComponent implements PendingRequest {

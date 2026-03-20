@@ -10,8 +10,8 @@ const FLIGHT_IDENTIFICATION_TYPE: Record<OrganisationStructure['legalStatusType'
 
 @Pipe({
   name: 'operatorDetailsLegalStatusType',
-  pure: true,
   standalone: true,
+  pure: true,
 })
 export class OperatorDetailsLegalStatusTypePipe implements PipeTransform {
   transform(value: OrganisationStructure['legalStatusType']): string | null {

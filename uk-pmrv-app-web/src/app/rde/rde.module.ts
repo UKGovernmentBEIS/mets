@@ -18,6 +18,7 @@ import { NotAllowedComponent } from './submit/not-allowed/not-allowed.component'
 import { NotifyUsersComponent } from './submit/notify-users/notify-users.component';
 import { TimelineComponent as SubmitTimelineComponent } from './submit/timeline/timeline.component';
 @NgModule({
+  imports: [RdeRoutingModule, SharedModule],
   declarations: [
     AnswersComponent,
     AnswersTemplateComponent,
@@ -34,7 +35,6 @@ import { TimelineComponent as SubmitTimelineComponent } from './submit/timeline/
     ReturnLinkComponent,
     SubmitTimelineComponent,
   ],
-  imports: [RdeRoutingModule, SharedModule],
   providers: [PaymentCompletedGuard],
 })
 export class RdeModule {}

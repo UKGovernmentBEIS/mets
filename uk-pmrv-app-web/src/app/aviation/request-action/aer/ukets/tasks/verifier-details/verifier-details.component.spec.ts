@@ -90,7 +90,7 @@ describe('VerifierDetailsComponent', () => {
       ['Company name', 'VB Company'],
       ['Address', 'street 1  , street 2 City111 80'],
       ['Accreditation number', '1313'],
-      ['National accreditation body', 'UK ETS Aviation EU ETS Installations CORSIA UK ETS Installations'],
+      ['National accreditation body', 'UK ETS Aviation  EU ETS Installations  CORSIA  UK ETS Installations'],
       ['Name', 'Verifier Name'],
       ['Email', 'test@test.com'],
       ['Telephone number', '6691423232'],

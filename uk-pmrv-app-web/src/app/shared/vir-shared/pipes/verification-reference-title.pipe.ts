@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'verificationReferenceTitle',
+  standalone: false,
 })
 export class VerificationReferenceTitlePipe implements PipeTransform {
   transform(value: string): string {

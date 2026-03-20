@@ -13,7 +13,6 @@ import { alrActivityLevelFormProvider } from './activity-level-form.provider';
 
 @Component({
   selector: 'app-alr-activity-level',
-  standalone: true,
   imports: [AlrTaskSharedModule, SharedModule],
   template: `
     <app-alr-task-common
@@ -26,8 +25,8 @@ import { alrActivityLevelFormProvider } from './activity-level-form.provider';
       </app-wizard-step>
     </app-alr-task-common>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [alrActivityLevelFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrActivityLevelComponent {
   private readonly index = this.route.snapshot.paramMap.get('index');

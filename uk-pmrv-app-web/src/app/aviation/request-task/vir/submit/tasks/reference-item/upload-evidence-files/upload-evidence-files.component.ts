@@ -24,7 +24,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-upload-evidence-files',
-  standalone: true,
   imports: [ReturnToLinkComponent, SharedModule],
   template: `
     <app-wizard-step
@@ -43,8 +42,8 @@ interface ViewModel {
     </app-wizard-step>
     <app-return-to-link></app-return-to-link>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UploadEvidenceFilesComponent {
   form = new FormGroup(

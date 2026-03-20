@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-environmental-system-summary-template',
+  standalone: false,
   template: `
     <dl
       *ngIf="'environmentalManagementSystem' | task: !showOriginal | async as environmentalSystem"

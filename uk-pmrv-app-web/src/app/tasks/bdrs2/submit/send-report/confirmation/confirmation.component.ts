@@ -7,8 +7,8 @@ import { BdrS2Service } from '@tasks/bdrs2/core';
 
 @Component({
   selector: 'app-bdrs2-send-report-confirmation',
-  standalone: true,
   imports: [SharedModule, RouterLink],
+  standalone: true,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

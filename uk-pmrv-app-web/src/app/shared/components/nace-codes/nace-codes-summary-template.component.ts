@@ -12,6 +12,7 @@ import { CompanyInformationService, CompanyProfileDTO, NaceCodes } from 'pmrv-ap
 
 @Component({
   selector: 'app-nace-codes-summary-template',
+  standalone: false,
   templateUrl: './nace-codes-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

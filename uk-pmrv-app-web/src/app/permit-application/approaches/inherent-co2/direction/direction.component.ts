@@ -15,9 +15,10 @@ import { directionFormProvider } from './direction-form.provider';
 
 @Component({
   selector: 'app-direction',
+  standalone: false,
   templateUrl: './direction.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject, directionFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DirectionComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

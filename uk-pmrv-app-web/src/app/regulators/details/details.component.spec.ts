@@ -215,6 +215,8 @@ describe('RegulatorDetailsComponent', () => {
       expect(component.form.get('permissions.REVIEW_AVIATION_AER').value).toEqual('VIEW_ONLY');
       expect(component.form.get('permissions.SUBMIT_AVIATION_NON_COMPLIANCE').value).toEqual('VIEW_ONLY');
       expect(component.form.get('permissions.PEER_REVIEW_AVIATION_NON_COMPLIANCE').value).toEqual('VIEW_ONLY');
+      expect(component.form.get('permissions.SUBMIT_BDR_REVIEW').value).toEqual('VIEW_ONLY');
+      expect(component.form.get('permissions.PEER_REVIEW_BDR').value).toEqual('VIEW_ONLY');
       expect(component.form.get('permissions.SUBMIT_PERMANENT_CESSATION').value).toEqual('VIEW_ONLY');
       expect(component.form.get('permissions.PEER_REVIEW_PERMANENT_CESSATION').value).toEqual('VIEW_ONLY');
       expect(component.form.get('permissions.SUBMIT_AVIATION_DOE_CORSIA').value).toEqual('NONE');
@@ -224,6 +226,8 @@ describe('RegulatorDetailsComponent', () => {
       expect(component.form.get('permissions.MARK_NOT_REQUIRED_ALR').value).toEqual('NONE');
       expect(component.form.get('permissions.SUBMIT_HSE_TI_REVIEW').value).toEqual('NONE');
       expect(component.form.get('permissions.PEER_REVIEW_HSE_TI').value).toEqual('NONE');
+      expect(component.form.get('permissions.SUBMIT_BDRS2_REVIEW').value).toEqual('VIEW_ONLY');
+      expect(component.form.get('permissions.PEER_REVIEW_BDRS2').value).toEqual('VIEW_ONLY');
       expect(component.form.get('user.email').disabled).toBeTruthy();
 
       await expect(firstValueFrom(component.allowEditPermissions$)).resolves.toBeTruthy();
@@ -475,6 +479,8 @@ describe('RegulatorDetailsComponent', () => {
       expect(component.form.get('permissions.MARK_NOT_REQUIRED_ALR').value).toEqual('NONE');
       expect(component.form.get('permissions.SUBMIT_HSE_TI_REVIEW').value).toEqual('NONE');
       expect(component.form.get('permissions.PEER_REVIEW_HSE_TI').value).toEqual('NONE');
+      expect(component.form.get('permissions.SUBMIT_BDRS2_REVIEW').value).toEqual('NONE');
+      expect(component.form.get('permissions.PEER_REVIEW_BDRS2').value).toEqual('NONE');
 
       page.submitButton.click();
       fixture.detectChanges();
@@ -582,6 +588,8 @@ describe('RegulatorDetailsComponent', () => {
       expect(component.form.get('permissions.MARK_NOT_REQUIRED_ALR').value).toEqual('NONE');
       expect(component.form.get('permissions.SUBMIT_HSE_TI_REVIEW').value).toEqual('NONE');
       expect(component.form.get('permissions.PEER_REVIEW_HSE_TI').value).toEqual('NONE');
+      expect(component.form.get('permissions.SUBMIT_BDRS2_REVIEW').value).toEqual('NONE');
+      expect(component.form.get('permissions.PEER_REVIEW_BDRS2').value).toEqual('NONE');
 
       page.submitButton.click();
       fixture.detectChanges();
@@ -660,6 +668,8 @@ describe('RegulatorDetailsComponent', () => {
       expect(component.form.get('permissions.MARK_NOT_REQUIRED_ALR').value).toEqual('NONE');
       expect(component.form.get('permissions.SUBMIT_HSE_TI_REVIEW').value).toEqual('NONE');
       expect(component.form.get('permissions.PEER_REVIEW_HSE_TI').value).toEqual('NONE');
+      expect(component.form.get('permissions.SUBMIT_BDRS2_REVIEW').value).toEqual('NONE');
+      expect(component.form.get('permissions.PEER_REVIEW_BDRS2').value).toEqual('NONE');
 
       fixture.detectChanges();
       page.submitButton.click();

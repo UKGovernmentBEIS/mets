@@ -22,7 +22,6 @@ import { MonitoringPlanChangesFormProvider } from '../monitoring-plan-changes-fo
 
 @Component({
   selector: 'app-monitoring-plan-changes-page',
-  standalone: true,
   imports: [
     GovukComponentsModule,
     SharedModule,

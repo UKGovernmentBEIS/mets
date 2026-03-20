@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { PermitIssuanceStore } from '@permit-issuance/store/permit-issuance.store';
 import { SharedModule } from '@shared/shared.module';
@@ -44,8 +44,9 @@ describe('PfcComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, PFCModule, RouterTestingModule],
+      imports: [SharedModule, PFCModule],
       providers: [
+        provideRouter([]),
         {
           provide: PermitApplicationStore,
           useExisting: PermitIssuanceStore,

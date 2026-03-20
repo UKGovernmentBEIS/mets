@@ -16,10 +16,9 @@ import { QuestionFormProvider } from './outcome-27a-question-form.provider';
 
 @Component({
   selector: 'app-outcome-27a-question',
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   templateUrl: './outcome-27a-question.component.html',
   providers: [QuestionFormProvider],
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Outcome27aQuestionComponent implements PendingRequest {

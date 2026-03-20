@@ -5,7 +5,7 @@
     [isEditable]="vm.isEditable"
     [materialityLevel]="vm.materialityLevel"
     [queryParams]="{ change: true }"
-    [yearEqualAfter25]="vm.yearEqualAfter25"></app-aer-verify-materiality-level-group>
+  ></app-aer-verify-materiality-level-group>
 
   <div class="govuk-button-group">
     <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
@@ -15,7 +15,8 @@
 
   <app-aviation-aer-verification-review-decision-group
     *ngIf="vm.showDecision"
-    taskKey="materialityLevel"></app-aviation-aer-verification-review-decision-group>
+    taskKey="materialityLevel"
+  ></app-aviation-aer-verification-review-decision-group>
 </ng-container>
 
 <app-return-to-link></app-return-to-link>

@@ -5,8 +5,7 @@
     heading="List the information sources you've used to arrive at the updated emissions"
     submitText="Continue"
     [hideSubmit]="(informationSources$ | async).length === 0"
-    [showBackLink]="true"
-  >
+    [showBackLink]="true">
     <div class="govuk-hint">
       These could be things like emails or data received from the operator, or the emissions report.
     </div>
@@ -15,14 +14,13 @@
       <app-information-sources-summary-template
         [data]="informationSources$ | async"
         [editable]="dreService.isEditable$ | async"
-        [baseChangeLink]="'./'"
-      ></app-information-sources-summary-template>
+        baseChangeLink="./"></app-information-sources-summary-template>
     </ng-container>
 
     <ng-container *ngIf="(informationSources$ | async).length; else noInformationSource">
       <div *ngIf="dreService.isEditable$ | async">
         <div class="govuk-button-group">
-          <a routerLink="./add" govukSecondaryButton type="button" [state]="{ changing: true }"> Add another item </a>
+          <a routerLink="./add" govukSecondaryButton type="button" [state]="{ changing: true }">Add another item</a>
         </div>
       </div>
     </ng-container>

@@ -1,0 +1,335 @@
+@if (vm) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Do you want to continue with your application for free allocation?</dt>
+      <dd govukSummaryListRowValue>
+        {{ vm.bdrs2?.bdrs2guardQuestions?.continueApplicationForFreeAllocationType | freeAllocationType }}
+      </dd>
+      @if (vm.isEditable) {
+        <dd govukSummaryListRowActions></dd>
+      }
+    </div>
+
+    @if (withdrawn(vm) && vm.bdrs2?.bdrs2guardQuestions?.applicationWithdrawalReason) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Reason</dt>
+        <dd govukSummaryListRowValue>
+          {{ vm.bdrs2?.bdrs2guardQuestions?.applicationWithdrawalReason }}
+        </dd>
+        @if (vm.isEditable) {
+          <dd govukSummaryListRowActions></dd>
+        }
+      </div>
+    }
+
+    @if (vm.outcome?.freeAllocationOpinion) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>What is your opinion on the free allocation application?</dt>
+        <dd govukSummaryListRowValue>
+          {{ vm.outcome?.freeAllocationOpinion | reviewOutcomeOpinion: 'fa' }}
+        </dd>
+        @if (vm.isEditable) {
+          <dd govukSummaryListRowActions>
+            <a
+              govukLink
+              [routerLink]="['../']"
+              hidden-text="your decision for the free allcation"
+              [state]="{ changing: true }">
+              Change
+            </a>
+          </dd>
+        }
+      </div>
+
+      @if (vm.outcome?.freeAllocationReviewNotes?.operatorNotes) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Review notes (visible to the operator)</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">{{ vm.outcome?.freeAllocationReviewNotes?.operatorNotes }}</dd>
+          @if (vm.isEditable) {
+            <dd govukSummaryListRowActions>
+              <a govukLink [routerLink]="['../']" [state]="{ changing: true }">
+                Change
+                <span class="govuk-visually-hidden">your decision for the free allocation</span>
+              </a>
+            </dd>
+          }
+        </div>
+      }
+
+      @if (vm.outcome?.freeAllocationReviewNotes?.internalNotes) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Review notes (not visible to the operator)</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">{{ vm.outcome?.freeAllocationReviewNotes?.internalNotes }}</dd>
+          @if (vm.isEditable) {
+            <dd govukSummaryListRowActions>
+              <a govukLink [routerLink]="['../']" [state]="{ changing: true }">
+                Change
+                <span class="govuk-visually-hidden">your decision for the free allocation</span>
+              </a>
+            </dd>
+          }
+        </div>
+      }
+    }
+
+    @if (!withdrawn(vm)) {
+      @if (notNullOrUndefined(vm.bdrs2?.bdrs2guardQuestions?.covidAdjustments)) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Are you making COVID adjustments?</dt>
+          <dd govukSummaryListRowValue>
+            {{ vm.bdrs2?.bdrs2guardQuestions?.covidAdjustments ? 'Yes' : 'No' }}
+          </dd>
+          @if (vm.isEditable) {
+            <dd govukSummaryListRowActions></dd>
+          }
+        </div>
+
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>What is your opinion on the COVID adjustments?</dt>
+          <dd govukSummaryListRowValue>
+            {{ vm.outcome?.covidAdjustmentsOpinion | reviewOutcomeOpinion: 'covid' }}
+          </dd>
+          @if (vm.isEditable) {
+            <dd govukSummaryListRowActions>
+              <a
+                govukLink
+                [routerLink]="['../covid-adjustments']"
+                hidden-text="your decision for the covid adjustments"
+                [state]="{ changing: true }">
+                Change
+              </a>
+            </dd>
+          }
+        </div>
+
+        @if (vm.outcome?.covidAdjustmentsReviewNotes?.operatorNotes) {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Review notes (visible to the operator)</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ vm.outcome?.covidAdjustmentsReviewNotes?.operatorNotes }}
+            </dd>
+            @if (vm.isEditable) {
+              <dd govukSummaryListRowActions>
+                <a
+                  govukLink
+                  [routerLink]="['../covid-adjustments']"
+                  hidden-text="your decision for the covid adjustments"
+                  [state]="{ changing: true }">
+                  Change
+                </a>
+              </dd>
+            }
+          </div>
+        }
+
+        @if (vm.outcome?.covidAdjustmentsReviewNotes?.internalNotes) {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Review notes (not visible to the operator)</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ vm.outcome?.covidAdjustmentsReviewNotes?.internalNotes }}
+            </dd>
+            @if (vm.isEditable) {
+              <dd govukSummaryListRowActions>
+                <a
+                  govukLink
+                  [routerLink]="['../covid-adjustments']"
+                  hidden-text="your decision for the covid adjustments"
+                  [state]="{ changing: true }">
+                  Change
+                </a>
+              </dd>
+            }
+          </div>
+        }
+      }
+
+      @if (notNullOrUndefined(vm.bdrs2?.bdrs2guardQuestions?.inEiteSector)) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>
+            Is your installation in the aluminium, cement, fertiliser, hydrogen, iron or steel sector?
+          </dt>
+          <dd govukSummaryListRowValue>
+            {{ vm.bdrs2?.bdrs2guardQuestions?.inEiteSector ? 'Yes' : 'No' }}
+          </dd>
+          @if (vm.isEditable) {
+            <dd govukSummaryListRowActions></dd>
+          }
+        </div>
+
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>What is your opinion on the installation sector?</dt>
+          <dd govukSummaryListRowValue>
+            {{ vm.outcome?.installationSectorOpinion | reviewOutcomeOpinion: 'installation' }}
+          </dd>
+          @if (vm.isEditable) {
+            <dd govukSummaryListRowActions>
+              <a
+                govukLink
+                [routerLink]="['../installation-sector']"
+                hidden-text="your decision for the installation sector"
+                [state]="{ changing: true }">
+                Change
+              </a>
+            </dd>
+          }
+        </div>
+
+        @if (vm.outcome?.installationSectorReviewNotes?.operatorNotes) {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Review notes (visible to the operator)</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ vm.outcome?.installationSectorReviewNotes?.operatorNotes }}
+            </dd>
+            @if (vm.isEditable) {
+              <dd govukSummaryListRowActions>
+                <a
+                  govukLink
+                  [routerLink]="['../installation-sector']"
+                  hidden-text="your decision for the installation sector"
+                  [state]="{ changing: true }">
+                  Change
+                </a>
+              </dd>
+            }
+          </div>
+        }
+
+        @if (vm.outcome?.installationSectorReviewNotes?.internalNotes) {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Review notes (not visible to the operator)</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ vm.outcome?.installationSectorReviewNotes?.internalNotes }}
+            </dd>
+            @if (vm.isEditable) {
+              <dd govukSummaryListRowActions>
+                <a
+                  govukLink
+                  [routerLink]="['../installation-sector']"
+                  hidden-text="your decision for the installation sector"
+                  [state]="{ changing: true }">
+                  Change
+                </a>
+              </dd>
+            }
+          </div>
+        }
+      }
+
+      @if (vm.bdrs2?.bdrs2guardQuestions?.inEiteSector === true) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Are additional sub-installation splits required because of the UK CBAM?</dt>
+          <dd govukSummaryListRowValue>
+            {{ vm.bdrs2?.bdrs2guardQuestions?.requiresAdditionalSubInstallationSplitsForCbam ? 'Yes' : 'No' }}
+          </dd>
+          @if (vm.isEditable) {
+            <dd govukSummaryListRowActions></dd>
+          }
+        </div>
+
+        @if (vm.outcome?.cbamSplitOpinion) {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>
+              What is your opinion on sub-installation splits required because of the UK CBAM?
+            </dt>
+            <dd govukSummaryListRowValue>
+              {{ vm.outcome?.cbamSplitOpinion | reviewOutcomeOpinion: 'cbam' }}
+            </dd>
+            @if (vm.isEditable) {
+              <dd govukSummaryListRowActions>
+                <a
+                  govukLink
+                  [routerLink]="['../cbam']"
+                  hidden-text="your decision for the sub-installation splits required because of the UK CBAM"
+                  [state]="{ changing: true }">
+                  Change
+                </a>
+              </dd>
+            }
+          </div>
+
+          @if (vm.outcome?.cbamSplitReviewNotes?.operatorNotes) {
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Review notes (visible to the operator)</dt>
+              <dd govukSummaryListRowValue class="pre-wrap">
+                {{ vm.outcome?.cbamSplitReviewNotes?.operatorNotes }}
+              </dd>
+              @if (vm.isEditable) {
+                <dd govukSummaryListRowActions>
+                  <a
+                    govukLink
+                    [routerLink]="['../cbam']"
+                    hidden-text="your decision for the sub-installation splits required because of the UK CBAM"
+                    [state]="{ changing: true }">
+                    Change
+                  </a>
+                </dd>
+              }
+            </div>
+          }
+
+          @if (vm.outcome?.cbamSplitReviewNotes?.internalNotes) {
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Review notes (not visible to the operator)</dt>
+              <dd govukSummaryListRowValue class="pre-wrap">
+                {{ vm.outcome?.cbamSplitReviewNotes?.internalNotes }}
+              </dd>
+              @if (vm.isEditable) {
+                <dd govukSummaryListRowActions>
+                  <a
+                    govukLink
+                    [routerLink]="['../cbam']"
+                    hidden-text="your decision for the sub-installation splits required because of the UK CBAM"
+                    [state]="{ changing: true }">
+                    Change
+                  </a>
+                </dd>
+              }
+            </div>
+          }
+        }
+      }
+
+      @if (vm?.bdrFile) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Uploaded stage 2 baseline data report</dt>
+          <dd govukSummaryListRowValue>
+            <app-summary-download-files [files]="[vm.bdrFile]"></app-summary-download-files>
+          </dd>
+
+          @if (vm.isEditable) {
+            <dd govukSummaryListRowActions>
+              <a
+                govukLink
+                [routerLink]="['../file-upload']"
+                hidden-text="the stage 2 baseline data report file"
+                [state]="{ changing: true }">
+                Change
+              </a>
+            </dd>
+          }
+        </div>
+      }
+
+      @if (vm?.files.length) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Uploaded supporting files</dt>
+          <dd govukSummaryListRowValue>
+            <app-summary-download-files [files]="vm.files"></app-summary-download-files>
+          </dd>
+
+          @if (vm.isEditable) {
+            <dd govukSummaryListRowActions>
+              <a
+                govukLink
+                [routerLink]="['../file-upload']"
+                hidden-text="the supporting files"
+                [state]="{ changing: true }">
+                Change
+              </a>
+            </dd>
+          }
+        </div>
+      }
+    }
+  </dl>
+}

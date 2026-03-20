@@ -1,0 +1,49 @@
+<app-bdrs2-task-review
+  [breadcrumb]="true"
+  returnToLink="../"
+  heading="What is your decision for the free allocation?"
+  caption="Outcome of regulator review">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()">
+    <div class="govuk-!-width-two-thirds">
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key govuk-!-width-two-thirds">
+            Do you want to continue with your application for free allocation?
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{
+              bdrPayload()?.bdrs2?.bdrs2guardQuestions?.continueApplicationForFreeAllocationType | freeAllocationType
+            }}
+          </dd>
+        </div>
+        @if (bdrPayload()?.bdrs2?.bdrs2guardQuestions?.continueApplicationForFreeAllocationType === 'WITHDRAW') {
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key govuk-!-width-two-thirds">Reason</dt>
+            <dd class="govuk-summary-list__value">
+              {{ bdrPayload()?.bdrs2?.bdrs2guardQuestions?.applicationWithdrawalReason }}
+            </dd>
+          </div>
+        }
+      </dl>
+
+      <div
+        formControlName="freeAllocationOpinion"
+        govuk-radio
+        legend="What is your opinion on the free allocation application?"
+        legendSize="medium">
+        <govuk-radio-option
+          value="SENT_TO_AUTHORITY"
+          label="Regulator has sent the free allocation application and explanations to UK ETS authority for assessment"></govuk-radio-option>
+        <govuk-radio-option
+          value="WITHDRAWN"
+          label="Free allocation application has been withdrawn"></govuk-radio-option>
+      </div>
+
+      <h2 class="govuk-heading-m govuk-!-margin-0">Review notes (visible to the operator)</h2>
+      <div formControlName="operatorNotes" govuk-textarea [maxLength]="10000" rows="5"></div>
+
+      <h2 class="govuk-heading-m govuk-!-margin-0">Review notes (not visible to the operator)</h2>
+      <div formControlName="internalNotes" govuk-textarea [maxLength]="10000" rows="5"></div>
+    </div>
+  </app-wizard-step>
+</app-bdrs2-task-review>

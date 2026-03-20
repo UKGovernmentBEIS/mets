@@ -16,10 +16,9 @@ import { provideMMPFormProvider } from './provide-mmp-form.provider';
 
 @Component({
   selector: 'app-provide-mmp',
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   templateUrl: './provide-mmp.component.html',
   providers: [provideMMPFormProvider],
-  standalone: true,
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProvideMmpComponent implements PendingRequest {

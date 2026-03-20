@@ -13,6 +13,7 @@ import { GovukTextWidthClass } from './select.type';
 */
 @Component({
   selector: 'div[govuk-select]',
+  standalone: false,
   templateUrl: './select.component.html',
 })
 export class SelectComponent extends FormInput implements ControlValueAccessor {

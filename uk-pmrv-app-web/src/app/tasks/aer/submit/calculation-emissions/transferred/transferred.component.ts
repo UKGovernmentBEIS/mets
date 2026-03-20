@@ -15,9 +15,10 @@ import { transferredFormProvider } from './transferred-form.provider';
 
 @Component({
   selector: 'app-transferred',
+  standalone: false,
   templateUrl: './transferred.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [transferredFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransferredComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));

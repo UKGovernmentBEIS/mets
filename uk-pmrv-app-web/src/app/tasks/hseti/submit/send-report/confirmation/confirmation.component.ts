@@ -7,7 +7,6 @@ import { HseTiService } from '@tasks/hseti/core';
 
 @Component({
   selector: 'app-hseti-send-report-confirmation',
-  standalone: true,
   imports: [SharedModule, RouterLink],
   template: `
     <div class="govuk-grid-row">

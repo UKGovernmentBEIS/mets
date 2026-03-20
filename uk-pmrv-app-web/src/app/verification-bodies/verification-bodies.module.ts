@@ -13,6 +13,7 @@ import { VerificationBodiesComponent } from './verification-bodies.component';
 import { VerificationBodiesRoutingModule } from './verification-bodies-routing.module';
 
 @NgModule({
+  imports: [SharedModule, SharedUserModule, VerificationBodiesRoutingModule],
   declarations: [
     AddComponent,
     ContactsAddComponent,
@@ -22,6 +23,5 @@ import { VerificationBodiesRoutingModule } from './verification-bodies-routing.m
     FormComponent,
     VerificationBodiesComponent,
   ],
-  imports: [SharedModule, SharedUserModule, VerificationBodiesRoutingModule],
 })
 export class VerificationBodiesModule {}

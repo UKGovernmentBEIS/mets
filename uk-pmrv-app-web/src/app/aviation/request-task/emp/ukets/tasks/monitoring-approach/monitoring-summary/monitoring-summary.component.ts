@@ -1,6 +1,5 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -15,7 +14,6 @@ import {
 } from '@aviation/request-task/util';
 import { MonitoringApproachSummaryTemplateComponent } from '@aviation/shared/components/emp/monitoring-approach-summary-template/monitoring-approach-summary-template.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
-import { MonitoringApproachTypePipe } from '@aviation/shared/pipes/monitoring-approach-type.pipe';
 import { SharedModule } from '@shared/shared.module';
 
 import {
@@ -46,20 +44,16 @@ interface ViewModel {
 
 @Component({
   selector: 'app-monitoring-summary',
-  templateUrl: './monitoring-summary.component.html',
-  standalone: true,
   imports: [
     NgIf,
-    NgFor,
     SharedModule,
-    RouterLinkWithHref,
-    MonitoringApproachTypePipe,
     ReturnToLinkComponent,
     EmpReviewDecisionGroupComponent,
     EmpVariationReviewDecisionGroupComponent,
     MonitoringApproachSummaryTemplateComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,
   ],
+  templateUrl: './monitoring-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonitoringSummaryComponent extends BaseMonitoringApproachComponent {

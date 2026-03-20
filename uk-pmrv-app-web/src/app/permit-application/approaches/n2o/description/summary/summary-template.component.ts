@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-n2o-approach-description-summary-template',
+  standalone: false,
   template: `
     <dl
       *ngIf="

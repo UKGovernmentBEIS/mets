@@ -9,6 +9,7 @@ import { FormErrorDirective } from './form-error.directive';
 
 describe('FormErrorDirective', () => {
   @Component({
+    standalone: false,
     template: `
       <div>
         <div class="govuk-form-group">

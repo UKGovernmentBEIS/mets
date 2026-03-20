@@ -21,10 +21,9 @@ interface ViewModel {
 }
 @Component({
   selector: 'app-misstatement-list',
-  templateUrl: './misstatement-list.component.html',
-  standalone: true,
-  providers: [DestroySubject],
   imports: [GovukComponentsModule, SharedModule, RouterModule, UncorrectedItemGroupComponent, ReturnToLinkComponent],
+  templateUrl: './misstatement-list.component.html',
+  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MisstatementListComponent {

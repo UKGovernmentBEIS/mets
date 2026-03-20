@@ -4,6 +4,7 @@ import { RegulatorAirReviewResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-air-regulator-provide-summary',
+  standalone: false,
   templateUrl: './air-regulator-provide-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

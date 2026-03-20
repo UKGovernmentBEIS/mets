@@ -12,6 +12,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, RegulatedActivity }
 
 @Component({
   selector: 'app-regulated-activity-delete',
+  standalone: false,
   template: `
     <ng-container *ngIf="activityType$ | async as activityType">
       <app-page-heading size="xl">

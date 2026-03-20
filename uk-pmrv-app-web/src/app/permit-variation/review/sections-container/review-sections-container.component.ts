@@ -20,9 +20,10 @@ import { ReviewGroupStatusPermitVariationRegulatorLedPipe } from '../review-grou
 
 @Component({
   selector: 'app-variation-review-sections-container',
+  standalone: false,
   templateUrl: './review-sections-container.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbstractComponent implements OnInit {
   variationDetailsReviewStatus$: Observable<ReviewGroupDecisionStatus | TaskItemStatus> =

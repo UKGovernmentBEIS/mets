@@ -8,6 +8,7 @@ import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-bdr-task-review',
+  imports: [RouterModule, SharedModule],
   template: `
     <govuk-notification-banner *ngIf="notification" type="success">
       <h1 class="govuk-notification-banner__heading">Details updated</h1>
@@ -16,10 +17,8 @@ import { SharedModule } from '@shared/shared.module';
     <ng-content></ng-content>
     <a govukLink [routerLink]="returnToLink">Return to: {{ linkText }}</a>
   `,
-  standalone: true,
-  imports: [RouterModule, SharedModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BdrTaskReviewComponent implements OnInit {
   @Input() notification: any;

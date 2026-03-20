@@ -11,7 +11,6 @@
  */
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
-export interface PermitVariationApplicationSubmitApplicationAmendRequestTaskActionPayload
-  extends RequestTaskActionPayload {
+export interface PermitVariationApplicationSubmitApplicationAmendRequestTaskActionPayload extends RequestTaskActionPayload {
   permitSectionsCompleted?: { [key: string]: Array<boolean> };
 }

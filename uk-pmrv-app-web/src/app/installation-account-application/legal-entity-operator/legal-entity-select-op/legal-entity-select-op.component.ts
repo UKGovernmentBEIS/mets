@@ -12,6 +12,7 @@ import { InstallationAccountApplicationStore } from '../../store/installation-ac
 
 @Component({
   selector: 'app-legal-entity-select-op',
+  standalone: false,
   templateUrl: './legal-entity-select-op.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -9,6 +9,7 @@ import { ALRReturnLinkComponent } from '../alr-return-link/alr-return-link.compo
 
 @Component({
   selector: 'app-alr-task',
+  imports: [RouterModule, SharedModule, ALRReturnLinkComponent],
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -20,10 +21,8 @@ import { ALRReturnLinkComponent } from '../alr-return-link/alr-return-link.compo
     </div>
     <app-alr-return-link [returnLink]="returnLink" [title]="returnLinkTitle"></app-alr-return-link>
   `,
-  standalone: true,
-  imports: [RouterModule, SharedModule, ALRReturnLinkComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlrTaskComponent {
   @Input() notification: any;

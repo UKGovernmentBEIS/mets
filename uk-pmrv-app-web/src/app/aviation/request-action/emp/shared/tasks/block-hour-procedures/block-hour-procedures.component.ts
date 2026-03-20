@@ -20,7 +20,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-block-hour-procedures',
-  standalone: true,
   imports: [
     RequestActionTaskComponent,
     EmpReviewDecisionGroupSummaryComponent,

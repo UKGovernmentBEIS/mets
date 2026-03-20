@@ -4,6 +4,7 @@ import { GovukTableColumn } from 'govuk-components';
 
 @Component({
   selector: 'app-overall-decision-list',
+  standalone: false,
   templateUrl: './overall-decision-reason-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

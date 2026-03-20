@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/prefer-host-metadata-property */
 import {
   AfterContentInit,
   ChangeDetectorRef,
@@ -31,6 +32,7 @@ import { MultiSelectItemComponent } from './multi-select-item/multi-select-item.
 */
 @Component({
   selector: 'div[app-multi-select]',
+  standalone: false,
   templateUrl: './multi-select.component.html',
   styleUrl: './multi-select.component.scss',
   providers: [DestroySubject],

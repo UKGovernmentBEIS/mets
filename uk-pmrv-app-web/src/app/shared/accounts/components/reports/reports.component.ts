@@ -34,14 +34,15 @@ import { reportsStatusesMap, reportsStatusesTagMap, reportsTypesMap, reportsType
 
 @Component({
   selector: 'app-reports',
+  standalone: false,
   templateUrl: './reports.component.html',
   styles: `
     span.search-results-list_item_status {
       float: right;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportsComponent extends BaseComponent implements OnInit {
   currentPageData$: Observable<Reports[]>;
@@ -76,16 +77,12 @@ export class ReportsComponent extends BaseComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$),
         tap((features) => {
-          const { bdrEnabled, corsia3yearOffsettingEnabled, wasteQdrEnabled, bdrs2Enabled } = features;
+          const { corsia3yearOffsettingEnabled, wasteQdrEnabled, bdrs2Enabled } = features;
 
           this.reportsTypesMap = reportsTypesMap[this.domain];
 
           if (!corsia3yearOffsettingEnabled) {
             delete this.reportsTypesMap['Calculate 3-year offsetting requirements'];
-          }
-
-          if (!bdrEnabled) {
-            delete this.reportsTypesMap['Baseline data report'];
           }
 
           if (!wasteQdrEnabled) {

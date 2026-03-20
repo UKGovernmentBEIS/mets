@@ -11,14 +11,15 @@ import { getCompletionStatus } from '../measurement-status';
 
 @Component({
   selector: 'app-summary',
+  standalone: false,
   templateUrl: './summary.component.html',
   styles: `
     .float-right {
       float: right;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryComponent {
   taskKey = this.route.snapshot.data.taskKey;

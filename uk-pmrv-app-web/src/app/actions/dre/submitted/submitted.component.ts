@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-dre-submitted',
+  standalone: false,
   templateUrl: './submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

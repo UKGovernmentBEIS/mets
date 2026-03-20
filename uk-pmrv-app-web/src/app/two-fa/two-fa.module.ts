@@ -10,6 +10,7 @@ import { ResetTwoFaComponent } from './reset-two-fa/reset-two-fa.component';
 import { TwoFaRoutingModule } from './two-fa-routing.module';
 
 @NgModule({
+  imports: [CommonModule, SharedModule, TwoFaRoutingModule],
   declarations: [
     Change2faComponent,
     Delete2faComponent,
@@ -17,6 +18,5 @@ import { TwoFaRoutingModule } from './two-fa-routing.module';
     RequestTwoFaResetComponent,
     ResetTwoFaComponent,
   ],
-  imports: [CommonModule, SharedModule, TwoFaRoutingModule],
 })
 export class TwoFaModule {}

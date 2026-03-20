@@ -12,6 +12,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-combustion-source-delete',
+  standalone: false,
   template: `
     <ng-container *ngIf="combustionSource$ | async as combustionSource">
       <app-page-heading size="xl">

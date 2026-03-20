@@ -18,7 +18,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-baseline-submitted',
-  standalone: true,
   imports: [ActionSharedModule, BaselineSummaryTemplateComponent, NgIf, SharedModule],
   templateUrl: './baseline-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

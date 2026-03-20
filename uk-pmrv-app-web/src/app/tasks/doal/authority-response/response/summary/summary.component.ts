@@ -10,6 +10,7 @@ import { DoalGrantAuthorityResponse } from 'pmrv-api';
 
 @Component({
   selector: 'app-summary',
+  standalone: false,
   template: `
     <app-doal-task [breadcrumb]="true">
       <app-page-heading>Check your answers</app-page-heading>

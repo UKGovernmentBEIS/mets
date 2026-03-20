@@ -13,9 +13,10 @@ import { AER_NOT_REQUIRE_FORM, aerReasonProvider } from './aer-mark-as-not-requi
 
 @Component({
   selector: 'app-aer-mark-as-not-required',
+  standalone: false,
   templateUrl: './aer-mark-as-not-required.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject, aerReasonProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerMarkAsNotRequiredComponent {
   isMarkedAsNotRequired$ = new BehaviorSubject<boolean>(false);

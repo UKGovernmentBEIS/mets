@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -13,25 +12,15 @@ import { GovukComponentsModule } from 'govuk-components';
 
 import { EmpBlockOnBlockOffMethodProcedures } from 'pmrv-api';
 
-import { ProcedureFormComponent } from '../../procedure-form';
 import { ProcedureFormPageHeaderDirective, ProcedureFormStepComponent } from '../../procedure-form-step';
 import { BlockProceduresFormProvider } from '../block-procedures-form.provider';
 
 @Component({
   selector: 'app-block-procedures-monitoring',
+  imports: [SharedModule, GovukComponentsModule, ProcedureFormPageHeaderDirective, ProcedureFormStepComponent],
   templateUrl: './block-procedures-monitoring.component.html',
-  standalone: true,
-  imports: [
-    SharedModule,
-    GovukComponentsModule,
-    NgIf,
-    NgFor,
-    ProcedureFormComponent,
-    ProcedureFormPageHeaderDirective,
-    ProcedureFormStepComponent,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockProceduresMonitoringComponent {
   form = this.formProvider.form;

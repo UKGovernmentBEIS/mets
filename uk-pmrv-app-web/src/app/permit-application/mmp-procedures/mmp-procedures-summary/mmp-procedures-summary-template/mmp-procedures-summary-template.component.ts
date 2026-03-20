@@ -15,10 +15,9 @@ import { procedureTypes } from '../../mmp-procedures-status';
 
 @Component({
   selector: 'app-mmp-procedures-summary-template',
+  imports: [SharedPermitModule, SharedModule, RouterLink],
   templateUrl: './mmp-procedures-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [SharedPermitModule, SharedModule, RouterLink],
 })
 export class MmpProceduresSummaryTemplateComponent extends ProductBenchmarkComponent implements PendingRequest {
   @Input() showOriginal = false;

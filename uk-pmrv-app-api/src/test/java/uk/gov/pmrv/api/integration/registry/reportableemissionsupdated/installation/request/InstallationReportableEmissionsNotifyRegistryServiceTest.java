@@ -81,6 +81,9 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 	@Mock
 	private NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
 
+	@Mock
+	private InstallationReportableEmissionsAddRequestActionService addRequestActionService;
+
 	@Test
 	void notifyRegistry_eventIsFromAerMarkedAsNotRequired_Send_Null() {
 		InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, true, Year.now().minusYears(1));

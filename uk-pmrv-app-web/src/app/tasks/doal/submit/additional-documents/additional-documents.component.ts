@@ -12,9 +12,10 @@ import { additionalDocumentsFormProvider } from './additional-documents.componen
 
 @Component({
   selector: 'app-additional-documents',
+  standalone: false,
   templateUrl: './additional-documents.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [additionalDocumentsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdditionalDocumentsComponent {
   readonly documentsExist$ = this.form.get('documents').valueChanges.pipe(

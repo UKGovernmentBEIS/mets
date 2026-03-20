@@ -22,6 +22,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, RegulatedActivity }
 
 @Component({
   selector: 'app-regulated-activity-add',
+  standalone: false,
   templateUrl: './regulated-activity-add.component.html',
   providers: [regulatedActivityAddFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

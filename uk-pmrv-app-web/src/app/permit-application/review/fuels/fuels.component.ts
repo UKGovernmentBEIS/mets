@@ -13,6 +13,7 @@ import { PermitApplicationState } from '../../store/permit-application.state';
 
 @Component({
   selector: 'app-fuels',
+  standalone: false,
   templateUrl: './fuels.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

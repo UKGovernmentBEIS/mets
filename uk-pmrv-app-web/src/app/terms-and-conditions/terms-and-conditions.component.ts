@@ -14,9 +14,10 @@ import { TermsAndConditionsService, TermsDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-terms-and-conditions',
+  standalone: false,
   templateUrl: './terms-and-conditions.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TermsAndConditionsComponent {
   latestTerms$: Observable<TermsDTO> = this.latestTermsStore.pipe(distinctUntilKeyChanged('version'));

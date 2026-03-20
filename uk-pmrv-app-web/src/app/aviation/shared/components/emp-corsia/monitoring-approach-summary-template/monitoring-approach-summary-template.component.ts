@@ -1,4 +1,3 @@
-import { NgFor, NgForOf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLinkWithHref } from '@angular/router';
 
@@ -11,9 +10,8 @@ import { GovukComponentsModule } from 'govuk-components';
 
 @Component({
   selector: 'app-monitoring-approach-corsia-summary-template',
+  imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref, MonitoringApproachTypeCorsiaPipe],
   templateUrl: './monitoring-approach-summary-template.component.html',
-  standalone: true,
-  imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref, NgFor, NgForOf, MonitoringApproachTypeCorsiaPipe],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

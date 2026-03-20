@@ -14,10 +14,9 @@ import { addMultipleMethodsControl, hasMoreThanOneMonitoringMethod } from '../em
 
 @Component({
   selector: 'app-aircraft-type-other-fuel',
-  templateUrl: './aircraft-type-other-fuel.component.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule, SharedModule, ReturnToLinkComponent],
+  templateUrl: './aircraft-type-other-fuel.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AircraftTypeOtherFuelComponent {
   emissionSourcesForm = inject<FormGroup<EmissionSourcesFormModel>>(TASK_FORM_PROVIDER);

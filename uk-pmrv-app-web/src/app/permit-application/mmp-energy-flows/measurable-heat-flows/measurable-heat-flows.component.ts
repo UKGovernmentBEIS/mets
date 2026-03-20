@@ -21,12 +21,11 @@ import { measurableHeatFlowsAddFormFactory } from './measurable-heat-flows-form.
 
 @Component({
   selector: 'app-measurable-heat-flows',
-  templateUrl: './measurable-heat-flows.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [SharedModule, SharedPermitModule, IncludeAnswerDetailsComponent],
-  providers: [measurableHeatFlowsAddFormFactory],
+  templateUrl: './measurable-heat-flows.component.html',
   styleUrl: './measurable-heat-flows.component.scss',
+  providers: [measurableHeatFlowsAddFormFactory],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MeasurableHeatFlowsComponent implements PendingRequest {
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;

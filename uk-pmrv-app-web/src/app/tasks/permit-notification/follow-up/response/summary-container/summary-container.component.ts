@@ -16,6 +16,7 @@ interface TaskPayload extends PermitNotificationFollowUpRequestTaskPayload {
 
 @Component({
   selector: 'app-summary-container',
+  standalone: false,
   template: `
     <govuk-notification-banner *ngIf="notification" type="success">
       <h1 class="govuk-notification-banner__heading">Details updated</h1>

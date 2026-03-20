@@ -10,9 +10,10 @@ import { PermitNotificationService } from '../../core/permit-notification.servic
 
 @Component({
   selector: 'app-submit-container',
+  standalone: false,
   templateUrl: './submit-container.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubmitContainerComponent {
   allowSubmit$ = this.permitNotificationService

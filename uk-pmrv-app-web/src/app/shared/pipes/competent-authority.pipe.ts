@@ -4,6 +4,7 @@ import { RequestInfoDTO } from 'pmrv-api';
 
 @Pipe({
   name: 'competentAuthority',
+  standalone: false,
 })
 export class CompetentAuthorityPipe implements PipeTransform {
   transform(value: RequestInfoDTO['competentAuthority']): string {

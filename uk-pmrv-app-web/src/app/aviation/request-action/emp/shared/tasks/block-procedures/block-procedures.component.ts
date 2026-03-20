@@ -20,7 +20,6 @@ interface ViewModel {
 
 @Component({
   selector: 'app-block-procedures',
-  standalone: true,
   imports: [
     RequestActionTaskComponent,
     EmpReviewDecisionGroupSummaryComponent,

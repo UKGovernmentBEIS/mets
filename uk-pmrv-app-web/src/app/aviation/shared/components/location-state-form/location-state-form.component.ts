@@ -11,7 +11,6 @@ import { GovukSelectOption } from 'govuk-components';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'app-location-state-form',
-  standalone: true,
   imports: [SharedModule],
   templateUrl: './location-state-form.component.html',
   viewProviders: [existingControlContainer],

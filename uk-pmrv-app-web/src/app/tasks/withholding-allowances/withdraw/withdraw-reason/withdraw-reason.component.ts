@@ -10,9 +10,10 @@ import { reasonFormProvider } from './withdraw-reason-form.provider';
 
 @Component({
   selector: 'app-withdraw-reason',
+  standalone: false,
   templateUrl: './withdraw-reason.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [PendingRequestService, reasonFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WithdrawReasonComponent {
   constructor(

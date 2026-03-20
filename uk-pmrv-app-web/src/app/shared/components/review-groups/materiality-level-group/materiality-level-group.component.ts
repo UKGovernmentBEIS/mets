@@ -4,11 +4,11 @@ import { MaterialityLevel } from 'pmrv-api';
 
 @Component({
   selector: 'app-materiality-level-group',
+  standalone: false,
   templateUrl: './materiality-level-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MaterialityLevelGroupComponent {
   @Input() isEditable = false;
   @Input() materialityLevelInfo: MaterialityLevel;
-  @Input() yearEqualAfter25 = false;
 }

@@ -5,6 +5,7 @@ import { AviationAerEmissionsReductionClaimVerification } from 'pmrv-api';
 
 @Component({
   selector: 'app-verify-emissions-reduction-claim-group',
+  standalone: false,
   templateUrl: './verify-emissions-reduction-claim-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -25,10 +25,9 @@ interface ViewModel {
 
 @Component({
   selector: 'app-misstatement-item',
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   templateUrl: './misstatement-item.component.html',
   providers: [DestroySubject, MisstatementItemFormProvider],
-  standalone: true,
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MisstatementItemComponent {

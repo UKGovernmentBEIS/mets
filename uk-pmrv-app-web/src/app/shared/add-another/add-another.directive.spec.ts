@@ -10,6 +10,7 @@ describe('AddAnotherDirective', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <div>
         <h1 #ref>Heading</h1>

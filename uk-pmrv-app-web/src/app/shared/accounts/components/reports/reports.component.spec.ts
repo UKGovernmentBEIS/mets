@@ -34,7 +34,7 @@ describe('ReportsComponent', () => {
 
   class Page extends BasePage<ReportsComponent> {
     get emissionReportsTypeCheckbox() {
-      return this.query<HTMLInputElement>('input#types-4');
+      return this.query<HTMLInputElement>('input#types-5');
     }
 
     get completedStatusCheckbox() {

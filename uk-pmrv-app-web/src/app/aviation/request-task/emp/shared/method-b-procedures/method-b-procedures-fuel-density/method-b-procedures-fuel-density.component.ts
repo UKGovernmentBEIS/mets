@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
-import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { BackLinkService } from '@shared/back-link/back-link.service';
@@ -14,11 +13,10 @@ import { MethodBProceduresFormProvider } from '../method-b-procedures-form.provi
 
 @Component({
   selector: 'app-method-b-procedures-fuel-density',
-  standalone: true,
-  imports: [SharedModule, ReturnToLinkComponent, ProcedureFormStepComponent],
+  imports: [SharedModule, ProcedureFormStepComponent],
   templateUrl: './method-b-procedures-fuel-density.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MethodBProceduresFuelDensityComponent implements OnInit, OnDestroy {
   private backLinkService = inject(BackLinkService);

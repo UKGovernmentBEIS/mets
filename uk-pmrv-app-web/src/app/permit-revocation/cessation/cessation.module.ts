@@ -18,6 +18,7 @@ import { SummaryComponent } from './confirm/summary/summary.component';
 import { SummaryDetailsComponent } from './confirm/summary/summary-details.component';
 
 @NgModule({
+  imports: [CessationRoutingModule, SharedModule],
   declarations: [
     AllowancesDateComponent,
     AllowancesNumberComponent,
@@ -32,7 +33,6 @@ import { SummaryDetailsComponent } from './confirm/summary/summary-details.compo
     SummaryComponent,
     SummaryDetailsComponent,
   ],
-  imports: [CessationRoutingModule, SharedModule],
   providers: [PaymentCompletedGuard],
 })
 export class CessationModule {}

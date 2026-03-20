@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { OverallAssessment } from 'pmrv-api';
 
-@Pipe({ name: 'overallAssessmentType' })
+@Pipe({
+  name: 'overallAssessmentType',
+  standalone: false,
+})
 export class OverallAssessmentTypePipe implements PipeTransform {
   transform(assessmentType: OverallAssessment['type']): string {
     switch (assessmentType) {

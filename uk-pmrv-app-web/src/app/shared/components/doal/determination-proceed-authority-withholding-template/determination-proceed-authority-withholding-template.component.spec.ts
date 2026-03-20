@@ -13,6 +13,7 @@ describe('DeterminationProceedAuthorityWithholdingTemplateComponent', () => {
   let page: Page;
 
   @Component({
+    standalone: false,
     template: `
       <app-determination-proceed-authority-withholding-template
         [determination]="determination"

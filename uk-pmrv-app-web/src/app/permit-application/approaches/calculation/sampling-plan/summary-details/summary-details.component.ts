@@ -10,6 +10,7 @@ import { PermitApplicationStore } from '../../../../store/permit-application.sto
 
 @Component({
   selector: 'app-calculation-plan-summary-details',
+  standalone: false,
   templateUrl: './summary-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

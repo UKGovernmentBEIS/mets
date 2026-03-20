@@ -13,8 +13,8 @@ import { SummaryComponent } from './summary/summary.component';
 import { SummaryGuard } from './summary/summary.guard';
 
 @NgModule({
-  declarations: [CommentsResponseContainerComponent, OperatorFollowupComponent, SendReportComponent, SummaryComponent],
   imports: [AirSharedModule, AirTaskCommentsResponseRoutingModule, AirTaskSharedModule, SharedModule, TaskSharedModule],
+  declarations: [CommentsResponseContainerComponent, OperatorFollowupComponent, SendReportComponent, SummaryComponent],
   providers: [SummaryGuard],
 })
 export class AirTaskCommentsResponseModule {}

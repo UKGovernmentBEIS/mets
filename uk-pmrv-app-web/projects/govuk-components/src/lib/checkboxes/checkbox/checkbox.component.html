@@ -3,16 +3,15 @@
     <input
       (blur)="onBlur()"
       (change)="onChange($event)"
-      [attr.aria-controls]="conditional ? identifier + 'conditional' : null"
-      [attr.aria-describedby]="identifier + '-item-hint'"
+      [attr.aria-controls]="conditional ? `${identifier}conditional` : null"
+      [attr.aria-describedby]="`${identifier}-item-hint`"
       [attr.value]="value"
       [checked]="isChecked"
       [disabled]="isDisabled"
       [id]="identifier"
       [name]="groupIdentifier"
       class="govuk-checkboxes__input"
-      type="checkbox"
-    />
+      type="checkbox" />
     <label [for]="identifier" class="govuk-label govuk-checkboxes__label">
       <ng-container *ngIf="label; else customLabel">{{ label }}</ng-container>
       <ng-template #customLabel>
@@ -21,19 +20,17 @@
     </label>
     <span
       *ngIf="hint"
-      [id]="identifier + '-item-hint'"
+      [id]="`${identifier}-item-hint`"
       class="govuk-hint govuk-checkboxes__hint"
-      [innerHTML]="hint"
-    ></span>
+      [innerHTML]="hint"></span>
   </div>
 </ng-template>
 <ng-template #conditionalTemplate>
   <div
     *ngIf="conditional"
     [class.govuk-checkboxes__conditional--hidden]="!isChecked"
-    [id]="identifier + 'conditional'"
-    class="govuk-checkboxes__conditional"
-  >
+    [id]="`${identifier}conditional`"
+    class="govuk-checkboxes__conditional">
     <ng-content select="[govukConditionalContent]" />
   </div>
 </ng-template>

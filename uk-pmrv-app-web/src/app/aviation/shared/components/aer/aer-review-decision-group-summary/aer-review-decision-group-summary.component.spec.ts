@@ -16,6 +16,7 @@ describe('AerReviewDecisionGroupSummaryComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: false,
     template: `
       <app-aer-review-decision-group-summary
         [data]="data"

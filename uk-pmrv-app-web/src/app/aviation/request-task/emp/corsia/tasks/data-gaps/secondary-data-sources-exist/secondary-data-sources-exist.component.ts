@@ -1,16 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { SharedModule } from '@shared/shared.module';
 
 import { BaseDataGapsComponent } from '../base-data-gaps.component';
 
 @Component({
   selector: 'app-secondary-data-sources-exist',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule],
   templateUrl: './secondary-data-sources-exist.component.html',
-  imports: [SharedModule, ReturnToLinkComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SecondaryDataSourcesExistComponent extends BaseDataGapsComponent {
   form = this.fb.group(

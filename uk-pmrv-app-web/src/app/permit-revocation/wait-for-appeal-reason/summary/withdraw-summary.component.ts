@@ -8,6 +8,7 @@ import { PermitRevocationStore } from '@permit-revocation/store/permit-revocatio
 
 @Component({
   selector: 'app-withdraw-summary',
+  standalone: false,
   templateUrl: './withdraw-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

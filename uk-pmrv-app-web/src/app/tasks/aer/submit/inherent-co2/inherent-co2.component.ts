@@ -14,9 +14,10 @@ import { isWizardComplete } from './inherent-co2-wizard';
 
 @Component({
   selector: 'app-inherent-co2',
+  standalone: false,
   templateUrl: './inherent-co2.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [inherentCO2FormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InherentCo2Component implements PendingRequest {
   displayErrors$ = new BehaviorSubject<ValidationErrors>(null);

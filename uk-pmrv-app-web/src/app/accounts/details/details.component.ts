@@ -21,9 +21,10 @@ import { accountFinalStatuses, accountFirstYearStatuses } from '../core/accountF
 
 @Component({
   selector: 'app-account-details',
+  standalone: false,
   templateUrl: './details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsComponent implements OnInit {
   @Input() currentTab: string;

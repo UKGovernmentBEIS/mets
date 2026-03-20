@@ -8,6 +8,7 @@ describe('PhaseBannerComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
+    standalone: false,
     template: `
       <govuk-phase-banner [phase]="phase">Test content</govuk-phase-banner>
     `,

@@ -7,6 +7,7 @@ import { statusKeyToSubtaskNameMapper } from '../category-tier';
 
 @Component({
   selector: 'app-summary',
+  standalone: false,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

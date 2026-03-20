@@ -25,6 +25,7 @@ describe('OverallDecisionGroupComponent', () => {
   }
 
   @Component({
+    standalone: false,
     template: `
       <app-aviation-overall-decision-group
         [isEditable]="isEditable"
