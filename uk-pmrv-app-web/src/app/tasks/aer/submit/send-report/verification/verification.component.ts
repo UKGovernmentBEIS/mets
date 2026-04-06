@@ -56,11 +56,19 @@ export class VerificationComponent implements OnInit {
   }
 
   onSubmit() {
+    let accountId: number;
+
     this.aerService.requestAccountId$
       .pipe(
         first(),
-        switchMap((accountId) => this.accountVerificationBodyService.getVerificationBodyOfAccount(accountId)),
-        switchMap((vb) => (vb ? of(vb) : this.businessErrorService.showError(notFoundVerificationBodyError()))),
+        switchMap((id) => {
+          accountId = id;
+
+          return this.accountVerificationBodyService.getVerificationBodyOfAccount(accountId);
+        }),
+        switchMap((vb) =>
+          vb ? of(vb) : this.businessErrorService.showError(notFoundVerificationBodyError(accountId)),
+        ),
         tap((vb) => {
           if ((vb as VerificationBodyNameInfoDTO)?.id) {
             const state = this.store.getState();

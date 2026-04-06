@@ -28,6 +28,7 @@ export interface AviationAerUkEtsApplicationCompletedRequestActionPayload extend
   verificationPerformed?: boolean;
   submittedEmissions?: AviationAerUkEtsSubmittedEmissions;
   verificationReport?: AviationAerUkEtsVerificationReport;
+  isVerifierAerTaskContentUpdate?: boolean;
   aerAttachments?: { [key: string]: string };
   verificationAttachments?: { [key: string]: string };
   reviewGroupDecisions?: { [key: string]: AerReviewDecision };

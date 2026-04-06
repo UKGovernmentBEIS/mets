@@ -3,7 +3,8 @@
     [listTitle]="listTitle"
     (fileDelete)="onFileDeleteClick()"
     [files]="uploadedFiles$ | async"
-    [isDisabled]="isDisabled"></app-file-upload-list>
+    [isDisabled]="isDisabled"
+    [headerSize]="headerSize"></app-file-upload-list>
 
   <label [for]="id" class="govuk-label" id="{{ 'l.' + id }}" [ngClass]="headerSize ? 'govuk-label--' + headerSize : ''">
     {{ label }}

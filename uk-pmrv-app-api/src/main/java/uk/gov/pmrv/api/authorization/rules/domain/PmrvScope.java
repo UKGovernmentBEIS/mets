@@ -7,4 +7,5 @@ public class PmrvScope {
 
     public static final String REQUEST_MARK_NOT_REQUIRED = "REQUEST_MARK_NOT_REQUIRED";
     public static final String ALR_BULK_DOWNLOAD = "ALR_BULK_DOWNLOAD";
+    public static final String BDRS2_BULK_DOWNLOAD = "BDRS2_BULK_DOWNLOAD";
 }

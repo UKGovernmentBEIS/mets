@@ -5,17 +5,27 @@ import { Observable } from 'rxjs';
 
 import { CommonActionsStore } from '@actions/store/common-actions.store';
 
-import { PermitIssuanceRegistryIntegrationRequestActionPayload, RequestActionDTO } from 'pmrv-api';
+import {
+  InstallationAccountRegistryIntegrationRequestActionPayload,
+  InstallationAccountUpdatedRegistryIntegrationRequestActionPayload,
+  RequestActionDTO,
+} from 'pmrv-api';
 
 @Injectable({ providedIn: 'root' })
 export class RegistryActionService {
   constructor(private readonly store: CommonActionsStore) {}
 
-  get payload$(): Observable<PermitIssuanceRegistryIntegrationRequestActionPayload> {
+  get payload$(): Observable<
+    | InstallationAccountRegistryIntegrationRequestActionPayload
+    | InstallationAccountUpdatedRegistryIntegrationRequestActionPayload
+  > {
     return this.store.payload$;
   }
 
-  get payload(): Signal<PermitIssuanceRegistryIntegrationRequestActionPayload> {
+  get payload(): Signal<
+    | InstallationAccountRegistryIntegrationRequestActionPayload
+    | InstallationAccountUpdatedRegistryIntegrationRequestActionPayload
+  > {
     return toSignal(this.payload$);
   }
 

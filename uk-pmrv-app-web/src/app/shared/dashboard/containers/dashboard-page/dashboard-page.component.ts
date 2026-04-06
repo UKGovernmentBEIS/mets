@@ -108,6 +108,7 @@ export class DashboardPageComponent implements OnInit {
             requestTypes.filter((type) => (features.wasteQdrEnabled ? true : type !== 'WASTE_QDR')),
           ),
           map((requestTypes) => requestTypes.filter((type) => (features.bdrs2Enabled ? true : type !== 'BDRS2'))),
+          map((requestTypes) => requestTypes.filter((type) => (features.nerEnabled ? true : type !== 'NER'))),
         ),
       ),
     ),

@@ -155,6 +155,10 @@ const routes: Routes = [
         path: 'registry',
         loadChildren: () => import('./registry/registry.routes').then((r) => r.REGISTRY_ACTION_ROUTES),
       },
+      {
+        path: 'ner',
+        loadChildren: () => import('./ner/ner.routes').then((r) => r.NER_ACTION_ROUTES),
+      },
     ],
   },
 ];

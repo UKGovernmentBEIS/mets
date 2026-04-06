@@ -24,6 +24,7 @@ interface ViewModel {
   materialityLevel: AviationAerMaterialityLevel;
   hideSubmit: boolean;
   showDecision: boolean;
+  isMaterialityUpdated: boolean;
 }
 
 @Component({
@@ -50,11 +51,16 @@ export default class MaterialityLevelSummaryComponent {
     this.store.pipe(requestTaskQuery.selectRequestTaskType),
     this.store.pipe(requestTaskQuery.selectIsEditable),
     this.store.pipe(aerVerifyQuery.selectStatusForTask('materialityLevel')),
+    this.store.pipe(aerVerifyQuery.selectPayload),
   ]).pipe(
-    map(([type, isEditable, taskStatus]) => {
+    map(([type, isEditable, taskStatus, payload]) => {
       return {
-        pageHeader: getSummaryHeaderForTaskType(type, 'materialityLevel'),
+        pageHeader:
+          type === 'AVIATION_AER_UKETS_APPLICATION_REVIEW' && payload?.isVerifierAerTaskContentUpdate
+            ? 'Further information of relevance to the opinion'
+            : getSummaryHeaderForTaskType(type, 'materialityLevel'),
         isEditable,
+        isMaterialityUpdated: payload?.isVerifierAerTaskContentUpdate,
         materialityLevel: this.formProvider.getFormValue(),
         hideSubmit: !isEditable || ['complete', 'cannot start yet'].includes(taskStatus),
         showDecision: showReviewDecisionComponent.includes(type),

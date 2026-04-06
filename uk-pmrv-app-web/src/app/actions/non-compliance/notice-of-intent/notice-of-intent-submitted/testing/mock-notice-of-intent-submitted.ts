@@ -1,11 +1,11 @@
 import { CommonActionsState } from '@actions/store/common-actions.state';
 
-import { CaExternalContactsDTO, NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload } from 'pmrv-api';
+import { NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload } from 'pmrv-api';
 
 export const mockPayload: NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload = {
   payloadType: 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED_PAYLOAD',
   noticeOfIntent: 'bfe44295-7668-4176-ba75-a6d2b3b0dc40',
-  externalContacts: [1],
+  externalContacts: [1, 2],
   comments: 'Distinctio Expedita',
   nonComplianceAttachments: {
     'bfe44295-7668-4176-ba75-a6d2b3b0dc40': 'printPayment (19).pdf',
@@ -31,22 +31,19 @@ export const mockState = {
   creationDate: '2024-09-02T15:14:18.887171Z',
 } as unknown as CommonActionsState;
 
-export const mockExternalContacts = {
-  caExternalContacts: [
-    {
-      id: 1,
-      name: 'Installation 5 Account',
-      email: 'regulator5@trasys.gr',
-      description: 'des',
-      lastUpdatedDate: '2021-03-03T10:40:03.535662Z',
-    },
-    {
-      id: 2,
-      name: 'Legal5',
-      email: 'qwe@qwreewrwe',
-      description: 'dws',
-      lastUpdatedDate: '2021-03-03T10:44:44.71144Z',
-    },
-  ],
-  isEditable: true,
-} as CaExternalContactsDTO;
+export const mockExternalContacts = [
+  {
+    id: 1,
+    name: 'Installation 5 Account',
+    email: 'regulator5@trasys.gr',
+    description: 'des',
+    lastUpdatedDate: '2021-03-03T10:40:03.535662Z',
+  },
+  {
+    id: 2,
+    name: 'Legal5',
+    email: 'qwe@qwreewrwe',
+    description: 'dws',
+    lastUpdatedDate: '2021-03-03T10:44:44.71144Z',
+  },
+];

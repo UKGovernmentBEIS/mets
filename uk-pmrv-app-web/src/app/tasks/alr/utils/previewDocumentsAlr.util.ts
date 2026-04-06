@@ -1,16 +1,12 @@
 import { DocumentFilenameAndDocumentType } from '@shared/interfaces/previewDocumentFilenameAndDocumentType';
 
-import {
-  ALRApplicationAuthorityReviewOutcome,
-  ALRProceedToAuthorityDetermination,
-  RequestTaskActionProcessDTO,
-} from 'pmrv-api';
+import { ALRApplicationAuthorityReviewOutcome, DoalDetermination, RequestTaskActionProcessDTO } from 'pmrv-api';
 
 const letterPreview = 'letter_preview.pdf';
 
 export function getAlrPreviewDocumentsInfo(
   taskActionType: RequestTaskActionProcessDTO['requestTaskActionType'],
-  determinationStatus: ALRProceedToAuthorityDetermination['type'],
+  determinationStatus: DoalDetermination['type'],
 ): DocumentFilenameAndDocumentType[] {
   switch (taskActionType) {
     case 'ALR_PROCEED_TO_AUTHORITY':

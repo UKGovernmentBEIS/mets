@@ -129,13 +129,9 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIAppl
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.audit.domain.InstallationAuditApplicationSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionOperatorRespondSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.onsiteinspection.domain.InstallationOnsiteInspectionApplicationSaveRequestTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveApplicationAmendRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationSubmitToVerifierRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationVerificationSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveApplicationRequestTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveApplicationReviewRequestTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveAuthorityResponseRequestTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveReviewDeterminationRequestTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveReviewGroupDecisionRequestTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSubmitApplicationAmendRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permanentcessation.domain.PermanentCessationSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceNotifyOperatorForDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceSaveApplicationAmendRequestTaskActionPayload;
@@ -283,15 +279,11 @@ import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RfiSubmitRequestTaskActi
 
 
     @JsonSubTypes.Type(value = NerSaveApplicationRequestTaskActionPayload.class, name = "NER_SAVE_APPLICATION_PAYLOAD"),
-    @JsonSubTypes.Type(value = NerSaveApplicationReviewRequestTaskActionPayload.class, name = "NER_SAVE_APPLICATION_REVIEW_PAYLOAD"),
-    @JsonSubTypes.Type(value = NerSaveReviewGroupDecisionRequestTaskActionPayload.class, name = "NER_SAVE_REVIEW_GROUP_DECISION_PAYLOAD"),
-    @JsonSubTypes.Type(value = NerSaveReviewDeterminationRequestTaskActionPayload.class, name = "NER_SAVE_REVIEW_DETERMINATION_PAYLOAD"),
+    @JsonSubTypes.Type(value = NERApplicationSubmitToVerifierRequestTaskActionPayload.class, name = "NER_APPLICATION_SUBMIT_TO_VERIFIER_PAYLOAD"),
+    @JsonSubTypes.Type(value = NERApplicationVerificationSaveRequestTaskActionPayload.class, name = "NER_APPLICATION_SAVE_VERIFICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "NER_REQUEST_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "NER_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD"),
-    @JsonSubTypes.Type(value = NerSaveApplicationAmendRequestTaskActionPayload.class, name = "NER_SAVE_APPLICATION_AMEND_PAYLOAD"),
-    @JsonSubTypes.Type(value = NerSubmitApplicationAmendRequestTaskActionPayload.class, name = "NER_SUBMIT_APPLICATION_AMEND_PAYLOAD"),
     @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "NER_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD"),
-    @JsonSubTypes.Type(value = NerSaveAuthorityResponseRequestTaskActionPayload.class, name = "NER_SAVE_AUTHORITY_RESPONSE_PAYLOAD"),
     @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "NER_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD"),
 
     @JsonSubTypes.Type(value = DoalSaveApplicationRequestTaskActionPayload.class, name = "DOAL_SAVE_APPLICATION_PAYLOAD"),

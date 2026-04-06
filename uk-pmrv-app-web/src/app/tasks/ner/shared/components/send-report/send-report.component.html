@@ -1,0 +1,34 @@
+@let vm = this.vm();
+
+@if (!vm.isSubmitted) {
+  <app-ner-task [heading]="vm.heading" [taskType]="vm.requestTaskType">
+    @if (vm.showCurrentVerifier) {
+      <div class="govuk-heading-m">
+        Current verifier
+        <p class="govuk-body">{{ assignedVerifier$ | async }}</p>
+      </div>
+    }
+    <p class="govuk-body">
+      By selecting ‘Confirm and send’ you confirm that the information in your application is correct to the best of
+      your knowledge.
+    </p>
+
+    <div class="govuk-button-group" *ngIf="vm.isEditable">
+      <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and send</button>
+    </div>
+  </app-ner-task>
+} @else {
+  <app-confirmation-shared
+    [title]="vm.confirmationTitle"
+    titleContent="Your reference number"
+    [whatHappensNextTemplate]="whatHappensNextTemplate"
+    [titleContentId]="vm.requestId"></app-confirmation-shared>
+
+  <ng-template #whatHappensNextTemplate>
+    <div id="whatHappensNextTemplate">
+      <h3 class="govuk-heading-m">What happens next</h3>
+
+      <p class="govuk-body">Your application has been submitted and will be reviewed by your Verifier.</p>
+    </div>
+  </ng-template>
+}

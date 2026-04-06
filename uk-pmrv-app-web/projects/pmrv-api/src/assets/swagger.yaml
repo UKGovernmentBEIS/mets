@@ -804,7 +804,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /v1.0/{accountType}/mireports:
+  /v1.0/{accountType}/mireports/system:
     post:
       tags:
         - MiReports
@@ -824,7 +824,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MiReportParams'
+              $ref: '#/components/schemas/MiReportSystemParams'
         required: true
       responses:
         '200':
@@ -832,48 +832,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MiReportResult'
-        '400':
-          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /v1.0/{accountType}/mireports/custom:
-    post:
-      tags:
-        - MiReports
-      summary: Generates custom report
-      operationId: generateCustomReport
-      parameters:
-        - name: accountType
-          in: path
-          description: The account type
-          required: true
-          schema:
-            type: string
-            enum:
-              - INSTALLATION
-              - AVIATION
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MiReportParams'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MiReportResult'
+                $ref: '#/components/schemas/MiReportSystemResult'
         '400':
           description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
           content:
@@ -2024,12 +1983,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  format: decimal
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  format: decimal
   /v1.0/regulator-users:
     post:
       tags:
@@ -2649,6 +2620,37 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/mireports/user-defined/generate-custom:
+    post:
+      tags:
+        - Mi Reports User defined
+      summary: Generates custom mi report user defined
+      operationId: generateCustomReport
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomMiReportQuery'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MiReportUserDefinedResult'
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
           content:
             application/json:
               schema:
@@ -3896,12 +3898,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/AviationReportableEmissionsDTO'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/AviationReportableEmissionsDTO'
   /v1.0/aviation-reporting-data/airports:
     post:
       tags:
@@ -4602,44 +4614,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
   /v1.0/ca-external-contacts/{id}:
-    get:
-      tags:
-        - Ca external contacts
-      summary: Returns the ca external contact with specified id
-      operationId: getCaExternalContactById
-      parameters:
-        - name: id
-          in: path
-          description: The ca external contact id
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/CaExternalContactDTO'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - Ca external contacts
@@ -4779,7 +4753,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /v1.0/{accountType}/mireports/types:
+  /v1.0/{accountType}/mireports/system/types:
     get:
       tags:
         - MiReports
@@ -4803,14 +4777,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiReportSearchResult'
+                  $ref: '#/components/schemas/MiReportSystemSearchResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /v1.0/{accountType}/mireports/request-task-types:
+  /v1.0/{accountType}/mireports/system/request-task-types:
     get:
       tags:
         - MiReports
@@ -4939,6 +4913,8 @@ paths:
                     - NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW
                     - NON_COMPLIANCE_FINAL_DETERMINATION
                     - NER_APPLICATION_SUBMIT
+                    - NER_APPLICATION_VERIFICATION_SUBMIT
+                    - NER_WAIT_FOR_VERIFICATION
                     - NER_APPLICATION_REVIEW
                     - NER_WAIT_FOR_REVIEW
                     - NER_APPLICATION_PEER_REVIEW
@@ -5255,7 +5231,6 @@ paths:
               - PERMIT_BATCH_REISSUE
               - PERMIT_REISSUE
               - NON_COMPLIANCE
-              - NER
               - DOAL
               - AER
               - VIR
@@ -5271,6 +5246,7 @@ paths:
               - PERMANENT_CESSATION
               - ALR
               - WASTE_QDR
+              - NER
               - AVIATION_ACCOUNT_CLOSURE
               - AVIATION_NON_COMPLIANCE
               - EMP_BATCH_REISSUE
@@ -5371,7 +5347,6 @@ paths:
               - PERMIT_BATCH_REISSUE
               - PERMIT_REISSUE
               - NON_COMPLIANCE
-              - NER
               - DOAL
               - AER
               - VIR
@@ -5387,6 +5362,7 @@ paths:
               - PERMANENT_CESSATION
               - ALR
               - WASTE_QDR
+              - NER
               - AVIATION_ACCOUNT_CLOSURE
               - AVIATION_NON_COMPLIANCE
               - EMP_BATCH_REISSUE
@@ -5479,7 +5455,6 @@ paths:
               - PERMIT_BATCH_REISSUE
               - PERMIT_REISSUE
               - NON_COMPLIANCE
-              - NER
               - DOAL
               - AER
               - VIR
@@ -5495,6 +5470,7 @@ paths:
               - PERMANENT_CESSATION
               - ALR
               - WASTE_QDR
+              - NER
               - AVIATION_ACCOUNT_CLOSURE
               - AVIATION_NON_COMPLIANCE
               - EMP_BATCH_REISSUE
@@ -6042,6 +6018,8 @@ paths:
               - NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW
               - NON_COMPLIANCE_FINAL_DETERMINATION
               - NER_APPLICATION_SUBMIT
+              - NER_APPLICATION_VERIFICATION_SUBMIT
+              - NER_WAIT_FOR_VERIFICATION
               - NER_APPLICATION_REVIEW
               - NER_WAIT_FOR_REVIEW
               - NER_APPLICATION_PEER_REVIEW
@@ -6445,7 +6423,6 @@ paths:
                     - PERMIT_BATCH_REISSUE
                     - PERMIT_REISSUE
                     - NON_COMPLIANCE
-                    - NER
                     - DOAL
                     - AER
                     - VIR
@@ -6461,6 +6438,7 @@ paths:
                     - PERMANENT_CESSATION
                     - ALR
                     - WASTE_QDR
+                    - NER
                     - AVIATION_ACCOUNT_CLOSURE
                     - AVIATION_NON_COMPLIANCE
                     - EMP_BATCH_REISSUE
@@ -6516,18 +6494,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
   /v1.0/requests/available-workflows/permit/{accountId}:
     get:
       tags:
@@ -6557,18 +6550,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
   /v1.0/request-notes/{requestId}/files:
     get:
       tags:
@@ -7953,6 +7961,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ReferenceDataDTO'
       security: []
   /v1.0/company-information/{registrationNumber}:
     get:
@@ -7990,6 +8005,50 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '503':
           description: "Service unavailable\t\n Error Code | Description \t\nCOMPANYINFO1001 | Companies House API is currently unavailable"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/ca-external-contacts/ids:
+    get:
+      tags:
+        - Ca external contacts
+      summary: Returns the ca external contacts with specified ids
+      operationId: getCaExternalContactsByIds
+      parameters:
+        - name: ids
+          in: query
+          description: The list of ca external contact ids
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CaExternalContactDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
           content:
             application/json:
               schema:
@@ -9128,7 +9187,7 @@ components:
           format: int64
         userId:
           type: string
-    MiReportParams:
+    MiReportSystemParams:
       type: object
       properties:
         reportType:
@@ -9136,7 +9195,7 @@ components:
       description: The parameters based on which the report will be generated
       discriminator:
         propertyName: reportType
-    MiReportResult:
+    MiReportSystemResult:
       required:
         - columnNames
         - reportType
@@ -13794,8 +13853,6 @@ components:
                 items:
                   type: boolean
     BDRS2ApplicationRegulatorReviewOutcome:
-      required:
-        - freeAllocationOpinion
       type: object
       properties:
         freeAllocationOpinion:
@@ -18263,40 +18320,6 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/EmpEmissionsMonitoringApproachCorsia'
-    GrantAuthorityResponse:
-      required:
-        - allocationComments
-        - monitoringMethodologyPlanApproved
-        - type
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - VALID
-            - VALID_WITH_CORRECTIONS
-            - INVALID
-        monitoringMethodologyPlanApproved:
-          type: boolean
-        decisionComments:
-          maxLength: 10000
-          minLength: 0
-          type: string
-        files:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-            format: uuid
-        preliminaryAllocations:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PreliminaryAllocation'
-        allocationComments:
-          maxLength: 10000
-          minLength: 0
-          type: string
     HSETI:
       required:
         - hsetiFile
@@ -20570,6 +20593,41 @@ components:
           maxLength: 10000
           minLength: 0
           type: string
+    NER:
+      type: object
+      properties:
+        nerFiles:
+          $ref: '#/components/schemas/NERFiles'
+        mmpFiles:
+          $ref: '#/components/schemas/NERFiles'
+        notes:
+          type: string
+    NERApplicationSubmitToVerifierRequestTaskActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            verificationSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+    NERFiles:
+      required:
+        - file
+      type: object
+      properties:
+        file:
+          type: string
+          format: uuid
+        supportingFiles:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
     NaceCodes:
       required:
         - codes
@@ -21297,255 +21355,17 @@ components:
               - >-
                 _982_UNDIFFERENTIATED_SERVICE_PRODUCING_ACTIVITIES_OF_PRIVATE_HOUSEHOLDS_FOR_OWN_USE
               - _990_ACTIVITIES_OF_EXTRATERRITORIAL_ORGANIZATIONS_AND_BODIES
-    NerDetermination:
-      required:
-        - reason
-        - type
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - CLOSED
-            - DEEMED_WITHDRAWN
-            - PROCEED_TO_AUTHORITY
-        reason:
-          maxLength: 10000
-          minLength: 0
-          type: string
-      discriminator:
-        propertyName: type
-        mapping:
-          CLOSED: '#/components/schemas/NerEndedDetermination'
-          DEEMED_WITHDRAWN: '#/components/schemas/NerEndedDetermination'
-          PROCEED_TO_AUTHORITY: '#/components/schemas/NerProceedToAuthorityDetermination'
-    NerEndedDetermination:
-      required:
-        - paymentRefunded
-        - reason
-        - type
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - CLOSED
-            - DEEMED_WITHDRAWN
-            - PROCEED_TO_AUTHORITY
-        reason:
-          maxLength: 10000
-          minLength: 0
-          type: string
-        paymentRefunded:
-          type: boolean
-        paymentComments:
-          maxLength: 10000
-          minLength: 0
-          type: string
-    NerOperatorDocumentWithComment:
-      required:
-        - document
-      type: object
-      properties:
-        document:
-          type: string
-          format: uuid
-        comment:
-          maxLength: 10000
-          minLength: 0
-          type: string
-    NerProceedToAuthorityDetermination:
-      required:
-        - newEntrantType
-        - operationStartDate
-        - reason
-        - sendOfficialNotice
-        - type
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - CLOSED
-            - DEEMED_WITHDRAWN
-            - PROCEED_TO_AUTHORITY
-        reason:
-          maxLength: 10000
-          minLength: 0
-          type: string
-        newEntrantType:
-          type: string
-          enum:
-            - YEAR_0
-            - YEAR_0_PLUS_1
-        operationStartDate:
-          type: string
-          format: date
-        activityLevels:
-          type: array
-          items:
-            $ref: '#/components/schemas/ActivityLevel'
-        preliminaryAllocations:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PreliminaryAllocation'
-        sendOfficialNotice:
-          type: boolean
-    NerReviewGroupDecision:
-      required:
-        - type
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - ACCEPTED
-            - REJECTED
-            - OPERATOR_AMENDS_NEEDED
-        details:
-          $ref: '#/components/schemas/ReviewDecisionDetails'
-    NerSaveApplicationAmendRequestTaskActionPayload:
-      required:
-        - monitoringMethodologyPlan
-        - newEntrantDataReport
-        - verifierOpinionStatement
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskActionPayload'
-        - type: object
-          properties:
-            newEntrantDataReport:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            verifierOpinionStatement:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            monitoringMethodologyPlan:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            confidentialityStatement:
-              $ref: '#/components/schemas/ConfidentialityStatement'
-            additionalDocuments:
-              $ref: '#/components/schemas/AdditionalDocuments'
-            nerSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            reviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
     NerSaveApplicationRequestTaskActionPayload:
-      required:
-        - monitoringMethodologyPlan
-        - newEntrantDataReport
-        - verifierOpinionStatement
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestTaskActionPayload'
         - type: object
           properties:
-            newEntrantDataReport:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            verifierOpinionStatement:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            monitoringMethodologyPlan:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            confidentialityStatement:
-              $ref: '#/components/schemas/ConfidentialityStatement'
-            additionalDocuments:
-              $ref: '#/components/schemas/AdditionalDocuments'
-            nerSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-    NerSaveApplicationReviewRequestTaskActionPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskActionPayload'
-        - type: object
-          properties:
-            newEntrantDataReport:
-              type: string
-              format: uuid
-            verifierOpinionStatement:
-              type: string
-              format: uuid
-            monitoringMethodologyPlan:
-              type: string
-              format: uuid
-            confidentialityStatement:
-              $ref: '#/components/schemas/ConfidentialityStatement'
-            additionalDocuments:
-              $ref: '#/components/schemas/AdditionalDocuments'
-            nerSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            reviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-    NerSaveAuthorityResponseRequestTaskActionPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskActionPayload'
-        - type: object
-          properties:
-            submittedToAuthorityDate:
-              type: string
-              format: date
-            authorityResponse:
-              oneOf:
-                - $ref: '#/components/schemas/GrantAuthorityResponse'
-                - $ref: '#/components/schemas/RejectAuthorityResponse'
-            nerSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-    NerSaveReviewDeterminationRequestTaskActionPayload:
-      required:
-        - determination
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskActionPayload'
-        - type: object
-          properties:
-            determination:
-              oneOf:
-                - $ref: '#/components/schemas/NerEndedDetermination'
-                - $ref: '#/components/schemas/NerProceedToAuthorityDetermination'
-            reviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-    NerSaveReviewGroupDecisionRequestTaskActionPayload:
-      required:
-        - decision
-        - group
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskActionPayload'
-        - type: object
-          properties:
-            group:
-              type: string
-              enum:
-                - NEW_ENTRANT_DATA_REPORT
-                - VERIFIER_OPINION_STATEMENT
-                - MONITORING_METHODOLOGY_PLAN
-                - CONFIDENTIALITY_STATEMENT
-                - ADDITIONAL_DOCUMENTS
-            decision:
-              $ref: '#/components/schemas/NerReviewGroupDecision'
-            reviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-    NerSubmitApplicationAmendRequestTaskActionPayload:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskActionPayload'
-        - type: object
-          properties:
+            ner:
+              $ref: '#/components/schemas/NER'
+            nerFileVersion:
+              type: integer
+              format: int32
             nerSectionsCompleted:
               type: object
               additionalProperties:
@@ -24749,35 +24569,6 @@ components:
           maxLength: 10000
           minLength: 0
           type: string
-    RejectAuthorityResponse:
-      required:
-        - monitoringMethodologyPlanApproved
-        - rejectComments
-        - type
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - VALID
-            - VALID_WITH_CORRECTIONS
-            - INVALID
-        monitoringMethodologyPlanApproved:
-          type: boolean
-        decisionComments:
-          maxLength: 10000
-          minLength: 0
-          type: string
-        files:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-            format: uuid
-        rejectComments:
-          maxLength: 10000
-          minLength: 0
-          type: string
     ReportableAndBiomassEmission:
       required:
         - reportableEmissions
@@ -24916,6 +24707,7 @@ components:
             - NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION_PAYLOAD
             - NON_COMPLIANCE_AMEND_DETAILS_PAYLOAD
             - NER_SAVE_APPLICATION_PAYLOAD
+            - NER_APPLICATION_SUBMIT_TO_VERIFIER_PAYLOAD
             - NER_SAVE_APPLICATION_REVIEW_PAYLOAD
             - NER_SAVE_REVIEW_GROUP_DECISION_PAYLOAD
             - NER_SAVE_REVIEW_DETERMINATION_PAYLOAD
@@ -25246,6 +25038,7 @@ components:
             - NER_CANCEL_APPLICATION
             - NER_UPLOAD_ATTACHMENT
             - NER_SAVE_APPLICATION
+            - NER_APPLICATION_SUBMIT_TO_VERIFIER
             - NER_SUBMIT_APPLICATION
             - NER_SAVE_APPLICATION_REVIEW
             - NER_SAVE_REVIEW_GROUP_DECISION
@@ -25791,18 +25584,8 @@ components:
             - $ref: >-
                 #/components/schemas/InstallationOnsiteInspectionApplicationSaveRequestTaskActionPayload
             - $ref: >-
-                #/components/schemas/NerSaveApplicationAmendRequestTaskActionPayload
+                #/components/schemas/NERApplicationSubmitToVerifierRequestTaskActionPayload
             - $ref: '#/components/schemas/NerSaveApplicationRequestTaskActionPayload'
-            - $ref: >-
-                #/components/schemas/NerSaveApplicationReviewRequestTaskActionPayload
-            - $ref: >-
-                #/components/schemas/NerSaveAuthorityResponseRequestTaskActionPayload
-            - $ref: >-
-                #/components/schemas/NerSaveReviewDeterminationRequestTaskActionPayload
-            - $ref: >-
-                #/components/schemas/NerSaveReviewGroupDecisionRequestTaskActionPayload
-            - $ref: >-
-                #/components/schemas/NerSubmitApplicationAmendRequestTaskActionPayload
             - $ref: >-
                 #/components/schemas/NonComplianceAmendDetailsRequestTaskActionPayload
             - $ref: >-
@@ -27297,6 +27080,47 @@ components:
           maxLength: 10000
           minLength: 0
           type: string
+      discriminator:
+        propertyName: type
+        mapping:
+          ACCEPTED: '#/components/schemas/WasteQDRReviewAcceptedDecisionDetails'
+          OPERATOR_AMENDS_NEEDED: >-
+            #/components/schemas/WasteQDRRegulatorReviewOperatorAmendsNeededDecisionDetails
+    WasteQDRRegulatorReviewOperatorAmendsNeededDecisionDetails:
+      required:
+        - requiredChanges
+      type: object
+      properties:
+        notes:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        requiredChanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/WasteQDRRegulatorReviewRequiredChange'
+    WasteQDRRegulatorReviewRequiredChange:
+      required:
+        - reason
+      type: object
+      properties:
+        reason:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        files:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+    WasteQDRReviewAcceptedDecisionDetails:
+      type: object
+      properties:
+        notes:
+          maxLength: 10000
+          minLength: 0
+          type: string
     WasteQDRReviewDecision:
       required:
         - type
@@ -27597,6 +27421,7 @@ components:
             - NER_CANCEL_APPLICATION
             - NER_UPLOAD_ATTACHMENT
             - NER_SAVE_APPLICATION
+            - NER_APPLICATION_SUBMIT_TO_VERIFIER
             - NER_SUBMIT_APPLICATION
             - NER_SAVE_APPLICATION_REVIEW
             - NER_SAVE_REVIEW_GROUP_DECISION
@@ -28203,7 +28028,6 @@ components:
               - PERMIT_BATCH_REISSUE
               - PERMIT_REISSUE
               - NON_COMPLIANCE
-              - NER
               - DOAL
               - AER
               - VIR
@@ -28219,6 +28043,7 @@ components:
               - PERMANENT_CESSATION
               - ALR
               - WASTE_QDR
+              - NER
               - AVIATION_ACCOUNT_CLOSURE
               - AVIATION_NON_COMPLIANCE
               - EMP_BATCH_REISSUE
@@ -28301,7 +28126,6 @@ components:
             - PERMIT_BATCH_REISSUE
             - PERMIT_REISSUE
             - NON_COMPLIANCE
-            - NER
             - DOAL
             - AER
             - VIR
@@ -28317,6 +28141,7 @@ components:
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
+            - NER
             - AVIATION_ACCOUNT_CLOSURE
             - AVIATION_NON_COMPLIANCE
             - EMP_BATCH_REISSUE
@@ -28792,7 +28617,6 @@ components:
                 - PERMIT_BATCH_REISSUE
                 - PERMIT_REISSUE
                 - NON_COMPLIANCE
-                - NER
                 - DOAL
                 - AER
                 - VIR
@@ -28808,6 +28632,7 @@ components:
                 - PERMANENT_CESSATION
                 - ALR
                 - WASTE_QDR
+                - NER
                 - AVIATION_ACCOUNT_CLOSURE
                 - AVIATION_NON_COMPLIANCE
                 - EMP_BATCH_REISSUE
@@ -28845,7 +28670,6 @@ components:
             - PERMIT_BATCH_REISSUE
             - PERMIT_REISSUE
             - NON_COMPLIANCE
-            - NER
             - DOAL
             - AER
             - VIR
@@ -28861,6 +28685,7 @@ components:
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
+            - NER
             - AVIATION_ACCOUNT_CLOSURE
             - AVIATION_NON_COMPLIANCE
             - EMP_BATCH_REISSUE
@@ -28958,6 +28783,7 @@ components:
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
+            - NER
             - REISSUE
             - AVIATION_AER
             - AVIATION_AER_CORSIA
@@ -29471,6 +29297,27 @@ components:
           additionalProperties:
             type: string
       description: The account operator authorities to update
+    CustomMiReportQuery:
+      required:
+        - sqlQuery
+      type: object
+      properties:
+        sqlQuery:
+          type: string
+      description: The parameters based on which the report will be generated
+    MiReportUserDefinedResult:
+      type: object
+      properties:
+        columnNames:
+          type: array
+          items:
+            type: string
+        results:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
     AerMarkNotRequiredDetails:
       required:
         - reason
@@ -30228,7 +30075,7 @@ components:
         total:
           type: integer
           format: int64
-    MiReportSearchResult:
+    MiReportSystemSearchResult:
       type: object
       properties:
         id:
@@ -30259,7 +30106,6 @@ components:
             - PERMIT_BATCH_REISSUE
             - PERMIT_REISSUE
             - NON_COMPLIANCE
-            - NER
             - DOAL
             - AER
             - VIR
@@ -30275,6 +30121,7 @@ components:
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
+            - NER
             - AVIATION_ACCOUNT_CLOSURE
             - AVIATION_NON_COMPLIANCE
             - EMP_BATCH_REISSUE
@@ -30402,6 +30249,8 @@ components:
             - NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW
             - NON_COMPLIANCE_FINAL_DETERMINATION
             - NER_APPLICATION_SUBMIT
+            - NER_APPLICATION_VERIFICATION_SUBMIT
+            - NER_WAIT_FOR_VERIFICATION
             - NER_APPLICATION_REVIEW
             - NER_WAIT_FOR_REVIEW
             - NER_APPLICATION_PEER_REVIEW
@@ -31124,6 +30973,10 @@ components:
                 type: string
             isPostALRSectionRemoval:
               type: boolean
+            sm3UnitEnabled:
+              type: boolean
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             verificationPerformed:
               type: boolean
             verificationBodyId:
@@ -31183,6 +31036,10 @@ components:
               additionalProperties:
                 type: string
             isPostALRSectionRemoval:
+              type: boolean
+            sm3UnitEnabled:
+              type: boolean
+            isVerifierAerTaskContentUpdate:
               type: boolean
             verificationReport:
               $ref: '#/components/schemas/AerVerificationReport'
@@ -31247,6 +31104,10 @@ components:
                 type: string
             isPostALRSectionRemoval:
               type: boolean
+            sm3UnitEnabled:
+              type: boolean
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             verificationPerformed:
               type: boolean
             verificationBodyId:
@@ -31294,6 +31155,10 @@ components:
               additionalProperties:
                 type: string
             isPostALRSectionRemoval:
+              type: boolean
+            sm3UnitEnabled:
+              type: boolean
+            isVerifierAerTaskContentUpdate:
               type: boolean
             verificationReport:
               $ref: '#/components/schemas/AerVerificationReport'
@@ -31949,6 +31814,8 @@ components:
                   type: boolean
             aer:
               $ref: '#/components/schemas/AviationAerUkEts'
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             empOriginatedData:
               $ref: '#/components/schemas/EmpUkEtsOriginatedData'
             verificationPerformed:
@@ -32005,6 +31872,8 @@ components:
                   type: boolean
             aer:
               $ref: '#/components/schemas/AviationAerUkEts'
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             verificationReport:
               $ref: '#/components/schemas/AviationAerUkEtsVerificationReport'
             totalEmissionsProvided:
@@ -32061,6 +31930,8 @@ components:
                   type: boolean
             aer:
               $ref: '#/components/schemas/AviationAerUkEts'
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             empOriginatedData:
               $ref: '#/components/schemas/EmpUkEtsOriginatedData'
             verificationPerformed:
@@ -32105,6 +31976,8 @@ components:
                   type: boolean
             aer:
               $ref: '#/components/schemas/AviationAerUkEts'
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             verificationReport:
               $ref: '#/components/schemas/AviationAerUkEtsVerificationReport'
             totalEmissionsProvided:
@@ -33597,28 +33470,14 @@ components:
         permitConsolidationNumber:
           type: integer
           format: int32
-    NerApplicationAmendsSubmitRequestTaskPayload:
-      required:
-        - additionalDocuments
-        - confidentialityStatement
-        - monitoringMethodologyPlan
-        - newEntrantDataReport
-        - verifierOpinionStatement
+    NERApplicationVerificationSubmitRequestTaskPayload:
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestTaskPayload'
         - type: object
           properties:
-            newEntrantDataReport:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            verifierOpinionStatement:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            monitoringMethodologyPlan:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            confidentialityStatement:
-              $ref: '#/components/schemas/ConfidentialityStatement'
-            additionalDocuments:
-              $ref: '#/components/schemas/AdditionalDocuments'
+            ner:
+              $ref: '#/components/schemas/NER'
             nerSectionsCompleted:
               type: object
               additionalProperties:
@@ -33627,85 +33486,47 @@ components:
               type: object
               additionalProperties:
                 type: string
-            reviewAttachments:
+            nerFileVersion:
+              type: integer
+              format: int32
+            verificationReport:
+              $ref: '#/components/schemas/NERVerificationReport'
+            verificationAttachments:
               type: object
               additionalProperties:
                 type: string
-            reviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            reviewGroupDecisions:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/NerReviewGroupDecision'
-    NerApplicationReviewRequestTaskPayload:
-      required:
-        - additionalDocuments
-        - confidentialityStatement
-        - determination
-        - monitoringMethodologyPlan
-        - newEntrantDataReport
-        - verifierOpinionStatement
+    NERVerificationOpinionStatement:
       type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskPayload'
-        - type: object
-          properties:
-            newEntrantDataReport:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            verifierOpinionStatement:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            monitoringMethodologyPlan:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            confidentialityStatement:
-              $ref: '#/components/schemas/ConfidentialityStatement'
-            additionalDocuments:
-              $ref: '#/components/schemas/AdditionalDocuments'
-            nerSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            nerAttachments:
-              type: object
-              additionalProperties:
-                type: string
-            determination:
-              $ref: '#/components/schemas/NerDetermination'
-            reviewAttachments:
-              type: object
-              additionalProperties:
-                type: string
-            reviewSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            reviewGroupDecisions:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/NerReviewGroupDecision'
+      properties:
+        opinionStatementFile:
+          type: string
+          format: uuid
+        supportingFiles:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+        notes:
+          type: string
+    NERVerificationReport:
+      type: object
+      properties:
+        verificationBodyId:
+          type: integer
+          format: int64
+        verificationBodyDetails:
+          $ref: '#/components/schemas/VerificationBodyDetails'
+        opinionStatement:
+          $ref: '#/components/schemas/NERVerificationOpinionStatement'
     NerApplicationSubmitRequestTaskPayload:
-      required:
-        - additionalDocuments
-        - confidentialityStatement
-        - monitoringMethodologyPlan
-        - newEntrantDataReport
-        - verifierOpinionStatement
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestTaskPayload'
         - type: object
           properties:
-            newEntrantDataReport:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            verifierOpinionStatement:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            monitoringMethodologyPlan:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            confidentialityStatement:
-              $ref: '#/components/schemas/ConfidentialityStatement'
-            additionalDocuments:
-              $ref: '#/components/schemas/AdditionalDocuments'
+            ner:
+              $ref: '#/components/schemas/NER'
             nerSectionsCompleted:
               type: object
               additionalProperties:
@@ -33714,35 +33535,14 @@ components:
               type: object
               additionalProperties:
                 type: string
-    NerAuthorityResponseRequestTaskPayload:
-      required:
-        - authorityResponse
-        - submittedToAuthorityDate
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestTaskPayload'
-        - type: object
-          properties:
-            originalPreliminaryAllocations:
-              uniqueItems: true
-              type: array
-              items:
-                $ref: '#/components/schemas/PreliminaryAllocation'
-            submittedToAuthorityDate:
-              type: string
-              format: date
-            authorityResponse:
-              oneOf:
-                - $ref: '#/components/schemas/GrantAuthorityResponse'
-                - $ref: '#/components/schemas/RejectAuthorityResponse'
-            nerSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
-            nerAttachments:
-              type: object
-              additionalProperties:
-                type: string
+            nerFileVersion:
+              type: integer
+              format: int32
+            verificationPerformed:
+              type: boolean
+            verificationBodyId:
+              type: integer
+              format: int64
     NonComplianceApplicationSubmitRequestTaskPayload:
       required:
         - civilPenalty
@@ -35204,7 +35004,6 @@ components:
             - PERMIT_BATCH_REISSUE
             - PERMIT_REISSUE
             - NON_COMPLIANCE
-            - NER
             - DOAL
             - AER
             - VIR
@@ -35220,6 +35019,7 @@ components:
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
+            - NER
             - AVIATION_ACCOUNT_CLOSURE
             - AVIATION_NON_COMPLIANCE
             - EMP_BATCH_REISSUE
@@ -35393,6 +35193,8 @@ components:
             - NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW
             - NON_COMPLIANCE_FINAL_DETERMINATION
             - NER_APPLICATION_SUBMIT
+            - NER_APPLICATION_VERIFICATION_SUBMIT
+            - NER_WAIT_FOR_VERIFICATION
             - NER_APPLICATION_REVIEW
             - NER_WAIT_FOR_REVIEW
             - NER_APPLICATION_PEER_REVIEW
@@ -35755,10 +35557,8 @@ components:
             - $ref: >-
                 #/components/schemas/InstallationOnsiteInspectionApplicationSubmitRequestTaskPayload
             - $ref: >-
-                #/components/schemas/NerApplicationAmendsSubmitRequestTaskPayload
-            - $ref: '#/components/schemas/NerApplicationReviewRequestTaskPayload'
+                #/components/schemas/NERApplicationVerificationSubmitRequestTaskPayload
             - $ref: '#/components/schemas/NerApplicationSubmitRequestTaskPayload'
-            - $ref: '#/components/schemas/NerAuthorityResponseRequestTaskPayload'
             - $ref: >-
                 #/components/schemas/NonComplianceApplicationSubmitRequestTaskPayload
             - $ref: '#/components/schemas/NonComplianceCivilPenaltyRequestTaskPayload'
@@ -35986,6 +35786,7 @@ components:
               - NER_CANCEL_APPLICATION
               - NER_UPLOAD_ATTACHMENT
               - NER_SAVE_APPLICATION
+              - NER_APPLICATION_SUBMIT_TO_VERIFIER
               - NER_SUBMIT_APPLICATION
               - NER_SAVE_APPLICATION_REVIEW
               - NER_SAVE_REVIEW_GROUP_DECISION
@@ -36389,6 +36190,7 @@ components:
             - NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW_PAYLOAD
             - NON_COMPLIANCE_FINAL_DETERMINATION_PAYLOAD
             - NER_APPLICATION_SUBMIT_PAYLOAD
+            - NER_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD
             - NER_APPLICATION_REVIEW_PAYLOAD
             - NER_APPLICATION_PEER_REVIEW_PAYLOAD
             - NER_WAIT_FOR_PEER_REVIEW_PAYLOAD
@@ -36637,12 +36439,8 @@ components:
           NON_COMPLIANCE_FINAL_DETERMINATION_PAYLOAD: >-
             #/components/schemas/NonComplianceFinalDeterminationRequestTaskPayload
           NER_APPLICATION_SUBMIT_PAYLOAD: '#/components/schemas/NerApplicationSubmitRequestTaskPayload'
-          NER_APPLICATION_REVIEW_PAYLOAD: '#/components/schemas/NerApplicationReviewRequestTaskPayload'
-          NER_APPLICATION_PEER_REVIEW_PAYLOAD: '#/components/schemas/NerApplicationReviewRequestTaskPayload'
-          NER_WAIT_FOR_PEER_REVIEW_PAYLOAD: '#/components/schemas/NerApplicationReviewRequestTaskPayload'
-          NER_APPLICATION_AMENDS_SUBMIT_PAYLOAD: '#/components/schemas/NerApplicationAmendsSubmitRequestTaskPayload'
-          NER_WAIT_FOR_AMENDS_PAYLOAD: '#/components/schemas/NerApplicationReviewRequestTaskPayload'
-          NER_AUTHORITY_RESPONSE_PAYLOAD: '#/components/schemas/NerAuthorityResponseRequestTaskPayload'
+          NER_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD: >-
+            #/components/schemas/NERApplicationVerificationSubmitRequestTaskPayload
           DOAL_APPLICATION_SUBMIT_PAYLOAD: '#/components/schemas/DoalApplicationSubmitRequestTaskPayload'
           DOAL_APPLICATION_PEER_REVIEW_PAYLOAD: '#/components/schemas/DoalApplicationSubmitRequestTaskPayload'
           DOAL_WAIT_FOR_PEER_REVIEW_PAYLOAD: '#/components/schemas/DoalApplicationSubmitRequestTaskPayload'
@@ -36724,6 +36522,10 @@ components:
             #/components/schemas/BDRS2ApplicationRegulatorReviewSubmitRequestTaskPayload
           BDRS2_APPLICATION_AMENDS_SUBMIT_PAYLOAD: '#/components/schemas/BDRS2ApplicationAmendsSubmitRequestTaskPayload'
           BDRS2_WAIT_FOR_AMENDS_PAYLOAD: >-
+            #/components/schemas/BDRS2ApplicationRegulatorReviewSubmitRequestTaskPayload
+          BDRS2_APPLICATION_PEER_REVIEW_PAYLOAD: >-
+            #/components/schemas/BDRS2ApplicationRegulatorReviewSubmitRequestTaskPayload
+          BDRS2_WAIT_FOR_PEER_REVIEW_PAYLOAD: >-
             #/components/schemas/BDRS2ApplicationRegulatorReviewSubmitRequestTaskPayload
           HSE_TI_APPLICATION_SUBMIT_PAYLOAD: '#/components/schemas/HSETIApplicationSubmitRequestTaskPayload'
           HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD: >-
@@ -37289,7 +37091,6 @@ components:
               - PERMIT_BATCH_REISSUE
               - PERMIT_REISSUE
               - NON_COMPLIANCE
-              - NER
               - DOAL
               - AER
               - VIR
@@ -37305,6 +37106,7 @@ components:
               - PERMANENT_CESSATION
               - ALR
               - WASTE_QDR
+              - NER
               - AVIATION_ACCOUNT_CLOSURE
               - AVIATION_NON_COMPLIANCE
               - EMP_BATCH_REISSUE
@@ -37459,6 +37261,7 @@ components:
             - NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_REJECTED
             - NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED
             - NER_APPLICATION_CANCELLED
+            - NER_APPLICATION_SENT_TO_VERIFIER
             - NER_APPLICATION_SUBMITTED
             - NER_PEER_REVIEW_REQUESTED
             - NER_PEER_REVIEWER_ACCEPTED
@@ -37708,6 +37511,7 @@ components:
             - >-
               AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED
             - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED
+            - NOTIFICATION_SENT_TO_REGISTRY
         submitter:
           type: string
         creationDate:
@@ -38023,6 +37827,8 @@ components:
               type: boolean
             verificationReport:
               $ref: '#/components/schemas/AerVerificationReport'
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             aerAttachments:
               type: object
               additionalProperties:
@@ -38058,6 +37864,8 @@ components:
               type: boolean
             verificationReport:
               $ref: '#/components/schemas/AerVerificationReport'
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             aerAttachments:
               type: object
               additionalProperties:
@@ -38131,6 +37939,8 @@ components:
               type: boolean
             verificationReport:
               $ref: '#/components/schemas/AerVerificationReport'
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             aerAttachments:
               type: object
               additionalProperties:
@@ -38166,6 +37976,8 @@ components:
               type: boolean
             verificationReport:
               $ref: '#/components/schemas/AerVerificationReport'
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             aerAttachments:
               type: object
               additionalProperties:
@@ -38577,6 +38389,8 @@ components:
               $ref: '#/components/schemas/AviationAerUkEtsSubmittedEmissions'
             verificationReport:
               $ref: '#/components/schemas/AviationAerUkEtsVerificationReport'
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             aerAttachments:
               type: object
               additionalProperties:
@@ -38636,6 +38450,8 @@ components:
               $ref: '#/components/schemas/AviationAerUkEtsSubmittedEmissions'
             verificationReport:
               $ref: '#/components/schemas/AviationAerUkEtsVerificationReport'
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             aerAttachments:
               type: object
               additionalProperties:
@@ -38671,6 +38487,8 @@ components:
               $ref: '#/components/schemas/AviationAerUkEtsSubmittedEmissions'
             verificationReport:
               $ref: '#/components/schemas/AviationAerUkEtsVerificationReport'
+            isVerifierAerTaskContentUpdate:
+              type: boolean
             aerAttachments:
               type: object
               additionalProperties:
@@ -38820,6 +38638,20 @@ components:
                 - $ref: '#/components/schemas/LocationOffShoreDTO'
                 - $ref: '#/components/schemas/LocationOnShoreDTO'
                 - $ref: '#/components/schemas/LocationOnShoreStateDTO'
+    AviationRegistryIntegrationOperatorDetails:
+      type: object
+      properties:
+        emitterId:
+          type: string
+        emissionsPlanId:
+          type: string
+        operatorName:
+          type: string
+        firstYearOfReportingObligation:
+          type: integer
+          format: int32
+        regulator:
+          type: string
     AviationReportableEmissionsRegistryIntegrationRequestActionPayload:
       type: object
       allOf:
@@ -39558,7 +39390,7 @@ components:
         - type: object
           properties:
             operatorDetails:
-              $ref: '#/components/schemas/AviationOperatorDetails'
+              $ref: '#/components/schemas/AviationRegistryIntegrationOperatorDetails'
             organisationDetails:
               oneOf:
                 - $ref: '#/components/schemas/AviationIndividualCompanyDetails'
@@ -40416,154 +40248,21 @@ components:
             activePermit:
               $ref: >-
                 #/components/schemas/RegistryIntegrationReportableEmissionsActivePermit
-    NerApplicationAcceptedRequestActionPayload:
+    NERApplicationSubmittedRequestActionPayload:
       required:
-        - authorityResponse
-        - decisionNotification
-        - submittedToAuthorityDate
+        - installationOperatorDetails
+        - ner
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestActionPayload'
         - type: object
           properties:
-            submittedToAuthorityDate:
-              type: string
-              format: date
-            authorityResponse:
-              $ref: '#/components/schemas/GrantAuthorityResponse'
-            nerAttachments:
-              type: object
-              additionalProperties:
-                type: string
-            decisionNotification:
-              $ref: '#/components/schemas/DecisionNotification'
-            usersInfo:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/RequestActionUserInfo'
-    NerApplicationEndedRequestActionPayload:
-      required:
-        - decisionNotification
-        - determination
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            determination:
-              $ref: '#/components/schemas/NerEndedDetermination'
-            decisionNotification:
-              $ref: '#/components/schemas/DecisionNotification'
-            usersInfo:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/RequestActionUserInfo'
-    NerApplicationProceededToAuthorityRequestActionPayload:
-      required:
-        - additionalDocuments
-        - confidentialityStatement
-        - determination
-        - monitoringMethodologyPlan
-        - newEntrantDataReport
-        - verifierOpinionStatement
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            newEntrantDataReport:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            verifierOpinionStatement:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            monitoringMethodologyPlan:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            confidentialityStatement:
-              $ref: '#/components/schemas/ConfidentialityStatement'
-            additionalDocuments:
-              $ref: '#/components/schemas/AdditionalDocuments'
-            reviewGroupDecisions:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/NerReviewGroupDecision'
-            determination:
-              $ref: '#/components/schemas/NerProceedToAuthorityDetermination'
-            decisionNotification:
-              $ref: '#/components/schemas/DecisionNotification'
-            nerAttachments:
-              type: object
-              additionalProperties:
-                type: string
-            usersInfo:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/RequestActionUserInfo'
-    NerApplicationRejectedRequestActionPayload:
-      required:
-        - authorityResponse
-        - decisionNotification
-        - submittedToAuthorityDate
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            submittedToAuthorityDate:
-              type: string
-              format: date
-            authorityResponse:
-              $ref: '#/components/schemas/RejectAuthorityResponse'
-            nerAttachments:
-              type: object
-              additionalProperties:
-                type: string
-            decisionNotification:
-              $ref: '#/components/schemas/DecisionNotification'
-            usersInfo:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/RequestActionUserInfo'
-    NerApplicationReturnedForAmendsRequestActionPayload:
-      required:
-        - reviewGroupDecisions
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            reviewGroupDecisions:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/NerReviewGroupDecision'
-            reviewAttachments:
-              type: object
-              additionalProperties:
-                type: string
-    NerApplicationSubmittedRequestActionPayload:
-      required:
-        - additionalDocuments
-        - confidentialityStatement
-        - monitoringMethodologyPlan
-        - newEntrantDataReport
-        - verifierOpinionStatement
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/RequestActionPayload'
-        - type: object
-          properties:
-            newEntrantDataReport:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            verifierOpinionStatement:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            monitoringMethodologyPlan:
-              $ref: '#/components/schemas/NerOperatorDocumentWithComment'
-            confidentialityStatement:
-              $ref: '#/components/schemas/ConfidentialityStatement'
-            additionalDocuments:
-              $ref: '#/components/schemas/AdditionalDocuments'
-            nerSectionsCompleted:
-              type: object
-              additionalProperties:
-                type: boolean
+            ner:
+              $ref: '#/components/schemas/NER'
+            installationOperatorDetails:
+              $ref: '#/components/schemas/InstallationOperatorDetails'
+            verificationPerformed:
+              type: boolean
             nerAttachments:
               type: object
               additionalProperties:
@@ -40867,6 +40566,19 @@ components:
               type: object
               additionalProperties:
                 $ref: '#/components/schemas/RequestActionUserInfo'
+    NotificationRegistryIntegrationRequestActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            registryId:
+              type: integer
+              format: int32
+            notificationType:
+              type: string
+            sentFile:
+              $ref: '#/components/schemas/FileInfoDTO'
     PaymentCancelledRequestActionPayload:
       type: object
       allOf:
@@ -42160,6 +41872,7 @@ components:
             - NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_REJECTED
             - NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED
             - NER_APPLICATION_CANCELLED
+            - NER_APPLICATION_SENT_TO_VERIFIER
             - NER_APPLICATION_SUBMITTED
             - NER_PEER_REVIEW_REQUESTED
             - NER_PEER_REVIEWER_ACCEPTED
@@ -42409,6 +42122,7 @@ components:
             - >-
               AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED
             - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED
+            - NOTIFICATION_SENT_TO_REGISTRY
         payload:
           oneOf:
             - $ref: '#/components/schemas/ALRApplicationAcceptedRequestActionPayload'
@@ -42590,14 +42304,7 @@ components:
                 #/components/schemas/InstallationInspectionOperatorRespondedRequestActionPayload
             - $ref: >-
                 #/components/schemas/InstallationReportableEmissionsRegistryIntegrationRequestActionPayload
-            - $ref: '#/components/schemas/NerApplicationAcceptedRequestActionPayload'
-            - $ref: '#/components/schemas/NerApplicationEndedRequestActionPayload'
-            - $ref: >-
-                #/components/schemas/NerApplicationProceededToAuthorityRequestActionPayload
-            - $ref: '#/components/schemas/NerApplicationRejectedRequestActionPayload'
-            - $ref: >-
-                #/components/schemas/NerApplicationReturnedForAmendsRequestActionPayload
-            - $ref: '#/components/schemas/NerApplicationSubmittedRequestActionPayload'
+            - $ref: '#/components/schemas/NERApplicationSubmittedRequestActionPayload'
             - $ref: >-
                 #/components/schemas/NonComplianceApplicationClosedRequestActionPayload
             - $ref: >-
@@ -42612,6 +42319,8 @@ components:
                 #/components/schemas/NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload
             - $ref: >-
                 #/components/schemas/NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload
+            - $ref: >-
+                #/components/schemas/NotificationRegistryIntegrationRequestActionPayload
             - $ref: '#/components/schemas/PaymentCancelledRequestActionPayload'
             - $ref: '#/components/schemas/PaymentProcessedRequestActionPayload'
             - $ref: >-
@@ -42721,7 +42430,6 @@ components:
             - PERMIT_BATCH_REISSUE
             - PERMIT_REISSUE
             - NON_COMPLIANCE
-            - NER
             - DOAL
             - AER
             - VIR
@@ -42737,6 +42445,7 @@ components:
             - PERMANENT_CESSATION
             - ALR
             - WASTE_QDR
+            - NER
             - AVIATION_ACCOUNT_CLOSURE
             - AVIATION_NON_COMPLIANCE
             - EMP_BATCH_REISSUE
@@ -42992,6 +42701,7 @@ components:
               AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
             - >-
               AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED_PAYLOAD
+            - NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD
       discriminator:
         propertyName: payloadType
         mapping:
@@ -43125,15 +42835,8 @@ components:
           NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED_PAYLOAD: >-
             #/components/schemas/NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload
           NON_COMPLIANCE_DETAILS_AMENDED_PAYLOAD: '#/components/schemas/NonComplianceDetailsAmendedRequestActionPayload'
-          NER_APPLICATION_SUBMITTED_PAYLOAD: '#/components/schemas/NerApplicationSubmittedRequestActionPayload'
+          NER_APPLICATION_SUBMITTED_PAYLOAD: '#/components/schemas/NERApplicationSubmittedRequestActionPayload'
           NER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
-          NER_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD: >-
-            #/components/schemas/NerApplicationReturnedForAmendsRequestActionPayload
-          NER_APPLICATION_ENDED_PAYLOAD: '#/components/schemas/NerApplicationEndedRequestActionPayload'
-          NER_APPLICATION_PROCEEDED_TO_AUTHORITY_PAYLOAD: >-
-            #/components/schemas/NerApplicationProceededToAuthorityRequestActionPayload
-          NER_APPLICATION_ACCEPTED_PAYLOAD: '#/components/schemas/NerApplicationAcceptedRequestActionPayload'
-          NER_APPLICATION_REJECTED_PAYLOAD: '#/components/schemas/NerApplicationRejectedRequestActionPayload'
           DOAL_APPLICATION_PROCEEDED_TO_AUTHORITY_PAYLOAD: >-
             #/components/schemas/DoalApplicationProceededToAuthorityRequestActionPayload
           DOAL_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
@@ -43194,6 +42897,7 @@ components:
           BDRS2_APPLICATION_AMENDS_SUBMITTED_PAYLOAD: >-
             #/components/schemas/BDRS2ApplicationAmendsSubmittedRequestActionPayload
           BDRS2_APPLICATION_COMPLETED_PAYLOAD: '#/components/schemas/BDRS2ApplicationCompletedRequestActionPayload'
+          BDRS2_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
           ALR_APPLICATION_SUBMITTED_PAYLOAD: '#/components/schemas/ALRApplicationSubmittedRequestActionPayload'
           ALR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD: >-
             #/components/schemas/ALRVerificationReturnedToOperatorRequestActionPayload
@@ -43331,6 +43035,8 @@ components:
             #/components/schemas/AviationAerCorsia3YearPeriodOffsettingApplicationSubmittedRequestActionPayload
           AVIATION_DOE_CORSIA_SUBMITTED_PAYLOAD: '#/components/schemas/AviationDoECorsiaSubmittedRequestActionPayload'
           AVIATION_DOE_CORSIA_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
+          NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD: >-
+            #/components/schemas/NotificationRegistryIntegrationRequestActionPayload
     RequestActionUserInfo:
       required:
         - name
@@ -44525,6 +44231,235 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NotificationAlertDTO'
+    AccountAssignedRegulatorSiteContact:
+      type: object
+      properties:
+        userId:
+          type: string
+        Account ID:
+          type: string
+        Account name:
+          type: string
+        Account status:
+          type: string
+        User status:
+          type: string
+        Assigned regulator:
+          type: string
+    AccountAssignedRegulatorSiteContactsMiReportResult:
+      required:
+        - columnNames
+        - reportType
+      type: object
+      properties:
+        reportType:
+          type: string
+        columnNames:
+          type: array
+          items:
+            type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountAssignedRegulatorSiteContact'
+    AccountUserContact:
+      type: object
+      properties:
+        userId:
+          type: string
+        Account ID:
+          type: string
+        Account name:
+          type: string
+        Account status:
+          type: string
+        Is User Primary contact?:
+          type: boolean
+        User status:
+          type: string
+        Name:
+          type: string
+        Telephone:
+          type: string
+        Last logon:
+          type: string
+        Email:
+          type: string
+        User role:
+          type: string
+    AccountsUsersContactsMiReportResult:
+      required:
+        - columnNames
+        - reportType
+      type: object
+      properties:
+        reportType:
+          type: string
+        columnNames:
+          type: array
+          items:
+            type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountUserContact'
+    ExecutedRequestAction:
+      type: object
+      properties:
+        Account ID:
+          type: string
+        Account name:
+          type: string
+        Account status:
+          type: string
+        Workflow ID:
+          type: string
+        Workflow type:
+          type: string
+        Workflow status:
+          type: string
+        Timeline event type:
+          type: string
+        Timeline event Completed by:
+          type: string
+        Timeline event Date Completed:
+          type: string
+          format: date-time
+    ExecutedRequestActionsMiReportResult:
+      required:
+        - columnNames
+        - reportType
+      type: object
+      properties:
+        reportType:
+          type: string
+        columnNames:
+          type: array
+          items:
+            type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExecutedRequestAction'
+    OutstandingRequestTask:
+      type: object
+      properties:
+        requestTaskAssignee:
+          type: string
+        Account ID:
+          type: string
+        Account name:
+          type: string
+        Workflow ID:
+          type: string
+        Workflow type:
+          type: string
+        Workflow task name:
+          type: string
+        Workflow task assignee:
+          type: string
+        Workflow task due date:
+          type: string
+          format: date
+        Workflow task days remaining:
+          type: integer
+          format: int64
+    OutstandingRequestTasksMiReportResult:
+      required:
+        - columnNames
+        - reportType
+      type: object
+      properties:
+        reportType:
+          type: string
+        columnNames:
+          type: array
+          items:
+            type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutstandingRequestTask'
+    VerificationBodyUser:
+      type: object
+      properties:
+        userId:
+          type: string
+        Verification body name:
+          type: string
+        Account status:
+          type: string
+        Accreditation reference number:
+          type: string
+        Is accredited for UK ETS Installations?:
+          type: boolean
+        'Is accredited for EU ETS Installations? ':
+          type: boolean
+        Is accredited for UK ETS Aviations?:
+          type: boolean
+        Is accredited for CORSIA?:
+          type: boolean
+        User role:
+          type: string
+        Name:
+          type: string
+        Email:
+          type: string
+        Telephone:
+          type: string
+        User status:
+          type: string
+        Last logon:
+          type: string
+    VerificationBodyUsersMiReportResult:
+      required:
+        - columnNames
+        - reportType
+      type: object
+      properties:
+        reportType:
+          type: string
+        columnNames:
+          type: array
+          items:
+            type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerificationBodyUser'
+    EmptyMiReportSystemParams:
+      type: object
+      properties:
+        reportType:
+          type: string
+    ExecutedRequestActionsMiReportParams:
+      required:
+        - fromDate
+      type: object
+      properties:
+        reportType:
+          type: string
+        fromDate:
+          type: string
+          format: date
+        toDate:
+          type: string
+          format: date
+    OutstandingRegulatorRequestTasksMiReportParams:
+      type: object
+      properties:
+        reportType:
+          type: string
+        requestTaskTypes:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        userIds:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
   securitySchemes:
     bearerAuth:
       type: http

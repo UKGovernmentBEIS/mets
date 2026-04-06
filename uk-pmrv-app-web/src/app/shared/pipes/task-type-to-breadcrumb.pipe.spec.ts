@@ -483,6 +483,9 @@ describe('TaskTypeToBreadcrumbPipe', () => {
     expect(pipe.transform('WASTE_QDR_WAIT_FOR_AMENDS')).toEqual('Quarterly data report returned to operator');
     expect(pipe.transform('WASTE_QDR_APPLICATION_AMENDS_SUBMIT')).toEqual('Amend quarterly data report');
 
+    expect(pipe.transform('NER_APPLICATION_SUBMIT')).toEqual('Complete new entrant reserve');
+    expect(pipe.transform('NER_WAIT_FOR_VERIFICATION')).toEqual('New entrant reserve sent to verifier');
+
     expect(pipe.transform(null)).toBeNull();
   });
 });

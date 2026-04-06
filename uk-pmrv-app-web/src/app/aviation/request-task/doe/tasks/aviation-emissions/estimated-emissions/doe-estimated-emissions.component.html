@@ -9,6 +9,8 @@
     <ng-container *ngIf="form.get('emissionsAllInternationalFlights')">
       <h2 class="govuk-heading-m govuk-!-width-two-thirds">Total emissions on all international flights</h2>
       <div class="govuk-hint govuk-!-width-two-thirds">
+        Must be a whole number, 1 or more
+        <br />
         Emissions from all international flights must be equal to or greater than emissions from flights with offsetting
         requirements
       </div>
@@ -39,6 +41,8 @@
     <ng-container *ngIf="form.get('emissionsFlightsWithOffsettingRequirements')">
       <h2 class="govuk-heading-m govuk-!-width-two-thirds">Emissions from flights with offsetting requirements</h2>
       <div class="govuk-hint govuk-!-width-two-thirds">
+        Must be a whole number, 0 or more
+        <br />
         Emissions from flights with offsetting requirements must be equal to or less than emissions from all
         international flights
       </div>
@@ -72,6 +76,7 @@
         formControlName="emissionsClaimFromCorsiaEligibleFuels"
         class="govuk-!-width-one-third"
         label="Emissions related to a claim from CORSIA eligible fuels"
+        hint="Must be a whole number, 0 or more"
         [isLabelHidden]="true"
         govuk-text-input
         suffix="tonnes CO2"></div>

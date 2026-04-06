@@ -1,4 +1,4 @@
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 import { lastValueFrom, of } from 'rxjs';
@@ -28,7 +28,7 @@ describe('SendReportVerifierGuard', () => {
       providers: [
         BdrService,
         ItemNamePipe,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(),
         { provide: AccountVerificationBodyService, useValue: accountVerificationBodyService },
         CapitalizeFirstPipe,
       ],

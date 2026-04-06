@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.kafka.utils.KafkaConstants;
 import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
+import uk.gov.pmrv.api.integration.common.KafkaCorrelationContext;
 
 @Component
 @RequiredArgsConstructor
@@ -20,10 +21,18 @@ public class AviationSetOperatorIdEventListener {
 
     private final AviationSetOperatorIdResponseHandler handler;
 
+    private final KafkaCorrelationContext kafkaCorrelationContext;
+
     @KafkaHandler
     @Transactional
     public void handler(@Payload OperatorUpdateEvent event, @Header(KafkaConstants.CORRELATION_ID_HEADER) String correlationId) {
-        handler.handleResponse(event, correlationId);
+        kafkaCorrelationContext.set(correlationId);
+        try {
+            handler.handleResponse(event);
+        }
+        finally {
+            kafkaCorrelationContext.clear();
+        }
     }
 
 

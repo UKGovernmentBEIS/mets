@@ -93,4 +93,7 @@ public interface InstallationAccountRepository extends AccountBaseRepository<Ins
 	Set<InstallationAccountIdAndNameAndLegalEntityNameDTO> findAllByCAAndStatusesAndInstallationCategoriesAndEmitterTypesAndFaStatus(
 			CompetentAuthorityEnum competentAuthority, Set<InstallationAccountStatus> statuses,
 			Set<EmitterType> emitterTypes, Set<InstallationCategory> installationCategories, boolean faStatus);
+
+	@Transactional(readOnly = true)
+	List<InstallationAccount> findAccountsByRegistryId(Integer registryId);
 }

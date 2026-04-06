@@ -18,6 +18,7 @@ public class NotifyRegistryUtils {
     public static String ACCOUNT_CONTACT_INTEGRATION_POINT_KEY = "account-contact";
     public static String ACCOUNT_AVIATION_EXEMPT_UPDATE_INTEGRATION_POINT_KEY = "exempt-flag";
     public static String ACCOUNT_INSTALLATION_WITHHOLD_FLAG_INTEGRATION_POINT_KEY = "withhold-flag";
+    public static String ACCOUNT_INSTALLATION_NOTIFICATION_INTEGRATION_POINT_KEY = "notification";
     public static String AVIATION_SERVICE_KEY = "Aviation";
     public static String INSTALLATION_SERVICE_KEY = "Installation";
 

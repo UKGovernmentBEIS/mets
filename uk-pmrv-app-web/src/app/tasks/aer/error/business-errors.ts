@@ -1,9 +1,8 @@
 import { BusinessError, dashboardLink } from '../../../error/business-error/business-error';
 
-export const notFoundVerificationBodyError = () =>
-  new BusinessError(
-    'Your named verifier is invalid. Please make sure a verification body has been successfully added to your account.',
-  ).withLink(dashboardLink);
+export const notFoundVerificationBodyError = (accountId?: number) => {
+  return new BusinessError('Appoint an accredited verification body to continue', accountId).withLink(dashboardLink);
+};
 
 export const notCalculationPrimaryPFCError = (taskId: number) =>
   new BusinessError(

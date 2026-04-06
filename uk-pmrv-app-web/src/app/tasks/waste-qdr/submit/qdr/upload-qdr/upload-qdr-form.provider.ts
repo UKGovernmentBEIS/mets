@@ -1,5 +1,4 @@
 import { UntypedFormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 import { RequestTaskFileService } from '@shared/services/request-task-file-service/request-task-file.service';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
@@ -9,7 +8,7 @@ import { WasteQDRApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 export const wasteQdrUploadReportFormProvider = {
   provide: WASTE_QDR_TASK_FORM,
-  deps: [UntypedFormBuilder, CommonTasksStore, RequestTaskFileService, ActivatedRoute],
+  deps: [UntypedFormBuilder, CommonTasksStore, RequestTaskFileService],
   useFactory: (fb: UntypedFormBuilder, store: CommonTasksStore, requestTaskFileService: RequestTaskFileService) => {
     const state = store.getValue();
     const disabled = !state.isEditable;

@@ -6,6 +6,7 @@ import uk.gov.pmrv.api.permit.domain.PermitEntity;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.MonitoringPlanVersion;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.service.PermitVariationRequestQueryService;
 
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +43,8 @@ public class AerMonitoringPlanVersionsBuilderService {
             .map(permitVariationRequestInfo ->
                 new MonitoringPlanVersion(
                     permitId,
-                    permitVariationRequestInfo.getEndDate().toLocalDate(),
+                        Optional.ofNullable(permitVariationRequestInfo.getEndDate()).map(LocalDateTime::toLocalDate).orElse(
+                                LocalDateTime.now().toLocalDate()),
                     permitVariationRequestInfo.getMetadata().getPermitConsolidationNumber()
                 )
             )

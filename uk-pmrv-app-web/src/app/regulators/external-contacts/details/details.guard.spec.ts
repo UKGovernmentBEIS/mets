@@ -18,7 +18,7 @@ describe('DetailsGuard', () => {
 
   beforeEach(() => {
     caExternalContactsService = {
-      getCaExternalContactById: jest.fn().mockReturnValue(of(response)),
+      getCaExternalContactsByIds: jest.fn().mockReturnValue(of([response])),
     };
 
     TestBed.configureTestingModule({
@@ -37,13 +37,13 @@ describe('DetailsGuard', () => {
       lastValueFrom(guard.canActivate(new ActivatedRouteSnapshotStub({ userId: '1' }))),
     ).resolves.toBeTruthy();
 
-    expect(caExternalContactsService.getCaExternalContactById).toHaveBeenCalledWith(1);
+    expect(caExternalContactsService.getCaExternalContactsByIds).toHaveBeenCalledWith(new Set([1]));
 
     expect(guard.resolve()).toEqual(response);
   });
 
   it('should display business error page if the contact is not found', async () => {
-    caExternalContactsService.getCaExternalContactById.mockReturnValue(
+    caExternalContactsService.getCaExternalContactsByIds.mockReturnValue(
       throwError(() => new HttpErrorResponse({ status: 400, error: { code: 'EXTCONTACT1000' } })),
     );
 

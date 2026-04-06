@@ -5,9 +5,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountStatusService;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.NotificationRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.RegistryNotificationType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -64,6 +67,9 @@ class RequestPermitSurrenderCessationServiceTest {
     
     @Mock
     private PermitSurrenderOfficialNoticeService permitSurrenderOfficialNoticeService;
+
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Test
     void applySaveCessation() {
@@ -161,6 +167,13 @@ class RequestPermitSurrenderCessationServiceTest {
             .addActionToRequest(request, cessationCompletedRequestActionPayload, RequestActionType.PERMIT_SURRENDER_CESSATION_COMPLETED, request.getPayload().getRegulatorAssignee());
         verify(permitSurrenderOfficialNoticeService, times(1))
             .sendOfficialNoticeForDecisionNotification(request, cessationOfficialNotice, taskActionPayload.getDecisionNotification());
+        verify(applicationEventPublisher, times(1)).publishEvent(
+                NotificationRegistryEvent.builder()
+                        .accountId(request.getAccountId())
+                        .requestId(request.getId())
+                        .fileInfoDTO(cessationOfficialNotice)
+                        .registryNotificationType(RegistryNotificationType.SURRENDER_CESSATION_NOTIFICATION)
+                        .build());
         assertThat(requestPayload.getPermitCessation()).isEqualTo(PermitCessation.builder().notes("notes").build());
     }
 }

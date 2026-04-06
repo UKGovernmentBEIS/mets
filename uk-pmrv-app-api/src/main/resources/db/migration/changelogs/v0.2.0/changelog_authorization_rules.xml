@@ -22757,6 +22757,364 @@
             </sql>
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_create_rule_notification_registry_integration_timeline_regulator_access" author="mitzelose@unisystems.gr">
+        <sql>
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'NOTIFICATION_SENT_TO_REGISTRY', 'requestActionViewHandler', 'REGULATOR');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in('getRequestActionById', 'generateRequestActionGetFileAttachmentToken', 'generateRequestActionGetFileDocumentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'NOTIFICATION_SENT_TO_REGISTRY'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type= 'REGULATOR'
+              and r.scope is null;
+
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule
+                where rule_id in (
+                select r.id
+                from au_rule r
+                where r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'NOTIFICATION_SENT_TO_REGISTRY'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope is null);
+
+                delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'NOTIFICATION_SENT_TO_REGISTRY'
+                and handler = 'requestActionViewHandler'
+                and role_type = 'REGULATOR'
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_NER_cleanup_old_rules_services_and_scopes" author="alekopoulosd@unisystems.gr">
+
+        <sql>
+
+            -- Remove service-rule relations first (FK to au_rule)
+            DELETE FROM au_service_rule
+            WHERE rule_id IN (
+                SELECT id
+                FROM au_rule
+                WHERE resource_sub_type LIKE 'NER%'
+            );
+
+            -- Remove resource scope permissions
+            DELETE FROM au_resource_scope_permission
+            WHERE resource_sub_type LIKE 'NER%'
+               OR permission LIKE 'PERM_NER%';
+
+            -- Remove rules
+            DELETE FROM au_rule
+            WHERE resource_sub_type LIKE 'NER%';
+
+        </sql>
+        <rollback>
+            <!-- Not reversible-->
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_create_ACCOUNT_NER_request_create_rule_and_permissions" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (
+                       nextval('au_rule_seq'),
+                       'ACCOUNT',
+                       'NER',
+                       'accountRequestCreateHandler',
+                       'OPERATOR',
+                       'REQUEST_CREATE'
+                   );
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'processRequestCreateAction'
+              and r.resource_type = 'ACCOUNT'
+              and r.resource_sub_type = 'NER'
+              and r.handler = 'accountRequestCreateHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_CREATE';
+
+            insert into au_resource_scope_permission(
+                id,
+                resource_type,
+                resource_sub_type,
+                scope,
+                permission,
+                role_type
+            )
+            select nextval('au_resource_scope_permission_seq'),
+                   'ACCOUNT',
+                   'NER',
+                   'REQUEST_CREATE',
+                   'PERM_NER_SUBMIT_EXECUTE_TASK',
+                   'OPERATOR';
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'processRequestCreateAction'
+                and r.resource_type = 'ACCOUNT'
+                and r.resource_sub_type = 'NER'
+                and r.handler = 'accountRequestCreateHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope = 'REQUEST_CREATE';
+
+                delete from au_resource_scope_permission
+                where resource_type = 'ACCOUNT'
+                and resource_sub_type = 'NER'
+                and scope = 'REQUEST_CREATE'
+                and permission = 'PERM_NER_SUBMIT_EXECUTE_TASK'
+                and role_type = 'OPERATOR';
+
+                delete
+                from au_rule
+                where resource_type = 'ACCOUNT'
+                and resource_sub_type = 'NER'
+                and handler = 'accountRequestCreateHandler'
+                and role_type = 'OPERATOR'
+                and scope = 'REQUEST_CREATE';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_create_rules_permissions_and_service_associations_for_NER_APPLICATION_SUBMIT_request_task" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (
+                       nextval('au_rule_seq'),
+                       'REQUEST_TASK',
+                       'NER_APPLICATION_SUBMIT',
+                       'requestTaskAccessHandler',
+                       'OPERATOR',
+                       'REQUEST_TASK_EXECUTE'
+                   );
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (
+                       nextval('au_rule_seq'),
+                       'REQUEST_TASK',
+                       'NER_APPLICATION_SUBMIT',
+                       'requestTaskAccessHandler',
+                       'OPERATOR',
+                       'REQUEST_TASK_VIEW'
+                   );
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+            select nextval('au_resource_scope_permission_seq'),
+                   'REQUEST_TASK',
+                   'NER_APPLICATION_SUBMIT',
+                   'REQUEST_TASK_VIEW',
+                   'PERM_NER_SUBMIT_VIEW_TASK',
+                   'OPERATOR';
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+            select nextval('au_resource_scope_permission_seq'),
+                   'REQUEST_TASK',
+                   'NER_APPLICATION_SUBMIT',
+                   'REQUEST_TASK_EXECUTE',
+                   'PERM_NER_SUBMIT_EXECUTE_TASK',
+                   'OPERATOR';
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in (
+                             'assignTask',
+                             'getCandidateAssigneesByTaskId',
+                             'releaseTask',
+                             'getTaskItemInfoById',
+                             'generateRequestTaskGetFileAttachmentToken'
+                )
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'NER_APPLICATION_SUBMIT'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_VIEW';
+
+            -- Associate EXECUTE services with EXECUTE rule
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in (
+                             'processRequestTaskAction',
+                             'uploadRequestTaskAttachment'
+                )
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'NER_APPLICATION_SUBMIT'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name in (
+                'assignTask',
+                'getCandidateAssigneesByTaskId',
+                'releaseTask',
+                'getTaskItemInfoById',
+                'generateRequestTaskGetFileAttachmentToken'
+                )
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'NER_APPLICATION_SUBMIT'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope = 'REQUEST_TASK_VIEW';
+
+                delete from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name in (
+                'processRequestTaskAction',
+                'uploadRequestTaskAttachment'
+                )
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'NER_APPLICATION_SUBMIT'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+
+                delete from au_resource_scope_permission
+                where resource_type = 'REQUEST_TASK'
+                and resource_sub_type = 'NER_APPLICATION_SUBMIT'
+                and scope = 'REQUEST_TASK_VIEW'
+                and permission = 'PERM_NER_SUBMIT_VIEW_TASK'
+                and role_type = 'OPERATOR';
+
+                delete from au_resource_scope_permission
+                where resource_type = 'REQUEST_TASK'
+                and resource_sub_type = 'NER_APPLICATION_SUBMIT'
+                and scope = 'REQUEST_TASK_EXECUTE'
+                and permission = 'PERM_NER_SUBMIT_EXECUTE_TASK'
+                and role_type = 'OPERATOR';
+
+                delete from au_rule
+                where resource_type = 'REQUEST_TASK'
+                and resource_sub_type = 'NER_APPLICATION_SUBMIT'
+                and handler = 'requestTaskAccessHandler'
+                and role_type = 'OPERATOR'
+                and scope in ('REQUEST_TASK_VIEW', 'REQUEST_TASK_EXECUTE');
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_add_REQUEST_NER_access_rules" author="alekopoulosd@unisystems.gr">
+
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values
+                (nextval('au_rule_seq'), 'REQUEST', 'NER', 'requestAccessHandler', 'REGULATOR', null),
+                (nextval('au_rule_seq'), 'REQUEST', 'NER', 'requestAccessHandler', 'OPERATOR', null),
+                (nextval('au_rule_seq'), 'REQUEST', 'NER', 'requestAccountBasedAccessHandler', 'VERIFIER', null);
+
+            INSERT INTO au_service_rule (rule_id, service_id)
+            SELECT ner.id, sr.service_id
+            FROM au_rule ner
+                     JOIN au_rule ref
+                          ON ref.resource_type = 'REQUEST'
+                              AND ref.resource_sub_type = 'AER'
+                              AND ref.role_type = ner.role_type
+                     JOIN au_service_rule sr
+                          ON sr.rule_id = ref.id
+            WHERE ner.resource_type = 'REQUEST'
+              AND ner.resource_sub_type = 'NER';
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM au_service_rule
+                WHERE rule_id IN (
+                SELECT id
+                FROM au_rule
+                WHERE resource_type = 'REQUEST'
+                AND resource_sub_type = 'NER'
+                );
+
+                delete from au_rule
+                where resource_type = 'REQUEST'
+                and resource_sub_type = 'NER'
+                and (
+                (handler = 'requestAccessHandler' and role_type in ('REGULATOR', 'OPERATOR'))
+                or (handler = 'requestAccountBasedAccessHandler' and role_type = 'VERIFIER')
+                );
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_bdrs2_bulk_download_service_rules" author="vasileios.vitzilaios@trasys.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'CA', 'BDRS2',
+                    'caAccessHandler', 'REGULATOR', 'BDRS2_BULK_DOWNLOAD');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'CA',
+                        'BDRS2',
+                        'BDRS2_BULK_DOWNLOAD',
+                        'PERM_BDRS2_APPLICATION_BULK_DOWNLOAD',
+                        'REGULATOR');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_rule aur
+                     cross join public.au_service aus
+            where aus.name in ('generateBulkDownloadExportToken')
+              and aur.resource_type = 'CA'
+              and aur.resource_sub_type = 'BDRS2'
+              and aur.handler = 'caAccessHandler'
+              and aur.scope = 'BDRS2_BULK_DOWNLOAD'
+              and aur.role_type = 'REGULATOR';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'generateBulkDownloadExportToken')
+                and rule_id in (select id
+                from au_rule
+                where resource_type = 'CA'
+                and resource_sub_type = 'BDRS2'
+                and handler = 'caAccessHandler'
+                and role_type = 'REGULATOR'
+                and scope = 'BDRS2_BULK_DOWNLOAD');
+
+                delete
+                from au_resource_scope_permission
+                where resource_type = 'CA'
+                and resource_sub_type = 'BDRS2'
+                and scope = 'BDRS2_BULK_DOWNLOAD'
+                and permission = 'PERM_BDRS2_APPLICATION_BULK_DOWNLOAD'
+                and role_type = 'REGULATOR';
+
+                delete
+                from au_rule
+                where resource_type = 'CA'
+                and resource_sub_type = 'BDRS2'
+                and handler = 'caAccessHandler'
+                and role_type = 'REGULATOR'
+                and scope = 'BDRS2_BULK_DOWNLOAD';
+            </sql>
+        </rollback>
+    </changeSet>
     <changeSet id="0_2_0_fix_rule_reportable_emissions_registry_integration_timeline_exclusive_regulator_access" author="mitzelose@unisystems.gr">
         <sql>
             delete from au_rule
@@ -22773,5 +23131,345 @@
               and role_type = 'OPERATOR'
               and scope is null;
         </sql>
+    </changeSet>
+    <changeSet id="0_2_0_update_bdrs2_wait_for_mends_permissions" author="alekopoulosd@unisystems.gr">
+        <sql>
+            UPDATE au_resource_scope_permission
+            SET permission = CASE
+                                 WHEN scope = 'REQUEST_TASK_EXECUTE'
+                                     THEN 'PERM_BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK'
+                                 WHEN scope = 'REQUEST_TASK_VIEW'
+                                     THEN 'PERM_BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK'
+                END
+            WHERE resource_sub_type = 'BDRS2_WAIT_FOR_AMENDS'
+              AND scope IN ('REQUEST_TASK_EXECUTE', 'REQUEST_TASK_VIEW');
+        </sql>
+    </changeSet>
+    <changeSet id="0_2_0_NER_wait_for_verification_authorization_rules_1" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'NER_WAIT_FOR_VERIFICATION', 'requestTaskAccessHandler', 'OPERATOR', 'REQUEST_TASK_VIEW');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'NER_WAIT_FOR_VERIFICATION', 'requestTaskAccessHandler', 'OPERATOR', 'REQUEST_TASK_EXECUTE');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'processRequestTaskAction'
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'NER_WAIT_FOR_VERIFICATION'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_EXECUTE';
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('assignTask', 'releaseTask', 'getTaskItemInfoById', 'getCandidateAssigneesByTaskId')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'NER_WAIT_FOR_VERIFICATION'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_VIEW';
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'NER_WAIT_FOR_VERIFICATION',
+                        'REQUEST_TASK_VIEW',
+                        'PERM_NER_APPLICATION_SUBMIT_VIEW_TASK',
+                        'OPERATOR');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'NER_WAIT_FOR_VERIFICATION',
+                        'REQUEST_TASK_EXECUTE',
+                        'PERM_NER_APPLICATION_SUBMIT_EXECUTE_TASK',
+                        'OPERATOR');
+        </sql>
+        <rollback>
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'NER_WAIT_FOR_VERIFICATION'
+            and scope = 'REQUEST_TASK_VIEW'
+            and permission = 'PERM_NER_APPLICATION_SUBMIT_VIEW_TASK'
+            and role_type = 'OPERATOR';
+
+
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'NER_WAIT_FOR_VERIFICATION'
+            and scope = 'REQUEST_TASK_EXECUTE'
+            and permission = 'PERM_NER_APPLICATION_SUBMIT_EXECUTE_TASK'
+            and role_type = 'OPERATOR';
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('assignTask', 'releaseTask', 'getTaskItemInfoById', 'getCandidateAssigneesByTaskId')
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'NER_WAIT_FOR_VERIFICATION'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope = 'REQUEST_TASK_VIEW';
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('processRequestTaskAction')
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'NER_WAIT_FOR_VERIFICATION'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'NER_WAIT_FOR_VERIFICATION'
+            and handler = 'requestTaskAccessHandler'
+            and role_type = 'OPERATOR'
+            and scope = 'REQUEST_TASK_VIEW';
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'NER_WAIT_FOR_VERIFICATION'
+            and handler = 'requestTaskAccessHandler'
+            and role_type = 'OPERATOR'
+            and scope = 'REQUEST_TASK_EXECUTE';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_NER_submit_to_verifier_authorization_rules" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'NER_APPLICATION_VERIFICATION_SUBMIT', 'requestTaskAccountBasedAccessHandler', 'VERIFIER', 'REQUEST_TASK_VIEW');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getTaskItemInfoById', 'getCandidateAssigneesByTaskId', 'assignTask','releaseTask', 'generateRequestTaskGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'NER_APPLICATION_VERIFICATION_SUBMIT'
+              and r.handler = 'requestTaskAccountBasedAccessHandler'
+              and r.role_type = 'VERIFIER'
+              and r.scope = 'REQUEST_TASK_VIEW';
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'NER_APPLICATION_VERIFICATION_SUBMIT',
+                        'REQUEST_TASK_VIEW',
+                        'PERM_NER_APPLICATION_VERIFICATION_SUBMIT_VIEW_TASK',
+                        'VERIFIER');
+
+        </sql>
+        <rollback>
+
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'NER_APPLICATION_VERIFICATION_SUBMIT'
+            and scope = 'REQUEST_TASK_VIEW'
+            and permission = 'PERM_NER_APPLICATION_VERIFICATION_SUBMIT_VIEW_TASK'
+            and role_type = 'VERIFIER';
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getTaskItemInfoById', 'getCandidateAssigneesByTaskId', 'assignTask','releaseTask', 'generateRequestTaskGetFileAttachmentToken')
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'NER_APPLICATION_VERIFICATION_SUBMIT'
+            and r.handler = 'requestTaskAccountBasedAccessHandler'
+            and r.role_type = 'VERIFIER'
+            and r.scope = 'REQUEST_TASK_VIEW';
+
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'NER_APPLICATION_VERIFICATION_SUBMIT'
+            and handler = 'requestTaskAccountBasedAccessHandler'
+            and role_type = 'VERIFIER'
+            and scope = 'REQUEST_TASK_VIEW';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_NER_application_sent_to_verifier_request_action_authorization_rules_1" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION', 'NER_APPLICATION_SENT_TO_VERIFIER','requestActionViewHandler', 'OPERATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION', 'NER_APPLICATION_SENT_TO_VERIFIER','requestActionViewHandler', 'REGULATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION', 'NER_APPLICATION_SENT_TO_VERIFIER','requestActionAccountBasedViewHandler', 'VERIFIER');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'NER_APPLICATION_SENT_TO_VERIFIER'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope IS NULL;
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'NER_APPLICATION_SENT_TO_VERIFIER'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope IS NULL;
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'NER_APPLICATION_SENT_TO_VERIFIER'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.role_type = 'VERIFIER'
+              and r.scope IS NULL;
+        </sql>
+        <rollback>
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+            and r.resource_type = 'REQUEST_ACTION'
+            and r.resource_sub_type = 'NER_APPLICATION_SENT_TO_VERIFIER'
+            and r.handler = 'requestActionViewHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope IS NULL;
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+            and r.resource_type = 'REQUEST_ACTION'
+            and r.resource_sub_type = 'NER_APPLICATION_SENT_TO_VERIFIER'
+            and r.handler = 'requestActionViewHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope IS NULL;
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+            and r.resource_type = 'REQUEST_ACTION'
+            and r.resource_sub_type = 'NER_APPLICATION_SENT_TO_VERIFIER'
+            and r.handler = 'requestActionAccountBasedViewHandler'
+            and r.role_type = 'VERIFIER'
+            and r.scope IS NULL;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+            and resource_sub_type = 'NER_APPLICATION_SENT_TO_VERIFIER'
+            and handler = 'requestActionViewHandler'
+            and role_type = 'OPERATOR'
+            and scope IS NULL;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+            and resource_sub_type = 'NER_APPLICATION_SENT_TO_VERIFIER'
+            and handler = 'requestActionViewHandler'
+            and role_type = 'REGULATOR'
+            and scope IS NULL;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+            and resource_sub_type = 'NER_APPLICATION_SENT_TO_VERIFIER'
+            and handler = 'requestActionAccountBasedViewHandler'
+            and role_type = 'VERIFIER'
+            and scope IS NULL;
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_NER_submit_to_verifier_authorization_rules_EXECUTE" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK', 'NER_APPLICATION_VERIFICATION_SUBMIT', 'requestTaskAccountBasedAccessHandler', 'VERIFIER', 'REQUEST_TASK_EXECUTE');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('processRequestTaskAction', 'uploadRequestTaskAttachment')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'NER_APPLICATION_VERIFICATION_SUBMIT'
+              and r.handler = 'requestTaskAccountBasedAccessHandler'
+              and r.role_type = 'VERIFIER'
+              and r.scope = 'REQUEST_TASK_EXECUTE';
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'REQUEST_TASK',
+                        'NER_APPLICATION_VERIFICATION_SUBMIT',
+                        'REQUEST_TASK_EXECUTE',
+                        'PERM_NER_APPLICATION_VERIFICATION_SUBMIT_EXECUTE_TASK',
+                        'VERIFIER');
+        </sql>
+        <rollback>
+
+            delete from au_resource_scope_permission
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'NER_APPLICATION_VERIFICATION_SUBMIT'
+            and scope = 'REQUEST_TASK_EXECUTE'
+            and permission = 'PERM_NER_APPLICATION_VERIFICATION_SUBMIT_EXECUTE_TASK'
+            and role_type = 'VERIFIER';
+
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('processRequestTaskAction', 'uploadRequestTaskAttachment')
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'NER_APPLICATION_VERIFICATION_SUBMIT'
+            and r.handler = 'requestTaskAccountBasedAccessHandler'
+            and r.role_type = 'VERIFIER'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_TASK'
+            and resource_sub_type = 'NER_APPLICATION_VERIFICATION_SUBMIT'
+            and handler = 'requestTaskAccountBasedAccessHandler'
+            and role_type = 'VERIFIER'
+            and scope = 'REQUEST_TASK_EXECUTE';
+        </rollback>
     </changeSet>
 </databaseChangeLog>

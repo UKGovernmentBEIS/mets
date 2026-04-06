@@ -2,11 +2,8 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { of } from 'rxjs';
-
 import { SharedModule } from '@shared/shared.module';
 import { TaskSharedModule } from '@tasks/shared/task-shared-module';
-import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage } from '@testing';
 
 import { WasteQdrTaskComponent } from './waste-qdr-task.component';
@@ -15,7 +12,6 @@ describe('WasteQdrTaskComponent', () => {
   let hostComponent: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let page: Page;
-  let store: CommonTasksStore;
 
   class Page extends BasePage<TestComponent> {
     get links(): HTMLAnchorElement[] {
@@ -34,14 +30,12 @@ describe('WasteQdrTaskComponent', () => {
   @Component({
     standalone: false,
     template: `
-      <app-waste-qdr-task heading="Check your answers" caption="Quarterly data report" [breadcrumb]="true">
+      <app-waste-qdr-task heading="Check your answers" caption="Quarterly data report">
         <h2 app-summary-header changeRoute=".." class="govuk-heading-m">Check your answers</h2>
       </app-waste-qdr-task>
     `,
   })
-  class TestComponent {
-    breadcrumb: any;
-  }
+  class TestComponent {}
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -49,9 +43,6 @@ describe('WasteQdrTaskComponent', () => {
       providers: [provideRouter([])],
       declarations: [TestComponent],
     }).compileComponents();
-
-    store = TestBed.inject(CommonTasksStore);
-    jest.spyOn(store, 'requestTaskType$', 'get').mockReturnValue(of('WASTE_QDR_APPLICATION_SUBMIT'));
 
     fixture = TestBed.createComponent(TestComponent);
     hostComponent = fixture.componentInstance;

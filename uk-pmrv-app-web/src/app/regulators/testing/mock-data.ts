@@ -139,6 +139,7 @@ export const mockRegulatorUser: {
       BULK_DOWNLOAD_ALR: 'NONE',
       SUBMIT_BDRS2_REVIEW: 'VIEW_ONLY',
       PEER_REVIEW_BDRS2: 'VIEW_ONLY',
+      BULK_DOWNLOAD_BDRS2: 'NONE',
     },
   },
 };
@@ -213,6 +214,7 @@ export const mockRegulatorRolePermissions = [
   'BULK_DOWNLOAD_ALR',
   'SUBMIT_BDRS2_REVIEW',
   'PEER_REVIEW_BDRS2',
+  'BULK_DOWNLOAD_BDRS2',
 ];
 
 export const mockRegulatorBasePermissions = [
@@ -289,6 +291,7 @@ export const mockRegulatorBasePermissions = [
       BULK_DOWNLOAD_ALR: 'NONE',
       SUBMIT_BDRS2_REVIEW: 'VIEW_ONLY',
       PEER_REVIEW_BDRS2: 'VIEW_ONLY',
+      BULK_DOWNLOAD_BDRS2: 'NONE',
     },
   },
   {
@@ -364,6 +367,7 @@ export const mockRegulatorBasePermissions = [
       BULK_DOWNLOAD_ALR: 'NONE',
       SUBMIT_BDRS2_REVIEW: 'EXECUTE',
       PEER_REVIEW_BDRS2: 'EXECUTE',
+      BULK_DOWNLOAD_BDRS2: 'NONE',
     },
   },
   {
@@ -439,6 +443,7 @@ export const mockRegulatorBasePermissions = [
       BULK_DOWNLOAD_ALR: 'NONE',
       SUBMIT_BDRS2_REVIEW: 'EXECUTE',
       PEER_REVIEW_BDRS2: 'EXECUTE',
+      BULK_DOWNLOAD_BDRS2: 'NONE',
     },
   },
   {
@@ -514,6 +519,7 @@ export const mockRegulatorBasePermissions = [
       BULK_DOWNLOAD_ALR: 'EXECUTE',
       SUBMIT_BDRS2_REVIEW: 'EXECUTE',
       PEER_REVIEW_BDRS2: 'EXECUTE',
+      BULK_DOWNLOAD_BDRS2: 'NONE',
     },
   },
   {
@@ -589,6 +595,7 @@ export const mockRegulatorBasePermissions = [
       BULK_DOWNLOAD_ALR: 'EXECUTE',
       SUBMIT_BDRS2_REVIEW: 'EXECUTE',
       PEER_REVIEW_BDRS2: 'EXECUTE',
+      BULK_DOWNLOAD_BDRS2: 'NONE',
     },
   },
 ];
@@ -663,4 +670,5 @@ export const mockRegulatorPermissionGroups = {
   BULK_DOWNLOAD_ALR: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
   SUBMIT_BDRS2_REVIEW: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
   PEER_REVIEW_BDRS2: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
+  BULK_DOWNLOAD_BDRS2: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
 };

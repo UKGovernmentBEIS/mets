@@ -22,6 +22,8 @@ export class SubmittedComponent {
 
   requestActionType$ = this.aerService.requestAction$.pipe(map((requestAction) => requestAction.type));
 
+  isMaterialityUpdated$ = this.aerService.isMaterialityUpdated$ as Observable<boolean>;
+
   hasReport$ = this.requestActionType$.pipe(
     map((requestActionType) => reportableAerRequestActionTypes.includes(requestActionType)),
   );

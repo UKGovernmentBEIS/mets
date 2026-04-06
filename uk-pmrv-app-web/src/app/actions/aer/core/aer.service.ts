@@ -25,6 +25,10 @@ export class AerService {
     return this.store.payload$.pipe(map((payload) => payload));
   }
 
+  get isMaterialityUpdated$(): Observable<boolean> {
+    return this.store.payload$.pipe(map((payload) => payload?.isVerifierAerTaskContentUpdate));
+  }
+
   getDownloadUrlFiles(files: string[], isVerification = false): { downloadUrl: string; fileName: string }[] {
     const aerAttachments = isVerification ? this.verificationAttachments : this.attachments;
 

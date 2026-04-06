@@ -9,9 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { MiReportParams } from './miReportParams';
 
-export interface ExecutedRequestActionsMiReportParams extends MiReportParams {
+export interface ExecutedRequestActionsMiReportParams {
+  reportType?: string;
   fromDate: string;
   toDate?: string;
 }

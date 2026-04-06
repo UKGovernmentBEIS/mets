@@ -84,10 +84,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.audit.domai
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionOperatorRespondRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.onsiteinspection.domain.InstallationOnsiteInspectionApplicationSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationAmendsSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationVerificationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerAuthorityResponseRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permanentcessation.domain.PermanentCessationApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationReviewRequestTaskPayload;
@@ -203,12 +201,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = NonComplianceFinalDeterminationRequestTaskPayload.class, value = "NON_COMPLIANCE_FINAL_DETERMINATION_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = NerApplicationSubmitRequestTaskPayload.class, value = "NER_APPLICATION_SUBMIT_PAYLOAD"),
-                @DiscriminatorMapping(schema = NerApplicationReviewRequestTaskPayload.class, value = "NER_APPLICATION_REVIEW_PAYLOAD"),
-                @DiscriminatorMapping(schema = NerApplicationReviewRequestTaskPayload.class, value = "NER_APPLICATION_PEER_REVIEW_PAYLOAD"),
-                @DiscriminatorMapping(schema = NerApplicationReviewRequestTaskPayload.class, value = "NER_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
-                @DiscriminatorMapping(schema = NerApplicationAmendsSubmitRequestTaskPayload.class, value = "NER_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
-                @DiscriminatorMapping(schema = NerApplicationReviewRequestTaskPayload.class, value = "NER_WAIT_FOR_AMENDS_PAYLOAD"),
-                @DiscriminatorMapping(schema = NerAuthorityResponseRequestTaskPayload.class, value = "NER_AUTHORITY_RESPONSE_PAYLOAD"),
+                @DiscriminatorMapping(schema = NERApplicationVerificationSubmitRequestTaskPayload.class, value = "NER_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = DoalApplicationSubmitRequestTaskPayload.class, value = "DOAL_APPLICATION_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = DoalApplicationSubmitRequestTaskPayload.class, value = "DOAL_APPLICATION_PEER_REVIEW_PAYLOAD"),
@@ -446,14 +439,9 @@ import java.util.UUID;
     @JsonSubTypes.Type(value = NonComplianceFinalDeterminationRequestTaskPayload.class, name = "NON_COMPLIANCE_FINAL_DETERMINATION_PAYLOAD"),
 
     @JsonSubTypes.Type(value = NerApplicationSubmitRequestTaskPayload.class, name = "NER_APPLICATION_SUBMIT_PAYLOAD"),
-    @JsonSubTypes.Type(value = NerApplicationReviewRequestTaskPayload.class, name = "NER_APPLICATION_REVIEW_PAYLOAD"),
-    @JsonSubTypes.Type(value = NerApplicationReviewRequestTaskPayload.class, name = "NER_APPLICATION_PEER_REVIEW_PAYLOAD"),
-    @JsonSubTypes.Type(value = NerApplicationReviewRequestTaskPayload.class, name = "NER_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
-    @JsonSubTypes.Type(value = NerApplicationAmendsSubmitRequestTaskPayload.class, name = "NER_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
-    @JsonSubTypes.Type(value = NerApplicationReviewRequestTaskPayload.class, name = "NER_WAIT_FOR_AMENDS_PAYLOAD"),
-    @JsonSubTypes.Type(value = NerAuthorityResponseRequestTaskPayload.class, name = "NER_AUTHORITY_RESPONSE_PAYLOAD"),
+    @JsonSubTypes.Type(value = NERApplicationVerificationSubmitRequestTaskPayload.class, name = "NER_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD"),
 
-    @JsonSubTypes.Type(value = DoalApplicationSubmitRequestTaskPayload.class, name = "DOAL_APPLICATION_SUBMIT_PAYLOAD"),
+@JsonSubTypes.Type(value = DoalApplicationSubmitRequestTaskPayload.class, name = "DOAL_APPLICATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = DoalApplicationSubmitRequestTaskPayload.class, name = "DOAL_APPLICATION_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = DoalApplicationSubmitRequestTaskPayload.class, name = "DOAL_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = DoalAuthorityResponseRequestTaskPayload.class, name = "DOAL_AUTHORITY_RESPONSE_PAYLOAD"),

@@ -15,7 +15,6 @@ import { WorkflowTypePipe } from '@shared/pipes/workflow-type.pipe';
 import { GovukTableColumn } from 'govuk-components';
 
 import {
-  CustomMiReportResult,
   ItemDTO,
   MiReportsService,
   OutstandingRegulatorRequestTasksMiReportParams,
@@ -24,6 +23,7 @@ import {
   RegulatorAuthoritiesService,
 } from 'pmrv-api';
 
+import { ExtendedMiReportResult } from '../core/mi-interfaces';
 import { createTableColumns, createTablePage, manipulateResultsAndExportToExcel, pageSize } from '../core/mi-report';
 
 @Component({
@@ -138,7 +138,7 @@ export class RegulatorOutstandingRequestTasksComponent implements OnInit {
           ),
         )
         .pipe(
-          map((miReportResult: CustomMiReportResult) =>
+          map((miReportResult: ExtendedMiReportResult) =>
             manipulateResultsAndExportToExcel(
               { ...miReportResult, results: this.addPipesToResult(miReportResult.results) },
               'Regulator outstanding request tasks',

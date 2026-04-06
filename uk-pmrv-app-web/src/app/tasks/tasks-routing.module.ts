@@ -159,6 +159,10 @@ const routes: Routes = [
         loadChildren: () => import('./waste-qdr/waste-qdr.module').then((m) => m.WasteQdrModule),
       },
       {
+        path: 'ner',
+        loadChildren: () => import('./ner/ner.module').then((m) => m.NerModule),
+      },
+      {
         path: 'cancel',
         loadChildren: () => import('../cancel-task/cancel-task.module').then((m) => m.CancelTaskModule),
       },

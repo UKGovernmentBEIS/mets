@@ -198,10 +198,7 @@
           <div [ngSwitch]="column.field" class="cell-container">
             <ng-container *ngSwitchCase="'name'">
               <a
-                *ngIf="
-                  (userId$ | async) === row.userId || ((isEditable$ | async) && row.authorityStatus !== 'PENDING');
-                  else simpleUserName
-                "
+                *ngIf="(userId$ | async) === row.userId || (isEditable$ | async); else simpleUserName"
                 [routerLink]="['users', row.userId]">
                 {{ row | userFullName }}
               </a>

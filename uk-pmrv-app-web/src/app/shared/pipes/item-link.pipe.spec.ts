@@ -1526,6 +1526,18 @@ describe('ItemLinkPipe', () => {
       expectedPath: ['/tasks', taskId, 'waste-qdr', 'submit'],
     },
 
+    //NER
+    {
+      requestType: 'NER',
+      taskType: 'NER_APPLICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'ner', 'submit'],
+    },
+    {
+      requestType: 'NER',
+      taskType: 'NER_WAIT_FOR_VERIFICATION',
+      expectedPath: ['/tasks', taskId, 'ner', 'submit'],
+    },
+
     // NULL
     {
       requestType: null,

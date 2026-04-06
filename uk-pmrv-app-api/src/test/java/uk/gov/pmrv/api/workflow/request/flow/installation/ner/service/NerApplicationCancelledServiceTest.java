@@ -14,7 +14,6 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionTyp
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.service.NerApplicationCancelledService;
 
 @ExtendWith(MockitoExtension.class)
 class NerApplicationCancelledServiceTest {

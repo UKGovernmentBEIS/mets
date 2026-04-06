@@ -1,19 +1,16 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { BehaviorSubject, EMPTY, of, switchMap, take } from 'rxjs';
+import { BehaviorSubject, EMPTY, of, switchMap } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
-import { AuthStore, selectCurrentDomain } from '@core/store/auth';
 import { catchBadRequest, ErrorCodes as BusinessErrorCode } from '@error/business-errors';
-import { BackLinkService } from '@shared/back-link/back-link.service';
 
 import { GovukValidators } from 'govuk-components';
 
-import { CustomMiReportParams, MiReportsService } from 'pmrv-api';
+import { CustomMiReportQuery, MiReportsUserDefinedService, MiReportUserDefinedResult } from 'pmrv-api';
 
-import { ExtendedMiReportResult } from '../core/mi-interfaces';
 import { manipulateResultsAndExportToExcel } from '../core/mi-report';
 
 @Component({
@@ -23,42 +20,26 @@ import { manipulateResultsAndExportToExcel } from '../core/mi-report';
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomReportComponent implements OnInit {
+export class CustomReportComponent {
   readonly isTemplateGenerationErrorDisplayed$ = new BehaviorSubject<boolean>(false);
   errorMessage$ = new BehaviorSubject<string>(null);
-  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, take(1));
-  domain: string;
 
   reportOptionsForm: FormGroup = this.fb.group({
     query: [null, [GovukValidators.required('Query must not be empty')]],
   });
 
   constructor(
-    private readonly backlinkService: BackLinkService,
     private readonly fb: FormBuilder,
-    private readonly miReportsService: MiReportsService,
+    private readonly miReportsUserDefinedService: MiReportsUserDefinedService,
     readonly pendingRequest: PendingRequestService,
-    private readonly authStore: AuthStore,
   ) {}
-
-  ngOnInit(): void {
-    this.currentDomain$.subscribe((domain) => {
-      this.domain = domain === 'AVIATION' ? domain.toLowerCase() : '';
-    });
-    this.backlinkService.show(this.domain + '/mi-reports');
-  }
 
   exportToExcel() {
     if (this.reportOptionsForm.valid) {
-      this.currentDomain$
-        .pipe(
-          switchMap((currentDomain) =>
-            this.miReportsService.generateCustomReport(currentDomain, {
-              reportType: 'CUSTOM',
-              sqlQuery: this.reportOptionsForm.get('query').value,
-            } as CustomMiReportParams),
-          ),
-        )
+      this.miReportsUserDefinedService
+        .generateCustomReport({
+          sqlQuery: this.reportOptionsForm.get('query').value,
+        } as CustomMiReportQuery)
         .pipe(
           this.pendingRequest.trackRequest(),
           catchBadRequest(BusinessErrorCode.REPORT1001, (res) => {
@@ -67,7 +48,7 @@ export class CustomReportComponent implements OnInit {
           }),
         )
         .pipe(
-          switchMap((results: ExtendedMiReportResult) => {
+          switchMap((results: MiReportUserDefinedResult) => {
             return of(manipulateResultsAndExportToExcel(results, 'Custom sql report'));
           }),
         )

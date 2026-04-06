@@ -10,8 +10,9 @@
  * Do not edit the class manually.
  */
 import { AccountUserContact } from './accountUserContact';
-import { MiReportResult } from './miReportResult';
 
-export interface AccountsUsersContactsMiReportResult extends MiReportResult {
+export interface AccountsUsersContactsMiReportResult {
+  reportType: string;
+  columnNames: Array<string>;
   results?: Array<AccountUserContact>;
 }

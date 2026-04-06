@@ -186,4 +186,12 @@
             update configuration set key = 'ui.features.bdrs2TriggerDate' where key = 'bdrs2.trigger.date';
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_add_configuration_ner.enable.flag" author="dridakisc@unisystems.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('ui.features.nerEnabled', false, 'BOOLEAN');
+        </sql>
+        <rollback>
+            delete from configuration where key = 'ui.features.nerEnabled';
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

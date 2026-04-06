@@ -8,8 +8,8 @@ export class BulkDownloadWorkflowTypePipe implements PipeTransform {
     switch (type) {
       case 'ALR':
         return 'Activity Level Report';
-      case 'BDR':
-        return 'Baseline Data Report';
+      case 'BDRS2':
+        return 'Stage 2 baseline data report';
       case 'WASTE_QDR':
         return 'Waste Voluntary Quarterly report';
 

@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { map, Observable, of } from 'rxjs';
+
+import { AerService } from '@tasks/aer/core/aer.service';
 
 import {
   AerApplicationReviewRequestTaskPayload,
@@ -38,10 +41,17 @@ export class CalculationEmissionsTierSummaryComponent implements OnInit {
   chargingZone$: Observable<string>;
   sectorName$: Observable<string>;
   permitParamMonitoringTiers: any[];
+  isSm3$: Observable<boolean>;
 
-  constructor(private readonly reportingDataService: ReportingDataService) {}
+  constructor(
+    private readonly reportingDataService: ReportingDataService,
+    private readonly aerService: AerService,
+    readonly route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
+    this.isSm3$ = this.aerService.getIsSm3$(of(this.index));
+
     this.sourceStreamEmission = (
       this.payload.aer.monitoringApproachEmissions.CALCULATION_CO2 as CalculationOfCO2Emissions
     )?.sourceStreamEmissions?.[this.index];

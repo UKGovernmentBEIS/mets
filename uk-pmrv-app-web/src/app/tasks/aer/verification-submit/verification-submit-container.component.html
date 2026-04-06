@@ -94,7 +94,11 @@
         <li
           app-task-item
           link="./materiality-level/summary"
-          linkText="Materiality level and reference documents"
+          [linkText]="
+            (isMaterialityUpdated$ | async)
+              ? 'Further information of relevance to the opinion'
+              : 'Materiality level and reference documents'
+          "
           [status]="'materialityLevel' | taskStatus | async"></li>
         <li
           app-task-item

@@ -15,5 +15,6 @@ public class AviationAccountUpdatedRegistryEvent {
     private Long accountId;
     private String requestId;
     private EmissionsMonitoringPlanUkEts emissionsMonitoringPlan;
+    private boolean isFromSetOperatorId;
 
 }

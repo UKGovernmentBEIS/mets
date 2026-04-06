@@ -74,4 +74,47 @@ describe('SubmittedComponent', () => {
       'Summary of conditions, changes, clarifications and variations',
     ]);
   });
+
+  it('should show task list after 2025', () => {
+    store.setState({
+      ...mockStateReviewed,
+      action: {
+        ...mockStateReviewed.action,
+        payload: { ...mockStateReviewed.action.payload, isVerifierAerTaskContentUpdate: true },
+      },
+    });
+    fixture.detectChanges();
+
+    expect(page.sections.map((el) => el.textContent.trim())).toEqual([
+      'Installation and operator details',
+      'Pollutant Release and Transfer Register codes (PRTR)',
+      'NACE codes',
+      'Regulated activities carried out at the installation',
+      'Monitoring plan versions during the reporting year',
+      'Monitoring approaches used during the reporting year',
+      'Source streams (fuels and materials)',
+      'Emission sources',
+      'Emission points',
+      'Calculation of CO2 emissions',
+      'Measurement of CO2 emissions',
+      'Inherent CO2 emissions',
+      'Fallback approach emissions',
+      'Emissions summary',
+      'Abbreviations and definitions',
+      'Additional documents and information',
+      'Confidentiality statement',
+      'Verifier details',
+      'Opinion statement',
+      'Compliance with ETS rules',
+      'Compliance with monitoring and reporting principles',
+      'Overall decision',
+      'Uncorrected misstatements',
+      'Uncorrected non-conformities',
+      'Uncorrected non-compliances',
+      'Recommended improvements',
+      'Methodologies to close data gaps',
+      'Further information of relevance to the opinion',
+      'Summary of conditions, changes, clarifications and variations',
+    ]);
+  });
 });

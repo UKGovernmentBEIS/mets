@@ -44,6 +44,11 @@ public class AviationAccountReportingStatusQueryOrchestrator {
     }
 
     @Transactional
+    public List<AviationAccountReportingStatus> getAllReportingStatusesForAccount(Long accountId) {
+        return aviationAccountReportingStatusRepository.findByAccountIdOrderByYearDesc(accountId);
+    }
+
+    @Transactional
     public void addReportingStatusesForYears(List<Integer> years, Long accountId) {
         List<AviationAccountReportingStatus> aviationAccountReportingStatuses = new ArrayList<>();
         years.forEach(year -> {

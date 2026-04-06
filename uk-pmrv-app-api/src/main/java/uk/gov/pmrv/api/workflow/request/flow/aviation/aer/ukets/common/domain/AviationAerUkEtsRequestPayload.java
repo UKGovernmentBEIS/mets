@@ -48,6 +48,8 @@ public class AviationAerUkEtsRequestPayload extends AviationAerRequestPayload
 
     private AviationAerUkEtsSubmittedEmissions submittedEmissions;
 
+    private Boolean isVerifierAerTaskContentUpdate;
+
     @Override
     @JsonIgnore
     public AviationAerUkEtsVerificationData getVerificationData() {

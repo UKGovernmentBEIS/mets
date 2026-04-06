@@ -30,7 +30,6 @@ public enum RequestType {
     PERMIT_BATCH_REISSUE("PROCESS_PERMIT_BATCH_REISSUE", "Permit Batch Reissue", RequestHistoryCategory.CA, AccountType.INSTALLATION, false, true, ResourceType.CA, Set.of()),
     PERMIT_REISSUE("PROCESS_PERMIT_REISSUE", "Permit Reissue", RequestHistoryCategory.PERMIT, AccountType.INSTALLATION, false, false, ResourceType.ACCOUNT,Set.of()),
     NON_COMPLIANCE("PROCESS_NON_COMPLIANCE", "Non-compliance", RequestHistoryCategory.PERMIT, AccountType.INSTALLATION, false, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR)),
-    NER("PROCESS_NER", "NER", RequestHistoryCategory.PERMIT, AccountType.INSTALLATION, false, true, ResourceType.ACCOUNT,  Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR)),
     DOAL("PROCESS_DOAL", "Determination of Activity Level", RequestHistoryCategory.REPORTING, AccountType.INSTALLATION, false, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR)),
     AER("PROCESS_AER", "Annual emission report", RequestHistoryCategory.REPORTING, AccountType.INSTALLATION, true, true, ResourceType.ACCOUNT,  Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER)),
     VIR("PROCESS_VIR", "Verifier Improvements Report", RequestHistoryCategory.REPORTING, AccountType.INSTALLATION, false, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR)),
@@ -46,6 +45,7 @@ public enum RequestType {
     PERMANENT_CESSATION("PROCESS_PERMANENT_CESSATION", "Permanent Cessation", RequestHistoryCategory.PERMIT, AccountType.INSTALLATION, true, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR)),
     ALR("PROCESS_ALR", "Activity Level Report", RequestHistoryCategory.REPORTING, AccountType.INSTALLATION, true, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER)),
     WASTE_QDR("PROCESS_WASTE_QDR","Waste Quarterly Supplementary Data Report", RequestHistoryCategory.REPORTING, AccountType.INSTALLATION, true, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR)),
+    NER("PROCESS_NER", "New Entrant Reserve allocation", RequestHistoryCategory.PERMIT,AccountType.INSTALLATION, true, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER)),
 
     // AVIATION UKETS + CORSIA types
     AVIATION_ACCOUNT_CLOSURE("PROCESS_AVIATION_ACCOUNT_CLOSURE", "Aviation Account Closure", RequestHistoryCategory.PERMIT, AccountType.AVIATION, false, true, ResourceType.ACCOUNT, Set.of(RoleTypeConstants.REGULATOR)),

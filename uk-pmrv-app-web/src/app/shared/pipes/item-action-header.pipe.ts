@@ -383,6 +383,10 @@ export class ItemActionHeaderPipe implements PipeTransform {
       case 'WASTE_QDR_APPLICATION_COMPLETED':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
+      case 'NER_APPLICATION_CANCELLED':
+      case 'NER_APPLICATION_SENT_TO_VERIFIER':
+        return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
+
       default:
         return itemActionTypePipe.transform(item.type);
     }

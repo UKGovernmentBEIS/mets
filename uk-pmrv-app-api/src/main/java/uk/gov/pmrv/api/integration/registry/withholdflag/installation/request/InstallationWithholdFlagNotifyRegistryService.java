@@ -11,7 +11,9 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
+import uk.gov.pmrv.api.integration.registry.common.RegistryIdEmailNotifierService;
 import uk.gov.pmrv.api.integration.registry.withholdflag.installation.request.requestaction.WithholdFlagRegistryIntegrationAddRequestActionService;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 
 import java.time.Year;
 
@@ -26,7 +28,7 @@ public class InstallationWithholdFlagNotifyRegistryService {
     private final InstallationWithholdFlagRegistryProducer registryProducer;
     private final InstallationAccountQueryService accountQueryService;
     private final WithholdFlagRegistryIntegrationAddRequestActionService addRequestActionService;
-    private final InstallationWithholdFlagEmailNotifierService notifierService;
+    private final RegistryIdEmailNotifierService notifierService;
 
     @Transactional
     public void notifyRegistry(WithholdFlagRegistryEvent withholdFlagRegistryEvent) {
@@ -48,7 +50,9 @@ public class InstallationWithholdFlagNotifyRegistryService {
 
         registryProducer.produce(accountWithholdUpdateEvent);
 
-        addRequestActionService.addRequestAction(withholdFlagRegistryEvent.getRequestId(), accountWithholdUpdateEvent);
+        if(!withholdFlagRegistryEvent.isFromSetOperatorId()) {
+            addRequestActionService.addRequestAction(withholdFlagRegistryEvent.getRequestId(), accountWithholdUpdateEvent);
+        }
 
         log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.INSTALLATION_SERVICE_KEY, withholdFlagRegistryEvent.getAccountId(),
                 NotifyRegistryUtils.ACCOUNT_INSTALLATION_WITHHOLD_FLAG_INTEGRATION_POINT_KEY,
@@ -62,7 +66,9 @@ public class InstallationWithholdFlagNotifyRegistryService {
             log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.INSTALLATION_SERVICE_KEY, accountDTO.getId(),
                     NotifyRegistryUtils.ACCOUNT_INSTALLATION_WITHHOLD_FLAG_INTEGRATION_POINT_KEY,
                     "Unable to publish withhold flag event to registry. The Registry/Operator Id field is empty");
-            notifierService.registryIdNonExistenceNotifyRegulator(accountDTO);
+            notifierService.registryIdNonExistenceNotifyRegulator(accountDTO,
+                    PmrvNotificationTemplateName.REGISTRY_INTEGRATION_WITHHOLD_FLAG_MISSING_REGISTRY_ID.getName(),
+                    NotifyRegistryUtils.INSTALLATION_SERVICE_KEY);
             return false;
         }
 

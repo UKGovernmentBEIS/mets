@@ -531,4 +531,23 @@ class InstallationAccountQueryServiceTest {
         assertEquals(ErrorCode.RESOURCE_NOT_FOUND, be.getErrorCode());
         verify(installationAccountRepository, times(1)).findAccountWithLeById(accountId);
     }
+
+    @Test
+    void getAccountByRegistryId() {
+        Long accountId = 1L;
+        Integer registryId = 1;
+        InstallationAccount account1 = InstallationAccount.builder().id(accountId).name("name").registryId(registryId).build();
+        InstallationAccount account2 = InstallationAccount.builder().id(accountId).name("name2").registryId(registryId).build();
+        List<InstallationAccount> accounts = List.of(account1, account2);
+
+        when(installationAccountRepository.findAccountsByRegistryId(registryId))
+                .thenReturn(accounts);
+
+        // Invoke
+        List<InstallationAccount> expected = service.getAccountsByRegistryId(registryId);
+
+        // Verify
+        assertEquals(accounts, expected);
+        verify(installationAccountRepository, times(1)).findAccountsByRegistryId(registryId);
+    }
 }

@@ -49,6 +49,8 @@ public class AviationAerUkEtsApplicationSubmittedRequestActionPayload extends Re
 
     private AviationAerUkEtsVerificationReport verificationReport;
 
+    private Boolean isVerifierAerTaskContentUpdate;
+
     @Builder.Default
     private Map<UUID, String> aerAttachments = new HashMap<>();
 

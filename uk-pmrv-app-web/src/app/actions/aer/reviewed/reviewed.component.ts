@@ -15,6 +15,7 @@ import { monitoringApproachMap } from '../core/monitoringApproaches';
 })
 export class ReviewedComponent {
   payload$ = this.aerService.getPayload() as Observable<AerApplicationCompletedRequestActionPayload>;
+  isMaterialityUpdated$ = this.aerService.isMaterialityUpdated$ as Observable<boolean>;
 
   requestAction$ = this.aerService.requestAction$;
   aerTitle$ = combineLatest([this.requestAction$, this.payload$]).pipe(

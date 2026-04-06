@@ -11,8 +11,8 @@ describe('BulkDownloadWorkflowTypePipe', () => {
     expect(pipe.transform('ALR')).toBe('Activity Level Report');
   });
 
-  it('should return "Baseline Data Report" for BDR', () => {
-    expect(pipe.transform('BDR')).toBe('Baseline Data Report');
+  it('should return "Stage 2 baseline data report" for BDR', () => {
+    expect(pipe.transform('BDRS2')).toBe('Stage 2 baseline data report');
   });
 
   it('should return "Waste Voluntary Quarterly report" for WASTE_QDR', () => {

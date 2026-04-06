@@ -18,6 +18,7 @@ interface ViewModel {
   requestActionType: RequestActionDTO['type'];
   pageHeader: string;
   materialityLevel: AviationAerMaterialityLevel;
+  isMaterialityUpdated: boolean;
 }
 
 @Component({
@@ -35,8 +36,8 @@ interface ViewModel {
       [requestActionType]="vm.requestActionType"
       [breadcrumb]="true">
       <app-aer-verify-materiality-level-group
-        [materialityLevel]="vm.materialityLevel"></app-aer-verify-materiality-level-group>
-
+        [materialityLevel]="vm.materialityLevel"
+        [isMaterialityUpdated]="vm.isMaterialityUpdated"></app-aer-verify-materiality-level-group>
       <ng-container *ngIf="vm.showDecision">
         <h2 app-summary-header class="govuk-heading-m">Decision Summary</h2>
         <app-aer-verification-review-decision-group-summary
@@ -57,10 +58,13 @@ export default class MaterialityLevelComponent {
     map(([payload, requestActionType, regulatorViewer]) => {
       return {
         requestActionType,
-        pageHeader: aerVerifyHeaderTaskMap['materialityLevel'],
+        pageHeader: payload?.isVerifierAerTaskContentUpdate
+          ? 'Further information of relevance to the opinion'
+          : aerVerifyHeaderTaskMap['materialityLevel'],
         materialityLevel: {
           ...payload.verificationReport.materialityLevel,
         },
+        isMaterialityUpdated: payload?.isVerifierAerTaskContentUpdate,
         ...getAerDecisionReview(payload, requestActionType, regulatorViewer, 'materialityLevel', false),
       };
     }),

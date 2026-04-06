@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -8,7 +8,6 @@ import { VerificationComponent } from '@tasks/aer/submit/send-report/verificatio
 import { mockState } from '@tasks/aer/submit/testing/mock-aer-apply-action';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { AccountVerificationBodyService, TasksService } from 'pmrv-api';
 
@@ -45,9 +44,9 @@ describe('VerificationComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
+      imports: [AerModule],
       providers: [
-        KeycloakService,
+        provideRouter([]),
         { provide: TasksService, useValue: tasksService },
         { provide: AccountVerificationBodyService, useValue: accountVerificationBodyService },
       ],

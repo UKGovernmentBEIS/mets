@@ -7,8 +7,6 @@ import { SharedModule } from '@shared/shared.module';
 
 import { GovukTableColumn } from 'govuk-components';
 
-import { BulkDownloadWorkflowDTO } from 'pmrv-api';
-
 import { BulkDownloadsService } from './core/bulk-downloads.service';
 
 @Component({
@@ -27,7 +25,7 @@ import { BulkDownloadsService } from './core/bulk-downloads.service';
 })
 export class BulkDownloadsComponent implements OnInit {
   tableColumns: GovukTableColumn[] = [{ field: 'name', header: '' }];
-  enabledWorkflows$: Observable<BulkDownloadWorkflowDTO[]>;
+  enabledWorkflows$: Observable<{ name: string; link: string }[]>;
 
   ngOnInit(): void {
     this.enabledWorkflows$ = this.bulkDownloadsService.getBulkDownloadWorkflows$.pipe(

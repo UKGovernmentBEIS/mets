@@ -1,10 +1,6 @@
 <ng-container *ngIf="vm() as vm">
   <ng-container *ngIf="!vm.isSubmitted; else submittedTemplate">
-    <app-waste-qdr-task
-      returnLink="../"
-      [breadcrumb]="true"
-      heading="Return for amendments"
-      returnLinkTitle="Review quarterly data report">
+    <app-waste-qdr-task returnLink="../" heading="Return for amendments" returnLinkTitle="Review quarterly data report">
       <p class="govuk-body">Check your information before sending</p>
 
       <h2 app-summary-header class="govuk-heading-m">Quarterly data report</h2>

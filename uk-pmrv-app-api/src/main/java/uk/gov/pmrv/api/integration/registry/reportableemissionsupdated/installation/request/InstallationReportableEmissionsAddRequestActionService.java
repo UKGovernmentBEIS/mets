@@ -32,9 +32,18 @@ public class InstallationReportableEmissionsAddRequestActionService {
     public void addRequestAction(final String requestId,
                                  InstallationReportableEmissionsRequestActionDTO installationReportableEmissionsRequestActionDTO,
                                  Long accountId) {
-        Request request = requestService.findRequestById(requestId);
-        if (request == null) {
-            log.info("No requestId found: %s ", requestId);
+        Request request;
+        try {
+            request = requestService.findRequestById(requestId);
+            if (request==null) {
+                log.info("Unable to find a request with id [{}] for the creation of a timeline event action ", requestId);
+                return;
+            }
+        } catch (BusinessException e) {
+            log.info("Unable to find a request with id [{}] for the creation of a timeline event action ", requestId);
+            return;
+        } catch (Exception e) {
+            log.error("Unable to create a timeline event {}", e.getMessage());
             return;
         }
         InstallationAccountPermitDTO installationAccountPermitDTO = installationAccountQueryOrchestrator.getAccountWithPermit(accountId);

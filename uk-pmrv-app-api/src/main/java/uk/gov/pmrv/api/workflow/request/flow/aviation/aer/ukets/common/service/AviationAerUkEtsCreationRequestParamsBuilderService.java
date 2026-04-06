@@ -41,6 +41,7 @@ public class AviationAerUkEtsCreationRequestParamsBuilderService implements
                 .payloadType(RequestPayloadType.AVIATION_AER_UKETS_REQUEST_PAYLOAD)
                 .empOriginatedData(buildEmpOriginatedDataService.build(accountId))
                 .aerMonitoringPlanVersions(buildMonitoringPlanVersionsService.build(accountId, reportingYear))
+                .isVerifierAerTaskContentUpdate(true)
                 .build())
             .requestMetadata(AviationAerRequestMetadata.builder()
                 .type(RequestMetadataType.AVIATION_AER)

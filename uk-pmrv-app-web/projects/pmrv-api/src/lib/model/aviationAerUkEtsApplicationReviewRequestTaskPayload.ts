@@ -27,6 +27,7 @@ export interface AviationAerUkEtsApplicationReviewRequestTaskPayload extends Req
   aerAttachments?: { [key: string]: string };
   verificationSectionsCompleted?: { [key: string]: Array<boolean> };
   aer?: AviationAerUkEts;
+  isVerifierAerTaskContentUpdate?: boolean;
   verificationReport?: AviationAerUkEtsVerificationReport;
   totalEmissionsProvided?: string;
   notCoveredChangesProvided?: string;

@@ -13,6 +13,8 @@ import uk.gov.netz.integration.model.error.IntegrationEventError;
 import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
 import uk.gov.netz.integration.model.metscontacts.MetsContactsEventOutcome;
 import uk.gov.pmrv.api.account.domain.Account;
+import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
+import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.response.AviationRegistryIntegrationEmailProperties;
@@ -36,6 +38,7 @@ import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.RE
 public class AccountContactResponseHandler {
 
     private final AccountQueryService accountQueryService;
+    private final InstallationAccountQueryService installationAccountQueryService;
     private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
     private final InstallationRegistryIntegrationEmailProperties installationEmailProperties;
     private final AviationRegistryIntegrationEmailProperties aviationEmailProperties;
@@ -84,12 +87,36 @@ public class AccountContactResponseHandler {
         notifyRegulator(eventOutcome,correlationId,systemIdentifier,actionErrors,PmrvNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ACCOUNT_CONTACT_ERROR_ACTION_TEMPLATE);
     }
 
-    private void notifyRegulator(MetsContactsEventOutcome eventOutcome,String correlationId,String systemIdentifier,Map<String,String> errorsForMail,PmrvNotificationTemplateName templateName) {
+    private void notifyRegulator(MetsContactsEventOutcome eventOutcome, String correlationId, String systemIdentifier,
+                                 Map<String,String> errorsForMail, PmrvNotificationTemplateName templateName) {
         if(errorsForMail.isEmpty()) return;
 
-        Account account = accountQueryService.getAccountByRegistryId(Integer.valueOf(eventOutcome.getAccountIdentifier()))
-                .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
+        String registryId = eventOutcome.getAccountIdentifier();
+        EmailData<PmrvEmailNotificationTemplateData> emailData = null;
+        String recipient = null;
 
+       if (NotifyRegistryUtils.INSTALLATION_SERVICE_KEY.equals(systemIdentifier)) {
+           InstallationAccount installationAccount = installationAccountQueryService.getSingleLiveAccountByRegistryId(Integer.valueOf(registryId));
+
+            emailData = getEmailData(errorsForMail, correlationId, systemIdentifier, eventOutcome, templateName, installationAccount);
+
+            recipient = installationEmailProperties.getEmail().get(installationAccount.getCompetentAuthority().getCode());
+
+        } else if (NotifyRegistryUtils.AVIATION_SERVICE_KEY.equals(systemIdentifier)) {
+            Account account = accountQueryService.getAccountByRegistryId(Integer.valueOf(eventOutcome.getAccountIdentifier()))
+                    .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
+
+            emailData = getEmailData(errorsForMail, correlationId, systemIdentifier, eventOutcome, templateName, account);
+
+            recipient = aviationEmailProperties.getEmail().get(account.getCompetentAuthority().getCode());
+        }
+
+        notificationEmailService.notifyRecipient(emailData, recipient);
+    }
+
+    private EmailData<PmrvEmailNotificationTemplateData> getEmailData(Map<String,String> errorsForMail, String correlationId,  String systemIdentifier,
+                                                                      MetsContactsEventOutcome eventOutcome, PmrvNotificationTemplateName templateName,
+                                                                      Account account) {
         Map<String, Object> templateParams = Map.of(
                 PmrvEmailNotificationTemplateConstants.EMITTER_ID, account.getEmitterId(),
                 PmrvEmailNotificationTemplateConstants.ERRORS, errorsForMail,
@@ -98,7 +125,7 @@ public class AccountContactResponseHandler {
                 PmrvEmailNotificationTemplateConstants.OPERATOR_NAME, account.getName(),
                 PmrvEmailNotificationTemplateConstants.PAYLOAD, eventOutcome);
 
-        EmailData<PmrvEmailNotificationTemplateData> emailData = EmailData.<PmrvEmailNotificationTemplateData>builder()
+        return EmailData.<PmrvEmailNotificationTemplateData>builder()
                 .notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
                         .competentAuthority(account.getCompetentAuthority())
                         .templateName(templateName.getName())
@@ -106,11 +133,5 @@ public class AccountContactResponseHandler {
                         .templateParams(templateParams)
                         .build())
                 .build();
-
-        String recipient = NotifyRegistryUtils.INSTALLATION_SERVICE_KEY.equals(systemIdentifier) ?
-                installationEmailProperties.getEmail().get(account.getCompetentAuthority().getCode()) :
-                aviationEmailProperties.getEmail().get(account.getCompetentAuthority().getCode());
-
-        notificationEmailService.notifyRecipient(emailData, recipient);
     }
 }

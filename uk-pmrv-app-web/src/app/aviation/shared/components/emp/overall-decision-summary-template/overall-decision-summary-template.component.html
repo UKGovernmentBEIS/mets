@@ -9,7 +9,13 @@
     </dd>
   </div>
   <div govukSummaryListRow *ngIf="data.reason">
-    <dt govukSummaryListRowKey>Reason for decision</dt>
+    <dt govukSummaryListRowKey>
+      @if (data.type === 'REJECTED') {
+        Text to be included in the refusal notice
+      } @else {
+        Reason for decision
+      }
+    </dt>
     <dd class="pre-wrap" govukSummaryListRowValue>
       {{ data.reason }}
     </dd>
@@ -21,7 +27,10 @@
     <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
     <dd class="pre-wrap" govukSummaryListRowValue>
       <ng-container *ngFor="let variationScheduleItem of variationScheduleItems; let i = index">
-        <div>{{ i + 1 }}. {{ variationScheduleItem }} <br /></div>
+        <div>
+          {{ i + 1 }}. {{ variationScheduleItem }}
+          <br />
+        </div>
       </ng-container>
     </dd>
     <dd govukSummaryListRowActions *ngIf="isEditable"></dd>

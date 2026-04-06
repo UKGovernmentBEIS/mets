@@ -52,12 +52,12 @@ describe('ComplianceMonitoringComponent', () => {
     expect(page.heading).toEqual('Compliance with monitoring and reporting principles');
     expect(page.summaryListValues).toHaveLength(6);
     expect(page.summaryListValues).toEqual([
-      ['Accuracy', 'Yes'],
-      ['Completeness', 'Yes'],
-      ['Consistency', 'Yes'],
-      ['Comparability over time', 'Yes'],
-      ['Transparency', 'Yes'],
-      ['Integrity of methodology', 'Yes'],
+      ['Accuracy', 'Compliant'],
+      ['Completeness', 'Compliant'],
+      ['Consistency', 'Compliant'],
+      ['Comparability over time', 'Compliant'],
+      ['Transparency', 'Compliant'],
+      ['Integrity of methodology', 'Compliant'],
     ]);
   });
 });

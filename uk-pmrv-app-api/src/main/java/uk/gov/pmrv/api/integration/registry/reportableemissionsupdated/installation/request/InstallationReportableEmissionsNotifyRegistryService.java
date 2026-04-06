@@ -1,21 +1,11 @@
 package uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.installation.request;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.MonthDay;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.util.ObjectUtils;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.configuration.domain.ConfigurationDTO;
@@ -27,22 +17,33 @@ import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryServ
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.common.reporting.domain.ReportableEmissionsUpdatedEvent;
+import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.AccountEmissionsUpdatedRequestEvent;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.installation.response.InstallationRegistryIntegrationEmailProperties;
 import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
 import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
-import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.AccountEmissionsUpdatedRequestEvent;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.reporting.domain.InstallationReportableEmissionsUpdatedEvent;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.PermitOriginatedData;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.service.AerRequestQueryService;
 
-import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.REQUEST_LOG_FORMAT;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.MonthDay;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.MISSING_REGISTRY_ID_ERROR_MESSAGE;
+import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.REQUEST_LOG_FORMAT;
 import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.capitalizeFirstLetter;
 
 @Log4j2
@@ -95,6 +96,14 @@ class InstallationReportableEmissionsNotifyRegistryService {
 
 		if (event.isFromDre()) {
 			notifyRegistry(event, account, requestId);
+			return;
+		}
+
+		if (event.isSetOperatorId()) {
+			if (setOperatorIdConditionsSatisfied(aerRequest.get(), aerRequestPayload, aerRequestMetadata, event)) {
+				event.setRequestId(aerRequest.get().getId());
+				notifyRegistry(event, account, event.getRequestId());
+			}
 			return;
 		}
 
@@ -180,6 +189,74 @@ class InstallationReportableEmissionsNotifyRegistryService {
 					INTEGRATION_POINT_KEY,
 					"Emissions updated are not sent to ETS Registry because AER initiator was not within the allowed types");
 			throw new BusinessException(MetsErrorCode.INTEGRATION_REGISTRY_EMISSIONS_INSTALLATION_WRONG_AER_INITIATOR_TYPE, event, initiatorRequestType);
+		}
+	}
+
+	private boolean setOperatorIdConditionsSatisfied(Request aerRequest,
+													 AerRequestPayload aerRequestPayload,
+													 AerRequestMetadata aerRequestMetadata,
+													 InstallationReportableEmissionsUpdatedEvent event) {
+		boolean isVerificationPerformed = aerRequestPayload.isVerificationPerformed();
+		boolean isInProgress = RequestStatus.IN_PROGRESS.equals(aerRequest.getStatus());
+
+		if (!isVerificationPerformed && isInProgress) {
+			log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
+					INTEGRATION_POINT_KEY,
+					"Set operator id emissions are not sent to ETS Registry: non-verified AER is still in progress (not yet completed)");
+			return false;
+		}
+
+		RequestType initiatorRequestType = aerRequestMetadata.getInitiatorRequest().getType();
+
+		if (initiatorRequestType.equals(RequestType.PERMIT_REVOCATION)
+				|| initiatorRequestType.equals(RequestType.PERMIT_SURRENDER)) {
+			return true;
+		}
+
+		return setOperatorReportingPeriodConditionsAreSatisfied(aerRequest, event);
+	}
+
+	private boolean setOperatorReportingPeriodConditionsAreSatisfied(Request aerRequest,
+																	  InstallationReportableEmissionsUpdatedEvent event) {
+		Optional<ConfigurationDTO> reportingPeriodFromConfiguration = configurationService
+				.getConfigurationByKey("aer.installation.reporting-period.from");
+		Optional<ConfigurationDTO> reportingPeriodToConfiguration = configurationService
+				.getConfigurationByKey("aer.installation.reporting-period.to");
+
+		if (reportingPeriodFromConfiguration.isEmpty()) {
+			log.error(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(), INTEGRATION_POINT_KEY,
+					"Cannot send emissions to ETS Registry because no configuration for the aer.installation.reporting-period.from property has been found");
+			throw new BusinessException(
+					MetsErrorCode.INTEGRATION_REGISTRY_EMISSIONS_INSTALLATION_REPORTING_PERIOD_FROM_NOT_FOUND, event);
+		}
+
+		if (reportingPeriodToConfiguration.isEmpty()) {
+			log.error(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(), INTEGRATION_POINT_KEY,
+					"Cannot send emissions to ETS Registry because no configuration for the aer.installation.reporting-period.to property has been found");
+			throw new BusinessException(
+					MetsErrorCode.INTEGRATION_REGISTRY_EMISSIONS_INSTALLATION_REPORTING_PERIOD_TO_NOT_FOUND, event);
+		}
+
+		int reportingYear = event.getYear().getValue() + 1;
+
+		MonthDay reportingPeriodFrom = MonthDay.parse(
+				reportingPeriodFromConfiguration.get().getValue().toString(), DateTimeFormatter.ofPattern("dd/MM"));
+		MonthDay reportingPeriodTo = MonthDay.parse(
+				reportingPeriodToConfiguration.get().getValue().toString(), DateTimeFormatter.ofPattern("dd/MM"));
+
+		LocalDate periodFrom = reportingPeriodFrom.atYear(reportingYear);
+		LocalDate periodTo = reportingPeriodTo.atYear(reportingYear);
+		LocalDate requestDate = RequestStatus.IN_PROGRESS.equals(aerRequest.getStatus())
+				? LocalDate.from(aerRequest.getSubmissionDate())
+				: LocalDate.from(aerRequest.getEndDate());
+
+		if (!requestDate.isBefore(periodFrom) && !requestDate.isAfter(periodTo)) {
+			return true;
+		} else {
+			log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(), INTEGRATION_POINT_KEY,
+					String.format("Set operator id emissions are not sent to ETS Registry: AER year %d is not within the reporting period of year %d",
+							event.getYear().getValue(), reportingYear));
+			return false;
 		}
 	}
 
@@ -285,9 +362,11 @@ class InstallationReportableEmissionsNotifyRegistryService {
 							installationAccountEmissionsUpdatedKafkaTemplate);
 
 		//timeline event
-		InstallationReportableEmissionsRequestActionDTO installationReportableEmissionsRequestActionDTO =
-				buildAccountReportableEmissionsRequestActionDTO(account, accountEmissionsUpdatedRequestEvent);
-		addRequestActionService.addRequestAction(requestId, installationReportableEmissionsRequestActionDTO, account.getId());
+		if(!event.isSetOperatorId()) {
+			InstallationReportableEmissionsRequestActionDTO installationReportableEmissionsRequestActionDTO =
+					buildAccountReportableEmissionsRequestActionDTO(account, accountEmissionsUpdatedRequestEvent);
+			addRequestActionService.addRequestAction(requestId, installationReportableEmissionsRequestActionDTO, account.getId());
+		}
 
 		log.info(REQUEST_LOG_FORMAT,
 					SERVICE_KEY,

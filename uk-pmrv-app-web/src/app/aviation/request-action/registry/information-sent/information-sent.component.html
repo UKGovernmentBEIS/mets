@@ -28,10 +28,10 @@
       </dl>
     } @else {
       <dl govuk-summary-list>
-        @if (vm.operatorDetails?.emitterId) {
+        @if ($any(vm.operatorDetails)?.emitterId) {
           <div govukSummaryListRow>
             <dt govukSummaryListRowKey>Emitter ID</dt>
-            <dd govukSummaryListRowValue>{{ vm.operatorDetails.emitterId }}</dd>
+            <dd govukSummaryListRowValue>{{ $any(vm.operatorDetails).emitterId }}</dd>
             <dd govukSummaryListRowActions></dd>
           </div>
         } @else if ($any(vm.operatorDetails).registryId) {
@@ -55,10 +55,10 @@
             <dd govukSummaryListRowActions></dd>
           </div>
         }
-        @if (vm.operatorDetails.firstKnownAviationActivity) {
+        @if ($any(vm.operatorDetails).firstKnownAviationActivity) {
           <div govukSummaryListRow>
             <dt govukSummaryListRowKey>First known aviation activity</dt>
-            <dd govukSummaryListRowValue>{{ vm.operatorDetails.firstKnownAviationActivity | govukDate }}</dd>
+            <dd govukSummaryListRowValue>{{ $any(vm.operatorDetails).firstKnownAviationActivity | govukDate }}</dd>
             <dd govukSummaryListRowActions></dd>
           </div>
         } @else if ($any(vm.operatorDetails).firstYearOfReportingObligation) {

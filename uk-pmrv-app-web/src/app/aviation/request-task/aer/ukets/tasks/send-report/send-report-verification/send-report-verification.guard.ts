@@ -19,15 +19,22 @@ export class VerificationGuard {
   ) {}
 
   canActivate(): Observable<boolean> {
+    let accountId: number;
+
     return this.store
       .pipe(
         take(1),
         requestTaskQuery.selectRequestInfo,
-        map((info) => info.accountId),
+        map((info) => {
+          accountId = info.accountId;
+          return accountId;
+        }),
       )
       .pipe(
-        switchMap((accountId) => this.accountVerificationBodyService.getVerificationBodyOfAccount(accountId)),
-        switchMap((vb) => (!vb ? this.businessErrorService.showError(notFoundVerificationBodyError()) : of(true))),
+        switchMap(() => this.accountVerificationBodyService.getVerificationBodyOfAccount(accountId)),
+        switchMap((vb) =>
+          !vb ? this.businessErrorService.showError(notFoundVerificationBodyError(accountId)) : of(true),
+        ),
       );
   }
 }

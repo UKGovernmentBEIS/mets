@@ -41,7 +41,7 @@ public class InstallationSetOperatorIdWithholdFlagUpdateService {
 
         Request request = requests.getFirst();
         if(RequestStatus.IN_PROGRESS.equals(request.getStatus()) || RequestStatus.COMPLETED.equals(request.getStatus())) {
-            eventPublisher.publishEvent(WithholdFlagRegistryEvent.builder()
+            eventPublisher.publishEvent(WithholdFlagRegistryEvent.builder().isFromSetOperatorId(true)
                     .withholdFlag(true).accountId(accountId).year(getWithholdingOfAllowancesYear(request)).requestId(request.getId()).build());
         }
     }

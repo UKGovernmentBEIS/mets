@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 
-import { distinctUntilChanged, EMPTY, first, map, Observable, switchMap, tap } from 'rxjs';
+import { combineLatest, distinctUntilChanged, EMPTY, first, map, Observable, of, switchMap, tap } from 'rxjs';
 
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
@@ -24,6 +25,9 @@ import {
   AerInherentReceivingTransferringInstallation,
   AerVerificationReportDataReviewDecision,
   AerVerificationReturnToOperatorRequestTaskActionPayload,
+  CalculationOfCO2Emissions,
+  CalculationRegionalDataCalculationMethod,
+  CalculationSourceStreamEmission,
   ChargingZoneDTO,
   ReportingDataService,
   RequestTaskActionPayload,
@@ -35,6 +39,14 @@ import {
 } from 'pmrv-api';
 
 import { AER_AMEND_STATUS_PREFIX, amendTasksPerReviewSection } from './aer.amend.types';
+
+const sourceStreamEmissionTypes = [
+  'COMBUSTION_COMMERCIAL_STANDARD_FUELS',
+  'COMBUSTION_OTHER_GASEOUS_LIQUID_FUELS',
+  'COMBUSTION_SOLID_FUELS',
+  'COMBUSTION_FLARES',
+  'OTHER',
+];
 
 @Injectable({ providedIn: 'root' })
 export class AerService extends TasksHelperService {
@@ -119,6 +131,10 @@ export class AerService extends TasksHelperService {
     return this.store.requestInfo$.pipe(map((info) => info.competentAuthority));
   }
 
+  get isMaterialityUpdated$(): Observable<boolean> {
+    return this.getPayload().pipe(map((payload) => payload?.isVerifierAerTaskContentUpdate));
+  }
+
   get requestAccountId$() {
     return this.store.requestInfo$.pipe(map((info) => info.accountId));
   }
@@ -145,6 +161,79 @@ export class AerService extends TasksHelperService {
   }
   get reviewGroupsForAmendData$(): Observable<any[]> {
     return this.getPayload().pipe(map((payload) => payload?.reviewGroupDecisions));
+  }
+
+  getSourceStreamEmission$(index): Observable<CalculationSourceStreamEmission> {
+    return this.getPayload().pipe(
+      map(
+        (payload) =>
+          (payload.aer.monitoringApproachEmissions.CALCULATION_CO2 as CalculationOfCO2Emissions)
+            ?.sourceStreamEmissions?.[index],
+      ),
+    );
+  }
+
+  getSm3UnitEnabled$(): Observable<boolean> {
+    return this.getPayload().pipe(
+      map(
+        (payload) =>
+          (
+            payload as
+              | AerApplicationAmendsSubmitRequestTaskPayload
+              | AerApplicationReviewRequestTaskPayload
+              | AerApplicationSubmitRequestTaskPayload
+              | AerApplicationVerificationSubmitRequestTaskPayload
+          )?.sm3UnitEnabled,
+      ),
+    );
+  }
+
+  sourceStreamEmissionType$ = this.getTask('sourceStreams').pipe(
+    first(),
+    map((sourceStreams) =>
+      sourceStreams?.some((sourceStream) => sourceStreamEmissionTypes?.includes(sourceStream.type)),
+    ),
+  );
+
+  monitoringTiers$(index: number): Observable<boolean> {
+    return this.getSourceStreamEmission$(index).pipe(
+      map((sourceStreamEmission) => {
+        return (
+          ['TIER_2', 'TIER_2A'].includes(
+            sourceStreamEmission?.parameterMonitoringTiers?.find((tier) => tier.type === 'EMISSION_FACTOR')?.tier,
+          ) &&
+          ['TIER_2A'].includes(
+            sourceStreamEmission?.parameterMonitoringTiers?.find((tier) => tier.type === 'NET_CALORIFIC_VALUE')?.tier,
+          ) &&
+          (sourceStreamEmission?.parameterCalculationMethod as CalculationRegionalDataCalculationMethod)
+            ?.fuelMeteringConditionType === 'CELSIUS_15'
+        );
+      }),
+    );
+  }
+
+  getIsSm3$(index$: Observable<number>): Observable<boolean> {
+    return index$.pipe(
+      first(),
+      switchMap((index) =>
+        this.sourceStreamEmissionType$.pipe(
+          switchMap((isSm3) => {
+            if (isSm3) {
+              return combineLatest([this.monitoringTiers$(index), this.getSm3UnitEnabled$()]).pipe(
+                map(([tiers, sm3Enabled]) => tiers && sm3Enabled),
+              );
+            }
+            return of(false);
+          }),
+          map((isSm3) => isSm3),
+          distinctUntilChanged(),
+        ),
+      ),
+    );
+  }
+
+  getIsSm3(index$: Observable<number>) {
+    return toSignal(this.getIsSm3$(index$));
   }
 
   postTaskSave(

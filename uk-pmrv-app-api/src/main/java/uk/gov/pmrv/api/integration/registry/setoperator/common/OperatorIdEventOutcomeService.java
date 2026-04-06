@@ -16,11 +16,12 @@ import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.event.AccountContactRegistryEvent;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.integration.registry.accountcreated.common.validation.SetOperatorIdResponseValidator;
-import uk.gov.pmrv.api.integration.registry.accountupdated.aviation.request.AviationAccountUpdatedRegistryEvent;
 import uk.gov.pmrv.api.integration.registry.accountupdated.installation.request.InstallationAccountUpdatedRegistryEvent;
 import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
 import uk.gov.pmrv.api.integration.registry.common.RegistryResponseErrorCode;
+import uk.gov.pmrv.api.integration.registry.setoperator.aviation.AviationSetOperatorIdAccountUpdateService;
 import uk.gov.pmrv.api.integration.registry.setoperator.aviation.AviationSetOperatorIdExemptStatusUpdateService;
+import uk.gov.pmrv.api.integration.registry.setoperator.installation.InstallationSetOperatorIdRegistryEmissionsService;
 import uk.gov.pmrv.api.integration.registry.setoperator.installation.InstallationSetOperatorIdWithholdFlagUpdateService;
 
 import java.util.List;
@@ -38,7 +39,9 @@ public class OperatorIdEventOutcomeService {
     private final SetOperatorIdResponseValidator setOperatorIdResponseValidator;
     private final AviationSetOperatorIdExemptStatusUpdateService aviationSetOperatorIdExemptStatusUpdateService;
     private final ApplicationEventPublisher publisher;
+    private final AviationSetOperatorIdAccountUpdateService aviationSetOperatorIdAccountUpdateService;
     private final InstallationSetOperatorIdWithholdFlagUpdateService installationSetOperatorIdWithholdFlagUpdateService;
+    private final InstallationSetOperatorIdRegistryEmissionsService installationSetOperatorIdRegistryEmissionsService;
 
 
     @Transactional
@@ -53,7 +56,7 @@ public class OperatorIdEventOutcomeService {
             eventOutcome.setOutcome(IntegrationEventOutcome.SUCCESS);
             log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.AVIATION_SERVICE_KEY, event.getEmitterId(),
                     NotifyRegistryUtils.OPERATOR_ID_INTEGRATION_POINT_KEY, "Operator Id received from registry " + event);
-            publisher.publishEvent(AviationAccountUpdatedRegistryEvent.builder().accountId(account.getId()).build());
+            aviationSetOperatorIdAccountUpdateService.notifyRegistryWithAccountUpdate(account.getId());
             publisher.publishEvent(AccountContactRegistryEvent.builder().accountsIds(List.of(account.getId())).build());
             aviationSetOperatorIdExemptStatusUpdateService.notifyRegistryWithExemptStatuses(account);
         }
@@ -75,9 +78,10 @@ public class OperatorIdEventOutcomeService {
             eventOutcome.setOutcome(IntegrationEventOutcome.SUCCESS);
             log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.INSTALLATION_SERVICE_KEY, event.getEmitterId(),
                     NotifyRegistryUtils.OPERATOR_ID_INTEGRATION_POINT_KEY, "Operator Id received from registry " + event);
-            publisher.publishEvent(InstallationAccountUpdatedRegistryEvent.builder().accountId(account.getId()).build());
+            publisher.publishEvent(InstallationAccountUpdatedRegistryEvent.builder().accountId(account.getId()).isFromSetOperatorId(true).build());
             publisher.publishEvent(AccountContactRegistryEvent.builder().accountsIds(List.of(account.getId())).build());
             installationSetOperatorIdWithholdFlagUpdateService.notifyRegistryWithWithholdFlag(account.getId());
+            installationSetOperatorIdRegistryEmissionsService.notifyRegistryWithEmissions(account.getId());
         }
         else {
             eventOutcome.setOutcome(IntegrationEventOutcome.ERROR);

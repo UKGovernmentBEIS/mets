@@ -1,24 +1,18 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.notification;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.NotificationRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.RegistryNotificationType;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
@@ -29,6 +23,16 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferARequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBRequestPayload;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PermitTransferAOfficialNoticeServiceTest {
@@ -50,6 +54,9 @@ class PermitTransferAOfficialNoticeServiceTest {
 
     @Mock
     private DocumentFileGeneratorService documentFileGeneratorService;
+
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
 
     @Test
@@ -104,6 +111,11 @@ class PermitTransferAOfficialNoticeServiceTest {
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
         verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
             DocumentTemplateType.PERMIT_TRANSFER_ACCEPTED, templateParams, fileName);
+        verify(applicationEventPublisher, times(1)).publishEvent(
+                NotificationRegistryEvent.builder()
+                        .registryNotificationType(RegistryNotificationType.TRANSFER_NOTIFICATION)
+                        .accountId(transfererRequest.getAccountId()).fileInfoDTO(officialDocFileInfoDTO)
+            .requestId(requestId).build());
 
         assertThat(transfererPayload.getOfficialNotice()).isEqualTo(officialDocFileInfoDTO);
     }

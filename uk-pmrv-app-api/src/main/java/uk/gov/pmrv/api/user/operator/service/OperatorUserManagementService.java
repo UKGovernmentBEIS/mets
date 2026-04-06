@@ -71,7 +71,7 @@ public class OperatorUserManagementService {
 	}
 
     private void validateOperatorUserAuthorityToAccount(String userId, Long accountId) {
-        List<String> operatorUserIds = operatorAuthorityQueryService.findOperatorUserAuthorityRoleListByAccount(accountId)
+        List<String> operatorUserIds = operatorAuthorityQueryService.findOperatorUserAuthoritiesListByAccount(accountId)
                 .stream().map(AuthorityRoleDTO::getUserId).collect(Collectors.toList());
 
         // Check if user id exists on account's users

@@ -9,17 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AdditionalDocuments } from './additionalDocuments';
-import { ConfidentialityStatement } from './confidentialityStatement';
-import { NerOperatorDocumentWithComment } from './nerOperatorDocumentWithComment';
+import { NER } from './nER';
 import { RequestTaskPayload } from './requestTaskPayload';
 
 export interface NerApplicationSubmitRequestTaskPayload extends RequestTaskPayload {
-  newEntrantDataReport: NerOperatorDocumentWithComment;
-  verifierOpinionStatement: NerOperatorDocumentWithComment;
-  monitoringMethodologyPlan: NerOperatorDocumentWithComment;
-  confidentialityStatement: ConfidentialityStatement;
-  additionalDocuments: AdditionalDocuments;
+  ner?: NER;
   nerSectionsCompleted?: { [key: string]: boolean };
   nerAttachments?: { [key: string]: string };
+  nerFileVersion?: number;
+  verificationPerformed?: boolean;
+  verificationBodyId?: number;
 }

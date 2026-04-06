@@ -1,0 +1,73 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Uploaded new entrant reserve</dt>
+    <dd govukSummaryListRowValue>
+      <app-summary-download-files [files]="[nerFile]"></app-summary-download-files>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }" hidden-text="uploaded new entrant reserve file">
+        Change
+      </a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="ner.nerFiles.supportingFiles?.length > 0">
+    <dt govukSummaryListRowKey>Uploaded supporting files</dt>
+    <dd govukSummaryListRowValue>
+      <app-summary-download-files [files]="nerSupportingFiles"></app-summary-download-files>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a
+        govukLink
+        [routerLink]="['..']"
+        [state]="{ changing: true }"
+        hidden-text="uploaded supporting files for new entrant reserve">
+        Change
+      </a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="ner.notes">
+    <dt govukSummaryListRowKey>Notes</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ ner.notes }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }" hidden-text="notes for new entrant reserve">
+        Change
+      </a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Uploaded monitoring methodology plan</dt>
+    <dd govukSummaryListRowValue>
+      <app-summary-download-files [files]="[mmpFile]"></app-summary-download-files>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a
+        govukLink
+        [routerLink]="['..', 'upload-mmp']"
+        [state]="{ changing: true }"
+        hidden-text="uploaded monitoring methodology plan file">
+        Change
+      </a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="ner.mmpFiles.supportingFiles?.length > 0">
+    <dt govukSummaryListRowKey>Uploaded supporting files</dt>
+    <dd govukSummaryListRowValue>
+      <app-summary-download-files [files]="mmpSupportingFiles"></app-summary-download-files>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a
+        govukLink
+        [routerLink]="['..', 'upload-mmp']"
+        [state]="{ changing: true }"
+        hidden-text="uploaded supporting files for monitoring methodology plan">
+        Change
+      </a>
+    </dd>
+  </div>
+</dl>

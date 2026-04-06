@@ -2,13 +2,13 @@ import { utils, writeFileXLSX } from 'xlsx';
 
 import { GovukTableColumn } from 'govuk-components';
 
-import { MiReportResult, MiReportSearchResult } from 'pmrv-api';
+import { MiReportSystemResult, MiReportSystemSearchResult, MiReportUserDefinedResult } from 'pmrv-api';
 
 import { ExtendedMiReportResult } from './mi-interfaces';
 
 export const pageSize = 20;
 
-export const miReportTypeDescriptionMap: Record<MiReportSearchResult['miReportType'], string> = {
+export const miReportTypeDescriptionMap: Record<MiReportSystemSearchResult['miReportType'] | 'CUSTOM', string> = {
   LIST_OF_ACCOUNTS_USERS_CONTACTS: 'List of Accounts, Users and Contacts',
   COMPLETED_WORK: 'Completed work',
   REGULATOR_OUTSTANDING_REQUEST_TASKS: 'Regulator outstanding request tasks',
@@ -17,7 +17,7 @@ export const miReportTypeDescriptionMap: Record<MiReportSearchResult['miReportTy
   CUSTOM: 'Custom sql report',
 };
 
-export const miReportTypeLinkMap: Partial<Record<MiReportResult['reportType'], string[]>> = {
+export const miReportTypeLinkMap: Partial<Record<MiReportSystemResult['reportType'] | 'CUSTOM', string[]>> = {
   LIST_OF_ACCOUNTS_USERS_CONTACTS: ['./', 'accounts-users-contacts'],
   COMPLETED_WORK: ['./', 'completed-work'],
   REGULATOR_OUTSTANDING_REQUEST_TASKS: ['./', 'regulator-outstanding-request-tasks'],
@@ -37,7 +37,7 @@ export const createTableColumns = (columns: string[]): GovukTableColumn<any>[] =
 };
 
 export const manipulateResultsAndExportToExcel = (
-  miReportResult: ExtendedMiReportResult,
+  miReportResult: ExtendedMiReportResult | MiReportUserDefinedResult,
   filename: string,
   manipulateResultsFn?: (
     parameter: {

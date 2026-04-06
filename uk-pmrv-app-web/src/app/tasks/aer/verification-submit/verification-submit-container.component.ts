@@ -21,6 +21,8 @@ export class VerificationSubmitContainerComponent {
   aerTitle$ = this.aerService.requestMetadata$.pipe(
     map((metadata) => (metadata as AerRequestMetadata).year + ' emissions report'),
   );
+  isMaterialityUpdated$ = this.aerService.isMaterialityUpdated$ as Observable<boolean>;
+
   monitoringApproaches$ = this.aerService.getTask('monitoringApproachEmissions').pipe(
     map(
       (monitoringApproachEmissions) =>

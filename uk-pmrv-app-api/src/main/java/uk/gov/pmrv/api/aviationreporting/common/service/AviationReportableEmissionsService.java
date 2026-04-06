@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerContainer;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerTotalReportableEmissions;
@@ -14,11 +15,11 @@ import uk.gov.pmrv.api.aviationreporting.common.repository.AviationReportableEmi
 import uk.gov.pmrv.api.aviationreporting.common.transform.AviationReportableEmissionsMapper;
 import uk.gov.pmrv.api.aviationreporting.common.util.AviationAerIdentifierGenerator;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.time.Year;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,11 @@ public class AviationReportableEmissionsService {
         return aviationReportableEmissionsRepository
             .findAllByAccountIdAndYearIn(accountId, years).stream()
             .collect(Collectors.toMap(AviationReportableEmissionsEntity::getYear, REPORTABLE_EMISSIONS_MAPPER::toAviationReportableEmissionsDTO));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<AviationReportableEmissionsEntity> getReportableEmissionsForYear(Long accountId, Year year) {
+        return aviationReportableEmissionsRepository.findByAccountIdAndYear(accountId, year);
     }
     
     @Transactional

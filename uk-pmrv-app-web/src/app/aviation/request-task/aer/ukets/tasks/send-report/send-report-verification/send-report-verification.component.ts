@@ -60,13 +60,21 @@ export class SendReportVerificationComponent {
   ) {}
 
   onSubmit() {
+    let accountId: number;
+
     this.store
       .pipe(
         take(1),
         requestTaskQuery.selectRequestInfo,
-        map((info) => info.accountId),
-        switchMap((accountId) => this.accountVerificationBodyService.getVerificationBodyOfAccount(accountId)),
-        switchMap((vb) => (vb ? of(vb) : this.businessErrorService.showError(notFoundVerificationBodyError()))),
+        map((info) => {
+          accountId = info.accountId;
+
+          return accountId;
+        }),
+        switchMap(() => this.accountVerificationBodyService.getVerificationBodyOfAccount(accountId)),
+        switchMap((vb) =>
+          vb ? of(vb) : this.businessErrorService.showError(notFoundVerificationBodyError(accountId)),
+        ),
         tap((vb) => {
           const state = this.store.getState();
 

@@ -26,6 +26,7 @@ export interface AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayloadAllOf 
   aerAttachments?: { [key: string]: string };
   verificationSectionsCompleted?: { [key: string]: Array<boolean> };
   aer?: AviationAerUkEts;
+  isVerifierAerTaskContentUpdate?: boolean;
   empOriginatedData?: EmpUkEtsOriginatedData;
   verificationPerformed?: boolean;
   verificationBodyId?: number;

@@ -3,7 +3,16 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-three-quarters">
         <a routerLink="." (click)="clickAccount($event, account)" govukLink>{{ account.name }}</a>
-        <div>{{ account.emitterId }}</div>
+        <ul class="account-metadata">
+          <li class="account-metadata-item govuk-hint">
+            {{ account.emitterId }}
+          </li>
+          @if (account?.['legalEntityName']) {
+            <li class="account-metadata-item govuk-hint">
+              {{ account?.['legalEntityName'] }}
+            </li>
+          }
+        </ul>
       </div>
       <div class="govuk-grid-column-one-quarter">
         <span class="govuk-tag govuk-tag--grey status-tag">

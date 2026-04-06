@@ -11,9 +11,9 @@ import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NER;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.handler.NerApplicationSubmitInitializer;
 
 @ExtendWith(MockitoExtension.class)
 class NerApplicationSubmitInitializerTest {
@@ -24,12 +24,16 @@ class NerApplicationSubmitInitializerTest {
     @Test
     void initializePayload() {
 
-        final Request request = Request.builder().payload(NerRequestPayload.builder().build()).build();
+        final Request request = Request.builder().payload(NerRequestPayload.builder().ner(NER.builder().build()).build()).build();
+        NerRequestPayload nerRequestPayload = (NerRequestPayload) request.getPayload();
+
 
         final RequestTaskPayload requestTaskPayload = initializer.initializePayload(request);
 
         assertEquals(requestTaskPayload, NerApplicationSubmitRequestTaskPayload.builder()
             .payloadType(RequestTaskPayloadType.NER_APPLICATION_SUBMIT_PAYLOAD)
+            .ner(nerRequestPayload.getNer())
+            .nerFileVersion(1)
             .build());
     }
 

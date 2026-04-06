@@ -21,6 +21,7 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY':
       case 'AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY':
       case 'WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY':
+      case 'NOTIFICATION_SENT_TO_REGISTRY':
         return 'Information sent to Registry by system';
 
       case 'PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMITTED':
@@ -653,6 +654,11 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'Changes submitted to regulator';
       case 'WASTE_QDR_APPLICATION_COMPLETED':
         return 'Quarterly data report reviewed';
+
+      case 'NER_APPLICATION_CANCELLED':
+        return 'New entrant reserve application cancelled';
+      case 'NER_APPLICATION_SENT_TO_VERIFIER':
+        return 'Submitted to verifier';
 
       default:
         return 'Approved Application';

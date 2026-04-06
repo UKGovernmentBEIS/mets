@@ -1,15 +1,10 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-
-import { of } from 'rxjs';
 
 import { SharedModule } from '@shared/shared.module';
 import { TaskSharedModule } from '@tasks/shared/task-shared-module';
-import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { ActivatedRouteStub, BasePage } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { AerTaskComponent } from './aer-task.component';
 
@@ -17,7 +12,6 @@ describe('AerTaskComponent', () => {
   let page: Page;
   let hostComponent: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
-  let store: CommonTasksStore;
 
   const route = new ActivatedRouteStub({ taskId: 63 }, null, {
     pageTitle: 'Review follow up response to a notification',
@@ -54,9 +48,9 @@ describe('AerTaskComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule, TaskSharedModule],
+      imports: [SharedModule, TaskSharedModule],
       declarations: [AerTaskComponent, TestComponent],
-      providers: [KeycloakService, { provide: ActivatedRoute, useValue: route }],
+      providers: [{ provide: ActivatedRoute, useValue: route }],
     }).compileComponents();
   });
 
@@ -68,11 +62,6 @@ describe('AerTaskComponent', () => {
   };
 
   describe('for submit', () => {
-    beforeEach(() => {
-      store = TestBed.inject(CommonTasksStore);
-      jest.spyOn(store, 'requestTaskType$', 'get').mockReturnValue(of('AER_APPLICATION_SUBMIT'));
-    });
-
     beforeEach(() => {
       createComponent();
     });

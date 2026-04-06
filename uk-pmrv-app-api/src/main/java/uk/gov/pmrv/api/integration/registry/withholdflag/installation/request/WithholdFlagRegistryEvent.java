@@ -15,5 +15,6 @@ public class WithholdFlagRegistryEvent {
     private Boolean withholdFlag;
     private Integer year;
     private String requestId;
+    private boolean isFromSetOperatorId;
 
 }

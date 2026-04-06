@@ -26,6 +26,7 @@ export interface AviationAerUkEtsApplicationSubmittedRequestActionPayloadAllOf {
   verificationPerformed?: boolean;
   submittedEmissions?: AviationAerUkEtsSubmittedEmissions;
   verificationReport?: AviationAerUkEtsVerificationReport;
+  isVerifierAerTaskContentUpdate?: boolean;
   aerAttachments?: { [key: string]: string };
   verificationAttachments?: { [key: string]: string };
 }

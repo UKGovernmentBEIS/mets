@@ -1,10 +1,6 @@
 package uk.gov.pmrv.api.account.aviation.service.reportingstatus;
 
 
-import java.time.LocalDateTime;
-import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
@@ -16,11 +12,16 @@ import uk.gov.pmrv.api.account.aviation.repository.AviationAccountReportingStatu
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountReportingStatusRepository;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 
+import java.time.LocalDateTime;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AviationAccountReportingStatusPopulationService {
 
-	private final AviationAccountRepository aviationAccountRepository; // Standard repo
+	private final AviationAccountRepository aviationAccountRepository;
 	private final AviationAccountReportingStatusRepository reportingStatusRepository;
 	private final AviationAccountReportingStatusHistoryRepository historyRepository;
 

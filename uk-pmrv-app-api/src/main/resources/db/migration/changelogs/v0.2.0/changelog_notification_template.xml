@@ -6628,4 +6628,354 @@ Thank you.$$
 The regulator will contact you if necessary.' where name = 'BDRS2 completed';
     </sql>
     </changeSet>
+    <changeSet id="0_2_0_fix_format_for_email_assigned_notification_template" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            <![CDATA[
+            UPDATE notification_template
+            SET text = $$You have been assigned a new task. [Sign in to your account](${homeUrl}) to view this task.
+
+<#if userRoleType?? && userRoleType == 'REGULATOR' && hasWorkflowId?? && hasWorkflowId>
+Workflow ID: ${workflowId}
+
+Task name: ${requestTaskType}
+
+<#if accountName?? && accountType?? && accountType == 'INSTALLATION'>
+Installation name: ${accountName}
+</#if>
+
+<#if operatorName??>Operator name: ${operatorName}</#if>
+</#if>
+
+This is an automatic email - please do not reply to this address.$$
+            WHERE name = 'EmailAssignedTask';
+            ]]>
+
+       </sql>
+        <rollback>
+            <sql>
+                <![CDATA[
+            UPDATE notification_template
+            SET text = $$You have been assigned a new task. [Sign in to your account](${homeUrl}) to view this task.
+
+<#if userRoleType?? && userRoleType == 'REGULATOR' && hasWorkflowId?? && hasWorkflowId>
+Workflow ID: ${workflowId}, Task name: ${requestTaskType}
+<#if accountName?? && accountType?? && accountType == 'INSTALLATION'>
+, Installation name: ${accountName}
+</#if>
+<#if operatorName??>, Operator name: ${operatorName}</#if>
+</#if>
+
+This is an automatic email - please do not reply to this address.$$
+            WHERE name = 'EmailAssignedTask';
+            ]]>
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_update_email_assigned_notification_for_verifier_role_template" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            <![CDATA[
+            UPDATE notification_template
+            SET text = $$You have been assigned a new task. [Sign in to your account](${homeUrl}) to view this task.
+
+<#if userRoleType?? && (userRoleType == 'REGULATOR' || userRoleType == 'VERIFIER') && hasWorkflowId?? && hasWorkflowId>
+Workflow ID: ${workflowId}
+
+Task name: ${requestTaskType}
+
+<#if accountName?? && accountType?? && accountType == 'INSTALLATION'>
+Installation name: ${accountName}
+</#if>
+
+<#if operatorName??>Operator name: ${operatorName}</#if>
+</#if>
+
+This is an automatic email - please do not reply to this address.$$
+            WHERE name = 'EmailAssignedTask';
+            ]]>
+
+       </sql>
+        <rollback>
+            <sql>
+                <![CDATA[
+            UPDATE notification_template
+            SET text = $$You have been assigned a new task. [Sign in to your account](${homeUrl}) to view this task.
+
+<#if userRoleType?? && userRoleType == 'REGULATOR' && hasWorkflowId?? && hasWorkflowId>
+Workflow ID: ${workflowId}
+
+Task name: ${requestTaskType}
+
+<#if accountName?? && accountType?? && accountType == 'INSTALLATION'>
+Installation name: ${accountName}
+</#if>
+
+<#if operatorName??>Operator name: ${operatorName}</#if>
+</#if>
+
+This is an automatic email - please do not reply to this address.$$
+            WHERE name = 'EmailAssignedTask';
+            ]]>
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_kafka_notification_registry_id_error" author="mitzelose@unisystems.gr">
+        <sql>
+            <![CDATA[
+            WITH
+                constants (name, subject, text_content) AS (
+                    VALUES (
+                               'Registry integration notification missing registry id template',
+                               'ACTION REQUIRED - Error with integration point ''Notifications'' for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                               $$Dear Regulator,
+
+The integration point 'Notifications' has failed with error(s):
+
+**'No Registry ID exists in METS account'**
+
+for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+
+**UK ETS Registry ID**
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+
+Thank you.$$
+                           )
+                ),
+                templates_to_create (ca_name, account_type) AS (
+                    VALUES
+                        ('ENGLAND',        'INSTALLATION'),
+                        ('SCOTLAND',       'INSTALLATION'),
+                        ('WALES',          'INSTALLATION'),
+                        ('NORTHERN_IRELAND', 'INSTALLATION'),
+                        ('OPRED',          'INSTALLATION')
+                )
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            SELECT
+                nextval('notification_template_seq'),
+                c.name,
+                c.subject,
+                t.ca_name,
+                null,
+                t.account_type,
+                null,
+                null,
+                false,
+                CURRENT_TIMESTAMP,
+                c.text_content
+            FROM
+                constants c
+                    CROSS JOIN
+                templates_to_create t;
+            ]]>
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template
+                WHERE name = 'Registry integration withhold flag missing registry id template'
+                AND competent_authority IN (
+                'ENGLAND',
+                'SCOTLAND',
+                'WALES',
+                'NORTHERN_IRELAND',
+                'OPRED'
+                )
+                AND account_type IN ('INSTALLATION');
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_kafka_notification_info_error" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            <![CDATA[
+            WITH
+                constants (name, subject, text_content) AS (
+                    VALUES (
+                               'Registry integration email template consume notification registry info error template',
+                               'INFORMATION ONLY - Error with integration point ''Notifications'' for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                               $$Dear Regulator,
+
+The integration point 'Notifications' has failed with error(s):
+<#list errors?keys as errorKey>
+<#assign error = errors[errorKey]>
+- **${errorKey?replace("ERROR_", "")}** - **${error}**
+</#list>
+
+for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+
+Message ID (correlation ID): ${correlationId}
+
+Payload: ${payload!""}
+
+Thank you.$$
+                           )
+                ),
+                templates_to_create (ca_name, account_type) AS (
+                    VALUES
+                        ('ENGLAND',        'INSTALLATION'),
+                        ('SCOTLAND',       'INSTALLATION'),
+                        ('WALES',          'INSTALLATION'),
+                        ('NORTHERN_IRELAND', 'INSTALLATION'),
+                        ('OPRED',          'INSTALLATION')
+                )
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            SELECT
+                nextval('notification_template_seq'),
+                c.name,
+                c.subject,
+                t.ca_name,
+                null,
+                t.account_type,
+                null,
+                null,
+                false,
+                CURRENT_TIMESTAMP,
+                c.text_content
+            FROM
+                constants c
+                    CROSS JOIN
+                templates_to_create t;
+            ]]>
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template
+                WHERE name = 'Registry integration email template consume notification registry info error template'
+                AND competent_authority IN (
+                'ENGLAND',
+                'SCOTLAND',
+                'WALES',
+                'NORTHERN_IRELAND',
+                'OPRED'
+                )
+                AND account_type IN ('INSTALLATION');
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_kafka_notification_action_error" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            <![CDATA[
+            WITH
+                constants (name, subject, text_content) AS (
+                    VALUES (
+                               'Registry integration email template consume notification registry error template',
+                               'ACTION REQUIRED - Error with integration point ''Notifications'' for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                               $$Dear Regulator,
+
+The integration point 'Notifications' has failed with error(s):
+<#list errors?keys as errorKey>
+<#assign error = errors[errorKey]>
+- **${errorKey?replace("ERROR_", "")}** - **${error}**
+</#list>
+
+for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+
+Message ID (correlation ID): ${correlationId}
+
+Payload: ${payload!""}
+
+Thank you.$$
+                           )
+                ),
+                templates_to_create (ca_name, account_type) AS (
+                    VALUES
+                        ('ENGLAND',        'INSTALLATION'),
+                        ('SCOTLAND',       'INSTALLATION'),
+                        ('WALES',          'INSTALLATION'),
+                        ('NORTHERN_IRELAND', 'INSTALLATION'),
+                        ('OPRED',          'INSTALLATION')
+                )
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            SELECT
+                nextval('notification_template_seq'),
+                c.name,
+                c.subject,
+                t.ca_name,
+                null,
+                t.account_type,
+                null,
+                null,
+                false,
+                CURRENT_TIMESTAMP,
+                c.text_content
+            FROM
+                constants c
+                    CROSS JOIN
+                templates_to_create t;
+            ]]>
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template
+                WHERE name = 'Registry integration email template consume notification registry error template'
+                AND competent_authority IN (
+                'ENGLAND',
+                'SCOTLAND',
+                'WALES',
+                'NORTHERN_IRELAND',
+                'OPRED'
+                )
+                AND account_type IN ('INSTALLATION');
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_update_2_bdrs2_completed_notification_templates" author="dridakisc@unisystems.gr">
+        <sql>
+            update notification_template set text = 'The regulator has reviewed your stage 2 baseline data report (BDRS2) application and sent it to the UK ETS Authority.
+
+The regulator will contact you if necessary.' where name = 'BDRS2 completed';
+        </sql>
+    </changeSet>
 </databaseChangeLog>

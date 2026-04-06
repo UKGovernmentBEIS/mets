@@ -117,7 +117,8 @@ public class InstallationAccountUpdatedNotifyRegistryServiceTest {
     @Test
     void notifyRegistry_when_requestId_empty() {
 
-        InstallationAccountUpdatedRegistryEvent event = InstallationAccountUpdatedRegistryEvent.builder().accountId(1L).build();
+        InstallationAccountUpdatedRegistryEvent event = InstallationAccountUpdatedRegistryEvent.builder().accountId(1L)
+                .isFromSetOperatorId(true).build();
         InstallationAccountPermitDTO installationAccountPermitDTO = buildInstallationAccountPermitDTO();
         PermitContainer permitContainer = buildPermitContainer();
 

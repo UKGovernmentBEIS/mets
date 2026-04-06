@@ -18,4 +18,5 @@ export class AerVerifyMaterialityLevelGroupComponent {
   @Input() isEditable = false;
   @Input() materialityLevel: AviationAerMaterialityLevel;
   @Input() queryParams = {};
+  @Input() isMaterialityUpdated = false;
 }

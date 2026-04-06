@@ -10,8 +10,9 @@
  * Do not edit the class manually.
  */
 import { ExecutedRequestAction } from './executedRequestAction';
-import { MiReportResult } from './miReportResult';
 
-export interface ExecutedRequestActionsMiReportResult extends MiReportResult {
+export interface ExecutedRequestActionsMiReportResult {
+  reportType: string;
+  columnNames: Array<string>;
   results?: Array<ExecutedRequestAction>;
 }

@@ -1758,7 +1758,9 @@ describe('ItemActionHeaderPipe', () => {
         type: 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED',
       }),
     ).toEqual('Peer review disagreement submitted by John Bolt');
+  });
 
+  it('should return WASTE_QDR', () => {
     expect(
       pipe.transform({
         ...baseRequestAction,
@@ -1786,5 +1788,21 @@ describe('ItemActionHeaderPipe', () => {
         type: 'WASTE_QDR_APPLICATION_COMPLETED',
       }),
     ).toEqual('Quarterly data report reviewed by John Bolt');
+  });
+
+  it('should return NER', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_APPLICATION_CANCELLED',
+      }),
+    ).toEqual('New entrant reserve application cancelled by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_APPLICATION_SENT_TO_VERIFIER',
+      }),
+    ).toEqual('Submitted to verifier by John Bolt');
   });
 });

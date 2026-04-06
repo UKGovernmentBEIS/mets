@@ -13,6 +13,7 @@ import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
 import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
+import uk.gov.pmrv.api.integration.common.KafkaCorrelationContext;
 import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
 import uk.gov.pmrv.api.integration.registry.common.RegistryResponseErrorCode;
 import uk.gov.pmrv.api.integration.registry.setoperator.common.NotifyErrorDTO;
@@ -33,15 +34,16 @@ public class AviationSetOperatorIdResponseHandler {
     private final AviationSetOperatorIdSendToRegistryProducer registryProducer;
     private final OperatorIdErrorNotifierService operatorIdErrorNotifierService;
     private final AccountQueryService accountQueryService;
+    private final KafkaCorrelationContext kafkaCorrelationContext;
 
-    public void handleResponse(OperatorUpdateEvent event , String correlationId) {
+    public void handleResponse(OperatorUpdateEvent event) {
         try {
             OperatorUpdateEventOutcome eventOutcome = operatorIdEventOutcomeService.getAviationOperatorIdEventOutcome(event);
             registryProducer.produce(eventOutcome);
             if (IntegrationEventOutcome.ERROR.equals(eventOutcome.getOutcome())) {
                 NotifyErrorDTO notifyErrorDTO = NotifyErrorDTO.builder()
                         .outcome(eventOutcome)
-                        .correlationId(correlationId)
+                        .correlationId(kafkaCorrelationContext.get())
                         .event(event)
                         .service(NotifyRegistryUtils.AVIATION_SERVICE_KEY)
                         .build();
@@ -54,7 +56,7 @@ public class AviationSetOperatorIdResponseHandler {
         catch(Exception ex) {
             NotifyErrorDTO notifyErrorDTO = NotifyErrorDTO.builder()
                     .outcome(operatorIdEventOutcomeService.getInternalErrorEventOutcome(event))
-                    .correlationId(correlationId)
+                    .correlationId(kafkaCorrelationContext.get())
                     .event(event)
                     .service(NotifyRegistryUtils.AVIATION_SERVICE_KEY)
                     .build();

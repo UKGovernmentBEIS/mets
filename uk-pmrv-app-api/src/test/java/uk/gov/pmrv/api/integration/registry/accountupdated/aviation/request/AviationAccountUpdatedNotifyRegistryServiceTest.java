@@ -142,7 +142,7 @@ public class AviationAccountUpdatedNotifyRegistryServiceTest {
         verify(empQueryService).getEmpIdByAccountId(1L);
         verify(empQueryService).getEmpContainerById("empId");
         verify(registryProducer).produce(any(AccountUpdatingEvent.class));
-        verifyNoInteractions(requestActionService);
+
     }
 
     @Test

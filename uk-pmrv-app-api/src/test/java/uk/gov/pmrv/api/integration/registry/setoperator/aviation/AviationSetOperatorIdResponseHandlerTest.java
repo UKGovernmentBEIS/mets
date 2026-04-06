@@ -11,6 +11,7 @@ import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
 import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
 import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
+import uk.gov.pmrv.api.integration.common.KafkaCorrelationContext;
 import uk.gov.pmrv.api.integration.registry.common.RegistryResponseErrorCode;
 import uk.gov.pmrv.api.integration.registry.setoperator.common.NotifyErrorDTO;
 import uk.gov.pmrv.api.integration.registry.setoperator.common.OperatorIdErrorNotifierService;
@@ -44,10 +45,12 @@ class AviationSetOperatorIdResponseHandlerTest {
     @Mock
     private AccountQueryService accountQueryService;
 
+    @Mock
+    private KafkaCorrelationContext kafkaCorrelationContext;
+
     @Test
     void handleResponse_whenOutcomeIsSuccess_thenProducesOutcome() {
 
-        final String correlationId = "1";
         final OperatorUpdateEvent event = OperatorUpdateEvent.builder()
                 .emitterId("1")
                 .operatorId(1L)
@@ -58,7 +61,7 @@ class AviationSetOperatorIdResponseHandlerTest {
 
         when(operatorIdEventOutcomeService.getAviationOperatorIdEventOutcome(event)).thenReturn(expectedOutcome);
 
-        aviationSetOperatorIdResponseHandler.handleResponse(event, correlationId);
+        aviationSetOperatorIdResponseHandler.handleResponse(event);
 
         verify(operatorIdEventOutcomeService, times(1)).getAviationOperatorIdEventOutcome(event);
         verify(registryProducer, times(1)).produce(expectedOutcome);
@@ -78,9 +81,10 @@ class AviationSetOperatorIdResponseHandlerTest {
 
         when(operatorIdEventOutcomeService.getAviationOperatorIdEventOutcome(event)).thenThrow(new RuntimeException("Service failure"));
         when(accountQueryService.getAccountByEmitterId(any())).thenReturn(Optional.empty());
+        when(kafkaCorrelationContext.get()).thenReturn("correlation-id-123");
 
 
-        aviationSetOperatorIdResponseHandler.handleResponse(event, correlationId);
+        aviationSetOperatorIdResponseHandler.handleResponse(event);
 
         verify(operatorIdEventOutcomeService, times(1)).getAviationOperatorIdEventOutcome(event);
         verify(registryProducer, times(1)).produce(outcomeCaptor.capture());

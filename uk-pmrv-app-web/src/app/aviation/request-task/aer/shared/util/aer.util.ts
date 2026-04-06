@@ -127,7 +127,7 @@ export function getAerReviewSections(payload: AviationAerUkEtsApplicationReviewR
 
   const availableSubTasksVerifier = [
     ...getVerifierAssessmentTasks(false, payload.verificationReport?.safExists),
-    ...getAerVerifyVerifierFindings(false),
+    ...getAerVerifyVerifierFindings(false, null, payload?.isVerifierAerTaskContentUpdate),
   ]
     .filter((section) => !!section)
     .map((section) => ({

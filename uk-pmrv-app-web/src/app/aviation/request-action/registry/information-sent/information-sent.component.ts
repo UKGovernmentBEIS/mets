@@ -7,13 +7,13 @@ import { PipesModule } from '@shared/pipes/pipes.module';
 import { SharedModule } from '@shared/shared.module';
 
 import {
-  AviationReportableEmissionsOperatorDetails,
+  AviationIndividualCompanyDetails,
+  AviationLimitedCompanyDetails,
+  AviationOrganisationDetails,
+  AviationPartnershipDetails,
+  AviationRegistryIntegrationOperatorDetails,
   AviationReportableEmissionsRegistryIntegrationRequestActionPayload,
-  EmpIssuanceIndividualCompanyDetails,
-  EmpIssuanceLimitedCompanyDetails,
-  EmpIssuanceOperatorDetails,
-  EmpIssuanceOrganisationDetails,
-  EmpIssuancePartnershipDetails,
+  AviationUpdateOperatorDetails,
   EmpIssuanceRegistryIntegrationRequestActionPayload,
   EmpVariationRegistryIntegrationRequestActionPayload,
   LocationDTO,
@@ -28,12 +28,16 @@ import { RegistryActionService } from '../core/registry.service';
 
 interface ViewModel {
   expectedActionType: Array<RequestActionDTO['type']>;
-  operatorDetails: EmpIssuanceOperatorDetails & AviationReportableEmissionsOperatorDetails;
+  operatorDetails: Partial<
+    AviationRegistryIntegrationOperatorDetails &
+      AviationUpdateOperatorDetails &
+      AviationReportableEmissionsRegistryIntegrationRequestActionPayload
+  >;
   organizationDetails: Partial<
-    EmpIssuanceOrganisationDetails &
-      EmpIssuanceIndividualCompanyDetails &
-      EmpIssuanceLimitedCompanyDetails &
-      EmpIssuancePartnershipDetails
+    AviationOrganisationDetails &
+      AviationIndividualCompanyDetails &
+      AviationLimitedCompanyDetails &
+      AviationPartnershipDetails
   >;
   address: LocationDTO | LocationOffShoreDTO | LocationOnShoreDTO | LocationOnShoreStateDTO;
 }
@@ -70,8 +74,8 @@ export class InformationSentToRegistryComponent {
       operatorDetails,
       organizationDetails,
       address:
-        (organizationDetails as EmpIssuanceLimitedCompanyDetails)?.registeredAddress ??
-        (organizationDetails as EmpIssuanceIndividualCompanyDetails)?.address,
+        (organizationDetails as AviationLimitedCompanyDetails)?.registeredAddress ??
+        (organizationDetails as AviationIndividualCompanyDetails)?.address,
     };
   });
 

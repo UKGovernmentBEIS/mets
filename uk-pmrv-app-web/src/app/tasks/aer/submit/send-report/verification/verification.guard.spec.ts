@@ -1,6 +1,5 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { lastValueFrom, of } from 'rxjs';
 
@@ -9,7 +8,6 @@ import { expectBusinessErrorToBe } from '@error/testing/business-error';
 import { notFoundVerificationBodyError } from '@tasks/aer/error/business-errors';
 import { VerificationGuard } from '@tasks/aer/submit/send-report/verification/verification.guard';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
-import { KeycloakService } from 'keycloak-angular';
 
 import { AccountVerificationBodyService } from 'pmrv-api';
 
@@ -25,9 +23,8 @@ describe('VerificationGuard', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
       providers: [
-        KeycloakService,
+        provideHttpClient(),
         { provide: AccountVerificationBodyService, useValue: accountVerificationBodyService },
       ],
     });

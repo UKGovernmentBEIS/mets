@@ -66,7 +66,7 @@ public class EmailNotificationAssignedTaskService {
     private EmailNotificationTemplateData constructEmailTemplateData(String homePage, RequestTask requestTask, String role) {
         EmailNotificationTemplateData emailNotificationTemplateData = defaultEmailNotificationTemplateData(homePage, requestTask, role);
 
-        if (!RoleTypeConstants.REGULATOR.equals(role)) {
+        if (!RoleTypeConstants.REGULATOR.equals(role) && !RoleTypeConstants.VERIFIER.equals(role)) {
             return emailNotificationTemplateData;
         }
         Request request = requestTask.getRequest();
@@ -97,6 +97,9 @@ public class EmailNotificationAssignedTaskService {
             case PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT:
             case PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW:
             case PERMIT_VARIATION_APPLICATION_PEER_REVIEW:
+            case AER_APPLICATION_VERIFICATION_SUBMIT:
+            case AER_AMEND_APPLICATION_VERIFICATION_SUBMIT:
+            case AER_APPLICATION_REVIEW:
                 return true;
             default: return false;
         }
@@ -111,7 +114,22 @@ public class EmailNotificationAssignedTaskService {
             case EMP_ISSUANCE_UKETS_CONFIRM_PAYMENT:
             case EMP_ISSUANCE_CORSIA_CONFIRM_PAYMENT:
             case EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW:
-            case EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEW: return true;
+            case EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEW:
+            case EMP_VARIATION_UKETS_APPLICATION_REVIEW:
+            case EMP_VARIATION_CORSIA_APPLICATION_REVIEW:
+            case EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT:
+            case EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT:
+            case EMP_VARIATION_UKETS_APPLICATION_PEER_REVIEW:
+            case EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEW:
+            case EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_PEER_REVIEW:
+            case EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_PEER_REVIEW:
+            case AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT:
+            case AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT:
+            case AVIATION_AER_UKETS_AMEND_APPLICATION_VERIFICATION_SUBMIT:
+            case AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT:
+            case AVIATION_AER_UKETS_APPLICATION_REVIEW:
+            case AVIATION_AER_CORSIA_APPLICATION_REVIEW:
+                return true;
             default: return false;
         }
     }

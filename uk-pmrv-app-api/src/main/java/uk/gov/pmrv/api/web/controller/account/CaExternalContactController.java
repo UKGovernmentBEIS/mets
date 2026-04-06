@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.security.Authorized;
@@ -28,7 +29,12 @@ import uk.gov.pmrv.api.account.domain.dto.CaExternalContactsDTO;
 import uk.gov.pmrv.api.account.service.CaExternalContactService;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
 
+import java.util.List;
+import java.util.Set;
+
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
 import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.VERIFIER;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.BAD_REQUEST;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.FORBIDDEN;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
@@ -45,7 +51,7 @@ public class CaExternalContactController {
 
     @GetMapping
     @AuthorizedRole(roleType = REGULATOR)
-    @Operation(summary = "Retrieves the current regulator external contacts")
+    @Operation(summary = "Retrieves the current regulator external contacts",operationId = "getCaExternalContacts")
     @ApiResponse(responseCode = "200", description = OK, content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CaExternalContactsDTO.class)))
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
@@ -53,23 +59,21 @@ public class CaExternalContactController {
         return new ResponseEntity<>(caExternalContactService.getCaExternalContacts(appUser), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{id}")
-    @Authorized
-    @Operation(summary = "Returns the ca external contact with specified id")
-
+    @GetMapping(path = "/ids")
+    @AuthorizedRole(roleType = {REGULATOR, OPERATOR, VERIFIER})
+    @Operation(summary = "Returns the ca external contacts with specified ids", operationId = "getCaExternalContactsByIds")
     @ApiResponse(responseCode = "200", description = OK)
     @ApiResponse(responseCode = "400", description = BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    public ResponseEntity<CaExternalContactDTO> getCaExternalContactById(@Parameter(hidden = true) AppUser authUser, @PathVariable("id")
-    @Parameter(description = "The ca external contact id") Long id) {
-        return new ResponseEntity<>(caExternalContactService.getCaExternalContactById(authUser, id), HttpStatus.OK);
+    public ResponseEntity<List<CaExternalContactDTO>> getCaExternalContactsByIds(
+            @RequestParam("ids") @Parameter(description = "The list of ca external contact ids") Set<Long> ids) {
+        return new ResponseEntity<>(caExternalContactService.getCaExternalContactsByIds(ids), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
     @Authorized
     @Operation(summary = "Deletes the ca external contact with specified id")
-
     @ApiResponse(responseCode = "204", description = NO_CONTENT)
     @ApiResponse(responseCode = "400", description = BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
@@ -98,7 +102,6 @@ public class CaExternalContactController {
     @PatchMapping(path = "/{id}")
     @Authorized
     @Operation(summary = "Edits the ca external contact with specified id")
-
     @ApiResponse(responseCode = "204", description = NO_CONTENT)
     @ApiResponse(responseCode = "400", description = BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})

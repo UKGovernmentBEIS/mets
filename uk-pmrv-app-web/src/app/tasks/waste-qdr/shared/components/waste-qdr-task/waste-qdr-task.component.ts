@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { BreadcrumbItem } from '@core/navigation/breadcrumbs';
 import { SharedModule } from '@shared/shared.module';
 
 import { WasteQdrReturnLinkComponent } from '..';
@@ -26,9 +25,6 @@ import { WasteQdrReturnLinkComponent } from '..';
 })
 export class WasteQdrTaskComponent {
   @Input() notification: any;
-  @Input() breadcrumb: BreadcrumbItem[] | true;
-  @Input() reviewGroupTitle: any;
-  @Input() reviewGroupUrl: any;
   @Input() returnLink: string;
   @Input() returnLinkTitle: string = 'Complete quarterly data report';
   @Input() heading: string;

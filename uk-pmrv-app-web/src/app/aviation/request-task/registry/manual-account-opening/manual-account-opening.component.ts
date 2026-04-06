@@ -16,10 +16,9 @@ import { SharedModule } from '@shared/shared.module';
 
 import {
   AviationAccountViewService,
-  EmpIssuanceIndividualCompanyDetails,
-  EmpIssuanceLimitedCompanyDetails,
-  EmpIssuanceOrganisationDetails,
-  EmpIssuancePartnershipDetails,
+  AviationIndividualCompanyDetails,
+  AviationLimitedCompanyDetails,
+  AviationPartnershipDetails,
   RegistryIntegrationAccountCreateActivePermit,
   RequestTaskActionPayload,
   TasksService,
@@ -31,10 +30,7 @@ interface ViewModel {
   header: string;
   operatorDetails: RegistryIntegrationAccountCreateActivePermit;
   organizationDetails: Partial<
-    EmpIssuanceOrganisationDetails &
-      EmpIssuanceIndividualCompanyDetails &
-      EmpIssuanceLimitedCompanyDetails &
-      EmpIssuancePartnershipDetails
+    AviationIndividualCompanyDetails & AviationLimitedCompanyDetails & AviationPartnershipDetails
   >;
 }
 

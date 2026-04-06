@@ -196,7 +196,7 @@ describe('TimelineItemLinkPipe', () => {
     ]);
   });
 
-  it('should return link for sending emmisions to registry', () => {
+  it('should return link for sending emissions to registry', () => {
     requestAction.type = 'INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY';
     expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'registry', 'information-sent']);
 
@@ -210,6 +210,9 @@ describe('TimelineItemLinkPipe', () => {
     ]);
 
     requestAction.type = 'WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'registry', 'information-sent']);
+
+    requestAction.type = 'NOTIFICATION_SENT_TO_REGISTRY';
     expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'registry', 'information-sent']);
   });
 
@@ -1312,5 +1315,13 @@ describe('TimelineItemLinkPipe', () => {
 
     requestAction.type = 'WASTE_QDR_APPLICATION_COMPLETED';
     expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'waste-qdr', 'submitted']);
+  });
+
+  it('should return links for NER', () => {
+    requestAction.type = 'NER_APPLICATION_CANCELLED';
+    expect(pipe.transform(requestAction)).toBe(null);
+
+    requestAction.type = 'NER_APPLICATION_SENT_TO_VERIFIER';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'ner', 'submitted']);
   });
 });

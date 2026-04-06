@@ -13,56 +13,12 @@ import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitType;
-import uk.gov.pmrv.api.permit.domain.abbreviations.AbbreviationDefinition;
-import uk.gov.pmrv.api.permit.domain.abbreviations.Abbreviations;
-import uk.gov.pmrv.api.permit.domain.emissionpoints.EmissionPoint;
-import uk.gov.pmrv.api.permit.domain.emissionpoints.EmissionPoints;
-import uk.gov.pmrv.api.permit.domain.emissionsources.EmissionSource;
-import uk.gov.pmrv.api.permit.domain.emissionsources.EmissionSources;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.MonitoringApproachType;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.MonitoringApproaches;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.CalculationActivityData;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.CalculationActivityDataTier;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.CalculationNetCalorificValue;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.CalculationNetCalorificValueTier;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.CalculationOfCO2MonitoringApproach;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.CalculationParameterType;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.CalculationSourceStreamCategory;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.CalculationSourceStreamCategoryAppliedTier;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.CategoryType;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.measuredemissions.MeasurementOfCO2MeasuredEmissionsTier;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.measuredemissions.MeasurementOfN2OMeasuredEmissionsTier;
-import uk.gov.pmrv.api.permit.domain.regulatedactivities.CapacityUnit;
-import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivities;
-import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivity;
-import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivityType;
-import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStream;
-import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamType;
-import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreams;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.reporting.domain.Aer;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.MonitoringApproachEmissions;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.MonitoringApproachMonitoringTiers;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.PermitOriginatedData;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.calculation.CalculationActivityDataMonitoringTier;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.calculation.CalculationNetCalorificValueMonitoringTier;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.calculation.CalculationOfCO2Emissions;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.calculation.CalculationSourceStreamEmission;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.co2.MeasurementCO2EmissionPointEmission;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.co2.MeasurementOfCO2Emissions;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.n2o.MeasurementN2OEmissionPointEmission;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.n2o.MeasurementOfN2OEmissions;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.pfc.CalculationOfPfcEmissions;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.pfc.CalculationPfcParameterMonitoringTier;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.pfc.PermitOriginatedCalculationPfcParameterMonitoringTier;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.pfc.PfcSourceStreamEmission;
-import uk.gov.pmrv.api.reporting.domain.regulatedactivities.AerRegulatedActivities;
-import uk.gov.pmrv.api.reporting.domain.regulatedactivities.AerRegulatedActivity;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
@@ -77,15 +33,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.aer.service.init.AerRe
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.service.init.AerSectionInitializationService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.service.init.AerSourceStreamsInitializationService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.MonitoringPlanVersion;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestInfo;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.service.PermitVariationRequestQueryService;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.Year;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -155,6 +106,8 @@ class AerApplicationSubmitInitializerTest {
                 .permitOriginatedData(PermitOriginatedData.builder().permitType(PermitType.GHGE).build())
                 .monitoringPlanVersions(List.of(MonitoringPlanVersion.builder().build()))
                 .isPostALRSectionRemoval(true)
+                .sm3UnitEnabled(true)
+                .isVerifierAerTaskContentUpdate(true)
                 .build())
             .metadata(AerRequestMetadata.builder().year(reportingYear).build()).build();
 
@@ -167,6 +120,8 @@ class AerApplicationSubmitInitializerTest {
             .monitoringPlanVersions(((AerRequestPayload) request.getPayload()).getMonitoringPlanVersions())
             .reportingYear(reportingYear)
             .isPostALRSectionRemoval(true)
+            .sm3UnitEnabled(true)
+            .isVerifierAerTaskContentUpdate(true)
             .build();
 
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(accountId)).thenReturn(installationOperatorDetails);

@@ -59,7 +59,7 @@ describe('ConfidentialitySummaryTemplateComponent', () => {
         ['Yes', 'Change'],
       ],
       [
-        'Emission data you are requesting should not be published and reasons why disclosure of this data would harm your commercial interests',
+        'Emissions data you are requesting should not be published and reasons why disclosure of this data would harm your commercial interests',
         ['expl', 'Change'],
       ],
       ['Supporting documents', ['totalEmissionsFile.png', 'Change']],

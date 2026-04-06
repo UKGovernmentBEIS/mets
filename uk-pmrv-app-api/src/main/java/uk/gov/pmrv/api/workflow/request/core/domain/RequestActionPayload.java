@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.integration.registry.accountupdated.aviation.request.requestaction.EmpVariationRegistryIntegrationRequestActionPayload;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.requestaction.NotificationRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.request.requestaction.AviationReportableEmissionsRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.integration.registry.withholdflag.installation.request.requestaction.WithholdingOfAllowancesRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -119,12 +120,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIComp
 import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIRegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionOperatorRespondedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationAcceptedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationEndedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationProceededToAuthorityRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationRejectedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationReturnedForAmendsRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permanentcessation.domain.PermanentCessationApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationDeemedWithdrawnRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationGrantedRequestActionPayload;
@@ -272,13 +268,9 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload.class, value = "NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = NonComplianceDetailsAmendedRequestActionPayload.class, value = "NON_COMPLIANCE_DETAILS_AMENDED_PAYLOAD"),
 
-                @DiscriminatorMapping(schema = NerApplicationSubmittedRequestActionPayload.class, value = "NER_APPLICATION_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = NERApplicationSubmittedRequestActionPayload.class, value = "NER_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "NER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
-                @DiscriminatorMapping(schema = NerApplicationReturnedForAmendsRequestActionPayload.class, value = "NER_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
-                @DiscriminatorMapping(schema = NerApplicationEndedRequestActionPayload.class, value = "NER_APPLICATION_ENDED_PAYLOAD"),
-                @DiscriminatorMapping(schema = NerApplicationProceededToAuthorityRequestActionPayload.class, value = "NER_APPLICATION_PROCEEDED_TO_AUTHORITY_PAYLOAD"),
-                @DiscriminatorMapping(schema = NerApplicationAcceptedRequestActionPayload.class, value = "NER_APPLICATION_ACCEPTED_PAYLOAD"),
-                @DiscriminatorMapping(schema = NerApplicationRejectedRequestActionPayload.class, value = "NER_APPLICATION_REJECTED_PAYLOAD"),
+
 
                 @DiscriminatorMapping(schema = DoalApplicationProceededToAuthorityRequestActionPayload.class, value = "DOAL_APPLICATION_PROCEEDED_TO_AUTHORITY_PAYLOAD"),
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "DOAL_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
@@ -429,7 +421,8 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = AviationAerCorsia3YearPeriodOffsettingApplicationSubmittedRequestActionPayload.class, value = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = AviationDoECorsiaSubmittedRequestActionPayload.class, value = "AVIATION_DOE_CORSIA_SUBMITTED_PAYLOAD"),
-                @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "AVIATION_DOE_CORSIA_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD")
+                @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "AVIATION_DOE_CORSIA_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = NotificationRegistryIntegrationRequestActionPayload.class, value = "NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD")
         },
         discriminatorProperty = "payloadType")
 
@@ -528,13 +521,8 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = NonComplianceDetailsAmendedRequestActionPayload.class, name = "NON_COMPLIANCE_DETAILS_AMENDED_PAYLOAD"),
 
 
-        @JsonSubTypes.Type(value = NerApplicationSubmittedRequestActionPayload.class, name = "NER_APPLICATION_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = NERApplicationSubmittedRequestActionPayload.class, name = "NER_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "NER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
-        @JsonSubTypes.Type(value = NerApplicationReturnedForAmendsRequestActionPayload.class, name = "NER_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
-        @JsonSubTypes.Type(value = NerApplicationEndedRequestActionPayload.class, name = "NER_APPLICATION_ENDED_PAYLOAD"),
-        @JsonSubTypes.Type(value = NerApplicationProceededToAuthorityRequestActionPayload.class, name = "NER_APPLICATION_PROCEEDED_TO_AUTHORITY_PAYLOAD"),
-        @JsonSubTypes.Type(value = NerApplicationAcceptedRequestActionPayload.class, name = "NER_APPLICATION_ACCEPTED_PAYLOAD"),
-        @JsonSubTypes.Type(value = NerApplicationRejectedRequestActionPayload.class, name = "NER_APPLICATION_REJECTED_PAYLOAD"),
 
         @JsonSubTypes.Type(value = DoalApplicationProceededToAuthorityRequestActionPayload.class, name = "DOAL_APPLICATION_PROCEEDED_TO_AUTHORITY_PAYLOAD"),
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "DOAL_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
@@ -689,7 +677,9 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = AviationAerCorsia3YearPeriodOffsettingApplicationSubmittedRequestActionPayload.class, name = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED_PAYLOAD"),
 
         @JsonSubTypes.Type(value = AviationDoECorsiaSubmittedRequestActionPayload.class, name = "AVIATION_DOE_CORSIA_SUBMITTED_PAYLOAD"),
-        @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "AVIATION_DOE_CORSIA_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD")
+        @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "AVIATION_DOE_CORSIA_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = NotificationRegistryIntegrationRequestActionPayload.class, name = "NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD")
+
 
 })
 @Data

@@ -6,36 +6,40 @@
     </dt>
     <dd govukSummaryListRowValue>{{ confidentialityData.totalEmissionsPublished ? 'Yes' : 'No' }}</dd>
 
-    <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
-    </dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
   </div>
 
-  <ng-container *ngIf="confidentialityData.totalEmissionsPublished === true">
+  @if (confidentialityData.totalEmissionsPublished === true) {
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>
-        Emission data you are requesting should not be published and reasons why disclosure of this data would harm your
-        commercial interests
+        Emissions data you are requesting should not be published and reasons why disclosure of this data would harm
+        your commercial interests
       </dt>
       <dd govukSummaryListRowValue class="pre-wrap">{{ confidentialityData?.totalEmissionsExplanation }}</dd>
-
-      <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
-      </dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
     </div>
-
-    <div govukSummaryListRow *ngIf="totalEmissionsFiles?.length > 0">
-      <dt govukSummaryListRowKey>Supporting documents</dt>
-
-      <dd govukSummaryListRowValue>
-        <app-summary-download-files [files]="totalEmissionsFiles"></app-summary-download-files>
-      </dd>
-
-      <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
-      </dd>
-    </div>
-  </ng-container>
+    @if (totalEmissionsFiles?.length > 0) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Supporting documents</dt>
+        <dd govukSummaryListRowValue>
+          <app-summary-download-files [files]="totalEmissionsFiles"></app-summary-download-files>
+        </dd>
+        @if (isEditable) {
+          <dd govukSummaryListRowActions>
+            <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+          </dd>
+        }
+      </div>
+    }
+  }
 </dl>
 
 <h2 class="govuk-heading-m">Aggregated state pair data</h2>
@@ -44,34 +48,38 @@
     <dt govukSummaryListRowKey>Do you want to request ICAO not to publish your aggregated state pair data?</dt>
     <dd govukSummaryListRowValue>{{ confidentialityData.aggregatedStatePairDataPublished ? 'Yes' : 'No' }}</dd>
 
-    <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
-    </dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
   </div>
 
-  <ng-container *ngIf="confidentialityData.aggregatedStatePairDataPublished === true">
+  @if (confidentialityData.aggregatedStatePairDataPublished === true) {
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>
         State pair data you are requesting should not be published and reasons why disclosure of this data would harm
         your commercial interests
       </dt>
       <dd govukSummaryListRowValue class="pre-wrap">{{ confidentialityData?.aggregatedStatePairDataExplanation }}</dd>
-
-      <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
-      </dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
     </div>
-
-    <div govukSummaryListRow *ngIf="aggregatedStatePairDataFiles?.length > 0">
-      <dt govukSummaryListRowKey>Supporting documents</dt>
-
-      <dd govukSummaryListRowValue>
-        <app-summary-download-files [files]="aggregatedStatePairDataFiles"></app-summary-download-files>
-      </dd>
-
-      <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
-      </dd>
-    </div>
-  </ng-container>
+    @if (aggregatedStatePairDataFiles?.length > 0) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Supporting documents</dt>
+        <dd govukSummaryListRowValue>
+          <app-summary-download-files [files]="aggregatedStatePairDataFiles"></app-summary-download-files>
+        </dd>
+        @if (isEditable) {
+          <dd govukSummaryListRowActions>
+            <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+          </dd>
+        }
+      </div>
+    }
+  }
 </dl>

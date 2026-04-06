@@ -70,13 +70,13 @@ class OperatorUserManagementServiceTest {
 		List<AuthorityRoleDTO> authorityRoleList = List.of(
 				AuthorityRoleDTO.builder().userId(userId2).authorityStatus(AuthorityStatus.ACTIVE).build());
 
-		when(operatorAuthorityQueryService.findOperatorUserAuthorityRoleListByAccount(accountId)).thenReturn(authorityRoleList);
+		when(operatorAuthorityQueryService.findOperatorUserAuthoritiesListByAccount(accountId)).thenReturn(authorityRoleList);
 
 		// Invoke
 		service.getOperatorUserByAccountAndId(accountId, userId2);
 
 		// Verify
-		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthorityRoleListByAccount(accountId);
+		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthoritiesListByAccount(accountId);
 		verify(operatorUserAuthService, times(1)).getOperatorUserById(userId2);
 	}
 
@@ -88,7 +88,7 @@ class OperatorUserManagementServiceTest {
 		List<AuthorityRoleDTO> authorityRoleList = List.of(
 				AuthorityRoleDTO.builder().userId(userId1).authorityStatus(AuthorityStatus.ACTIVE).build());
 
-		when(operatorAuthorityQueryService.findOperatorUserAuthorityRoleListByAccount(accountId)).thenReturn(authorityRoleList);
+		when(operatorAuthorityQueryService.findOperatorUserAuthoritiesListByAccount(accountId)).thenReturn(authorityRoleList);
 
 		// Invoke
 		BusinessException businessException = assertThrows(BusinessException.class,
@@ -96,7 +96,7 @@ class OperatorUserManagementServiceTest {
 
 		// Verify
 		assertEquals(ErrorCode.AUTHORITY_USER_NOT_RELATED_TO_ACCOUNT, businessException.getErrorCode());
-		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthorityRoleListByAccount(accountId);
+		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthoritiesListByAccount(accountId);
 	}
 
 	@Test
@@ -104,7 +104,7 @@ class OperatorUserManagementServiceTest {
 		final Long accountId = 1L;
 		final String userId = "userId";
 
-		when(operatorAuthorityQueryService.findOperatorUserAuthorityRoleListByAccount(accountId)).thenReturn(new ArrayList<>());
+		when(operatorAuthorityQueryService.findOperatorUserAuthoritiesListByAccount(accountId)).thenReturn(new ArrayList<>());
 
 		// Invoke
 		BusinessException businessException = assertThrows(BusinessException.class,
@@ -112,7 +112,7 @@ class OperatorUserManagementServiceTest {
 
 		// Verify
 		assertEquals(ErrorCode.AUTHORITY_USER_NOT_RELATED_TO_ACCOUNT, businessException.getErrorCode());
-		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthorityRoleListByAccount(accountId);
+		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthoritiesListByAccount(accountId);
 	}
 
 	@Test
@@ -123,13 +123,13 @@ class OperatorUserManagementServiceTest {
 				AuthorityRoleDTO.builder().userId(userId2).authorityStatus(AuthorityStatus.ACTIVE).build());
 		OperatorUserDTO operatorUserDTO = buildOperatorUserDTO();
 
-		when(operatorAuthorityQueryService.findOperatorUserAuthorityRoleListByAccount(accountId)).thenReturn(authorityRoleList);
+		when(operatorAuthorityQueryService.findOperatorUserAuthoritiesListByAccount(accountId)).thenReturn(authorityRoleList);
 
 		// Invoke
 		service.updateOperatorUserByAccountAndId(accountId, userId2, operatorUserDTO);
 
 		// Verify
-		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthorityRoleListByAccount(accountId);
+		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthoritiesListByAccount(accountId);
 		verify(operatorUserAuthService, times(1)).updateUser(operatorUserDTO);
 	}
 
@@ -142,7 +142,7 @@ class OperatorUserManagementServiceTest {
 				AuthorityRoleDTO.builder().userId(userId1).authorityStatus(AuthorityStatus.ACTIVE).build());
 		OperatorUserDTO operatorUserDTO = buildOperatorUserDTO();
 
-		when(operatorAuthorityQueryService.findOperatorUserAuthorityRoleListByAccount(accountId)).thenReturn(authorityRoleList);
+		when(operatorAuthorityQueryService.findOperatorUserAuthoritiesListByAccount(accountId)).thenReturn(authorityRoleList);
 
 		// Invoke
 		BusinessException businessException = assertThrows(BusinessException.class,
@@ -150,7 +150,7 @@ class OperatorUserManagementServiceTest {
 
 		// Verify
 		assertEquals(ErrorCode.AUTHORITY_USER_NOT_RELATED_TO_ACCOUNT, businessException.getErrorCode());
-		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthorityRoleListByAccount(accountId);
+		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthoritiesListByAccount(accountId);
 		verify(operatorUserAuthService, never()).updateUser(Mockito.any(OperatorUserDTO.class));
 	}
 
@@ -160,7 +160,7 @@ class OperatorUserManagementServiceTest {
 		final String userId2 = "userId2";
 		OperatorUserDTO operatorUserDTO = buildOperatorUserDTO();
 
-		when(operatorAuthorityQueryService.findOperatorUserAuthorityRoleListByAccount(accountId)).thenReturn(new ArrayList<>());
+		when(operatorAuthorityQueryService.findOperatorUserAuthoritiesListByAccount(accountId)).thenReturn(new ArrayList<>());
 
 		// Invoke
 		BusinessException businessException = assertThrows(BusinessException.class,
@@ -168,7 +168,7 @@ class OperatorUserManagementServiceTest {
 
 		// Verify
 		assertEquals(ErrorCode.AUTHORITY_USER_NOT_RELATED_TO_ACCOUNT, businessException.getErrorCode());
-		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthorityRoleListByAccount(accountId);
+		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthoritiesListByAccount(accountId);
 		verify(operatorUserAuthService, never()).updateUser(Mockito.any(OperatorUserDTO.class));
 	}
 	
@@ -179,13 +179,13 @@ class OperatorUserManagementServiceTest {
 		List<AuthorityRoleDTO> authorityRoleList = List.of(
 				AuthorityRoleDTO.builder().userId(userId).authorityStatus(AuthorityStatus.ACTIVE).build());
 
-		when(operatorAuthorityQueryService.findOperatorUserAuthorityRoleListByAccount(accountId)).thenReturn(authorityRoleList);
+		when(operatorAuthorityQueryService.findOperatorUserAuthoritiesListByAccount(accountId)).thenReturn(authorityRoleList);
 
 		// Invoke
 		service.resetOperator2Fa(accountId, userId);
 
 		// Verify
-		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthorityRoleListByAccount(accountId);
+		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthoritiesListByAccount(accountId);
 		verify(userSecuritySetupService, times(1)).resetUser2Fa(userId);
 	}
 	
@@ -197,13 +197,13 @@ class OperatorUserManagementServiceTest {
 		List<AuthorityRoleDTO> authorityRoleList = List.of(
 				AuthorityRoleDTO.builder().userId(userId1).authorityStatus(AuthorityStatus.ACTIVE).build());
 
-		when(operatorAuthorityQueryService.findOperatorUserAuthorityRoleListByAccount(accountId)).thenReturn(authorityRoleList);
+		when(operatorAuthorityQueryService.findOperatorUserAuthoritiesListByAccount(accountId)).thenReturn(authorityRoleList);
 
 		BusinessException businessException = assertThrows(BusinessException.class,
 				() -> service.resetOperator2Fa(accountId, userId2));
 
 		assertEquals(ErrorCode.AUTHORITY_USER_NOT_RELATED_TO_ACCOUNT, businessException.getErrorCode());
-		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthorityRoleListByAccount(accountId);
+		verify(operatorAuthorityQueryService, times(1)).findOperatorUserAuthoritiesListByAccount(accountId);
 		verify(userSecuritySetupService, never()).resetUser2Fa(anyString());
 	}
 	

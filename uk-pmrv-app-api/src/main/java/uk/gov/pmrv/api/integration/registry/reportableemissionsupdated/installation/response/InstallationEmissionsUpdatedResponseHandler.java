@@ -8,10 +8,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.account.domain.Account;
-import uk.gov.pmrv.api.account.service.AccountQueryService;
+import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
+import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
+
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.AccountEmissionsUpdatedResponseEvent;
 import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
 import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
@@ -35,7 +38,7 @@ public class InstallationEmissionsUpdatedResponseHandler {
     private static final String SERVICE_KEY = "installation";
     private static final String INTEGRATION_POINT_KEY = "reportable-emissions-updated";
 
-    private final AccountQueryService accountQueryService;
+    private final InstallationAccountQueryService installationAccountQueryService;
     private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
     private final InstallationRegistryIntegrationEmailProperties emailProperties;
 
@@ -82,7 +85,13 @@ public class InstallationEmissionsUpdatedResponseHandler {
     private void notifyRegulator(AccountEmissionsUpdatedResponseEvent event, String correlationId,
                                  Map<String, String> errorsForMail, PmrvNotificationTemplateName templateName) {
         AccountEmissionsUpdatedRequestEvent initialEvent = event.getEvent();
-        Account account = accountQueryService.findAccountByRegistryId(initialEvent.getRegistryId());
+        Integer registryId = initialEvent.getRegistryId();
+
+        if (registryId == null) {
+            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Registry Id is null");
+        }
+
+        InstallationAccount account = installationAccountQueryService.getSingleLiveAccountByRegistryId(Integer.valueOf(registryId));
 
         final Map<String, Object> templateParams = new HashMap<>();
         templateParams.put(PmrvEmailNotificationTemplateConstants.EMITTER_ID, account.getEmitterId());

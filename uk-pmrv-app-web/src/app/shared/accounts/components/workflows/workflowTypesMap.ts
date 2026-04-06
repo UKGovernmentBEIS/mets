@@ -5,6 +5,7 @@ export const workflowTypesDomainMap: Record<string, Record<string, RequestDetail
     'Account creation': ['INSTALLATION_ACCOUNT_OPENING'],
     'Batch variation': ['PERMIT_REISSUE'],
     'HSE target increase': ['HSE_TI'],
+    'New entrant reserve': ['NER'],
     'Non-compliance': ['NON_COMPLIANCE'],
     Notification: ['PERMIT_NOTIFICATION'],
     'Permanent cessation': ['PERMANENT_CESSATION'],

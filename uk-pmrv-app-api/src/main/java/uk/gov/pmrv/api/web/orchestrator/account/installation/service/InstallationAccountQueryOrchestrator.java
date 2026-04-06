@@ -79,7 +79,7 @@ public class InstallationAccountQueryOrchestrator {
 
     protected FileInfoDTO getLatestBdrFile(Long accountId) {
         Optional<AccountFileAttachmentDTO> latestBdr = accountFileAttachmentService.getLatestFinalizedFileByWorkflowsAndWorkflowSubTypeAndAccountId(accountId,
-            Set.of(AccountFileAttachmentWorkflow.BDR),
+            Set.of(AccountFileAttachmentWorkflow.BDR, AccountFileAttachmentWorkflow.BDRS2),
             AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT);
 
         if (latestBdr.isEmpty() || !fileAttachmentService.fileAttachmentExist(latestBdr.get().getFileUuid())) {

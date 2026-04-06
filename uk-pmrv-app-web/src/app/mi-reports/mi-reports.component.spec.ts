@@ -19,6 +19,8 @@ describe('MiReportsComponent', () => {
     { id: 3, miReportType: 'REGULATOR_OUTSTANDING_REQUEST_TASKS' },
   ];
 
+  const expectedMiReports = [...miReports, { miReportType: 'CUSTOM' }];
+
   class Page extends BasePage<MiReportsComponent> {
     get cells(): HTMLTableCellElement[] {
       return Array.from(this.queryAll<HTMLTableCellElement>('td'));
@@ -50,9 +52,9 @@ describe('MiReportsComponent', () => {
 
   it('should create table with expected content', () => {
     const cells = page.cells;
-    expect(cells.length).toEqual(3);
+    expect(cells.length).toEqual(4);
     const reportDescriptions = cells.map((c) => c.textContent);
-    const expectedDescriptions = miReports
+    const expectedDescriptions = expectedMiReports
       .map((r) => miReportTypeDescriptionMap[r.miReportType])
       .sort((a, b) => a.localeCompare(b));
 

@@ -17,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class BDRS2Files {
 
+    //main BDRS2 file. Whenever a new BDRS2 file is uploaded (from operator/regulator), this will be updated
     @NotNull
     private UUID file;
 

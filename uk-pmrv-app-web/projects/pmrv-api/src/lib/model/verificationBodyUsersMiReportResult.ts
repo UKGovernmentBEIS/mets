@@ -9,9 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { MiReportResult } from './miReportResult';
 import { VerificationBodyUser } from './verificationBodyUser';
 
-export interface VerificationBodyUsersMiReportResult extends MiReportResult {
+export interface VerificationBodyUsersMiReportResult {
+  reportType: string;
+  columnNames: Array<string>;
   results?: Array<VerificationBodyUser>;
 }

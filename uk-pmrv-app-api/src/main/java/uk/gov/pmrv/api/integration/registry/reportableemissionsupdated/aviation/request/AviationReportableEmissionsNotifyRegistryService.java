@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.request;
 
-import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -11,6 +10,8 @@ import org.springframework.util.ObjectUtils;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.configuration.domain.ConfigurationDTO;
 import uk.gov.netz.api.configuration.service.ConfigurationService;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationReportableEmissionsEntity;
@@ -22,17 +23,18 @@ import uk.gov.pmrv.api.common.reporting.domain.ReportableEmissionsUpdatedEvent;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.AccountEmissionsUpdatedRequestEvent;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.request.requestaction.AviationReportableEmissionsAddRequestActionService;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.response.AviationRegistryIntegrationEmailProperties;
-import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
-import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
 import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.service.AviationAerRequestQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.common.domain.AviationAerUkEtsRequestPayload;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
@@ -40,15 +42,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.REQUEST_LOG_FORMAT;
 import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.MISSING_REGISTRY_ID_ERROR_MESSAGE;
+import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.REQUEST_LOG_FORMAT;
 import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.capitalizeFirstLetter;
 
 @Log4j2
 @Service
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "registry.integration.emissions.updated.enabled", havingValue = "true", matchIfMissing = false)
-class AviationReportableEmissionsNotifyRegistryService {
+public class AviationReportableEmissionsNotifyRegistryService {
 
 	private static final String SERVICE_KEY = "aviation";
 	private static final String INTEGRATION_POINT_KEY = "reportable-emissions-updated";
@@ -92,6 +94,14 @@ class AviationReportableEmissionsNotifyRegistryService {
 			return;
 		}
 
+		if (event.isHistorical()) {
+			if (aerRequest.isPresent() && areHistoricalConditionsSatisfied(aerRequest.get(), aerRequestPayload, event)) {
+				event.setRequestId(aerRequest.get().getId());
+				notifyRegistry(event, account, event.getRequestId());
+			}
+			return;
+		}
+
 		if (aerRequest.isEmpty()) {
 			log.error(REQUEST_LOG_FORMAT,
 					SERVICE_KEY,
@@ -126,6 +136,23 @@ class AviationReportableEmissionsNotifyRegistryService {
 		return reportingPeriodConditionsAreSatisfied(event);
 	}
 
+
+	private boolean areHistoricalConditionsSatisfied(Request aerRequest,
+													 AviationAerUkEtsRequestPayload aerRequestPayload,
+													 AviationReportableEmissionsUpdatedEvent event) {
+		boolean isVerificationPerformed = aerRequestPayload.isVerificationPerformed();
+		boolean isInProgress = RequestStatus.IN_PROGRESS.equals(aerRequest.getStatus());
+
+		if (!isVerificationPerformed && isInProgress) {
+			log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
+					INTEGRATION_POINT_KEY,
+					"Set operator id emissions are not sent to ETS Registry: non-verified AER is still in progress (not yet completed)");
+			return false;
+		}
+
+		return setOperatorReportingPeriodConditionsAreSatisfied(event,aerRequest);
+	}
+
 	private boolean isExempt(AviationReportableEmissionsUpdatedEvent event){
 		AviationReportableEmissionsEntity aviationReportableEmissions =
 				aviationReportableEmissionsRepository.findByAccountIdAndYear(event.getAccountId(), event.getYear())
@@ -143,8 +170,8 @@ class AviationReportableEmissionsNotifyRegistryService {
 		return false;
 	}
 
-	private boolean reportingPeriodConditionsAreSatisfied(ReportableEmissionsUpdatedEvent event) {
-		if (!event.getYear().equals(Year.now().minusYears(1))) {
+	private boolean reportingPeriodConditionsAreSatisfied(AviationReportableEmissionsUpdatedEvent event) {
+		if (!event.getYear().equals(Year.now().minusYears(1)) && !event.isHistorical()) {
 			log.info(REQUEST_LOG_FORMAT,
 					SERVICE_KEY,
 					event.getAccountId(),
@@ -203,6 +230,67 @@ class AviationReportableEmissionsNotifyRegistryService {
 		}
 	}
 
+	private boolean setOperatorReportingPeriodConditionsAreSatisfied(AviationReportableEmissionsUpdatedEvent event,Request aerRequest) {
+
+		Optional<ConfigurationDTO> reportingPeriodFromConfiguration = configurationService
+				.getConfigurationByKey(AVIATION_REPORTABLE_PERIOD_START_KEY);
+		Optional<ConfigurationDTO> reportingPeriodToConfiguration = configurationService
+				.getConfigurationByKey(AVIATION_REPORTABLE_PERIOD_END_KEY);
+
+		if (reportingPeriodFromConfiguration.isEmpty()) {
+			log.error(REQUEST_LOG_FORMAT,
+					SERVICE_KEY,
+					event.getAccountId(),
+					INTEGRATION_POINT_KEY,
+					"Cannot send emissions to ETS Registry because no configuration for the aer.installation.reporting-period.from property has been found");
+
+			throw new BusinessException(
+					MetsErrorCode.INTEGRATION_REGISTRY_EMISSIONS_AVIATION_REPORTING_PERIOD_FROM_NOT_FOUND,
+					event);
+		}
+
+		if (reportingPeriodToConfiguration.isEmpty()) {
+			log.error(REQUEST_LOG_FORMAT,
+					SERVICE_KEY,
+					event.getAccountId(),
+					INTEGRATION_POINT_KEY,
+					"Cannot send emissions to ETS Registry because no configuration for the aer.installation.reporting-period.to property has been found");
+
+			throw new BusinessException(
+					MetsErrorCode.INTEGRATION_REGISTRY_EMISSIONS_AVIATION_REPORTING_PERIOD_TO_NOT_FOUND,
+					event);
+		}
+
+		int reportingYear = event.getYear().getValue() + 1;
+
+		MonthDay reportingPeriodFrom = MonthDay.parse(reportingPeriodFromConfiguration.get().getValue().toString(),
+				DateTimeFormatter.ofPattern("dd/MM"));
+		MonthDay reportingPeriodTo = MonthDay.parse(reportingPeriodToConfiguration.get().getValue().toString(),
+				DateTimeFormatter.ofPattern("dd/MM"));
+
+		LocalDate periodFrom = reportingPeriodFrom.atYear(reportingYear);
+		LocalDate periodTo = reportingPeriodTo.atYear(reportingYear);
+		LocalDate requestDate;
+		if(RequestStatus.IN_PROGRESS.equals(aerRequest.getStatus())) {
+			requestDate = LocalDate.from(aerRequest.getSubmissionDate());
+		}
+		else {
+			requestDate = LocalDate.from(aerRequest.getEndDate());
+		}
+
+		if ((!requestDate.isBefore(periodFrom)) && (!requestDate.isAfter(periodTo))) {
+			return true;
+		} else {
+			log.info(REQUEST_LOG_FORMAT,
+					SERVICE_KEY,
+					event.getAccountId(),
+					INTEGRATION_POINT_KEY,
+					String.format("Set operator id emissions are not sent to ETS Registry: AER year %d is not within the reporting period of year %d",
+							event.getYear().getValue(), reportingYear));
+			return false;
+		}
+	}
+
 	private void notifyRegistry(AviationReportableEmissionsUpdatedEvent event, AviationAccountInfoDTO aviationAccountInfoDTO, String requestId) {
 		Long accountId = event.getAccountId();
 
@@ -237,7 +325,9 @@ class AviationReportableEmissionsNotifyRegistryService {
 		reportableEmissionsSendToRegistryProducer.produce(accountEmissionsUpdatedRequestEvent,
 				aviationAccountEmissionsUpdatedKafkaTemplate);
 
-		aviationReportableEmissionsAddRequestActionService.addRequestAction(requestId, accountId, event);
+		if(!event.isHistorical()) {
+			aviationReportableEmissionsAddRequestActionService.addRequestAction(requestId, accountId, event);
+		}
 
 		log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
 				INTEGRATION_POINT_KEY, "Emissions sent to registry " + accountEmissionsUpdatedRequestEvent);

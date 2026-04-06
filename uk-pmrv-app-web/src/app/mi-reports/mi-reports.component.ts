@@ -5,7 +5,7 @@ import { BehaviorSubject, combineLatest, map, Observable, shareReplay } from 'rx
 
 import { GovukTableColumn } from 'govuk-components';
 
-import { MiReportSearchResult } from 'pmrv-api';
+import { MiReportSystemSearchResult } from 'pmrv-api';
 
 import { createTablePage, miReportTypeDescriptionMap, miReportTypeLinkMap } from './core/mi-report';
 
@@ -23,7 +23,9 @@ export class MiReportsComponent {
 
   currentPage$ = new BehaviorSubject<number>(1);
 
-  private data$: Observable<MiReportSearchResult[]> = this.route.data.pipe(map((data) => data.miReports));
+  private data$: Observable<MiReportSystemSearchResult[]> = this.route.data.pipe(
+    map((data) => [...data.miReports, { miReportType: 'CUSTOM' }]),
+  );
 
   currentPageData$ = combineLatest([this.data$, this.currentPage$]).pipe(
     map(([data, currentPage]) =>

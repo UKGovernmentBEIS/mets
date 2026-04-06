@@ -2,7 +2,6 @@ package uk.gov.pmrv.api.integration.registry.setoperator.common;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -17,7 +16,7 @@ import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.integration.registry.accountcreated.common.validation.SetOperatorIdResponseValidator;
-import uk.gov.pmrv.api.integration.registry.accountupdated.aviation.request.AviationAccountUpdatedRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.setoperator.aviation.AviationSetOperatorIdAccountUpdateService;
 import uk.gov.pmrv.api.integration.registry.setoperator.aviation.AviationSetOperatorIdExemptStatusUpdateService;
 import uk.gov.pmrv.api.integration.registry.setoperator.installation.InstallationSetOperatorIdWithholdFlagUpdateService;
 
@@ -54,6 +53,12 @@ class OperatorIdEventOutcomeServiceTest {
     @Mock
     private InstallationSetOperatorIdWithholdFlagUpdateService installationSetOperatorIdWithholdFlagUpdateService;
 
+
+    @Mock
+    private AviationSetOperatorIdAccountUpdateService aviationSetOperatorIdAccountUpdateService;
+
+
+
     @Test
     void getAviationOperatorIdEventOutcome_whenValidationSucceedsAndAccountExists_setsRegistryIdAndReturnsSuccessOutcome() {
         final String emitterId = "1";
@@ -73,9 +78,9 @@ class OperatorIdEventOutcomeServiceTest {
         assertThat(result.getOutcome()).isEqualTo(IntegrationEventOutcome.SUCCESS);
         assertThat(result.getErrors()).isEmpty();
 
-        ArgumentCaptor<AviationAccountUpdatedRegistryEvent> eventCaptor =
-                ArgumentCaptor.forClass(AviationAccountUpdatedRegistryEvent.class);
-        verify(publisher).publishEvent(eventCaptor.capture());
+
+        verify(aviationSetOperatorIdAccountUpdateService, times(1))
+                .notifyRegistryWithAccountUpdate(mockAccount.getId());
         verify(aviationSetOperatorIdExemptStatusUpdateService, times(1))
                 .notifyRegistryWithExemptStatuses(mockAccount);
         verify(accountRepository, times(1)).findAccountByEmitterId(emitterId);

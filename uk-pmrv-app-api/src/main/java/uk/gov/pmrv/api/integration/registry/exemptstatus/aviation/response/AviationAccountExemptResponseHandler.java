@@ -12,6 +12,7 @@ import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.integration.model.IntegrationEventOutcome;
 import uk.gov.netz.integration.model.error.IntegrationEventError;
 import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
+import uk.gov.netz.integration.model.exemption.AccountExemptionUpdateEvent;
 import uk.gov.netz.integration.model.exemption.AccountExemptionUpdateEventOutcome;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
@@ -36,6 +37,7 @@ public class AviationAccountExemptResponseHandler {
     private final AccountQueryService accountQueryService;
     private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
     private final AviationRegistryIntegrationEmailProperties emailProperties;
+    private final AviationAccountExemptFlagEmissionsPublishService aviationAccountExemptFlagEmissionsPublishService;
 
     public void handleResponse(AccountExemptionUpdateEventOutcome eventOutcome , String correlationId) {
         if (IntegrationEventOutcome.ERROR.equals(eventOutcome.getOutcome())) {
@@ -55,6 +57,12 @@ public class AviationAccountExemptResponseHandler {
                         eventOutcome.getEvent(),
                         NotifyRegistryUtils.ACCOUNT_AVIATION_EXEMPT_UPDATE_INTEGRATION_POINT_KEY,
                         "Failed to process an aviation request, but received unknown error(s) " + eventOutcome);
+            }
+        } else if (IntegrationEventOutcome.SUCCESS.equals(eventOutcome.getOutcome())) {
+            AccountExemptionUpdateEvent event = eventOutcome.getEvent();
+            if(Boolean.FALSE.equals(event.getExemptionFlag())) {
+                Account account = accountQueryService.findAccountByRegistryId(Math.toIntExact(event.getRegistryId()));
+                aviationAccountExemptFlagEmissionsPublishService.publishEmissions(account.getId(), event.getReportingYear());
             }
         }
     }

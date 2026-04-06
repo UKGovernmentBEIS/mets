@@ -24,6 +24,8 @@ export class ReviewContainerComponent {
   requestTaskType$ = this.store.requestTaskType$;
   readonly daysRemaining$ = this.aerService.daysRemaining$;
 
+  isMaterialityUpdated$ = this.aerService.isMaterialityUpdated$ as Observable<boolean>;
+
   baseUrl$ = this.aerService.getPayload().pipe(
     map((payload) => {
       switch (payload?.payloadType) {

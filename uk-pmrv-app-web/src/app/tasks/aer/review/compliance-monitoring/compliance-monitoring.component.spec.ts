@@ -58,7 +58,7 @@ describe('ComplianceMonitoringComponent', () => {
     expect(
       page.sections.map((permit) => Array.from(permit.querySelectorAll('dd')).map((dd) => dd.textContent)),
     ).toEqual([
-      ['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'],
+      ['Compliant', 'Compliant', 'Compliant', 'Compliant', 'Compliant', 'Compliant'],
       ['Accepted', 'Notes'],
     ]);
   });

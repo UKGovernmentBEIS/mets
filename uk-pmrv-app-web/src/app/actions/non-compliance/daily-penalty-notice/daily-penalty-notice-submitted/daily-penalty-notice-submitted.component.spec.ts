@@ -39,7 +39,7 @@ describe('DailyPenaltyNoticeSubmittedComponent', () => {
   };
 
   const externalContactsService = {
-    getCaExternalContacts: jest.fn().mockReturnValue(of(mockExternalContacts)),
+    getCaExternalContactsByIds: jest.fn().mockReturnValue(of(mockExternalContacts)),
   };
 
   beforeEach(async () => {
@@ -75,6 +75,7 @@ describe('DailyPenaltyNoticeSubmittedComponent', () => {
       'Users',
       'Mock user name, Operator admin - Primary contact, Service contact, Financial contact',
       'Installation 5 Account - External contact',
+      'Legal5 - External contact',
     ]);
   });
 });

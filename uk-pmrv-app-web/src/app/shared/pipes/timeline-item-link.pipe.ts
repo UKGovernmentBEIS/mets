@@ -19,6 +19,7 @@ export class TimelineItemLinkPipe implements PipeTransform {
 
       case 'INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY':
       case 'WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY':
+      case 'NOTIFICATION_SENT_TO_REGISTRY':
         return [routerLooks + 'actions', value.id, 'registry', 'information-sent'];
       case 'AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY':
         return isWorkflow
@@ -604,6 +605,11 @@ export class TimelineItemLinkPipe implements PipeTransform {
         return [routerLooks + 'actions', value.id, 'waste-qdr', 'submitted'];
       case 'WASTE_QDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
         return [routerLooks + 'actions', value.id, 'waste-qdr', 'returned-for-amends'];
+
+      case 'NER_APPLICATION_CANCELLED':
+        return null;
+      case 'NER_APPLICATION_SENT_TO_VERIFIER':
+        return [routerLooks + 'actions', value.id, 'ner', 'submitted'];
 
       default:
         throw new Error('Provide an action url');

@@ -195,6 +195,7 @@ export class DetailsComponent implements OnInit {
       BULK_DOWNLOAD_ALR: ['NONE'],
       SUBMIT_BDRS2_REVIEW: ['NONE'],
       PEER_REVIEW_BDRS2: ['NONE'],
+      BULK_DOWNLOAD_BDRS2: ['NONE'],
     }),
   });
 
@@ -536,6 +537,7 @@ export class DetailsComponent implements OnInit {
       task: 'Peer review',
       type: 'BDR stage 2',
     },
+    { permission: 'BULK_DOWNLOAD_BDRS2', task: 'Download', type: 'BDR stage 2 bulk download' },
   ];
 
   private readonly configFeatures$ = this.configStore.asObservable().pipe(map((state) => state.features));
@@ -559,7 +561,7 @@ export class DetailsComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$),
         tap((features) => {
-          const { corsia3yearOffsettingEnabled, wasteQdrEnabled, bdrs2Enabled } = features;
+          const { corsia3yearOffsettingEnabled, wasteQdrEnabled, bdrs2Enabled, nerEnabled } = features;
 
           if (!corsia3yearOffsettingEnabled) {
             this.filterTableRows([
@@ -573,7 +575,11 @@ export class DetailsComponent implements OnInit {
           }
 
           if (!bdrs2Enabled) {
-            this.filterTableRows(['SUBMIT_BDRS2_REVIEW', 'PEER_REVIEW_BDRS2']);
+            this.filterTableRows(['SUBMIT_BDRS2_REVIEW', 'PEER_REVIEW_BDRS2', 'BULK_DOWNLOAD_BDRS2']);
+          }
+
+          if (!nerEnabled) {
+            this.filterTableRows(['REVIEW_NER', 'PEER_REVIEW_NER']);
           }
         }),
       )

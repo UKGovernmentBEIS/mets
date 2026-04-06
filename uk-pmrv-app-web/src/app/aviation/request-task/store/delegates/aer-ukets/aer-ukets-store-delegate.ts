@@ -338,6 +338,9 @@ export class AerUkEtsStoreDelegate implements RequestTaskStoreDelegate {
       if (draft.sendEmailNotification) {
         delete draft.sendEmailNotification;
       }
+      if (draft.isVerifierAerTaskContentUpdate) {
+        delete draft.isVerifierAerTaskContentUpdate;
+      }
 
       if (Object.keys(ROOT_AER_PAYLOAD_TASKS).includes(taskKey)) {
         if (ROOT_AER_PAYLOAD_TASKS[taskKey]) {

@@ -98,7 +98,7 @@ public class AviationAccountEmpCommandOrchestrator {
     }
 
 
-    private EmissionsMonitoringPlanUkEts getEmpFromPendingApprovalRequest(Long accountId) {
+    public EmissionsMonitoringPlanUkEts getEmpFromPendingApprovalRequest(Long accountId) {
         List<Request> requestList =
                 requestService.findRequestsByAccountIdAndType(accountId, RequestType.EMP_ISSUANCE_UKETS);
         Optional<RequestTask> requestTask = requestList.stream()

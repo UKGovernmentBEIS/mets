@@ -59,6 +59,7 @@ class InstallationSetOperatorIdWithholdFlagUpdateServiceTest {
 
         verify(eventPublisher, times(1)).publishEvent(WithholdFlagRegistryEvent.builder()
                 .withholdFlag(true)
+                .isFromSetOperatorId(true)
                 .accountId(accountId)
                 .year(year)
                 .build());

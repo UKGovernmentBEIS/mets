@@ -1,26 +1,6 @@
 package uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.installation.request;
 
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.Clock;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Year;
-import java.time.ZoneId;
-
-import java.util.Map;
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,8 +9,8 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
-
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.api.configuration.domain.ConfigurationDTO;
 import uk.gov.netz.api.configuration.service.ConfigurationService;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
@@ -39,10 +19,9 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.AccountEmissionsUpdatedRequestEvent;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.installation.response.InstallationRegistryIntegrationEmailProperties;
 import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
-import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.AccountEmissionsUpdatedRequestEvent;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.reporting.domain.InstallationReportableEmissionsUpdatedEvent;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.PermitOriginatedData;
@@ -53,6 +32,24 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.AerInitiatorRequest;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.service.AerRequestQueryService;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Year;
+import java.time.ZoneId;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class InstallationReportableEmissionsNotifyRegistryServiceTest {
@@ -573,6 +570,210 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 		);
 	}
 
+	@Test
+	void notifyRegistry_setOperatorId_eventIsFromDRE_accountHasRegistryId_send() {
+		InstallationReportableEmissionsUpdatedEvent event = getDummySetOperatorIdEvent(true, Year.now().minusYears(1));
+		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
+		AccountEmissionsUpdatedRequestEvent accountEmissionsUpdatedRequestEvent = getEmissionsUpdatedEvent(event, account);
+		Request aerRequest = getDummyAerRequestWithDates(true, RequestType.AER, PermitType.GHGE,
+				RequestStatus.IN_PROGRESS, LocalDateTime.now(), null);
+
+		when(installationAccountQueryService.getInstallationAccountInfoDTOById(1L)).thenReturn(account);
+		when(aerRequestQueryService.findAerByAccountIdAndYear(1L, Year.now().minusYears(1).getValue())).thenReturn(Optional.of(aerRequest));
+
+		cut.notifyRegistry(event);
+
+		verify(reportableEmissionsSendToRegistryProducer, times(1)).produce(accountEmissionsUpdatedRequestEvent, installationAccountEmissionsUpdatedKafkaTemplate);
+	}
+
+	@Test
+	void notifyRegistry_setOperatorId_nonVerifiedAerInProgress_doNotSend() {
+		InstallationReportableEmissionsUpdatedEvent event = getDummySetOperatorIdEvent(false, Year.now().minusYears(1));
+		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
+		Request aerRequest = getDummyAerRequestWithDates(false, RequestType.AER, PermitType.GHGE,
+				RequestStatus.IN_PROGRESS, LocalDateTime.now(), null);
+
+		when(installationAccountQueryService.getInstallationAccountInfoDTOById(1L)).thenReturn(account);
+		when(aerRequestQueryService.findAerByAccountIdAndYear(1L, Year.now().minusYears(1).getValue())).thenReturn(Optional.of(aerRequest));
+
+		cut.notifyRegistry(event);
+
+		verify(reportableEmissionsSendToRegistryProducer, never()).produce(Mockito.any(AccountEmissionsUpdatedRequestEvent.class), Mockito.any(KafkaTemplate.class));
+	}
+
+	@Test
+	void notifyRegistry_setOperatorId_initiatorTypeRevocation_accountHasRegistryId_send() {
+		InstallationReportableEmissionsUpdatedEvent event = getDummySetOperatorIdEvent(false, Year.now().minusYears(1));
+		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
+		AccountEmissionsUpdatedRequestEvent accountEmissionsUpdatedRequestEvent = getEmissionsUpdatedEvent(event, account);
+		Request aerRequest = getDummyAerRequestWithDates(true, RequestType.PERMIT_REVOCATION, PermitType.GHGE,
+				RequestStatus.COMPLETED, null, LocalDateTime.now());
+
+		when(installationAccountQueryService.getInstallationAccountInfoDTOById(1L)).thenReturn(account);
+		when(aerRequestQueryService.findAerByAccountIdAndYear(1L, Year.now().minusYears(1).getValue())).thenReturn(Optional.of(aerRequest));
+
+		cut.notifyRegistry(event);
+
+		verify(reportableEmissionsSendToRegistryProducer, times(1)).produce(accountEmissionsUpdatedRequestEvent, installationAccountEmissionsUpdatedKafkaTemplate);
+	}
+
+	@Test
+	void notifyRegistry_setOperatorId_initiatorTypeSurrender_accountHasRegistryId_send() {
+		InstallationReportableEmissionsUpdatedEvent event = getDummySetOperatorIdEvent(false, Year.now().minusYears(1));
+		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
+		AccountEmissionsUpdatedRequestEvent accountEmissionsUpdatedRequestEvent = getEmissionsUpdatedEvent(event, account);
+		Request aerRequest = getDummyAerRequestWithDates(true, RequestType.PERMIT_SURRENDER, PermitType.GHGE,
+				RequestStatus.COMPLETED, null, LocalDateTime.now());
+
+		when(installationAccountQueryService.getInstallationAccountInfoDTOById(1L)).thenReturn(account);
+		when(aerRequestQueryService.findAerByAccountIdAndYear(1L, Year.now().minusYears(1).getValue())).thenReturn(Optional.of(aerRequest));
+
+		cut.notifyRegistry(event);
+
+		verify(reportableEmissionsSendToRegistryProducer, times(1)).produce(accountEmissionsUpdatedRequestEvent, installationAccountEmissionsUpdatedKafkaTemplate);
+	}
+
+	@Test
+	void notifyRegistry_setOperatorId_initiatorTypeAer_withinReportingPeriod_completedRequest_send() {
+		Year aerYear = Year.now().minusYears(1);
+		int reportingYear = aerYear.getValue() + 1;
+
+		InstallationReportableEmissionsUpdatedEvent event = getDummySetOperatorIdEvent(false, aerYear);
+		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
+		AccountEmissionsUpdatedRequestEvent accountEmissionsUpdatedRequestEvent = getEmissionsUpdatedEvent(event, account);
+
+		LocalDateTime endDate = LocalDate.of(reportingYear, 3, 15).atStartOfDay();
+		Request aerRequest = getDummyAerRequestWithDates(true, RequestType.AER, PermitType.GHGE,
+				RequestStatus.COMPLETED, null, endDate);
+
+		when(installationAccountQueryService.getInstallationAccountInfoDTOById(1L)).thenReturn(account);
+		when(aerRequestQueryService.findAerByAccountIdAndYear(1L, aerYear.getValue())).thenReturn(Optional.of(aerRequest));
+		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.from")).thenReturn(Optional.of(ConfigurationDTO
+				.builder().key("aer.installation.reporting-period.from").value("01/01").build()));
+		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.to")).thenReturn(Optional.of(ConfigurationDTO
+				.builder().key("aer.installation.reporting-period.to").value("30/06").build()));
+
+		cut.notifyRegistry(event);
+
+		verify(reportableEmissionsSendToRegistryProducer, times(1)).produce(accountEmissionsUpdatedRequestEvent, installationAccountEmissionsUpdatedKafkaTemplate);
+	}
+
+	@Test
+	void notifyRegistry_setOperatorId_initiatorTypeAer_outsideReportingPeriod_completedRequest_doNotSend() {
+		Year aerYear = Year.now().minusYears(1);
+		int reportingYear = aerYear.getValue() + 1;
+
+		InstallationReportableEmissionsUpdatedEvent event = getDummySetOperatorIdEvent(false, aerYear);
+		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
+
+		LocalDateTime endDate = LocalDate.of(reportingYear, 7, 15).atStartOfDay();
+		Request aerRequest = getDummyAerRequestWithDates(true, RequestType.AER, PermitType.GHGE,
+				RequestStatus.COMPLETED, null, endDate);
+
+		when(installationAccountQueryService.getInstallationAccountInfoDTOById(1L)).thenReturn(account);
+		when(aerRequestQueryService.findAerByAccountIdAndYear(1L, aerYear.getValue())).thenReturn(Optional.of(aerRequest));
+		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.from")).thenReturn(Optional.of(ConfigurationDTO
+				.builder().key("aer.installation.reporting-period.from").value("01/01").build()));
+		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.to")).thenReturn(Optional.of(ConfigurationDTO
+				.builder().key("aer.installation.reporting-period.to").value("30/06").build()));
+
+		cut.notifyRegistry(event);
+
+		verify(reportableEmissionsSendToRegistryProducer, never()).produce(Mockito.any(AccountEmissionsUpdatedRequestEvent.class), Mockito.any(KafkaTemplate.class));
+	}
+
+	@Test
+	void notifyRegistry_setOperatorId_initiatorTypeAer_withinReportingPeriod_inProgressRequest_usesSubmissionDate_send() {
+		Year aerYear = Year.now().minusYears(1);
+		int reportingYear = aerYear.getValue() + 1;
+
+		InstallationReportableEmissionsUpdatedEvent event = getDummySetOperatorIdEvent(false, aerYear);
+		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
+		AccountEmissionsUpdatedRequestEvent accountEmissionsUpdatedRequestEvent = getEmissionsUpdatedEvent(event, account);
+
+		LocalDateTime submissionDate = LocalDate.of(reportingYear, 4, 10).atStartOfDay();
+		Request aerRequest = getDummyAerRequestWithDates(true, RequestType.AER, PermitType.GHGE,
+				RequestStatus.IN_PROGRESS, submissionDate, null);
+
+		when(installationAccountQueryService.getInstallationAccountInfoDTOById(1L)).thenReturn(account);
+		when(aerRequestQueryService.findAerByAccountIdAndYear(1L, aerYear.getValue())).thenReturn(Optional.of(aerRequest));
+		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.from")).thenReturn(Optional.of(ConfigurationDTO
+				.builder().key("aer.installation.reporting-period.from").value("01/01").build()));
+		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.to")).thenReturn(Optional.of(ConfigurationDTO
+				.builder().key("aer.installation.reporting-period.to").value("30/06").build()));
+
+		cut.notifyRegistry(event);
+
+		verify(reportableEmissionsSendToRegistryProducer, times(1)).produce(accountEmissionsUpdatedRequestEvent, installationAccountEmissionsUpdatedKafkaTemplate);
+	}
+
+	@Test
+	void notifyRegistry_setOperatorId_initiatorTypeAer_reportingPeriodFromNotFound_throwException() {
+		Year aerYear = Year.now().minusYears(1);
+		InstallationReportableEmissionsUpdatedEvent event = getDummySetOperatorIdEvent(false, aerYear);
+		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
+		Request aerRequest = getDummyAerRequestWithDates(true, RequestType.AER, PermitType.GHGE,
+				RequestStatus.COMPLETED, null, LocalDateTime.now());
+
+		when(installationAccountQueryService.getInstallationAccountInfoDTOById(1L)).thenReturn(account);
+		when(aerRequestQueryService.findAerByAccountIdAndYear(1L, aerYear.getValue())).thenReturn(Optional.of(aerRequest));
+		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.from")).thenReturn(Optional.empty());
+		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.to")).thenReturn(Optional.of(ConfigurationDTO
+				.builder().key("aer.installation.reporting-period.to").value("30/06").build()));
+
+		final BusinessException be = assertThrows(BusinessException.class, () -> cut.notifyRegistry(event));
+
+		assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INTEGRATION_REGISTRY_EMISSIONS_INSTALLATION_REPORTING_PERIOD_FROM_NOT_FOUND);
+		verify(reportableEmissionsSendToRegistryProducer, never()).produce(Mockito.any(AccountEmissionsUpdatedRequestEvent.class), Mockito.any(KafkaTemplate.class));
+	}
+
+	@Test
+	void notifyRegistry_setOperatorId_initiatorTypeAer_reportingPeriodToNotFound_throwException() {
+		Year aerYear = Year.now().minusYears(1);
+		// isFromDre=false so the setOperatorId branch is reached; COMPLETED so the non-verified IN_PROGRESS guard passes
+		InstallationReportableEmissionsUpdatedEvent event = getDummySetOperatorIdEvent(false, aerYear);
+		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
+		Request aerRequest = getDummyAerRequestWithDates(true, RequestType.AER, PermitType.GHGE,
+				RequestStatus.COMPLETED, null, LocalDateTime.now());
+
+		when(installationAccountQueryService.getInstallationAccountInfoDTOById(1L)).thenReturn(account);
+		when(aerRequestQueryService.findAerByAccountIdAndYear(1L, aerYear.getValue())).thenReturn(Optional.of(aerRequest));
+		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.from")).thenReturn(Optional.of(ConfigurationDTO
+				.builder().key("aer.installation.reporting-period.from").value("01/01").build()));
+		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.to")).thenReturn(Optional.empty());
+
+		final BusinessException be = assertThrows(BusinessException.class, () -> cut.notifyRegistry(event));
+
+		assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INTEGRATION_REGISTRY_EMISSIONS_INSTALLATION_REPORTING_PERIOD_TO_NOT_FOUND);
+		verify(reportableEmissionsSendToRegistryProducer, never()).produce(Mockito.any(AccountEmissionsUpdatedRequestEvent.class), Mockito.any(KafkaTemplate.class));
+	}
+
+	@Test
+	void notifyRegistry_setOperatorId_accountDoesNotHaveRegistryId_doNotSend() {
+		Year aerYear = Year.now().minusYears(1);
+		int reportingYear = aerYear.getValue() + 1;
+
+		InstallationReportableEmissionsUpdatedEvent event = getDummySetOperatorIdEvent(false, aerYear);
+		InstallationAccountInfoDTO account = getDummyAccount(false, EmitterType.GHGE);
+
+		LocalDateTime endDate = LocalDate.of(reportingYear, 3, 15).atStartOfDay();
+		Request aerRequest = getDummyAerRequestWithDates(true, RequestType.AER, PermitType.GHGE,
+				RequestStatus.COMPLETED, null, endDate);
+
+		when(installationAccountQueryService.getInstallationAccountInfoDTOById(1L)).thenReturn(account);
+		when(aerRequestQueryService.findAerByAccountIdAndYear(1L, aerYear.getValue())).thenReturn(Optional.of(aerRequest));
+		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.from")).thenReturn(Optional.of(ConfigurationDTO
+				.builder().key("aer.installation.reporting-period.from").value("01/01").build()));
+		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.to")).thenReturn(Optional.of(ConfigurationDTO
+				.builder().key("aer.installation.reporting-period.to").value("30/06").build()));
+		when(emailProperties.getEmail()).thenReturn(Map.of(CompetentAuthorityEnum.ENGLAND.getCode(), "any@mail.c"));
+
+		cut.notifyRegistry(event);
+
+		verify(reportableEmissionsSendToRegistryProducer, never()).produce(Mockito.any(AccountEmissionsUpdatedRequestEvent.class), Mockito.any(KafkaTemplate.class));
+		verify(notificationEmailService, times(1)).notifyRecipient(any(), any());
+	}
+
 	private Request getDummyAerRequest(Boolean isVerificationPerfomed, RequestType initiatorRequestType, PermitType permitType) {
 		AerRequestPayload requestPayload = AerRequestPayload
 				.builder()
@@ -602,6 +803,39 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 				.build();
 	}
 
+	private Request getDummyAerRequestWithDates(Boolean isVerificationPerformed, RequestType initiatorRequestType,
+												PermitType permitType, RequestStatus status,
+												LocalDateTime submissionDate, LocalDateTime endDate) {
+		AerRequestPayload requestPayload = AerRequestPayload
+				.builder()
+				.verificationPerformed(isVerificationPerformed)
+				.permitOriginatedData(PermitOriginatedData
+						.builder()
+						.permitType(permitType)
+						.build())
+				.build();
+
+		AerRequestMetadata requestMetadata = AerRequestMetadata
+				.builder()
+				.initiatorRequest(AerInitiatorRequest
+						.builder()
+						.submissionDateTime(LocalDateTime.now())
+						.type(initiatorRequestType)
+						.build())
+				.build();
+
+		return Request
+				.builder()
+				.payload(requestPayload)
+				.metadata(requestMetadata)
+				.type(RequestType.AER)
+				.accountId(1L)
+				.status(status)
+				.submissionDate(submissionDate)
+				.endDate(endDate)
+				.build();
+	}
+
 	private AccountEmissionsUpdatedRequestEvent getEmissionsUpdatedEvent(InstallationReportableEmissionsUpdatedEvent event, InstallationAccountInfoDTO account) {
 		return AccountEmissionsUpdatedRequestEvent.builder().registryId(account.getRegistryId())
 				.reportableEmissions(event.getReportableEmissions() != null? event.getReportableEmissions().setScale(0, RoundingMode.HALF_UP).toString() : null)
@@ -617,6 +851,17 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 				.isFromRegulator(isFromRegulator)
     			.year(year)
     			.build();
+	}
+
+	private InstallationReportableEmissionsUpdatedEvent getDummySetOperatorIdEvent(Boolean isFromDRE, Year year) {
+		Long accountId = 1L;
+		return InstallationReportableEmissionsUpdatedEvent.builder()
+				.accountId(accountId)
+				.isFromDre(isFromDRE)
+				.reportableEmissions(new BigDecimal(10.34))
+				.isSetOperatorId(true)
+				.year(year)
+				.build();
 	}
 
 	private InstallationAccountInfoDTO getDummyAccount(Boolean hasRegistryId, EmitterType emitterType) {

@@ -9,9 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { MiReportResult } from './miReportResult';
 import { OutstandingRequestTask } from './outstandingRequestTask';
 
-export interface OutstandingRequestTasksMiReportResult extends MiReportResult {
+export interface OutstandingRequestTasksMiReportResult {
+  reportType: string;
+  columnNames: Array<string>;
   results?: Array<OutstandingRequestTask>;
 }

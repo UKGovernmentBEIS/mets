@@ -1,15 +1,18 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.notification;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.NotificationRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.RegistryNotificationType;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
@@ -31,6 +34,7 @@ public class PermitTransferAOfficialNoticeService {
     private final DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
     private final DocumentFileGeneratorService documentFileGeneratorService;
     private final OfficialNoticeSendService officialNoticeSendService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
     public void generateAndSaveGrantedOfficialNotice(final String requestId) {
@@ -50,6 +54,12 @@ public class PermitTransferAOfficialNoticeService {
             fileName);
 
         requestPayload.setOfficialNotice(officialNotice);
+
+        applicationEventPublisher.publishEvent(NotificationRegistryEvent.builder()
+                .accountId(request.getAccountId()).requestId(requestId)
+                .fileInfoDTO(requestPayload.getOfficialNotice())
+                .registryNotificationType(RegistryNotificationType.TRANSFER_NOTIFICATION).build());
+
     }
 
     @Transactional
@@ -128,7 +138,8 @@ public class PermitTransferAOfficialNoticeService {
         final Request request = requestService.findRequestById(requestId);
         final PermitTransferARequestPayload requestPayload = (PermitTransferARequestPayload) request.getPayload();
         final List<FileInfoDTO> attachments = List.of(requestPayload.getOfficialNotice());
-        
+
+
         officialNoticeSendService.sendOfficialNotice(attachments, request);
     }
 }

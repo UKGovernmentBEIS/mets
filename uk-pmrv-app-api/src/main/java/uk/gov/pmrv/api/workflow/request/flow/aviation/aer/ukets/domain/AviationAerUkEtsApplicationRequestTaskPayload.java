@@ -23,6 +23,8 @@ public class AviationAerUkEtsApplicationRequestTaskPayload extends AviationAerAp
 
     private AviationAerUkEts aer;
 
+    private Boolean isVerifierAerTaskContentUpdate;
+
     @Override
     public Map<UUID, String> getAttachments() {
         return getAerAttachments();

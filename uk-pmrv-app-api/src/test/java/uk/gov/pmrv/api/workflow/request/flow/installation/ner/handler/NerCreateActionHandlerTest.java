@@ -13,6 +13,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadTy
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestCreateActionEmptyPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NER;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerRequestPayload;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,6 +40,7 @@ class NerCreateActionHandlerTest {
 	            .type(RequestType.NER)
 	            .accountId(accountId)
 	            .requestPayload(NerRequestPayload.builder()
+					.ner(NER.builder().build())
 	                .payloadType(RequestPayloadType.NER_REQUEST_PAYLOAD)
 	                .operatorAssignee(appUser.getUserId())
 	                .build())

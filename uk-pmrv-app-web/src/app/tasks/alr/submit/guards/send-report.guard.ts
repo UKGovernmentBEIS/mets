@@ -45,7 +45,7 @@ export class AlrSendReportGuard {
                   .getVerificationBodyOfAccount(accountId)
                   .pipe(
                     switchMap((vb) =>
-                      !vb ? this.businessErrorService.showError(notFoundVerificationBodyError()) : of(true),
+                      !vb ? this.businessErrorService.showError(notFoundVerificationBodyError(accountId)) : of(true),
                     ),
                   ),
               )
@@ -54,7 +54,7 @@ export class AlrSendReportGuard {
                   .getVerificationBodyOfAccount(accountId)
                   .pipe(
                     switchMap((vb) =>
-                      !vb ? this.businessErrorService.showError(notFoundVerificationBodyError()) : of(true),
+                      !vb ? this.businessErrorService.showError(notFoundVerificationBodyError(accountId)) : of(true),
                     ),
                   )
               : of(

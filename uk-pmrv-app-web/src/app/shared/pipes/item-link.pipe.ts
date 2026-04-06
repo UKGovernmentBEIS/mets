@@ -755,6 +755,19 @@ export class ItemLinkPipe implements PipeTransform {
         }
       }
 
+      case 'NER': {
+        switch (value?.taskType) {
+          case 'NER_APPLICATION_SUBMIT':
+          case 'NER_WAIT_FOR_VERIFICATION':
+            return [routerLooks + 'tasks', value.taskId, 'ner', 'submit'];
+          case 'NER_APPLICATION_VERIFICATION_SUBMIT':
+            return [routerLooks + 'tasks', value.taskId, 'ner', 'verification-submit'];
+
+          default:
+            return ['.'];
+        }
+      }
+
       default:
         return ['.'];
     }

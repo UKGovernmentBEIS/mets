@@ -19,6 +19,7 @@ public enum RequestMetadataType {
     PERMANENT_CESSATION,
     ALR,
     WASTE_QDR,
+    NER,
     
     REISSUE,
 

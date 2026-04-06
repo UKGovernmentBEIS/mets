@@ -68,6 +68,10 @@ public class AerRequestPayload extends RequestPayload implements RequestPayloadV
 
     private Boolean isPostALRSectionRemoval;
 
+    private Boolean sm3UnitEnabled;
+
+    private Boolean isVerifierAerTaskContentUpdate;
+
     public void clearRegulatorData() {
         this.reviewGroupDecisions.clear();
         this.reviewAttachments.clear();

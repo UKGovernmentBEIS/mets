@@ -15,6 +15,7 @@ public enum MetsErrorCode implements NetzErrorCode {
     ACCOUNT_FIELD_NOT_AMENDABLE("ACCOUNT1003", HttpStatus.BAD_REQUEST, "Non amendable account fields"),
     LEGAL_ENTITY_NOT_ASSOCIATED_WITH_USER("ACCOUNT1000", HttpStatus.BAD_REQUEST, "Legal entity is not associated with the user", true),
     LEGAL_ENTITY_ALREADY_EXISTS("ACCOUNT1002", HttpStatus.BAD_REQUEST, "Legal entity name already exists"),
+    MULTIPLE_LIVE_ACCOUNTS_FOUND("ACCOUNT1004", HttpStatus.BAD_REQUEST, "Multiple live accounts found"),
 
     CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT("ACCOUNT1012", HttpStatus.BAD_REQUEST, "Central route charges office number already related with another account"),
 
@@ -45,6 +46,8 @@ public enum MetsErrorCode implements NetzErrorCode {
 
     /** Codes for NER. */
     INVALID_NER("NER1001", HttpStatus.BAD_REQUEST, "Invalid NER"),
+    NER_FILENAME_NOT_VALID("NER1002", HttpStatus.BAD_REQUEST, "NER file name is not valid"),
+
 
     /** Codes for DOAL. */
     INVALID_DOAL("DOAL1001", HttpStatus.BAD_REQUEST, "Invalid DOAL"),

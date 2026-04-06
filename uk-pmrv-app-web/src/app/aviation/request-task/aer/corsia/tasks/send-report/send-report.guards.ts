@@ -23,9 +23,14 @@ export const canActivateSendReportVerifier = (route: ActivatedRouteSnapshot) => 
   const accountVerificationBodyService = inject(AccountVerificationBodyService);
   const businessErrorService = inject(BusinessErrorService);
 
+  let accountId: number;
+
   const verifierBodyExists$ = store.pipe(
     requestTaskQuery.selectRequestInfo,
-    switchMap((info) => accountVerificationBodyService.getVerificationBodyOfAccount(info.accountId)),
+    switchMap((info) => {
+      accountId = info.accountId;
+      return accountVerificationBodyService.getVerificationBodyOfAccount(accountId);
+    }),
     map((vb) => !!vb),
   );
 
@@ -43,7 +48,7 @@ export const canActivateSendReportVerifier = (route: ActivatedRouteSnapshot) => 
       ) !== 'cannot start yet' && !payload?.verificationPerformed
         ? verifierBodyExists
           ? of(true)
-          : businessErrorService.showError(notFoundVerificationBodyError())
+          : businessErrorService.showError(notFoundVerificationBodyError(accountId))
         : of(router.parseUrl(`aviation/tasks/${route.params.taskId}`));
     }),
   );

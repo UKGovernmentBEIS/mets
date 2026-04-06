@@ -4,11 +4,11 @@ import { map, Observable, switchMap, take, tap } from 'rxjs';
 
 import { AuthStore, selectCurrentDomain } from '@core/store/auth';
 
-import { MiReportSearchResult, MiReportsService } from 'pmrv-api';
+import { MiReportsService, MiReportSystemSearchResult } from 'pmrv-api';
 
 @Injectable({ providedIn: 'root' })
 export class MiReportsListGuard {
-  miReports: MiReportSearchResult[];
+  miReports: MiReportSystemSearchResult[];
 
   constructor(
     private readonly miReportsService: MiReportsService,
@@ -24,7 +24,7 @@ export class MiReportsListGuard {
     );
   }
 
-  resolve(): MiReportSearchResult[] {
+  resolve(): MiReportSystemSearchResult[] {
     return this.miReports;
   }
 }

@@ -1,12 +1,12 @@
 import { DocumentFilenameAndDocumentType } from '@shared/interfaces/previewDocumentFilenameAndDocumentType';
 
-import { AuthorityResponse, DoalDetermination, RequestTaskActionProcessDTO } from 'pmrv-api';
+import { DoalAuthorityResponse, DoalDetermination, RequestTaskActionProcessDTO } from 'pmrv-api';
 
 const letterPreview = 'letter_preview.pdf';
 
 export function getPreviewDocumentsInfo(
   taskActionType: RequestTaskActionProcessDTO['requestTaskActionType'],
-  determinationStatus: AuthorityResponse['type'] | DoalDetermination['type'],
+  determinationStatus: DoalAuthorityResponse['type'] | DoalDetermination['type'],
 ): DocumentFilenameAndDocumentType[] {
   switch (taskActionType) {
     case 'DOAL_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION':

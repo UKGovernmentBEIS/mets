@@ -1,0 +1,57 @@
+@let vm = this.vm();
+
+<app-base-task-container-component
+  [header]="vm.pageTitle"
+  [customContentTemplate]="vm.isWaitTask ? waitContentTemplate : taskContentTemplate"
+  [expectedTaskType]="vm.requestTaskType"
+  [notification]="vm.notification"
+  [daysRemaining]="vm.daysRemaining"></app-base-task-container-component>
+
+<ng-template #waitContentTemplate>
+  <govuk-warning-text>{{ vm.warningText }}</govuk-warning-text>
+</ng-template>
+
+<ng-template #taskContentTemplate>
+  <h2 class="govuk-heading-m">New entrant reserve details</h2>
+
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      [link]="vm.redirectDetailsLink"
+      linkText="New entrant reserve"
+      [status]="vm.detailsSectionStatus"></li>
+
+    @if (vm.hasVerificationReport) {
+      <li app-task-section title="Verification opinion statement">
+        <ul app-task-item-list>
+          <li
+            app-task-item
+            [link]="vm.redirectOpinionStatementLink"
+            linkText="NER verification opinion statement"
+            [status]="vm.opinionStatementSectionStatus"></li>
+        </ul>
+      </li>
+      <li app-task-section title="Overall decision">
+        <ul app-task-item-list>
+          <li
+            app-task-item
+            [link]="vm.redirectOverallDecisionLink"
+            linkText="Overall decision"
+            [status]="vm.overallDecisionStatus"></li>
+        </ul>
+      </li>
+    }
+  </ul>
+
+  @if (vm.isSubmitRequestTask) {
+    <h2 class="govuk-heading-m">Send application</h2>
+
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.sectionsCompleted ? vm.redirectSendReportLink : null"
+        linkText="Send application"
+        [status]="vm.sendReportSectionStatus"></li>
+    </ul>
+  }
+</ng-template>

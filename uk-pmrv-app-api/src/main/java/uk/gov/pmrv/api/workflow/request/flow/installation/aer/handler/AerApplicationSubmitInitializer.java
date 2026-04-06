@@ -57,6 +57,8 @@ public class AerApplicationSubmitInitializer implements InitializeRequestTaskHan
             .verificationSectionsCompleted(requestPayload.getVerificationSectionsCompleted())
             .verificationBodyId(verificationBodyId)
             .isPostALRSectionRemoval(requestPayload.getIsPostALRSectionRemoval())
+            .sm3UnitEnabled(requestPayload.getSm3UnitEnabled())
+            .isVerifierAerTaskContentUpdate(requestPayload.getIsVerifierAerTaskContentUpdate())
             .build();
     }
 

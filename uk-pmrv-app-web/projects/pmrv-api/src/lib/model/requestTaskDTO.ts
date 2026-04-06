@@ -75,10 +75,8 @@ import { InstallationAuditApplicationSubmitRequestTaskPayload } from './installa
 import { InstallationInspectionApplicationSubmitRequestTaskPayload } from './installationInspectionApplicationSubmitRequestTaskPayload';
 import { InstallationInspectionOperatorRespondRequestTaskPayload } from './installationInspectionOperatorRespondRequestTaskPayload';
 import { InstallationOnsiteInspectionApplicationSubmitRequestTaskPayload } from './installationOnsiteInspectionApplicationSubmitRequestTaskPayload';
-import { NerApplicationAmendsSubmitRequestTaskPayload } from './nerApplicationAmendsSubmitRequestTaskPayload';
-import { NerApplicationReviewRequestTaskPayload } from './nerApplicationReviewRequestTaskPayload';
 import { NerApplicationSubmitRequestTaskPayload } from './nerApplicationSubmitRequestTaskPayload';
-import { NerAuthorityResponseRequestTaskPayload } from './nerAuthorityResponseRequestTaskPayload';
+import { NERApplicationVerificationSubmitRequestTaskPayload } from './nERApplicationVerificationSubmitRequestTaskPayload';
 import { NonComplianceApplicationSubmitRequestTaskPayload } from './nonComplianceApplicationSubmitRequestTaskPayload';
 import { NonComplianceCivilPenaltyRequestTaskPayload } from './nonComplianceCivilPenaltyRequestTaskPayload';
 import { NonComplianceDailyPenaltyNoticeRequestTaskPayload } from './nonComplianceDailyPenaltyNoticeRequestTaskPayload';
@@ -234,6 +232,8 @@ export interface RequestTaskDTO {
     | 'NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW'
     | 'NON_COMPLIANCE_FINAL_DETERMINATION'
     | 'NER_APPLICATION_SUBMIT'
+    | 'NER_APPLICATION_VERIFICATION_SUBMIT'
+    | 'NER_WAIT_FOR_VERIFICATION'
     | 'NER_APPLICATION_REVIEW'
     | 'NER_WAIT_FOR_REVIEW'
     | 'NER_APPLICATION_PEER_REVIEW'
@@ -536,10 +536,8 @@ export interface RequestTaskDTO {
     | InstallationInspectionApplicationSubmitRequestTaskPayload
     | InstallationInspectionOperatorRespondRequestTaskPayload
     | InstallationOnsiteInspectionApplicationSubmitRequestTaskPayload
-    | NerApplicationAmendsSubmitRequestTaskPayload
-    | NerApplicationReviewRequestTaskPayload
+    | NERApplicationVerificationSubmitRequestTaskPayload
     | NerApplicationSubmitRequestTaskPayload
-    | NerAuthorityResponseRequestTaskPayload
     | NonComplianceApplicationSubmitRequestTaskPayload
     | NonComplianceCivilPenaltyRequestTaskPayload
     | NonComplianceDailyPenaltyNoticeRequestTaskPayload

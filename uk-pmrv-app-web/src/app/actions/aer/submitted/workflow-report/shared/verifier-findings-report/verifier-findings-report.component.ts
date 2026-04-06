@@ -14,6 +14,7 @@ import { AerService } from '../../../../core/aer.service';
 })
 export class VerifierFindingsReportComponent {
   payload$: Observable<AerApplicationVerificationSubmittedRequestActionPayload> = this.aerService.getPayload();
+  isMaterialityUpdated$ = this.aerService.isMaterialityUpdated$ as Observable<boolean>;
 
   constructor(readonly aerService: AerService) {}
 }

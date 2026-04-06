@@ -66,7 +66,7 @@ public class InstallationAccountUpdatedNotifyRegistryService {
         }
         AccountUpdatingEvent accountUpdatingEvent = buildAccountUpdatedPayload(installationAccountPermitDTO, permitContainer);
         registryProducer.produce(accountUpdatingEvent);
-        if(!ObjectUtils.isEmpty(event.getRequestId())) {
+        if(!event.isFromSetOperatorId()) {
             addRequestActionService.addRequestAction(event.getRequestId(),installationAccountPermitDTO,permitContainer);
         }
 

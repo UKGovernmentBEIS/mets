@@ -16,25 +16,7 @@ import { OverallDecisionFormProvider } from '../overall-decision-form.provider';
 @Component({
   selector: 'app-overall-decision-reason-page',
   imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent, EmpReviewDeterminationTypePipe],
-  template: `
-    <app-wizard-step
-      [showBackLink]="true"
-      (formSubmit)="onContinue()"
-      [formGroup]="form"
-      submitText="Continue"
-      [hideSubmit]="(isEditable$ | async) === false">
-      <span class="govuk-caption-l">{{ form.value.type | empReviewDeterminationType }}</span>
-
-      <app-page-heading>
-        Provide a reason for your decision
-        <span *ngIf="form.value.type === 'APPROVED'">(optional)</span>
-      </app-page-heading>
-      <div class="govuk-hint">This cannot be viewed by the operator</div>
-
-      <div formControlName="reason" govuk-textarea [maxLength]="10000"></div>
-    </app-wizard-step>
-    <app-return-to-link></app-return-to-link>
-  `,
+  templateUrl: './overall-decision-reason.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverallDecisionReasonComponent {

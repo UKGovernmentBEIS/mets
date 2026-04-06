@@ -5,6 +5,11 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentStatus;
+import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentWorkflow;
+import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentWorkflowSubType;
+import uk.gov.pmrv.api.account.fileattachment.domain.dto.AccountFileAttachmentDTO;
+import uk.gov.pmrv.api.account.fileattachment.service.AccountFileAttachmentService;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -22,6 +27,9 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2Appl
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2Files;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2VerificationData;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2VerificationOpinionStatement;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2VerificationReport;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.mapper.BDRS2Mapper;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.validation.BDRS2ValidationService;
 
@@ -37,6 +45,7 @@ public class BDRS2SubmitService {
     private final RequestService requestService;
     private final InstallationOperatorDetailsQueryService installationOperatorDetailsQueryService;
     private final BDRS2ValidationService bdrs2ValidationService;
+    private final AccountFileAttachmentService accountFileAttachmentService;
     private static final BDRS2Mapper BDRS2_MAPPER = Mappers.getMapper(BDRS2Mapper.class);
 
     public void applySaveAction(RequestTask requestTask,
@@ -102,6 +111,9 @@ public class BDRS2SubmitService {
                 actionPayload,
                 RequestActionType.BDRS2_APPLICATION_SENT_TO_REGULATOR,
                 appUser.getUserId());
+
+        // Update account file attachments with IN_PROGRESS status
+        updateAccountFileAttachments(request.getId(), request, requestPayload);
     }
 
     public void submitToVerifier(BDRS2ApplicationSubmitToVerifierRequestTaskActionPayload actionPayload,
@@ -223,6 +235,55 @@ public class BDRS2SubmitService {
         if (!Objects.equals(requestFile, taskFile)) {
             requestPayload.incrementBdrs2FileVersion();
         }
+    }
+
+    private void updateAccountFileAttachments(String requestId, Request request, BDRS2RequestPayload requestPayload) {
+        final String period = "2026-2030";
+
+        Optional.ofNullable(requestPayload.getBdrs2().getBdrs2Files())
+                .map(BDRS2Files::getFile).ifPresent(bdrs2File ->
+                        accountFileAttachmentService.updateOrInsertAccountFileAttachment(AccountFileAttachmentDTO.builder()
+                        .workflow(AccountFileAttachmentWorkflow.BDRS2)
+                        .workflowSubtype(AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT)
+                        .originatedRequestId(requestId)
+                        .status(AccountFileAttachmentStatus.IN_PROGRESS)
+                        .accountId(request.getAccountId())
+                        .period(period)
+                        .fileUuid(bdrs2File.toString())
+                        .competentAuthority(request.getCompetentAuthority())
+                        .build()));
+
+        if (requestPayload.getBdrs2().getMmpFiles() != null) {
+            UUID mmpFile = requestPayload.getBdrs2().getMmpFiles().getFile();
+            if (mmpFile != null) {
+                accountFileAttachmentService.updateOrInsertAccountFileAttachment(AccountFileAttachmentDTO.builder()
+                        .workflow(AccountFileAttachmentWorkflow.BDRS2)
+                        .workflowSubtype(AccountFileAttachmentWorkflowSubType.BDRS2_MMP)
+                        .originatedRequestId(requestId)
+                        .status(AccountFileAttachmentStatus.IN_PROGRESS)
+                        .accountId(request.getAccountId())
+                        .period(period)
+                        .fileUuid(mmpFile.toString())
+                        .competentAuthority(request.getCompetentAuthority())
+                        .build());
+            }
+        }
+
+        Optional.ofNullable(requestPayload.getVerificationReport())
+                .map(BDRS2VerificationReport::getVerificationData)
+                .map(BDRS2VerificationData::getOpinionStatement)
+                .map(BDRS2VerificationOpinionStatement::getOpinionStatementFile)
+                .ifPresent(vosFile -> accountFileAttachmentService.updateOrInsertAccountFileAttachment(
+                        AccountFileAttachmentDTO.builder()
+                                .workflow(AccountFileAttachmentWorkflow.BDRS2)
+                                .workflowSubtype(AccountFileAttachmentWorkflowSubType.BDRS2_VOS)
+                                .originatedRequestId(requestId)
+                                .status(AccountFileAttachmentStatus.IN_PROGRESS)
+                                .accountId(request.getAccountId())
+                                .period(period)
+                                .fileUuid(vosFile.toString())
+                                .competentAuthority(request.getCompetentAuthority())
+                                .build()));
     }
 
 }

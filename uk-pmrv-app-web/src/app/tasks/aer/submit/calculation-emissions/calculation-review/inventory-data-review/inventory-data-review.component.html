@@ -1,19 +1,17 @@
 <app-aer-task>
-  <ng-container *ngIf="form$ | async as form">
+  @if (form$ | async; as form) {
     <app-wizard-step
       (formSubmit)="onContinue()"
       [formGroup]="form"
       heading="Review the calculated emissions and values applied by the UK greenhouse gas inventory data"
       [hideSubmit]="(isEditable$ | async) === false">
-      <ng-container *ngFor="let element of emissionsElements$ | async">
+      @for (element of emissionsElements$ | async; track element) {
         <h2 class="govuk-heading-m">{{ element.label }}</h2>
-        <ng-container *ngFor="let content of element.content">
+        @for (content of element.content; track content) {
           <p class="govuk-body">{{ content.label }} {{ content.value }}</p>
-        </ng-container>
-      </ng-container>
-
+        }
+      }
       <br />
-
       <div
         formControlName="calculationCorrect"
         govuk-radio
@@ -37,19 +35,18 @@
               "
               widthClass="govuk-input--width-10"
               suffix="tonnes CO2e"></div>
-            <ng-container *ngIf="(sourceStreamEmission$ | async)?.biomassPercentages?.contains">
+            @if ((sourceStreamEmission$ | async)?.biomassPercentages?.contains) {
               <div
                 formControlName="totalProvidedSustainableBiomassEmissions"
                 govuk-text-input
                 label="Total sustainable biomass emissions"
                 widthClass="govuk-input--width-10"
                 suffix="tonnes CO2e"></div>
-            </ng-container>
+            }
           </ng-container>
         </govuk-radio-option>
       </div>
     </app-wizard-step>
-
     <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }}</a>
-  </ng-container>
+  }
 </app-aer-task>

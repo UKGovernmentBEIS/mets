@@ -24,6 +24,7 @@ export interface AerApplicationSubmittedRequestActionPayload extends RequestActi
   monitoringPlanVersions?: Array<MonitoringPlanVersion>;
   verificationPerformed?: boolean;
   verificationReport?: AerVerificationReport;
+  isVerifierAerTaskContentUpdate?: boolean;
   aerAttachments?: { [key: string]: string };
   verificationAttachments?: { [key: string]: string };
 }

@@ -32,6 +32,7 @@ import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -130,11 +131,12 @@ class CaExternalContactControllerTest {
     }
 
     @Test
-    void getCaExternalContactById() throws Exception {
-        final AppUser user = AppUser.builder()
-            .roleType(RoleTypeConstants.REGULATOR)
-            .build();
+    void getCaExternalContactsByIds() throws Exception {
         long id = 1L;
+
+        final AppUser user = AppUser.builder()
+                .roleType(RoleTypeConstants.REGULATOR)
+                .build();
 
         CaExternalContactDTO caExternalContactDTO =
             CaExternalContactDTO.builder()
@@ -142,35 +144,17 @@ class CaExternalContactControllerTest {
                 .name("c1")
                 .build();
 
-        when(caExternalContactService.getCaExternalContactById(user, id)).thenReturn(caExternalContactDTO);
+        List<CaExternalContactDTO> caExternalContactDTOList = List.of(caExternalContactDTO);
+
+        when(caExternalContactService.getCaExternalContactsByIds(Set.of(id))).thenReturn(caExternalContactDTOList);
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(CA_EXTERNAL_CONTACT_CONTROLLER_PATH + "/" + id)
+        mockMvc.perform(MockMvcRequestBuilders.get(CA_EXTERNAL_CONTACT_CONTROLLER_PATH+"/ids")
+            .param("ids", String.valueOf(id))
             .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("id").value(1L))
-            .andExpect(jsonPath("name").value("c1"));
+            .andExpect(status().isOk());
 
-        verify(caExternalContactService, times(1)).getCaExternalContactById(user, id);
-    }
-
-    @Test
-    void getCaExternalContactById_forbidden() throws Exception {
-        final AppUser user = AppUser.builder()
-            .roleType(RoleTypeConstants.REGULATOR)
-            .build();
-        long id = 1L;
-
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(appUserAuthorizationService)
-            .authorize(user, "getCaExternalContactById");
-
-        mockMvc.perform(MockMvcRequestBuilders.get(CA_EXTERNAL_CONTACT_CONTROLLER_PATH + "/" + id)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isForbidden());
-
-        verify(caExternalContactService, never()).getCaExternalContactById(user, id);
+        verify(caExternalContactService, times(1)).getCaExternalContactsByIds(any());
     }
 
     @Test

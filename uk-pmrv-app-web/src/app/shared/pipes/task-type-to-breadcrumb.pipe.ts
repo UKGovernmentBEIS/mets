@@ -582,6 +582,13 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
       case 'WASTE_QDR_APPLICATION_AMENDS_SUBMIT':
         return 'Amend quarterly data report';
 
+      case 'NER_APPLICATION_SUBMIT':
+        return 'Complete new entrant reserve';
+      case 'NER_WAIT_FOR_VERIFICATION':
+        return 'New entrant reserve sent to verifier';
+      case 'NER_APPLICATION_VERIFICATION_SUBMIT':
+        return 'Verify new entrant reserve';
+
       default:
         return null;
     }

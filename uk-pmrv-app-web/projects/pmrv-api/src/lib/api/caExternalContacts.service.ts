@@ -325,76 +325,6 @@ export class CaExternalContactsService {
   }
 
   /**
-   * Returns the ca external contact with specified id
-   * @param id The ca external contact id
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getCaExternalContactById(id: number): Observable<CaExternalContactDTO>;
-  public getCaExternalContactById(
-    id: number,
-    observe: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: '*/*' | 'application/json' },
-  ): Observable<HttpResponse<CaExternalContactDTO>>;
-  public getCaExternalContactById(
-    id: number,
-    observe: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: '*/*' | 'application/json' },
-  ): Observable<HttpEvent<CaExternalContactDTO>>;
-  public getCaExternalContactById(
-    id: number,
-    observe: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: '*/*' | 'application/json' },
-  ): Observable<CaExternalContactDTO>;
-  public getCaExternalContactById(
-    id: number,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: '*/*' | 'application/json' },
-  ): Observable<any> {
-    if (id === null || id === undefined) {
-      throw new Error('Required parameter id was null or undefined when calling getCaExternalContactById.');
-    }
-
-    let headers = this.defaultHeaders;
-
-    // authentication (bearerAuth) required
-    const credential = this.configuration.lookupCredential('bearerAuth');
-    if (credential) {
-      headers = headers.set('Authorization', 'Bearer ' + credential);
-    }
-
-    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (httpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['*/*', 'application/json'];
-      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (httpHeaderAcceptSelected !== undefined) {
-      headers = headers.set('Accept', httpHeaderAcceptSelected);
-    }
-
-    let responseType_: 'text' | 'json' = 'json';
-    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
-      responseType_ = 'text';
-    }
-
-    return this.httpClient.get<CaExternalContactDTO>(
-      `${this.configuration.basePath}/v1.0/ca-external-contacts/${encodeURIComponent(String(id))}`,
-      {
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: headers,
-        observe: observe,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
    * Retrieves the current regulator external contacts
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
@@ -450,5 +380,83 @@ export class CaExternalContactsService {
       observe: observe,
       reportProgress: reportProgress,
     });
+  }
+
+  /**
+   * Returns the ca external contacts with specified ids
+   * @param ids The list of ca external contact ids
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getCaExternalContactsByIds(ids: Set<number>): Observable<Array<CaExternalContactDTO>>;
+  public getCaExternalContactsByIds(
+    ids: Set<number>,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' | 'application/json' },
+  ): Observable<HttpResponse<Array<CaExternalContactDTO>>>;
+  public getCaExternalContactsByIds(
+    ids: Set<number>,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' | 'application/json' },
+  ): Observable<HttpEvent<Array<CaExternalContactDTO>>>;
+  public getCaExternalContactsByIds(
+    ids: Set<number>,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' | 'application/json' },
+  ): Observable<Array<CaExternalContactDTO>>;
+  public getCaExternalContactsByIds(
+    ids: Set<number>,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: '*/*' | 'application/json' },
+  ): Observable<any> {
+    if (ids === null || ids === undefined) {
+      throw new Error('Required parameter ids was null or undefined when calling getCaExternalContactsByIds.');
+    }
+
+    let queryParameters = new HttpParams({ encoder: this.encoder });
+    if (ids) {
+      ids.forEach((element) => {
+        queryParameters = this.addToHttpParams(queryParameters, <any>element, 'ids');
+      });
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['*/*', 'application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.get<Array<CaExternalContactDTO>>(
+      `${this.configuration.basePath}/v1.0/ca-external-contacts/ids`,
+      {
+        params: queryParameters,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
   }
 }

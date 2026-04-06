@@ -107,12 +107,7 @@ import { InstallationAccountUpdatedRegistryIntegrationRequestActionPayload } fro
 import { InstallationInspectionApplicationSubmittedRequestActionPayload } from './installationInspectionApplicationSubmittedRequestActionPayload';
 import { InstallationInspectionOperatorRespondedRequestActionPayload } from './installationInspectionOperatorRespondedRequestActionPayload';
 import { InstallationReportableEmissionsRegistryIntegrationRequestActionPayload } from './installationReportableEmissionsRegistryIntegrationRequestActionPayload';
-import { NerApplicationAcceptedRequestActionPayload } from './nerApplicationAcceptedRequestActionPayload';
-import { NerApplicationEndedRequestActionPayload } from './nerApplicationEndedRequestActionPayload';
-import { NerApplicationProceededToAuthorityRequestActionPayload } from './nerApplicationProceededToAuthorityRequestActionPayload';
-import { NerApplicationRejectedRequestActionPayload } from './nerApplicationRejectedRequestActionPayload';
-import { NerApplicationReturnedForAmendsRequestActionPayload } from './nerApplicationReturnedForAmendsRequestActionPayload';
-import { NerApplicationSubmittedRequestActionPayload } from './nerApplicationSubmittedRequestActionPayload';
+import { NERApplicationSubmittedRequestActionPayload } from './nERApplicationSubmittedRequestActionPayload';
 import { NonComplianceApplicationClosedRequestActionPayload } from './nonComplianceApplicationClosedRequestActionPayload';
 import { NonComplianceApplicationSubmittedRequestActionPayload } from './nonComplianceApplicationSubmittedRequestActionPayload';
 import { NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload } from './nonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload';
@@ -120,6 +115,7 @@ import { NonComplianceDailyPenaltyNoticeApplicationSubmittedRequestActionPayload
 import { NonComplianceDetailsAmendedRequestActionPayload } from './nonComplianceDetailsAmendedRequestActionPayload';
 import { NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload } from './nonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload';
 import { NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload } from './nonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload';
+import { NotificationRegistryIntegrationRequestActionPayload } from './notificationRegistryIntegrationRequestActionPayload';
 import { PaymentCancelledRequestActionPayload } from './paymentCancelledRequestActionPayload';
 import { PaymentProcessedRequestActionPayload } from './paymentProcessedRequestActionPayload';
 import { PeerReviewDecisionSubmittedRequestActionPayload } from './peerReviewDecisionSubmittedRequestActionPayload';
@@ -267,6 +263,7 @@ export interface RequestActionDTO {
     | 'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_REJECTED'
     | 'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED'
     | 'NER_APPLICATION_CANCELLED'
+    | 'NER_APPLICATION_SENT_TO_VERIFIER'
     | 'NER_APPLICATION_SUBMITTED'
     | 'NER_PEER_REVIEW_REQUESTED'
     | 'NER_PEER_REVIEWER_ACCEPTED'
@@ -509,7 +506,8 @@ export interface RequestActionDTO {
     | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REQUESTED'
     | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_ACCEPTED'
     | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED'
-    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED';
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED'
+    | 'NOTIFICATION_SENT_TO_REGISTRY';
   payload?:
     | ALRApplicationAcceptedRequestActionPayload
     | ALRApplicationAcceptedWithCorrectionsRequestActionPayload
@@ -609,12 +607,7 @@ export interface RequestActionDTO {
     | InstallationInspectionApplicationSubmittedRequestActionPayload
     | InstallationInspectionOperatorRespondedRequestActionPayload
     | InstallationReportableEmissionsRegistryIntegrationRequestActionPayload
-    | NerApplicationAcceptedRequestActionPayload
-    | NerApplicationEndedRequestActionPayload
-    | NerApplicationProceededToAuthorityRequestActionPayload
-    | NerApplicationRejectedRequestActionPayload
-    | NerApplicationReturnedForAmendsRequestActionPayload
-    | NerApplicationSubmittedRequestActionPayload
+    | NERApplicationSubmittedRequestActionPayload
     | NonComplianceApplicationClosedRequestActionPayload
     | NonComplianceApplicationSubmittedRequestActionPayload
     | NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload
@@ -622,6 +615,7 @@ export interface RequestActionDTO {
     | NonComplianceDetailsAmendedRequestActionPayload
     | NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload
     | NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload
+    | NotificationRegistryIntegrationRequestActionPayload
     | PaymentCancelledRequestActionPayload
     | PaymentProcessedRequestActionPayload
     | PeerReviewDecisionSubmittedRequestActionPayload
@@ -687,7 +681,6 @@ export interface RequestActionDTO {
     | 'PERMIT_BATCH_REISSUE'
     | 'PERMIT_REISSUE'
     | 'NON_COMPLIANCE'
-    | 'NER'
     | 'DOAL'
     | 'AER'
     | 'VIR'
@@ -703,6 +696,7 @@ export interface RequestActionDTO {
     | 'PERMANENT_CESSATION'
     | 'ALR'
     | 'WASTE_QDR'
+    | 'NER'
     | 'AVIATION_ACCOUNT_CLOSURE'
     | 'AVIATION_NON_COMPLIANCE'
     | 'EMP_BATCH_REISSUE'

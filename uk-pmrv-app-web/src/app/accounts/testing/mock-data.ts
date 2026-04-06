@@ -55,6 +55,15 @@ export const mockOperatorListData: AccountOperatorsUsersAuthoritiesInfoDTO = {
       userId: 'userTest4',
       authorityCreationDate: '2021-01-13T13:42:43.050682Z',
     },
+    {
+      authorityStatus: 'PENDING',
+      firstName: 'Frank',
+      lastName: 'Sinatra',
+      roleCode: 'operator',
+      roleName: 'Operator',
+      userId: 'userTest5',
+      authorityCreationDate: '2021-01-14T13:42:43.050682Z',
+    },
   ] as UserAuthorityInfoDTO[],
   contactTypes: {
     PRIMARY: 'userTest1',

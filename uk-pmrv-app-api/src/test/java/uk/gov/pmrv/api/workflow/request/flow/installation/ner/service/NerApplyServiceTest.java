@@ -1,33 +1,38 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.ner.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-import org.junit.jupiter.api.Assertions;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
-import uk.gov.pmrv.api.permit.domain.additionaldocuments.AdditionalDocuments;
-import uk.gov.pmrv.api.permit.domain.confidentialitystatement.ConfidentialityStatement;
+import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
+import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NER;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationSubmittedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerOperatorDocumentWithComment;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerOperatorDocuments;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveApplicationRequestTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.validation.NerSubmitValidator;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationSubmitToVerifierRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERFiles;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.validation.NERValidationService;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
 class NerApplyServiceTest {
@@ -36,7 +41,10 @@ class NerApplyServiceTest {
     private NerApplyService service;
 
     @Mock
-    private NerSubmitValidator validatorService;
+    private InstallationOperatorDetailsQueryService installationOperatorDetailsQueryService;
+
+    @Mock
+    private NERValidationService nerValidationService;
 
     @Mock
     private RequestService requestService;
@@ -46,94 +54,230 @@ class NerApplyServiceTest {
 
         final NerApplicationSubmitRequestTaskPayload taskPayload =
             NerApplicationSubmitRequestTaskPayload.builder().build();
+
         final RequestTask requestTask = RequestTask.builder()
             .payload(taskPayload)
             .build();
 
-        final UUID newEntrantDataReport = UUID.randomUUID();
-        final UUID monitoringMethodologyPlan = UUID.randomUUID();
-        final UUID additional = UUID.randomUUID();
         final Map<String, Boolean> sectionsCompleted = Map.of("section1", true);
-        final NerSaveApplicationRequestTaskActionPayload taskActionPaylod =
+
+        final NER ner = NER.builder().build();
+        final int nerFileVersion = 1;
+
+        final NerSaveApplicationRequestTaskActionPayload taskActionPayload =
             NerSaveApplicationRequestTaskActionPayload.builder()
-                .nerOperatorDocuments(NerOperatorDocuments.builder()
-                    .newEntrantDataReport(
-                        NerOperatorDocumentWithComment.builder().document(newEntrantDataReport).build())
-                    .monitoringMethodologyPlan(
-                        NerOperatorDocumentWithComment.builder().document(monitoringMethodologyPlan).build())
-                    .build())
-                .additionalDocuments(AdditionalDocuments.builder().exist(true).documents(Set.of(additional)).build())
-                .confidentialityStatement(ConfidentialityStatement.builder().exist(false).build())
                 .nerSectionsCompleted(sectionsCompleted)
+                .ner(ner)
+                .nerFileVersion(nerFileVersion)
                 .build();
 
-        service.applySaveAction(requestTask, taskActionPaylod);
+        service.applySaveAction(requestTask, taskActionPayload);
 
-        Assertions.assertEquals(taskPayload.getNerOperatorDocuments(), taskActionPaylod.getNerOperatorDocuments());
-        Assertions.assertEquals(taskPayload.getAdditionalDocuments(), taskActionPaylod.getAdditionalDocuments());
-        Assertions.assertEquals(taskPayload.getConfidentialityStatement(),
-            taskActionPaylod.getConfidentialityStatement());
-        Assertions.assertEquals(taskPayload.getNerSectionsCompleted(), taskActionPaylod.getNerSectionsCompleted());
+        assertEquals(sectionsCompleted, taskPayload.getNerSectionsCompleted());
+        assertEquals(ner, taskPayload.getNer());
+        assertEquals(nerFileVersion, taskPayload.getNerFileVersion());
     }
 
     @Test
-    void applySubmitAction() {
+    void submitToVerifier_happyPath() {
+        // given
+        NerApplicationSubmitRequestTaskPayload taskPayload =
+                NerApplicationSubmitRequestTaskPayload.builder()
+                        .ner(NER.builder().build())
+                        .nerAttachments(Map.of(UUID.randomUUID(), "file.pdf"))
+                        .build();
 
-        final AppUser appUser = AppUser.builder().userId("userId").build();
-        final UUID newEntrantDataReport = UUID.randomUUID();
-        final UUID monitoringMethodologyPlan = UUID.randomUUID();
-        final UUID additional = UUID.randomUUID();
-        final Map<String, Boolean> sectionsCompleted = Map.of("section1", true);
-        final NerApplicationSubmitRequestTaskPayload taskPayload =
-            NerApplicationSubmitRequestTaskPayload.builder()
-                .nerOperatorDocuments(NerOperatorDocuments.builder()
-                    .newEntrantDataReport(
-                        NerOperatorDocumentWithComment.builder().document(newEntrantDataReport).build())
-                    .monitoringMethodologyPlan(
-                        NerOperatorDocumentWithComment.builder().document(monitoringMethodologyPlan).build())
-                    .build())
-                .additionalDocuments(AdditionalDocuments.builder().exist(true).documents(Set.of(additional)).build())
-                .confidentialityStatement(ConfidentialityStatement.builder().exist(false).build())
-                .nerAttachments(Map.of(newEntrantDataReport, "newEntrantDataReport", monitoringMethodologyPlan, "monitoringMethodologyPlan", additional, "additional"))
-                .nerSectionsCompleted(sectionsCompleted)
+        Request request = Request.builder()
+                .payload(NerRequestPayload.builder().ner(NER.builder().build()).build())
+                .accountId(1L)
                 .build();
 
-        final NerRequestPayload requestPayload = NerRequestPayload.builder().build();
-        final Request request = Request.builder().payload(requestPayload).build();
-        final RequestTask requestTask = RequestTask.builder()
-            .payload(taskPayload)
-            .request(request)
-            .build();
-        final NerApplicationSubmittedRequestActionPayload actionPayload =
-            NerApplicationSubmittedRequestActionPayload.builder()
-                .payloadType(RequestActionPayloadType.NER_APPLICATION_SUBMITTED_PAYLOAD)
-                .nerOperatorDocuments(NerOperatorDocuments.builder()
-                    .newEntrantDataReport(
-                        NerOperatorDocumentWithComment.builder().document(newEntrantDataReport).build())
-                    .monitoringMethodologyPlan(
-                        NerOperatorDocumentWithComment.builder().document(monitoringMethodologyPlan).build())
-                    .build())
-                .additionalDocuments(AdditionalDocuments.builder().exist(true).documents(Set.of(additional)).build())
-                .confidentialityStatement(ConfidentialityStatement.builder().exist(false).build())
-                .nerAttachments(Map.of(newEntrantDataReport, "newEntrantDataReport", monitoringMethodologyPlan, "monitoringMethodologyPlan", additional, "additional"))
-                .nerSectionsCompleted(sectionsCompleted)
+        RequestTask requestTask = RequestTask.builder()
+                .payload(taskPayload)
+                .request(request)
                 .build();
 
+        AppUser appUser = AppUser.builder().userId("user").build();
 
-        service.applySubmitAction(requestTask, appUser);
+        when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(any()))
+                .thenReturn(InstallationOperatorDetails.builder().build());
 
-        verify(validatorService, times(1)).validateSubmitTaskPayload(taskPayload);
-        verify(requestService, times(1)).addActionToRequest(
-            request,
-            actionPayload,
-            RequestActionType.NER_APPLICATION_SUBMITTED,
-            "userId"
+        // when
+        service.submitToVerifier(
+                NERApplicationSubmitToVerifierRequestTaskActionPayload.builder().build(),
+                requestTask,
+                appUser
         );
 
-        assertEquals(taskPayload.getNerOperatorDocuments(), requestPayload.getNerOperatorDocuments());
-        assertEquals(taskPayload.getAdditionalDocuments(), requestPayload.getAdditionalDocuments());
-        assertEquals(taskPayload.getConfidentialityStatement(), requestPayload.getConfidentialityStatement());
-        assertEquals(taskPayload.getNerAttachments(), requestPayload.getNerAttachments());
-        assertEquals(taskPayload.getNerSectionsCompleted(), requestPayload.getNerSectionsCompleted());
+        // then
+        verify(nerValidationService).validateNer(taskPayload.getNer());
+        verify(requestService).addActionToRequest(
+                eq(request),
+                any(NERApplicationSubmittedRequestActionPayload.class),
+                eq(RequestActionType.NER_APPLICATION_SENT_TO_VERIFIER),
+                eq("user")
+        );
+    }
+
+    @Test
+    void submitToVerifier_whenFileExists_shouldValidateFileName() {
+        // given
+        UUID fileId = UUID.randomUUID();
+
+        NERFiles nerFiles = NERFiles.builder()
+                .file(fileId)
+                .build();
+
+        NER ner = NER.builder()
+                .nerFiles(nerFiles)
+                .build();
+
+        Map<UUID, String> attachments = Map.of(fileId, "NER-00026-11-v1-uploaded by Operator-Test.pdf");
+
+        NerApplicationSubmitRequestTaskPayload taskPayload =
+                NerApplicationSubmitRequestTaskPayload.builder()
+                        .ner(ner)
+                        .nerAttachments(attachments)
+                        .build();
+
+        Request request = Request.builder()
+                .payload(NerRequestPayload.builder().ner(NER.builder().build()).build())
+                .accountId(1L)
+                .build();
+
+        RequestTask requestTask = RequestTask.builder()
+                .payload(taskPayload)
+                .request(request)
+                .build();
+
+        when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(any()))
+                .thenReturn(InstallationOperatorDetails.builder().build());
+
+        // when
+        service.submitToVerifier(
+                NERApplicationSubmitToVerifierRequestTaskActionPayload.builder().build(),
+                requestTask,
+                AppUser.builder().userId("user").build()
+        );
+
+        // then
+        verify(nerValidationService).validateNerFileName(anyString());
+    }
+
+    @Test
+    void submitToVerifier_whenFileChanged_shouldIncrementVersion() {
+        // given
+        UUID oldFile = UUID.randomUUID();
+        UUID newFile = UUID.randomUUID();
+
+        NerRequestPayload requestPayload = NerRequestPayload.builder()
+                .ner(NER.builder()
+                        .nerFiles(NERFiles.builder().file(oldFile).build())
+                        .build())
+                .build();
+
+        NerApplicationSubmitRequestTaskPayload taskPayload =
+                NerApplicationSubmitRequestTaskPayload.builder()
+                        .ner(NER.builder()
+                                .nerFiles(NERFiles.builder().file(newFile).build())
+                                .build())
+                        .build();
+
+        Request request = Request.builder()
+                .payload(requestPayload)
+                .accountId(1L)
+                .build();
+
+        RequestTask requestTask = RequestTask.builder()
+                .payload(taskPayload)
+                .request(request)
+                .build();
+
+        when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(any()))
+                .thenReturn(InstallationOperatorDetails.builder().build());
+
+        // when
+        service.submitToVerifier(
+                NERApplicationSubmitToVerifierRequestTaskActionPayload.builder().build(),
+                requestTask,
+                AppUser.builder().userId("user").build()
+        );
+
+        // then
+        assertEquals(2, requestPayload.getNerFileVersion());
+    }
+
+    @Test
+    void submitToVerifier_whenSameFile_shouldNotIncrementVersion() {
+        // given
+        UUID file = UUID.randomUUID();
+
+        NerRequestPayload requestPayload = spy(NerRequestPayload.builder()
+                .ner(NER.builder()
+                        .nerFiles(NERFiles.builder().file(file).build())
+                        .build())
+                .build());
+
+        NerApplicationSubmitRequestTaskPayload taskPayload =
+                NerApplicationSubmitRequestTaskPayload.builder()
+                        .ner(NER.builder()
+                                .nerFiles(NERFiles.builder().file(file).build())
+                                .build())
+                        .build();
+
+        Request request = Request.builder()
+                .payload(requestPayload)
+                .accountId(1L)
+                .build();
+
+        RequestTask requestTask = RequestTask.builder()
+                .payload(taskPayload)
+                .request(request)
+                .build();
+
+        when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(any()))
+                .thenReturn(InstallationOperatorDetails.builder().build());
+
+        // when
+        service.submitToVerifier(
+                NERApplicationSubmitToVerifierRequestTaskActionPayload.builder().build(),
+                requestTask,
+                AppUser.builder().userId("user").build()
+        );
+
+        // then
+        verify(requestPayload, never()).incrementNerFileVersion();
+    }
+
+    @Test
+    void submitToVerifier_whenNoFile_shouldNotValidateFileName() {
+        // given
+        NerApplicationSubmitRequestTaskPayload taskPayload =
+                NerApplicationSubmitRequestTaskPayload.builder()
+                        .ner(NER.builder().build())
+                        .build();
+
+        Request request = Request.builder()
+                .payload(NerRequestPayload.builder().ner(NER.builder().build()).build())
+                .accountId(1L)
+                .build();
+
+        RequestTask requestTask = RequestTask.builder()
+                .payload(taskPayload)
+                .request(request)
+                .build();
+
+        when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(any()))
+                .thenReturn(InstallationOperatorDetails.builder().build());
+
+        // when
+        service.submitToVerifier(
+                NERApplicationSubmitToVerifierRequestTaskActionPayload.builder().build(),
+                requestTask,
+                AppUser.builder().userId("user").build()
+        );
+
+        // then
+        verify(nerValidationService, never()).validateNerFileName(any());
     }
 }

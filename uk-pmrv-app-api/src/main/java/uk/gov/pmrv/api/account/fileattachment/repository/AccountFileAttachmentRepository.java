@@ -53,4 +53,5 @@ public interface AccountFileAttachmentRepository extends JpaRepository<AccountFi
 
     @Transactional(readOnly = true)
     boolean existsByWorkflowAndCompetentAuthority(AccountFileAttachmentWorkflow workflow, CompetentAuthorityEnum competentAuthority);
+
 }

@@ -21,4 +21,6 @@ public class AviationAerUkEtsContainer extends AviationAerContainer {
 
     @Valid
     private AviationAerUkEtsVerificationReport verificationReport;
+
+    private Boolean isVerifierAerTaskContentUpdate;
 }

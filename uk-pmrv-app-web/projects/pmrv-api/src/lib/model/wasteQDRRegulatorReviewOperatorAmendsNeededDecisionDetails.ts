@@ -9,9 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { WasteQDRRegulatorReviewDecisionDetails } from './wasteQDRRegulatorReviewDecisionDetails';
 import { WasteQDRRegulatorReviewRequiredChange } from './wasteQDRRegulatorReviewRequiredChange';
 
-export interface WasteQDRRegulatorReviewOperatorAmendsNeededDecisionDetails extends WasteQDRRegulatorReviewDecisionDetails {
+export interface WasteQDRRegulatorReviewOperatorAmendsNeededDecisionDetails {
+  notes?: string;
   requiredChanges: Array<WasteQDRRegulatorReviewRequiredChange>;
 }

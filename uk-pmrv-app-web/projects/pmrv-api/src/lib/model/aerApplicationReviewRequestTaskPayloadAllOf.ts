@@ -27,6 +27,8 @@ export interface AerApplicationReviewRequestTaskPayloadAllOf {
   verificationSectionsCompleted?: { [key: string]: Array<boolean> };
   aerAttachments?: { [key: string]: string };
   isPostALRSectionRemoval?: boolean;
+  sm3UnitEnabled?: boolean;
+  isVerifierAerTaskContentUpdate?: boolean;
   verificationReport?: AerVerificationReport;
   verificationAttachments?: { [key: string]: string };
   verifiedAer?: Aer;

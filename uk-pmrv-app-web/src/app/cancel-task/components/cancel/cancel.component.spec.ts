@@ -1,12 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { BehaviorSubject, of } from 'rxjs';
 
 import { BREADCRUMB_ITEMS } from '@core/navigation/breadcrumbs';
 import { SharedModule } from '@shared/shared.module';
-import { KeycloakService } from 'keycloak-angular';
 
 import { CancelComponent } from './cancel.component';
 
@@ -24,12 +22,11 @@ describe('CancelComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [
-        KeycloakService,
         { provide: BREADCRUMB_ITEMS, useValue: breadcrumbs },
         { provide: ActivatedRoute, useValue: route },
       ],
       declarations: [CancelComponent],
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
     }).compileComponents();
   });
 

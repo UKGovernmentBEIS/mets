@@ -12,7 +12,10 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
+import uk.gov.pmrv.api.integration.registry.common.RegistryIdEmailNotifierService;
 import uk.gov.pmrv.api.integration.registry.withholdflag.installation.request.requestaction.WithholdFlagRegistryIntegrationAddRequestActionService;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 
 import java.time.Year;
 
@@ -35,7 +38,7 @@ class InstallationAccountWithholdFlagNotifyRegistryServiceTest {
     private WithholdFlagRegistryIntegrationAddRequestActionService addRequestActionService;
 
     @Mock
-    private InstallationWithholdFlagEmailNotifierService emailNotifierService;
+    private RegistryIdEmailNotifierService emailNotifierService;
 
     @InjectMocks
     private InstallationWithholdFlagNotifyRegistryService service;
@@ -101,7 +104,9 @@ class InstallationAccountWithholdFlagNotifyRegistryServiceTest {
 
         service.notifyRegistry(event);
 
-        verify(emailNotifierService).registryIdNonExistenceNotifyRegulator(accountDTO);
+        verify(emailNotifierService).registryIdNonExistenceNotifyRegulator(accountDTO,
+                PmrvNotificationTemplateName.REGISTRY_INTEGRATION_WITHHOLD_FLAG_MISSING_REGISTRY_ID.getName(),
+                NotifyRegistryUtils.INSTALLATION_SERVICE_KEY);
         verifyNoInteractions(registryProducer);
         verifyNoInteractions(addRequestActionService);
     }

@@ -1,0 +1,29 @@
+<app-ner-task heading="Upload new entrant reserve" caption="New entrant reserve" [taskType]="requestTaskType()">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()" [showBackLink]="false">
+    <div class="govuk-!-width-three-quarters">
+      <app-file-input
+        [downloadUrl]="getDocumentDownloadUrl"
+        formControlName="file"
+        headerSize="s"
+        label="Upload file"
+        listTitle="Uploaded file"
+        [showFilesizeHint]="false"
+        [fileNameTransformer]="renameFile.bind(this)" />
+
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        label="Upload supporting files"
+        headerSize="s"
+        listTitle="Uploaded supporting files"
+        formControlName="supportingFiles"></app-multiple-file-input>
+
+      <h2 class="govuk-heading-s">Notes (optional)</h2>
+
+      <div
+        govuk-textarea
+        formControlName="notes"
+        [maxLength]="10000"
+        hint="Add any information you think will help regulators review your report or supporting data."></div>
+    </div>
+  </app-wizard-step>
+</app-ner-task>

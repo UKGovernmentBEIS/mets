@@ -1,5 +1,28 @@
 package uk.gov.pmrv.api.account.service;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.domain.Scope;
+import uk.gov.netz.api.authorization.rules.services.resource.CompAuthAuthorizationResourceService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.account.domain.CaExternalContact;
+import uk.gov.pmrv.api.account.domain.dto.CaExternalContactDTO;
+import uk.gov.pmrv.api.account.domain.dto.CaExternalContactRegistrationDTO;
+import uk.gov.pmrv.api.account.domain.dto.CaExternalContactsDTO;
+import uk.gov.pmrv.api.account.repository.CaExternalContactRepository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -13,29 +36,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.netz.api.authorization.core.domain.AppAuthority;
-import uk.gov.netz.api.authorization.core.domain.AppUser;
-import uk.gov.netz.api.authorization.rules.domain.Scope;
-import uk.gov.netz.api.authorization.rules.services.resource.CompAuthAuthorizationResourceService;
-import uk.gov.netz.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.account.domain.CaExternalContact;
-import uk.gov.pmrv.api.account.domain.dto.CaExternalContactDTO;
-import uk.gov.pmrv.api.account.domain.dto.CaExternalContactRegistrationDTO;
-import uk.gov.pmrv.api.account.domain.dto.CaExternalContactsDTO;
-import uk.gov.pmrv.api.account.repository.CaExternalContactRepository;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.netz.api.common.exception.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
 class CaExternalContactServiceTest {
@@ -109,53 +109,28 @@ class CaExternalContactServiceTest {
     }
 
     @Test
-    void getCaExternalContactById() {
+    void getCaExternalContactsByIds() {
         Long id = 1L;
-        final CompetentAuthorityEnum ca = ENGLAND;
-        AppUser authUser = AppUser.builder()
-            .roleType(REGULATOR)
-            .authorities(List.of(
-                AppAuthority
-                    .builder()
-                    .competentAuthority(ca).build()))
-            .build();
 
         CaExternalContact caExternalContact = CaExternalContact.builder()
             .id(1L)
             .name("c")
             .build();
 
-        when(caExternalContactRepository.findByIdAndCompetentAuthority(id, ca))
-            .thenReturn(Optional.of(caExternalContact));
+        when(caExternalContactRepository.findAllByIdIn(Set.of(1L)))
+            .thenReturn(List.of(caExternalContact));
 
         CaExternalContactDTO caExternalContactDTO = CaExternalContactDTO.builder()
             .id(1L)
             .name("c")
             .build();
 
-        assertThat(caExternalContactService.getCaExternalContactById(authUser, id)).isEqualTo(caExternalContactDTO);
+        List<CaExternalContactDTO> caExternalContactDTOS = List.of(caExternalContactDTO);
+
+        assertThat(caExternalContactService.getCaExternalContactsByIds(Set.of(id)).containsAll(caExternalContactDTOS));
     }
 
-    @Test
-    void getCaExternalContactById_contact_not_related_to_ca() {
-        Long id = 1L;
-        final CompetentAuthorityEnum ca = ENGLAND;
-        AppUser authUser = AppUser.builder()
-            .roleType(REGULATOR)
-            .authorities(List.of(
-                AppAuthority
-                    .builder()
-                    .competentAuthority(ca)
-                    .build()))
-            .build();
 
-        when(caExternalContactRepository.findByIdAndCompetentAuthority(id, ca)).thenReturn(Optional.empty());
-
-        BusinessException exception = assertThrows(BusinessException.class,
-            () -> caExternalContactService.getCaExternalContactById(authUser, id));
-
-        assertEquals(ErrorCode.EXTERNAL_CONTACT_NOT_RELATED_TO_CA, exception.getErrorCode());
-    }
     
     @Test
     void getCaExternalContactEmailsByIds() {

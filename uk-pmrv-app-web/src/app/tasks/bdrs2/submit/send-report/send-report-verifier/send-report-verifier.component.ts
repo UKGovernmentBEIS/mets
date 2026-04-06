@@ -60,11 +60,18 @@ export class Bdrs2SendReportVerifierComponent {
   ) {}
 
   onSubmit() {
+    let accountId: number;
+
     this.bdrs2Service.requestAccountId$
       .pipe(
         first(),
-        switchMap((accountId) => this.accountVerificationBodyService.getVerificationBodyOfAccount(accountId)),
-        switchMap((vb) => (vb ? of(vb) : this.businessErrorService.showError(notFoundVerificationBodyError()))),
+        switchMap((id) => {
+          accountId = id;
+          return this.accountVerificationBodyService.getVerificationBodyOfAccount(accountId);
+        }),
+        switchMap((vb) =>
+          vb ? of(vb) : this.businessErrorService.showError(notFoundVerificationBodyError(accountId)),
+        ),
         tap((vb) => {
           const state = this.store.getState();
 

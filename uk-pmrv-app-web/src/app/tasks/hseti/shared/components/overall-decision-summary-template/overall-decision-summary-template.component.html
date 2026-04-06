@@ -2,16 +2,28 @@
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Decision</dt>
     <dd govukSummaryListRowValue>{{ overallDecision.type | capitalizeFirst }}</dd>
-    <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
-    </dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+      </dd>
+    }
   </div>
 
-  <div govukSummaryListRow *ngIf="overallDecision?.reason">
-    <dt govukSummaryListRowKey>Reason for decision</dt>
-    <dd govukSummaryListRowValue class="pre-wrap">{{ overallDecision.reason }}</dd>
-    <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink [routerLink]="['../reason']" [state]="{ changing: true }">Change</a>
-    </dd>
-  </div>
+  @if (overallDecision?.reason) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        @if (overallDecision.type === 'REJECTED') {
+          Text to be included in the refusal notice
+        } @else {
+          Reason for decision
+        }
+      </dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ overallDecision.reason }}</dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="['../reason']" [state]="{ changing: true }">Change</a>
+        </dd>
+      }
+    </div>
+  }
 </dl>

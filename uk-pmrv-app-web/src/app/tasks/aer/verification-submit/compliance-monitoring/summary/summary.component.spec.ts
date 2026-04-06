@@ -65,7 +65,20 @@ describe('SummaryComponent', () => {
     tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
 
     expect(page.summaryListValues).toEqual([
-      ['Yes', 'Change', 'Yes', 'Change', 'Yes', 'Change', 'Yes', 'Change', 'Yes', 'Change', 'Yes', 'Change'],
+      [
+        'Compliant',
+        'Change',
+        'Compliant',
+        'Change',
+        'Compliant',
+        'Change',
+        'Compliant',
+        'Change',
+        'Compliant',
+        'Change',
+        'Compliant',
+        'Change',
+      ],
     ]);
 
     page.submitButton.click();

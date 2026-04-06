@@ -18,7 +18,6 @@ import { format, subDays } from 'date-fns';
 import { GovukTableColumn, GovukValidators } from 'govuk-components';
 
 import {
-  CustomMiReportResult,
   ExecutedRequestAction,
   ExecutedRequestActionsMiReportParams,
   ExecutedRequestActionsMiReportResult,
@@ -26,6 +25,7 @@ import {
 } from 'pmrv-api';
 
 import { DateInputValidators } from '../../../../projects/govuk-components/src/lib/date-input/date-input.validators';
+import { ExtendedMiReportResult } from '../core/mi-interfaces';
 import { createTableColumns, createTablePage, manipulateResultsAndExportToExcel, pageSize } from '../core/mi-report';
 
 @Component({
@@ -110,7 +110,7 @@ export class CompletedWorkComponent implements OnInit {
             ),
           )
           .pipe(
-            map((miReportResult: CustomMiReportResult) =>
+            map((miReportResult: ExtendedMiReportResult) =>
               manipulateResultsAndExportToExcel(
                 { ...miReportResult, results: this.addPipesToResult(miReportResult.results) },
                 'Completed work',

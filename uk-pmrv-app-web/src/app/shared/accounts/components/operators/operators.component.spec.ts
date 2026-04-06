@@ -253,19 +253,19 @@ describe('OperatorsComponent', () => {
     });
 
     it('should initialize with default sorting by created date', () => {
-      expectUserOrderToBe([0, 2, 1, 3]);
+      expectUserOrderToBe([0, 2, 1, 3, 4]);
     });
 
     it('should sort by name', () => {
       page.nameSortingButton.click();
       fixture.detectChanges();
 
-      expectUserOrderToBe([3, 2, 0, 1]);
+      expectUserOrderToBe([3, 2, 0, 4, 1]);
 
       page.nameSortingButton.click();
       fixture.detectChanges();
 
-      expectUserOrderToBe([1, 0, 2, 3]);
+      expectUserOrderToBe([1, 4, 0, 2, 3]);
     });
 
     it('should render a save changes to both operator and regulator users', () => {
@@ -443,7 +443,7 @@ describe('OperatorsComponent', () => {
       page.nameSortingButton.click();
       fixture.detectChanges();
 
-      expect(page.nameColumns[2].textContent.trim()).toEqual('Darth Vader');
+      expect(page.nameColumns[2].textContent.trim()).toEqual('First User');
       expect(page.accountStatusSelectsValue[2]).toEqual('ACTIVE');
     });
 
@@ -582,12 +582,12 @@ describe('OperatorsComponent', () => {
       setUserAsRegulator();
       fixture.detectChanges();
 
-      expectUserOrderToBe([0, 2, 1, 3]);
+      expectUserOrderToBe([0, 2, 1, 3, 4]);
 
       setUserAsOperator();
       fixture.detectChanges();
 
-      expectUserOrderToBe([0, 2, 1, 3]);
+      expectUserOrderToBe([0, 2, 1, 3, 4]);
     });
 
     it('should not show appoint verifier button', () => {
@@ -645,6 +645,26 @@ describe('OperatorsComponent', () => {
       fixture.detectChanges();
 
       expect(page.registerUserButton).toBeFalsy();
+    });
+
+    it('should render the list of users with links to both operator and regulator users', () => {
+      setUserAsRegulator();
+      fixture.detectChanges();
+
+      expect(page.nameLinks[0]).toBeTruthy();
+      expect(page.nameLinks[1]).toBeTruthy();
+      expect(page.nameLinks[2]).toBeTruthy();
+      expect(page.nameLinks[3]).toBeTruthy();
+      expect(page.roleSelectsValue[0]).toEqual('operator_admin');
+
+      setUserAsOperator();
+      fixture.detectChanges();
+
+      expect(page.nameLinks[0]).toBeTruthy();
+      expect(page.nameLinks[1]).toBeTruthy();
+      expect(page.nameLinks[2]).toBeTruthy();
+      expect(page.nameLinks[3]).toBeTruthy();
+      expect(page.roleSelectsValue[0]).toEqual('operator_admin');
     });
   });
 

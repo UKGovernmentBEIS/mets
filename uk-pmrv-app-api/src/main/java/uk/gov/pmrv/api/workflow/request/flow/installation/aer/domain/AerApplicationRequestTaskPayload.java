@@ -53,6 +53,10 @@ public abstract class AerApplicationRequestTaskPayload extends RequestTaskPayloa
 
     private Boolean isPostALRSectionRemoval;
 
+    private Boolean sm3UnitEnabled;
+
+    private Boolean isVerifierAerTaskContentUpdate;
+
     @Override
     public Map<UUID, String> getAttachments() {
         return getAerAttachments();

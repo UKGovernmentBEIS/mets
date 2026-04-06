@@ -10,8 +10,9 @@
  * Do not edit the class manually.
  */
 import { AccountAssignedRegulatorSiteContact } from './accountAssignedRegulatorSiteContact';
-import { MiReportResult } from './miReportResult';
 
-export interface AccountAssignedRegulatorSiteContactsMiReportResult extends MiReportResult {
+export interface AccountAssignedRegulatorSiteContactsMiReportResult {
+  reportType: string;
+  columnNames: Array<string>;
   results?: Array<AccountAssignedRegulatorSiteContact>;
 }

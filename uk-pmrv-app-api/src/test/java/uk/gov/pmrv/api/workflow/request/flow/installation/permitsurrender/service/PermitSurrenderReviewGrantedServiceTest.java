@@ -1,15 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -17,7 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountStatusService;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.NotificationRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -33,6 +25,17 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderReviewDeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.notification.PermitSurrenderOfficialNoticeService;
 import uk.gov.pmrv.api.workflow.utils.DateUtils;
+
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Map;
+import java.util.Set;
+
+import static java.time.temporal.ChronoUnit.DAYS;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PermitSurrenderReviewGrantedServiceTest {
@@ -51,9 +54,12 @@ class PermitSurrenderReviewGrantedServiceTest {
     
     @Mock
     private PermitSurrenderOfficialNoticeService permitSurrenderOfficialNoticeService;
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
     
     @Test
-    void executeDeemedWithdrawnPostActions() {
+    void executeGrantedPostActions() {
         final String requestId = "1";
         Long accountId= 1L;
         final DecisionNotification reviewDecisionNotification = DecisionNotification.builder()
@@ -89,7 +95,8 @@ class PermitSurrenderReviewGrantedServiceTest {
         verify(requestActionUserInfoResolver, times(1))
             .getUsersInfo(reviewDecisionNotification.getOperators(), reviewDecisionNotification.getSignatory(), request);
         verify(permitSurrenderOfficialNoticeService, times(1)).sendReviewDeterminationOfficialNotice(request);
-        
+        verify(eventPublisher,times(1)).publishEvent(Mockito.any(NotificationRegistryEvent.class));
+
         ArgumentCaptor<PermitSurrenderApplicationGrantedRequestActionPayload> requestActionPayloadCaptor = ArgumentCaptor.forClass(PermitSurrenderApplicationGrantedRequestActionPayload.class);
         verify(requestService, times(1)).addActionToRequest(Mockito.eq(request), requestActionPayloadCaptor.capture(), Mockito.eq(RequestActionType.PERMIT_SURRENDER_APPLICATION_GRANTED), Mockito.eq(requestPayload.getRegulatorReviewer()));
         PermitSurrenderApplicationGrantedRequestActionPayload actionPayloadCaptured = requestActionPayloadCaptor.getValue();

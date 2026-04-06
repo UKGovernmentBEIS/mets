@@ -317,7 +317,7 @@ describe('PeerReviewComponent', () => {
     });
   });
 
-  describe('for emmisions monitoring plan application', () => {
+  describe('for emissions monitoring plan application', () => {
     beforeEach(() => {
       jest.spyOn(location, 'path').mockReturnValue('/aviation/tasks/237/emp/review/peer-review');
       storeResolver.getRequestTaskType.mockReturnValue(of('EMP_ISSUANCE_UKETS_APPLICATION_REVIEW'));
@@ -380,7 +380,7 @@ describe('PeerReviewComponent', () => {
     });
   });
 
-  describe('for emmisions monitoring plan variation', () => {
+  describe('for emissions monitoring plan variation', () => {
     beforeEach(() => {
       jest.spyOn(location, 'path').mockReturnValue('/aviation/tasks/237/emp/review/peer-review');
       storeResolver.getRequestTaskType.mockReturnValue(of('EMP_VARIATION_UKETS_APPLICATION_REVIEW'));
@@ -443,7 +443,7 @@ describe('PeerReviewComponent', () => {
     });
   });
 
-  describe('for emmisions monitoring plan corsia variation', () => {
+  describe('for emissions monitoring plan corsia variation', () => {
     beforeEach(() => {
       jest.spyOn(location, 'path').mockReturnValue('/aviation/tasks/237/emp-corsia/variation/review/peer-review');
       storeResolver.getRequestTaskType.mockReturnValue(of('EMP_VARIATION_CORSIA_APPLICATION_REVIEW'));

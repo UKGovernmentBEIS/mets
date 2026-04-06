@@ -141,4 +141,24 @@ describe('InformationSentToRegistryComponent', () => {
       ['Withhold year', '2026'],
     ]);
   });
+
+  it('should show summary details for NOTIFICATION_SENT_TO_REGISTRY action type', async () => {
+    setState({
+      type: 'NOTIFICATION_SENT_TO_REGISTRY',
+      payload: {
+        registryId: '123456789',
+        notificationType: 'Installation surrender request approval',
+        sentFile: { name: 'Test file', uui: '0000122223333' },
+      },
+    });
+    await runOnPushChangeDetection(fixture);
+
+    expect(page.heading).toEqual('Information sent to Registry by system');
+    expect(page.summaryListValues).toHaveLength(3);
+    expect(page.summaryListValues).toEqual([
+      ['Registry ID', '123456789'],
+      ['Notification type', 'Installation surrender request approval'],
+      ['Notification', 'Test file'],
+    ]);
+  });
 });

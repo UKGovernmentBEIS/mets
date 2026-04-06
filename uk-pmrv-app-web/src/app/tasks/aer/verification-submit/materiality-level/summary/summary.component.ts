@@ -16,7 +16,8 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
     <app-page-heading>Check your answers</app-page-heading>
     <app-materiality-level-group
       [isEditable]="isEditable$ | async"
-      [materialityLevelInfo]="materialityLevelInfo$ | async"></app-materiality-level-group>
+      [materialityLevelInfo]="materialityLevelInfo$ | async"
+      [isMaterialityUpdated]="isMaterialityUpdated$ | async"></app-materiality-level-group>
     <div *ngIf="(isEditable$ | async) === true" class="govuk-button-group">
       <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
     </div>
@@ -29,6 +30,7 @@ export class SummaryComponent implements OnInit {
     this.aerService.getPayload() as Observable<AerApplicationVerificationSubmitRequestTaskPayload>
   ).pipe(map((payload) => payload.verificationReport.materialityLevel));
   isEditable$ = this.aerService.isEditable$;
+  isMaterialityUpdated$ = this.aerService.isMaterialityUpdated$ as Observable<boolean>;
 
   constructor(
     readonly pendingRequest: PendingRequestService,

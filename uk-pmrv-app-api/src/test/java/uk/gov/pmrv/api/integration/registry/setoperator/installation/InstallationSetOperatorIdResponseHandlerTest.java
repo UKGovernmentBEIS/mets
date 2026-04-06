@@ -11,6 +11,7 @@ import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
 import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
 import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
+import uk.gov.pmrv.api.integration.common.KafkaCorrelationContext;
 import uk.gov.pmrv.api.integration.registry.common.RegistryResponseErrorCode;
 import uk.gov.pmrv.api.integration.registry.setoperator.common.NotifyErrorDTO;
 import uk.gov.pmrv.api.integration.registry.setoperator.common.OperatorIdErrorNotifierService;
@@ -44,10 +45,12 @@ class InstallationSetOperatorIdResponseHandlerTest {
     @Mock
     private AccountQueryService accountQueryService;
 
+    @Mock
+    private KafkaCorrelationContext kafkaCorrelationContext;
+
 
     @Test
     void handleResponse_whenOutcomeIsSuccess_thenProducesOutcome() {
-        final String correlationId = "1";
         final OperatorUpdateEvent event = OperatorUpdateEvent.builder()
                 .emitterId("1")
                 .operatorId(1L)
@@ -59,7 +62,7 @@ class InstallationSetOperatorIdResponseHandlerTest {
 
         when(operatorIdEventOutcomeService.getInstallationOperatorIdEventOutcome(event)).thenReturn(expectedOutcome);
 
-        installationSetOperatorIdResponseHandler.handleResponse(event, correlationId);
+        installationSetOperatorIdResponseHandler.handleResponse(event);
 
         verify(operatorIdEventOutcomeService, times(1)).getInstallationOperatorIdEventOutcome(event);
         verify(registryProducer, times(1)).produce(expectedOutcome);
@@ -69,7 +72,6 @@ class InstallationSetOperatorIdResponseHandlerTest {
 
     @Test
     void handleResponse_whenServiceThrowsException_thenProducesErrorOutcome() {
-        final String correlationId = "1";
         final OperatorUpdateEvent event = OperatorUpdateEvent.builder()
                 .emitterId("2")
                 .operatorId(1L)
@@ -78,9 +80,10 @@ class InstallationSetOperatorIdResponseHandlerTest {
 
         when(operatorIdEventOutcomeService.getInstallationOperatorIdEventOutcome(event)).thenThrow(new RuntimeException("Service failure"));
         when(accountQueryService.getAccountByEmitterId(any())).thenReturn(Optional.empty());
+        when(kafkaCorrelationContext.get()).thenReturn("correlation-id-123");
 
 
-        installationSetOperatorIdResponseHandler.handleResponse(event, correlationId);
+        installationSetOperatorIdResponseHandler.handleResponse(event);
 
         verify(operatorIdEventOutcomeService, times(1)).getInstallationOperatorIdEventOutcome(event);
         verify(registryProducer, times(1)).produce(outcomeCaptor.capture());

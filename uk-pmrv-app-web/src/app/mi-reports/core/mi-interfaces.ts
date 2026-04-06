@@ -1,5 +1,5 @@
-import { MiReportResult } from 'pmrv-api';
+import { MiReportSystemResult } from 'pmrv-api';
 
-export interface ExtendedMiReportResult extends MiReportResult {
+export interface ExtendedMiReportResult extends MiReportSystemResult {
   results: Array<any>;
 }

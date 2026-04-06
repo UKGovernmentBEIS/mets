@@ -7,6 +7,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
@@ -15,9 +16,11 @@ import uk.gov.netz.integration.model.error.IntegrationEventError;
 import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
 import uk.gov.netz.integration.model.metscontacts.MetsContactsEvent;
 import uk.gov.netz.integration.model.metscontacts.MetsContactsEventOutcome;
-import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
+import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
+import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.response.AviationRegistryIntegrationEmailProperties;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.installation.response.InstallationRegistryIntegrationEmailProperties;
@@ -54,6 +57,9 @@ class AccountContactResponseHandlerTest {
     private AccountQueryService accountQueryService;
 
     @Mock
+    private InstallationAccountQueryService installationAccountQueryService;
+
+    @Mock
     private NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
 
     @Mock
@@ -62,7 +68,7 @@ class AccountContactResponseHandlerTest {
     @Mock
     private AviationRegistryIntegrationEmailProperties aviationEmailProperties;
 
-    private Account account;
+    private InstallationAccount account;
     private IntegrationEventErrorDetails infoErrorDetails;
     private IntegrationEventErrorDetails actionErrorDetails;
     private MetsContactsEventOutcome eventOutcome;
@@ -70,13 +76,14 @@ class AccountContactResponseHandlerTest {
 
     @BeforeEach
     void setUp() {
-        account = buildAccount();
+        account = buildAccount(InstallationAccountStatus.LIVE);
         infoErrorDetails = buildErrorDetails(IntegrationEventError.ERROR_0700);
         actionErrorDetails = buildErrorDetails(IntegrationEventError.ERROR_0703);
 
         // Manual instantiation to ensure correct mock passing (no InjectMocks ambiguity)
         accountContactResponseHandler = new AccountContactResponseHandler(
                 accountQueryService,
+                installationAccountQueryService,
                 notificationEmailService,
                 installationEmailProperties,
                 aviationEmailProperties
@@ -89,7 +96,7 @@ class AccountContactResponseHandlerTest {
 
         accountContactResponseHandler.handleResponse(eventOutcome, CORRELATION_ID, INSTALLATION_SYSTEM_IDENTIFIER);
 
-        verifyNoInteractions(accountQueryService, notificationEmailService, installationEmailProperties, aviationEmailProperties);
+        verifyNoInteractions(installationAccountQueryService, notificationEmailService, installationEmailProperties, aviationEmailProperties);
     }
 
     @Test
@@ -98,21 +105,21 @@ class AccountContactResponseHandlerTest {
 
         accountContactResponseHandler.handleResponse(eventOutcome, CORRELATION_ID, INSTALLATION_SYSTEM_IDENTIFIER);
 
-        verifyNoInteractions(accountQueryService, notificationEmailService);
+        verifyNoInteractions(installationAccountQueryService, notificationEmailService);
     }
 
     @Test
     void handleResponse_error_outcome_sends_two_emails_for_installation_service() {
         MetsContactsEventOutcome eventOutcomeWithErrors = buildMetsContactsEventOutcome(List.of(infoErrorDetails, actionErrorDetails));
 
-        when(accountQueryService.getAccountByRegistryId(REGISTRY_ID)).thenReturn(Optional.of(account));
+        List<InstallationAccount> accounts = getLiveInstallationAccounts();
+        when(installationAccountQueryService.getSingleLiveAccountByRegistryId(REGISTRY_ID)).thenReturn(accounts.get(0));
         when(installationEmailProperties.getEmail()).thenReturn(Map.of(CA_ID.getCode(), EMAIL_RECIPIENT));
 
         ArgumentCaptor<EmailData> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
 
         accountContactResponseHandler.handleResponse(eventOutcomeWithErrors, CORRELATION_ID, INSTALLATION_SYSTEM_IDENTIFIER);
 
-        verify(accountQueryService, times(2)).getAccountByRegistryId(REGISTRY_ID);
         verify(notificationEmailService, times(2)).notifyRecipient(emailDataCaptor.capture(), eq(EMAIL_RECIPIENT));
 
         List<EmailData> capturedEmails = emailDataCaptor.getAllValues();
@@ -123,7 +130,7 @@ class AccountContactResponseHandlerTest {
 
         Map<String, Object> params = actionEmail.getNotificationTemplateData().getTemplateParams();
         assertEquals(INSTALLATION_SYSTEM_IDENTIFIER, params.get(PmrvEmailNotificationTemplateConstants.SOURCE_SYSTEM));
-
+        verify(installationAccountQueryService, times(2)).getSingleLiveAccountByRegistryId(REGISTRY_ID);
         verify(installationEmailProperties, times(2)).getEmail();
         verifyNoInteractions(aviationEmailProperties);
     }
@@ -159,12 +166,13 @@ class AccountContactResponseHandlerTest {
     void handleResponse_error_outcome_throws_exception_if_account_not_found() {
         MetsContactsEventOutcome eventOutcomeWithErrors = buildMetsContactsEventOutcome(List.of(infoErrorDetails, actionErrorDetails));
 
-        when(accountQueryService.getAccountByRegistryId(REGISTRY_ID)).thenReturn(Optional.empty());
+        when(installationAccountQueryService.getSingleLiveAccountByRegistryId(REGISTRY_ID))
+                .thenThrow(new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "No account found"));
 
-        assertThrows(BusinessException.class, () ->
-                accountContactResponseHandler.handleResponse(eventOutcomeWithErrors, CORRELATION_ID, INSTALLATION_SYSTEM_IDENTIFIER));
+        BusinessException be = assertThrows(BusinessException.class, () -> accountContactResponseHandler.handleResponse(eventOutcomeWithErrors, CORRELATION_ID, INSTALLATION_SYSTEM_IDENTIFIER));
 
-        verify(accountQueryService).getAccountByRegistryId(REGISTRY_ID);
+        assertEquals(ErrorCode.RESOURCE_NOT_FOUND, be.getErrorCode());
+        verify(installationAccountQueryService).getSingleLiveAccountByRegistryId(REGISTRY_ID);
         verifyNoInteractions(notificationEmailService);
     }
 
@@ -172,14 +180,15 @@ class AccountContactResponseHandlerTest {
     void handleResponse_sends_only_one_email_if_only_action_error_present() {
         MetsContactsEventOutcome eventOutcome = buildMetsContactsEventOutcome(List.of(actionErrorDetails));
 
-        when(accountQueryService.getAccountByRegistryId(REGISTRY_ID)).thenReturn(Optional.of(account));
+        List<InstallationAccount> accounts = getInstallationAccounts();
+        when(installationAccountQueryService.getSingleLiveAccountByRegistryId(REGISTRY_ID)).thenReturn(accounts.get(0));
         when(installationEmailProperties.getEmail()).thenReturn(Map.of(CA_ID.getCode(), EMAIL_RECIPIENT));
 
         ArgumentCaptor<EmailData> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
 
         accountContactResponseHandler.handleResponse(eventOutcome, CORRELATION_ID, INSTALLATION_SYSTEM_IDENTIFIER);
 
-        verify(accountQueryService, times(1)).getAccountByRegistryId(REGISTRY_ID);
+        verify(installationAccountQueryService, times(1)).getSingleLiveAccountByRegistryId(REGISTRY_ID);
         verify(notificationEmailService, times(1)).notifyRecipient(emailDataCaptor.capture(), eq(EMAIL_RECIPIENT));
 
         EmailData email = emailDataCaptor.getValue();
@@ -191,14 +200,15 @@ class AccountContactResponseHandlerTest {
     void handleResponse_sends_only_one_email_if_only_info_error_present() {
         MetsContactsEventOutcome eventOutcome = buildMetsContactsEventOutcome(List.of(infoErrorDetails));
 
-        when(accountQueryService.getAccountByRegistryId(REGISTRY_ID)).thenReturn(Optional.of(account));
+        List<InstallationAccount> accounts = getInstallationAccounts();
+        when(installationAccountQueryService.getSingleLiveAccountByRegistryId(REGISTRY_ID)).thenReturn(accounts.get(0));
         when(installationEmailProperties.getEmail()).thenReturn(Map.of(CA_ID.getCode(), EMAIL_RECIPIENT));
 
         ArgumentCaptor<EmailData> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
 
         accountContactResponseHandler.handleResponse(eventOutcome, CORRELATION_ID, INSTALLATION_SYSTEM_IDENTIFIER);
 
-        verify(accountQueryService, times(1)).getAccountByRegistryId(REGISTRY_ID);
+        verify(installationAccountQueryService, times(1)).getSingleLiveAccountByRegistryId(REGISTRY_ID);
         verify(notificationEmailService, times(1)).notifyRecipient(emailDataCaptor.capture(), eq(EMAIL_RECIPIENT));
 
         EmailData email = emailDataCaptor.getValue();
@@ -206,13 +216,40 @@ class AccountContactResponseHandlerTest {
                 email.getNotificationTemplateData().getTemplateName());
     }
 
-    private Account buildAccount() {
+    @Test
+    void handleResponse_multiple_live_accounts_found() {
+        MetsContactsEventOutcome eventOutcome = buildMetsContactsEventOutcome(List.of(infoErrorDetails));
+
+        when(installationAccountQueryService.getSingleLiveAccountByRegistryId(REGISTRY_ID))
+                .thenThrow(new BusinessException(MetsErrorCode.MULTIPLE_LIVE_ACCOUNTS_FOUND, "More than one LIVE account found with registryId " + REGISTRY_ID));
+
+        BusinessException be = assertThrows(BusinessException.class, () -> accountContactResponseHandler.handleResponse(eventOutcome, CORRELATION_ID, INSTALLATION_SYSTEM_IDENTIFIER));
+
+        assertEquals(MetsErrorCode.MULTIPLE_LIVE_ACCOUNTS_FOUND, be.getErrorCode());
+        verify(installationAccountQueryService).getSingleLiveAccountByRegistryId(REGISTRY_ID);
+        verifyNoInteractions(notificationEmailService);
+    }
+
+    private InstallationAccount buildAccount(InstallationAccountStatus status) {
         return InstallationAccount.builder()
                 .registryId(REGISTRY_ID)
                 .emitterId(EMITTER_ID)
                 .name("Account Name")
+                .status(status)
                 .competentAuthority(CA_ID)
                 .build();
+    }
+
+    public List<InstallationAccount> getInstallationAccounts() {
+        InstallationAccount account = buildAccount(InstallationAccountStatus.LIVE);
+        InstallationAccount account2 = buildAccount(InstallationAccountStatus.NEW);
+        return List.of(account, account2);
+    }
+
+    public List<InstallationAccount> getLiveInstallationAccounts() {
+        InstallationAccount account = buildAccount(InstallationAccountStatus.LIVE);
+        InstallationAccount account2 = buildAccount(InstallationAccountStatus.LIVE);
+        return List.of(account, account2);
     }
 
     private MetsContactsEventOutcome buildMetsContactsEventOutcome(IntegrationEventOutcome outcome, List<IntegrationEventErrorDetails> errors) {
@@ -220,7 +257,7 @@ class AccountContactResponseHandlerTest {
                 .accountIdentifier(String.valueOf(REGISTRY_ID))
                 .outcome(outcome)
                 .errors(errors)
-                .event(MetsContactsEvent.builder().operatorId("1").build())
+                .event(MetsContactsEvent.builder().operatorId(String.valueOf(REGISTRY_ID)).build())
                 .build();
     }
 

@@ -20,10 +20,12 @@ export class DetailsGuard {
   ) {}
 
   isExternalContactActive(route: ActivatedRouteSnapshot): Observable<boolean> {
-    return this.caExternalContactsService.getCaExternalContactById(Number(route.paramMap.get('userId'))).pipe(
-      tap((contact) => (this.externalContact = contact)),
-      map(() => true),
-    );
+    return this.caExternalContactsService
+      .getCaExternalContactsByIds(new Set([Number(route.paramMap.get('userId'))]))
+      .pipe(
+        tap(([contact]) => (this.externalContact = contact)),
+        map(() => true),
+      );
   }
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {

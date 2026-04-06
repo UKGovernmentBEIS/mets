@@ -68,6 +68,7 @@ public class AviationAerUkEtsApplicationSubmitInitializer implements InitializeR
                 .verificationBodyId(verificationBodyId)
                 .verificationPerformed(requestPayload.isVerificationPerformed())
                 .verificationSectionsCompleted(requestPayload.getVerificationSectionsCompleted())
+                .isVerifierAerTaskContentUpdate(requestPayload.getIsVerifierAerTaskContentUpdate())
                 .build();
     }
 

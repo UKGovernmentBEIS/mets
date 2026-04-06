@@ -6,14 +6,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.integration.model.IntegrationEventOutcome;
 import uk.gov.netz.integration.model.error.IntegrationEventError;
 import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
 import uk.gov.netz.integration.model.withold.AccountWithholdUpdateEventOutcome;
-import uk.gov.pmrv.api.account.domain.Account;
-import uk.gov.pmrv.api.account.service.AccountQueryService;
+import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
+import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.installation.response.InstallationRegistryIntegrationEmailProperties;
 import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
@@ -25,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.RESPONSE_LOG_FORMAT;
 
 @Slf4j
@@ -34,7 +34,7 @@ import static uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils.RE
 @ConditionalOnProperty(name = "registry.integration.withhold.flag.enabled", havingValue = "true", matchIfMissing = false)
 public class InstallationWithholdFlagResponseHandler {
 
-    private final AccountQueryService accountQueryService;
+    private final InstallationAccountQueryService installationAccountQueryService;
     private final InstallationRegistryIntegrationEmailProperties installationEmailProperties;
     private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
 
@@ -87,8 +87,13 @@ public class InstallationWithholdFlagResponseHandler {
     private void notifyRegulator(AccountWithholdUpdateEventOutcome eventOutcome, String correlationId, Map<String,String> errorsForMail, PmrvNotificationTemplateName templateName) {
         if(errorsForMail.isEmpty()) return;
 
-        Account account = accountQueryService.getAccountByRegistryId(Math.toIntExact(eventOutcome.getEvent().getRegistryId()))
-                .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
+        Long registryId = eventOutcome.getEvent().getRegistryId();
+
+        if (registryId == null) {
+            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Registry Id is null");
+        }
+
+        InstallationAccount account = installationAccountQueryService.getSingleLiveAccountByRegistryId(Math.toIntExact(registryId));
 
         Map<String, Object> templateParams = Map.of(
                 PmrvEmailNotificationTemplateConstants.EMITTER_ID, account.getEmitterId(),

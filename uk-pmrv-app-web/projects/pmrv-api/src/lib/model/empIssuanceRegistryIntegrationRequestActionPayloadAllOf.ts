@@ -11,10 +11,10 @@
  */
 import { AviationIndividualCompanyDetails } from './aviationIndividualCompanyDetails';
 import { AviationLimitedCompanyDetails } from './aviationLimitedCompanyDetails';
-import { AviationOperatorDetails } from './aviationOperatorDetails';
 import { AviationPartnershipDetails } from './aviationPartnershipDetails';
+import { AviationRegistryIntegrationOperatorDetails } from './aviationRegistryIntegrationOperatorDetails';
 
 export interface EmpIssuanceRegistryIntegrationRequestActionPayloadAllOf {
-  operatorDetails?: AviationOperatorDetails;
+  operatorDetails?: AviationRegistryIntegrationOperatorDetails;
   organisationDetails?: AviationIndividualCompanyDetails | AviationLimitedCompanyDetails | AviationPartnershipDetails;
 }

@@ -1,0 +1,25 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <app-page-heading caption="Bulk download of workflow files">Stage 2 baseline data report</app-page-heading>
+  </div>
+</div>
+<div class="overflow-auto overflow-auto-table govuk-!-padding-1">
+  <govuk-table
+    [columns]="tableColumns"
+    [data]="periods$ | async"
+    caption="Select a period to download the files for that time frame">
+    <ng-template let-column="column" let-row="row">
+      <ng-container [ngSwitch]="column.field">
+        <ng-container *ngSwitchDefault>
+          <a
+            [routerLink]="row.downloadUrl"
+            govukLink
+            target="_blank"
+            attr.data-print-text="{{ row[column.field] }} download">
+            {{ row[column.field] }} download
+          </a>
+        </ng-container>
+      </ng-container>
+    </ng-template>
+  </govuk-table>
+</div>

@@ -1,0 +1,16 @@
+@let vm = this.vm();
+
+<app-base-action-container-component
+  [header]="vm.header"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="vm.expectedActionType"></app-base-action-container-component>
+
+<ng-template #customContentTemplate>
+  <ul class="app-task-list">
+    <li app-task-section title="New entrant reserve details">
+      <ul app-task-item-list>
+        <li app-task-item link="details" linkText="New entrant reserve"></li>
+      </ul>
+    </li>
+  </ul>
+</ng-template>

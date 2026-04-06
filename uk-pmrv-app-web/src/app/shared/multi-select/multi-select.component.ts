@@ -74,6 +74,13 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, After
     }
   }
 
+  @HostListener('mousedown', ['$event'])
+  onMouseDown(event: MouseEvent): void {
+    if (this.isOpen.getValue()) {
+      event.preventDefault();
+    }
+  }
+
   constructor(
     @Inject(DOCUMENT_EVENT) readonly documentEvent: Subject<FocusEvent | PointerEvent>,
     private readonly ngControl: NgControl,

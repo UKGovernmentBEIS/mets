@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { filter, first, map, switchMap } from 'rxjs';
@@ -7,27 +7,30 @@ import { PendingRequestService } from '@core/guards/pending-request.service';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
-import { BackLinkService } from '@shared/back-link/back-link.service';
 import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
-import { cancelActionMap } from '../../cancel-action.map';
+import { cancelActionMap, isApplicationTextTypes } from '../../cancel-action.util';
 
 @Component({
   selector: 'app-cancel-surrender',
   standalone: false,
   template: `
-    <app-page-heading size="xl">Are you sure you want to cancel this task?</app-page-heading>
-    <p class="govuk-body">This task and its data will be deleted.</p>
+    @let applicationText = this.isApplicationText() ? 'application' : 'task';
+    <app-page-heading size="xl">Are you sure you want to cancel this {{ applicationText }}?</app-page-heading>
+    <p class="govuk-body">This {{ applicationText }} and its data will be deleted.</p>
     <div class="govuk-button-group">
-      <button type="button" appPendingButton (click)="cancel()" govukWarnButton>Yes, cancel this task</button>
+      <button type="button" appPendingButton (click)="cancel()" govukWarnButton>
+        Yes, cancel this {{ applicationText }}
+      </button>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CancelComponent implements OnInit {
   taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
+  isApplicationText = signal(false);
 
   constructor(
     private readonly pendingRequest: PendingRequestService,
@@ -35,7 +38,6 @@ export class CancelComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly breadcrumbsService: BreadcrumbService,
-    private readonly backLinkService: BackLinkService,
     private readonly commonTasksStore: CommonTasksStore,
   ) {}
 
@@ -49,10 +51,10 @@ export class CancelComponent implements OnInit {
         first(),
       )
       .subscribe((type) => {
+        this.isApplicationText.set(isApplicationTextTypes.includes(type));
+
         if (cancelActionMap[type] == null) {
           this.router.navigate(['error', '404']);
-        } else {
-          this.backLinkService.show();
         }
       });
   }

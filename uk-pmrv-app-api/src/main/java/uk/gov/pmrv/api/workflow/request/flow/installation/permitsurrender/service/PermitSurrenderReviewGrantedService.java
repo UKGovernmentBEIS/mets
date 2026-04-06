@@ -2,9 +2,12 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.servi
 
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountStatusService;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.NotificationRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.RegistryNotificationType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -32,6 +35,7 @@ public class PermitSurrenderReviewGrantedService {
     private final InstallationAccountStatusService installationAccountStatusService;
     private final RequestActionUserInfoResolver requestActionUserInfoResolver;
     private final PermitSurrenderOfficialNoticeService permitSurrenderOfficialNoticeService;
+    private final ApplicationEventPublisher eventPublisher;
 
     private static final PermitSurrenderMapper permitSurrenderMapper = Mappers.getMapper(PermitSurrenderMapper.class);
     
@@ -61,6 +65,12 @@ public class PermitSurrenderReviewGrantedService {
         
         //send official notice
         permitSurrenderOfficialNoticeService.sendReviewDeterminationOfficialNotice(request);
+
+        eventPublisher.publishEvent(NotificationRegistryEvent.builder()
+                .requestId(request.getId())
+                .accountId(request.getAccountId())
+                .fileInfoDTO(grantedRequestActionPayload.getOfficialNotice())
+                .registryNotificationType(RegistryNotificationType.SURRENDER_NOTIFICATION).build());
     }
     
     public Date resolveNoticeReminderDate(String requestId) {

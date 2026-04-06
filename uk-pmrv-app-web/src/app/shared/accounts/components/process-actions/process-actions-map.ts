@@ -4,6 +4,7 @@ export interface WorkflowLabelProperties {
   button: string;
   type: RequestCreateActionProcessDTO['requestCreateActionType'];
   errors: string[];
+  content?: string;
 }
 
 export interface WorkflowLabel {

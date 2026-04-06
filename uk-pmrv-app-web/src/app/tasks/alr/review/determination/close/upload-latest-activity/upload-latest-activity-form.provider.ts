@@ -5,7 +5,7 @@ import { RequestTaskFileService } from '@shared/services/request-task-file-servi
 import { ALR_TASK_FORM } from '@tasks/alr/core';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
-import { ALRApplicationRegulatorReviewSubmitRequestTaskPayload, ALRProceedToAuthorityDetermination } from 'pmrv-api';
+import { ALRApplicationRegulatorReviewSubmitRequestTaskPayload, ALRClosedDetermination } from 'pmrv-api';
 
 export const alrUploadLatestActivityFormProvider = {
   provide: ALR_TASK_FORM,
@@ -15,7 +15,7 @@ export const alrUploadLatestActivityFormProvider = {
     const disabled = !state.isEditable;
     const statePayload = state.requestTaskItem.requestTask
       .payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload;
-    const determination = statePayload.regulatorReviewOutcome?.determination as ALRProceedToAuthorityDetermination;
+    const determination = statePayload.regulatorReviewOutcome?.determination as ALRClosedDetermination;
     const uploadDocumentReport = determination?.alrFile || statePayload.alr?.alrFile;
     const uploadReportFiles = determination?.files || statePayload.alr?.files;
     const attachments = { ...statePayload?.alrAttachments, ...statePayload.regulatorReviewAttachments };

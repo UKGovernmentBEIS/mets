@@ -216,6 +216,7 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_ALR, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_BDRS2, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_BDRS2_REVIEW, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_BDRS2, RegulatorPermissionLevel.NONE);
 
         assertThat(pmrvRegulatorPermissionsAdapter.getPermissionGroupLevelsFromPermissions(permissions))
                 .containsExactlyInAnyOrderEntriesOf(expectedPermissionGroupLevels);
@@ -299,6 +300,7 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_ALR, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_BDRS2, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_BDRS2_REVIEW, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_BDRS2, RegulatorPermissionLevel.NONE);
 
         assertThat(pmrvRegulatorPermissionsAdapter.getPermissionGroupLevelsFromPermissions(permissions))
                 .containsExactlyInAnyOrderEntriesOf(expectedPermissionGroupLevels);
@@ -400,6 +402,7 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_ALR, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_BDRS2, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_BDRS2_REVIEW, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_BDRS2, RegulatorPermissionLevel.NONE);
 
         assertThat(pmrvRegulatorPermissionsAdapter.getPermissionGroupLevelsFromPermissions(permissions))
                 .containsExactlyInAnyOrderEntriesOf(expectedPermissionGroupLevels);
@@ -477,6 +480,7 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_ALR, List.of(RegulatorPermissionLevel.NONE, EXECUTE));
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_BDRS2_REVIEW, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_BDRS2, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_BDRS2, List.of(RegulatorPermissionLevel.NONE, EXECUTE));
 
         Map<String, List<RegulatorPermissionLevel>> actualPermissionGroupLevels =
                 pmrvRegulatorPermissionsAdapter.getPermissionGroupLevels();

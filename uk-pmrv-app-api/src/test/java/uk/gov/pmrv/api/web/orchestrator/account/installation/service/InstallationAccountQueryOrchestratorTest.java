@@ -160,7 +160,7 @@ class InstallationAccountQueryOrchestratorTest {
         when(accountFileAttachmentService
             .getLatestFinalizedFileByWorkflowsAndWorkflowSubTypeAndAccountId(
                 accountId,
-                Set.of(AccountFileAttachmentWorkflow.BDR),
+                Set.of(AccountFileAttachmentWorkflow.BDR, AccountFileAttachmentWorkflow.BDRS2),
                 AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT
             ))
             .thenReturn(bdr);
@@ -208,7 +208,7 @@ class InstallationAccountQueryOrchestratorTest {
         when(accountFileAttachmentService
             .getLatestFinalizedFileByWorkflowsAndWorkflowSubTypeAndAccountId(
                 accountId,
-                Set.of(AccountFileAttachmentWorkflow.BDR),
+                Set.of(AccountFileAttachmentWorkflow.BDR, AccountFileAttachmentWorkflow.BDRS2),
                 AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT
             ))
             .thenReturn(Optional.empty());
@@ -246,7 +246,7 @@ class InstallationAccountQueryOrchestratorTest {
         when(accountFileAttachmentService
             .getLatestFinalizedFileByWorkflowsAndWorkflowSubTypeAndAccountId(
                 accountId,
-                Set.of(AccountFileAttachmentWorkflow.BDR),
+                Set.of(AccountFileAttachmentWorkflow.BDR, AccountFileAttachmentWorkflow.BDRS2),
                 AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT
             ))
             .thenReturn(bdr);

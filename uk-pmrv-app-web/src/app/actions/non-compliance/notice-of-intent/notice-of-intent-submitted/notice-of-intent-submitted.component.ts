@@ -1,13 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { first, map, Observable, switchMap } from 'rxjs';
+import { first, iif, map, Observable, of, switchMap } from 'rxjs';
 
 import { NonComplianceService } from '@actions/non-compliance/core/non-compliance.service';
 import { AuthStore, selectCurrentDomain } from '@core/store';
 import { UserInfoResolverPipe } from '@shared/pipes/user-info-resolver.pipe';
 
 import {
-  CaExternalContactsDTO,
   CaExternalContactsService,
   NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload,
 } from 'pmrv-api';
@@ -46,15 +45,14 @@ export class NoticeOfIntentSubmittedComponent {
 
       const transformExternals = (externalUsers) => externalUsers.map((user) => `${user.name} - External contact`);
 
-      return this.caExternalContactsService.getCaExternalContacts().pipe(
-        map((externalContacts: CaExternalContactsDTO) => {
-          // Filter external contacts based on the IDs in payload.externalContacts
-          const filteredExternalContacts = externalContacts.caExternalContacts.filter((external) =>
-            payload?.externalContacts?.includes(external.id),
-          );
-
-          return [...internalUsers, ...transformExternals(filteredExternalContacts)];
-        }),
+      return iif(
+        () => payload?.externalContacts && payload?.externalContacts.length > 0,
+        this.caExternalContactsService.getCaExternalContactsByIds(new Set(payload?.externalContacts)).pipe(
+          map(([...externalContacts]) => {
+            return [...internalUsers, ...transformExternals(externalContacts)];
+          }),
+        ),
+        of([...internalUsers]),
       );
     }),
   );

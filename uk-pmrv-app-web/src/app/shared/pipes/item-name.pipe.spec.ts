@@ -739,6 +739,9 @@ describe('ItemNamePipe', () => {
       'Amend January to March 2022 quarterly data report',
     );
 
+    expect(pipe.transform('NER_APPLICATION_SUBMIT')).toEqual('Complete new entrant reserve');
+    expect(pipe.transform('NER_WAIT_FOR_VERIFICATION')).toEqual('New entrant reserve sent to verifier');
+
     expect(pipe.transform(null)).toBeNull();
   });
 });

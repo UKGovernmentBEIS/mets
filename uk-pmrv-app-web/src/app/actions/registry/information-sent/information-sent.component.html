@@ -53,6 +53,36 @@
       </dl>
     }
 
+    @case ('NOTIFICATION_SENT_TO_REGISTRY') {
+      @let notificationFile = $any(vm.payload).sentFile;
+
+      <h2 class="govuk-heading-m">Details</h2>
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Registry ID</dt>
+          <dd govukSummaryListRowValue>{{ $any(vm.payload).registryId }}</dd>
+          <dd govukSummaryListRowActions></dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Notification type</dt>
+          <dd govukSummaryListRowValue>{{ $any(vm.payload).notificationType }}</dd>
+          <dd govukSummaryListRowActions></dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Notification</dt>
+          <dd govukSummaryListRowValue>
+            <a
+              [routerLink]="['/', 'actions', vm.actionId, 'file-download', 'document', notificationFile.uuid]"
+              govukLink
+              target="_blank">
+              {{ notificationFile.name }}
+            </a>
+          </dd>
+          <dd govukSummaryListRowActions></dd>
+        </div>
+      </dl>
+    }
+
     @default {
       <h2 class="govuk-heading-m">Active permit</h2>
       <dl govuk-summary-list>

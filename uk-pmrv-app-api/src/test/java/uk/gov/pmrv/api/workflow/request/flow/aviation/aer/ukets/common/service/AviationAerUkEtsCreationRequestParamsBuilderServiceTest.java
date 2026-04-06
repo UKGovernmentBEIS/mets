@@ -66,6 +66,7 @@ class AviationAerUkEtsCreationRequestParamsBuilderServiceTest {
                 .payloadType(RequestPayloadType.AVIATION_AER_UKETS_REQUEST_PAYLOAD)
                 .empOriginatedData(empOriginatedData)
                 .aerMonitoringPlanVersions(versions)
+                .isVerifierAerTaskContentUpdate(true)
                 .build())
             .requestMetadata(AviationAerRequestMetadata.builder()
                 .type(RequestMetadataType.AVIATION_AER)

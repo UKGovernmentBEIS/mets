@@ -49,6 +49,7 @@ const relatedRequestTaskActions: Array<RequestTaskActionProcessDTO['requestTaskA
   'ALR_VERIFICATION_RETURN_TO_OPERATOR',
   'ALR_RECALL_FROM_VERIFICATION',
   'HSE_TI_CANCEL',
+  'NER_CANCEL_APPLICATION',
 ];
 
 export function hasRelatedViewActions(type: RequestInfoDTO['type']) {
@@ -118,6 +119,7 @@ function actionDetails(
     case 'RETURN_OF_ALLOWANCES_CANCEL_APPLICATION':
     case 'INSTALLATION_AUDIT_CANCEL_APPLICATION':
     case 'INSTALLATION_ONSITE_INSPECTION_CANCEL_APPLICATION':
+    case 'NER_CANCEL_APPLICATION':
       return { text: 'Cancel task', link: [routerLooks + 'tasks', taskId, 'cancel'] };
 
     case 'WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_CLOSE_APPLICATION':

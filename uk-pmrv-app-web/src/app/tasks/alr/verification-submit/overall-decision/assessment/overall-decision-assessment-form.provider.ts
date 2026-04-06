@@ -1,4 +1,4 @@
-import { UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, ValidationErrors } from '@angular/forms';
 
 import { OverallVerificationAssessment } from '@shared/components/overall-decision-summary-template/overall-decision';
 import { ALR_TASK_FORM } from '@tasks/alr/core';
@@ -47,7 +47,7 @@ export const overallAssessmentFormProvider = {
   },
 };
 
-const reasonsValidator = (): ValidatorFn => {
+const reasonsValidator = () => {
   return (group: UntypedFormGroup): ValidationErrors => {
     const type: OverallVerificationAssessment['type'] = group.get('type').value;
     const reasons: OverallVerificationAssessment['reasons'] =

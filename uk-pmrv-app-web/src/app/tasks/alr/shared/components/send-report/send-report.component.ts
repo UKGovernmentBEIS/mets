@@ -86,6 +86,8 @@ export class AlrSendReportComponent {
   ) {}
 
   onSubmit() {
+    let accountId: number;
+
     const requestTaskType = this.requestTaskItem().requestTask.type;
     const state = this.store.getState();
     const verificationPerformed = (state.requestTaskItem.requestTask.payload as ALRApplicationSubmitRequestTaskPayload)
@@ -108,7 +110,11 @@ export class AlrSendReportComponent {
       this.alrService.requestAccountId$
         .pipe(
           first(),
-          switchMap((accountId) => this.accountVerificationBodyService.getVerificationBodyOfAccount(accountId)),
+          switchMap((id) => {
+            accountId = id;
+
+            return this.accountVerificationBodyService.getVerificationBodyOfAccount(accountId);
+          }),
           switchMap((vb) => (vb ? of(vb) : this.businessErrorService.showError(notFoundVerificationBodyError()))),
           tap((vb) => {
             if (

@@ -44,7 +44,14 @@
           <li app-task-item link="./non-compliances" linkText="Uncorrected non-compliances"></li>
           <li app-task-item link="./recommended-improvements" linkText="Recommended improvements"></li>
           <li app-task-item link="./data-gaps" linkText="Methodologies to close data gaps"></li>
-          <li app-task-item link="./materiality-level" linkText="Materiality level and reference documents"></li>
+          <li
+            app-task-item
+            link="./materiality-level"
+            [linkText]="
+              (isMaterialityUpdated$ | async)
+                ? 'Further information of relevance to the opinion'
+                : 'Materiality level and reference documents'
+            "></li>
           <li
             app-task-item
             link="./summary-of-conditions"

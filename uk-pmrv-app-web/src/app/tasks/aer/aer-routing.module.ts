@@ -843,7 +843,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            data: { pageTitle: 'Compliance with the Monitoring and Reporting Principles' },
+            data: { pageTitle: 'Compliance with the monitoring and reporting principles' },
             component: ComplianceMonitoringComponent,
             canDeactivate: [PendingRequestGuard],
           },
@@ -851,7 +851,7 @@ const routes: Routes = [
             path: 'summary',
             data: {
               pageTitle: 'Check your answers',
-              breadcrumb: 'Compliance with the Monitoring and Reporting Principles summary',
+              breadcrumb: 'Compliance with the monitoring and reporting principles summary',
             },
             component: ComplianceMonitoringSummaryComponent,
             canActivate: [VerificationSubmitSummaryGuard],

@@ -30,6 +30,7 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY')).toEqual(
       'Information sent to Registry by system',
     );
+    expect(pipe.transform('NOTIFICATION_SENT_TO_REGISTRY')).toEqual('Information sent to Registry by system');
 
     expect(pipe.transform('PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMITTED')).toEqual(
       'Amended permit application submitted',
@@ -623,6 +624,9 @@ describe('ItemActionTypePipe', () => {
     );
     expect(pipe.transform('WASTE_QDR_APPLICATION_AMENDS_SUBMITTED')).toEqual('Changes submitted to regulator');
     expect(pipe.transform('WASTE_QDR_APPLICATION_COMPLETED')).toEqual('Quarterly data report reviewed');
+
+    expect(pipe.transform('NER_APPLICATION_CANCELLED')).toEqual('New entrant reserve application cancelled');
+    expect(pipe.transform('NER_APPLICATION_SENT_TO_VERIFIER')).toEqual('Submitted to verifier');
 
     expect(pipe.transform(undefined)).toEqual('Approved Application');
   });

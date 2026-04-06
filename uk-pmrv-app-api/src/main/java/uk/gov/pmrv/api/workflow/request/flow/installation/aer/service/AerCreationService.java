@@ -97,6 +97,8 @@ public class AerCreationService {
                         .permitOriginatedData(permitOriginatedData)
                         .monitoringPlanVersions(aerMonitoringPlanVersionsBuilderService.buildMonitoringPlanVersions(accountId, permitId, aerYear))
                         .isPostALRSectionRemoval(true)
+                        .sm3UnitEnabled(true)
+                        .isVerifierAerTaskContentUpdate(true)
                         .build())
                 .requestMetadata(AerRequestMetadata.builder()
                         .type(RequestMetadataType.AER)

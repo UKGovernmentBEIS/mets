@@ -16,9 +16,9 @@ import { Observable } from 'rxjs';
 
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
-import { MiReportParams } from '../model/miReportParams';
-import { MiReportResult } from '../model/miReportResult';
-import { MiReportSearchResult } from '../model/miReportSearchResult';
+import { MiReportSystemParams } from '../model/miReportSystemParams';
+import { MiReportSystemResult } from '../model/miReportSystemResult';
+import { MiReportSystemSearchResult } from '../model/miReportSystemSearchResult';
 import { BASE_PATH } from '../variables';
 
 @Injectable({
@@ -84,129 +84,40 @@ export class MiReportsService {
   }
 
   /**
-   * Generates custom report
-   * @param accountType The account type
-   * @param miReportParams
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public generateCustomReport(
-    accountType: 'INSTALLATION' | 'AVIATION',
-    miReportParams: MiReportParams,
-  ): Observable<MiReportResult>;
-  public generateCustomReport(
-    accountType: 'INSTALLATION' | 'AVIATION',
-    miReportParams: MiReportParams,
-    observe: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpResponse<MiReportResult>>;
-  public generateCustomReport(
-    accountType: 'INSTALLATION' | 'AVIATION',
-    miReportParams: MiReportParams,
-    observe: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpEvent<MiReportResult>>;
-  public generateCustomReport(
-    accountType: 'INSTALLATION' | 'AVIATION',
-    miReportParams: MiReportParams,
-    observe: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<MiReportResult>;
-  public generateCustomReport(
-    accountType: 'INSTALLATION' | 'AVIATION',
-    miReportParams: MiReportParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<any> {
-    if (accountType === null || accountType === undefined) {
-      throw new Error('Required parameter accountType was null or undefined when calling generateCustomReport.');
-    }
-    if (miReportParams === null || miReportParams === undefined) {
-      throw new Error('Required parameter miReportParams was null or undefined when calling generateCustomReport.');
-    }
-
-    let headers = this.defaultHeaders;
-
-    // authentication (bearerAuth) required
-    const credential = this.configuration.lookupCredential('bearerAuth');
-    if (credential) {
-      headers = headers.set('Authorization', 'Bearer ' + credential);
-    }
-
-    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (httpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (httpHeaderAcceptSelected !== undefined) {
-      headers = headers.set('Accept', httpHeaderAcceptSelected);
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = ['application/json'];
-    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      headers = headers.set('Content-Type', httpContentTypeSelected);
-    }
-
-    let responseType_: 'text' | 'json' = 'json';
-    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
-      responseType_ = 'text';
-    }
-
-    return this.httpClient.post<MiReportResult>(
-      `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/mireports/custom`,
-      miReportParams,
-      {
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: headers,
-        observe: observe,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
    * Generates the report identified by the provided report type
    * @param accountType The account type
-   * @param miReportParams
+   * @param miReportSystemParams
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public generateReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    miReportParams: MiReportParams,
-  ): Observable<MiReportResult>;
+    miReportSystemParams: MiReportSystemParams,
+  ): Observable<MiReportSystemResult>;
   public generateReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    miReportParams: MiReportParams,
+    miReportSystemParams: MiReportSystemParams,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpResponse<MiReportResult>>;
+  ): Observable<HttpResponse<MiReportSystemResult>>;
   public generateReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    miReportParams: MiReportParams,
+    miReportSystemParams: MiReportSystemParams,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpEvent<MiReportResult>>;
+  ): Observable<HttpEvent<MiReportSystemResult>>;
   public generateReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    miReportParams: MiReportParams,
+    miReportSystemParams: MiReportSystemParams,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<MiReportResult>;
+  ): Observable<MiReportSystemResult>;
   public generateReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    miReportParams: MiReportParams,
+    miReportSystemParams: MiReportSystemParams,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
@@ -214,8 +125,8 @@ export class MiReportsService {
     if (accountType === null || accountType === undefined) {
       throw new Error('Required parameter accountType was null or undefined when calling generateReport.');
     }
-    if (miReportParams === null || miReportParams === undefined) {
-      throw new Error('Required parameter miReportParams was null or undefined when calling generateReport.');
+    if (miReportSystemParams === null || miReportSystemParams === undefined) {
+      throw new Error('Required parameter miReportSystemParams was null or undefined when calling generateReport.');
     }
 
     let headers = this.defaultHeaders;
@@ -248,9 +159,9 @@ export class MiReportsService {
       responseType_ = 'text';
     }
 
-    return this.httpClient.post<MiReportResult>(
-      `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/mireports`,
-      miReportParams,
+    return this.httpClient.post<MiReportSystemResult>(
+      `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/mireports/system`,
+      miReportSystemParams,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
@@ -267,25 +178,27 @@ export class MiReportsService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getCurrentUserMiReports(accountType: 'INSTALLATION' | 'AVIATION'): Observable<Array<MiReportSearchResult>>;
+  public getCurrentUserMiReports(
+    accountType: 'INSTALLATION' | 'AVIATION',
+  ): Observable<Array<MiReportSystemSearchResult>>;
   public getCurrentUserMiReports(
     accountType: 'INSTALLATION' | 'AVIATION',
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpResponse<Array<MiReportSearchResult>>>;
+  ): Observable<HttpResponse<Array<MiReportSystemSearchResult>>>;
   public getCurrentUserMiReports(
     accountType: 'INSTALLATION' | 'AVIATION',
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpEvent<Array<MiReportSearchResult>>>;
+  ): Observable<HttpEvent<Array<MiReportSystemSearchResult>>>;
   public getCurrentUserMiReports(
     accountType: 'INSTALLATION' | 'AVIATION',
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<Array<MiReportSearchResult>>;
+  ): Observable<Array<MiReportSystemSearchResult>>;
   public getCurrentUserMiReports(
     accountType: 'INSTALLATION' | 'AVIATION',
     observe: any = 'body',
@@ -319,8 +232,8 @@ export class MiReportsService {
       responseType_ = 'text';
     }
 
-    return this.httpClient.get<Array<MiReportSearchResult>>(
-      `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/mireports/types`,
+    return this.httpClient.get<Array<MiReportSystemSearchResult>>(
+      `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/mireports/system/types`,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
@@ -392,7 +305,7 @@ export class MiReportsService {
     }
 
     return this.httpClient.get<Array<string>>(
-      `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/mireports/request-task-types`,
+      `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/mireports/system/request-task-types`,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

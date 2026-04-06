@@ -83,7 +83,7 @@ describe('SummaryDetailsComponent', () => {
       ['Supporting note', 'reason'],
       ['Date regulated activities ended', '13 Dec 2012'],
       ['Effective date of notice', '13 Dec 2030'],
-      ['Surrender annual emmisions report', 'No'],
+      ['Surrender annual emissions report', 'No'],
       ['Surrender of allowances', 'No'],
     ]);
 

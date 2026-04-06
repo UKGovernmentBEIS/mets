@@ -10,13 +10,13 @@ import uk.gov.netz.api.authorization.rules.domain.Scope;
 import uk.gov.netz.api.authorization.rules.services.resource.CompAuthAuthorizationResourceService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.CaExternalContact;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactDTO;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactRegistrationDTO;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactsDTO;
 import uk.gov.pmrv.api.account.repository.CaExternalContactRepository;
 import uk.gov.pmrv.api.account.transform.CaExternalContactMapper;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,13 +42,11 @@ public class CaExternalContactService {
             .build();
     }
     
-    public CaExternalContactDTO getCaExternalContactById(AppUser authUser, Long id) {
-        CompetentAuthorityEnum ca = authUser.getCompetentAuthority();
+    public List<CaExternalContactDTO> getCaExternalContactsByIds(Set<Long> ids) {
 
-        CaExternalContact caExternalContact = caExternalContactRepository.findByIdAndCompetentAuthority(id, ca)
-            .orElseThrow(() -> new BusinessException(ErrorCode.EXTERNAL_CONTACT_NOT_RELATED_TO_CA));
+        List<CaExternalContact> contacts = caExternalContactRepository.findAllByIdIn(ids);
 
-        return caExternalContactMapper.toCaExternalContactDTO(caExternalContact);
+        return contacts.stream().map(caExternalContactMapper::toCaExternalContactDTO).toList();
     }
     
     public List<String> getCaExternalContactEmailsByIds(Set<Long> ids){

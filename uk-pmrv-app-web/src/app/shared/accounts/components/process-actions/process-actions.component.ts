@@ -66,7 +66,6 @@ export class ProcessActionsComponent implements OnInit {
         },
       ],
     },
-
     {
       title: 'Notify the regulator of a change',
       properties: [
@@ -77,7 +76,6 @@ export class ProcessActionsComponent implements OnInit {
         },
       ],
     },
-
     {
       title: 'Start a new HSE target increase application',
       properties: [
@@ -88,7 +86,6 @@ export class ProcessActionsComponent implements OnInit {
         },
       ],
     },
-
     {
       title: 'Make a change to your emissions plan',
       properties: [
@@ -106,6 +103,18 @@ export class ProcessActionsComponent implements OnInit {
           button: 'Start an emission plan variation',
           type: 'EMP_VARIATION_CORSIA',
           errors: [],
+        },
+      ],
+    },
+    {
+      title: 'Apply for a New Entrant Reserve (NER) allocation',
+      properties: [
+        {
+          button: 'Start an NER application',
+          type: 'NER',
+          errors: [],
+          content:
+            'If you are an eligible new entrant and wish to apply for a free allocation from the NER, you must upload both:',
         },
       ],
     },
@@ -288,6 +297,7 @@ export class ProcessActionsComponent implements OnInit {
               .map((property) => ({
                 button: property.button,
                 type: property.type,
+                content: property.content,
                 errors: validationResults[property.type].valid
                   ? []
                   : this.createErrorMessages(property.type, validationResults[property.type]),
@@ -354,6 +364,8 @@ export class ProcessActionsComponent implements OnInit {
       return [
         'You cannot start a withholding of allowances as there is already one in progress or completed. You can reopen the completed workflows.',
       ];
+    } else if (requestType === 'NER') {
+      return ['You cannot start a new entrant reserve application as there is already one in progress or completed.'];
     } else {
       return result?.requests?.length > 0
         ? [

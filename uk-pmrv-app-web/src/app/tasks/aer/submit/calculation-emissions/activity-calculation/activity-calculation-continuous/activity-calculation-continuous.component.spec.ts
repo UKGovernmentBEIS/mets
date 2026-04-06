@@ -54,13 +54,6 @@ describe('ActivityCalculationContinuousComponent', () => {
   };
 
   class Page extends BasePage<ActivityCalculationContinuousComponent> {
-    get measurementUnitValue() {
-      return this.getInputValue('#measurementUnit');
-    }
-
-    set measurementUnitValue(value: string) {
-      this.setInputValue('#measurementUnit', value);
-    }
     get totalMaterialValue() {
       return this.getInputValue('#totalMaterial');
     }
@@ -124,6 +117,7 @@ describe('ActivityCalculationContinuousComponent', () => {
                       type: 'NATIONAL_INVENTORY_DATA',
                       calculationActivityDataCalculationMethod: {
                         type: 'CONTINUOUS_METERING',
+                        measurementUnit: 'TONNES',
                       },
                     },
                     parameterMonitoringTiers,
@@ -154,15 +148,11 @@ describe('ActivityCalculationContinuousComponent', () => {
       fixture.detectChanges();
 
       expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummaryLinks).toEqual([
-        'Please select a measurement unit',
-        'Please state the total amount of exported fuel',
-      ]);
+      expect(page.errorSummaryLinks).toEqual(['Please state the total amount of exported fuel']);
 
       page.submitButton.click();
       fixture.detectChanges();
 
-      page.measurementUnitValue = 'TONNES';
       page.totalMaterialValue = '10';
 
       page.submitButton.click();
@@ -251,7 +241,6 @@ describe('ActivityCalculationContinuousComponent', () => {
     it('should  fill the form with data from the store', () => {
       expect(page.errorSummary).toBeFalsy();
 
-      expect(page.measurementUnitValue).toEqual('TONNES');
       expect(page.totalMaterialValue).toEqual('10');
     });
 

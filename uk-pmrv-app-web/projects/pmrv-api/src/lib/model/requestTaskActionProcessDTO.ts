@@ -118,13 +118,8 @@ import { InstallationAccountOpeningSubmitDecisionRequestTaskActionPayload } from
 import { InstallationAuditApplicationSaveRequestTaskActionPayload } from './installationAuditApplicationSaveRequestTaskActionPayload';
 import { InstallationInspectionOperatorRespondSaveRequestTaskActionPayload } from './installationInspectionOperatorRespondSaveRequestTaskActionPayload';
 import { InstallationOnsiteInspectionApplicationSaveRequestTaskActionPayload } from './installationOnsiteInspectionApplicationSaveRequestTaskActionPayload';
-import { NerSaveApplicationAmendRequestTaskActionPayload } from './nerSaveApplicationAmendRequestTaskActionPayload';
+import { NERApplicationSubmitToVerifierRequestTaskActionPayload } from './nERApplicationSubmitToVerifierRequestTaskActionPayload';
 import { NerSaveApplicationRequestTaskActionPayload } from './nerSaveApplicationRequestTaskActionPayload';
-import { NerSaveApplicationReviewRequestTaskActionPayload } from './nerSaveApplicationReviewRequestTaskActionPayload';
-import { NerSaveAuthorityResponseRequestTaskActionPayload } from './nerSaveAuthorityResponseRequestTaskActionPayload';
-import { NerSaveReviewDeterminationRequestTaskActionPayload } from './nerSaveReviewDeterminationRequestTaskActionPayload';
-import { NerSaveReviewGroupDecisionRequestTaskActionPayload } from './nerSaveReviewGroupDecisionRequestTaskActionPayload';
-import { NerSubmitApplicationAmendRequestTaskActionPayload } from './nerSubmitApplicationAmendRequestTaskActionPayload';
 import { NonComplianceAmendDetailsRequestTaskActionPayload } from './nonComplianceAmendDetailsRequestTaskActionPayload';
 import { NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload } from './nonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload';
 import { NonComplianceCloseApplicationRequestTaskActionPayload } from './nonComplianceCloseApplicationRequestTaskActionPayload';
@@ -315,6 +310,7 @@ export interface RequestTaskActionProcessDTO {
     | 'NER_CANCEL_APPLICATION'
     | 'NER_UPLOAD_ATTACHMENT'
     | 'NER_SAVE_APPLICATION'
+    | 'NER_APPLICATION_SUBMIT_TO_VERIFIER'
     | 'NER_SUBMIT_APPLICATION'
     | 'NER_SAVE_APPLICATION_REVIEW'
     | 'NER_SAVE_REVIEW_GROUP_DECISION'
@@ -755,13 +751,8 @@ export interface RequestTaskActionProcessDTO {
     | InstallationAuditApplicationSaveRequestTaskActionPayload
     | InstallationInspectionOperatorRespondSaveRequestTaskActionPayload
     | InstallationOnsiteInspectionApplicationSaveRequestTaskActionPayload
-    | NerSaveApplicationAmendRequestTaskActionPayload
+    | NERApplicationSubmitToVerifierRequestTaskActionPayload
     | NerSaveApplicationRequestTaskActionPayload
-    | NerSaveApplicationReviewRequestTaskActionPayload
-    | NerSaveAuthorityResponseRequestTaskActionPayload
-    | NerSaveReviewDeterminationRequestTaskActionPayload
-    | NerSaveReviewGroupDecisionRequestTaskActionPayload
-    | NerSubmitApplicationAmendRequestTaskActionPayload
     | NonComplianceAmendDetailsRequestTaskActionPayload
     | NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload
     | NonComplianceCloseApplicationRequestTaskActionPayload

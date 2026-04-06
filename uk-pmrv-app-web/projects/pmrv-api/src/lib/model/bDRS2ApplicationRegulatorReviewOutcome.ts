@@ -12,7 +12,7 @@
 import { BDRS2RegulatorReviewNotes } from './bDRS2RegulatorReviewNotes';
 
 export interface BDRS2ApplicationRegulatorReviewOutcome {
-  freeAllocationOpinion: 'SENT_TO_AUTHORITY' | 'WITHDRAWN';
+  freeAllocationOpinion?: 'SENT_TO_AUTHORITY' | 'WITHDRAWN';
   freeAllocationReviewNotes?: BDRS2RegulatorReviewNotes;
   covidAdjustmentsOpinion?: 'SENT_TO_AUTHORITY' | 'NO_ADJUSTMENTS';
   covidAdjustmentsReviewNotes?: BDRS2RegulatorReviewNotes;

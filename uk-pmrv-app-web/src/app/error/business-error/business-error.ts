@@ -3,7 +3,10 @@ export class BusinessError {
   linkText: string;
   fragment?: string;
 
-  constructor(readonly heading: string) {}
+  constructor(
+    readonly heading: string,
+    readonly accountId?: number,
+  ) {}
 
   withLink?({ link, linkText, fragment }: Pick<BusinessError, 'link' | 'linkText' | 'fragment'>): this {
     this.link = link;

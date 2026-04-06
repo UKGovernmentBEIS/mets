@@ -30,6 +30,7 @@ export interface RequestMetadata {
     | 'PERMANENT_CESSATION'
     | 'ALR'
     | 'WASTE_QDR'
+    | 'NER'
     | 'REISSUE'
     | 'AVIATION_AER'
     | 'AVIATION_AER_CORSIA'

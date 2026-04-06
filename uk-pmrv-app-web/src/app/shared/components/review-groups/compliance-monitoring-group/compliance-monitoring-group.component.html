@@ -1,84 +1,106 @@
-<dl *ngIf="compliance" govuk-summary-list [hasBorders]="true">
-  <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>Accuracy</dt>
-    <dd govukSummaryListRowValue class="pre-wrap">
-      <span *ngIf="compliance.accuracy; else accuracyReason">Yes</span>
-      <ng-template #accuracyReason>
-        No <br />
-        {{ compliance.accuracyReason }}
-      </ng-template>
-    </dd>
-    <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="..">Change</a>
-    </dd>
-  </div>
-
-  <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>Completeness</dt>
-    <dd govukSummaryListRowValue class="pre-wrap">
-      <span *ngIf="compliance.completeness; else completenessReason">Yes</span>
-      <ng-template #completenessReason>
-        No <br />
-        {{ compliance.completenessReason }}
-      </ng-template>
-    </dd>
-    <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="..">Change</a>
-    </dd>
-  </div>
-
-  <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>Consistency</dt>
-    <dd govukSummaryListRowValue class="pre-wrap">
-      <span *ngIf="compliance.consistency; else consistencyReason">Yes</span>
-      <ng-template #consistencyReason>
-        No <br />
-        {{ compliance.consistencyReason }}
-      </ng-template>
-    </dd>
-    <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="..">Change</a>
-    </dd>
-  </div>
-
-  <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>Comparability over time</dt>
-    <dd govukSummaryListRowValue class="pre-wrap">
-      <span *ngIf="compliance.comparability; else comparabilityReason">Yes</span>
-      <ng-template #comparabilityReason>
-        No <br />
-        {{ compliance.comparabilityReason }}
-      </ng-template>
-    </dd>
-    <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="..">Change</a>
-    </dd>
-  </div>
-
-  <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>Transparency</dt>
-    <dd govukSummaryListRowValue class="pre-wrap">
-      <span *ngIf="compliance.transparency; else transparencyReason">Yes</span>
-      <ng-template #transparencyReason>
-        No <br />
-        {{ compliance.transparencyReason }}
-      </ng-template>
-    </dd>
-    <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="..">Change</a>
-    </dd>
-  </div>
-  <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>Integrity of methodology</dt>
-    <dd govukSummaryListRowValue class="pre-wrap">
-      <span *ngIf="compliance.integrity; else integrityReason">Yes</span>
-      <ng-template #integrityReason>
-        No <br />
-        {{ compliance.integrityReason }}
-      </ng-template>
-    </dd>
-    <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="..">Change</a>
-    </dd>
-  </div>
-</dl>
+@if (compliance) {
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Accuracy</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        @if (compliance.accuracy) {
+          <span>Compliant</span>
+        } @else {
+          Not compliant
+          <br />
+          {{ compliance.accuracyReason }}
+        }
+      </dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink routerLink="..">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Completeness</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        @if (compliance.completeness) {
+          <span>Compliant</span>
+        } @else {
+          Not compliant
+          <br />
+          {{ compliance.completenessReason }}
+        }
+      </dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink routerLink="..">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Consistency</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        @if (compliance.consistency) {
+          <span>Compliant</span>
+        } @else {
+          Not compliant
+          <br />
+          {{ compliance.consistencyReason }}
+        }
+      </dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink routerLink="..">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Comparability over time</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        @if (compliance.comparability) {
+          <span>Compliant</span>
+        } @else {
+          Not compliant
+          <br />
+          {{ compliance.comparabilityReason }}
+        }
+      </dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink routerLink="..">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Transparency</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        @if (compliance.transparency) {
+          <span>Compliant</span>
+        } @else {
+          Not compliant
+          <br />
+          {{ compliance.transparencyReason }}
+        }
+      </dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink routerLink="..">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Integrity of methodology</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        @if (compliance.integrity) {
+          <span>Compliant</span>
+        } @else {
+          Not compliant
+          <br />
+          {{ compliance.integrityReason }}
+        }
+      </dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink routerLink="..">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

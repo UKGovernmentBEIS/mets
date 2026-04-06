@@ -6,6 +6,17 @@ import { AccountSearchResult } from '@shared/accounts';
   selector: 'app-accounts-list',
   standalone: false,
   templateUrl: './accounts-list.component.html',
+  styles: `
+    .account-metadata {
+      padding: 0;
+    }
+    .account-metadata-item {
+      display: inline-block;
+      list-style: none;
+      padding-right: 20px;
+      margin: 0px;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountsListComponent {

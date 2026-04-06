@@ -6,23 +6,28 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestCreateAccountRelatedValidator;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestCreateValidatorService;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
 public class NerCreateValidator extends RequestCreateAccountRelatedValidator {
 
+    private final RequestRepository requestRepository;
     private final InstallationAccountQueryService installationAccountQueryService;
     
-    public NerCreateValidator(final RequestCreateValidatorService requestCreateValidatorService,
+    public NerCreateValidator(final RequestCreateValidatorService requestCreateValidatorService, RequestRepository requestRepository,
                               final InstallationAccountQueryService installationAccountQueryService) {
         
         super(requestCreateValidatorService);
+        this.requestRepository = requestRepository;
         this.installationAccountQueryService = installationAccountQueryService;
     }
 
@@ -31,7 +36,13 @@ public class NerCreateValidator extends RequestCreateAccountRelatedValidator {
 
         // this is safe to call, as RequestType.NER is tied to AccountType.INSTALLATION
         final InstallationAccountDTO accountDTOById = installationAccountQueryService.getAccountDTOById(accountId);
-        if (accountDTOById.getEmitterType() == EmitterType.HSE) {
+        List<Request> BDRrequestsList = requestRepository.findByAccountIdAndType(accountId, RequestType.BDR);
+
+        boolean isNEREligible = accountDTOById.getEmitterType() == EmitterType.GHGE
+                && accountDTOById.getFaStatus() == false
+                && BDRrequestsList.isEmpty();
+
+        if (!isNEREligible) {
             return RequestCreateValidationResult.builder().isAvailable(false).build();
         }
         return super.validateAction(accountId);

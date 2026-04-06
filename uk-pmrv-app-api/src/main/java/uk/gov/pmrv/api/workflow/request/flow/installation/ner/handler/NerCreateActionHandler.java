@@ -11,6 +11,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestAccountCreateActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestCreateActionEmptyPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NER;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerRequestPayload;
 
 @Component
@@ -29,6 +30,7 @@ public class NerCreateActionHandler implements RequestAccountCreateActionHandler
             .type(RequestType.NER)
             .requestPayload(NerRequestPayload.builder()
 				.payloadType(RequestPayloadType.NER_REQUEST_PAYLOAD)
+                .ner(NER.builder().build())
 				.operatorAssignee(appUser.getUserId())
 				.build())
             .build();

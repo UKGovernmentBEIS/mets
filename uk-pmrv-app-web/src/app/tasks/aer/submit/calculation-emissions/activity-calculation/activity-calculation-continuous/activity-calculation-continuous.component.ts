@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Signal } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -46,12 +46,15 @@ export class ActivityCalculationContinuousComponent {
   isEditable$ = this.aerService.isEditable$;
 
   sourceStreamEmission$: Observable<CalculationSourceStreamEmission> = combineLatest([this.payload$, this.index$]).pipe(
-    map(([payload, index]) => {
-      const res = (payload.aer.monitoringApproachEmissions.CALCULATION_CO2 as CalculationOfCO2Emissions)
-        ?.sourceStreamEmissions?.[index];
-      return res;
-    }),
+    map(
+      ([payload, index]) =>
+        (payload.aer.monitoringApproachEmissions.CALCULATION_CO2 as CalculationOfCO2Emissions)?.sourceStreamEmissions?.[
+          index
+        ],
+    ),
   );
+
+  isSm3: Signal<boolean> = this.aerService.getIsSm3(this.index$);
 
   nationalInventoryData$ = this.nationalInventoryService.nationalInventoryData$;
 
@@ -68,8 +71,9 @@ export class ActivityCalculationContinuousComponent {
     this.nationalInventoryData$,
     this.regionalInventoryData$,
     this.isEditable$,
+    this.aerService.getIsSm3$(this.index$),
   ]).pipe(
-    map(([sourceStreamEmission, nationalInventoryData, regionalInventoryData, isEditable]) => {
+    map(([sourceStreamEmission, nationalInventoryData, regionalInventoryData, isEditable, isSm3]) => {
       const [predefinedMeasurementUnit, calculationActivityDataCalculationMethod] = getFormData(
         sourceStreamEmission,
         nationalInventoryData,
@@ -80,6 +84,7 @@ export class ActivityCalculationContinuousComponent {
         predefinedMeasurementUnit,
         calculationActivityDataCalculationMethod,
         isEditable,
+        isSm3,
       );
 
       return this.fb.group(controls);
@@ -122,7 +127,7 @@ export class ActivityCalculationContinuousComponent {
 
     const sourceStreamEmission = calculation.sourceStreamEmissions?.[index];
 
-    const measurementUnit = form.get('measurementUnit').value;
+    const measurementUnit = form.get('measurementUnit').value ?? 'NM3';
     const totalMaterial = form.get('totalMaterial').value;
 
     const activityData = calculateActivityData(
@@ -168,12 +173,13 @@ export class ActivityCalculationContinuousComponent {
     });
   }
 
-  private getFormControls(predefinedMeasurementUnit, calculationActivityDataCalculationMethod, isEditable) {
+  private getFormControls(predefinedMeasurementUnit, calculationActivityDataCalculationMethod, isEditable, isSm3) {
     const controls = {
       measurementUnit: [
         {
-          value:
-            predefinedMeasurementUnit === 'GJ_PER_TONNE'
+          value: isSm3
+            ? null
+            : predefinedMeasurementUnit === 'GJ_PER_TONNE'
               ? 'TONNES'
               : predefinedMeasurementUnit === 'GJ_PER_NM3'
                 ? 'NM3'
@@ -182,9 +188,11 @@ export class ActivityCalculationContinuousComponent {
                   : null,
           disabled: !isEditable || !!predefinedMeasurementUnit,
         },
-        {
-          validators: GovukValidators.required('Please select a measurement unit'),
-        },
+        isSm3
+          ? {}
+          : {
+              validators: GovukValidators.required('Please select a measurement unit'),
+            },
       ],
       totalMaterial: [
         {

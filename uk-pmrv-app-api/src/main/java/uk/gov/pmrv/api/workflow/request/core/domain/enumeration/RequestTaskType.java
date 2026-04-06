@@ -1021,7 +1021,26 @@ public enum RequestTaskType {
                 RequestTaskActionType.NER_CANCEL_APPLICATION,
                 RequestTaskActionType.NER_UPLOAD_ATTACHMENT,
                 RequestTaskActionType.NER_SAVE_APPLICATION,
+                RequestTaskActionType.NER_APPLICATION_SUBMIT_TO_VERIFIER,
                 RequestTaskActionType.NER_SUBMIT_APPLICATION
+            );
+        }
+    },
+
+    NER_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.NER) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                RequestTaskActionType.NER_APPLICATION_SAVE_VERIFICATION,
+                RequestTaskActionType.NER_VERIFICATION_UPLOAD_ATTACHMENT
+            );
+        }
+    },
+
+    NER_WAIT_FOR_VERIFICATION(true, RequestType.NER) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
             );
         }
     },

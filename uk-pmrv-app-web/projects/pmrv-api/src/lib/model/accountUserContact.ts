@@ -12,17 +12,10 @@
 
 export interface AccountUserContact {
   userId?: string;
-  Account_type?: string;
   Account_ID?: string;
   Account_name?: string;
   Account_status?: string;
-  Permit_ID?: string;
-  Permit_type_Account_category?: string;
-  Legal_Entity_name?: string;
   Is_User_Primary_contact?: boolean;
-  Is_User_Secondary_contact?: boolean;
-  Is_User_Financial_contact?: boolean;
-  Is_User_Service_contact?: boolean;
   User_status?: string;
   Name?: string;
   Telephone?: string;

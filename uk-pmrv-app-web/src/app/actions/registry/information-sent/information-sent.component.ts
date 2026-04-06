@@ -1,5 +1,6 @@
 import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
 import { PipesModule } from '@shared/pipes/pipes.module';
@@ -12,9 +13,10 @@ import {
   InstallationAccountRegistryIntegrationRequestActionPayload,
   InstallationAccountUpdatedRegistryIntegrationRequestActionPayload,
   InstallationReportableEmissionsRegistryIntegrationRequestActionPayload,
-  PermitIssuanceOrganizationDetails,
+  NotificationRegistryIntegrationRequestActionPayload,
   RegistryIntegrationAccountCreateActivePermit,
   RegistryIntegrationAccountUpdateActivePermit,
+  RegistryIntegrationOrganizationDetails,
   RegistryIntegrationReportableEmissionsActivePermit,
   RequestActionDTO,
   WithholdingOfAllowancesRegistryIntegrationRequestActionPayload,
@@ -30,32 +32,38 @@ interface ViewModel {
     | RegistryIntegrationAccountUpdateActivePermit
     | RegistryIntegrationReportableEmissionsActivePermit;
   organizationDetails: Partial<
-    PermitIssuanceOrganizationDetails & IndividualOrganisationDetails & BusinessOrganisationDetails
+    RegistryIntegrationOrganizationDetails & IndividualOrganisationDetails & BusinessOrganisationDetails
   >;
   address: AddressDTO;
-  payload: WithholdingOfAllowancesRegistryIntegrationRequestActionPayload;
+  payload: WithholdingOfAllowancesRegistryIntegrationRequestActionPayload &
+    NotificationRegistryIntegrationRequestActionPayload;
+  actionId: number;
 }
 
 @Component({
   selector: 'app-information-sent',
-  imports: [ActionSharedModule, NgIf, PipesModule, SharedModule],
+  imports: [ActionSharedModule, NgIf, PipesModule, SharedModule, RouterLink],
   templateUrl: './information-sent.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InformationSentToRegistryComponent {
+  private readonly requestActionType = this.registryActionService.requestActionType;
+
   payload = this.registryActionService.payload as Signal<
     | InstallationAccountRegistryIntegrationRequestActionPayload
     | InstallationAccountUpdatedRegistryIntegrationRequestActionPayload
     | InstallationReportableEmissionsRegistryIntegrationRequestActionPayload
     | WithholdingOfAllowancesRegistryIntegrationRequestActionPayload
   >;
-  private readonly requestActionType = this.registryActionService.requestActionType;
+
+  actionId = this.registryActionService.requestAction;
 
   vm: Signal<ViewModel> = computed(() => {
     const payload = this.payload();
     const activePermit = (payload as InstallationAccountUpdatedRegistryIntegrationRequestActionPayload).activePermit;
     const organizationDetails = (payload as InstallationAccountUpdatedRegistryIntegrationRequestActionPayload)
       .organizationDetails;
+    const actionId = this.actionId().id;
 
     return {
       header: 'Information sent to Registry by system',
@@ -66,6 +74,7 @@ export class InformationSentToRegistryComponent {
         (organizationDetails as BusinessOrganisationDetails)?.registeredAddress ??
         (organizationDetails as IndividualOrganisationDetails)?.operatorAddress,
       payload,
+      actionId,
     };
   });
 

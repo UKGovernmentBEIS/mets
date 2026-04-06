@@ -340,6 +340,8 @@
             drop view if exists sch_report_sepa.allowance_activity_level cascade;
             drop view if exists sch_report_sepa.allowance_allocation cascade;
             drop view if exists sch_report_sepa.ref_country cascade;
+            drop view if exists sch_report_sepa.baseline_data_report_free_allocation cascade;
+            drop view if exists sch_report_sepa.account_aviation_reporting_status cascade;
 
             drop view if exists sch_report_opred.verification_body_emission_trading_scheme cascade;
             drop view if exists sch_report_opred.verification_body cascade;
@@ -378,6 +380,8 @@
             drop view if exists sch_report_opred.allowance_activity_level cascade;
             drop view if exists sch_report_opred.allowance_allocation cascade;
             drop view if exists sch_report_opred.ref_country cascade;
+            drop view if exists sch_report_opred.baseline_data_report_free_allocation cascade;
+            drop view if exists sch_report_opred.account_aviation_reporting_status cascade;
 
             drop view if exists sch_report_nrw.verification_body_emission_trading_scheme cascade;
             drop view if exists sch_report_nrw.verification_body cascade;
@@ -416,6 +420,8 @@
             drop view if exists sch_report_nrw.allowance_activity_level cascade;
             drop view if exists sch_report_nrw.allowance_allocation cascade;
             drop view if exists sch_report_nrw.ref_country cascade;
+            drop view if exists sch_report_nrw.baseline_data_report_free_allocation cascade;
+            drop view if exists sch_report_nrw.account_aviation_reporting_status cascade;
 
             drop view if exists sch_report_niea.verification_body_emission_trading_scheme cascade;
             drop view if exists sch_report_niea.verification_body cascade;
@@ -454,6 +460,8 @@
             drop view if exists sch_report_niea.allowance_activity_level cascade;
             drop view if exists sch_report_niea.allowance_allocation cascade;
             drop view if exists sch_report_niea.ref_country cascade;
+            drop view if exists sch_report_niea.baseline_data_report_free_allocation cascade;
+            drop view if exists sch_report_niea.account_aviation_reporting_status cascade;
 
             drop view if exists sch_report_ea.verification_body_emission_trading_scheme cascade;
             drop view if exists sch_report_ea.verification_body cascade;
@@ -492,6 +500,8 @@
             drop view if exists sch_report_ea.allowance_activity_level cascade;
             drop view if exists sch_report_ea.allowance_allocation cascade;
             drop view if exists sch_report_ea.ref_country cascade;
+            drop view if exists sch_report_ea.baseline_data_report_free_allocation cascade;
+            drop view if exists sch_report_ea.account_aviation_reporting_status cascade;
         </sql>
         <rollback>
         </rollback>
@@ -537,6 +547,8 @@
             create or replace view sch_report_sepa.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
             create or replace view sch_report_sepa.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
             create or replace view sch_report_sepa.ref_country as select s.* from ref_country s;
+            create or replace view sch_report_sepa.baseline_data_report_free_allocation as select s.* from baseline_data_report_free_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.account_aviation_reporting_status as select s.* from account_aviation_reporting_status s;
 
             create or replace view sch_report_opred.account as select s.* from account s where s.competent_authority = 'OPRED';
             create or replace view sch_report_opred.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'OPRED';
@@ -575,6 +587,8 @@
             create or replace view sch_report_opred.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
             create or replace view sch_report_opred.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
             create or replace view sch_report_opred.ref_country as select s.* from ref_country s;
+            create or replace view sch_report_opred.baseline_data_report_free_allocation as select s.* from baseline_data_report_free_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.account_aviation_reporting_status as select s.* from account_aviation_reporting_status s;
 
             create or replace view sch_report_nrw.account as select s.* from account s where s.competent_authority = 'WALES';
             create or replace view sch_report_nrw.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'WALES';
@@ -613,6 +627,8 @@
             create or replace view sch_report_nrw.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
             create or replace view sch_report_nrw.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
             create or replace view sch_report_nrw.ref_country as select s.* from ref_country s;
+            create or replace view sch_report_nrw.baseline_data_report_free_allocation as select s.* from baseline_data_report_free_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.account_aviation_reporting_status as select s.* from account_aviation_reporting_status s;
 
             create or replace view sch_report_niea.account as select s.* from account s where s.competent_authority = 'NORTHERN_IRELAND';
             create or replace view sch_report_niea.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'NORTHERN_IRELAND';
@@ -651,6 +667,8 @@
             create or replace view sch_report_niea.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
             create or replace view sch_report_niea.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
             create or replace view sch_report_niea.ref_country as select s.* from ref_country s;
+            create or replace view sch_report_niea.baseline_data_report_free_allocation as select s.* from baseline_data_report_free_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.account_aviation_reporting_status as select s.* from account_aviation_reporting_status s;
 
             create or replace view sch_report_ea.account as select s.* from account s where s.competent_authority = 'ENGLAND';
             create or replace view sch_report_ea.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'ENGLAND';
@@ -689,6 +707,8 @@
             create or replace view sch_report_ea.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
             create or replace view sch_report_ea.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
             create or replace view sch_report_ea.ref_country as select s.* from ref_country s;
+            create or replace view sch_report_ea.baseline_data_report_free_allocation as select s.* from baseline_data_report_free_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.account_aviation_reporting_status as select s.* from account_aviation_reporting_status s;
 
         </sql>
         <rollback changeSetId="0_1_0_drop_views" changeSetAuthor="P70453"/>

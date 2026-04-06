@@ -13,10 +13,8 @@
 export interface AccountAssignedRegulatorSiteContact {
   userId?: string;
   Account_ID?: string;
-  Account_type?: string;
   Account_name?: string;
   Account_status?: string;
-  Legal_Entity_name?: string;
   User_status?: string;
   Assigned_regulator?: string;
 }

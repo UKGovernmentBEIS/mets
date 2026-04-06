@@ -51,6 +51,8 @@ public class AerApplicationSubmittedRequestActionPayload extends RequestActionPa
 
     private AerVerificationReport verificationReport;
 
+    private Boolean isVerifierAerTaskContentUpdate;
+
     @Builder.Default
     private Map<UUID, String> aerAttachments = new HashMap<>();
 

@@ -9,7 +9,7 @@ import { HSE_TI_TASK_FORM, HseTiService } from '@tasks/hseti/core';
 import { HseTiTaskSharedModule } from '@tasks/hseti/shared/hseti-task-shared.module';
 import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 
-import { HSEApplicationSubmitRequestTaskPayload } from 'pmrv-api';
+import { HSETIApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 import { hseTiUploadReportFormProvider } from './hseti-details-form.provider';
 
@@ -25,9 +25,9 @@ export class HSETIDetailsComponent implements PendingRequest {
   readonly allocationPeriod: Signal<string> = this.hseTiService.allocationPeriod;
   readonly title: Signal<string> = computed(() => `Upload the ${this.allocationPeriod()} HSE target increase file`);
 
-  readonly hseTiPayload: Signal<HSEApplicationSubmitRequestTaskPayload> = this.hseTiService.payload;
-  readonly hseTiRequestMetadata: Signal<HSEApplicationSubmitRequestTaskPayload> = this.hseTiService.requestMetadata;
-  readonly requestTaskType: Signal<HSEApplicationSubmitRequestTaskPayload> = this.hseTiService.requestTaskType;
+  readonly hseTiPayload: Signal<HSETIApplicationSubmitRequestTaskPayload> = this.hseTiService.payload;
+  readonly hseTiRequestMetadata: Signal<HSETIApplicationSubmitRequestTaskPayload> = this.hseTiService.requestMetadata;
+  readonly requestTaskType: Signal<HSETIApplicationSubmitRequestTaskPayload> = this.hseTiService.requestTaskType;
 
   constructor(
     @Inject(HSE_TI_TASK_FORM) readonly form: UntypedFormGroup,
@@ -51,7 +51,7 @@ export class HSETIDetailsComponent implements PendingRequest {
             notes: this.form.controls.notes.value,
           },
           {
-            ...payload?.hseAttachments,
+            ...payload?.hsetiAttachments,
             ...this.getHseTiAttachments(),
           },
           false,

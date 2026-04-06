@@ -1,0 +1,82 @@
+package uk.gov.pmrv.api.mireport.system.common.verificationbodyusers;
+
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.mireport.system.EmptyMiReportSystemParams;
+import uk.gov.netz.api.mireport.system.MiReportSystemResult;
+import uk.gov.pmrv.api.mireport.system.aviation.AviationMiReportGeneratorHandler;
+import uk.gov.pmrv.api.mireport.system.installation.InstallationMiReportGeneratorHandler;
+import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class VerificationBodyUsersReportGeneratorHandlerHandler implements InstallationMiReportGeneratorHandler<EmptyMiReportSystemParams>,
+        AviationMiReportGeneratorHandler<EmptyMiReportSystemParams> {
+
+    private final VerificationBodyUsersRepository verificationBodyUsersRepository;
+
+    private final UserAuthService userAuthService;
+
+    @Override
+    @Transactional(readOnly = true)
+    public MiReportSystemResult generateMiReport(EntityManager entityManager, EmptyMiReportSystemParams reportParams) {
+
+        List<VerificationBodyUser> verificationBodyUsers = verificationBodyUsersRepository.findAllVerificationBodyUsers(entityManager);
+        Map<String, VerifierUserInfoDTO> verifierUsersInfo = getVerifierUserInfoByUserIds(verificationBodyUsers);
+
+        List<VerificationBodyUser> payload = verificationBodyUsers.stream()
+                .map(verificationBodyUser -> {
+                    if (Optional.ofNullable(verificationBodyUser.getUserId()).isPresent()) {
+                        VerifierUserInfoDTO verifierUserInfoDTO = verifierUsersInfo.get(verificationBodyUser.getUserId());
+                        appendUserDetails(verificationBodyUser, verifierUserInfoDTO);
+                    }
+                    return verificationBodyUser;
+                }).collect(Collectors.toList());
+
+        return VerificationBodyUsersMiReportResult.builder()
+                .reportType(getReportType())
+                .columnNames(VerificationBodyUser.getColumnNames())
+                .results(payload)
+                .build();
+    }
+
+    @Override
+    public String getReportType() {
+        return "LIST_OF_VERIFICATION_BODY_USERS";
+    }
+
+    private Map<String, VerifierUserInfoDTO> getVerifierUserInfoByUserIds(List<VerificationBodyUser> verificationBodyUsers) {
+
+        List<String> userIds = verificationBodyUsers.stream()
+                .map(VerificationBodyUser::getUserId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        return userAuthService.getUsersWithAttributes(userIds, VerifierUserInfoDTO.class)
+                .stream()
+                .collect(Collectors.toMap(VerifierUserInfoDTO::getId, Function.identity()));
+    }
+
+    private void appendUserDetails(VerificationBodyUser verificationBodyUser, VerifierUserInfoDTO verifierUserInfoDTO) {
+        verificationBodyUser.setVerifierFullName(verifierUserInfoDTO.getFullName());
+        verificationBodyUser.setTelephone(verifierUserInfoDTO.getTelephone());
+        verificationBodyUser.setLastLogon(Optional.ofNullable(verifierUserInfoDTO.getLastLoginDate())
+                .map(VerificationBodyUsersReportGeneratorHandlerHandler::formatLastLoginDate).orElse(null));
+        verificationBodyUser.setEmail(verifierUserInfoDTO.getEmail());
+    }
+
+    private static String formatLastLoginDate(String lastLoginDate) {
+        return LocalDateTime.parse(lastLoginDate, DateTimeFormatter.ISO_DATE_TIME).format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss"));
+    }
+}

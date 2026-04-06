@@ -69,11 +69,11 @@
     (changeClick)="changeClick('report')"
     [changeRoute]="(isEditable$ | async) ? '.' : undefined"
     class="govuk-heading-m">
-    <span class="govuk-visually-hidden">Surrender annual emmisions report</span>
+    <span class="govuk-visually-hidden">Surrender annual emissions report</span>
   </h2>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Surrender annual emmisions report</dt>
+      <dt govukSummaryListRowKey>Surrender annual emissions report</dt>
       <dd govukSummaryListRowValue>
         {{ grantDetermination.reportRequired ? (grantDetermination.reportDate | govukDate) : 'No' }}
       </dd>

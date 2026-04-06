@@ -11,4 +11,5 @@ import { MaterialityLevel } from 'pmrv-api';
 export class MaterialityLevelGroupComponent {
   @Input() isEditable = false;
   @Input() materialityLevelInfo: MaterialityLevel;
+  @Input() isMaterialityUpdated = false;
 }

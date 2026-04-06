@@ -3,7 +3,7 @@
   [formGroup]="form"
   heading="Search for an aircraft"
   submitText="Select"
-  [hideSubmit]="false"
+  [hideSubmit]="(aircraftTypesVm$ | async) === null || (aircraftTypesVm$ | async)?.aircraftTypes?.length === 0"
   data-testid="aircraft-type-search-form">
   <span class="govuk-hint">Search by manufacturer, model or type designator code</span>
   <p class="govuk-error-message" *ngIf="selectedAircraftError$ | async">Select the aircraft type.</p>

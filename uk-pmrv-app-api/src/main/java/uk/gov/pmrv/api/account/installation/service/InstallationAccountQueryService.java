@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.dto.AccountSearchCriteria;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
@@ -126,6 +127,38 @@ public class InstallationAccountQueryService {
             .map(accountInstallationMapper::toInstallationAccountDTO);
     }
 
+    public 	List<InstallationAccount> getAccountsByRegistryId(Integer registryId) {
+        return installationAccountRepository.findAccountsByRegistryId(registryId);
+    }
+
+    public InstallationAccount getSingleLiveAccountByRegistryId(Integer registryId) {
+        List<InstallationAccount> installationAccounts = getAccountsByRegistryId(Integer.valueOf(registryId));
+
+        if (installationAccounts.isEmpty()) {
+            throw new BusinessException(
+                    ErrorCode.RESOURCE_NOT_FOUND,
+                    String.format("No Installation accounts found with registryId %s", registryId));
+        }
+
+        List<InstallationAccount> liveList = installationAccounts.stream()
+                .filter(acc -> InstallationAccountStatus.LIVE.equals(acc.getStatus()))
+                .toList();
+
+        if (liveList.isEmpty()) {
+            throw new BusinessException(
+                    ErrorCode.RESOURCE_NOT_FOUND,
+                    String.format("No LIVE accounts found with registryId %s", registryId));
+        }
+
+        if (liveList.size() > 1) {
+            throw new BusinessException(
+                    MetsErrorCode.MULTIPLE_LIVE_ACCOUNTS_FOUND,
+                    String.format("More than one LIVE account found with registryId %s", registryId));
+        }
+
+        return liveList.get(0);
+    }
+
     void validateAccountNameExistence(String accountName) {
         if (accountQueryService.isExistingActiveAccountName(accountName)) {
             throw new BusinessException(MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS);
@@ -155,6 +188,5 @@ public class InstallationAccountQueryService {
         return installationAccountRepository.findAccountWithLocAndLeWithLocById(accountId)
             .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
     }
-
 
 }

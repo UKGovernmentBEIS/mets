@@ -11,6 +11,8 @@ import { summaryOfConditionsFormProvider } from '@tasks/aer/verification-submit/
 
 import { AerApplicationVerificationSubmitRequestTaskPayload, SummaryOfConditions } from 'pmrv-api';
 
+import { summaryOfConditionsWizardComplete } from './summary-of-conditions.wizard';
+
 @Component({
   selector: 'app-summary-of-conditions',
   standalone: false,
@@ -77,7 +79,7 @@ export class SummaryOfConditionsComponent {
         ? this.router.navigate(['not-included-list'], { relativeTo: this.route })
         : this.router.navigate(['not-included-list', 0], { relativeTo: this.route });
     } else {
-      return summaryOfConditions?.changesIdentified !== undefined
+      return summaryOfConditionsWizardComplete(summaryOfConditions)
         ? this.router.navigate(['summary'], { relativeTo: this.route })
         : this.router.navigate(['identified-changes'], { relativeTo: this.route });
     }

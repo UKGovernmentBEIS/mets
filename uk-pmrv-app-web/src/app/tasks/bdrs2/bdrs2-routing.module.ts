@@ -136,13 +136,19 @@ const routes: Routes = [
           },
           {
             path: 'regulator',
-            data: { pageTitle: 'Send to regulator', backlink: ({ backlinkUrl }) => backlinkUrl },
+            data: {
+              pageTitle: 'Send to regulator',
+              backlink: ({ backlinkUrl }: { backlinkUrl: string }) => backlinkUrl,
+            },
             resolve: { backlinkUrl: bdrs2SendReportBacklinkResolver },
             component: Bdrs2SendReportRegulatorComponent,
           },
           {
             path: 'verifier',
-            data: { pageTitle: 'Send report for verification', backlink: ({ backlinkUrl }) => backlinkUrl },
+            data: {
+              pageTitle: 'Send report for verification',
+              backlink: ({ backlinkUrl }: { backlinkUrl: string }) => backlinkUrl,
+            },
             resolve: { backlinkUrl: bdrs2SendReportBacklinkResolver },
             canActivate: [Bdrs2SendReportVerifierGuard],
             component: Bdrs2SendReportVerifierComponent,
@@ -343,7 +349,7 @@ const routes: Routes = [
             path: 'file-upload',
             data: {
               pageTitle: 'Upload the stage 2 baseline data report file - Outcome of regulator review',
-              backlink: ({ backlinkUrl }) => backlinkUrl,
+              backlink: ({ backlinkUrl }: { backlinkUrl: string }) => backlinkUrl,
             },
             resolve: { backlinkUrl: bdrs2OutcomeReviewBacklinkResolver },
             component: OutcomeFileUploadComponent,

@@ -36,7 +36,7 @@ public class PermitTransferAcceptedCommonDocumentTemplateWorkflowParamsProvider 
         final String transfererLeName = transfererAccount.getLegalEntity().getName();
         final String transfererInstallationName = transfererAccount.getName();
         final String transfererPermitId = permitQueryService.getPermitIdByAccountId(transfererAccountId).orElse(null);
-        final String transfererInstallationAddress = documentTemplateLocationInfoResolver.constructAddressInfo(transfererAccount.getLegalEntity().getAddress());
+        final String transfererInstallationAddress = documentTemplateLocationInfoResolver.constructLocationInfo(transfererAccount.getLocation());
 
         final Long receiverAccountId = receiverRequest.getAccountId();
         final InstallationAccountWithoutLeHoldingCompanyDTO receiverAccount = installationAccountQueryService.getAccountWithoutLeHoldingCompanyDTOById(receiverAccountId);
