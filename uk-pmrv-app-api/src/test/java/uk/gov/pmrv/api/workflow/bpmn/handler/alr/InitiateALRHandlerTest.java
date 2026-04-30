@@ -40,7 +40,7 @@ public class InitiateALRHandlerTest {
 
         handler.execute(execution);
 
-        verify(alrCreationService, timeout(1000).times(1)).createALR(accountId, false, Optional.empty());
+        verify(alrCreationService, timeout(1000).times(1)).createALRInNewTransaction(accountId, false, Optional.empty());
     }
 
     @Test
@@ -50,13 +50,13 @@ public class InitiateALRHandlerTest {
         when(execution.getVariable("accountId")).thenReturn(accountId);
         when(execution.getVariable(BpmnProcessConstants.ALR_EXPIRATION_DATE)).thenReturn(null);
         when(execution.getVariable(BpmnProcessConstants.ALR_FINAL)).thenReturn(Boolean.FALSE);
-        when(alrCreationService.createALR(accountId, false, Optional.empty()))
+        when(alrCreationService.createALRInNewTransaction(accountId, false, Optional.empty()))
                 .thenThrow(new BusinessException(
                         MetsErrorCode.ALR_CREATION_NOT_ALLOWED,
                         RequestCreateValidationResult.builder().valid(false).build()));
 
         handler.execute(execution);
 
-        verify(alrCreationService, timeout(1000).times(1)).createALR(accountId, false, Optional.empty());
+        verify(alrCreationService, timeout(1000).times(1)).createALRInNewTransaction(accountId, false, Optional.empty());
     }
 }

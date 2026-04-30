@@ -2,9 +2,12 @@ package uk.gov.pmrv.api.workflow.request.core.repository;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.LockModeType;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.application.taskview.RequestInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -20,6 +23,13 @@ public interface RequestRepository extends JpaRepository<Request, String> {
 
     @Override
     Optional<Request> findById(String id);
+    
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select r from Request r where r.id = :id")
+    Optional<Request> findByIdForUpdate(String id);
+    
+    @Transactional(readOnly = true)
+    Request findByProcessInstanceId(String processInstanceId);
 
     @Query(name = Request.NAMED_QUERY_FIND_BY_ACCOUNT_ID_AND_STATUS_AND_TYPE_NOT_NOTIFICATION)
     List<Request> findByAccountIdAndStatusAndTypeNotNotification(Long accountId, RequestStatus status);

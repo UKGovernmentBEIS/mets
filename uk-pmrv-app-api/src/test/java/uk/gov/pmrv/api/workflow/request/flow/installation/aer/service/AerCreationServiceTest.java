@@ -102,7 +102,7 @@ class AerCreationServiceTest {
             .thenReturn(monitoringPlanVersions);
 
         // Invoke
-        aerCreationService.createRequestAer(accountId, requestTypeInitiatedBy);
+        aerCreationService.createRequestAerInNewTransaction(accountId, requestTypeInitiatedBy);
 
         // Verify
         verify(aerCreationValidatorService, times(1)).validateAccountStatus(accountId);
@@ -127,7 +127,7 @@ class AerCreationServiceTest {
 
         // Invoke
         BusinessException ex = assertThrows(BusinessException.class, () ->
-                aerCreationService.createRequestAer(accountId, requestTypeInitiatedBy));
+                aerCreationService.createRequestAerInNewTransaction(accountId, requestTypeInitiatedBy));
 
         // Verify
         assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.AER_CREATION_NOT_ALLOWED);
@@ -148,7 +148,7 @@ class AerCreationServiceTest {
 
         // Invoke
         BusinessException ex = assertThrows(BusinessException.class, () ->
-                aerCreationService.createRequestAer(accountId, requestTypeInitiatedBy));
+                aerCreationService.createRequestAerInNewTransaction(accountId, requestTypeInitiatedBy));
 
         // Verify
         assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.AER_CREATION_NOT_ALLOWED);

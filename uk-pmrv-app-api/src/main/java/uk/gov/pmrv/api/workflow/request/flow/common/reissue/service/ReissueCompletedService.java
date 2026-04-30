@@ -16,10 +16,11 @@ import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueReport
 public class ReissueCompletedService {
 
 	private final RequestService requestService;
-	
+
 	@Transactional
-	public void reissueCompleted(String requestId, Long accountId, boolean succeeded) {
-		final Request request = requestService.findRequestById(requestId);
+	public void reissueCompleted(String batchRequestId, Long accountId, boolean succeeded, boolean lock) {
+		final Request request = lock ? requestService.findRequestByIdForUpdate(batchRequestId)
+				: requestService.findRequestById(batchRequestId);
 		
 		// update report metadata
 		BatchReissueRequestMetadata metadata = (BatchReissueRequestMetadata) request.getMetadata();

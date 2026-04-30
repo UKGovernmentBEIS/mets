@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:design="http://flowable.org/design" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Flowable Design" exporterVersion="2025.1.03" design:palette="flowable-work-process-palette">
+  <process id="PROCESS_BDRS2_INITIATE" name="PROCESS_BDRS2_INITIATE" isExecutable="true">
+    <extensionElements>
+      <design:stencilid><![CDATA[BPMNDiagram]]></design:stencilid>
+      <design:creationdate><![CDATA[2026-03-08T16:34:28.232Z]]></design:creationdate>
+      <design:modificationdate><![CDATA[2026-03-08T16:39:36.477Z]]></design:modificationdate>
+    </extensionElements>
+    <serviceTask id="Activity_1ttk3r7" name="Collect accounts for BDRS2" flowable:delegateExpression="#{collectInstallationAccountsForBDRS2HandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_152jtlu" name="Create BDRS2 task" flowable:exclusive="true" flowable:async="true" flowable:delegateExpression="#{initiateBDRS2HandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="true" flowable:collection="accounts" flowable:elementVariable="accountId">
+        <extensionElements></extensionElements>
+      </multiInstanceLoopCharacteristics>
+    </serviceTask>
+    <startEvent id="Event_070qnvy" name="BDRS2 initiation" flowable:initiator="initiator">
+      <extensionElements>
+        <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+        <design:stencilid><![CDATA[StartTimerEvent]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <timerEventDefinition>
+        <timeDate>2026-04-01T00:00Z</timeDate>
+      </timerEventDefinition>
+    </startEvent>
+    <endEvent id="Event_1hrom29">
+      <extensionElements>
+        <design:stencilid><![CDATA[EndNoneEvent]]></design:stencilid>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="Flow_1sffi33" sourceRef="Activity_1ttk3r7" targetRef="Activity_152jtlu">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1elh5mj" sourceRef="Activity_152jtlu" targetRef="Event_1hrom29">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0uvz7fx" sourceRef="Event_070qnvy" targetRef="Activity_1ttk3r7">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_BDRS2_INITIATE">
+    <bpmndi:BPMNPlane bpmnElement="PROCESS_BDRS2_INITIATE" id="BPMNPlane_PROCESS_BDRS2_INITIATE">
+      <bpmndi:BPMNShape bpmnElement="Activity_1ttk3r7" id="BPMNShape_Activity_1ttk3r7">
+        <omgdc:Bounds height="80.0" width="100.0" x="290.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_152jtlu" id="BPMNShape_Activity_152jtlu">
+        <omgdc:Bounds height="80.0" width="100.0" x="460.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_070qnvy" id="BPMNShape_Event_070qnvy">
+        <omgdc:Bounds height="30.0" width="30.0" x="175.0" y="105.0"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="87.0" x="152.0" y="145.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1hrom29" id="BPMNShape_Event_1hrom29">
+        <omgdc:Bounds height="28.0" width="28.0" x="636.0" y="106.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0uvz7fx" id="BPMNEdge_Flow_0uvz7fx" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="205.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="290.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1elh5mj" id="BPMNEdge_Flow_1elh5mj" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="560.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="636.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1sffi33" id="BPMNEdge_Flow_1sffi33" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="390.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="460.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

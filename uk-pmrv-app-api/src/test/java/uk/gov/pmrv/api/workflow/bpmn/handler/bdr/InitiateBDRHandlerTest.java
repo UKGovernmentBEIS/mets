@@ -37,7 +37,7 @@ public class InitiateBDRHandlerTest {
 
         handler.execute(execution);
 
-        verify(bdrCreationService, timeout(1000).times(1)).createBDR(accountId);
+        verify(bdrCreationService, timeout(1000).times(1)).createBDRInNewTransaction(accountId);
     }
 
     @Test
@@ -45,10 +45,10 @@ public class InitiateBDRHandlerTest {
         Long accountId = 1L;
 
         when(execution.getVariable("accountId")).thenReturn(accountId);
-        when(bdrCreationService.createBDR(accountId)).thenThrow(new BusinessException(MetsErrorCode.BDR_CREATION_NOT_ALLOWED, RequestCreateValidationResult.builder().valid(false).build()));
+        when(bdrCreationService.createBDRInNewTransaction(accountId)).thenThrow(new BusinessException(MetsErrorCode.BDR_CREATION_NOT_ALLOWED, RequestCreateValidationResult.builder().valid(false).build()));
 
         handler.execute(execution);
 
-        verify(bdrCreationService, timeout(1000).times(1)).createBDR(accountId);
+        verify(bdrCreationService, timeout(1000).times(1)).createBDRInNewTransaction(accountId);
     }
 }

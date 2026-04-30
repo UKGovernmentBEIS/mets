@@ -116,34 +116,44 @@ public class WasteQDRCreationServiceTest {
     }
 
     @Test
-    void createWasteQDRForYearQuarter_yearQuarterInvalid_throws() {
+    void createWasteQDR_yearQuarterInvalid_throws() {
         Long accountId = 1L;
         Year year = Year.of(2025);
         Date expirationDate = new Date();
 
+        when(dateService.getYear()).thenReturn(year);
+        when(dateService.getLocalDate()).thenReturn(LocalDate.of(2025, 7, 1)); // Q2
+        when(wasteQDRDueDateService.generateDueDate()).thenReturn(expirationDate);
+        when(wasteQDRCreationValidationService.validateAccountStatus(accountId))
+                .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
         when(wasteQDRCreationValidationService.validateYearQuarter(accountId, year, WasteQDRQuarter.Q2))
                 .thenReturn(RequestCreateValidationResult.builder().valid(false).build());
 
         BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.createWasteQDRForYearQuarter(accountId, year, WasteQDRQuarter.Q2, expirationDate));
+                () -> service.createWasteQDR(accountId));
 
         assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.WASTE_QDR_CREATION_NOT_ALLOWED);
         verify(startProcessRequestService, never()).startProcess(any());
     }
 
     @Test
-    void createWasteQDRForYearQuarter_emitterTypeInvalid_throws() {
+    void createWasteQDR_emitterTypeInvalid_throws() {
         Long accountId = 1L;
         Year year = Year.of(2025);
         Date expirationDate = new Date();
 
+        when(dateService.getYear()).thenReturn(year);
+        when(dateService.getLocalDate()).thenReturn(LocalDate.of(2025, 7, 1)); // Q2
+        when(wasteQDRDueDateService.generateDueDate()).thenReturn(expirationDate);
+        when(wasteQDRCreationValidationService.validateAccountStatus(accountId))
+                .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
         when(wasteQDRCreationValidationService.validateYearQuarter(accountId, year, WasteQDRQuarter.Q2))
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
         when(wasteQDRCreationValidationService.validateAccountEmitterType(accountId))
                 .thenReturn(RequestCreateValidationResult.builder().valid(false).build());
 
         BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.createWasteQDRForYearQuarter(accountId, year, WasteQDRQuarter.Q2, expirationDate));
+                () -> service.createWasteQDR(accountId));
 
         assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.WASTE_QDR_CREATION_NOT_ALLOWED);
         verify(startProcessRequestService, never()).startProcess(any());

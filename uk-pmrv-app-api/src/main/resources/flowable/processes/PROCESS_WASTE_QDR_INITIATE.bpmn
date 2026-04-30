@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:design="http://flowable.org/design" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Flowable Design" exporterVersion="2025.1.03" design:palette="flowable-work-process-palette">
+  <process id="PROCESS_WASTE_QDR_INITIATE" name="Waste Quarterly Supplementary Data Report initiate" isExecutable="true">
+    <extensionElements>
+      <design:stencilid><![CDATA[BPMNDiagram]]></design:stencilid>
+      <design:creationdate><![CDATA[2026-02-25T12:52:09.985Z]]></design:creationdate>
+      <design:modificationdate><![CDATA[2026-02-25T12:52:48.041Z]]></design:modificationdate>
+    </extensionElements>
+    <serviceTask id="Activity_0115drj" name="Collect accounts for Waste QDR" flowable:delegateExpression="#{collectInstallationAccountsForWasteQDRHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="INITIATE_WASTE_QDR" name="initiate Waste QDR" flowable:exclusive="true" flowable:async="true" flowable:delegateExpression="#{initiateWasteQDRHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="true" flowable:collection="accounts" flowable:elementVariable="accountId">
+        <extensionElements></extensionElements>
+      </multiInstanceLoopCharacteristics>
+    </serviceTask>
+    <startEvent id="WASTE_QDR_INITIATE_TIMER" name="Waste QDR initiate timer">
+      <timerEventDefinition>
+        <timeCycle>R/2026-04-01T00:00:00/P3M</timeCycle>
+      </timerEventDefinition>
+    </startEvent>
+    <endEvent id="Event_WasteQDRInitiate_End" />
+    <sequenceFlow id="Flow_169zlw3" sourceRef="Activity_0115drj" targetRef="INITIATE_WASTE_QDR">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0cx34hw" sourceRef="WASTE_QDR_INITIATE_TIMER" targetRef="Activity_0115drj">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_Initiate_To_End" sourceRef="INITIATE_WASTE_QDR" targetRef="Event_WasteQDRInitiate_End">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_WASTE_QDR_INITIATE">
+    <bpmndi:BPMNPlane bpmnElement="PROCESS_WASTE_QDR_INITIATE" id="BPMNPlane_PROCESS_WASTE_QDR_INITIATE">
+      <bpmndi:BPMNShape bpmnElement="Activity_0115drj" id="BPMNShape_Activity_0115drj">
+        <omgdc:Bounds height="80.0" width="100.0" x="327.0" y="77.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="INITIATE_WASTE_QDR" id="BPMNShape_INITIATE_WASTE_QDR">
+        <omgdc:Bounds height="80.0" width="100.0" x="547.0" y="77.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="WASTE_QDR_INITIATE_TIMER" id="BPMNShape_WASTE_QDR_INITIATE_TIMER">
+        <omgdc:Bounds height="30.0" width="30.0" x="175.0" y="102.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0cx34hw" id="BPMNEdge_Flow_0cx34hw" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="205.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="327.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="Event_WasteQDRInitiate_End" id="BPMNShape_Event_WasteQDRInitiate_End">
+        <omgdc:Bounds height="28.0" width="28.0" x="647.0" y="101.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="Flow_169zlw3" id="BPMNEdge_Flow_169zlw3" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="427.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="547.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_Initiate_To_End" id="BPMNEdge_Flow_Initiate_To_End" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="647.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="661.0" y="115.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -102,7 +102,5 @@ class PermitTransferBInitiateRequestServiceTest {
         when(startProcessRequestService.startProcess(requestParams)).thenReturn(Request.builder().id(transferBRequestId).build());
 
         service.initiatePermitTransferBRequest(transferARequestId, transferABusinessKey);
-
-        verify(workflowService, times(1)).constructBusinessKey(transferBRequestId);
     }
 }

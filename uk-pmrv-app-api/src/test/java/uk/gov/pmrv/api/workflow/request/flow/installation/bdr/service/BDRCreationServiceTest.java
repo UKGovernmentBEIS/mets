@@ -105,7 +105,7 @@ public class BDRCreationServiceTest {
 
 
 
-        Request actualRequest = service.createBDR(accountId);
+        Request actualRequest = service.createBDRInNewTransaction(accountId);
 
 
         assertThat(actualRequest).isEqualTo(request);
@@ -126,7 +126,7 @@ public class BDRCreationServiceTest {
                 .thenReturn(RequestCreateValidationResult.builder().valid(false).build());
 
         BusinessException ex = assertThrows(BusinessException.class, () ->
-                service.createBDR(accountId));
+                service.createBDRInNewTransaction(accountId));
 
 
         assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.BDR_CREATION_NOT_ALLOWED);
@@ -150,7 +150,7 @@ public class BDRCreationServiceTest {
                 .thenReturn(RequestCreateValidationResult.builder().valid(false).build());
 
         BusinessException ex = assertThrows(BusinessException.class, () ->
-                service.createBDR(accountId));
+                service.createBDRInNewTransaction(accountId));
 
 
         assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.BDR_CREATION_NOT_ALLOWED);

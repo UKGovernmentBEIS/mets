@@ -45,13 +45,13 @@ class ReissueCompletedServiceTest {
 		when(requestService.findRequestById(requestId))
 				.thenReturn(request);
 		
-		cut.reissueCompleted(requestId, accountId, succeeded);
-		
+		cut.reissueCompleted(requestId, accountId, succeeded, false);
+
 		verify(requestService, times(1)).findRequestById(requestId);
 		assertThat(metadata.getAccountsReports()).hasSize(1);
 		PermitReissueAccountReport report = metadata.getAccountsReports().get(accountId);
 		assertThat(report.getIssueDate()).isNull();
-		assertThat(report.isSucceeded()).isFalse();
+		assertThat(report.getSucceeded()).isFalse();
 	}
 	
 	@Test
@@ -68,14 +68,14 @@ class ReissueCompletedServiceTest {
 		Request request = Request.builder().metadata(metadata).build();
 		
 		when(requestService.findRequestById(requestId)).thenReturn(request);
-		
-		cut.reissueCompleted(requestId, accountId, succeeded);
+
+		cut.reissueCompleted(requestId, accountId, succeeded, false);
 		
 		verify(requestService, times(1)).findRequestById(requestId);
 		verifyNoMoreInteractions(requestService);
 		assertThat(metadata.getAccountsReports()).hasSize(1);
 		PermitReissueAccountReport report = metadata.getAccountsReports().get(accountId);
 		assertThat(report.getIssueDate()).isNotNull();
-		assertThat(report.isSucceeded()).isTrue();
+		assertThat(report.getSucceeded()).isTrue();
 	}
 }

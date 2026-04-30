@@ -190,6 +190,8 @@ public class BpmnProcessConstants {
     public static final String PROCESS_TO_MESSAGE_BUSINESS_KEY = "processToMessageBusinessKey";
     public static final String VARIABLES = "variables";
 
+    public static final String ENGINE = "engine";
+
     //aviation aer
     public static final String AVIATION_AER_EXPIRATION_DATE = RequestExpirationType.AVIATION_AER.getCode() + _EXPIRATION_DATE;
     public static final String AVIATION_AER_OUTCOME = "aviationAerOutcome";

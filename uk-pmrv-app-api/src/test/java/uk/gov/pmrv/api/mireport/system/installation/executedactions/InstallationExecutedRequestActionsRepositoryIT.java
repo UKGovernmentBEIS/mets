@@ -24,6 +24,7 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccou
 import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowEngineType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -51,28 +52,28 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
     private EntityManager entityManager;
 
     @Test
-    void findRequestActionsByCaAndParams_resultes_when_only_mandatory_parameters_applied(){
+    void findRequestActionsByCaAndParams_resultes_when_only_mandatory_parameters_applied() {
         LegalEntity legalEntity = createLegalEntity("legalEntityName");
-        Account acc1 = createAccount(1L,"account", InstallationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
+        Account acc1 = createAccount(1L, "account", InstallationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
         Request acc1InstAccOpenRequest = createRequest(acc1, "NEW1", RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.COMPLETED);
         createRequestAction(acc1InstAccOpenRequest,
-            RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
-            LocalDateTime.of(2022, 1, 5, 12, 30 ),
-            "operator");
+                RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
+                LocalDateTime.of(2022, 1, 5, 12, 30),
+                "operator");
         RequestAction acc1InstAccOpenRequestApproved = createRequestAction(acc1InstAccOpenRequest,
-            RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED,
-            LocalDateTime.of(2022, 1, 6, 15, 45 ),
-            "regulator");
+                RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED,
+                LocalDateTime.of(2022, 1, 6, 15, 45),
+                "regulator");
 
-        Account acc2 = createAccount(2L,"account2", InstallationAccountStatus.LIVE, CompetentAuthorityEnum.ENGLAND, legalEntity);
+        Account acc2 = createAccount(2L, "account2", InstallationAccountStatus.LIVE, CompetentAuthorityEnum.ENGLAND, legalEntity);
         Request acc2InstAccOpenRequest = createRequest(acc2, "NEW2", RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS);
         createRequestAction(acc2InstAccOpenRequest,
-            RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
-            LocalDateTime.of(2022, 1, 5, 22, 30 ),
-            "operator");
+                RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
+                LocalDateTime.of(2022, 1, 5, 22, 30),
+                "operator");
         RequestAction acc2InstAccOpenRequestApproved = createRequestAction(acc2InstAccOpenRequest,
                 RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED,
-                LocalDateTime.of(2022, 1, 10, 15, 45 ),
+                LocalDateTime.of(2022, 1, 10, 15, 45),
                 "regulator");
 
         ExecutedRequestActionsMiReportParams reportParams = ExecutedRequestActionsMiReportParams.builder()
@@ -98,7 +99,7 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
         assertEquals(acc1InstAccOpenRequestApproved.getType().name(), executedRequestAction.getRequestActionType());
         assertEquals(acc1InstAccOpenRequestApproved.getSubmitter(), executedRequestAction.getRequestActionSubmitter());
         assertEquals(acc1InstAccOpenRequestApproved.getCreationDate().truncatedTo(ChronoUnit.MILLIS),
-            executedRequestAction.getRequestActionCompletionDate().truncatedTo(ChronoUnit.MILLIS));
+                executedRequestAction.getRequestActionCompletionDate().truncatedTo(ChronoUnit.MILLIS));
 
         executedRequestAction = actions.get(1);
         assertEquals(acc2.getEmitterId(), executedRequestAction.getAccountId());
@@ -117,25 +118,25 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
     }
 
     @Test
-    void findRequestActionsByCaAndParams_results_when_all_parameters_applied(){
+    void findRequestActionsByCaAndParams_results_when_all_parameters_applied() {
         LegalEntity legalEntity = createLegalEntity("legalEntityName");
-        Account acc1 = createAccount(1L,"account", InstallationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
+        Account acc1 = createAccount(1L, "account", InstallationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
         Request acc1InstAccOpenRequest = createRequest(acc1, "NEW1", RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.COMPLETED);
         createRequestAction(acc1InstAccOpenRequest,
-            RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
-            LocalDateTime.of(2022, 1, 5, 0, 0 ),
-            "operator");
+                RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
+                LocalDateTime.of(2022, 1, 5, 0, 0),
+                "operator");
         createRequestAction(acc1InstAccOpenRequest,
-            RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED,
-            LocalDateTime.of(2022, 1, 6, 15, 45 ),
-            "regulator");
+                RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED,
+                LocalDateTime.of(2022, 1, 6, 15, 45),
+                "regulator");
 
-        Account acc2 = createAccount(2L,"account2", InstallationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
+        Account acc2 = createAccount(2L, "account2", InstallationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
         Request acc2InstAccOpenRequest = createRequest(acc2, "NEW2", RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS);
         createRequestAction(acc2InstAccOpenRequest,
-            RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
-            LocalDateTime.of(2022, 1, 10, 0, 30 ),
-            "operator");
+                RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
+                LocalDateTime.of(2022, 1, 10, 0, 30),
+                "operator");
 
         ExecutedRequestActionsMiReportParams reportParams = ExecutedRequestActionsMiReportParams.builder()
             .reportType(MiReportSystemType.COMPLETED_WORK)
@@ -153,37 +154,37 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
     @Test
     void findRequestActionsByCaAndParams_results_fetched_on_requested_order() {
         LegalEntity legalEntity = createLegalEntity("legalEntityName");
-        Account acc1 = createAccount(1L,"account1", InstallationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
+        Account acc1 = createAccount(1L, "account1", InstallationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
         Request acc1InstAccOpenRequest1 = createRequest(acc1, "NEW1", RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.COMPLETED);
         RequestAction acc1InstAccOpenRequest1Submitted = createRequestAction(acc1InstAccOpenRequest1,
-            RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
-            LocalDateTime.of(2022, 1, 1, 12, 30 ),
-            "operator");
+                RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
+                LocalDateTime.of(2022, 1, 1, 12, 30),
+                "operator");
         RequestAction acc1InstAccOpenRequest1Approved = createRequestAction(acc1InstAccOpenRequest1,
-            RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED,
-            LocalDateTime.of(2022, 1, 3, 15, 45 ),
-            "regulator");
+                RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED,
+                LocalDateTime.of(2022, 1, 3, 15, 45),
+                "regulator");
         Request acc1InstAccOpenRequest2 = createRequest(acc1, "NEW2", RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS);
         RequestAction acc1InstAccOpenRequest2Submitted = createRequestAction(acc1InstAccOpenRequest2,
-            RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
-            LocalDateTime.of(2022, 1, 2, 10, 0),
-            "operator");
+                RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
+                LocalDateTime.of(2022, 1, 2, 10, 0),
+                "operator");
         Request acc1PermitIssuanceRequest = createRequest(acc1, "PERM1", RequestType.PERMIT_ISSUANCE, RequestStatus.IN_PROGRESS);
         RequestAction acc1PermitIssuanceRequestGranted = createRequestAction(acc1PermitIssuanceRequest,
-            RequestActionType.PERMIT_ISSUANCE_APPLICATION_SUBMITTED,
-            LocalDateTime.of(2022, 1, 15, 10, 30),
-            "operator");
+                RequestActionType.PERMIT_ISSUANCE_APPLICATION_SUBMITTED,
+                LocalDateTime.of(2022, 1, 15, 10, 30),
+                "operator");
 
-        Account acc2 = createAccount(2L,"account2", InstallationAccountStatus.NEW, CompetentAuthorityEnum.WALES, legalEntity);
+        Account acc2 = createAccount(2L, "account2", InstallationAccountStatus.NEW, CompetentAuthorityEnum.WALES, legalEntity);
         Request acc2InstAccOpenRequest = createRequest(acc2, "NEW3", RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.COMPLETED);
         createRequestAction(acc2InstAccOpenRequest,
-            RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
-            LocalDateTime.of(2022, 1, 2, 0, 0 ),
-            "operator");
+                RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
+                LocalDateTime.of(2022, 1, 2, 0, 0),
+                "operator");
         createRequestAction(acc2InstAccOpenRequest,
-            RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED,
-            LocalDateTime.of(2022, 1, 6, 11, 0 ),
-            "regulator");
+                RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED,
+                LocalDateTime.of(2022, 1, 6, 11, 0),
+                "regulator");
 
         ExecutedRequestActionsMiReportParams reportParams = ExecutedRequestActionsMiReportParams.builder()
             .reportType(MiReportSystemType.COMPLETED_WORK)
@@ -195,47 +196,47 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
         assertThat(actions).isNotEmpty();
         assertThat(actions).hasSize(6);
         assertThat(actions).extracting(ExecutedRequestAction::getAccountId)
-            .containsExactly(acc1.getEmitterId(), acc1.getEmitterId(), acc1.getEmitterId(), acc1.getEmitterId(), acc2.getEmitterId(), acc2.getEmitterId());
+                .containsExactly(acc1.getEmitterId(), acc1.getEmitterId(), acc1.getEmitterId(), acc1.getEmitterId(), acc2.getEmitterId(), acc2.getEmitterId());
         assertThat(actions)
-            .filteredOn(action -> action.getAccountId().equals(acc1.getEmitterId()))
-            .extracting(InstallationExecutedRequestAction::getRequestType)
-            .containsExactly(
-                RequestType.INSTALLATION_ACCOUNT_OPENING.name(),
-                RequestType.INSTALLATION_ACCOUNT_OPENING.name(),
-                RequestType.INSTALLATION_ACCOUNT_OPENING.name(),
-                RequestType.PERMIT_ISSUANCE.name()
-            );
+                .filteredOn(action -> action.getAccountId().equals(acc1.getEmitterId()))
+                .extracting(InstallationExecutedRequestAction::getRequestType)
+                .containsExactly(
+                        RequestType.INSTALLATION_ACCOUNT_OPENING.name(),
+                        RequestType.INSTALLATION_ACCOUNT_OPENING.name(),
+                        RequestType.INSTALLATION_ACCOUNT_OPENING.name(),
+                        RequestType.PERMIT_ISSUANCE.name()
+                );
         assertThat(actions)
-            .filteredOn(action -> action.getAccountId().equals(acc1.getEmitterId())
-                && action.getRequestType().equals(RequestType.INSTALLATION_ACCOUNT_OPENING.name())
-            )
-            .extracting(ExecutedRequestAction::getRequestId)
-            .containsExactly(
-                acc1InstAccOpenRequest1.getId(),
-                acc1InstAccOpenRequest1.getId(),
-                acc1InstAccOpenRequest2.getId()
-            );
+                .filteredOn(action -> action.getAccountId().equals(acc1.getEmitterId())
+                        && action.getRequestType().equals(RequestType.INSTALLATION_ACCOUNT_OPENING.name())
+                )
+                .extracting(ExecutedRequestAction::getRequestId)
+                .containsExactly(
+                        acc1InstAccOpenRequest1.getId(),
+                        acc1InstAccOpenRequest1.getId(),
+                        acc1InstAccOpenRequest2.getId()
+                );
         assertThat(actions)
-            .filteredOn(action -> action.getAccountId().equals(acc1.getEmitterId())
-                && action.getRequestType().equals(RequestType.INSTALLATION_ACCOUNT_OPENING.name())
-                && action.getRequestId().equals(acc1InstAccOpenRequest1.getId())
-            )
-            .extracting(ExecutedRequestAction::getRequestActionCompletionDate)
-            .containsExactly(
-                acc1InstAccOpenRequest1Submitted.getCreationDate(),
-                acc1InstAccOpenRequest1Approved.getCreationDate()
-            );
+                .filteredOn(action -> action.getAccountId().equals(acc1.getEmitterId())
+                        && action.getRequestType().equals(RequestType.INSTALLATION_ACCOUNT_OPENING.name())
+                        && action.getRequestId().equals(acc1InstAccOpenRequest1.getId())
+                )
+                .extracting(ExecutedRequestAction::getRequestActionCompletionDate)
+                .containsExactly(
+                        acc1InstAccOpenRequest1Submitted.getCreationDate(),
+                        acc1InstAccOpenRequest1Approved.getCreationDate()
+                );
     }
 
     @Test
-    void findRequestActionsByCaAndParams_no_results(){
+    void findRequestActionsByCaAndParams_no_results() {
         LegalEntity legalEntity = createLegalEntity("legalEntityName");
-        Account account = createAccount(1L,"account", InstallationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
+        Account account = createAccount(1L, "account", InstallationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
         Request request = createRequest(account, "NEW1", RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.COMPLETED);
         createRequestAction(request,
-            RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
-            LocalDateTime.of(2022, 1, 15, 12, 30 ),
-            "operator");
+                RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
+                LocalDateTime.of(2022, 1, 15, 12, 30),
+                "operator");
 
         ExecutedRequestActionsMiReportParams reportParams = ExecutedRequestActionsMiReportParams.builder()
             .reportType(MiReportSystemType.COMPLETED_WORK)
@@ -243,25 +244,25 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
             .build();
 
         List<InstallationExecutedRequestAction> executedRequestActions =
-            repository.findExecutedRequestActions(entityManager, reportParams);
+                repository.findExecutedRequestActions(entityManager, reportParams);
 
         assertThat(executedRequestActions).isEmpty();
     }
 
     private LegalEntity createLegalEntity(String name) {
         LegalEntity le = LegalEntity.builder()
-            .location(LocationOnShore.builder()
-                .address(Address.builder()
-                    .city("city")
-                    .country("GR")
-                    .line1("line")
-                    .postcode("postcode")
-                    .build())
-                .build())
-            .name(name)
-            .status(LegalEntityStatus.ACTIVE)
-            .type(LegalEntityType.LIMITED_COMPANY)
-            .build();
+                .location(LocationOnShore.builder()
+                        .address(Address.builder()
+                                .city("city")
+                                .country("GR")
+                                .line1("line")
+                                .postcode("postcode")
+                                .build())
+                        .build())
+                .name(name)
+                .status(LegalEntityStatus.ACTIVE)
+                .type(LegalEntityType.LIMITED_COMPANY)
+                .build();
         entityManager.persist(le);
         return le;
     }
@@ -270,18 +271,18 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
                                               CompetentAuthorityEnum competentAuthority, LegalEntity le) {
 
         InstallationAccount account = InstallationAccount.builder()
-            .id(id)
-            .name(name)
-            .status(status)
-            .accountType(AccountType.INSTALLATION)
-            .applicationType(ApplicationType.NEW_PERMIT)
-            .siteName(name)
-            .competentAuthority(competentAuthority)
-            .legalEntity(le)
-            .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
-            .commencementDate(LocalDate.of(2022, 1, 1))
-            .emitterId("EM" + String.format("%05d", id))
-            .build();
+                .id(id)
+                .name(name)
+                .status(status)
+                .accountType(AccountType.INSTALLATION)
+                .applicationType(ApplicationType.NEW_PERMIT)
+                .siteName(name)
+                .competentAuthority(competentAuthority)
+                .legalEntity(le)
+                .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
+                .commencementDate(LocalDate.of(2022, 1, 1))
+                .emitterId("EM" + String.format("%05d", id))
+                .build();
 
         entityManager.persist(account);
         return account;
@@ -289,12 +290,13 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
 
     private Request createRequest(Account account, String requestId, RequestType type, RequestStatus status) {
         Request request = Request.builder()
-            .id(requestId)
-            .type(type)
-            .status(status)
-            .accountId(account.getId())
-            .competentAuthority(account.getCompetentAuthority())
-            .build();
+                .id(requestId)
+                .type(type)
+                .status(status)
+                .accountId(account.getId())
+                .competentAuthority(account.getCompetentAuthority())
+                .engine(WorkflowEngineType.CAMUNDA)
+                .build();
 
         entityManager.persist(request);
         return request;
@@ -302,10 +304,10 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
 
     private RequestAction createRequestAction(Request request, RequestActionType type, LocalDateTime creationDate, String submitter) {
         RequestAction requestAction = RequestAction.builder()
-            .request(request)
-            .type(type)
-            .submitter(submitter)
-            .build();
+                .request(request)
+                .type(type)
+                .submitter(submitter)
+                .build();
 
         entityManager.persist(requestAction);
 

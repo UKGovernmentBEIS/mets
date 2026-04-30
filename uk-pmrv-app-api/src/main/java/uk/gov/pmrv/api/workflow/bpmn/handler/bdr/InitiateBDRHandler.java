@@ -24,7 +24,7 @@ public class InitiateBDRHandler implements JavaDelegate {
 
     private void initiateBDRWorkflow(Long accountId) {
         try {
-            bdrCreationService.createBDR(accountId);
+            bdrCreationService.createBDRInNewTransaction(accountId);
         } catch (Exception ex) {
             log.error(() -> "Could not create BDR workflow for account with id '" + accountId
                 + "' failed with " + ExceptionUtils.getRootCause(ex).getMessage(), ex);

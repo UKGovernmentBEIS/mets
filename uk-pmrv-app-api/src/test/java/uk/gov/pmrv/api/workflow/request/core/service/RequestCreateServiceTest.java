@@ -8,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowEngineType;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowTypeServiceDelegator;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
@@ -34,6 +36,9 @@ class RequestCreateServiceTest {
     @Mock
     private AccountQueryService accountQueryService;
     
+    @Mock
+    private WorkflowTypeServiceDelegator workflowTypeServiceDelegator;
+    
     @Test
     void createRequest_with_accountId() {
     	final RequestType type = RequestType.INSTALLATION_ACCOUNT_OPENING;
@@ -44,6 +49,7 @@ class RequestCreateServiceTest {
 
         when(accountQueryService.getAccountCa(accountId)).thenReturn(ca);
         when(accountQueryService.getAccountVerificationBodyId(accountId)).thenReturn(Optional.of(verificationBodyId));
+        when(workflowTypeServiceDelegator.getWorkflowEngineByType(type.name())).thenReturn(WorkflowEngineType.CAMUNDA);
     	
         RequestParams requestParams = RequestParams.builder()
             .requestId("1")
@@ -59,6 +65,7 @@ class RequestCreateServiceTest {
         Request request = requestCaptor.getValue();
         assertThat(request).isNotNull();
         assertThat(request.getType()).isEqualTo(type);
+        assertThat(request.getEngine()).isEqualTo(WorkflowEngineType.CAMUNDA);
         assertThat(request.getStatus()).isEqualTo(status);
         assertThat(request.getCompetentAuthority()).isEqualTo(ca);
         assertThat(request.getVerificationBodyId()).isEqualTo(verificationBodyId);
@@ -66,6 +73,7 @@ class RequestCreateServiceTest {
 
         verify(accountQueryService, times(1)).getAccountCa(accountId);
         verify(accountQueryService, times(1)).getAccountVerificationBodyId(accountId);
+        verify(workflowTypeServiceDelegator, times(1)).getWorkflowEngineByType(type.name());
     }
     
     @Test
@@ -73,6 +81,8 @@ class RequestCreateServiceTest {
     	final RequestType type = RequestType.INSTALLATION_ACCOUNT_OPENING;
         final RequestStatus status = RequestStatus.IN_PROGRESS;
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+        
+        when(workflowTypeServiceDelegator.getWorkflowEngineByType(type.name())).thenReturn(WorkflowEngineType.CAMUNDA);
 
         RequestParams requestParams = RequestParams.builder()
             .requestId("1")
@@ -92,6 +102,7 @@ class RequestCreateServiceTest {
         assertThat(request.getCompetentAuthority()).isEqualTo(ca);
         assertThat(request.getVerificationBodyId()).isNull();
 
+        verify(workflowTypeServiceDelegator, times(1)).getWorkflowEngineByType(type.name());
         verifyNoInteractions(accountQueryService);
     }
 }

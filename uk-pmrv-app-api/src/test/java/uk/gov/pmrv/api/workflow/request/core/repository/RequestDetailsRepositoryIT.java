@@ -23,6 +23,7 @@ import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowEngineType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestMetadata;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsDTO;
@@ -226,6 +227,7 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
                     .status(status)
                     .accountId(accountId)
                     .metadata(metaData)
+                    .engine(WorkflowEngineType.CAMUNDA)
                     .build();
 
         entityManager.persist(request);

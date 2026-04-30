@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:design="http://flowable.org/design" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" design:palette="flowable-work-process-palette">
+  <process id="PROCESS_INSTALLATION_ACCOUNT_OPENING" name="Installation account opening process" isExecutable="true">
+    <extensionElements>
+      <design:stencilid>BPMNDiagram</design:stencilid>
+      <design:creationdate>2024-07-22T08:30:15.675Z</design:creationdate>
+      <design:modificationdate>2024-07-24T13:25:45.796Z</design:modificationdate>
+    </extensionElements>
+    <userTask id="INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE" name="Transferring archive" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:task-candidates-type>all</flowable:task-candidates-type>
+        <design:stencilid>FormTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </userTask>
+    <userTask id="INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW" name="Review application" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:task-candidates-type>all</flowable:task-candidates-type>
+        <design:stencilid>FormTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </userTask>
+    <serviceTask id="INSTALLATION_ACCOUNT_OPENING_ACTIVATE_ACCOUNT" name="Activate account" flowable:delegateExpression="#{installationAccountOpeningActivateAccountHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid>ServiceTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="INSTALLATION_ACCOUNT_OPENING_SEND_REJECTION_EMAIL" name="Notify operator" flowable:delegateExpression="#{installationAccountOpeningNotifyOperatorHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid>ServiceTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="INSTALLATION_ACCOUNT_OPENING_REJECT_ACCOUNT" name="Reject account" flowable:delegateExpression="#{installationAccountOpeningRejectAccountHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid>ServiceTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <userTask id="INSTALLATION_ACCOUNT_OPENING_ARCHIVE" name="Opening archive" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:task-candidates-type>all</flowable:task-candidates-type>
+        <design:stencilid>FormTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </userTask>
+    <serviceTask id="ACCOUNT_USERS_SETUP_SYSTEM_MESSAGE_NOTIFICATION" name="Initialize Account Users Setup System Message Notification WF" flowable:delegateExpression="#{installationAccountMessageAccountUsersSetupHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid>ServiceTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="PERMIT_ISSUANCE_APPLICATION_SUBMIT" name="Initialize Permit issuance WF" flowable:delegateExpression="#{installationAccountPermitIssuanceHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid>ServiceTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_0d377x9" name="Update Workflow status to APPROVED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+      <extensionElements>
+        <flowable:field name="requestStatus">
+          <flowable:string>APPROVED</flowable:string>
+        </flowable:field>
+        <design:stencilid>ServiceTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_0wmaq6k" name="Update Workflow status to REJECTED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+      <extensionElements>
+        <flowable:field name="requestStatus">
+          <flowable:string>REJECTED</flowable:string>
+        </flowable:field>
+        <design:stencilid>ServiceTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="INSTALLATION_ACCOUNT_OPENING_SEND_ACCEPTANCE_EMAIL" name="Notify operator" flowable:async="true" flowable:delegateExpression="#{installationAccountOpeningNotifyOperatorHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid>ServiceTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <exclusiveGateway id="INSTALLATION_ACCOUNT_OPENING_DECISION_GATEWAY" name="Application Accepted?">
+      <extensionElements>
+        <design:stencilid>Exclusive_Databased_Gateway</design:stencilid>
+        <design:display_ref_in_diagram>true</design:display_ref_in_diagram>
+      </extensionElements>
+    </exclusiveGateway>
+    <parallelGateway id="Gateway_19p7asy">
+      <extensionElements>
+        <design:stencilid>ParallelGateway</design:stencilid>
+      </extensionElements>
+    </parallelGateway>
+    <parallelGateway id="Gateway_1qwx38k">
+      <extensionElements>
+        <design:stencilid>ParallelGateway</design:stencilid>
+      </extensionElements>
+    </parallelGateway>
+    <exclusiveGateway id="Gateway_1rxssd7">
+      <extensionElements>
+        <design:stencilid>Exclusive_Databased_Gateway</design:stencilid>
+      </extensionElements>
+    </exclusiveGateway>
+    <exclusiveGateway id="Gateway_17tv19o" default="Flow_1ys72we">
+      <extensionElements>
+        <design:stencilid>Exclusive_Databased_Gateway</design:stencilid>
+      </extensionElements>
+    </exclusiveGateway>
+    <exclusiveGateway id="Gateway_11h1bxl">
+      <extensionElements>
+        <design:stencilid>Exclusive_Databased_Gateway</design:stencilid>
+      </extensionElements>
+    </exclusiveGateway>
+    <exclusiveGateway id="Gateway_04o17tj" default="bpmnSequenceFlow_2">
+      <extensionElements>
+        <design:stencilid>Exclusive_Databased_Gateway</design:stencilid>
+      </extensionElements>
+    </exclusiveGateway>
+    <exclusiveGateway id="Gateway_058kjuq">
+      <extensionElements>
+        <design:stencilid>Exclusive_Databased_Gateway</design:stencilid>
+      </extensionElements>
+    </exclusiveGateway>
+    <startEvent id="INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW_START_EVENT" name="Start Event" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:work-form-field-validation>false</flowable:work-form-field-validation>
+        <design:stencilid>StartNoneEvent</design:stencilid>
+        <design:display_ref_in_diagram>true</design:display_ref_in_diagram>
+      </extensionElements>
+    </startEvent>
+    <endEvent id="INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW_END_EVENT" name="End Event">
+      <extensionElements>
+        <design:stencilid>EndNoneEvent</design:stencilid>
+        <design:display_ref_in_diagram>true</design:display_ref_in_diagram>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="Flow_17ueuqq" sourceRef="INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE" targetRef="Gateway_11h1bxl">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="bpmnSequenceFlow_1" sourceRef="INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW" targetRef="INSTALLATION_ACCOUNT_OPENING_DECISION_GATEWAY">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="bpmnSequenceFlow_5" sourceRef="INSTALLATION_ACCOUNT_OPENING_ACTIVATE_ACCOUNT" targetRef="Activity_0d377x9">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_038yns6" sourceRef="INSTALLATION_ACCOUNT_OPENING_SEND_REJECTION_EMAIL" targetRef="Gateway_1rxssd7">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="bpmnSequenceFlow_6" sourceRef="INSTALLATION_ACCOUNT_OPENING_REJECT_ACCOUNT" targetRef="Activity_0wmaq6k">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1g01a46" sourceRef="INSTALLATION_ACCOUNT_OPENING_ARCHIVE" targetRef="Gateway_11h1bxl">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_08k7ul7" sourceRef="ACCOUNT_USERS_SETUP_SYSTEM_MESSAGE_NOTIFICATION" targetRef="Gateway_04o17tj">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1hpfhef" sourceRef="PERMIT_ISSUANCE_APPLICATION_SUBMIT" targetRef="Gateway_058kjuq">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1slbpwh" sourceRef="Activity_0d377x9" targetRef="ACCOUNT_USERS_SETUP_SYSTEM_MESSAGE_NOTIFICATION">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0gm1dpb" sourceRef="Activity_0wmaq6k" targetRef="INSTALLATION_ACCOUNT_OPENING_SEND_REJECTION_EMAIL">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1di6xve" sourceRef="INSTALLATION_ACCOUNT_OPENING_SEND_ACCEPTANCE_EMAIL" targetRef="Gateway_1qwx38k">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="INSTALLATION_ACCOUNT_OPENING_DECISION_ACCEPTED" name="Yes" sourceRef="INSTALLATION_ACCOUNT_OPENING_DECISION_GATEWAY" targetRef="INSTALLATION_ACCOUNT_OPENING_ACTIVATE_ACCOUNT">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+        <design:display_ref_in_diagram>true</design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">#{applicationAccepted}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="INSTALLATION_ACCOUNT_OPENING_DECISION_REJECTED" name="No" sourceRef="INSTALLATION_ACCOUNT_OPENING_DECISION_GATEWAY" targetRef="INSTALLATION_ACCOUNT_OPENING_REJECT_ACCOUNT">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+        <design:display_ref_in_diagram>true</design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">#{!applicationAccepted}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0mbpxzn" sourceRef="Gateway_19p7asy" targetRef="INSTALLATION_ACCOUNT_OPENING_SEND_ACCEPTANCE_EMAIL">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1prv82m" sourceRef="Gateway_19p7asy" targetRef="Gateway_17tv19o">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1qjblc2" sourceRef="Gateway_1qwx38k" targetRef="Gateway_1rxssd7">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="bpmnSequenceFlow_3" sourceRef="Gateway_1rxssd7" targetRef="INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW_END_EVENT">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1t66ri0" name="is Transfer" sourceRef="Gateway_17tv19o" targetRef="INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+        <design:display_ref_in_diagram>true</design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">#{applicationTypeIsTransfer}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1ys72we" sourceRef="Gateway_17tv19o" targetRef="INSTALLATION_ACCOUNT_OPENING_ARCHIVE">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0egzexq" sourceRef="Gateway_11h1bxl" targetRef="Gateway_1qwx38k">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_08dcc0b" name="is Transfer" sourceRef="Gateway_04o17tj" targetRef="Gateway_058kjuq">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+        <design:display_ref_in_diagram>true</design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">#{applicationTypeIsTransfer}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="bpmnSequenceFlow_2" sourceRef="Gateway_04o17tj" targetRef="PERMIT_ISSUANCE_APPLICATION_SUBMIT">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_195239k" sourceRef="Gateway_058kjuq" targetRef="Gateway_19p7asy">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_08hj9qm" sourceRef="INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW_START_EVENT" targetRef="INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_INSTALLATION_ACCOUNT_OPENING">
+    <bpmndi:BPMNPlane id="BPMNPlane_PROCESS_INSTALLATION_ACCOUNT_OPENING" bpmnElement="PROCESS_INSTALLATION_ACCOUNT_OPENING">
+      <bpmndi:BPMNShape id="BPMNShape_INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE" bpmnElement="INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE">
+        <omgdc:Bounds x="1797.6672108843538" y="483.07714285714286" width="100" height="80.00000000000006" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW" bpmnElement="INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW">
+        <omgdc:Bounds x="253.89051868906802" y="225.07714285714286" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_INSTALLATION_ACCOUNT_OPENING_ACTIVATE_ACCOUNT" bpmnElement="INSTALLATION_ACCOUNT_OPENING_ACTIVATE_ACCOUNT">
+        <omgdc:Bounds x="560" y="225.07714285714286" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_INSTALLATION_ACCOUNT_OPENING_SEND_REJECTION_EMAIL" bpmnElement="INSTALLATION_ACCOUNT_OPENING_SEND_REJECTION_EMAIL">
+        <omgdc:Bounds x="1797.6672108843538" y="593.0771428571428" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_INSTALLATION_ACCOUNT_OPENING_REJECT_ACCOUNT" bpmnElement="INSTALLATION_ACCOUNT_OPENING_REJECT_ACCOUNT">
+        <omgdc:Bounds x="560" y="593.0771428571428" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_INSTALLATION_ACCOUNT_OPENING_ARCHIVE" bpmnElement="INSTALLATION_ACCOUNT_OPENING_ARCHIVE">
+        <omgdc:Bounds x="1797.6672108843538" y="358.07714285714286" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_ACCOUNT_USERS_SETUP_SYSTEM_MESSAGE_NOTIFICATION" bpmnElement="ACCOUNT_USERS_SETUP_SYSTEM_MESSAGE_NOTIFICATION">
+        <omgdc:Bounds x="896" y="225.07714285714286" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_PERMIT_ISSUANCE_APPLICATION_SUBMIT" bpmnElement="PERMIT_ISSUANCE_APPLICATION_SUBMIT">
+        <omgdc:Bounds x="1302.6672108843538" y="225.07714285714286" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_0d377x9" bpmnElement="Activity_0d377x9">
+        <omgdc:Bounds x="714" y="225.07714285714286" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_0wmaq6k" bpmnElement="Activity_0wmaq6k">
+        <omgdc:Bounds x="714" y="593.0771428571428" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_INSTALLATION_ACCOUNT_OPENING_SEND_ACCEPTANCE_EMAIL" bpmnElement="INSTALLATION_ACCOUNT_OPENING_SEND_ACCEPTANCE_EMAIL">
+        <omgdc:Bounds x="1797.6672108843538" y="103.99265306122449" width="100" height="79.99999999999999" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_INSTALLATION_ACCOUNT_OPENING_DECISION_GATEWAY" bpmnElement="INSTALLATION_ACCOUNT_OPENING_DECISION_GATEWAY" isMarkerVisible="true">
+        <omgdc:Bounds x="435" y="245.07714285714286" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="428" y="196" width="54" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Gateway_19p7asy" bpmnElement="Gateway_19p7asy">
+        <omgdc:Bounds x="1492.6672108843538" y="378.07714285714286" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Gateway_1qwx38k" bpmnElement="Gateway_1qwx38k">
+        <omgdc:Bounds x="2002.6672108843538" y="275.07714285714286" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Gateway_1rxssd7" bpmnElement="Gateway_1rxssd7" isMarkerVisible="true">
+        <omgdc:Bounds x="2112.667210884354" y="275.07714285714286" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Gateway_17tv19o" bpmnElement="Gateway_17tv19o" isMarkerVisible="true">
+        <omgdc:Bounds x="1632.6672108843538" y="378.07714285714286" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Gateway_11h1bxl" bpmnElement="Gateway_11h1bxl" isMarkerVisible="true">
+        <omgdc:Bounds x="2002.6672108843538" y="378.07714285714286" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Gateway_04o17tj" bpmnElement="Gateway_04o17tj" isMarkerVisible="true">
+        <omgdc:Bounds x="1162.0183589356122" y="245.07714285714286" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Gateway_058kjuq" bpmnElement="Gateway_058kjuq" isMarkerVisible="true">
+        <omgdc:Bounds x="1332.6672108843538" y="378.07714285714286" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW_START_EVENT" bpmnElement="INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW_START_EVENT">
+        <omgdc:Bounds x="151.35158021848866" y="250.07714285714286" width="30" height="30" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="142.35158021848866" y="293.07714285714286" width="59" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW_END_EVENT" bpmnElement="INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW_END_EVENT">
+        <omgdc:Bounds x="2206.835932991103" y="281.07714285714286" width="28" height="28" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="2199.835932991103" y="324.07714285714286" width="55" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_17ueuqq" bpmnElement="Flow_17ueuqq" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1897.6672108843538" y="523.0771428571429" />
+        <omgdi:waypoint x="2022.6672108843538" y="523.0771428571429" />
+        <omgdi:waypoint x="2022.6672108843538" y="418.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_bpmnSequenceFlow_1" bpmnElement="bpmnSequenceFlow_1" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="353.890518689068" y="265.07714285714286" />
+        <omgdi:waypoint x="435" y="265.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_bpmnSequenceFlow_5" bpmnElement="bpmnSequenceFlow_5" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="660" y="265.07714285714286" />
+        <omgdi:waypoint x="714" y="265.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_038yns6" bpmnElement="Flow_038yns6" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1897.6672108843538" y="633.0771428571428" />
+        <omgdi:waypoint x="2132.667210884354" y="633.0771428571428" />
+        <omgdi:waypoint x="2132.667210884354" y="315.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_bpmnSequenceFlow_6" bpmnElement="bpmnSequenceFlow_6" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="660" y="633.0771428571428" />
+        <omgdi:waypoint x="714" y="633.0771428571428" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1g01a46" bpmnElement="Flow_1g01a46" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1897.6672108843538" y="398.07714285714286" />
+        <omgdi:waypoint x="2002.6672108843538" y="398.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_08k7ul7" bpmnElement="Flow_08k7ul7" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="996" y="265.07714285714286" />
+        <omgdi:waypoint x="1162.0183589356122" y="265.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1hpfhef" bpmnElement="Flow_1hpfhef" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1352.6672108843538" y="305.07714285714286" />
+        <omgdi:waypoint x="1352.6672108843538" y="378.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1slbpwh" bpmnElement="Flow_1slbpwh" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="814" y="265.07714285714286" />
+        <omgdi:waypoint x="896" y="265.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0gm1dpb" bpmnElement="Flow_0gm1dpb" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="814" y="633.0771428571428" />
+        <omgdi:waypoint x="1797.6672108843538" y="633.0771428571428" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1di6xve" bpmnElement="Flow_1di6xve" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1897.6672108843538" y="143.99265306122447" />
+        <omgdi:waypoint x="2022.6672108843538" y="143.99265306122447" />
+        <omgdi:waypoint x="2022.6672108843538" y="275.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_INSTALLATION_ACCOUNT_OPENING_DECISION_ACCEPTED" bpmnElement="INSTALLATION_ACCOUNT_OPENING_DECISION_ACCEPTED" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="475" y="265.07714285714286" />
+        <omgdi:waypoint x="560" y="265.07714285714286" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="502.0231362856927" y="246.7255626386542" width="20" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_INSTALLATION_ACCOUNT_OPENING_DECISION_REJECTED" bpmnElement="INSTALLATION_ACCOUNT_OPENING_DECISION_REJECTED" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="455" y="285.07714285714286" />
+        <omgdi:waypoint x="455" y="633.0771428571428" />
+        <omgdi:waypoint x="560" y="633.0771428571428" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="472" y="324.07714285714286" width="15" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0mbpxzn" bpmnElement="Flow_0mbpxzn" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1512.6672108843538" y="378.07714285714286" />
+        <omgdi:waypoint x="1512.6672108843538" y="143.99265306122447" />
+        <omgdi:waypoint x="1797.6672108843538" y="143.99265306122447" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1prv82m" bpmnElement="Flow_1prv82m" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1532.6672108843538" y="398.07714285714286" />
+        <omgdi:waypoint x="1632.6672108843538" y="398.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1qjblc2" bpmnElement="Flow_1qjblc2" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="2042.6672108843538" y="295.07714285714286" />
+        <omgdi:waypoint x="2112.667210884354" y="295.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_bpmnSequenceFlow_3" bpmnElement="bpmnSequenceFlow_3" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="2152.667210884354" y="295.07714285714286" />
+        <omgdi:waypoint x="2206.835932991103" y="295.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1t66ri0" bpmnElement="Flow_1t66ri0" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1652.6672108843538" y="418.07714285714286" />
+        <omgdi:waypoint x="1652.6672108843538" y="523.0771428571429" />
+        <omgdi:waypoint x="1797.6672108843538" y="523.0771428571429" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1697.6672108843538" y="506.07714285714286" width="56" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1ys72we" bpmnElement="Flow_1ys72we" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1672.6672108843538" y="398.07714285714286" />
+        <omgdi:waypoint x="1797.6672108843538" y="398.0771428571429" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0egzexq" bpmnElement="Flow_0egzexq" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="2022.6672108843538" y="378.07714285714286" />
+        <omgdi:waypoint x="2022.6672108843538" y="315.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_08dcc0b" bpmnElement="Flow_08dcc0b" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1182.0183589356122" y="285.07714285714286" />
+        <omgdi:waypoint x="1182.0183589356122" y="398.07714285714286" />
+        <omgdi:waypoint x="1332.6672108843538" y="398.07714285714286" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1218.822532599441" y="380.88978460505217" width="56" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_bpmnSequenceFlow_2" bpmnElement="bpmnSequenceFlow_2" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1202.0183589356122" y="265.07714285714286" />
+        <omgdi:waypoint x="1302.6672108843538" y="265.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_195239k" bpmnElement="Flow_195239k" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1372.6672108843538" y="398.07714285714286" />
+        <omgdi:waypoint x="1492.6672108843538" y="398.07714285714286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_08hj9qm" bpmnElement="Flow_08hj9qm" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="181.35158021848866" y="265.07714285714286" />
+        <omgdi:waypoint x="253.89051868906802" y="265.07714285714286" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

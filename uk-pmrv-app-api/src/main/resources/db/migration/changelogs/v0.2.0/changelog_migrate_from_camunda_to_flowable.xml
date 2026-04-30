@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog logicalFilePath="v0.2.0/changelog_migrate_from_camunda_to_flowable.xml"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+    
+    <changeSet id="0_1_0_add_engine_column_in_request_table" author="P35066">
+        <addColumn tableName="request">
+            <column name="engine" type="varchar(255)" remarks="The engine type (e.g. camunda, flowable)">
+            </column>
+        </addColumn>
+        <update tableName="request">
+	        <column name="engine" value="CAMUNDA"/>
+	    </update>
+	    <addNotNullConstraint tableName="request" columnName="engine" />
+        <rollback>
+            <sql>
+                alter table request
+                drop column if exists engine;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_remove_camunda_aer_initiate_job" author="P35066">
+        <sql>
+            delete from public.act_ru_job where process_def_key_ = 'PROCESS_AER_INITIATE';
+        </sql>
+        <rollback />
+    </changeSet>
+    <changeSet id="0_1_0_remove_camunda_reporting_status_initiate_job" author="pkouris">
+        <sql>
+            delete from public.act_ru_job where process_def_key_ = 'PROCESS_AVIATION_REPORTING_STATUS_INITIATE';
+        </sql>
+        <rollback />
+    </changeSet>
+    <changeSet id="0_1_0_remove_camunda_alr_initiate_job" author="pkouris">
+        <sql>
+            delete from public.act_ru_job where process_def_key_ = 'PROCESS_ALR_INITIATE';
+        </sql>
+        <rollback />
+    </changeSet>
+    <changeSet id="0_1_0_remove_camunda_aviation_aer_initiate_job" author="dridakisc@unisystems.gr">
+        <sql>
+            delete from public.act_ru_job where process_def_key_ = 'PROCESS_AVIATION_AER_INITIATE';
+        </sql>
+        <rollback />
+    </changeSet>
+    <changeSet id="0_1_0_remove_camunda_waste_qdr_initiate_job" author="pkouris">
+        <sql>
+            delete from public.act_ru_job where process_def_key_ = 'PROCESS_WASTE_QDR_INITIATE';
+        </sql>
+        <rollback />
+    </changeSet>
+    <changeSet id="0_1_0_remove_camunda_bdr_2_initiate_job" author="pkouris">
+        <sql>
+            delete from public.act_ru_job where process_def_key_ = 'PROCESS_BDRS2_INITIATE'
+        </sql>
+        <rollback />
+    </changeSet>
+</databaseChangeLog>

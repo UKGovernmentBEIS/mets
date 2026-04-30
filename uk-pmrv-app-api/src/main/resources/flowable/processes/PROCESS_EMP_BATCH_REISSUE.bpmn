@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:design="http://flowable.org/design" targetNamespace="http://bpmn.io/schema/bpmn" design:palette="flowable-work-process-palette">
+  <process id="PROCESS_EMP_BATCH_REISSUE" name="EMP Batch Reissue Process" isExecutable="true">
+    <startEvent id="StartEvent_1">
+      <outgoing>Flow_1opujsq</outgoing>
+    </startEvent>
+    <serviceTask id="Activity_0lpi6k4" name="trigger EMP reissue" flowable:delegateExpression="#{empBatchTriggerEmpReissueHandlerFlowable}">
+      <incoming>Flow_1v0rz0n</incoming>
+      <outgoing>Flow_0s0zu9j</outgoing>
+      <multiInstanceLoopCharacteristics flowable:collection="accountIds" flowable:elementVariable="accountId" />
+    </serviceTask>
+    <serviceTask id="Activity_0xd0pff" name="EMP batch reissue completed" flowable:delegateExpression="#{empBatchReissueCompletedHandlerFlowable}">
+      <incoming>Flow_1v51yh4</incoming>
+      <outgoing>Flow_1tc33w4</outgoing>
+    </serviceTask>
+    <sequenceFlow id="Flow_1opujsq" sourceRef="StartEvent_1" targetRef="Activity_131ih32" />
+    <sequenceFlow id="Flow_0s0zu9j" sourceRef="Activity_0lpi6k4" targetRef="Event_088wx5f" />
+    <sequenceFlow id="Flow_1tc33w4" sourceRef="Activity_0xd0pff" targetRef="Event_05qh1be" />
+    <sequenceFlow id="Flow_06vywy1" sourceRef="Activity_131ih32" targetRef="Gateway_1wifmxg" />
+    <serviceTask id="Activity_131ih32" name="EMP batch reissue submitted" flowable:delegateExpression="#{empBatchReissueSubmittedHandlerFlowable}"  flowable:async="true">
+      <incoming>Flow_1opujsq</incoming>
+      <outgoing>Flow_06vywy1</outgoing>
+    </serviceTask>
+    <endEvent id="Event_05qh1be">
+      <incoming>Flow_1tc33w4</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_1v51yh4" sourceRef="Activity_1v1o7ti" targetRef="Activity_0xd0pff" />
+    <serviceTask id="Activity_1v1o7ti" name="generate report" flowable:async="true" flowable:delegateExpression="#{empBatchReissueGenerateReportHandlerFlowable}">
+      <incoming>Flow_18vyfjp</incoming>
+      <incoming>Flow_13rkaiq</incoming>
+      <outgoing>Flow_1v51yh4</outgoing>
+    </serviceTask>
+    <exclusiveGateway id="Gateway_1wifmxg" name="check accounts size" default="Flow_18vyfjp">
+      <incoming>Flow_06vywy1</incoming>
+      <outgoing>Flow_1v0rz0n</outgoing>
+      <outgoing>Flow_18vyfjp</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="Flow_1v0rz0n" sourceRef="Gateway_1wifmxg" targetRef="Activity_0lpi6k4">
+      <conditionExpression xsi:type="tFormalExpression">${accountIds.size() &gt; 0}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_18vyfjp" sourceRef="Gateway_1wifmxg" targetRef="Activity_1v1o7ti" />
+    <sequenceFlow id="Flow_00nbuu3" sourceRef="Activity_1kycge2" targetRef="Gateway_0h2ylyc" />
+    <serviceTask id="Activity_1kycge2" name="Populate reissues completed number" flowable:delegateExpression="#{empBatchReissuePopulateNumberOfAccountsCompletedHandlerFlowable}">
+      <incoming>Flow_1etgsy1</incoming>
+      <outgoing>Flow_00nbuu3</outgoing>
+    </serviceTask>
+    <exclusiveGateway id="Gateway_0h2ylyc" name="all completed">
+      <incoming>Flow_00nbuu3</incoming>
+      <outgoing>Flow_13rkaiq</outgoing>
+      <outgoing>Flow_0sa02ik</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="Flow_13rkaiq" sourceRef="Gateway_0h2ylyc" targetRef="Activity_1v1o7ti">
+      <conditionExpression xsi:type="tFormalExpression">${batchAccountsCompleted == accountIds.size()}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0sa02ik" sourceRef="Gateway_0h2ylyc" targetRef="Event_088wx5f">
+      <conditionExpression xsi:type="tFormalExpression">${batchAccountsCompleted &lt; accountIds.size()}</conditionExpression>
+    </sequenceFlow>
+    <intermediateCatchEvent id="Event_088wx5f" name="timer event">
+      <incoming>Flow_0s0zu9j</incoming>
+      <incoming>Flow_0sa02ik</incoming>
+      <outgoing>Flow_1etgsy1</outgoing>
+      <timerEventDefinition id="TimerEventDefinition_0fe7m01">
+        <timeDuration>PT1S</timeDuration>
+      </timerEventDefinition>
+    </intermediateCatchEvent>
+    <sequenceFlow id="Flow_1etgsy1" sourceRef="Event_088wx5f" targetRef="Activity_1kycge2" />
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PROCESS_EMP_BATCH_REISSUE">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <omgdc:Bounds x="152" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qdyazh_di" bpmnElement="Activity_0lpi6k4">
+        <omgdc:Bounds x="590" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_11sj2co_di" bpmnElement="Activity_0xd0pff">
+        <omgdc:Bounds x="1350" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0evljui_di" bpmnElement="Activity_131ih32">
+        <omgdc:Bounds x="270" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1979u9q_di" bpmnElement="Event_05qh1be">
+        <omgdc:Bounds x="1512" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_18l63n2_di" bpmnElement="Activity_1v1o7ti">
+        <omgdc:Bounds x="1180" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1wifmxg_di" bpmnElement="Gateway_1wifmxg" isMarkerVisible="true">
+        <omgdc:Bounds x="455" y="215" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="442" y="275" width="77" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1s69doq_di" bpmnElement="Activity_1kycge2">
+        <omgdc:Bounds x="880" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0h2ylyc_di" bpmnElement="Gateway_0h2ylyc" isMarkerVisible="true">
+        <omgdc:Bounds x="1065" y="215" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1058" y="185" width="65" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1772475_di" bpmnElement="Event_088wx5f">
+        <omgdc:Bounds x="762" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="753" y="180" width="55" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1opujsq_di" bpmnElement="Flow_1opujsq">
+        <omgdi:waypoint x="188" y="240" />
+        <omgdi:waypoint x="270" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0s0zu9j_di" bpmnElement="Flow_0s0zu9j">
+        <omgdi:waypoint x="690" y="240" />
+        <omgdi:waypoint x="762" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tc33w4_di" bpmnElement="Flow_1tc33w4">
+        <omgdi:waypoint x="1450" y="240" />
+        <omgdi:waypoint x="1512" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06vywy1_di" bpmnElement="Flow_06vywy1">
+        <omgdi:waypoint x="370" y="240" />
+        <omgdi:waypoint x="455" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v51yh4_di" bpmnElement="Flow_1v51yh4">
+        <omgdi:waypoint x="1280" y="240" />
+        <omgdi:waypoint x="1350" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v0rz0n_di" bpmnElement="Flow_1v0rz0n">
+        <omgdi:waypoint x="505" y="240" />
+        <omgdi:waypoint x="590" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18vyfjp_di" bpmnElement="Flow_18vyfjp">
+        <omgdi:waypoint x="480" y="215" />
+        <omgdi:waypoint x="480" y="80" />
+        <omgdi:waypoint x="1230" y="80" />
+        <omgdi:waypoint x="1230" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00nbuu3_di" bpmnElement="Flow_00nbuu3">
+        <omgdi:waypoint x="980" y="240" />
+        <omgdi:waypoint x="1065" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13rkaiq_di" bpmnElement="Flow_13rkaiq">
+        <omgdi:waypoint x="1115" y="240" />
+        <omgdi:waypoint x="1180" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1etgsy1_di" bpmnElement="Flow_1etgsy1">
+        <omgdi:waypoint x="798" y="240" />
+        <omgdi:waypoint x="880" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0sa02ik_di" bpmnElement="Flow_0sa02ik">
+        <omgdi:waypoint x="1090" y="265" />
+        <omgdi:waypoint x="1090" y="390" />
+        <omgdi:waypoint x="780" y="390" />
+        <omgdi:waypoint x="780" y="258" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

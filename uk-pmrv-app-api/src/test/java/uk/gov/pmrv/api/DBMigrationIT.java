@@ -9,12 +9,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.netz.api.common.AbstractContainerBaseTest;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,20 +30,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DBMigrationIT extends AbstractContainerBaseTest {
+class DBMigrationIT {
 
-    @Value("${spring.datasource.url}")
-    private String datasourceUrl;
-
-    @Value("${spring.datasource.username}")
-    private String datasourceUsername;
-
-    @Value("${spring.datasource.password}")
-    private String datasourcePassword;
+    @Container
+    private static final PostgreSQLContainer<?> POSTGRESQL_CONTAINER =
+            new PostgreSQLContainer<>("postgres:15")
+                    .withDatabaseName("netz-docker-tests-db")
+                    .withUsername("inmemory")
+                    .withPassword("inmemory");
 
 
     @BeforeAll
     public void setup() throws SQLException, LiquibaseException {
+        String datasourceUrl = POSTGRESQL_CONTAINER.getJdbcUrl();
+        String datasourceUsername = POSTGRESQL_CONTAINER.getUsername();
+        String datasourcePassword = POSTGRESQL_CONTAINER.getPassword();
+
         Connection connection = DriverManager.getConnection(datasourceUrl, datasourceUsername, datasourcePassword);
         Liquibase liquibase = new Liquibase(
             "db/migration/changelog-master.test.xml",
@@ -52,6 +54,7 @@ class DBMigrationIT extends AbstractContainerBaseTest {
         );
 
         liquibase.setChangeLogParameter("report_datasource_name","\"netz-docker-tests-db\"");
+        liquibase.setChangeLogParameter("spring-db-user","inmemory");
         liquibase.update( "" );
         connection.close();
     }
@@ -175,9 +178,13 @@ class DBMigrationIT extends AbstractContainerBaseTest {
 
     private Connection getConnection() {
         try {
-          return DriverManager.getConnection(datasourceUrl, datasourceUsername, datasourcePassword);
+            return DriverManager.getConnection(
+                    POSTGRESQL_CONTAINER.getJdbcUrl(),
+                    POSTGRESQL_CONTAINER.getUsername(),
+                    POSTGRESQL_CONTAINER.getPassword()
+            );
         } catch (Exception e) {
-          throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 

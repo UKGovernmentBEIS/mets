@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowTypeServiceDelegator;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
@@ -16,6 +17,7 @@ public class RequestCreateService {
 
     private final RequestRepository requestRepository;
     private final AccountQueryService accountQueryService;
+    private final WorkflowTypeServiceDelegator workflowTypeServiceDelegator;
 
     /**
      * Create and persist request.
@@ -29,6 +31,7 @@ public class RequestCreateService {
         Request request = new Request();
         request.setId(requestParams.getRequestId());
         request.setType(requestParams.getType());
+        request.setEngine(workflowTypeServiceDelegator.getWorkflowEngineByType(requestParams.getType().name()));
         request.setStatus(status);
         request.setCompetentAuthority(resolveRequestCompetentAuthority(requestParams));
         request.setVerificationBodyId(resolveRequestVerificationBody(requestParams));

@@ -22,6 +22,7 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccou
 import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowEngineType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
@@ -175,6 +176,7 @@ class InstallationOutstandingRequestTasksRepositoryIT extends AbstractContainerB
                 .status(status)
                 .accountId(account.getId())
                 .competentAuthority(account.getCompetentAuthority())
+                .engine(WorkflowEngineType.CAMUNDA)
                 .build();
 
         entityManager.persist(request);

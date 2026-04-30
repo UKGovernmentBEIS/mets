@@ -24,9 +24,14 @@ import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.permit.domain.dto.PermitEntityAccountDTO;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.InstallationAccountIdAndNameAndLegalEntityNameDTOImpl;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueFilters;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitEntityAccountDTOImpl;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitReissueAccountDetails;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitReissueAccountReport;
 
 @ExtendWith(MockitoExtension.class)
 class PermitBatchReissueQueryServiceTest {
@@ -39,7 +44,10 @@ class PermitBatchReissueQueryServiceTest {
 	
 	@Mock
 	private PermitQueryService permitQueryService;
-	
+
+	@Mock
+	private RequestService requestService;
+
 	@Test
 	void existAccountsByCAAndFilters() {
 		CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
@@ -401,5 +409,24 @@ class PermitBatchReissueQueryServiceTest {
 		verify(installationAccountQueryService, times(1)).getAccountIdsByCAAndStatusesAndInstallationCategoriesAndEmitterTypes(ca, statuses, emitterTypes, categories);
 		verify(permitQueryService, times(1)).getPermitByAccountIds(List.of(1L, 2L));
 	}
-	
+
+	@Test
+	void getNumberOfAccountsCompleted() {
+		String batchRequestId = "batch-1";
+		PermitReissueAccountReport report1 = PermitReissueAccountReport.builder().succeeded(true).build();
+		PermitReissueAccountReport report2 = PermitReissueAccountReport.builder().succeeded(false).build();
+		PermitReissueAccountReport report3 = PermitReissueAccountReport.builder().build();
+		PermitBatchReissueRequestMetadata metadata = PermitBatchReissueRequestMetadata.builder()
+				.type(RequestMetadataType.PERMIT_BATCH_REISSUE)
+				.accountsReports(Map.of(1L, report1, 2L, report2, 3L, report3))
+				.build();
+		Request request = Request.builder().metadata(metadata).build();
+
+		when(requestService.findRequestById(batchRequestId)).thenReturn(request);
+
+		long result = cut.getNumberOfAccountsCompleted(batchRequestId);
+
+		assertThat(result).isEqualTo(2L);
+		verify(requestService, times(1)).findRequestById(batchRequestId);
+	}
 }

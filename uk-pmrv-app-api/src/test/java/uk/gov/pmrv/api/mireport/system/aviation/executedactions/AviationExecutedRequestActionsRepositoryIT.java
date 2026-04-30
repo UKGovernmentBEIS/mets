@@ -24,6 +24,7 @@ import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanEntity;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowEngineType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -52,30 +53,30 @@ class AviationExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
     private EntityManager entityManager;
 
     @Test
-    void findExecutedRequestActions_results_when_only_mandatory_parameters_applied(){
+    void findExecutedRequestActions_results_when_only_mandatory_parameters_applied() {
         LegalEntity legalEntity = createLegalEntity("legalEntityName");
-        AviationAccount acc1 = createAccount(1L,"account", AviationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
+        AviationAccount acc1 = createAccount(1L, "account", AviationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
         Request acc1Request = createRequest(acc1, "NEW1", RequestType.EMP_ISSUANCE_UKETS, RequestStatus.COMPLETED);
         createRequestAction(acc1Request,
-            RequestActionType.PAYMENT_MARKED_AS_PAID,
-            LocalDateTime.of(2022, 1, 5, 12, 30 ),
-            "operator");
+                RequestActionType.PAYMENT_MARKED_AS_PAID,
+                LocalDateTime.of(2022, 1, 5, 12, 30),
+                "operator");
         RequestAction acc1RequestAction = createRequestAction(acc1Request,
-            RequestActionType.RDE_SUBMITTED,
-            LocalDateTime.of(2022, 1, 6, 15, 45 ),
-            "regulator");
+                RequestActionType.RDE_SUBMITTED,
+                LocalDateTime.of(2022, 1, 6, 15, 45),
+                "regulator");
         EmissionsMonitoringPlanEntity acc1Emp = createEmp(1L, "UK-W-AV-000001");
 
-        AviationAccount acc2 = createAccount(2L,"account2", AviationAccountStatus.LIVE, CompetentAuthorityEnum.ENGLAND, legalEntity);
+        AviationAccount acc2 = createAccount(2L, "account2", AviationAccountStatus.LIVE, CompetentAuthorityEnum.ENGLAND, legalEntity);
         Request acc2Request = createRequest(acc2, "NEW2", RequestType.EMP_ISSUANCE_UKETS, RequestStatus.IN_PROGRESS);
         createRequestAction(acc2Request,
-            RequestActionType.PAYMENT_MARKED_AS_PAID,
-            LocalDateTime.of(2022, 1, 5, 22, 30 ),
-            "operator");
+                RequestActionType.PAYMENT_MARKED_AS_PAID,
+                LocalDateTime.of(2022, 1, 5, 22, 30),
+                "operator");
         RequestAction acc2RequestAction = createRequestAction(acc2Request,
-            RequestActionType.RDE_SUBMITTED,
-            LocalDateTime.of(2022, 1, 10, 15, 45 ),
-            "regulator");
+                RequestActionType.RDE_SUBMITTED,
+                LocalDateTime.of(2022, 1, 10, 15, 45),
+                "regulator");
 
         ExecutedRequestActionsMiReportParams reportParams = ExecutedRequestActionsMiReportParams.builder()
             .reportType(MiReportSystemType.COMPLETED_WORK)
@@ -100,7 +101,7 @@ class AviationExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
         assertEquals(acc1RequestAction.getType().name(), executedRequestAction.getRequestActionType());
         assertEquals(acc1RequestAction.getSubmitter(), executedRequestAction.getRequestActionSubmitter());
         assertEquals(acc1RequestAction.getCreationDate().truncatedTo(ChronoUnit.MILLIS),
-            executedRequestAction.getRequestActionCompletionDate().truncatedTo(ChronoUnit.MILLIS));
+                executedRequestAction.getRequestActionCompletionDate().truncatedTo(ChronoUnit.MILLIS));
         assertEquals(acc1Emp.getId(), executedRequestAction.getPermitId());
         assertEquals(acc1.getCrcoCode(), executedRequestAction.getCrcoCode());
 
@@ -117,31 +118,31 @@ class AviationExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
         assertEquals(acc2RequestAction.getType().name(), executedRequestAction.getRequestActionType());
         assertEquals(acc2RequestAction.getSubmitter(), executedRequestAction.getRequestActionSubmitter());
         assertEquals(acc2RequestAction.getCreationDate().truncatedTo(ChronoUnit.MILLIS),
-            executedRequestAction.getRequestActionCompletionDate().truncatedTo(ChronoUnit.MILLIS));
+                executedRequestAction.getRequestActionCompletionDate().truncatedTo(ChronoUnit.MILLIS));
         assertNull(executedRequestAction.getPermitId());
         assertEquals(acc2.getCrcoCode(), executedRequestAction.getCrcoCode());
     }
 
     @Test
-    void findExecutedRequestActions_results_when_all_parameters_applied(){
+    void findExecutedRequestActions_results_when_all_parameters_applied() {
         LegalEntity legalEntity = createLegalEntity("legalEntityName");
-        AviationAccount acc1 = createAccount(1L,"account", AviationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
+        AviationAccount acc1 = createAccount(1L, "account", AviationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
         Request acc1Request = createRequest(acc1, "NEW1", RequestType.EMP_ISSUANCE_UKETS, RequestStatus.COMPLETED);
         createRequestAction(acc1Request,
-            RequestActionType.PAYMENT_MARKED_AS_RECEIVED,
-            LocalDateTime.of(2022, 1, 5, 0, 0 ),
-            "operator");
+                RequestActionType.PAYMENT_MARKED_AS_RECEIVED,
+                LocalDateTime.of(2022, 1, 5, 0, 0),
+                "operator");
         createRequestAction(acc1Request,
-            RequestActionType.RDE_ACCEPTED,
-            LocalDateTime.of(2022, 1, 6, 15, 45 ),
-            "regulator");
+                RequestActionType.RDE_ACCEPTED,
+                LocalDateTime.of(2022, 1, 6, 15, 45),
+                "regulator");
 
-        AviationAccount acc2 = createAccount(2L,"account2", AviationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
+        AviationAccount acc2 = createAccount(2L, "account2", AviationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
         Request acc2Request = createRequest(acc2, "NEW2", RequestType.EMP_ISSUANCE_UKETS, RequestStatus.IN_PROGRESS);
         createRequestAction(acc2Request,
-            RequestActionType.PAYMENT_MARKED_AS_RECEIVED,
-            LocalDateTime.of(2022, 1, 10, 0, 30 ),
-            "operator");
+                RequestActionType.PAYMENT_MARKED_AS_RECEIVED,
+                LocalDateTime.of(2022, 1, 10, 0, 30),
+                "operator");
 
         ExecutedRequestActionsMiReportParams reportParams = ExecutedRequestActionsMiReportParams.builder()
             .reportType(MiReportSystemType.COMPLETED_WORK)
@@ -162,18 +163,18 @@ class AviationExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
 
     private LegalEntity createLegalEntity(String name) {
         LegalEntity le = LegalEntity.builder()
-            .location(LocationOnShore.builder()
-                .address(Address.builder()
-                    .city("city")
-                    .country("GR")
-                    .line1("line")
-                    .postcode("postcode")
-                    .build())
-                .build())
-            .name(name)
-            .status(LegalEntityStatus.ACTIVE)
-            .type(LegalEntityType.LIMITED_COMPANY)
-            .build();
+                .location(LocationOnShore.builder()
+                        .address(Address.builder()
+                                .city("city")
+                                .country("GR")
+                                .line1("line")
+                                .postcode("postcode")
+                                .build())
+                        .build())
+                .name(name)
+                .status(LegalEntityStatus.ACTIVE)
+                .type(LegalEntityType.LIMITED_COMPANY)
+                .build();
         entityManager.persist(le);
         return le;
     }
@@ -200,12 +201,13 @@ class AviationExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
 
     private Request createRequest(Account account, String requestId, RequestType type, RequestStatus status) {
         Request request = Request.builder()
-            .id(requestId)
-            .type(type)
-            .status(status)
-            .accountId(account.getId())
-            .competentAuthority(account.getCompetentAuthority())
-            .build();
+                .id(requestId)
+                .type(type)
+                .status(status)
+                .accountId(account.getId())
+                .competentAuthority(account.getCompetentAuthority())
+                .engine(WorkflowEngineType.CAMUNDA)
+                .build();
 
         entityManager.persist(request);
         return request;
@@ -213,10 +215,10 @@ class AviationExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
 
     private RequestAction createRequestAction(Request request, RequestActionType type, LocalDateTime creationDate, String submitter) {
         RequestAction requestAction = RequestAction.builder()
-            .request(request)
-            .type(type)
-            .submitter(submitter)
-            .build();
+                .request(request)
+                .type(type)
+                .submitter(submitter)
+                .build();
 
         entityManager.persist(requestAction);
 

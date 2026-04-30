@@ -23,7 +23,10 @@ import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.response.AviationEmissionsUpdatedEventListener;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.installation.response.InstallationEmissionsUpdatedEventListener;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
-import uk.gov.pmrv.api.workflow.request.WorkflowService;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowEngineType;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowTypeServiceDelegator;
+import uk.gov.pmrv.api.workflow.bpmn.camunda.CamundaWorkflowService;
+import uk.gov.pmrv.api.workflow.bpmn.flowable.FlowableWorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -43,9 +46,10 @@ import static org.mockito.Mockito.verify;
 
 @Testcontainers
 @SpringBootTest(
-    properties = {
-        "camunda.bpm.enabled=false"
-    }
+        properties = {
+                "camunda.bpm.enabled=false",
+                "flowable.process.enabled=false"
+        }
 )
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Import({BuildProperties.class})
@@ -55,10 +59,13 @@ class ParallelRequestHandlingIT extends AbstractContainerBaseTest {
     private static final Long TEST_ACCOUNT_ID = 1L;
     private static final String TEST_REQUEST_ID = "1";
     private static final String TEST_PROCESS_ID = "2";
+
     @Autowired
     private InstallationAccountStatusService installationAccountStatusService;
+
     @Autowired
     private AccountRepository repository;
+
     @Autowired
     private RequestRepository requestRepository;
 
@@ -66,47 +73,58 @@ class ParallelRequestHandlingIT extends AbstractContainerBaseTest {
     private RequestActionRepository requestActionRepository;
 
     @MockitoBean
-    WorkflowService workflowService;
-    @MockitoBean
-    UserAuthService userAuthService;
-    @MockitoBean
-    AccountAuthorizationResourceService accountAuthorizationResourceService;
-    @MockitoBean
-    AccountRequestAuthorizationResourceService accountRequestAuthorizationResourceService;
+    private WorkflowTypeServiceDelegator workflowService;
 
     @MockitoBean
-    AviationEmissionsUpdatedEventListener aviationEmissionsUpdatedEventListener;
+    private FlowableWorkflowService flowableWorkflowService;
+
     @MockitoBean
-    InstallationEmissionsUpdatedEventListener installationEmissionsUpdatedEventListener;
+    private CamundaWorkflowService camundaWorkflowService;
+
+    @MockitoBean
+    private UserAuthService userAuthService;
+
+    @MockitoBean
+    private AccountAuthorizationResourceService accountAuthorizationResourceService;
+
+    @MockitoBean
+    private AccountRequestAuthorizationResourceService accountRequestAuthorizationResourceService;
+
+    @MockitoBean
+    private AviationEmissionsUpdatedEventListener aviationEmissionsUpdatedEventListener;
+
+    @MockitoBean
+    private InstallationEmissionsUpdatedEventListener installationEmissionsUpdatedEventListener;
 
     @BeforeEach
     void setUp() {
         repository.deleteAll();
         requestRepository.deleteAll();
         repository.save(
-            InstallationAccount.builder()
-                .id(TEST_ACCOUNT_ID)
-                .accountType(AccountType.INSTALLATION)
-                .applicationType(ApplicationType.NEW_PERMIT)
-                .commencementDate(LocalDate.now())
-                .competentAuthority(CompetentAuthorityEnum.ENGLAND)
-                .verificationBodyId(TEST_ACCOUNT_ID)
-                .status(InstallationAccountStatus.LIVE)
-                .name("account1")
-                .siteName("account1")
-                .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
-                .emitterId("EM00001")
-                .build()
+                InstallationAccount.builder()
+                        .id(TEST_ACCOUNT_ID)
+                        .accountType(AccountType.INSTALLATION)
+                        .applicationType(ApplicationType.NEW_PERMIT)
+                        .commencementDate(LocalDate.now())
+                        .competentAuthority(CompetentAuthorityEnum.ENGLAND)
+                        .verificationBodyId(TEST_ACCOUNT_ID)
+                        .status(InstallationAccountStatus.LIVE)
+                        .name("account1")
+                        .siteName("account1")
+                        .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
+                        .emitterId("EM00001")
+                        .build()
         );
         requestRepository.save(
-            Request.builder()
-                .id(TEST_REQUEST_ID)
-                .accountId(TEST_ACCOUNT_ID)
-                .processInstanceId(TEST_PROCESS_ID)
-                .type(RequestType.PERMIT_REVOCATION)
-                .status(RequestStatus.IN_PROGRESS)
-                .creationDate(LocalDateTime.now())
-                .build()
+                Request.builder()
+                        .id(TEST_REQUEST_ID)
+                        .accountId(TEST_ACCOUNT_ID)
+                        .processInstanceId(TEST_PROCESS_ID)
+                        .type(RequestType.PERMIT_REVOCATION)
+                        .status(RequestStatus.IN_PROGRESS)
+                        .creationDate(LocalDateTime.now())
+                        .engine(WorkflowEngineType.CAMUNDA)
+                        .build()
         );
     }
 
@@ -124,7 +142,7 @@ class ParallelRequestHandlingIT extends AbstractContainerBaseTest {
         RequestAction closeRequestAction = requestActionRepository.findAllByRequestId(request.getId()).get(0);
 
         assertThat(closeRequestAction.getType()).isEqualTo(RequestActionType.REQUEST_TERMINATED);
-//        assertThat(closeRequestAction.getPayload()).isNull();
+        // assertThat(closeRequestAction.getPayload()).isNull();
         assertThat(closeRequestAction.getSubmitter()).isNull();
 
         verify(workflowService, times(1)).deleteProcessInstance(TEST_PROCESS_ID, DELETE_REASON);

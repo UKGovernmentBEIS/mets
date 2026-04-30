@@ -3,6 +3,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.aer.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
@@ -44,9 +45,13 @@ public class AerCreationService {
     private final AerMonitoringPlanVersionsBuilderService aerMonitoringPlanVersionsBuilderService;
     private final AerPermitOriginatedDataBuilderService aerPermitOriginatedDataBuilderService;
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void createRequestAerInNewTransaction(Long accountId, RequestType initiationRequestType) {
+        this.createRequestAer(accountId, initiationRequestType);
+    }
 
     @Transactional
-    public Request createRequestAer(Long accountId, RequestType initiationRequestType) {
+    public void createRequestAer(Long accountId, RequestType initiationRequestType) {
         Year aerYear = Year.now().minusYears(1);
 
         // Validate if AER is allowed
@@ -55,7 +60,7 @@ public class AerCreationService {
             throw new BusinessException(MetsErrorCode.AER_CREATION_NOT_ALLOWED, validationResult);
         }
 
-		return createRequestAerForYear(accountId, aerYear, aerDueDateService.generateDueDate(),
+		this.createRequestAerForYear(accountId, aerYear, aerDueDateService.generateDueDate(),
 				AerInitiatorRequest.builder().type(initiationRequestType).build());
     }
 

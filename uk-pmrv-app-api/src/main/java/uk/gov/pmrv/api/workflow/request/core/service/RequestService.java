@@ -37,7 +37,11 @@ public class RequestService {
         return requestRepository.findById(id)
             .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
     }
-
+    
+    public Request findRequestByIdForUpdate(String id) {
+        return requestRepository.findByIdForUpdate(id)
+            .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
+    }
 
     @Transactional
     public void addActionToRequest(Request request, @Valid RequestActionPayload payload,
@@ -77,6 +81,8 @@ public class RequestService {
     public void terminateRequest(String requestId, String processInstanceId, boolean shouldBeDeleted) {
         Request request = findRequestById(requestId);
 
+		// check if the process instance that does terminate is the main process
+		// instance and not any bpmn execution sub process instance
         if(processInstanceId.equals(request.getProcessInstanceId())){
             if (shouldBeDeleted || 
             		RequestType.SYSTEM_MESSAGE_NOTIFICATION.equals(request.getType())) {

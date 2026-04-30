@@ -21,6 +21,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowEngineType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
@@ -172,6 +173,7 @@ class RequestTaskRepositoryIT extends AbstractContainerBaseTest {
 				.id(RandomStringUtils.insecure().next(5))
 				.type(type)
 				.status(RequestStatus.IN_PROGRESS)
+				.engine(WorkflowEngineType.FLOWABLE)
 				.competentAuthority(ca)
 				.accountId(accountId)
 				.build();

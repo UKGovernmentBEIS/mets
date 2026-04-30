@@ -73,7 +73,7 @@ class StartProcessRequestServiceTest {
         processVars.put(BpmnProcessConstants.REQUEST_TYPE, requestType.name());
         processVars.putAll(params.getProcessVars());
         
-        when(workflowService.startProcessDefinition(requestType.getProcessDefinitionId(), processVars))
+        when(workflowService.startProcessDefinition(request, processVars))
             .thenReturn(processInstanceId);
 
         // Invoke
@@ -86,7 +86,7 @@ class StartProcessRequestServiceTest {
         verify(requestIdGeneratorResolver, times(1)).get(requestType);
         verify(requestIdGenerator, times(1)).generate(params);
         verify(requestCreateService, times(1)).createRequest(params.withRequestId(requestId), IN_PROGRESS);
-        verify(workflowService, times(1)).startProcessDefinition(requestType.getProcessDefinitionId(), processVars);
+        verify(workflowService, times(1)).startProcessDefinition(request, processVars);
         assertThat(result.getProcessInstanceId()).isEqualTo(processInstanceId);
     }
 
@@ -118,7 +118,7 @@ class StartProcessRequestServiceTest {
         );
 
         when(requestIdGeneratorResolver.get(any())).thenReturn(systemMessageNotificationRequestSequenceRequestIdGenerator);
-        when(workflowService.startProcessDefinition(requestType.getProcessDefinitionId(), processVars))
+        when(workflowService.startProcessDefinition(request, processVars))
             .thenReturn(processInstanceId);
 
 
@@ -131,7 +131,7 @@ class StartProcessRequestServiceTest {
         assertThat(result.getProcessInstanceId()).isEqualTo(processInstanceId);
         // Verify
         verify(requestCreateService, times(1)).createRequest(requestParams, IN_PROGRESS);
-        verify(workflowService, times(1)).startProcessDefinition(requestType.getProcessDefinitionId(), processVars);
+        verify(workflowService, times(1)).startProcessDefinition(request, processVars);
         assertThat(result.getProcessInstanceId()).isEqualTo(processInstanceId);
     }
 
@@ -152,14 +152,14 @@ class StartProcessRequestServiceTest {
         processVars.put(BpmnProcessConstants.REQUEST_ID, request.getId());
         processVars.put(BpmnProcessConstants.REQUEST_TYPE, request.getType().name());
 
-        when(workflowService.startProcessDefinition(requestType.getProcessDefinitionId(), processVars))
+        when(workflowService.reStartProcessDefinition(request, processVars))
                 .thenReturn(processInstanceId);
 
         // Invoke
         startProcessRequestService.reStartProcess(request);
 
         // Verify
-        verify(workflowService, times(1)).startProcessDefinition(requestType.getProcessDefinitionId(), processVars);
+        verify(workflowService, times(1)).reStartProcessDefinition(request, processVars);
         assertThat(request.getProcessInstanceId()).isEqualTo(processInstanceId);
         assertThat(request.getStatus()).isEqualTo(IN_PROGRESS);
     }

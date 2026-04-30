@@ -1,0 +1,24 @@
+package uk.gov.pmrv.api.workflow.bpmn.flowable.handler.permitnotification;
+
+import lombok.RequiredArgsConstructor;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
+import org.springframework.stereotype.Service;
+import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service.PermitNotificationReviewSubmittedService;
+
+@Service
+@RequiredArgsConstructor
+public class PermitNotificationCompletedHandlerFlowable implements JavaDelegate {
+
+    private final PermitNotificationReviewSubmittedService reviewSubmittedService;
+
+    @Override
+    public void execute(DelegateExecution execution) {
+        final String requestId = (String) execution.getVariable(BpmnProcessConstants.REQUEST_ID);
+        reviewSubmittedService.executeCompletedPostActions(requestId);
+		execution.setVariable(BpmnProcessConstants.FOLLOW_UP_RESPONSE_NEEDED,
+				reviewSubmittedService.isFollowUpNeeded(requestId));
+        
+    }
+}

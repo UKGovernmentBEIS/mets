@@ -8,7 +8,10 @@ import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmpAccountDTO;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueFilters;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpReissueAccountDetails;
 
 import java.util.Map;
@@ -22,6 +25,7 @@ public class EmpBatchReissueQueryService {
 
 	private final AviationAccountQueryService aviationAccountQueryService;
 	private final EmissionsMonitoringPlanQueryService emissionsMonitoringPlanQueryService;
+	private final RequestService requestService;
 	
 	public boolean existAccountsByCAAndFilters(CompetentAuthorityEnum ca, EmpBatchReissueFilters filters) {
 		return !aviationAccountQueryService.getAllByCAAndStatusesAndEmissionTradingSchemesAndReportingStatuses(ca,
@@ -50,5 +54,15 @@ public class EmpBatchReissueQueryService {
 					.build();
 		}));
 	}
-	
+
+	public long getNumberOfAccountsCompleted(String batchRequestId) {
+		final Request batchRequest = requestService.findRequestById(batchRequestId);
+		final EmpBatchReissueRequestMetadata metadata =
+				(EmpBatchReissueRequestMetadata) batchRequest.getMetadata();
+		return metadata.getAccountsReports()
+				.values().stream()
+				.filter(report -> report.getSucceeded() != null)
+				.count();
+	}
+
 }

@@ -53,7 +53,7 @@ public class PermitBatchReissueGenerateReportService {
 						accountReport.getIssueDate() != null
 								? CSV_DATE_ISSUE_FORMATTER.format(accountReport.getIssueDate())
 								: "N/A",
-						accountReport.isSucceeded() ? "Pass" : "Fail");
+						Boolean.TRUE.equals(accountReport.getSucceeded()) ? "Pass" : "Fail");
 			}
 			
 			final byte[] generatedFile = sw.toString().getBytes(StandardCharsets.UTF_8);

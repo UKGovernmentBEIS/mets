@@ -2,6 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -156,11 +157,14 @@ class BDRS2CreationServiceTest {
     }
 
     @Test
-    void createBDRS2ForYear() {
+    void createBDRS2_setsInitiationTypeProcessVar() {
         Date expirationDate = new Date();
         Long accountId = 1L;
         Year bdrYear = Year.of(2025);
-        Map<String, Object> processVars = Map.of(BpmnProcessConstants.BDRS2_EXPIRATION_DATE, expirationDate);
+        Map<String, Object> processVars = Map.of(
+            BpmnProcessConstants.BDRS2_EXPIRATION_DATE, expirationDate,
+            BpmnProcessConstants.BDRS2_INITIATION_TYPE, BDRS2InitiationType.INITIATED
+        );
 
 
         RequestParams requestParams = RequestParams.builder()
@@ -189,19 +193,32 @@ class BDRS2CreationServiceTest {
                 .status(RequestStatus.IN_PROGRESS)
                 .build();
 
+        when(dateService.getYear())
+            .thenReturn(bdrYear);
+
+        when(bdrs2CreationValidatorService.validateAccountStatus(accountId))
+            .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
+
         when(bdrs2CreationValidatorService.validateYear(eq(accountId), any()))
                 .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
+
+        when(bdrs2DueDateService.generateDueDate())
+            .thenReturn(expirationDate);
 
         when(startProcessRequestService.startProcess(any(RequestParams.class)))
                 .thenReturn(request);
 
-        Request actualRequest = service.createBDRS2ForYear(accountId, bdrYear, expirationDate);
+        Request actualRequest = service.createBDRS2(accountId);
 
 
         assertThat(actualRequest).isEqualTo(request);
 
+        ArgumentCaptor<RequestParams> requestParamsCaptor = ArgumentCaptor.forClass(RequestParams.class);
+        verify(startProcessRequestService, times(1)).startProcess(requestParamsCaptor.capture());
+        assertThat(requestParamsCaptor.getValue().getProcessVars()).isEqualTo(processVars);
 
+        verify(bdrs2CreationValidatorService, times(1)).validateAccountStatus(accountId);
         verify(bdrs2CreationValidatorService, times(1)).validateYear(eq(accountId), any());
-        verify(startProcessRequestService, times(1)).startProcess(any(RequestParams.class));
+        verify(bdrs2DueDateService, times(1)).generateDueDate();
     }
 }

@@ -3,6 +3,9 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.service
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountIdAndNameAndLegalEntityNameDTO;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueRequestMetadata;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
@@ -23,6 +26,7 @@ public class PermitBatchReissueQueryService {
 	
 	private final InstallationAccountQueryService installationAccountQueryService;
 	private final PermitQueryService permitQueryService;
+	private final RequestService requestService;
 	
 	public boolean existAccountsByCAAndFilters(CompetentAuthorityEnum ca, PermitBatchReissueFilters filters) {
 		return !findAccounts(ca, filters).isEmpty();
@@ -66,5 +70,14 @@ public class PermitBatchReissueQueryService {
 							filters.getInstallationCategories(),
                             filters.isFreeAllocation());
 	}
-	
+
+	public long getNumberOfAccountsCompleted(String batchRequestId) {
+		final Request batchRequest = requestService.findRequestById(batchRequestId);
+		final PermitBatchReissueRequestMetadata metadata =
+				(PermitBatchReissueRequestMetadata) batchRequest.getMetadata();
+		return metadata.getAccountsReports()
+				.values().stream()
+				.filter(report -> report.getSucceeded() != null)
+				.count();
+	}
 }

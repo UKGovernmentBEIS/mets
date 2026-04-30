@@ -14,6 +14,6 @@ import lombok.experimental.SuperBuilder;
 public abstract class ReissueReport {
 
 	private LocalDate issueDate;
-	private boolean succeeded;
+	private Boolean succeeded;
 	
 }

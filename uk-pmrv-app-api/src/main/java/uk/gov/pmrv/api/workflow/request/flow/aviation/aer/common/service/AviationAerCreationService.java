@@ -2,6 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
@@ -30,7 +31,7 @@ public class AviationAerCreationService {
     private final StartProcessRequestService startProcessRequestService;
     private final AviationAerReportingObligationService aviationAerReportingObligationService;
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void createRequestAviationAer(Long accountId) {
         Year reportingYear = Year.now().minusYears(1);
 

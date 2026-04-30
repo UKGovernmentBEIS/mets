@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:design="http://flowable.org/design" typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://bpmn.io/schema/bpmn"
+             exporter="Flowable Design" exporterVersion="2025.1.03" design:palette="flowable-work-process-palette">
+    <process id="PROCESS_AVIATION_DOE_CORSIA" name="PROCESS_AVIATION_DOE_CORSIA" isExecutable="true">
+        <extensionElements>
+            <design:stencilid><![CDATA[BPMNDiagram]]></design:stencilid>
+            <design:creationdate><![CDATA[2025-10-27T10:25:25.870Z]]></design:creationdate>
+            <design:modificationdate><![CDATA[2025-11-07T09:53:15.742Z]]></design:modificationdate>
+        </extensionElements>
+        <userTask id="AVIATION_DOE_CORSIA_APPLICATION_SUBMIT" flowable:formFieldValidation="false">
+            <extensionElements>
+                <flowable:element-name>Regulator:
+                    Submit Aviation DoE CORSIA Aplication
+                </flowable:element-name>
+                <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+                <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </userTask>
+        <serviceTask id="AVIATION_DOE_CORSIA_ADD_CANCELLED_REQUEST_ACTION" name="Add cancelled request action"
+                     flowable:delegateExpression="#{aviationDoECorsiaAddCancelledRequestActionHandlerFlowable}">
+            <extensionElements>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <serviceTask id="AVIATION_DOE_CORSIA_UPDATE_WORKFLOW_STATUS_TO_CANCELLED"
+                     name="Update Workflow status to CANCELLED"
+                     flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+            <extensionElements>
+                <flowable:field name="requestStatus">
+                    <flowable:string>CANCELLED</flowable:string>
+                </flowable:field>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <serviceTask id="AVIATION_DOE_CORSIA_UPDATE_WORKFLOW_STATUS_TO_COMPLETED_HANDLER"
+                     name="Update Workflow status to COMPLETED"
+                     flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+            <extensionElements>
+                <flowable:field name="requestStatus">
+                    <flowable:string>COMPLETED</flowable:string>
+                </flowable:field>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <callActivity id="Activity_17ycuan" name="Payment" calledElement="PAYMENT" flowable:businessKey="#{businessKey}"
+                      flowable:fallbackToDefaultTenant="true">
+            <extensionElements>
+                <flowable:in source="requestId" target="requestId"></flowable:in>
+                <flowable:in source="requestType" target="requestType"></flowable:in>
+                <flowable:in source="paymentExpirationDate" target="paymentExpirationDate"></flowable:in>
+                <flowable:in sourceExpression="${true}" target="expires"></flowable:in>
+                <design:stencilid><![CDATA[CallActivity]]></design:stencilid>
+            </extensionElements>
+        </callActivity>
+        <serviceTask id="AVIATION_DOE_CORSIA_ADD_SUBMITTED_REQUEST_ACTION_HANDLER" name="Add submitted request action"
+                     flowable:delegateExpression="#{aviationDoECorsiaAddSubmittedRequestActionHandlerFlowable}">
+            <extensionElements>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <serviceTask id="Activity_01l5egg" name="Update reportable emissions"
+                     flowable:delegateExpression="#{aviationDoECorsiaUpdateReportableEmissionsHandlerFlowable}">
+            <extensionElements>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <serviceTask id="Activity_0mgwkpn" name="Update request metadata"
+                     flowable:delegateExpression="#{aviationDoECorsiaPopulateRequestMetadataWithReportableEmissionsHandlerFlowable}">
+            <extensionElements>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <serviceTask id="Activity_0n26guh" name="Cancel AER1"
+                     flowable:delegateExpression="#{aviationDoECorsiaCancelAerHandlerFlowable}">
+            <extensionElements>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <serviceTask id="Activity_1x2s1l7" name="Generate official notice"
+                     flowable:delegateExpression="#{aviationDoECorsiaSubmittedGenerateOfficialNoticeHandlerFlowable}">
+            <extensionElements>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <serviceTask id="Activity_0uj493m" name="Send official notice"
+                     flowable:delegateExpression="#{aviationDoECorsiaSubmittedSendOfficialNoticeHandlerFlowable}">
+            <extensionElements>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <callActivity id="AVIATION_DOE_CORSIA_PEER_REVIEW" name="Peer Review" calledElement="PEER_REVIEW"
+                      flowable:businessKey="#{businessKey}" flowable:fallbackToDefaultTenant="true">
+            <extensionElements>
+                <flowable:in source="requestId" target="requestId"></flowable:in>
+                <flowable:in source="requestType" target="requestType"></flowable:in>
+                <flowable:out source="aviationDoECorsiaSubmitOutcome"
+                              target="aviationDoECorsiaSubmitOutcome"></flowable:out>
+                <design:stencilid><![CDATA[CallActivity]]></design:stencilid>
+            </extensionElements>
+        </callActivity>
+        <exclusiveGateway id="AVIATION_DOE_CORSIA_SUBMIT_OUTCOME_GATEWAY" name="what is the submit outcome?">
+            <extensionElements>
+                <design:stencilid><![CDATA[Exclusive_Databased_Gateway]]></design:stencilid>
+                <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+            </extensionElements>
+        </exclusiveGateway>
+        <exclusiveGateway id="Gateway_1m6gng8" name="is Payment needed?"
+                          default="AVIATION_DOE_CORSIA_PAYMENT_NOT_REQUIRED_FLOW">
+            <extensionElements>
+                <design:stencilid><![CDATA[Exclusive_Databased_Gateway]]></design:stencilid>
+                <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+            </extensionElements>
+        </exclusiveGateway>
+        <exclusiveGateway id="AVIATION_DOE_CORSIA_PEER_REVIEW_OUTCOME_GATEWAY" name="what is the peer review outcome?">
+            <extensionElements>
+                <design:stencilid><![CDATA[Exclusive_Databased_Gateway]]></design:stencilid>
+                <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+            </extensionElements>
+        </exclusiveGateway>
+        <startEvent id="StartEvent_1" flowable:formFieldValidation="false">
+            <extensionElements>
+                <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+                <design:stencilid><![CDATA[StartNoneEvent]]></design:stencilid>
+            </extensionElements>
+        </startEvent>
+        <endEvent id="Event_10ghcxq">
+            <extensionElements>
+                <design:stencilid><![CDATA[EndNoneEvent]]></design:stencilid>
+            </extensionElements>
+        </endEvent>
+        <sequenceFlow id="Flow_0loplul" sourceRef="AVIATION_DOE_CORSIA_APPLICATION_SUBMIT"
+                      targetRef="AVIATION_DOE_CORSIA_SUBMIT_OUTCOME_GATEWAY">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_107umn8" sourceRef="AVIATION_DOE_CORSIA_ADD_CANCELLED_REQUEST_ACTION"
+                      targetRef="AVIATION_DOE_CORSIA_UPDATE_WORKFLOW_STATUS_TO_CANCELLED">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_0uf8zv4" sourceRef="AVIATION_DOE_CORSIA_UPDATE_WORKFLOW_STATUS_TO_CANCELLED"
+                      targetRef="Event_10ghcxq">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_1rla8gg" sourceRef="AVIATION_DOE_CORSIA_UPDATE_WORKFLOW_STATUS_TO_COMPLETED_HANDLER"
+                      targetRef="Event_10ghcxq">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_0kixjs9" sourceRef="Activity_17ycuan"
+                      targetRef="AVIATION_DOE_CORSIA_UPDATE_WORKFLOW_STATUS_TO_COMPLETED_HANDLER">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_1pmsjqq" sourceRef="AVIATION_DOE_CORSIA_ADD_SUBMITTED_REQUEST_ACTION_HANDLER"
+                      targetRef="Activity_0n26guh">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_0xb78xx" sourceRef="Activity_01l5egg" targetRef="Activity_0mgwkpn">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_0i65r89" sourceRef="Activity_0mgwkpn" targetRef="Activity_1x2s1l7">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_0o1y6qy" sourceRef="Activity_0n26guh" targetRef="Gateway_1m6gng8">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_1bpxvrv" sourceRef="Activity_1x2s1l7" targetRef="Activity_0uj493m">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_0fwysw1" sourceRef="Activity_0uj493m"
+                      targetRef="AVIATION_DOE_CORSIA_ADD_SUBMITTED_REQUEST_ACTION_HANDLER">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_0djflaz" sourceRef="AVIATION_DOE_CORSIA_PEER_REVIEW"
+                      targetRef="AVIATION_DOE_CORSIA_PEER_REVIEW_OUTCOME_GATEWAY">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_1uvbthp" sourceRef="AVIATION_DOE_CORSIA_SUBMIT_OUTCOME_GATEWAY"
+                      targetRef="AVIATION_DOE_CORSIA_ADD_CANCELLED_REQUEST_ACTION">
+            <extensionElements>
+                <flowable:element-name>cancelled
+                </flowable:element-name>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+                <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+            </extensionElements>
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${aviationDoECorsiaSubmitOutcome=='CANCELLED'}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_1mzzspk" name="submitted" sourceRef="AVIATION_DOE_CORSIA_SUBMIT_OUTCOME_GATEWAY"
+                      targetRef="Activity_01l5egg">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+                <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+            </extensionElements>
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${aviationDoECorsiaSubmitOutcome=='SUBMITTED'}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_0nl9ilf" name="peer review" sourceRef="AVIATION_DOE_CORSIA_SUBMIT_OUTCOME_GATEWAY"
+                      targetRef="AVIATION_DOE_CORSIA_PEER_REVIEW">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+                <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+            </extensionElements>
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${aviationDoECorsiaSubmitOutcome=='PEER_REVIEW_REQUIRED'}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="AVIATION_DOE_CORSIA_PAYMENT_REQUIRED_FLOW" sourceRef="Gateway_1m6gng8"
+                      targetRef="Activity_17ycuan">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${paymentRequired == true}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="AVIATION_DOE_CORSIA_PAYMENT_NOT_REQUIRED_FLOW" sourceRef="Gateway_1m6gng8"
+                      targetRef="AVIATION_DOE_CORSIA_UPDATE_WORKFLOW_STATUS_TO_COMPLETED_HANDLER">
+            <extensionElements>
+                <flowable:is-default-flow><![CDATA[true]]></flowable:is-default-flow>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_0d85929" name="cancelled" sourceRef="AVIATION_DOE_CORSIA_PEER_REVIEW_OUTCOME_GATEWAY"
+                      targetRef="AVIATION_DOE_CORSIA_ADD_CANCELLED_REQUEST_ACTION">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+                <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+            </extensionElements>
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${aviationDoECorsiaSubmitOutcome=='CANCELLED'}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_04tdrzu" name="submitted" sourceRef="AVIATION_DOE_CORSIA_PEER_REVIEW_OUTCOME_GATEWAY"
+                      targetRef="AVIATION_DOE_CORSIA_APPLICATION_SUBMIT">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+                <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+            </extensionElements>
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${aviationDoECorsiaSubmitOutcome=='SUBMITTED'}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_1e7uoeu" sourceRef="StartEvent_1" targetRef="AVIATION_DOE_CORSIA_APPLICATION_SUBMIT">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+    </process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_AVIATION_DOE_CORSIA">
+        <bpmndi:BPMNPlane bpmnElement="PROCESS_AVIATION_DOE_CORSIA" id="BPMNPlane_PROCESS_AVIATION_DOE_CORSIA">
+            <bpmndi:BPMNShape bpmnElement="AVIATION_DOE_CORSIA_APPLICATION_SUBMIT"
+                              id="BPMNShape_AVIATION_DOE_CORSIA_APPLICATION_SUBMIT">
+                <omgdc:Bounds height="80.0" width="100.0" x="360.0" y="260.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="AVIATION_DOE_CORSIA_ADD_CANCELLED_REQUEST_ACTION"
+                              id="BPMNShape_AVIATION_DOE_CORSIA_ADD_CANCELLED_REQUEST_ACTION">
+                <omgdc:Bounds height="80.0" width="100.0" x="850.0" y="450.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="AVIATION_DOE_CORSIA_UPDATE_WORKFLOW_STATUS_TO_CANCELLED"
+                              id="BPMNShape_AVIATION_DOE_CORSIA_UPDATE_WORKFLOW_STATUS_TO_CANCELLED">
+                <omgdc:Bounds height="80.0" width="100.0" x="1110.0" y="450.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="AVIATION_DOE_CORSIA_UPDATE_WORKFLOW_STATUS_TO_COMPLETED_HANDLER"
+                              id="BPMNShape_AVIATION_DOE_CORSIA_UPDATE_WORKFLOW_STATUS_TO_COMPLETED_HANDLER">
+                <omgdc:Bounds height="80.0" width="100.0" x="2170.0" y="260.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Activity_17ycuan" id="BPMNShape_Activity_17ycuan">
+                <omgdc:Bounds height="80.0" width="100.0" x="1960.0" y="260.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="AVIATION_DOE_CORSIA_ADD_SUBMITTED_REQUEST_ACTION_HANDLER"
+                              id="BPMNShape_AVIATION_DOE_CORSIA_ADD_SUBMITTED_REQUEST_ACTION_HANDLER">
+                <omgdc:Bounds height="80.0" width="100.0" x="1470.0" y="260.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Activity_01l5egg" id="BPMNShape_Activity_01l5egg">
+                <omgdc:Bounds height="80.0" width="100.0" x="810.0" y="260.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Activity_0mgwkpn" id="BPMNShape_Activity_0mgwkpn">
+                <omgdc:Bounds height="80.0" width="100.0" x="990.0" y="260.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Activity_0n26guh" id="BPMNShape_Activity_0n26guh">
+                <omgdc:Bounds height="80.0" width="100.0" x="1640.0" y="260.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Activity_1x2s1l7" id="BPMNShape_Activity_1x2s1l7">
+                <omgdc:Bounds height="80.0" width="100.0" x="1140.0" y="260.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Activity_0uj493m" id="BPMNShape_Activity_0uj493m">
+                <omgdc:Bounds height="80.0" width="100.0" x="1310.0" y="260.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="AVIATION_DOE_CORSIA_PEER_REVIEW"
+                              id="BPMNShape_AVIATION_DOE_CORSIA_PEER_REVIEW">
+                <omgdc:Bounds height="80.0" width="100.0" x="530.0" y="80.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="AVIATION_DOE_CORSIA_SUBMIT_OUTCOME_GATEWAY"
+                              id="BPMNShape_AVIATION_DOE_CORSIA_SUBMIT_OUTCOME_GATEWAY">
+                <omgdc:Bounds height="40.0" width="40.0" x="680.0" y="280.0"></omgdc:Bounds>
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds height="18.0" width="152.0" x="588.0" y="269.0"></omgdc:Bounds>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Gateway_1m6gng8" id="BPMNShape_Gateway_1m6gng8">
+                <omgdc:Bounds height="40.0" width="40.0" x="1830.0" y="280.0"></omgdc:Bounds>
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds height="18.0" width="109.0" x="1822.0" y="335.0"></omgdc:Bounds>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="AVIATION_DOE_CORSIA_PEER_REVIEW_OUTCOME_GATEWAY"
+                              id="BPMNShape_AVIATION_DOE_CORSIA_PEER_REVIEW_OUTCOME_GATEWAY">
+                <omgdc:Bounds height="40.0" width="40.0" x="560.0" y="470.0"></omgdc:Bounds>
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds height="18.0" width="179.0" x="538.0" y="522.0"></omgdc:Bounds>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="StartEvent_1" id="BPMNShape_StartEvent_1">
+                <omgdc:Bounds height="30.0" width="30.0" x="185.0" y="285.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Event_10ghcxq" id="BPMNShape_Event_10ghcxq">
+                <omgdc:Bounds height="28.0" width="28.0" x="2326.0" y="286.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0uf8zv4" id="BPMNEdge_Flow_0uf8zv4" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+                <omgdi:waypoint x="1210.0" y="490.0"></omgdi:waypoint>
+                <omgdi:waypoint x="2340.0" y="490.0"></omgdi:waypoint>
+                <omgdi:waypoint x="2340.0" y="314.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0fwysw1" id="BPMNEdge_Flow_0fwysw1" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="1410.0" y="300.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1470.0" y="300.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0o1y6qy" id="BPMNEdge_Flow_0o1y6qy" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+                <omgdi:waypoint x="1740.0" y="300.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1830.0" y="300.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_1bpxvrv" id="BPMNEdge_Flow_1bpxvrv" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="1240.0" y="300.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1310.0" y="300.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_1mzzspk" id="BPMNEdge_Flow_1mzzspk" flowable:sourceDockerX="20.0"
+                             flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="720.0" y="300.0"></omgdi:waypoint>
+                <omgdi:waypoint x="810.0" y="300.0"></omgdi:waypoint>
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds height="18.0" width="52.0" x="744.0" y="282.0"></omgdc:Bounds>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_1rla8gg" id="BPMNEdge_Flow_1rla8gg" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+                <omgdi:waypoint x="2270.0" y="300.0"></omgdi:waypoint>
+                <omgdi:waypoint x="2326.0" y="300.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_1uvbthp" id="BPMNEdge_Flow_1uvbthp" flowable:sourceDockerX="20.0"
+                             flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="700.0" y="320.0"></omgdi:waypoint>
+                <omgdi:waypoint x="700.0" y="490.0"></omgdi:waypoint>
+                <omgdi:waypoint x="850.0" y="490.0"></omgdi:waypoint>
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds height="18.0" width="51.0" x="692.0" y="405.0"></omgdc:Bounds>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0kixjs9" id="BPMNEdge_Flow_0kixjs9" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="2060.0" y="300.0"></omgdi:waypoint>
+                <omgdi:waypoint x="2170.0" y="300.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_1e7uoeu" id="BPMNEdge_Flow_1e7uoeu" flowable:sourceDockerX="15.0"
+                             flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="215.0" y="300.0"></omgdi:waypoint>
+                <omgdi:waypoint x="360.0" y="300.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_107umn8" id="BPMNEdge_Flow_107umn8" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="950.0" y="490.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1110.0" y="490.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0nl9ilf" id="BPMNEdge_Flow_0nl9ilf" flowable:sourceDockerX="20.0"
+                             flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="700.0" y="280.0"></omgdi:waypoint>
+                <omgdi:waypoint x="700.0" y="110.0"></omgdi:waypoint>
+                <omgdi:waypoint x="630.0" y="110.0"></omgdi:waypoint>
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds height="18.0" width="62.0" x="711.0" y="113.0"></omgdc:Bounds>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_04tdrzu" id="BPMNEdge_Flow_04tdrzu" flowable:sourceDockerX="20.0"
+                             flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="560.0" y="490.0"></omgdi:waypoint>
+                <omgdi:waypoint x="410.0" y="490.0"></omgdi:waypoint>
+                <omgdi:waypoint x="410.0" y="340.0"></omgdi:waypoint>
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds height="18.0" width="52.0" x="459.0" y="472.0"></omgdc:Bounds>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="AVIATION_DOE_CORSIA_PAYMENT_REQUIRED_FLOW"
+                             id="BPMNEdge_AVIATION_DOE_CORSIA_PAYMENT_REQUIRED_FLOW" flowable:sourceDockerX="20.0"
+                             flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="1870.0" y="300.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1960.0" y="300.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0loplul" id="BPMNEdge_Flow_0loplul" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+                <omgdi:waypoint x="460.0" y="300.0"></omgdi:waypoint>
+                <omgdi:waypoint x="680.0" y="300.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0i65r89" id="BPMNEdge_Flow_0i65r89" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="1090.0" y="300.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1140.0" y="300.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="AVIATION_DOE_CORSIA_PAYMENT_NOT_REQUIRED_FLOW"
+                             id="BPMNEdge_AVIATION_DOE_CORSIA_PAYMENT_NOT_REQUIRED_FLOW" flowable:sourceDockerX="20.0"
+                             flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="1850.0" y="280.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1850.0" y="160.0"></omgdi:waypoint>
+                <omgdi:waypoint x="2220.0" y="160.0"></omgdi:waypoint>
+                <omgdi:waypoint x="2220.0" y="260.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0d85929" id="BPMNEdge_Flow_0d85929" flowable:sourceDockerX="20.0"
+                             flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="600.0" y="490.0"></omgdi:waypoint>
+                <omgdi:waypoint x="850.0" y="490.0"></omgdi:waypoint>
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds height="18.0" width="51.0" x="626.0" y="472.0"></omgdc:Bounds>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_1pmsjqq" id="BPMNEdge_Flow_1pmsjqq" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="1570.0" y="300.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1640.0" y="300.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0xb78xx" id="BPMNEdge_Flow_0xb78xx" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="910.0" y="300.0"></omgdi:waypoint>
+                <omgdi:waypoint x="990.0" y="300.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0djflaz" id="BPMNEdge_Flow_0djflaz" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+                <omgdi:waypoint x="580.0" y="160.0"></omgdi:waypoint>
+                <omgdi:waypoint x="580.0" y="470.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

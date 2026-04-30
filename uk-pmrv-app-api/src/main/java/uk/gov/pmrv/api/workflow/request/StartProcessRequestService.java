@@ -39,7 +39,8 @@ public class StartProcessRequestService {
         processVars.put(BpmnProcessConstants.REQUEST_TYPE, request.getType().name());
         processVars.putAll(params.getProcessVars());
 
-        String processInstanceId = startProcessDefinition(request, processVars);
+        String processInstanceId = workflowService.startProcessDefinition(request, processVars);
+        log.info("Triggered {} process flow with id: {}", () -> request.getType().name(), () -> processInstanceId);
 
         setProcessToRequest(processInstanceId, request);
 
@@ -57,7 +58,8 @@ public class StartProcessRequestService {
         processVars.put(BpmnProcessConstants.REQUEST_TASK_ASSIGNEE,
             populateSystemMessageRequestTaskAssignee(request.getPayload()));
 
-        String processInstanceId = startProcessDefinition(request, processVars);
+        String processInstanceId = workflowService.startProcessDefinition(request, processVars);
+        log.info("Triggered {} process flow with id: {}", () -> request.getType().name(), () -> processInstanceId);
 
         setProcessToRequest(processInstanceId, request);
 
@@ -70,7 +72,8 @@ public class StartProcessRequestService {
         processVars.putAll(customProcessVars);
 
         request.setStatus(IN_PROGRESS);
-        String processInstanceId = startProcessDefinition(request, processVars);
+        String processInstanceId = workflowService.reStartProcessDefinition(request, processVars);
+        log.info("Restarted {} process flow with id: {}", () -> request.getType().name(), () -> processInstanceId);
 
         setProcessToRequest(processInstanceId, request);
     }
@@ -82,13 +85,6 @@ public class StartProcessRequestService {
 
     private Request createRequest(RequestParams params) {
         return requestCreateService.createRequest(params, IN_PROGRESS);
-    }
-
-    private String startProcessDefinition(Request request, Map<String, Object> vars) {
-        String processDefinitionId = request.getType().getProcessDefinitionId();
-        String processInstanceId = workflowService.startProcessDefinition(processDefinitionId, vars);
-        log.info("Triggered {} process flow with id: {}", request.getType()::name, () -> processInstanceId);
-        return processInstanceId;
     }
 
     private void setProcessToRequest(String processInstanceId, Request request) {

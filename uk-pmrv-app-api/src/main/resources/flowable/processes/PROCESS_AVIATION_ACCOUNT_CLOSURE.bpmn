@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:design="http://flowable.org/design" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Flowable Design" exporterVersion="2025.1.03" design:palette="flowable-work-process-palette">
+  <process id="PROCESS_AVIATION_ACCOUNT_CLOSURE" name="Aviation account closure process" isExecutable="true">
+    <extensionElements>
+      <design:stencilid><![CDATA[BPMNDiagram]]></design:stencilid>
+      <design:creationdate><![CDATA[2026-02-11T07:45:08.369Z]]></design:creationdate>
+      <design:modificationdate><![CDATA[2026-02-11T07:45:38.287Z]]></design:modificationdate>
+    </extensionElements>
+    <userTask id="AVIATION_ACCOUNT_CLOSURE_SUBMIT" name="Regulator: Submit account closure" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+        <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </userTask>
+    <startEvent id="AVIATION_ACCOUNT_CLOSURE_START_EVENT" name="Start Event" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+        <design:stencilid><![CDATA[StartNoneEvent]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+    </startEvent>
+    <endEvent id="AVIATION_ACCOUNT_CLOSURE_END_EVENT" name="End Event">
+      <extensionElements>
+        <design:stencilid><![CDATA[EndNoneEvent]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="Flow_1oj2lq6" sourceRef="AVIATION_ACCOUNT_CLOSURE_SUBMIT" targetRef="AVIATION_ACCOUNT_CLOSURE_END_EVENT">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0oue52q" sourceRef="AVIATION_ACCOUNT_CLOSURE_START_EVENT" targetRef="AVIATION_ACCOUNT_CLOSURE_SUBMIT">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_AVIATION_ACCOUNT_CLOSURE">
+    <bpmndi:BPMNPlane bpmnElement="PROCESS_AVIATION_ACCOUNT_CLOSURE" id="BPMNPlane_PROCESS_AVIATION_ACCOUNT_CLOSURE">
+      <bpmndi:BPMNShape bpmnElement="AVIATION_ACCOUNT_CLOSURE_SUBMIT" id="BPMNShape_AVIATION_ACCOUNT_CLOSURE_SUBMIT">
+        <omgdc:Bounds height="80.0" width="100.0" x="290.0" y="77.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="AVIATION_ACCOUNT_CLOSURE_START_EVENT" id="BPMNShape_AVIATION_ACCOUNT_CLOSURE_START_EVENT">
+        <omgdc:Bounds height="30.0" width="30.0" x="182.0" y="102.0"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="59.0" x="169.0" y="142.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="AVIATION_ACCOUNT_CLOSURE_END_EVENT" id="BPMNShape_AVIATION_ACCOUNT_CLOSURE_END_EVENT">
+        <omgdc:Bounds height="28.0" width="28.0" x="476.0" y="103.0"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="55.0" x="464.0" y="142.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1oj2lq6" id="BPMNEdge_Flow_1oj2lq6" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="390.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="476.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0oue52q" id="BPMNEdge_Flow_0oue52q" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="212.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="290.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

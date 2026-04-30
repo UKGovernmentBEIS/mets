@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog logicalFilePath="v0.2.0/changelog_flowable_create_schema.xml"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_create_flowable_schema" author="P70453">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS sch_flowable;
+        </sql>
+        <rollback>
+            <sql>
+                DROP SCHEMA sch_flowable CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_flowable_schema_assign_privileges_for_app_user" author="P35066">
+        <sql>
+            GRANT USAGE ON SCHEMA sch_flowable TO ${spring-db-user};
+        	GRANT SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA sch_flowable TO ${spring-db-user};
+			ALTER DEFAULT PRIVILEGES GRANT SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON TABLES TO ${spring-db-user};
+			GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA sch_flowable TO ${spring-db-user};
+			ALTER DEFAULT PRIVILEGES GRANT ALL ON SEQUENCES TO ${spring-db-user};
+        </sql>
+        <rollback>
+        </rollback>
+    </changeSet>
+    
+</databaseChangeLog>

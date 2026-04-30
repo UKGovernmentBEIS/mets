@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:design="http://flowable.org/design" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Flowable Design" exporterVersion="2025.1.03" design:palette="flowable-work-process-palette">
+  <process id="PROCESS_WASTE_QDR" name="Waste Quarterly Supplementary Data Report" isExecutable="true">
+    <extensionElements>
+      <design:stencilid><![CDATA[BPMNDiagram]]></design:stencilid>
+      <design:creationdate><![CDATA[2026-02-25T14:48:59.279Z]]></design:creationdate>
+      <design:modificationdate><![CDATA[2026-02-26T15:14:03.036Z]]></design:modificationdate>
+    </extensionElements>
+    <subProcess id="Activity_1ihtsb4" name="subProcess">
+      <extensionElements>
+        <design:stencilid><![CDATA[ExpandedSubProcess]]></design:stencilid>
+      </extensionElements>
+      <userTask id="WASTE_QDR_APPLICATION_SUBMIT" name="Operator: Submit Waste QDR" flowable:formFieldValidation="false">
+        <extensionElements>
+          <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+          <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+          <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+        </extensionElements>
+      </userTask>
+      <serviceTask id="Activity_12wrn87" name="Calculate expiration reminders" flowable:delegateExpression="#{calculateWasteQDRExpirationRemindersHandlerFlowable}">
+        <extensionElements>
+          <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+          <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+        </extensionElements>
+      </serviceTask>
+      <serviceTask id="Activity_0a4azox" name="Handle First reminder date reached" flowable:delegateExpression="#{wasteQDRFirstReminderDateReachedHandlerFlowable}">
+        <extensionElements>
+          <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+          <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+        </extensionElements>
+      </serviceTask>
+      <serviceTask id="Activity_0rlkmgz" name="Handle Second reminder date reached" flowable:delegateExpression="#{wasteQDRSecondReminderDateReachedHandlerFlowable}">
+        <extensionElements>
+          <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+          <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+        </extensionElements>
+      </serviceTask>
+      <parallelGateway id="Gateway_1s9ig9k">
+        <extensionElements>
+          <design:stencilid><![CDATA[ParallelGateway]]></design:stencilid>
+        </extensionElements>
+      </parallelGateway>
+      <startEvent id="StartEvent_1" flowable:formFieldValidation="false">
+        <extensionElements>
+          <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+          <design:stencilid><![CDATA[StartNoneEvent]]></design:stencilid>
+        </extensionElements>
+      </startEvent>
+      <intermediateCatchEvent id="Event_1tffvym" name="Waste QDR First Reminder Timer">
+        <extensionElements>
+          <flowable:element-name>Waste QDR First
+Reminder Timer</flowable:element-name>
+          <design:stencilid><![CDATA[IntermediateTimerEvent]]></design:stencilid>
+          <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+        </extensionElements>
+        <timerEventDefinition>
+          <timeDate>${wasteqdrFirstReminderDate}</timeDate>
+        </timerEventDefinition>
+      </intermediateCatchEvent>
+      <intermediateCatchEvent id="Event_1tg1ag5" name="Waste QDR Second Reminder Timer">
+        <extensionElements>
+          <flowable:element-name>Waste QDR Second
+Reminder Timer</flowable:element-name>
+          <design:stencilid><![CDATA[IntermediateTimerEvent]]></design:stencilid>
+          <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+        </extensionElements>
+        <timerEventDefinition>
+          <timeDate>${wasteqdrSecondReminderDate}</timeDate>
+        </timerEventDefinition>
+      </intermediateCatchEvent>
+      <endEvent id="Event_1v1n4jt">
+        <extensionElements>
+          <design:stencilid><![CDATA[EndNoneEvent]]></design:stencilid>
+        </extensionElements>
+      </endEvent>
+      <endEvent id="Event_1uays7c">
+        <extensionElements>
+          <design:stencilid><![CDATA[EndTerminateEvent]]></design:stencilid>
+        </extensionElements>
+        <terminateEventDefinition></terminateEventDefinition>
+      </endEvent>
+      <sequenceFlow id="Flow_18orts4" sourceRef="WASTE_QDR_APPLICATION_SUBMIT" targetRef="Event_1uays7c">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_0o0o02r" sourceRef="Activity_12wrn87" targetRef="Event_1tffvym">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_1yw7al1" sourceRef="Activity_0a4azox" targetRef="Event_1tg1ag5">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_0oj80pw" sourceRef="Activity_0rlkmgz" targetRef="Event_1v1n4jt">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_0bw05ja" sourceRef="Gateway_1s9ig9k" targetRef="WASTE_QDR_APPLICATION_SUBMIT">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_0hgqa3x" sourceRef="Gateway_1s9ig9k" targetRef="Activity_12wrn87">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_0fbon3a" sourceRef="StartEvent_1" targetRef="Gateway_1s9ig9k">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_081fqr3" sourceRef="Event_1tffvym" targetRef="Activity_0a4azox">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_18gp27s" sourceRef="Event_1tg1ag5" targetRef="Activity_0rlkmgz">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+    </subProcess>
+    <subProcess id="Activity_022qszp" name="subProcess">
+      <extensionElements>
+        <design:stencilid><![CDATA[ExpandedSubProcess]]></design:stencilid>
+      </extensionElements>
+      <userTask id="WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT" flowable:formFieldValidation="false">
+        <extensionElements>
+          <flowable:element-name>Regulator:
+Review application</flowable:element-name>
+          <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+          <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+          <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+        </extensionElements>
+      </userTask>
+      <userTask id="WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW" flowable:formFieldValidation="false">
+        <extensionElements>
+          <flowable:element-name>Operator:
+Wait for regulator review</flowable:element-name>
+          <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+          <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+          <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+        </extensionElements>
+      </userTask>
+      <parallelGateway id="Gateway_0q67ah4">
+        <extensionElements>
+          <design:stencilid><![CDATA[ParallelGateway]]></design:stencilid>
+        </extensionElements>
+      </parallelGateway>
+      <startEvent id="Event_1jghzfr" flowable:formFieldValidation="false">
+        <extensionElements>
+          <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+          <design:stencilid><![CDATA[StartNoneEvent]]></design:stencilid>
+        </extensionElements>
+      </startEvent>
+      <endEvent id="Event_1eufa8f">
+        <extensionElements>
+          <design:stencilid><![CDATA[EndTerminateEvent]]></design:stencilid>
+        </extensionElements>
+        <terminateEventDefinition></terminateEventDefinition>
+      </endEvent>
+      <endEvent id="Event_1g07v6p">
+        <extensionElements>
+          <design:stencilid><![CDATA[EndNoneEvent]]></design:stencilid>
+        </extensionElements>
+      </endEvent>
+      <sequenceFlow id="Flow_06ges4t" sourceRef="WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT" targetRef="Event_1eufa8f">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_1mnkxp9" sourceRef="WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW" targetRef="Event_1g07v6p">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_0b7w5gd" sourceRef="Gateway_0q67ah4" targetRef="WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_0s9wbg0" sourceRef="Gateway_0q67ah4" targetRef="WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_1nbqsgj" sourceRef="Event_1jghzfr" targetRef="Gateway_0q67ah4">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+    </subProcess>
+    <subProcess id="Activity_0ahurmt" name="subProcess">
+      <extensionElements>
+        <design:stencilid><![CDATA[ExpandedSubProcess]]></design:stencilid>
+      </extensionElements>
+      <userTask id="WASTE_QDR_WAIT_FOR_AMENDS" name="Regulator: Wait for amends" flowable:formFieldValidation="false">
+        <extensionElements>
+          <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+          <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+          <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+        </extensionElements>
+      </userTask>
+      <userTask id="WASTE_QDR_APPLICATION_AMENDS_SUBMIT" name="Operator: Submit Waste QDR amends" flowable:formFieldValidation="false">
+        <extensionElements>
+          <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+          <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+          <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+        </extensionElements>
+      </userTask>
+      <parallelGateway id="Gateway_0xitmto">
+        <extensionElements>
+          <design:stencilid><![CDATA[ParallelGateway]]></design:stencilid>
+        </extensionElements>
+      </parallelGateway>
+      <startEvent id="Event_1q0ntyd" flowable:formFieldValidation="false">
+        <extensionElements>
+          <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+          <design:stencilid><![CDATA[StartNoneEvent]]></design:stencilid>
+        </extensionElements>
+      </startEvent>
+      <endEvent id="Event_0b8va0c">
+        <extensionElements>
+          <design:stencilid><![CDATA[EndTerminateEvent]]></design:stencilid>
+        </extensionElements>
+        <terminateEventDefinition></terminateEventDefinition>
+      </endEvent>
+      <sequenceFlow id="Flow_0m8stf8" sourceRef="WASTE_QDR_WAIT_FOR_AMENDS" targetRef="Event_0b8va0c">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_0o2rah8" name="send for regulator review" sourceRef="WASTE_QDR_APPLICATION_AMENDS_SUBMIT" targetRef="Event_0b8va0c">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+          <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+        </extensionElements>
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${wasteQDROutcome=='SUBMITTED_TO_REGULATOR'}]]></conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_1u0eup1" sourceRef="Gateway_0xitmto" targetRef="WASTE_QDR_WAIT_FOR_AMENDS">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_1mv366k" sourceRef="Gateway_0xitmto" targetRef="WASTE_QDR_APPLICATION_AMENDS_SUBMIT">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="Flow_0kvdft6" sourceRef="Event_1q0ntyd" targetRef="Gateway_0xitmto">
+        <extensionElements>
+          <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        </extensionElements>
+      </sequenceFlow>
+    </subProcess>
+    <serviceTask id="Activity_0kcfnzs" name="Update Workflow status to COMPLETED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+      <extensionElements>
+        <flowable:field name="requestStatus">
+          <flowable:string><![CDATA[COMPLETED]]></flowable:string>
+        </flowable:field>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_0crsaty" name="Add Completed Request Action" flowable:delegateExpression="#{wasteQDRCompletedAddRequestActionHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_0ze26wi" name="Handle Waste QDR Completed" flowable:delegateExpression="#{wasteQDRCompletedHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <exclusiveGateway id="Gateway_07ni6lf" name="what is the review outcome?">
+      <extensionElements>
+        <design:stencilid><![CDATA[Exclusive_Databased_Gateway]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+    </exclusiveGateway>
+    <startEvent id="Event_1nvc5tl" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+        <design:stencilid><![CDATA[StartNoneEvent]]></design:stencilid>
+      </extensionElements>
+    </startEvent>
+    <endEvent id="Event_0zf07qq">
+      <extensionElements>
+        <design:stencilid><![CDATA[EndTerminateEvent]]></design:stencilid>
+      </extensionElements>
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <sequenceFlow id="Flow_1vwolto" sourceRef="Activity_1ihtsb4" targetRef="Activity_022qszp">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0yz6hf6" sourceRef="Activity_022qszp" targetRef="Gateway_07ni6lf">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1gu227j" sourceRef="Activity_0ahurmt" targetRef="Activity_022qszp">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0tpa5qa" sourceRef="Activity_0kcfnzs" targetRef="Event_0zf07qq">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0lfxp0v" sourceRef="Activity_0crsaty" targetRef="Activity_0kcfnzs">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_00lvgcp" sourceRef="Activity_0ze26wi" targetRef="Activity_0crsaty">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0gmwhjb" name="amends needed" sourceRef="Gateway_07ni6lf" targetRef="Activity_0ahurmt">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${wasteQdrReviewOutcome=='AMENDS_NEEDED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0fuyg1u" name="submitted" sourceRef="Gateway_07ni6lf" targetRef="Activity_0ze26wi">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${wasteQdrReviewOutcome=='COMPLETED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1p8ieoh" sourceRef="Event_1nvc5tl" targetRef="Activity_1ihtsb4">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_WASTE_QDR">
+    <bpmndi:BPMNPlane bpmnElement="PROCESS_WASTE_QDR" id="BPMNPlane_PROCESS_WASTE_QDR">
+      <bpmndi:BPMNShape bpmnElement="Activity_1ihtsb4" id="BPMNShape_Activity_1ihtsb4">
+        <omgdc:Bounds height="503.0" width="1270.0" x="370.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="WASTE_QDR_APPLICATION_SUBMIT" id="BPMNShape_WASTE_QDR_APPLICATION_SUBMIT">
+        <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_12wrn87" id="BPMNShape_Activity_12wrn87">
+        <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="400.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0a4azox" id="BPMNShape_Activity_0a4azox">
+        <omgdc:Bounds height="80.0" width="100.0" x="1010.0" y="400.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0rlkmgz" id="BPMNShape_Activity_0rlkmgz">
+        <omgdc:Bounds height="80.0" width="100.0" x="1310.0" y="400.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Gateway_1s9ig9k" id="BPMNShape_Gateway_1s9ig9k">
+        <omgdc:Bounds height="40.0" width="40.0" x="550.0" y="307.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="StartEvent_1" id="BPMNShape_StartEvent_1">
+        <omgdc:Bounds height="30.0" width="30.0" x="422.0" y="312.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1tffvym" id="BPMNShape_Event_1tffvym">
+        <omgdc:Bounds height="30.0" width="30.0" x="905.0" y="425.0"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="36.0" width="90.0" x="882.0" y="466.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1tg1ag5" id="BPMNShape_Event_1tg1ag5">
+        <omgdc:Bounds height="30.0" width="30.0" x="1205.0" y="425.0"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="36.0" width="108.0" x="1182.0" y="466.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1v1n4jt" id="BPMNShape_Event_1v1n4jt">
+        <omgdc:Bounds height="28.0" width="28.0" x="1506.0" y="426.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1uays7c" id="BPMNShape_Event_1uays7c">
+        <omgdc:Bounds height="28.0" width="28.0" x="1506.0" y="166.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_022qszp" id="BPMNShape_Activity_022qszp">
+        <omgdc:Bounds height="470.0" width="650.0" x="1800.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT" id="BPMNShape_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT">
+        <omgdc:Bounds height="80.0" width="100.0" x="2000.0" y="400.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW" id="BPMNShape_WASTE_QDR_WAIT_FOR_REGULATOR_REVIEW">
+        <omgdc:Bounds height="80.0" width="100.0" x="2000.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Gateway_0q67ah4" id="BPMNShape_Gateway_0q67ah4">
+        <omgdc:Bounds height="40.0" width="40.0" x="1910.0" y="310.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1jghzfr" id="BPMNShape_Event_1jghzfr">
+        <omgdc:Bounds height="30.0" width="30.0" x="1843.0" y="315.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1eufa8f" id="BPMNShape_Event_1eufa8f">
+        <omgdc:Bounds height="28.0" width="28.0" x="2286.0" y="426.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1g07v6p" id="BPMNShape_Event_1g07v6p">
+        <omgdc:Bounds height="28.0" width="28.0" x="2286.0" y="156.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0ahurmt" id="BPMNShape_Activity_0ahurmt">
+        <omgdc:Bounds height="300.0" width="690.0" x="2520.0" y="530.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="WASTE_QDR_WAIT_FOR_AMENDS" id="BPMNShape_WASTE_QDR_WAIT_FOR_AMENDS">
+        <omgdc:Bounds height="80.0" width="100.0" x="2780.0" y="720.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="WASTE_QDR_APPLICATION_AMENDS_SUBMIT" id="BPMNShape_WASTE_QDR_APPLICATION_AMENDS_SUBMIT">
+        <omgdc:Bounds height="80.0" width="100.0" x="2780.0" y="580.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Gateway_0xitmto" id="BPMNShape_Gateway_0xitmto">
+        <omgdc:Bounds height="40.0" width="40.0" x="2660.0" y="600.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1q0ntyd" id="BPMNShape_Event_1q0ntyd">
+        <omgdc:Bounds height="30.0" width="30.0" x="2545.0" y="605.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_0b8va0c" id="BPMNShape_Event_0b8va0c">
+        <omgdc:Bounds height="28.0" width="28.0" x="3096.0" y="666.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0kcfnzs" id="BPMNShape_Activity_0kcfnzs">
+        <omgdc:Bounds height="80.0" width="100.0" x="3170.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0crsaty" id="BPMNShape_Activity_0crsaty">
+        <omgdc:Bounds height="80.0" width="100.0" x="2960.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0ze26wi" id="BPMNShape_Activity_0ze26wi">
+        <omgdc:Bounds height="80.0" width="100.0" x="2750.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Gateway_07ni6lf" id="BPMNShape_Gateway_07ni6lf">
+        <omgdc:Bounds height="40.0" width="40.0" x="2550.0" y="280.0"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="151.0" x="2528.0" y="238.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1nvc5tl" id="BPMNShape_Event_1nvc5tl">
+        <omgdc:Bounds height="30.0" width="30.0" x="155.0" y="317.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_0zf07qq" id="BPMNShape_Event_0zf07qq">
+        <omgdc:Bounds height="28.0" width="28.0" x="3376.0" y="286.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1p8ieoh" id="BPMNEdge_Flow_1p8ieoh" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="635.0" flowable:targetDockerY="252.0">
+        <omgdi:waypoint x="185.0" y="332.0"></omgdi:waypoint>
+        <omgdi:waypoint x="370.0" y="332.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0tpa5qa" id="BPMNEdge_Flow_0tpa5qa" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="3270.0" y="300.0"></omgdi:waypoint>
+        <omgdi:waypoint x="3376.0" y="300.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0gmwhjb" id="BPMNEdge_Flow_0gmwhjb" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="345.0" flowable:targetDockerY="150.0">
+        <omgdi:waypoint x="2570.0" y="320.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2570.0" y="530.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="86.0" x="2580.0" y="428.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_18gp27s" id="BPMNEdge_Flow_18gp27s" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1235.0" y="440.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1310.0" y="440.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1mnkxp9" id="BPMNEdge_Flow_1mnkxp9" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="2100.0" y="170.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2286.0" y="170.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0s9wbg0" id="BPMNEdge_Flow_0s9wbg0" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1930.0" y="310.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1930.0" y="170.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2000.0" y="170.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0oj80pw" id="BPMNEdge_Flow_0oj80pw" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="1410.0" y="440.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1506.0" y="440.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1yw7al1" id="BPMNEdge_Flow_1yw7al1" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="15.0" flowable:targetDockerY="15.0">
+        <omgdi:waypoint x="1110.0" y="440.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1205.0" y="440.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0kvdft6" id="BPMNEdge_Flow_0kvdft6" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="2575.0" y="620.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2660.0" y="620.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_00lvgcp" id="BPMNEdge_Flow_00lvgcp" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="2850.0" y="300.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2960.0" y="300.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1u0eup1" id="BPMNEdge_Flow_1u0eup1" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="2680.0" y="640.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2680.0" y="760.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2780.0" y="760.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0yz6hf6" id="BPMNEdge_Flow_0yz6hf6" flowable:sourceDockerX="325.0" flowable:sourceDockerY="235.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="2450.0" y="300.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2550.0" y="300.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0bw05ja" id="BPMNEdge_Flow_0bw05ja" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="570.0" y="307.0"></omgdi:waypoint>
+        <omgdi:waypoint x="570.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="700.0" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1nbqsgj" id="BPMNEdge_Flow_1nbqsgj" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1873.0" y="330.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1910.0" y="330.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0m8stf8" id="BPMNEdge_Flow_0m8stf8" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="2880.0" y="760.0"></omgdi:waypoint>
+        <omgdi:waypoint x="3110.0" y="760.0"></omgdi:waypoint>
+        <omgdi:waypoint x="3110.0" y="694.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_18orts4" id="BPMNEdge_Flow_18orts4" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="800.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1506.0" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1gu227j" id="BPMNEdge_Flow_1gu227j" flowable:sourceDockerX="345.0" flowable:sourceDockerY="150.0" flowable:targetDockerX="325.0" flowable:targetDockerY="235.0">
+        <omgdi:waypoint x="2520.0" y="710.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2125.0" y="710.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2125.0" y="550.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0lfxp0v" id="BPMNEdge_Flow_0lfxp0v" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="3060.0" y="300.0"></omgdi:waypoint>
+        <omgdi:waypoint x="3170.0" y="300.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0b7w5gd" id="BPMNEdge_Flow_0b7w5gd" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1930.0" y="350.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1930.0" y="440.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2000.0" y="440.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_081fqr3" id="BPMNEdge_Flow_081fqr3" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="935.0" y="440.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1010.0" y="440.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0fuyg1u" id="BPMNEdge_Flow_0fuyg1u" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="2590.0" y="300.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2750.0" y="300.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="52.0" x="2649.0" y="282.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1vwolto" id="BPMNEdge_Flow_1vwolto" flowable:sourceDockerX="635.0" flowable:sourceDockerY="252.0" flowable:targetDockerX="325.0" flowable:targetDockerY="235.0">
+        <omgdi:waypoint x="1640.0" y="332.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1800.0" y="332.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_06ges4t" id="BPMNEdge_Flow_06ges4t" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="2100.0" y="440.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2286.0" y="440.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1mv366k" id="BPMNEdge_Flow_1mv366k" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="2700.0" y="620.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2780.0" y="620.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0fbon3a" id="BPMNEdge_Flow_0fbon3a" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="452.0" y="327.0"></omgdi:waypoint>
+        <omgdi:waypoint x="550.0" y="327.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0o2rah8" id="BPMNEdge_Flow_0o2rah8" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="2880.0" y="620.0"></omgdi:waypoint>
+        <omgdi:waypoint x="3110.0" y="620.0"></omgdi:waypoint>
+        <omgdi:waypoint x="3110.0" y="666.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="132.0" x="2946.0" y="586.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0o0o02r" id="BPMNEdge_Flow_0o0o02r" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="15.0" flowable:targetDockerY="15.0">
+        <omgdi:waypoint x="800.0" y="440.0"></omgdi:waypoint>
+        <omgdi:waypoint x="905.0" y="440.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0hgqa3x" id="BPMNEdge_Flow_0hgqa3x" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="570.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="570.0" y="440.00000000000006"></omgdi:waypoint>
+        <omgdi:waypoint x="700.0" y="440.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

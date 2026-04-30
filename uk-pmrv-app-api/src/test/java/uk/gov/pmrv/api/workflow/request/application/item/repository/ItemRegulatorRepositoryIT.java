@@ -23,6 +23,7 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccou
 import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowEngineType;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemOrderBy;
@@ -35,6 +36,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 
 import jakarta.persistence.EntityManager;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -66,36 +68,36 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
     void setUp() {
         accounts = createAccounts();
     }
-    
+
     @Test
     void findItems_assigned_to_me() {
         Long account = accounts.get(0).getId();
         String user = "reg";
-        
+
         Map<CompetentAuthorityEnum, Set<RequestTaskType>> scopedRequestTaskTypes =
-            Map.of(CompetentAuthorityEnum.ENGLAND, Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
+                Map.of(CompetentAuthorityEnum.ENGLAND, Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
 
         Request request1 = createRequest(account, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         RequestTask requestTask1 =
-            createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t1", request1.getCreationDate());
+                createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t1", request1.getCreationDate());
         createOpenedItem(requestTask1.getId(), user);
-        
+
         Request request2 = createRequest(account, RequestType.SYSTEM_MESSAGE_NOTIFICATION, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         RequestTask requestTask2 =
-            createRequestTask(user, request2, RequestTaskType.NEW_VERIFICATION_BODY_EMITTER, "t2", request2.getCreationDate());
-        
-        
+                createRequestTask(user, request2, RequestTaskType.NEW_VERIFICATION_BODY_EMITTER, "t2", request2.getCreationDate());
+
+
         Request request3 = createRequest(account, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask(user, request3, RequestTaskType.INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE, "t3", request3.getCreationDate());
-        
+
         Request request4 = createRequest(account, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask("another user", request4, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t4", request4.getCreationDate());
-        
+
         createRequestTask(null, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t5", request1.getCreationDate());
 
         ItemPage itemPage =
-        		cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST , null, null);
-        
+                cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
+
         assertEquals(2L, itemPage.getTotalItems());
         assertEquals(2, itemPage.getItems().size());
 
@@ -111,7 +113,7 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
         assertEquals(item2.getTaskDueDate(), requestTask2.getDueDate());
         assertEquals(item2.getAccountId(), account);
         assertTrue(item2.isNew());
-        
+
         Item item1 = itemPage.getItems().get(1);
         assertThat(item1.getRequestId()).isEqualTo(request1.getId());
         assertEquals(item1.getCreationDate().truncatedTo(ChronoUnit.MILLIS),
@@ -144,29 +146,29 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
 
 
         Map<CompetentAuthorityEnum, Set<RequestTaskType>> scopedRequestTaskTypes =
-				Map.of(CompetentAuthorityEnum.ENGLAND,
-                        Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE,RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
+                Map.of(CompetentAuthorityEnum.ENGLAND,
+                        Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
 
-        Request request1 = createRequest(account1, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS,  CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
+        Request request1 = createRequest(account1, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         RequestTask requestTask1 =
-            createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE, "t1", t1);
+                createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE, "t1", t1);
         createOpenedItem(requestTask1.getId(), user);
 
-        Request request2 = createRequest(account1_2, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS,  CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
+        Request request2 = createRequest(account1_2, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask(user, request2, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t2", t2);
 
-        Request request3 = createRequest(account1_2, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS,  CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
+        Request request3 = createRequest(account1_2, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask(user, request3, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t3", t3);
 
-        Request request4 = createRequest(account1_2, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS,  CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
+        Request request4 = createRequest(account1_2, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask(user, request4, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t4", t4);
 
 
-        Request request5 = createRequest(account1_2, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS,  CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
+        Request request5 = createRequest(account1_2, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask(user, request5, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t5", t5);
 
 
-        Request request6 = createRequest(account1_2, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS,  CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
+        Request request6 = createRequest(account1_2, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask(user, request6, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t6", t6);
 
 
@@ -174,12 +176,12 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
         createRequestTask(user, request7, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t7", t7);
 
 
-        ItemPage itemPage = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes,PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
+        ItemPage itemPage = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
 
         assertEquals(7L, itemPage.getTotalItems());
         assertEquals(7, itemPage.getItems().size());
 
-        assertThat(itemPage.getItems().stream().map(Item::getCreationDate)).containsExactly(t7,  t6, t3, t4, t5, t2, t1);
+        assertThat(itemPage.getItems().stream().map(Item::getCreationDate)).containsExactly(t7, t6, t3, t4, t5, t2, t1);
     }
 
     @Test
@@ -209,12 +211,12 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
 
 
         Map<CompetentAuthorityEnum, Set<RequestTaskType>> scopedRequestTaskTypes =
-				Map.of(CompetentAuthorityEnum.ENGLAND,
-                        Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE,RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
+                Map.of(CompetentAuthorityEnum.ENGLAND,
+                        Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
 
         Request request1 = createRequest(account1, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         RequestTask requestTask1 =
-            createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE, "t1", t1, d1);
+                createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE, "t1", t1, d1);
         createOpenedItem(requestTask1.getId(), user);
 
         Request request2 = createRequest(account1_2, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
@@ -239,7 +241,7 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
         createRequestTask(user, request7, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t7", t7, d7);
 
 
-        ItemPage itemPage = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes,PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEAREST_DUE_DATE, null, null);
+        ItemPage itemPage = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEAREST_DUE_DATE, null, null);
 
         assertEquals(7L, itemPage.getTotalItems());
         assertEquals(7, itemPage.getItems().size());
@@ -254,16 +256,16 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
         String user = "reg";
 
         Map<CompetentAuthorityEnum, Set<RequestTaskType>> scopedRequestTaskTypes =
-            Map.of(CompetentAuthorityEnum.ENGLAND, Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, RequestTaskType.AER_APPLICATION_REVIEW));
+                Map.of(CompetentAuthorityEnum.ENGLAND, Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, RequestTaskType.AER_APPLICATION_REVIEW));
 
         Request request1 = createRequest(account, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         RequestTask requestTask1 =
-            createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t1", request1.getCreationDate());
+                createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t1", request1.getCreationDate());
         createOpenedItem(requestTask1.getId(), user);
 
         Request request2 = createRequest(account, RequestType.AER, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         RequestTask requestTask2 =
-            createRequestTask(user, request2, RequestTaskType.AER_APPLICATION_REVIEW, "t2", request2.getCreationDate());
+                createRequestTask(user, request2, RequestTaskType.AER_APPLICATION_REVIEW, "t2", request2.getCreationDate());
 
 
         Request request3 = createRequest(account, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
@@ -275,7 +277,7 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
         createRequestTask(null, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t5", request1.getCreationDate());
 
         ItemPage itemPage =
-        		cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, RequestType.AER, null);
+                cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, RequestType.AER, null);
 
         assertEquals(1L, itemPage.getTotalItems());
         assertEquals(1, itemPage.getItems().size());
@@ -304,16 +306,16 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
         String user = "reg";
 
         Map<CompetentAuthorityEnum, Set<RequestTaskType>> scopedRequestTaskTypes =
-            Map.of(CompetentAuthorityEnum.ENGLAND, Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, RequestTaskType.AER_APPLICATION_REVIEW));
+                Map.of(CompetentAuthorityEnum.ENGLAND, Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, RequestTaskType.AER_APPLICATION_REVIEW));
 
         Request request1 = createRequest(account1.getId(), RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         RequestTask requestTask1 =
-            createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t1", request1.getCreationDate());
+                createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t1", request1.getCreationDate());
         createOpenedItem(requestTask1.getId(), user);
 
         Request request2 = createRequest(account1.getId(), RequestType.AER, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         RequestTask requestTask2 =
-            createRequestTask(user, request2, RequestTaskType.AER_APPLICATION_REVIEW, "t2", request2.getCreationDate());
+                createRequestTask(user, request2, RequestTaskType.AER_APPLICATION_REVIEW, "t2", request2.getCreationDate());
 
 
         Request request3 = createRequest(account2.getId(), RequestType.AER, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
@@ -325,8 +327,8 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
         createRequestTask(null, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t5", request1.getCreationDate());
 
 
-        ItemPage itemPageAccount1 = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes,PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, "1");
-        ItemPage itemPageAccount2 = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes,PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, "2");
+        ItemPage itemPageAccount1 = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, "1");
+        ItemPage itemPageAccount2 = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, "2");
 
         assertEquals(2L, itemPageAccount1.getTotalItems());
         assertEquals(2, itemPageAccount1.getItems().size());
@@ -350,16 +352,16 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
         String user = "reg";
 
         Map<CompetentAuthorityEnum, Set<RequestTaskType>> scopedRequestTaskTypes =
-            Map.of(CompetentAuthorityEnum.ENGLAND, Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, RequestTaskType.AER_APPLICATION_REVIEW));
+                Map.of(CompetentAuthorityEnum.ENGLAND, Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, RequestTaskType.AER_APPLICATION_REVIEW));
 
         Request request1 = createRequest(account1.getId(), RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         RequestTask requestTask1 =
-            createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t1", request1.getCreationDate());
+                createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t1", request1.getCreationDate());
         createOpenedItem(requestTask1.getId(), user);
 
         Request request2 = createRequest(account1.getId(), RequestType.AER, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         RequestTask requestTask2 =
-            createRequestTask(user, request2, RequestTaskType.AER_APPLICATION_REVIEW, "t2", request2.getCreationDate());
+                createRequestTask(user, request2, RequestTaskType.AER_APPLICATION_REVIEW, "t2", request2.getCreationDate());
 
 
         Request request3 = createRequest(account2.getId(), RequestType.AER, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
@@ -371,8 +373,8 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
         createRequestTask(null, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t5", request1.getCreationDate());
 
 
-        ItemPage itemPageAccount1 = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes,PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, "Combust");
-        ItemPage itemPageAccount2 = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes,PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, "refin");
+        ItemPage itemPageAccount1 = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, "Combust");
+        ItemPage itemPageAccount2 = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, "refin");
 
         assertEquals(2L, itemPageAccount1.getTotalItems());
         assertEquals(2, itemPageAccount1.getItems().size());
@@ -391,31 +393,31 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
     void findItems_assigned_to_others() {
         Long account = accounts.get(0).getId();
         String user = "reg";
-        
+
         Map<CompetentAuthorityEnum, Set<RequestTaskType>> scopedRequestTaskTypes =
-            Map.of(CompetentAuthorityEnum.ENGLAND, Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
+                Map.of(CompetentAuthorityEnum.ENGLAND, Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
 
         Request request1 = createRequest(account, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t1", request1.getCreationDate());
-        
+
         Request request2 = createRequest(account, RequestType.SYSTEM_MESSAGE_NOTIFICATION, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask("another user", request2, RequestTaskType.NEW_VERIFICATION_BODY_EMITTER, "t2", request2.getCreationDate());
-        
-        
+
+
         Request request3 = createRequest(account, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask(user, request3, RequestTaskType.INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE, "t3", request3.getCreationDate());
-        
+
         Request request4 = createRequest(account, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         RequestTask requestTask4 = createRequestTask("another user", request4, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t4", request4.getCreationDate());
-        
+
         Request request5 = createRequest(account, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.SCOTLAND, LocalDateTime.now());
         createRequestTask("another user", request5, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t5", request5.getCreationDate());
 
         createRequestTask(null, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t6", request1.getCreationDate());
-        
+
         ItemPage itemPage =
-        		cut.findItems(user, ItemAssignmentType.OTHERS, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
-        
+                cut.findItems(user, ItemAssignmentType.OTHERS, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
+
         assertEquals(1L, itemPage.getTotalItems());
         assertEquals(1, itemPage.getItems().size());
 
@@ -431,37 +433,37 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
         assertEquals(item.getTaskDueDate(), requestTask4.getDueDate());
         assertEquals(item.getAccountId(), account);
     }
-    
+
     @Test
     void findItems_unassigned() {
         Long account = accounts.get(0).getId();
         String user = "reg";
-        
+
         Map<CompetentAuthorityEnum, Set<RequestTaskType>> scopedRequestTaskTypes =
-            Map.of(CompetentAuthorityEnum.ENGLAND, Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
+                Map.of(CompetentAuthorityEnum.ENGLAND, Set.of(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
 
         Request request1 = createRequest(account, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         RequestTask requestTask1 = createRequestTask(null, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t1", request1.getCreationDate());
-        
+
         createRequestTask(user, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t2", request1.getCreationDate());
-        
+
         Request request2 = createRequest(account, RequestType.SYSTEM_MESSAGE_NOTIFICATION, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask(user, request2, RequestTaskType.NEW_VERIFICATION_BODY_EMITTER, "3", request2.getCreationDate());
-        
+
         Request request3 = createRequest(account, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask(user, request3, RequestTaskType.INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE, "t4", request3.getCreationDate());
-        
+
         Request request4 = createRequest(account, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, LocalDateTime.now());
         createRequestTask("another user", request4, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "t5", request4.getCreationDate());
-        
+
         createRequestTask(null, request1, RequestTaskType.PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT, "t6", request1.getCreationDate());
-        
+
         ItemPage itemPage =
-        		cut.findItems(user, ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
-        
+                cut.findItems(user, ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build(), ItemOrderBy.NEWEST_FIRST, null, null);
+
         assertEquals(1L, itemPage.getTotalItems());
         assertEquals(1, itemPage.getItems().size());
-        
+
         Item item1 = itemPage.getItems().get(0);
         assertThat(item1.getRequestId()).isEqualTo(request1.getId());
         assertEquals(item1.getCreationDate().truncatedTo(ChronoUnit.MILLIS),
@@ -477,13 +479,14 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
 
     private Request createRequest(Long accountId, RequestType type, RequestStatus status, CompetentAuthorityEnum ca, LocalDateTime creationDate) {
         Request request = Request.builder()
-            .id(RandomStringUtils.insecure().next(5))
-            .competentAuthority(ca)
-            .type(type)
-            .status(status)
-            .accountId(accountId)
-            .creationDate(creationDate)
-            .build();
+                .id(RandomStringUtils.insecure().next(5))
+                .competentAuthority(ca)
+                .type(type)
+                .status(status)
+                .accountId(accountId)
+                .creationDate(creationDate)
+                .engine(WorkflowEngineType.CAMUNDA)
+                .build();
 
         entityManager.persist(request);
 
@@ -491,16 +494,16 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
     }
 
     private RequestTask createRequestTask(String assignee, Request request, RequestTaskType taskType,
-            String processTaskId, LocalDateTime startDate) {
+                                          String processTaskId, LocalDateTime startDate) {
         RequestTask requestTask =
-            RequestTask.builder()
-                .request(request)
-                .processTaskId(processTaskId)
-                .type(taskType)
-                .assignee(assignee)
-                .startDate(LocalDateTime.now())
-                .dueDate(LocalDate.now().plusMonths(1L))
-                .build();
+                RequestTask.builder()
+                        .request(request)
+                        .processTaskId(processTaskId)
+                        .type(taskType)
+                        .assignee(assignee)
+                        .startDate(LocalDateTime.now())
+                        .dueDate(LocalDate.now().plusMonths(1L))
+                        .build();
 
         entityManager.persist(requestTask);
         requestTask.setStartDate(startDate);
@@ -509,7 +512,7 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
     }
 
     private RequestTask createRequestTask(String assignee, Request request, RequestTaskType taskType,
-            String processTaskId, LocalDateTime startDate, LocalDate dueDate) {
+                                          String processTaskId, LocalDateTime startDate, LocalDate dueDate) {
         RequestTask requestTask = RequestTask.builder()
                 .request(request)
                 .processTaskId(processTaskId)
@@ -527,27 +530,27 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
 
     private void createOpenedItem(Long taskId, String userId) {
         RequestTaskVisit requestTaskVisit =
-            RequestTaskVisit.builder()
-                .taskId(taskId)
-                .userId(userId)
-                .build();
+                RequestTaskVisit.builder()
+                        .taskId(taskId)
+                        .userId(userId)
+                        .build();
 
         entityManager.persist(requestTaskVisit);
     }
 
     private List<Account> createAccounts() {
-         LegalEntity le = LegalEntity.builder()
+        LegalEntity le = LegalEntity.builder()
                 .location(
                         LocationOnShore.builder()
-                            .gridReference("grid")
-                            .address(
-                                    Address.builder()
-                                        .city("city")
-                                        .country("GR")
-                                        .line1("line")
-                                        .postcode("postcode")
-                                        .build())
-                            .build())
+                                .gridReference("grid")
+                                .address(
+                                        Address.builder()
+                                                .city("city")
+                                                .country("GR")
+                                                .line1("line")
+                                                .postcode("postcode")
+                                                .build())
+                                .build())
                 .name("le")
                 .status(LegalEntityStatus.ACTIVE)
                 .referenceNumber("regNumber")
@@ -566,15 +569,15 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
                 .status(InstallationAccountStatus.LIVE)
                 .location(
                         LocationOnShore.builder()
-                            .gridReference("grid")
-                            .address(
-                                    Address.builder()
-                                        .city("city")
-                                        .country("GR")
-                                        .line1("line")
-                                        .postcode("postcode")
-                                        .build())
-                            .build())
+                                .gridReference("grid")
+                                .address(
+                                        Address.builder()
+                                                .city("city")
+                                                .country("GR")
+                                                .line1("line")
+                                                .postcode("postcode")
+                                                .build())
+                                .build())
                 .name("Combustion")
                 .siteName("Combustion")
                 .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
@@ -593,15 +596,15 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
                 .status(InstallationAccountStatus.LIVE)
                 .location(
                         LocationOnShore.builder()
-                            .gridReference("grid")
-                            .address(
-                                    Address.builder()
-                                        .city("city")
-                                        .country("GR")
-                                        .line1("line")
-                                        .postcode("postcode")
-                                        .build())
-                            .build())
+                                .gridReference("grid")
+                                .address(
+                                        Address.builder()
+                                                .city("city")
+                                                .country("GR")
+                                                .line1("line")
+                                                .postcode("postcode")
+                                                .build())
+                                .build())
                 .name("MINERAL oil Refining")
                 .siteName("MINERAL oil Refining")
                 .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
@@ -610,6 +613,6 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
         entityManager.persist(account1);
         entityManager.persist(account2);
 
-        return List.of(account1,account2);
+        return List.of(account1, account2);
     }
 }

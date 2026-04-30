@@ -28,7 +28,7 @@ public class InitiateALRHandler implements JavaDelegate {
 
     private void initiateALRWorkflow(Long accountId, boolean isFinal, Optional<Date> alrExpirationDateOpt) {
         try {
-            alrCreationService.createALR(accountId, isFinal, alrExpirationDateOpt);
+            alrCreationService.createALRInNewTransaction(accountId, isFinal, alrExpirationDateOpt);
         } catch (Exception ex) {
             log.error(() -> "Could not create ALR workflow for account with id '" + accountId
                     + "' failed with " + ExceptionUtils.getRootCause(ex).getMessage(), ex);

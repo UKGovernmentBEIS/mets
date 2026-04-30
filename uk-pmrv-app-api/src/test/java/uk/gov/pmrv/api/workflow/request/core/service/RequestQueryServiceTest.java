@@ -194,4 +194,17 @@ class RequestQueryServiceTest {
 
         assertThat(relatedRequests).containsExactly(linkedRequest);
     }
+    
+    @Test
+    void findByProcessInstanceId() {
+    	String processInstanceId = "1";
+    	Request request = Request.builder().id("1").processInstanceId(processInstanceId).build();
+
+        when(requestRepository.findByProcessInstanceId(processInstanceId)).thenReturn(request);
+
+        Request result = service.findByProcessInstanceId(processInstanceId);
+
+        assertThat(result).isEqualTo(request);
+        verify(requestRepository, times(1)).findByProcessInstanceId(processInstanceId);
+    }
 }

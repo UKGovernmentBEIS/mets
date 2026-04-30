@@ -1,0 +1,850 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:design="http://flowable.org/design" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Flowable Design" exporterVersion="2025.1.03" design:palette="flowable-work-process-palette">
+  <process id="PROCESS_EMP_VARIATION_CORSIA" name="EMP Variation CORSIA Process" isExecutable="true">
+    <extensionElements>
+      <design:stencilid><![CDATA[BPMNDiagram]]></design:stencilid>
+      <design:creationdate><![CDATA[2026-03-01T09:56:03.151Z]]></design:creationdate>
+      <design:modificationdate><![CDATA[2026-03-01T10:00:17.231Z]]></design:modificationdate>
+    </extensionElements>
+    <userTask id="EMP_VARIATION_CORSIA_APPLICATION_SUBMIT" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:element-name>Operator: Submit EMP Variation Application</flowable:element-name>
+        <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+        <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </userTask>
+    <callActivity id="Activity_0la8qh3" name="Review EMP Variation CORSIA Application" calledElement="APPL_REVIEW" flowable:businessKey="#{businessKey}" flowable:fallbackToDefaultTenant="true">
+      <extensionElements>
+        <flowable:in source="requestId" target="requestId"></flowable:in>
+        <flowable:in source="requestType" target="requestType"></flowable:in>
+        <flowable:in source="businessKey" target="businessKey"></flowable:in>
+        <flowable:out source="reviewDetermination" target="reviewDetermination"></flowable:out>
+        <design:stencilid><![CDATA[CallActivity]]></design:stencilid>
+      </extensionElements>
+    </callActivity>
+    <serviceTask id="Activity_15ksia3" name="Update Workflow status to APPROVED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+      <extensionElements>
+        <flowable:field name="requestStatus"><flowable:string><![CDATA[APPROVED]]></flowable:string></flowable:field>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_1yfglar" name="Update Workflow status to REJECTED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+      <extensionElements>
+        <flowable:field name="requestStatus"><flowable:string><![CDATA[REJECTED]]></flowable:string></flowable:field>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_1s8nwkx" name="Update Workflow status to WITHDRAWN" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+      <extensionElements>
+        <flowable:field name="requestStatus"><flowable:string><![CDATA[WITHDRAWN]]></flowable:string></flowable:field>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_11lfq4t" name="Update Workflow status to CANCELLED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+      <extensionElements>
+        <flowable:field name="requestStatus"><flowable:string><![CDATA[CANCELLED]]></flowable:string></flowable:field>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_01z2zx8" name="Add Approved Request Action" flowable:delegateExpression="#{empVariationCorsiaApprovedAddRequestActionHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_0rdk7hl" name="Add Rejected Request Action" flowable:delegateExpression="#{empVariationCorsiaRejectedAddRequestActionHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_0ztlyhu" name="Add Deemed Withdrawn Request Action" flowable:delegateExpression="#{empVariationCorsiaDeemedWithdrawnAddRequestActionHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_0dc857y" name="Handle EMP Variation Cancelled" flowable:delegateExpression="#{empVariationAddCancelledRequestActionHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_1snl8xz" name="Set regulator led request type prefix" flowable:delegateExpression="#{empVariationCorsiaSetRegulatorLedRequestTypePrefixHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <userTask id="EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:element-name>Regulator: Submit EMP Variation Application</flowable:element-name>
+        <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+        <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </userTask>
+    <serviceTask id="Activity_00rkigj" name="Add cancelled request action" flowable:delegateExpression="#{empVariationAddCancelledRequestActionHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_1yizcch" name="Update Workflow status to CANCELLED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+      <extensionElements>
+        <flowable:field name="requestStatus"><flowable:string><![CDATA[CANCELLED]]></flowable:string></flowable:field>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_0n6jjo3" name="Update EMP" flowable:delegateExpression="#{empVariationCorsiaRegulatorLedUpdateEmpUponSubmitHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <callActivity id="Activity_0qanzdi" name="Peer Review" calledElement="PEER_REVIEW" flowable:businessKey="#{businessKey}" flowable:inheritVariables="true" flowable:fallbackToDefaultTenant="true">
+      <extensionElements>
+        <design:stencilid><![CDATA[CallActivity]]></design:stencilid>
+      </extensionElements>
+    </callActivity>
+    <serviceTask id="Activity_1f2ditt" name="Populate request metadata" flowable:delegateExpression="#{empVariationCorsiaRegulatorLedSubmitPopulateRequestMetadataHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_03yykr9" name="Generate approved documents" flowable:delegateExpression="#{empVariationCorsiaRegulatorLedApprovedGenerateDocumentsHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_13us3aj" name="Add submitted request action" flowable:delegateExpression="#{empVariationCorsiaAddRegulatorLedApprovedRequestActionHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_0svz07n" name="Update Workflow status to APPROVED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+      <extensionElements>
+        <flowable:field name="requestStatus"><flowable:string><![CDATA[APPROVED]]></flowable:string></flowable:field>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_137z13j" name="Send Official Notice Email" flowable:delegateExpression="#{empVariationCorsiaSendOfficialNoticeEmailHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <callActivity id="Activity_1hzmdyn" name="Payment" calledElement="PAYMENT" flowable:businessKey="#{businessKey}" flowable:inheritVariables="true" flowable:fallbackToDefaultTenant="true">
+      <extensionElements>
+        <flowable:in sourceExpression="${false}" target="expires"></flowable:in>
+        <design:stencilid><![CDATA[CallActivity]]></design:stencilid>
+      </extensionElements>
+    </callActivity>
+    <serviceTask id="Activity_0ttpve7" flowable:delegateExpression="#{empVariationCorsiaApprovedHandlerFlowable}">
+      <extensionElements>
+        <flowable:element-name>Handle EMP Variation Approved</flowable:element-name>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_1ib2lxq" name="Generate approved documents" flowable:delegateExpression="#{empVariationCorsiaApprovedGenerateDocumentsHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_177o5z9" name="Send Official Notice Email" flowable:delegateExpression="#{empVariationCorsiaSendOfficialNoticeEmailHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_0yyq3dc" name="Generate rejected official notice" flowable:delegateExpression="#{empVariationCorsiaRejectedGenerateOfficialNoticeHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_0p0oygf" name="Send Official Notice Email" flowable:delegateExpression="#{empVariationCorsiaSendOfficialNoticeEmailHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_1lu00d0" name="Generate deemed withdrawn official notice" flowable:delegateExpression="#{empVariationCorsiaDeemedWithdrawnGenerateOfficialNoticeHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_115yhke" name="Send Official Notice Email" flowable:delegateExpression="#{empVariationCorsiaSendOfficialNoticeEmailHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_1x8nqyk" name="Populate request metadata" flowable:delegateExpression="#{empVariationCorsiaApprovedPopulateRequestMetadataHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <exclusiveGateway id="Gateway_0plzx0b" name="what is the review determination?">
+      <extensionElements>
+        <design:stencilid><![CDATA[Exclusive_Databased_Gateway]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+    </exclusiveGateway>
+    <exclusiveGateway id="Gateway_1huade3" name="what type of user initiated the flow?">
+      <extensionElements>
+        <design:stencilid><![CDATA[Exclusive_Databased_Gateway]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+    </exclusiveGateway>
+    <exclusiveGateway id="Gateway_0kxajqi" name="what is the submit outcome?">
+      <extensionElements>
+        <design:stencilid><![CDATA[Exclusive_Databased_Gateway]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+    </exclusiveGateway>
+    <exclusiveGateway id="Gateway_1tkjgge" name="what is the submit outcome?" default="Flow_1414b3j">
+      <extensionElements>
+        <design:stencilid><![CDATA[Exclusive_Databased_Gateway]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+    </exclusiveGateway>
+    <exclusiveGateway id="Gateway_09z9ual" name="is peer review required?">
+      <extensionElements>
+        <design:stencilid><![CDATA[Exclusive_Databased_Gateway]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+    </exclusiveGateway>
+    <startEvent id="Event_18hebpn" name="Start" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+        <design:stencilid><![CDATA[StartNoneEvent]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+    </startEvent>
+    <endEvent id="Event_1435rl5">
+      <extensionElements>
+        <design:stencilid><![CDATA[EndNoneEvent]]></design:stencilid>
+      </extensionElements>
+    </endEvent>
+    <endEvent id="Event_1you0to">
+      <extensionElements>
+        <design:stencilid><![CDATA[EndNoneEvent]]></design:stencilid>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="Flow_02vp2ek" sourceRef="EMP_VARIATION_CORSIA_APPLICATION_SUBMIT" targetRef="Gateway_0kxajqi">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1q8pegu" sourceRef="Activity_0la8qh3" targetRef="Gateway_0plzx0b">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0echj9k" sourceRef="Activity_15ksia3" targetRef="Event_1435rl5">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_08onsm0" sourceRef="Activity_1yfglar" targetRef="Event_1435rl5">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1g9enj8" sourceRef="Activity_1s8nwkx" targetRef="Event_1435rl5">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1mgsto7" sourceRef="Activity_11lfq4t" targetRef="Event_1435rl5">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1p0765q" sourceRef="Activity_01z2zx8" targetRef="Activity_177o5z9">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_00c4yrx" sourceRef="Activity_0rdk7hl" targetRef="Activity_0p0oygf">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1qzf91h" sourceRef="Activity_0ztlyhu" targetRef="Activity_115yhke">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1k9dtv6" sourceRef="Activity_0dc857y" targetRef="Activity_11lfq4t">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1qgukr9" sourceRef="Activity_1snl8xz" targetRef="EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1ci6c8q" sourceRef="EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT" targetRef="Gateway_1tkjgge">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1dvyurr" sourceRef="Activity_00rkigj" targetRef="Activity_1yizcch">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1a8em1p" sourceRef="Activity_1yizcch" targetRef="Event_1you0to">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0l9d7wf" sourceRef="Activity_0n6jjo3" targetRef="Activity_1f2ditt">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0f39zfq" sourceRef="Activity_0qanzdi" targetRef="EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_112xj17" sourceRef="Activity_1f2ditt" targetRef="Activity_03yykr9">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0mocpt3" sourceRef="Activity_03yykr9" targetRef="Activity_13us3aj">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_04hgxwh" sourceRef="Activity_13us3aj" targetRef="Activity_137z13j">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_05yb8b7" sourceRef="Activity_0svz07n" targetRef="Activity_1hzmdyn">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_00i3hj4" sourceRef="Activity_137z13j" targetRef="Activity_0svz07n">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0uf4ehl" sourceRef="Activity_1hzmdyn" targetRef="Event_1you0to">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0x2sje3" sourceRef="Activity_0ttpve7" targetRef="Activity_1x8nqyk">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1dubowu" sourceRef="Activity_1ib2lxq" targetRef="Activity_01z2zx8">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0y0dqdt" sourceRef="Activity_177o5z9" targetRef="Activity_15ksia3">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1tw3jts" sourceRef="Activity_0yyq3dc" targetRef="Activity_0rdk7hl">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1umc62p" sourceRef="Activity_0p0oygf" targetRef="Activity_1yfglar">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_04zixlw" sourceRef="Activity_1lu00d0" targetRef="Activity_0ztlyhu">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1ehxnib" sourceRef="Activity_115yhke" targetRef="Activity_1s8nwkx">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_01tokhd" sourceRef="Activity_1x8nqyk" targetRef="Activity_1ib2lxq">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1tx4ddw" name="rejected" sourceRef="Gateway_0plzx0b" targetRef="Activity_0yyq3dc">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${reviewDetermination=='REJECTED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1a0sz6t" name="deemed withdrawn" sourceRef="Gateway_0plzx0b" targetRef="Activity_1lu00d0">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${reviewDetermination=='DEEMED_WITHDRAWN'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0sltn69" name="approved" sourceRef="Gateway_0plzx0b" targetRef="Activity_0ttpve7">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${reviewDetermination=='APPROVED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_178epos" name="operator" sourceRef="Gateway_1huade3" targetRef="EMP_VARIATION_CORSIA_APPLICATION_SUBMIT">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${requestInitiatorRoleType=='OPERATOR'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0734yhw" name="regulator" sourceRef="Gateway_1huade3" targetRef="Activity_1snl8xz">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${requestInitiatorRoleType=='REGULATOR'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_04bbuo6" name="submitted" sourceRef="Gateway_0kxajqi" targetRef="Activity_0la8qh3">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${empVariationSubmitOutcome=='SUBMITTED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1ul4f0f" name="cancelled" sourceRef="Gateway_0kxajqi" targetRef="Activity_0dc857y">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${empVariationSubmitOutcome=='CANCELLED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1414b3j" name="submitted" sourceRef="Gateway_1tkjgge" targetRef="Gateway_09z9ual">
+      <extensionElements>
+        <flowable:is-default-flow><![CDATA[true]]></flowable:is-default-flow>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_08s3gzp" name="cancelled" sourceRef="Gateway_1tkjgge" targetRef="Activity_00rkigj">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${empVariationSubmitOutcome=='CANCELLED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1ibqb3x" name="no" sourceRef="Gateway_09z9ual" targetRef="Activity_0n6jjo3">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${reviewOutcome!='PEER_REVIEW_REQUIRED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1xkryhq" name="yes" sourceRef="Gateway_09z9ual" targetRef="Activity_0qanzdi">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${reviewOutcome=='PEER_REVIEW_REQUIRED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1y7j39m" sourceRef="Event_18hebpn" targetRef="Gateway_1huade3">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <textAnnotation id="TextAnnotation_105sg2r">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[requestId]]></design:text>
+      </extensionElements>
+      <text>requestId</text>
+    </textAnnotation>
+    <association id="Association_0imzgfa" sourceRef="Event_18hebpn" targetRef="TextAnnotation_105sg2r" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_EMP_VARIATION_CORSIA">
+    <bpmndi:BPMNPlane bpmnElement="PROCESS_EMP_VARIATION_CORSIA" id="BPMNPlane_PROCESS_EMP_VARIATION_CORSIA">
+      <bpmndi:BPMNShape bpmnElement="EMP_VARIATION_CORSIA_APPLICATION_SUBMIT" id="BPMNShape_EMP_VARIATION_CORSIA_APPLICATION_SUBMIT">
+        <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="220.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0la8qh3" id="BPMNShape_Activity_0la8qh3">
+        <omgdc:Bounds height="80.0" width="100.0" x="760.0" y="220.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_15ksia3" id="BPMNShape_Activity_15ksia3">
+        <omgdc:Bounds height="80.0" width="100.0" x="1760.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_1yfglar" id="BPMNShape_Activity_1yfglar">
+        <omgdc:Bounds height="80.0" width="100.0" x="1760.0" y="220.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_1s8nwkx" id="BPMNShape_Activity_1s8nwkx">
+        <omgdc:Bounds height="80.0" width="100.0" x="1760.0" y="360.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_11lfq4t" id="BPMNShape_Activity_11lfq4t">
+        <omgdc:Bounds height="80.0" width="100.0" x="1760.0" y="510.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_01z2zx8" id="BPMNShape_Activity_01z2zx8">
+        <omgdc:Bounds height="80.0" width="100.0" x="1470.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0rdk7hl" id="BPMNShape_Activity_0rdk7hl">
+        <omgdc:Bounds height="80.0" width="100.0" x="1470.0" y="220.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0ztlyhu" id="BPMNShape_Activity_0ztlyhu">
+        <omgdc:Bounds height="80.0" width="100.0" x="1470.0" y="360.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0dc857y" id="BPMNShape_Activity_0dc857y">
+        <omgdc:Bounds height="80.0" width="100.0" x="1030.0" y="510.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_1snl8xz" id="BPMNShape_Activity_1snl8xz">
+        <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="800.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT" id="BPMNShape_EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT">
+        <omgdc:Bounds height="80.0" width="100.0" x="540.0" y="800.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_00rkigj" id="BPMNShape_Activity_00rkigj">
+        <omgdc:Bounds height="80.0" width="100.0" x="1510.0" y="920.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_1yizcch" id="BPMNShape_Activity_1yizcch">
+        <omgdc:Bounds height="80.0" width="100.0" x="1880.0" y="920.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0n6jjo3" id="BPMNShape_Activity_0n6jjo3">
+        <omgdc:Bounds height="80.0" width="100.0" x="990.0" y="800.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0qanzdi" id="BPMNShape_Activity_0qanzdi">
+        <omgdc:Bounds height="80.0" width="100.0" x="690.0" y="680.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_1f2ditt" id="BPMNShape_Activity_1f2ditt">
+        <omgdc:Bounds height="80.0" width="100.0" x="1170.0" y="800.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_03yykr9" id="BPMNShape_Activity_03yykr9">
+        <omgdc:Bounds height="80.0" width="100.0" x="1340.0" y="800.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_13us3aj" id="BPMNShape_Activity_13us3aj">
+        <omgdc:Bounds height="80.0" width="100.0" x="1510.0" y="800.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0svz07n" id="BPMNShape_Activity_0svz07n">
+        <omgdc:Bounds height="80.0" width="100.0" x="1880.0" y="800.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_137z13j" id="BPMNShape_Activity_137z13j">
+        <omgdc:Bounds height="80.0" width="100.0" x="1690.0" y="800.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_1hzmdyn" id="BPMNShape_Activity_1hzmdyn">
+        <omgdc:Bounds height="80.0" width="100.0" x="2050.0" y="800.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0ttpve7" id="BPMNShape_Activity_0ttpve7">
+        <omgdc:Bounds height="80.0" width="100.0" x="1030.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_1ib2lxq" id="BPMNShape_Activity_1ib2lxq">
+        <omgdc:Bounds height="80.0" width="100.0" x="1320.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_177o5z9" id="BPMNShape_Activity_177o5z9">
+        <omgdc:Bounds height="80.0" width="100.0" x="1610.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0yyq3dc" id="BPMNShape_Activity_0yyq3dc">
+        <omgdc:Bounds height="80.0" width="100.0" x="1320.0" y="220.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_0p0oygf" id="BPMNShape_Activity_0p0oygf">
+        <omgdc:Bounds height="80.0" width="100.0" x="1610.0" y="220.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_1lu00d0" id="BPMNShape_Activity_1lu00d0">
+        <omgdc:Bounds height="80.0" width="100.0" x="1320.0" y="360.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_115yhke" id="BPMNShape_Activity_115yhke">
+        <omgdc:Bounds height="80.0" width="100.0" x="1610.0" y="360.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Activity_1x8nqyk" id="BPMNShape_Activity_1x8nqyk">
+        <omgdc:Bounds height="80.0" width="100.0" x="1170.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_105sg2r" id="BPMNShape_TextAnnotation_105sg2r">
+        <omgdc:Bounds height="30.0" width="70.0" x="160.0" y="302.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Gateway_0plzx0b" id="BPMNShape_Gateway_0plzx0b">
+        <omgdc:Bounds height="40.0" width="40.0" x="940.0" y="240.0"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="178.0" x="856.0" y="276.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Gateway_1huade3" id="BPMNShape_Gateway_1huade3">
+        <omgdc:Bounds height="40.0" width="40.0" x="200.0" y="240.0"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="187.0" x="177.0" y="198.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Gateway_0kxajqi" id="BPMNShape_Gateway_0kxajqi">
+        <omgdc:Bounds height="40.0" width="40.0" x="660.0" y="240.0"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="152.0" x="638.0" y="198.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Gateway_1tkjgge" id="BPMNShape_Gateway_1tkjgge">
+        <omgdc:Bounds height="40.0" width="40.0" x="720.0" y="820.0"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="152.0" x="708.0" y="776.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Gateway_09z9ual" id="BPMNShape_Gateway_09z9ual">
+        <omgdc:Bounds height="40.0" width="40.0" x="860.0" y="820.0"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="128.0" x="846.0" y="872.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_18hebpn" id="BPMNShape_Event_18hebpn">
+        <omgdc:Bounds height="30.0" width="30.0" x="115.0" y="245.0"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="25.0" x="117.0" y="288.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1435rl5" id="BPMNShape_Event_1435rl5">
+        <omgdc:Bounds height="28.0" width="28.0" x="1896.0" y="246.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1you0to" id="BPMNShape_Event_1you0to">
+        <omgdc:Bounds height="28.0" width="28.0" x="2216.0" y="826.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1qzf91h" id="BPMNEdge_Flow_1qzf91h" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1570.0" y="400.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1610.0" y="400.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0sltn69" id="BPMNEdge_Flow_0sltn69" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="960.0" y="240.0"></omgdi:waypoint>
+        <omgdi:waypoint x="960.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1030.0" y="120.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="50.0" x="965.0" y="103.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1g9enj8" id="BPMNEdge_Flow_1g9enj8" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="1860.0" y="400.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1910.0" y="400.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1910.0" y="274.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_178epos" id="BPMNEdge_Flow_178epos" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="240.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="400.0" y="260.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="45.0" x="260.0" y="243.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0uf4ehl" id="BPMNEdge_Flow_0uf4ehl" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="2150.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2216.0" y="840.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0y0dqdt" id="BPMNEdge_Flow_0y0dqdt" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1710.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1760.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_08onsm0" id="BPMNEdge_Flow_08onsm0" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="1860.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1896.0" y="260.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1p0765q" id="BPMNEdge_Flow_1p0765q" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1570.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1610.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1ehxnib" id="BPMNEdge_Flow_1ehxnib" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1710.0" y="400.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1760.0" y="400.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0f39zfq" id="BPMNEdge_Flow_0f39zfq" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="690.0" y="720.0"></omgdi:waypoint>
+        <omgdi:waypoint x="590.0" y="720.0"></omgdi:waypoint>
+        <omgdi:waypoint x="590.0" y="800.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1ibqb3x" id="BPMNEdge_Flow_1ibqb3x" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="900.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="990.0" y="840.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="13.0" x="941.0" y="822.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0x2sje3" id="BPMNEdge_Flow_0x2sje3" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1130.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1170.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_112xj17" id="BPMNEdge_Flow_112xj17" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1270.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1340.0" y="840.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1mgsto7" id="BPMNEdge_Flow_1mgsto7" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="1860.0" y="550.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1910.0" y="550.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1910.0" y="274.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_00c4yrx" id="BPMNEdge_Flow_00c4yrx" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1570.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1610.0" y="260.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1a8em1p" id="BPMNEdge_Flow_1a8em1p" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="1980.0" y="960.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2230.0" y="960.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2230.0" y="854.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0734yhw" id="BPMNEdge_Flow_0734yhw" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="220.0" y="280.0"></omgdi:waypoint>
+        <omgdi:waypoint x="220.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="400.0" y="840.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="47.0" x="237.0" y="439.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1414b3j" id="BPMNEdge_Flow_1414b3j" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="760.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="860.0" y="840.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="52.0" x="762.0" y="813.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1dvyurr" id="BPMNEdge_Flow_1dvyurr" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1610.0" y="960.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1880.0" y="960.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_02vp2ek" id="BPMNEdge_Flow_02vp2ek" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="500.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="660.0" y="260.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0echj9k" id="BPMNEdge_Flow_0echj9k" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="1860.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1910.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1910.0" y="246.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_01tokhd" id="BPMNEdge_Flow_01tokhd" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1270.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1320.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_04hgxwh" id="BPMNEdge_Flow_04hgxwh" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1610.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1690.0" y="840.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0l9d7wf" id="BPMNEdge_Flow_0l9d7wf" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1090.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1170.0" y="840.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1a0sz6t" id="BPMNEdge_Flow_1a0sz6t" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="960.0" y="280.0"></omgdi:waypoint>
+        <omgdi:waypoint x="960.0" y="400.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1320.0" y="400.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="101.0" x="1050.0" y="406.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Association_0imzgfa" id="BPMNEdge_Association_0imzgfa" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="35.0" flowable:targetDockerY="15.0">
+        <omgdi:waypoint x="145.0" y="270.0"></omgdi:waypoint>
+        <omgdi:waypoint x="178.0" y="302.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1ci6c8q" id="BPMNEdge_Flow_1ci6c8q" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="640.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="720.0" y="840.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1umc62p" id="BPMNEdge_Flow_1umc62p" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1710.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1760.0" y="260.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1dubowu" id="BPMNEdge_Flow_1dubowu" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1420.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1470.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_04bbuo6" id="BPMNEdge_Flow_04bbuo6" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="700.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="760.0" y="260.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="52.0" x="701.0" y="243.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_08s3gzp" id="BPMNEdge_Flow_08s3gzp" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="740.0" y="860.0"></omgdi:waypoint>
+        <omgdi:waypoint x="740.0" y="960.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1510.0" y="960.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="51.0" x="755.0" y="933.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_04zixlw" id="BPMNEdge_Flow_04zixlw" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1420.0" y="400.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1470.0" y="400.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_00i3hj4" id="BPMNEdge_Flow_00i3hj4" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1790.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1880.0" y="840.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0mocpt3" id="BPMNEdge_Flow_0mocpt3" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1440.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1510.0" y="840.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1y7j39m" id="BPMNEdge_Flow_1y7j39m" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="145.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="200.0" y="260.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1xkryhq" id="BPMNEdge_Flow_1xkryhq" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="880.0" y="820.0"></omgdi:waypoint>
+        <omgdi:waypoint x="880.0" y="710.0"></omgdi:waypoint>
+        <omgdi:waypoint x="790.0" y="710.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="19.0" x="887.0" y="759.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_05yb8b7" id="BPMNEdge_Flow_05yb8b7" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1980.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2050.0" y="840.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1tw3jts" id="BPMNEdge_Flow_1tw3jts" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1420.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1470.0" y="260.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1ul4f0f" id="BPMNEdge_Flow_1ul4f0f" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="680.0" y="280.0"></omgdi:waypoint>
+        <omgdi:waypoint x="680.0" y="550.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1030.0" y="550.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="51.0" x="676.0" y="563.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1tx4ddw" id="BPMNEdge_Flow_1tx4ddw" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="980.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1320.0" y="260.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="43.0" x="1049.0" y="243.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1q8pegu" id="BPMNEdge_Flow_1q8pegu" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="860.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="940.0" y="260.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1k9dtv6" id="BPMNEdge_Flow_1k9dtv6" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1130.0" y="550.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1760.0" y="550.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1qgukr9" id="BPMNEdge_Flow_1qgukr9" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="500.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="540.0" y="840.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

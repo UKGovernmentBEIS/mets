@@ -23,6 +23,7 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccou
 import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowEngineType;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemOrderBy;
@@ -593,6 +594,7 @@ class ItemOperatorRepositoryIT extends AbstractContainerBaseTest {
                 .accountId(accountId)
                 .verificationBodyId(vbId)
                 .creationDate(creationDate)
+                .engine(WorkflowEngineType.CAMUNDA)
                 .build();
 
         entityManager.persist(request);

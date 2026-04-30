@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:design="http://flowable.org/design" typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://bpmn.io/schema/bpmn"
+             exporter="Flowable Design" exporterVersion="2025.1.03" design:palette="flowable-work-process-palette">
+    <process id="PROCESS_AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING"
+             name="PROCESS_AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING" isExecutable="true">
+        <extensionElements>
+            <design:stencilid><![CDATA[BPMNDiagram]]></design:stencilid>
+            <design:creationdate><![CDATA[2025-11-18T14:27:30.793Z]]></design:creationdate>
+            <design:modificationdate><![CDATA[2025-11-18T14:40:20.267Z]]></design:modificationdate>
+        </extensionElements>
+        <serviceTask id="Activity_0gqx0ch" name="Handle Aviation Aer Corsia 3 Year Period Offset Cancelled"
+                     flowable:delegateExpression="#{aviationAerCorsia3YearPeriodOffsettingApplicationCancelledHandlerFlowable}">
+            <extensionElements>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <serviceTask id="Activity_0g5xhfh" name="Update Workflow status to CANCELLED"
+                     flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+            <extensionElements>
+                <flowable:field name="requestStatus">
+                    <flowable:string>CANCELLED</flowable:string>
+                </flowable:field>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <userTask id="AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT"
+                  name="Regulator: Clicks to calculate 3 year period offset requirements"
+                  flowable:formFieldValidation="false">
+            <extensionElements>
+                <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+                <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </userTask>
+        <callActivity id="Activity_02nvq1w" name="Peer Review" default="Flow_0s7jt34" calledElement="PEER_REVIEW"
+                      flowable:businessKey="#{businessKey}" flowable:fallbackToDefaultTenant="true">
+            <extensionElements>
+                <flowable:in source="requestId" target="requestId"></flowable:in>
+                <flowable:in source="requestType" target="requestType"></flowable:in>
+                <flowable:out source="aviationAerCorsiaAnnualOffsettingSubmitOutcome"
+                              target="aviationAerCorsiaAnnualOffsettingSubmitOutcome"></flowable:out>
+                <design:stencilid><![CDATA[CallActivity]]></design:stencilid>
+            </extensionElements>
+        </callActivity>
+        <serviceTask id="Activity_1opk2i4" name="Generate official notice"
+                     flowable:delegateExpression="#{aviationAerCorsia3YearPeriodOffsettingSubmittedGenerateOfficialNoticeHandlerFlowable}">
+            <extensionElements>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <serviceTask id="Activity_1xpnecr" name="Send official notice"
+                     flowable:delegateExpression="#{aviationAerCorsia3YearPeriodOffsettingSubmittedSendOfficialNoticeHandlerFlowable}">
+            <extensionElements>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <serviceTask id="Activity_1xna561" name="Add submitted request action"
+                     flowable:delegateExpression="#{aviationAerCorsia3YearPeriodOffsettingAddSubmittedRequestActionHandlerFlowable}">
+            <extensionElements>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <serviceTask id="Activity_0ady72h" name="Update Workflow status to COMPLETED"
+                     flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+            <extensionElements>
+                <flowable:field name="requestStatus">
+                    <flowable:string>COMPLETED</flowable:string>
+                </flowable:field>
+                <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <exclusiveGateway id="Gateway_1450suc" name="What is the submit outcome?">
+            <extensionElements>
+                <design:stencilid><![CDATA[Exclusive_Databased_Gateway]]></design:stencilid>
+                <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+            </extensionElements>
+        </exclusiveGateway>
+        <startEvent id="StartEvent_1" flowable:formFieldValidation="false">
+            <extensionElements>
+                <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+                <design:stencilid><![CDATA[StartNoneEvent]]></design:stencilid>
+            </extensionElements>
+        </startEvent>
+        <endEvent id="Event_1t5p2j0">
+            <extensionElements>
+                <design:stencilid><![CDATA[EndNoneEvent]]></design:stencilid>
+            </extensionElements>
+        </endEvent>
+        <sequenceFlow id="Flow_1q9g5mg" sourceRef="Activity_0gqx0ch" targetRef="Activity_0g5xhfh">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_1njh265" sourceRef="Activity_0g5xhfh" targetRef="Event_1t5p2j0">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_16a10ev" sourceRef="AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT"
+                      targetRef="Gateway_1450suc">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_0s7jt34" sourceRef="Activity_02nvq1w"
+                      targetRef="AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT">
+            <extensionElements>
+                <flowable:is-default-flow><![CDATA[true]]></flowable:is-default-flow>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_1b8ewuy" sourceRef="Activity_1opk2i4" targetRef="Activity_1xpnecr">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_19ph9ov" sourceRef="Activity_1xpnecr" targetRef="Activity_1xna561">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_01nidhu" sourceRef="Activity_1xna561" targetRef="Activity_0ady72h">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_0z1rmbz" sourceRef="Activity_0ady72h" targetRef="Event_1t5p2j0">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_14bzfj0" name="Cancelled" sourceRef="Gateway_1450suc" targetRef="Activity_0gqx0ch">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+                <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+            </extensionElements>
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${aviationAerCorsia3YearPeriodOffsettingSubmitOutcome=='CANCELLED'}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_0def0my" name="Submitted" sourceRef="Gateway_1450suc" targetRef="Activity_1opk2i4">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+                <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+            </extensionElements>
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${aviationAerCorsia3YearPeriodOffsettingSubmitOutcome=='SUBMITTED'}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_14td9r6" sourceRef="Gateway_1450suc" targetRef="Activity_02nvq1w">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${aviationAerCorsia3YearPeriodOffsettingSubmitOutcome=='PEER_REVIEW_REQUIRED'}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="Flow_099d5wn" sourceRef="StartEvent_1"
+                      targetRef="AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+    </process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING">
+        <bpmndi:BPMNPlane bpmnElement="PROCESS_AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING"
+                          id="BPMNPlane_PROCESS_AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING">
+            <bpmndi:BPMNShape bpmnElement="Activity_0gqx0ch" id="BPMNShape_Activity_0gqx0ch">
+                <omgdc:Bounds height="80.0" width="100.0" x="720.0" y="540.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Activity_0g5xhfh" id="BPMNShape_Activity_0g5xhfh">
+                <omgdc:Bounds height="80.0" width="100.0" x="1010.0" y="540.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT"
+                              id="BPMNShape_AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT">
+                <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="77.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Activity_02nvq1w" id="BPMNShape_Activity_02nvq1w">
+                <omgdc:Bounds height="80.0" width="100.0" x="440.0" y="530.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Activity_1opk2i4" id="BPMNShape_Activity_1opk2i4">
+                <omgdc:Bounds height="80.0" width="100.0" x="780.0" y="310.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Activity_1xpnecr" id="BPMNShape_Activity_1xpnecr">
+                <omgdc:Bounds height="80.0" width="100.0" x="930.0" y="310.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Activity_1xna561" id="BPMNShape_Activity_1xna561">
+                <omgdc:Bounds height="80.0" width="100.0" x="1100.0" y="310.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Activity_0ady72h" id="BPMNShape_Activity_0ady72h">
+                <omgdc:Bounds height="80.0" width="100.0" x="1290.0" y="310.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Gateway_1450suc" id="BPMNShape_Gateway_1450suc">
+                <omgdc:Bounds height="40.0" width="40.0" x="630.0" y="330.0"></omgdc:Bounds>
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds height="18.0" width="155.0" x="608.0" y="384.0"></omgdc:Bounds>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="StartEvent_1" id="BPMNShape_StartEvent_1">
+                <omgdc:Bounds height="30.0" width="30.0" x="182.0" y="102.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="Event_1t5p2j0" id="BPMNShape_Event_1t5p2j0">
+                <omgdc:Bounds height="28.0" width="28.0" x="1476.0" y="336.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="Flow_16a10ev" id="BPMNEdge_Flow_16a10ev" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+                <omgdi:waypoint x="450.0" y="117.0"></omgdi:waypoint>
+                <omgdi:waypoint x="650.0" y="117.0"></omgdi:waypoint>
+                <omgdi:waypoint x="650.0" y="330.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0z1rmbz" id="BPMNEdge_Flow_0z1rmbz" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+                <omgdi:waypoint x="1390.0" y="350.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1476.0" y="350.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_14bzfj0" id="BPMNEdge_Flow_14bzfj0" flowable:sourceDockerX="20.0"
+                             flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="650.0" y="370.0"></omgdi:waypoint>
+                <omgdi:waypoint x="650.0" y="580.0"></omgdi:waypoint>
+                <omgdi:waypoint x="720.0" y="580.0"></omgdi:waypoint>
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds height="18.0" width="53.0" x="656.0" y="475.0"></omgdc:Bounds>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_099d5wn" id="BPMNEdge_Flow_099d5wn" flowable:sourceDockerX="15.0"
+                             flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="212.0" y="117.0"></omgdi:waypoint>
+                <omgdi:waypoint x="350.0" y="117.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0def0my" id="BPMNEdge_Flow_0def0my" flowable:sourceDockerX="20.0"
+                             flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="670.0" y="350.0"></omgdi:waypoint>
+                <omgdi:waypoint x="780.0" y="350.0"></omgdi:waypoint>
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds height="18.0" width="54.0" x="669.0" y="323.0"></omgdc:Bounds>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_1njh265" id="BPMNEdge_Flow_1njh265" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+                <omgdi:waypoint x="1110.0" y="580.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1490.0" y="580.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1490.0" y="364.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_0s7jt34" id="BPMNEdge_Flow_0s7jt34" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="440.0" y="570.0"></omgdi:waypoint>
+                <omgdi:waypoint x="400.0" y="570.0"></omgdi:waypoint>
+                <omgdi:waypoint x="400.0" y="157.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_01nidhu" id="BPMNEdge_Flow_01nidhu" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="1200.0" y="350.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1290.0" y="350.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_19ph9ov" id="BPMNEdge_Flow_19ph9ov" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="1030.0" y="350.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1100.0" y="350.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_1b8ewuy" id="BPMNEdge_Flow_1b8ewuy" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="880.0" y="350.0"></omgdi:waypoint>
+                <omgdi:waypoint x="930.0" y="350.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_1q9g5mg" id="BPMNEdge_Flow_1q9g5mg" flowable:sourceDockerX="50.0"
+                             flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="820.0" y="580.0"></omgdi:waypoint>
+                <omgdi:waypoint x="1010.0" y="580.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="Flow_14td9r6" id="BPMNEdge_Flow_14td9r6" flowable:sourceDockerX="20.0"
+                             flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="630.0" y="350.0"></omgdi:waypoint>
+                <omgdi:waypoint x="490.0" y="350.0"></omgdi:waypoint>
+                <omgdi:waypoint x="490.0" y="530.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

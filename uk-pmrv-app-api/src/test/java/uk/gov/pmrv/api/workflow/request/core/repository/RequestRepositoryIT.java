@@ -10,6 +10,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowEngineType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestMetadata;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
@@ -23,7 +24,9 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestM
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,10 +37,36 @@ class RequestRepositoryIT extends AbstractContainerBaseTest {
 
     @Autowired
     private RequestRepository requestRepository;
-    
+
     @Autowired
-	private EntityManager entityManager;
-    
+    private EntityManager entityManager;
+
+    @Test
+    void findByIdForUpdate() {
+        Request request1 = createRequest(1L, CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.COMPLETED, LocalDateTime.now());
+        createRequest(2L, CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.COMPLETED, LocalDateTime.now());
+
+        flushAndClear();
+
+        Optional<Request> result = requestRepository.findByIdForUpdate(request1.getId());
+
+        assertThat(result).isNotEmpty();
+        assertThat(result.get().getId()).isEqualTo(request1.getId());
+    }
+
+    @Test
+    void findByProcessInstanceId() {
+        String processInstanceId = "prInId";
+        Request request1 = createRequest(1L, CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.COMPLETED, LocalDateTime.now(), 1L, null, processInstanceId);
+        createRequest(2L, CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.COMPLETED, LocalDateTime.now(), 2L, null, "processInst2");
+
+        flushAndClear();
+
+        Request result = requestRepository.findByProcessInstanceId(processInstanceId);
+
+        assertThat(result).isEqualTo(request1);
+    }
+
     @Test
     void findByAccountIdAndStatusAndTypeNotNotification() {
         Long accountId = 1L;
@@ -46,9 +75,9 @@ class RequestRepositoryIT extends AbstractContainerBaseTest {
         createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.SYSTEM_MESSAGE_NOTIFICATION, RequestStatus.IN_PROGRESS, null);
 
         flushAndClear();
-        
+
         List<Request> result = requestRepository.findByAccountIdAndStatusAndTypeNotNotification(accountId, RequestStatus.IN_PROGRESS);
-        
+
         assertThat(result).containsExactlyInAnyOrder(request);
     }
 
@@ -80,12 +109,12 @@ class RequestRepositoryIT extends AbstractContainerBaseTest {
         flushAndClear();
 
         List<Request> retrievedRequests = requestRepository
-            .findAllByAccountIdAndTypeIsNot(accountId1, RequestType.SYSTEM_MESSAGE_NOTIFICATION);
+                .findAllByAccountIdAndTypeIsNot(accountId1, RequestType.SYSTEM_MESSAGE_NOTIFICATION);
 
         assertThat(retrievedRequests).hasSize(2);
         assertThat(retrievedRequests)
-            .extracting(Request::getId)
-            .containsExactly(acc1Request1.getId(), acc1Request2.getId());
+                .extracting(Request::getId)
+                .containsExactly(acc1Request1.getId(), acc1Request2.getId());
     }
 
     @Test
@@ -102,14 +131,14 @@ class RequestRepositoryIT extends AbstractContainerBaseTest {
         flushAndClear();
 
         List<Request> retrievedRequests = requestRepository
-            .findAllByAccountIdInAndTypeIsNot(Set.of(accountId1, accountId2), RequestType.SYSTEM_MESSAGE_NOTIFICATION);
+                .findAllByAccountIdInAndTypeIsNot(Set.of(accountId1, accountId2), RequestType.SYSTEM_MESSAGE_NOTIFICATION);
 
         assertThat(retrievedRequests).hasSize(2);
         assertThat(retrievedRequests)
-            .extracting(Request::getId)
-            .containsExactly(acc1Request.getId(), acc2Request.getId());
+                .extracting(Request::getId)
+                .containsExactly(acc1Request.getId(), acc2Request.getId());
     }
-    
+
     @Test
     void findByAccountIdAndTypeAndStatus() {
         Long accountId1 = 1L;
@@ -122,8 +151,8 @@ class RequestRepositoryIT extends AbstractContainerBaseTest {
 
         flushAndClear();
 
-		List<Request> result = requestRepository.findByAccountIdAndTypeAndStatus(accountId1, RequestType.PERMIT_VARIATION,
-            RequestStatus.APPROVED, Sort.by(Sort.Direction.ASC, "creationDate"));
+        List<Request> result = requestRepository.findByAccountIdAndTypeAndStatus(accountId1, RequestType.PERMIT_VARIATION,
+                RequestStatus.APPROVED, Sort.by(Sort.Direction.ASC, "creationDate"));
 
         assertThat(result).hasSize(2);
         assertThat(result).extracting(Request::getId).containsExactly(request1_1.getId(), request1_2.getId());
@@ -143,81 +172,81 @@ class RequestRepositoryIT extends AbstractContainerBaseTest {
         flushAndClear();
 
         List<Request> result = requestRepository.findByAccountIdAndTypeAndStatusOrderByEndDateDesc(
-            accountId1, RequestType.PERMIT_VARIATION, RequestStatus.APPROVED);
+                accountId1, RequestType.PERMIT_VARIATION, RequestStatus.APPROVED);
 
         assertThat(result).hasSize(3);
         assertThat(result).extracting(Request::getId)
-            .containsExactly(request1_2.getId(), request1_1.getId(), request1_3.getId());
+                .containsExactly(request1_2.getId(), request1_1.getId(), request1_3.getId());
     }
-    
+
     @Test
     void existsByTypeAndStatusAndCompetentAuthority_exists() {
-    	RequestType type = RequestType.PERMIT_BATCH_REISSUE;
-    	RequestStatus status= RequestStatus.IN_PROGRESS;
-    	CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.ENGLAND;
-    	
-    	createRequest(1L, competentAuthority, type, status, LocalDateTime.now());
-    	
+        RequestType type = RequestType.PERMIT_BATCH_REISSUE;
+        RequestStatus status = RequestStatus.IN_PROGRESS;
+        CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.ENGLAND;
+
+        createRequest(1L, competentAuthority, type, status, LocalDateTime.now());
+
         flushAndClear();
-        
+
         boolean result = requestRepository.existsByTypeAndStatusAndCompetentAuthority(type, status, competentAuthority);
-        
+
         assertThat(result).isTrue();
     }
-    
+
     @Test
     void existsByTypeAndStatusAndCompetentAuthority_not_exist() {
-    	RequestType type = RequestType.PERMIT_BATCH_REISSUE;
-    	RequestStatus status= RequestStatus.IN_PROGRESS;
-    	CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.ENGLAND;
-    	
-    	createRequest(1L, competentAuthority, type, RequestStatus.APPROVED, LocalDateTime.now());
-        createRequest(2L, competentAuthority,  RequestType.AER, status, LocalDateTime.now());
+        RequestType type = RequestType.PERMIT_BATCH_REISSUE;
+        RequestStatus status = RequestStatus.IN_PROGRESS;
+        CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.ENGLAND;
+
+        createRequest(1L, competentAuthority, type, RequestStatus.APPROVED, LocalDateTime.now());
+        createRequest(2L, competentAuthority, RequestType.AER, status, LocalDateTime.now());
         createRequest(3L, CompetentAuthorityEnum.OPRED, type, status, LocalDateTime.now());
-        
+
         flushAndClear();
-        
+
         boolean result = requestRepository.existsByTypeAndStatusAndCompetentAuthority(type, status, competentAuthority);
-        
+
         assertThat(result).isFalse();
     }
-    
+
     @Test
     void existByRequestTypeAndStatusAndAccountIdAndMetadataYear_not_exist() {
-    	Long accountId = 1L;
-    	RequestType requestType = RequestType.DRE;
-    	RequestStatus status = RequestStatus.IN_PROGRESS;
-    	Year year = Year.of(2023);
-    	
-    	createRequest(2L, CompetentAuthorityEnum.ENGLAND, requestType, status, LocalDateTime.now(), null, DreRequestMetadata.builder().type(RequestMetadataType.DRE).year(year).build());
-    	createRequest(accountId, CompetentAuthorityEnum.ENGLAND, requestType, status, LocalDateTime.now(), null, DreRequestMetadata.builder().type(RequestMetadataType.DRE).year(Year.of(2020)).build());
-    	createRequest(accountId, CompetentAuthorityEnum.ENGLAND, requestType, RequestStatus.COMPLETED, LocalDateTime.now(), null, DreRequestMetadata.builder()
-    			.type(RequestMetadataType.DRE)
-    			.year(year).build());
-    	
-    	flushAndClear();
-    	
-    	boolean result = requestRepository.existByRequestTypeAndStatusAndAccountIdAndMetadataYear(requestType.name(), status.name(), accountId, year.getValue());
-    	
-    	assertThat(result).isEqualTo(false);
+        Long accountId = 1L;
+        RequestType requestType = RequestType.DRE;
+        RequestStatus status = RequestStatus.IN_PROGRESS;
+        Year year = Year.of(2023);
+
+        createRequest(2L, CompetentAuthorityEnum.ENGLAND, requestType, status, LocalDateTime.now(), null, DreRequestMetadata.builder().type(RequestMetadataType.DRE).year(year).build());
+        createRequest(accountId, CompetentAuthorityEnum.ENGLAND, requestType, status, LocalDateTime.now(), null, DreRequestMetadata.builder().type(RequestMetadataType.DRE).year(Year.of(2020)).build());
+        createRequest(accountId, CompetentAuthorityEnum.ENGLAND, requestType, RequestStatus.COMPLETED, LocalDateTime.now(), null, DreRequestMetadata.builder()
+                .type(RequestMetadataType.DRE)
+                .year(year).build());
+
+        flushAndClear();
+
+        boolean result = requestRepository.existByRequestTypeAndStatusAndAccountIdAndMetadataYear(requestType.name(), status.name(), accountId, year.getValue());
+
+        assertThat(result).isEqualTo(false);
     }
-    
+
     @Test
     void existByRequestTypeAndStatusAndAccountIdAndMetadataYear_exist() {
-    	Long accountId = 1L;
-    	RequestType requestType = RequestType.DRE;
-    	RequestStatus status = RequestStatus.IN_PROGRESS;
-    	Year year = Year.of(2023);
-    	
-    	createRequest(accountId, CompetentAuthorityEnum.ENGLAND, requestType, status, LocalDateTime.now(), null, DreRequestMetadata.builder()
-    			.type(RequestMetadataType.DRE)
-    			.year(year).build());
-    	
-    	flushAndClear();
-    	
-    	boolean result = requestRepository.existByRequestTypeAndStatusAndAccountIdAndMetadataYear(requestType.name(), status.name(), accountId, year.getValue());
-    	
-    	assertThat(result).isEqualTo(true);
+        Long accountId = 1L;
+        RequestType requestType = RequestType.DRE;
+        RequestStatus status = RequestStatus.IN_PROGRESS;
+        Year year = Year.of(2023);
+
+        createRequest(accountId, CompetentAuthorityEnum.ENGLAND, requestType, status, LocalDateTime.now(), null, DreRequestMetadata.builder()
+                .type(RequestMetadataType.DRE)
+                .year(year).build());
+
+        flushAndClear();
+
+        boolean result = requestRepository.existByRequestTypeAndStatusAndAccountIdAndMetadataYear(requestType.name(), status.name(), accountId, year.getValue());
+
+        assertThat(result).isEqualTo(true);
     }
 
     @Test
@@ -226,20 +255,20 @@ class RequestRepositoryIT extends AbstractContainerBaseTest {
         Year year = Year.of(2023);
 
         createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_AER_UKETS, RequestStatus.IN_PROGRESS,
-            LocalDateTime.now(), null,
-            AviationAerRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER).year(year).build());
+                LocalDateTime.now(), null,
+                AviationAerRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER).year(year).build());
 
         createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_DRE_UKETS, RequestStatus.COMPLETED,
-            LocalDateTime.now(), null,
-            AviationDreRequestMetadata.builder().type(RequestMetadataType.AVIATION_DRE).year(Year.of(2022)).build());
+                LocalDateTime.now(), null,
+                AviationDreRequestMetadata.builder().type(RequestMetadataType.AVIATION_DRE).year(Year.of(2022)).build());
 
         Request dreRequest2023_1 = createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_DRE_UKETS, RequestStatus.IN_PROGRESS,
-            LocalDateTime.now(), null,
-            AviationDreRequestMetadata.builder().type(RequestMetadataType.AVIATION_DRE).year(year).build());
+                LocalDateTime.now(), null,
+                AviationDreRequestMetadata.builder().type(RequestMetadataType.AVIATION_DRE).year(year).build());
 
         Request dreRequest2023_2 = createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_DRE_UKETS, RequestStatus.COMPLETED,
-            LocalDateTime.now(), null,
-            AviationDreRequestMetadata.builder().type(RequestMetadataType.AVIATION_DRE).year(year).build());
+                LocalDateTime.now(), null,
+                AviationDreRequestMetadata.builder().type(RequestMetadataType.AVIATION_DRE).year(year).build());
 
         flushAndClear();
 
@@ -254,24 +283,24 @@ class RequestRepositoryIT extends AbstractContainerBaseTest {
         Year year = Year.of(2023);
 
         createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_AER_UKETS, RequestStatus.IN_PROGRESS,
-            LocalDateTime.now(), null,
-            AviationAerRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER).year(year).build());
+                LocalDateTime.now(), null,
+                AviationAerRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER).year(year).build());
 
         createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_DRE_UKETS, RequestStatus.COMPLETED,
-            LocalDateTime.now(), null,
-            AviationDreRequestMetadata.builder().type(RequestMetadataType.AVIATION_DRE).year(Year.of(2022)).build());
+                LocalDateTime.now(), null,
+                AviationDreRequestMetadata.builder().type(RequestMetadataType.AVIATION_DRE).year(Year.of(2022)).build());
 
         createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING, RequestStatus.CANCELLED,
-            LocalDateTime.now(), null,
-            AviationAerCorsiaAnnualOffsettingRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING).year(year).build());
+                LocalDateTime.now(), null,
+                AviationAerCorsiaAnnualOffsettingRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING).year(year).build());
 
         Request req1 = createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING, RequestStatus.IN_PROGRESS,
-             LocalDateTime.of(2024, 10, 19, 14, 5), null,
-            AviationAerCorsiaAnnualOffsettingRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING).year(year).build());
+                LocalDateTime.of(2024, 10, 19, 14, 5), null,
+                AviationAerCorsiaAnnualOffsettingRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING).year(year).build());
 
         Request req2 = createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING, RequestStatus.COMPLETED,
-            LocalDateTime.of(2024, 10, 20, 14, 5), null,
-            AviationAerCorsiaAnnualOffsettingRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING).year(year).build());
+                LocalDateTime.of(2024, 10, 20, 14, 5), null,
+                AviationAerCorsiaAnnualOffsettingRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING).year(year).build());
 
         flushAndClear();
 
@@ -285,37 +314,44 @@ class RequestRepositoryIT extends AbstractContainerBaseTest {
         assertThat(result).containsExactly(req2, req1);
     }
 
-    
-	private Request createRequest(Long accountId, CompetentAuthorityEnum competentAuthority, RequestType type,
-			RequestStatus status, LocalDateTime endDate) {
-		return createRequest(accountId, competentAuthority, type, status, endDate, null);
-	}
-    
-	private Request createRequest(Long accountId, CompetentAuthorityEnum competentAuthority, RequestType type,
-			RequestStatus status, LocalDateTime endDate, Long verificationBodyId) {
-		return createRequest(accountId, competentAuthority, type, status, endDate, verificationBodyId, null);
-	}
-    
-	private Request createRequest(Long accountId, CompetentAuthorityEnum competentAuthority, RequestType type,
-			RequestStatus status, LocalDateTime endDate, Long verificationBodyId, RequestMetadata metadata) {
-        Request request = 
+
+    private Request createRequest(Long accountId, CompetentAuthorityEnum competentAuthority, RequestType type,
+                                  RequestStatus status, LocalDateTime endDate) {
+        return createRequest(accountId, competentAuthority, type, status, endDate, null);
+    }
+
+    private Request createRequest(Long accountId, CompetentAuthorityEnum competentAuthority, RequestType type,
+                                  RequestStatus status, LocalDateTime endDate, Long verificationBodyId) {
+        return createRequest(accountId, competentAuthority, type, status, endDate, verificationBodyId, null);
+    }
+
+    private Request createRequest(Long accountId, CompetentAuthorityEnum competentAuthority, RequestType type,
+                                  RequestStatus status, LocalDateTime endDate, Long verificationBodyId, RequestMetadata metadata) {
+        return createRequest(accountId, competentAuthority, type, status, endDate, verificationBodyId, metadata, "procInstance" + "_" + UUID.randomUUID() + "_" + accountId);
+    }
+
+    private Request createRequest(Long accountId, CompetentAuthorityEnum competentAuthority, RequestType type,
+                                  RequestStatus status, LocalDateTime endDate, Long verificationBodyId, RequestMetadata metadata, String processInstanceId) {
+        Request request =
                 Request.builder()
-                    .id(RandomStringUtils.insecure().next(5))
-                    .accountId(accountId)
-                    .type(type)
-                    .status(status)
-                    .competentAuthority(competentAuthority)
-                    .verificationBodyId(verificationBodyId)
-                    .endDate(endDate)
-                    .metadata(metadata)
-                    .build();
+                        .id(RandomStringUtils.insecure().next(5))
+                        .accountId(accountId)
+                        .type(type)
+                        .status(status)
+                        .competentAuthority(competentAuthority)
+                        .verificationBodyId(verificationBodyId)
+                        .processInstanceId(processInstanceId)
+                        .endDate(endDate)
+                        .metadata(metadata)
+                        .engine(WorkflowEngineType.CAMUNDA)
+                        .build();
         entityManager.persist(request);
         return request;
     }
-    
+
     private void flushAndClear() {
-		entityManager.flush();
-		entityManager.clear();
-	}
+        entityManager.flush();
+        entityManager.clear();
+    }
 
 }

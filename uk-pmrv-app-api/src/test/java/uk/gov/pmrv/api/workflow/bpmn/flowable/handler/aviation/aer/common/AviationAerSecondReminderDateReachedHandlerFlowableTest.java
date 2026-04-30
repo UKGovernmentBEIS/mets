@@ -1,0 +1,40 @@
+package uk.gov.pmrv.api.workflow.bpmn.flowable.handler.aviation.aer.common;
+
+import org.flowable.engine.delegate.DelegateExecution;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.service.AviationAerSendReminderNotificationService;
+import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
+
+import java.util.Date;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class AviationAerSecondReminderDateReachedHandlerFlowableTest {
+
+    @InjectMocks
+    private AviationAerSecondReminderDateReachedHandlerFlowable secondReminderDateReachedHandler;
+
+    @Mock
+    private AviationAerSendReminderNotificationService sendReminderNotificationService;
+
+    @Test
+    void execute() {
+        DelegateExecution delegateExecution = mock(DelegateExecution.class);
+        String requestId = "REQ-001";
+        Date expirationDate = new Date();
+
+        when(delegateExecution.getVariable(BpmnProcessConstants.REQUEST_ID)).thenReturn(requestId);
+        when(delegateExecution.getVariable(BpmnProcessConstants.AVIATION_AER_EXPIRATION_DATE)).thenReturn(expirationDate);
+
+        secondReminderDateReachedHandler.execute(delegateExecution);
+
+        verify(sendReminderNotificationService).sendSecondReminderNotification(requestId, expirationDate);
+    }
+}

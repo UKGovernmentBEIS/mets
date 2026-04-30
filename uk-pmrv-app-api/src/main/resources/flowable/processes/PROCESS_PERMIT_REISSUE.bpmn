@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:design="http://flowable.org/design" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" design:palette="flowable-work-process-palette">
+  <error id="error_reissue_failed" name="Reissue failed" errorCode="REISSUE_FAILED" />
+  <process id="PROCESS_PERMIT_REISSUE" name="Permit Reissue Process" isExecutable="true">
+    <startEvent id="StartEvent_1">
+      <outgoing>Flow_1hiqvh9</outgoing>
+    </startEvent>
+    <serviceTask id="Activity_1e66bwi" name="Reissue completed successfully" flowable:delegateExpression="#{permitReissueMarkAsCompletedHandlerFlowable}">
+      <incoming>Flow_1nz40up</incoming>
+      <outgoing>Flow_06i99dp</outgoing>
+    </serviceTask>
+    <serviceTask id="Activity_1fw5ib6" name="Reissue failed" flowable:delegateExpression="#{permitReissueMarkAsFailedHandlerFlowable}">
+      <incoming>Flow_1v46q7k</incoming>
+      <outgoing>Flow_1q13759</outgoing>
+    </serviceTask>
+    <sequenceFlow id="Flow_1hiqvh9" sourceRef="StartEvent_1" targetRef="Activity_022wprc" />
+    <sequenceFlow id="Flow_1nz40up" sourceRef="Activity_022wprc" targetRef="Activity_1e66bwi" />
+    <serviceTask id="Activity_022wprc" name="Do reissue permit" flowable:async="true" flowable:delegateExpression="#{permitReissueDoReissueHandlerFlowable}">
+      <incoming>Flow_1hiqvh9</incoming>
+      <outgoing>Flow_1nz40up</outgoing>
+    </serviceTask>
+    <boundaryEvent id="Event_15b3rt0" name="Reissue failed" attachedToRef="Activity_022wprc">
+      <outgoing>Flow_1v46q7k</outgoing>
+      <errorEventDefinition />
+    </boundaryEvent>
+    <sequenceFlow id="Flow_1v46q7k" sourceRef="Event_15b3rt0" targetRef="Activity_1fw5ib6" />
+    <sequenceFlow id="Flow_06i99dp" sourceRef="Activity_1e66bwi" targetRef="Activity_14mjrv4" />
+    <sequenceFlow id="Flow_1q13759" sourceRef="Activity_1fw5ib6" targetRef="Activity_14mjrv4" />
+    <sequenceFlow id="Flow_09k6ftf" sourceRef="Activity_14mjrv4" targetRef="Event_0grjtyr" />
+    <serviceTask id="Activity_14mjrv4" name="Permit reissue completed" flowable:delegateExpression="#{permitReissueCompletedHandlerFlowable}">
+      <incoming>Flow_06i99dp</incoming>
+      <incoming>Flow_1q13759</incoming>
+      <outgoing>Flow_09k6ftf</outgoing>
+    </serviceTask>
+    <endEvent id="Event_0grjtyr" flowable:async="true">
+      <extensionElements />
+      <incoming>Flow_09k6ftf</incoming>
+    </endEvent>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PROCESS_PERMIT_REISSUE">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <omgdc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0gxgp57_di" bpmnElement="Activity_1e66bwi">
+        <omgdc:Bounds x="620" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1x9shc1_di" bpmnElement="Activity_1fw5ib6">
+        <omgdc:Bounds x="620" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_03w03k3_di" bpmnElement="Event_0grjtyr">
+        <omgdc:Bounds x="1222" y="202" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="935" y="248" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ho2ema_di" bpmnElement="Activity_022wprc">
+        <omgdc:Bounds x="360" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0v5k4mf_di" bpmnElement="Activity_14mjrv4">
+        <omgdc:Bounds x="1000" y="180" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_036xldn_di" bpmnElement="Event_15b3rt0">
+        <omgdc:Bounds x="392" y="142" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="435" y="173" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1hiqvh9_di" bpmnElement="Flow_1hiqvh9">
+        <omgdi:waypoint x="188" y="120" />
+        <omgdi:waypoint x="360" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nz40up_di" bpmnElement="Flow_1nz40up">
+        <omgdi:waypoint x="460" y="120" />
+        <omgdi:waypoint x="620" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v46q7k_di" bpmnElement="Flow_1v46q7k">
+        <omgdi:waypoint x="410" y="178" />
+        <omgdi:waypoint x="410" y="310" />
+        <omgdi:waypoint x="620" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06i99dp_di" bpmnElement="Flow_06i99dp">
+        <omgdi:waypoint x="720" y="120" />
+        <omgdi:waypoint x="850" y="120" />
+        <omgdi:waypoint x="850" y="220" />
+        <omgdi:waypoint x="1000" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1q13759_di" bpmnElement="Flow_1q13759">
+        <omgdi:waypoint x="720" y="310" />
+        <omgdi:waypoint x="850" y="310" />
+        <omgdi:waypoint x="850" y="220" />
+        <omgdi:waypoint x="1000" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09k6ftf_di" bpmnElement="Flow_09k6ftf">
+        <omgdi:waypoint x="1100" y="220" />
+        <omgdi:waypoint x="1222" y="220" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

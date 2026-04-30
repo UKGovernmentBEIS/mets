@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:design="http://flowable.org/design" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" design:palette="flowable-work-process-palette">
+  <process id="APPL_AMENDS" name="Process Amends Needed" isExecutable="true" flowable:candidateStarterGroups="flowableUser">
+    <extensionElements>
+      <flowable:processInstanceBusinessKey>#{businessKey}</flowable:processInstanceBusinessKey>
+      <design:stencilid>BPMNDiagram</design:stencilid>
+      <design:creationdate>2024-07-22T10:28:34.157Z</design:creationdate>
+      <design:modificationdate>2024-07-24T13:44:33.148Z</design:modificationdate>
+    </extensionElements>
+    <userTask id="WAIT_FOR_AMENDS" name="Regulator: Wait for Amends" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:task-candidates-type>all</flowable:task-candidates-type>
+        <design:stencilid>FormTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </userTask>
+    <userTask id="APPLICATION_AMENDS_SUBMIT" name="Operator: Submit amends" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:task-candidates-type>all</flowable:task-candidates-type>
+        <design:stencilid>FormTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </userTask>
+    <parallelGateway id="Gateway_16ppoex">
+      <extensionElements>
+        <design:stencilid>ParallelGateway</design:stencilid>
+      </extensionElements>
+    </parallelGateway>
+    <startEvent id="Event_0pj6y8s" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:work-form-field-validation>false</flowable:work-form-field-validation>
+        <design:stencilid>StartNoneEvent</design:stencilid>
+      </extensionElements>
+    </startEvent>
+    <endEvent id="Event_0cptmra">
+      <extensionElements>
+        <design:stencilid>EndTerminateEvent</design:stencilid>
+      </extensionElements>
+      <terminateEventDefinition />
+    </endEvent>
+    <sequenceFlow id="Flow_0npd9d6" sourceRef="WAIT_FOR_AMENDS" targetRef="Event_0cptmra">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_107j1d9" sourceRef="APPLICATION_AMENDS_SUBMIT" targetRef="Event_0cptmra">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0pz02k1" sourceRef="Gateway_16ppoex" targetRef="WAIT_FOR_AMENDS">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_01l6r9g" sourceRef="Gateway_16ppoex" targetRef="APPLICATION_AMENDS_SUBMIT">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1g70epv" sourceRef="Event_0pj6y8s" targetRef="Gateway_16ppoex">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_APPLICATION_AMENDS">
+    <bpmndi:BPMNPlane id="BPMNPlane_PROCESS_APPLICATION_AMENDS" bpmnElement="APPL_AMENDS">
+      <bpmndi:BPMNShape id="BPMNShape_WAIT_FOR_AMENDS" bpmnElement="WAIT_FOR_AMENDS">
+        <omgdc:Bounds x="380" y="60" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_APPLICATION_AMENDS_SUBMIT" bpmnElement="APPLICATION_AMENDS_SUBMIT">
+        <omgdc:Bounds x="380" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Gateway_16ppoex" bpmnElement="Gateway_16ppoex">
+        <omgdc:Bounds x="275" y="165" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Event_0pj6y8s" bpmnElement="Event_0pj6y8s">
+        <omgdc:Bounds x="152" y="170" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Event_0cptmra" bpmnElement="Event_0cptmra">
+        <omgdc:Bounds x="546" y="171" width="28" height="28" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0npd9d6" bpmnElement="Flow_0npd9d6" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="480" y="100" />
+        <omgdi:waypoint x="560" y="100" />
+        <omgdi:waypoint x="560" y="171" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_107j1d9" bpmnElement="Flow_107j1d9" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="480" y="280" />
+        <omgdi:waypoint x="560" y="280" />
+        <omgdi:waypoint x="560" y="199" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0pz02k1" bpmnElement="Flow_0pz02k1" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="295" y="165" />
+        <omgdi:waypoint x="295" y="100" />
+        <omgdi:waypoint x="380" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_01l6r9g" bpmnElement="Flow_01l6r9g" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="295" y="205" />
+        <omgdi:waypoint x="295" y="280" />
+        <omgdi:waypoint x="380" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1g70epv" bpmnElement="Flow_1g70epv" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="182" y="185" />
+        <omgdi:waypoint x="275" y="185" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

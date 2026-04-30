@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog logicalFilePath="v0.2.0/changelog_flowable_ddl.xml"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_flowable_ddl" author="P35066">
+        <sql>
+            SET search_path TO sch_flowable;
+        </sql>
+        <sqlFile encoding="utf8" splitStatements="true" stripComments="true" path="org/flowable/common/db/create/flowable.postgres.create.common.sql" />
+        <sqlFile encoding="utf8" splitStatements="true" stripComments="true" path="org/flowable/db/create/flowable.postgres.create.engine.sql" />
+        <sqlFile encoding="utf8" splitStatements="true" stripComments="true" path="org/flowable/db/create/flowable.postgres.create.history.sql" />
+        <sql>
+            SET search_path TO public;
+        </sql>
+        <rollback>
+        	<sql>
+	            SET search_path TO sch_flowable;
+	        </sql>
+        	<sqlFile encoding="utf8" splitStatements="true" stripComments="true" path="org/flowable/db/drop/flowable.postgres.drop.history.sql" />
+        	<sqlFile encoding="utf8" splitStatements="true" stripComments="true" path="org/flowable/db/drop/flowable.postgres.drop.engine.sql" />
+            <sqlFile encoding="utf8" splitStatements="true" stripComments="true" path="org/flowable/common/db/drop/flowable.postgres.drop.common.sql" />
+            <sql>
+	            SET search_path TO public;
+	        </sql>
+        </rollback>
+    </changeSet>
+    
+</databaseChangeLog>

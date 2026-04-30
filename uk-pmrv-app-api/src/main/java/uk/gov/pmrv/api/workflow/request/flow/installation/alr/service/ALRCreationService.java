@@ -2,6 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.alr.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.utils.DateService;
@@ -32,6 +33,11 @@ public class ALRCreationService {
     private final ALRDueDateService alrDueDateService;
     private final DateService dateService;
     private final StartProcessRequestService startProcessRequestService;
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Request createALRInNewTransaction(Long accountId, boolean isFinal,  Optional<Date> alrExpirationDateOpt) {
+        return createALR(accountId, isFinal, alrExpirationDateOpt);
+    }
 
     @Transactional
     public Request createALR(Long accountId, boolean isFinal,  Optional<Date> alrExpirationDateOpt) {

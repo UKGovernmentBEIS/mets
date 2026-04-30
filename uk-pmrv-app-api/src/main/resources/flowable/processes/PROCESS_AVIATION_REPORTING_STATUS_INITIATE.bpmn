@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:design="http://flowable.org/design" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Flowable Design" exporterVersion="2025.1.03" design:palette="flowable-work-process-palette">
+  <process id="PROCESS_AVIATION_REPORTING_STATUS_INITIATE" name="Initiate the new reporting status row for aviation accounts" isExecutable="true">
+    <extensionElements>
+      <design:stencilid><![CDATA[BPMNDiagram]]></design:stencilid>
+      <design:creationdate><![CDATA[2026-02-02T07:20:13.260Z]]></design:creationdate>
+      <design:modificationdate><![CDATA[2026-02-02T11:12:56.228Z]]></design:modificationdate>
+    </extensionElements>
+    <serviceTask id="Activity_00ly68k" name="Add Reporting Status For New Year" flowable:delegateExpression="#{aviationAccountReportingStatusHandlerFlowable}">
+      <extensionElements>
+        <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <startEvent id="initiate" flowable:initiator="initiator" isInterrupting="true">
+      <extensionElements>
+        <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+        <design:stencilid><![CDATA[StartTimerEvent]]></design:stencilid>
+      </extensionElements>
+      <timerEventDefinition>
+        <timeCycle>R/2025-01-01T00:05:00/P1Y</timeCycle>
+      </timerEventDefinition>
+    </startEvent>
+    <endEvent id="Event_1xbvtyg">
+      <extensionElements>
+        <design:stencilid><![CDATA[EndNoneEvent]]></design:stencilid>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="Flow_1vc6u6t" sourceRef="Activity_00ly68k" targetRef="Event_1xbvtyg">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0dxofed" sourceRef="initiate" targetRef="Activity_00ly68k">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_AVIATION_REPORTING_STATUS_INITIATE">
+    <bpmndi:BPMNPlane bpmnElement="PROCESS_AVIATION_REPORTING_STATUS_INITIATE" id="BPMNPlane_PROCESS_AVIATION_REPORTING_STATUS_INITIATE">
+      <bpmndi:BPMNShape bpmnElement="Activity_00ly68k" id="BPMNShape_Activity_00ly68k">
+        <omgdc:Bounds height="80.0" width="100.0" x="370.0" y="77.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="initiate" id="BPMNShape_initiate">
+        <omgdc:Bounds height="30.0" width="30.0" x="182.0" y="102.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Event_1xbvtyg" id="BPMNShape_Event_1xbvtyg">
+        <omgdc:Bounds height="28.0" width="28.0" x="626.0" y="103.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1vc6u6t" id="BPMNEdge_Flow_1vc6u6t" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="470.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="626.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0dxofed" id="BPMNEdge_Flow_0dxofed" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="212.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="370.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

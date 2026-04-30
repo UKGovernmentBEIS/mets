@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:design="http://flowable.org/design" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" design:palette="flowable-work-process-palette">
+  <process id="SYSTEM_MESSAGE_NOTIFICATION" name="Closing a system message notification" isExecutable="true">
+    <extensionElements>
+      <design:stencilid>BPMNDiagram</design:stencilid>
+      <design:creationdate>2024-07-22T10:28:47.611Z</design:creationdate>
+      <design:modificationdate>2024-07-22T10:28:47.611Z</design:modificationdate>
+    </extensionElements>
+    <startEvent id="SYSTEM_MESSAGE_NOTIFICATION_START_EVENT" name="Start Event">
+      <extensionElements>
+        <design:stencilid>StartNoneEvent</design:stencilid>
+      </extensionElements>
+    </startEvent>
+    <userTask id="SYSTEM_MESSAGE_NOTIFICATION_TASK" name="System Message Notification Task">
+      <extensionElements>
+        <design:stencilid>FormTask</design:stencilid>
+        <design:stencilsuperid>Task</design:stencilsuperid>
+      </extensionElements>
+    </userTask>
+    <endEvent id="SYSTEM_MESSAGE_NOTIFICATION_END_EVENT" name="End Event">
+      <extensionElements>
+        <design:stencilid>EndNoneEvent</design:stencilid>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="Flow_1o4wnjf" sourceRef="SYSTEM_MESSAGE_NOTIFICATION_START_EVENT" targetRef="SYSTEM_MESSAGE_NOTIFICATION_TASK">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0hid0ok" sourceRef="SYSTEM_MESSAGE_NOTIFICATION_TASK" targetRef="SYSTEM_MESSAGE_NOTIFICATION_END_EVENT">
+      <extensionElements>
+        <design:stencilid>SequenceFlow</design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_SYSTEM_MESSAGE_NOTIFICATION">
+    <bpmndi:BPMNPlane id="BPMNPlane_SYSTEM_MESSAGE_NOTIFICATION" bpmnElement="SYSTEM_MESSAGE_NOTIFICATION">
+      <bpmndi:BPMNShape id="BPMNShape_SYSTEM_MESSAGE_NOTIFICATION_START_EVENT" bpmnElement="SYSTEM_MESSAGE_NOTIFICATION_START_EVENT">
+        <omgdc:Bounds x="179" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="170" y="142" width="56" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_SYSTEM_MESSAGE_NOTIFICATION_TASK" bpmnElement="SYSTEM_MESSAGE_NOTIFICATION_TASK">
+        <omgdc:Bounds x="310" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_SYSTEM_MESSAGE_NOTIFICATION_END_EVENT" bpmnElement="SYSTEM_MESSAGE_NOTIFICATION_END_EVENT">
+        <omgdc:Bounds x="512" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="505" y="142" width="52" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1o4wnjf" bpmnElement="Flow_1o4wnjf" flowable:sourceDockerX="18.0" flowable:sourceDockerY="18.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="215" y="117" />
+        <omgdi:waypoint x="310" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0hid0ok" bpmnElement="Flow_0hid0ok" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="18.0" flowable:targetDockerY="18.0">
+        <omgdi:waypoint x="410" y="117" />
+        <omgdi:waypoint x="512" y="117" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

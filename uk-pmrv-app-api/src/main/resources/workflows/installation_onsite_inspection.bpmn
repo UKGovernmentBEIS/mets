@@ -173,16 +173,16 @@
       <bpmn:sequenceFlow id="Flow_1x5z27i" sourceRef="Activity_12htnks" targetRef="Gateway_0dcp31n" />
       <bpmn:sequenceFlow id="Flow_0kg9gvk" sourceRef="Gateway_0dcp31n" targetRef="Event_0ldhsmc" />
     </bpmn:subProcess>
-    <bpmn:sequenceFlow id="Flow_0i6s8af" sourceRef="Activity_1xna560" targetRef="INSTALLATION_AUDIT_ARE_FOLLOWUP_ACTIONS_REQUIRED" />
+    <bpmn:sequenceFlow id="Flow_0i6s8af" sourceRef="Activity_1xna560" targetRef="INSTALLATION_ONSITE_INSPECTION_ARE_FOLLOWUP_ACTIONS_REQUIRED" />
     <bpmn:sequenceFlow id="Flow_1aasi5h" sourceRef="Activity_1xv6af7" targetRef="Activity_0ady72h" />
     <bpmn:sequenceFlow id="Flow_1trxvmh" sourceRef="Activity_0ady72h" targetRef="Event_1uays7c" />
-    <bpmn:exclusiveGateway id="INSTALLATION_AUDIT_ARE_FOLLOWUP_ACTIONS_REQUIRED" name="Are followup actions required ? " default="Flow_0qhddo5">
+    <bpmn:exclusiveGateway id="INSTALLATION_ONSITE_INSPECTION_ARE_FOLLOWUP_ACTIONS_REQUIRED" name="Are followup actions required ? " default="Flow_0qhddo5">
       <bpmn:incoming>Flow_0i6s8af</bpmn:incoming>
       <bpmn:outgoing>Flow_0qhddo5</bpmn:outgoing>
       <bpmn:outgoing>Flow_0cmfgdu</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0qhddo5" sourceRef="INSTALLATION_AUDIT_ARE_FOLLOWUP_ACTIONS_REQUIRED" targetRef="Activity_1xv6af7" />
-    <bpmn:sequenceFlow id="Flow_0cmfgdu" sourceRef="INSTALLATION_AUDIT_ARE_FOLLOWUP_ACTIONS_REQUIRED" targetRef="Activity_0ady72h">
+    <bpmn:sequenceFlow id="Flow_0qhddo5" sourceRef="INSTALLATION_ONSITE_INSPECTION_ARE_FOLLOWUP_ACTIONS_REQUIRED" targetRef="Activity_1xv6af7" />
+    <bpmn:sequenceFlow id="Flow_0cmfgdu" sourceRef="INSTALLATION_ONSITE_INSPECTION_ARE_FOLLOWUP_ACTIONS_REQUIRED" targetRef="Activity_0ady72h">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${installationInspectionAreFollowupActionsRequired=='false'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
   </bpmn:process>
@@ -227,7 +227,7 @@
         <dc:Bounds x="4270" y="390" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0f4ethb" bpmnElement="INSTALLATION_AUDIT_ARE_FOLLOWUP_ACTIONS_REQUIRED" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="BPMNShape_0f4ethb" bpmnElement="INSTALLATION_ONSITE_INSPECTION_ARE_FOLLOWUP_ACTIONS_REQUIRED" isMarkerVisible="true">
         <dc:Bounds x="1665" y="405" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1587" y="396" width="88" height="27" />

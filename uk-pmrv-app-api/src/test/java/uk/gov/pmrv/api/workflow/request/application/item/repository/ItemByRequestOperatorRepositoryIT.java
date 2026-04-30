@@ -14,6 +14,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.workflow.bpmn.WorkflowEngineType;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -106,6 +107,7 @@ class ItemByRequestOperatorRepositoryIT extends AbstractContainerBaseTest {
                 .accountId(accountId)
                 .verificationBodyId(vbId)
                 .creationDate(creationDate)
+                .engine(WorkflowEngineType.CAMUNDA)
                 .build();
 
         entityManager.persist(request);

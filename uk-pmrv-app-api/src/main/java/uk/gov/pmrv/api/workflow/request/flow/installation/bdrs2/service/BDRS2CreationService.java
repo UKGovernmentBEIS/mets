@@ -2,6 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.utils.DateService;
@@ -33,7 +34,7 @@ public class BDRS2CreationService {
     private final DateService dateService;
     private final StartProcessRequestService startProcessRequestService;
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Request createBDRS2(Long accountId) {
         Year bdrs2Year = dateService.getYear();
 
@@ -46,8 +47,7 @@ public class BDRS2CreationService {
         return createBDRS2ForYear(accountId, bdrs2Year, bdrs2DueDateService.generateDueDate());
     }
 
-    @Transactional
-    public Request createBDRS2ForYear(Long accountId, Year bdrs2Year, Date expirationDate) {
+    private Request createBDRS2ForYear(Long accountId, Year bdrs2Year, Date expirationDate) {
         // Validate if BDRS2 is allowed
         RequestCreateValidationResult validationResult = bdrs2CreationValidatorService.validateYear(accountId, bdrs2Year);
         if(!validationResult.isValid()) {

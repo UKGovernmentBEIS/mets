@@ -2,6 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.utils.DateService;
@@ -36,7 +37,7 @@ public class WasteQDRCreationService {
     private final DateService dateService;
     private final StartProcessRequestService startProcessRequestService;
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Request createWasteQDR(Long accountId) {
 
         Date expirationDate = wasteQDRDueDateService.generateDueDate();
@@ -54,8 +55,8 @@ public class WasteQDRCreationService {
         return createWasteQDRForYearQuarter(accountId, wasteQDRyear, quarter, expirationDate);
     }
 
-    @Transactional
-    public Request createWasteQDRForYearQuarter(Long accountId, Year wasteQDRYear, WasteQDRQuarter quarter, Date expirationDate) {
+
+    private Request createWasteQDRForYearQuarter(Long accountId, Year wasteQDRYear, WasteQDRQuarter quarter, Date expirationDate) {
         // Validate if Waste QDR is allowed
         RequestCreateValidationResult validationYearQuarterResult = wasteQDRCreationValidationService.validateYearQuarter(accountId, wasteQDRYear, quarter);
         if(!validationYearQuarterResult.isValid()) {

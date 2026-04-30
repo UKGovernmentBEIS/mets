@@ -70,6 +70,6 @@ public class PermitTransferBInitiateRequestService {
         final String transferBRequestId = transferBRequest.getId();
         transferARequestPayload.setRelatedRequestId(transferBRequestId);
         
-        return workflowService.constructBusinessKey(transferBRequestId);
+        return WorkflowService.constructBusinessKey(transferBRequestId);
     }
 }

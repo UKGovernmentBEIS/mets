@@ -38,6 +38,10 @@ public class RequestQueryService {
     public List<Request> findInProgressRequestsByAccount(Long accountId){
         return requestRepository.findByAccountIdAndStatusAndTypeNotNotification(accountId, RequestStatus.IN_PROGRESS);
     }
+    
+    public Request findByProcessInstanceId(String processInstanceId) {
+    	return requestRepository.findByProcessInstanceId(processInstanceId);
+    }
 
     @Transactional(readOnly = true)
     public List<Request> findRequestsByAccountIdAndType(Long accountId, RequestType type){
