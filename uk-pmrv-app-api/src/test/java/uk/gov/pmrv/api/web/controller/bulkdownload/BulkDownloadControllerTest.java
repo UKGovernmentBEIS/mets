@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.token.FileToken;
 import uk.gov.pmrv.api.account.fileattachment.domain.AccountFileAttachmentWorkflow;
 import uk.gov.pmrv.api.bulkdownload.core.service.BulkDownloadDelegator;
@@ -143,7 +142,6 @@ class BulkDownloadControllerTest {
     void bulkDownloadExport_returnsZipStreamWithHeaders() throws Exception {
         StreamingResponseBody body =
                 outputStream -> outputStream.write("ZIP".getBytes());
-        AppUser appUser = AppUser.builder().build();
 
         BulkDownloadResponse response =
                 BulkDownloadResponse.builder()

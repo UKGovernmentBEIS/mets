@@ -27,20 +27,24 @@ public class BulkDownloadGenerateFileService {
 
     public FileToken generateBulkDownloadAttachmentToken(String workflow, String period, AppUser appUser) {
 
-        log.info(
-            "User {} {} generated BULK DOWNLOAD token for download on workflow [{}], period [{}] at [{}]",
-            appUser.getFirstName(),
-            appUser.getLastName(),
-            workflow,
-            period,
-            Instant.now()
-        );
-
         Map<PmrvJwtTokenAction, String> claims = new HashMap<>();
         claims.put(PmrvJwtTokenAction.BULK_DOWNLOAD_WORKFLOW,workflow);
         claims.put(PmrvJwtTokenAction.BULK_DOWNLOAD_PERIOD,period);
         claims.put(PmrvJwtTokenAction.BULK_DOWNLOAD_COMPETENT_AUTHORITY, appUser.getCompetentAuthority().toString());
-        return pmrvJwtTokenService.generateToken(claims);
+
+        FileToken fileToken = pmrvJwtTokenService.generateToken(claims);
+
+        log.info(
+                "User {} {} generated BULK DOWNLOAD token [{}], on workflow [{}], for period [{}], at [{}].",
+                appUser.getFirstName(),
+                appUser.getLastName(),
+                fileToken.getToken(),
+                workflow,
+                period,
+                Instant.now()
+        );
+
+        return fileToken;
     }
 
     public StreamingResponseBody streamWorkflowPeriodData(String workflow, String period, CompetentAuthorityEnum competentAuthority) {
@@ -51,6 +55,8 @@ public class BulkDownloadGenerateFileService {
             .orElseThrow(() -> new IllegalArgumentException("No service defined for workflow: " + workflow));
 
         return out -> {
+            out.flush();
+
             final ZipOutputStream zipOut = new ZipOutputStream(out);
 
             service.generateFile(zipOut, period, competentAuthority);
@@ -60,6 +66,7 @@ public class BulkDownloadGenerateFileService {
     }
 
     public BulkDownloadResponse extractBulkDownloadResponseFromToken(String token) {
+
         Map<PmrvJwtTokenAction, String> claims =
                 pmrvJwtTokenService.resolveTokenClaims(
                         token,
@@ -72,6 +79,15 @@ public class BulkDownloadGenerateFileService {
 
         String period = claims.get(PmrvJwtTokenAction.BULK_DOWNLOAD_PERIOD);
         String workflow = claims.get(PmrvJwtTokenAction.BULK_DOWNLOAD_WORKFLOW);
+
+        log.info(
+                "User initiated BULK DOWNLOAD process with token [{}], on workflow [{}], for period [{}], at [{}].",
+                token,
+                workflow,
+                period,
+                Instant.now()
+        );
+
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.valueOf(claims.get(PmrvJwtTokenAction.BULK_DOWNLOAD_COMPETENT_AUTHORITY));
 
         StreamingResponseBody stream = this.streamWorkflowPeriodData(workflow, period, competentAuthority);

@@ -29,7 +29,7 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.anySet;
 
 @ExtendWith(MockitoExtension.class)
-public class BulkDownloadGenerateFileServiceTest {
+class BulkDownloadGenerateFileServiceTest {
 
     @Mock
     private PmrvJwtTokenService pmrvJwtTokenService;

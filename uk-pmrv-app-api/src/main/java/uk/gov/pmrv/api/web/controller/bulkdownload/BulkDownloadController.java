@@ -96,8 +96,8 @@ public class BulkDownloadController {
     @ApiResponse(responseCode = "400", description = SwaggerApiInfo.BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "404", description = SwaggerApiInfo.NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    public ResponseEntity<StreamingResponseBody> bulkDownloadExport(
-            @PathVariable("token") @Parameter(description = "The file attachment token", required = true) @NotEmpty String token) {
+    public ResponseEntity<StreamingResponseBody> bulkDownloadExport(@PathVariable @Parameter(description = "The file attachment token", required = true) @NotEmpty String token) {
+
         BulkDownloadResponse response = bulkDownloadGenerateFileService.extractBulkDownloadResponseFromToken(token);
 
         return ResponseEntity.ok()

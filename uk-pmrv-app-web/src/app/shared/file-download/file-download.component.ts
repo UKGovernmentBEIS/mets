@@ -1,4 +1,3 @@
-import { HttpResponse } from '@angular/common/http';
 import {
   AfterViewChecked,
   ChangeDetectionStrategy,
@@ -16,14 +15,12 @@ import {
   asyncScheduler,
   combineLatest,
   expand,
-  iif,
   map,
   Observable,
   of,
   SchedulerLike,
   shareReplay,
   switchMap,
-  tap,
   timer,
 } from 'rxjs';
 
@@ -53,7 +50,9 @@ export const FILE_DOWNLOAD_SCHEDULER = new InjectionToken<SchedulerLike>('FILE_D
   template: `
     <h1 class="govuk-heading-l">Your download has started</h1>
     <p class="govuk-body">You should see your downloads in the downloads folder.</p>
-    <a govukLink [href]="url$ | async" [download]="streamFilename()" #anchor>Click to restart download if it fails</a>
+    <a govukLink [href]="url$ | async" [attr.download]="streamFilename()" #anchor>
+      Click to restart download if it fails
+    </a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -63,21 +62,7 @@ export class FileDownloadComponent implements AfterViewChecked {
   private hasDownloadedOnce = false;
   private fileDownloadAttachmentPath = `${this.fileAttachmentsService.configuration.basePath}/v1.0/file-attachments/`;
   private fileDownloadDocumentPath = `${this.fileDocumentsService.configuration.basePath}/v1.0/file-documents/`;
-
-  private downloadBlob(blob: Blob, filename: string) {
-    if (!this.hasDownloadedOnce) {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      this.hasDownloadedOnce = true;
-      URL.revokeObjectURL(url);
-    }
-  }
+  private bulkDownloadFilePath = `${this.bulkDownloadService.configuration.basePath}/v1.0/bulk-download/file/`;
 
   streamFilename = signal(null);
 
@@ -105,34 +90,19 @@ export class FileDownloadComponent implements AfterViewChecked {
         ),
       ]),
     ),
-    switchMap(([fileType, fileToken]) =>
-      iif(
-        () => fileType !== 'stream',
+    switchMap(([fileType, fileToken]) => {
+      const token = encodeURIComponent(String(fileToken.token));
+      if (fileType === 'stream') {
+        this.streamFilename.set('bulk-export.zip');
+        return of(`${this.bulkDownloadFilePath}${token}`);
+      }
 
-        // TRUE: return a URL string (or null) as an Observable
-        of(
-          fileType === 'attachment'
-            ? `${this.fileDownloadAttachmentPath}${encodeURIComponent(String(fileToken.token))}`
-            : `${this.fileDownloadDocumentPath}${encodeURIComponent(String(fileToken.token))}`,
-        ),
-
-        // FALSE: stream download side-effect; return something for url$ (null is typical)
-        this.bulkDownloadService
-          .bulkDownloadExport(fileToken.token, 'response', null, { httpHeaderAccept: 'application/octet-stream' })
-          .pipe(
-            tap((res: HttpResponse<Blob>) => {
-              const blob = res.body;
-              if (!blob) throw new Error('Empty body');
-
-              const filename = extractFilename(res, 'bulk-export.zip');
-              this.streamFilename.set(filename);
-              this.downloadBlob(blob, filename);
-            }),
-            map((res) => URL.createObjectURL(res.body)),
-          ),
-      ),
-    ),
-
+      return of(
+        fileType === 'attachment'
+          ? `${this.fileDownloadAttachmentPath}${token}`
+          : `${this.fileDownloadDocumentPath}${token}`,
+      );
+    }),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
@@ -153,7 +123,8 @@ export class FileDownloadComponent implements AfterViewChecked {
   ngAfterViewChecked(): void {
     if (
       (this.anchor.nativeElement.href.includes(this.fileDownloadAttachmentPath) ||
-        this.anchor.nativeElement.href.includes(this.fileDownloadDocumentPath)) &&
+        this.anchor.nativeElement.href.includes(this.fileDownloadDocumentPath) ||
+        this.anchor.nativeElement.href.includes(this.bulkDownloadFilePath)) &&
       !this.hasDownloadedOnce
     ) {
       this.anchor.nativeElement.click();
@@ -236,23 +207,4 @@ export class FileDownloadComponent implements AfterViewChecked {
       fileType: 'attachment',
     };
   }
-}
-
-function extractFilename(res: HttpResponse<Blob>, fallback = 'download.zip'): string {
-  const cd = res.headers.get('content-disposition');
-  if (!cd) return fallback;
-
-  // RFC 5987 / 6266 (filename*)
-  const utf8Match = cd.match(/filename\*\s*=\s*UTF-8''([^;]+)/i);
-  if (utf8Match) {
-    return decodeURIComponent(utf8Match[1]);
-  }
-
-  // Basic filename=
-  const asciiMatch = cd.match(/filename\s*=\s*"?([^";]+)"?/i);
-  if (asciiMatch) {
-    return asciiMatch[1];
-  }
-
-  return fallback;
 }

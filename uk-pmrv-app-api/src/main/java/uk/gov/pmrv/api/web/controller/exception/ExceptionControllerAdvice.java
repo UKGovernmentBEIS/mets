@@ -1,6 +1,7 @@
 package uk.gov.pmrv.api.web.controller.exception;
 
 import jakarta.validation.ConstraintViolationException;
+import java.io.IOException;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.validator.internal.metadata.descriptor.ConstraintDescriptorImpl;
 import org.hibernate.validator.internal.metadata.location.ConstraintLocation;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -181,6 +183,24 @@ public class ExceptionControllerAdvice {
         log.error("No Resource Found Exception:", ExceptionUtils.getRootCause(e));
 
         return ErrorUtil.getErrorResponse(new Object[]{}, ErrorCode.RESOURCE_NOT_FOUND);
+    }
+
+    @ExceptionHandler(SecurityException.class)
+    public ResponseEntity<ErrorResponse> handleSecurityException(SecurityException ex) {
+
+        log.error("File blocked by the file content security filter: {}", ex.getMessage());
+
+        return ErrorUtil.getErrorResponse(new Object[]{}, ErrorCode.INVALID_FILE_TYPE);
+    }
+
+    @ExceptionHandler(AsyncRequestNotUsableException.class)
+    public void handleAsyncRequestNotUsable(AsyncRequestNotUsableException e) {
+        log.debug("Client disconnected during async streaming: {}", e.getMessage());
+    }
+
+    @ExceptionHandler(IOException.class)
+    public void handleStreamingIOException(IOException e) {
+        log.debug("I/O error during streaming (client likely disconnected): {}", e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
