@@ -35,11 +35,12 @@ export class AlrSendReportGuard {
           (payload.regulatorReviewGroupDecisions?.ALR as ALRAlrDataRegulatorReviewDecision)
             ?.details as ALRAlrDataRegulatorReviewOperatorAmendsNeededDecisionDetails
         )?.verificationRequired;
+        const verificationPerformed = payload.verificationPerformed;
 
         return submitWizardComplete(payload)
           ? regulatorVerificationRequired === undefined
             ? iif(
-                () => payload.verificationPerformed,
+                () => verificationPerformed,
                 of(true),
                 this.accountVerificationBodyService
                   .getVerificationBodyOfAccount(accountId)
@@ -58,7 +59,7 @@ export class AlrSendReportGuard {
                     ),
                   )
               : of(
-                  hasSendTo
+                  hasSendTo || verificationPerformed
                     ? true
                     : this.router.parseUrl(`/tasks/${route.paramMap.get('taskId')}/alr/submit/send-report/question`),
                 )

@@ -32,7 +32,9 @@ import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerC
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationData;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
 import uk.gov.pmrv.api.aviationreporting.corsia.service.AviationAerCorsiaSubmittedEmissionsCalculationService;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.AviationCorsiaOperatorDetails;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyDetailsQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -74,12 +76,20 @@ class AviationAerCorsiaApplicationVerificationSubmitInitializerTest {
                 .operatorName("name")
                 .build())
             .build();
-        
+
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
+        VerificationBodyDetails verificationBodyDetails = VerificationBodyDetails.builder()
+                .name("vb_name")
+                .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
+                .build();
+
         AviationAerCorsiaVerificationReport requestVerificationReport = AviationAerCorsiaVerificationReport.builder()
         		.verificationBodyId(requestVBId)
-        		.verificationBodyDetails(VerificationBodyDetails.builder()
-        				.accreditationReferenceNumber("old vb details")
-        				.build())
+        		.verificationBodyDetails(verificationBodyDetails)
         		.verificationData(AviationAerCorsiaVerificationData.builder()
         				.generalInformation(AviationAerCorsiaGeneralInformation.builder()
         						.operatorData("operatorData")
@@ -119,9 +129,14 @@ class AviationAerCorsiaApplicationVerificationSubmitInitializerTest {
                 .build();
         when(aviationAerCorsiaEmissionsCalculationService.calculateTotalSubmittedEmissions(aer, Year.of(2022)))
         	.thenReturn(totalEmissions);
-        
+
+        VerificationBodyEmissionSchemeDTO latestVerificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         VerificationBodyDetails latestVerificationBodyDetails = VerificationBodyDetails.builder()
-                .accreditationReferenceNumber("accr_ref_number")
+                .verificationBodyEmissionSchemeDTOS(Set.of(latestVerificationBodyEmissionSchemeDTO))
                 .build();
         when(verificationBodyDetailsQueryService.getVerificationBodyDetails(requestVBId))
             .thenReturn(Optional.of(latestVerificationBodyDetails));
@@ -200,12 +215,20 @@ class AviationAerCorsiaApplicationVerificationSubmitInitializerTest {
                   ))
                   .build())
             .build();
-        
+
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
+        VerificationBodyDetails verificationBodyDetails = VerificationBodyDetails.builder()
+                .name("vb_name")
+                .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
+                .build();
+
         AviationAerCorsiaVerificationReport requestVerificationReport = AviationAerCorsiaVerificationReport.builder()
         		.verificationBodyId(reportVBId)
-        		.verificationBodyDetails(VerificationBodyDetails.builder()
-        				.accreditationReferenceNumber("old vb details")
-        				.build())
+        		.verificationBodyDetails(verificationBodyDetails)
         		.verificationData(AviationAerCorsiaVerificationData.builder()
         				.generalInformation(AviationAerCorsiaGeneralInformation.builder()
         						.operatorData("operatorData")
@@ -245,9 +268,14 @@ class AviationAerCorsiaApplicationVerificationSubmitInitializerTest {
                 .build();
         when(aviationAerCorsiaEmissionsCalculationService.calculateTotalSubmittedEmissions(aer, Year.of(2022)))
         	.thenReturn(totalEmissions);
-        
+
+        VerificationBodyEmissionSchemeDTO latestVerificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         VerificationBodyDetails latestVerificationBodyDetails = VerificationBodyDetails.builder()
-                .accreditationReferenceNumber("accr_ref_number")
+                .verificationBodyEmissionSchemeDTOS(Set.of(latestVerificationBodyEmissionSchemeDTO))
                 .build();
         when(verificationBodyDetailsQueryService.getVerificationBodyDetails(requestVBId))
             .thenReturn(Optional.of(latestVerificationBodyDetails));
@@ -290,12 +318,19 @@ class AviationAerCorsiaApplicationVerificationSubmitInitializerTest {
                 .operatorName("name")
                 .build())
             .build();
-        
+
+        VerificationBodyEmissionSchemeDTO latestVerificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
+        VerificationBodyDetails latestVerificationBodyDetails = VerificationBodyDetails.builder()
+                .verificationBodyEmissionSchemeDTOS(Set.of(latestVerificationBodyEmissionSchemeDTO))
+                .build();
+
         AviationAerCorsiaVerificationReport requestVerificationReport = AviationAerCorsiaVerificationReport.builder()
         		.verificationBodyId(requestVBId)
-        		.verificationBodyDetails(VerificationBodyDetails.builder()
-        				.accreditationReferenceNumber("old vb details")
-        				.build())
+        		.verificationBodyDetails(latestVerificationBodyDetails)
         		.verificationData(AviationAerCorsiaVerificationData.builder()
         				.generalInformation(AviationAerCorsiaGeneralInformation.builder()
         						.operatorData("operatorData")
@@ -338,12 +373,17 @@ class AviationAerCorsiaApplicationVerificationSubmitInitializerTest {
                 .build();
         when(aviationAerCorsiaEmissionsCalculationService.calculateTotalSubmittedEmissions(aer, Year.of(2022)))
         	.thenReturn(totalEmissions);
-        
-        VerificationBodyDetails latestVerificationBodyDetails = VerificationBodyDetails.builder()
-                .accreditationReferenceNumber("accr_ref_number")
+
+        VerificationBodyEmissionSchemeDTO latestVerificationBodyEmissionSchemeDTO2 = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
+        VerificationBodyDetails latestVerificationBodyDetails2 = VerificationBodyDetails.builder()
+                .verificationBodyEmissionSchemeDTOS(Set.of(latestVerificationBodyEmissionSchemeDTO2))
                 .build();
         when(verificationBodyDetailsQueryService.getVerificationBodyDetails(requestVBId))
-            .thenReturn(Optional.of(latestVerificationBodyDetails));
+            .thenReturn(Optional.of(latestVerificationBodyDetails2));
        
         //invoke
         RequestTaskPayload result = initializer.initializePayload(request);

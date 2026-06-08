@@ -1,5 +1,7 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { AerModule } from '@actions/aer/aer.module';
 
 import { VerifierAssessmentReportComponent } from './verifier-assessment-report.component';
 
@@ -9,8 +11,8 @@ describe('VerifierAssessmentReportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [VerifierAssessmentReportComponent],
-      imports: [HttpClientTestingModule],
+      providers: [provideHttpClientTesting()],
+      imports: [AerModule],
     }).compileComponents();
   });
 

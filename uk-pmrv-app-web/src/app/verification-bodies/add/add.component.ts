@@ -8,7 +8,7 @@ import { BackLinkService } from '@shared/back-link/back-link.service';
 
 import { GovukValidators } from 'govuk-components';
 
-import { VerificationBodiesService } from 'pmrv-api';
+import { VerificationBodiesService, VerificationBodyEmissionSchemeDTO } from 'pmrv-api';
 
 import { VERIFICATION_BODY_FORM, verificationBodyFormFactory } from '../form/form.factory';
 
@@ -73,10 +73,15 @@ export class AddComponent implements OnInit {
       this.confirmedVBname$ = this.verificationBodiesService
         .createVerificationBody({
           name: vbName,
-          accreditationReferenceNumber: this.form.get('details.accreditationRefNum').value,
           address: this.form.get('details.address').value,
-          emissionTradingSchemes: this.form.get('types').value,
           adminVerifierUserInvitation: this.form.get('adminVerifierUserInvitation').value,
+          verificationBodyEmissionSchemes: this.form
+            .get('types')
+            .value.map((type: VerificationBodyEmissionSchemeDTO['emissionTradingScheme']) => ({
+              emissionTradingScheme: type,
+              accreditationReferenceNumber: this.form.get(`accreditationRefNum_${type}`).value,
+              accreditationName: this.form.get(`accreditationName_${type}`).value,
+            })),
         })
         .pipe(
           first(),

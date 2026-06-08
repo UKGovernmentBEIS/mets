@@ -8,12 +8,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
+import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountReportingObligationFirstYearDTO;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountUpdateService;
-import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateCommencementDateDTO;
+import uk.gov.pmrv.api.account.service.AccountDetailsHistoryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
@@ -26,6 +28,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.service.AviationAerCreationService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceUkEtsApplicationReviewRequestTaskPayload;
 
 import java.time.LocalDate;
@@ -38,6 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -63,22 +67,28 @@ public class AviationAccountEmpCommandOrchestratorTest {
     @Mock
     private AviationAccountReportingStatusQueryOrchestrator aviationAccountReportingStatusQueryOrchestrator;
 
+    @Mock
+    private AccountDetailsHistoryService accountDetailsHistoryService;
+
+    @Mock AviationAerCreationService aviationAerCreationService;
+
     @InjectMocks
     private AviationAccountEmpCommandOrchestrator aviationAccountEmpCommandOrchestrator;
 
     @Test
-    void updateAccountCommencementDate_uk_ets_aviation_with_emp() {
+    void updateAccountFirstYearOfReportingObligation_uk_ets_aviation_with_emp() {
 
         Long accountId = 1L;
         LocalDate commencementDate = LocalDate.of(2023, 1, 1);
-        AccountUpdateCommencementDateDTO commencementDateDTO = buildCommencementDateDTO(commencementDate);
+        AviationAccountReportingObligationFirstYearDTO commencementDateDTO = buildCommencementDateDTO(commencementDate);
         AviationAccountDTO aviationAccountDTO = buildAviationAccountDTO(EmissionTradingScheme.UK_ETS_AVIATION);
         EmissionsMonitoringPlanUkEtsDTO empDTO = buildEmissionsMonitoringPlanUkEtsDTO();
+        AppUser appUser = new AppUser();
 
         when(aviationAccountQueryService.getAviationAccountDTOById(accountId)).thenReturn(aviationAccountDTO);
         when(emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanUkEtsDTOByAccountId(accountId)).thenReturn(Optional.of(empDTO));
 
-        aviationAccountEmpCommandOrchestrator.updateAccountCommencementDate(accountId, commencementDateDTO);
+        aviationAccountEmpCommandOrchestrator.updateAccountFirstYearOfReportingObligation(accountId, commencementDateDTO,appUser);
 
         verify(aviationAccountQueryService).getAviationAccountDTOById(accountId);
         verify(aviationAccountUpdateService).updateAccountCommencementDate(accountId, commencementDate);
@@ -87,6 +97,8 @@ public class AviationAccountEmpCommandOrchestratorTest {
 
         ArgumentCaptor<AviationAccountUpdatedRegistryEvent> eventCaptor = ArgumentCaptor.forClass(AviationAccountUpdatedRegistryEvent.class);
         verify(publisher).publishEvent(eventCaptor.capture());
+        verify(aviationAerCreationService, times(2)).createAerFromFirstYearOfReportingObligation(any(), any(), any());
+
 
         AviationAccountUpdatedRegistryEvent event = eventCaptor.getValue();
         assertNotNull(event);
@@ -95,22 +107,24 @@ public class AviationAccountEmpCommandOrchestratorTest {
     }
 
     @Test
-    void updateAccountCommencementDate_uk_ets_aviation_without_emp() {
+    void updateAccountFirstYearOfReportingObligation_uk_ets_aviation_without_emp() {
 
         Long accountId = 1L;
         LocalDate commencementDate = LocalDate.of(2023, 1, 1);
-        AccountUpdateCommencementDateDTO commencementDateDTO = buildCommencementDateDTO(commencementDate);
+        AviationAccountReportingObligationFirstYearDTO commencementDateDTO = buildCommencementDateDTO(commencementDate);
         AviationAccountDTO aviationAccountDTO = buildAviationAccountDTO(EmissionTradingScheme.UK_ETS_AVIATION);
         EmissionsMonitoringPlanUkEts emp = buildEmissionsMonitoringPlanUkEts();
         Request request = buildRequest(accountId);
         RequestTask requestTask = buildRequestTask(emp);
         request.getRequestTasks().add(requestTask);
+        AppUser appUser = new AppUser();
+
 
         when(aviationAccountQueryService.getAviationAccountDTOById(accountId)).thenReturn(aviationAccountDTO);
         when(emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanUkEtsDTOByAccountId(accountId)).thenReturn(Optional.empty());
         when(requestService.findRequestsByAccountIdAndType(accountId, RequestType.EMP_ISSUANCE_UKETS)).thenReturn(List.of(request));
 
-        aviationAccountEmpCommandOrchestrator.updateAccountCommencementDate(accountId, commencementDateDTO);
+        aviationAccountEmpCommandOrchestrator.updateAccountFirstYearOfReportingObligation(accountId, commencementDateDTO,appUser);
 
         verify(aviationAccountQueryService).getAviationAccountDTOById(accountId);
         verify(aviationAccountUpdateService).updateAccountCommencementDate(accountId, commencementDate);
@@ -120,6 +134,9 @@ public class AviationAccountEmpCommandOrchestratorTest {
 
         ArgumentCaptor<AviationAccountUpdatedRegistryEvent> eventCaptor = ArgumentCaptor.forClass(AviationAccountUpdatedRegistryEvent.class);
         verify(publisher).publishEvent(eventCaptor.capture());
+        verify(accountDetailsHistoryService,times(1)).createAccountDetailsHistory(any(), any(), any(), any(), any(), any());
+        verify(aviationAerCreationService, times(2)).createAerFromFirstYearOfReportingObligation(any(), any(), any());
+
 
         AviationAccountUpdatedRegistryEvent event = eventCaptor.getValue();
         assertNotNull(event);
@@ -128,68 +145,81 @@ public class AviationAccountEmpCommandOrchestratorTest {
     }
 
     @Test
-    void updateAccountCommencementDate_non_uk_ets_aviation() {
+    void updateAccountFirstYearOfReportingObligation_non_uk_ets_aviation() {
 
         Long accountId = 1L;
         LocalDate commencementDate = LocalDate.of(2023, 1, 1);
-        AccountUpdateCommencementDateDTO commencementDateDTO = buildCommencementDateDTO(commencementDate);
+        AviationAccountReportingObligationFirstYearDTO commencementDateDTO = buildCommencementDateDTO(commencementDate);
         AviationAccountDTO aviationAccountDTO = buildAviationAccountDTO(EmissionTradingScheme.CORSIA);
+        AppUser appUser = new AppUser();
+
 
         when(aviationAccountQueryService.getAviationAccountDTOById(accountId)).thenReturn(aviationAccountDTO);
 
-        aviationAccountEmpCommandOrchestrator.updateAccountCommencementDate(accountId, commencementDateDTO);
+        aviationAccountEmpCommandOrchestrator.updateAccountFirstYearOfReportingObligation(accountId, commencementDateDTO,appUser);
 
         verify(aviationAccountQueryService).getAviationAccountDTOById(accountId);
         verify(aviationAccountUpdateService).updateAccountCommencementDate(accountId, commencementDate);
         verifyNoInteractions(emissionsMonitoringPlanQueryService);
         verifyNoInteractions(publisher);
+        verify(accountDetailsHistoryService,times(1)).createAccountDetailsHistory(any(), any(), any(), any(), any(), any());
+
     }
 
     @Test
-    void updateAccountCommencementDate_year_before_2021() {
+    void updateAccountFirstYearOfReportingObligation_year_before_2021() {
 
         Long accountId = 1L;
         LocalDate commencementDate = LocalDate.of(2020, 1, 1);
-        AccountUpdateCommencementDateDTO commencementDateDTO = buildCommencementDateDTO(commencementDate);
+        AviationAccountReportingObligationFirstYearDTO commencementDateDTO = buildCommencementDateDTO(commencementDate);
         AviationAccountDTO aviationAccountDTO = buildAviationAccountDTO(EmissionTradingScheme.UK_ETS_AVIATION);
+        AppUser appUser = new AppUser();
+
 
         when(aviationAccountQueryService.getAviationAccountDTOById(accountId)).thenReturn(aviationAccountDTO);
 
         BusinessException exception = assertThrows(BusinessException.class,
-                () -> aviationAccountEmpCommandOrchestrator.updateAccountCommencementDate(accountId, commencementDateDTO));
+                () -> aviationAccountEmpCommandOrchestrator.updateAccountFirstYearOfReportingObligation(accountId, commencementDateDTO,appUser));
 
         assertEquals(MetsErrorCode.AVIATION_COMMENCEMENT_DATE_NOT_BEFORE_2021_NOT_AFTER_CURRENT_YEAR, exception.getErrorCode());
         verify(aviationAccountQueryService).getAviationAccountDTOById(accountId);
         verify(aviationAccountUpdateService, never()).updateAccountCommencementDate(any(), any());
         verifyNoInteractions(publisher);
+        verifyNoInteractions(accountDetailsHistoryService);
+
     }
 
     @Test
-    void updateAccountCommencementDate_year_after_current_year() {
+    void updateAccountFirstYearOfReportingObligation_year_after_current_year() {
 
         Long accountId = 1L;
         LocalDate commencementDate = LocalDate.of(LocalDate.now().getYear() + 1, 1, 1);
-        AccountUpdateCommencementDateDTO commencementDateDTO = buildCommencementDateDTO(commencementDate);
+        AviationAccountReportingObligationFirstYearDTO commencementDateDTO = buildCommencementDateDTO(commencementDate);
         AviationAccountDTO aviationAccountDTO = buildAviationAccountDTO(EmissionTradingScheme.UK_ETS_AVIATION);
+        AppUser appUser = new AppUser();
+
 
         when(aviationAccountQueryService.getAviationAccountDTOById(accountId)).thenReturn(aviationAccountDTO);
 
         BusinessException exception = assertThrows(BusinessException.class,
-                () -> aviationAccountEmpCommandOrchestrator.updateAccountCommencementDate(accountId, commencementDateDTO));
+                () -> aviationAccountEmpCommandOrchestrator.updateAccountFirstYearOfReportingObligation(accountId, commencementDateDTO,appUser));
 
         assertEquals(MetsErrorCode.AVIATION_COMMENCEMENT_DATE_NOT_BEFORE_2021_NOT_AFTER_CURRENT_YEAR, exception.getErrorCode());
         verify(aviationAccountQueryService).getAviationAccountDTOById(accountId);
         verify(aviationAccountUpdateService, never()).updateAccountCommencementDate(any(), any());
         verifyNoInteractions(publisher);
+        verifyNoInteractions(accountDetailsHistoryService);
+
     }
 
     @Test
-    void updateAccountCommencementDate_moved_backwards_adds_reporting_statuses() {
+    void updateAccountFirstYearOfReportingObligation_moved_backwards_adds_reporting_statuses() {
         Long accountId = 1L;
         LocalDate previousDate = LocalDate.of(2023, 1, 1);
         LocalDate newDate = LocalDate.of(2021, 1, 1);
-        AccountUpdateCommencementDateDTO dto = AccountUpdateCommencementDateDTO.builder()
+        AviationAccountReportingObligationFirstYearDTO dto = AviationAccountReportingObligationFirstYearDTO.builder()
                 .commencementDate(newDate)
+                .reason("test")
                 .build();
 
         AviationAccountDTO accountDTO = AviationAccountDTO.builder()
@@ -198,14 +228,19 @@ public class AviationAccountEmpCommandOrchestratorTest {
                 .emissionTradingScheme(EmissionTradingScheme.UK_ETS_AVIATION)
                 .build();
 
+        AppUser appUser = new AppUser();
+
+
         when(aviationAccountQueryService.getAviationAccountDTOById(accountId)).thenReturn(accountDTO);
 
-        aviationAccountEmpCommandOrchestrator.updateAccountCommencementDate(accountId, dto);
+        aviationAccountEmpCommandOrchestrator.updateAccountFirstYearOfReportingObligation(accountId, dto,appUser);
 
         verify(aviationAccountUpdateService).updateAccountCommencementDate(accountId, newDate);
 
         ArgumentCaptor<List<Integer>> yearsCaptor = ArgumentCaptor.forClass(List.class);
         verify(aviationAccountReportingStatusQueryOrchestrator).addReportingStatusesForYears(yearsCaptor.capture(), eq(accountId));
+        verify(accountDetailsHistoryService,times(1)).createAccountDetailsHistory(any(), any(), any(), any(), any(), any());
+
 
         List<Integer> capturedYears = yearsCaptor.getValue();
         assertEquals(2, capturedYears.size());
@@ -214,13 +249,17 @@ public class AviationAccountEmpCommandOrchestratorTest {
     }
 
     @Test
-    void updateAccountCommencementDate_moved_forwards_no_reporting_statuses_added() {
+    void updateAccountFirstYearOfReportingObligation_moved_forwards_no_reporting_statuses_added() {
         Long accountId = 1L;
         LocalDate previousDate = LocalDate.of(2021, 1, 1);
         LocalDate newDate = LocalDate.of(2023, 1, 1);
-        AccountUpdateCommencementDateDTO dto = AccountUpdateCommencementDateDTO.builder()
+        AviationAccountReportingObligationFirstYearDTO dto = AviationAccountReportingObligationFirstYearDTO.builder()
                 .commencementDate(newDate)
+                .reason("test")
                 .build();
+
+        AppUser appUser = new AppUser();
+
 
         AviationAccountDTO accountDTO = AviationAccountDTO.builder()
                 .id(accountId)
@@ -230,15 +269,18 @@ public class AviationAccountEmpCommandOrchestratorTest {
 
         when(aviationAccountQueryService.getAviationAccountDTOById(accountId)).thenReturn(accountDTO);
 
-        aviationAccountEmpCommandOrchestrator.updateAccountCommencementDate(accountId, dto);
+        aviationAccountEmpCommandOrchestrator.updateAccountFirstYearOfReportingObligation(accountId, dto,appUser);
 
         verify(aviationAccountUpdateService).updateAccountCommencementDate(accountId, newDate);
+        verify(accountDetailsHistoryService,times(1)).createAccountDetailsHistory(any(), any(), any(), any(), any(), any());
+
         verifyNoInteractions(aviationAccountReportingStatusQueryOrchestrator);
     }
 
-    private AccountUpdateCommencementDateDTO buildCommencementDateDTO(LocalDate commencementDate) {
-        return AccountUpdateCommencementDateDTO.builder()
+    private AviationAccountReportingObligationFirstYearDTO buildCommencementDateDTO(LocalDate commencementDate) {
+        return AviationAccountReportingObligationFirstYearDTO.builder()
                 .commencementDate(commencementDate)
+                .reason("test")
                 .build();
     }
 

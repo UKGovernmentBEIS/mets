@@ -3,8 +3,9 @@ package uk.gov.pmrv.api.user.core.service;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import uk.gov.netz.api.userinfoapi.UserInfoDTO;
+import uk.gov.netz.api.mireport.system.accountuserscontacts.OperatorUserInfoDTO;
 import uk.gov.netz.api.userinfoapi.UserInfo;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.user.core.transform.UserMapper;
 
@@ -20,8 +21,14 @@ public class UserInfoService {
 
     public List<UserInfoDTO> getUsersInfo(List<String> userIds) {
         return userAuthService.getUsers(userIds).stream()
-            .collect(Collectors.toMap(UserInfo::getId, user -> user))
-            .values().stream()
-            .map(userMapper::toUserInfoDTO).collect(Collectors.toList());
+                .collect(Collectors.toMap(UserInfo::getId, user -> user))
+                .values().stream()
+                .map(userMapper::toUserInfoDTO).collect(Collectors.toList());
+    }
+
+    public List<OperatorUserInfoDTO> getOperatorUsersInfo(List<String> userIds) {
+        return userAuthService.getUsersWithAttributes(userIds, OperatorUserInfoDTO.class)
+                .stream()
+                .toList();
     }
 }

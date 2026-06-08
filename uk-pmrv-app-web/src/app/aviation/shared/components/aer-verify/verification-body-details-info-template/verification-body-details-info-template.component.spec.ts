@@ -36,7 +36,18 @@ describe('VerificationBodyDetailsInfoTemplateComponent', () => {
         country: 'GR',
         postcode: '15452',
       },
-      accreditationReferenceNumber: '1313',
+      verificationBodyEmissionSchemeDTOS: [
+        {
+          emissionTradingScheme: 'UK_ETS_AVIATION',
+          accreditationReferenceNumber: '1313',
+          accreditationName: 'accreditationName 1',
+        },
+        {
+          emissionTradingScheme: 'EU_ETS_INSTALLATIONS',
+          accreditationReferenceNumber: '354',
+          accreditationName: 'accreditationName 2',
+        },
+      ],
     };
 
     page = new Page(fixture);

@@ -25,6 +25,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static java.util.Map.entry;
 
@@ -66,72 +67,30 @@ public class EmailNotificationAssignedTaskService {
     private EmailNotificationTemplateData constructEmailTemplateData(String homePage, RequestTask requestTask, String role) {
         EmailNotificationTemplateData emailNotificationTemplateData = defaultEmailNotificationTemplateData(homePage, requestTask, role);
 
-        if (!RoleTypeConstants.REGULATOR.equals(role) && !RoleTypeConstants.VERIFIER.equals(role)) {
+        if (!isSupportedRole(role)) {
             return emailNotificationTemplateData;
         }
+
         Request request = requestTask.getRequest();
         Long accountId = request.getAccountId();
         AccountType accountType = accountQueryService.getAccountType(accountId);
-        if (AccountType.INSTALLATION.equals(accountType) && checkInstallationRequestTaskType(requestTask.getType())) {
-            return buildInstallationTemplateData(emailNotificationTemplateData, request, accountId, accountType);
-        } else if (AccountType.INSTALLATION.equals(accountType) && !checkInstallationRequestTaskType(requestTask.getType())) {
-            emailNotificationTemplateData.getTemplateParams().put(PmrvEmailNotificationTemplateConstants.HAS_WORKFLOW_ID, false);
-        }
+        RequestTaskType taskType = requestTask.getType();
 
-        if (AccountType.AVIATION.equals(accountType) && checkAviationRequestTaskType(requestTask.getType())) {
-            return buildAviationTemplateData(emailNotificationTemplateData, request, accountId, accountType);
-        } else if (AccountType.AVIATION.equals(accountType) && !checkAviationRequestTaskType(requestTask.getType())) {
-            emailNotificationTemplateData.getTemplateParams().put(PmrvEmailNotificationTemplateConstants.HAS_WORKFLOW_ID, false);
+        if (RoleTaskPermissions.isAllowed(role, accountType, taskType)) {
+            if (accountType == AccountType.INSTALLATION) {
+                return buildInstallationTemplateData(emailNotificationTemplateData, request, accountId, accountType);
+            }
+            if (accountType == AccountType.AVIATION) {
+                return buildAviationTemplateData(emailNotificationTemplateData, request, accountId, accountType);
+            }
         }
+        emailNotificationTemplateData.getTemplateParams().put(PmrvEmailNotificationTemplateConstants.HAS_WORKFLOW_ID, false);
+
         return emailNotificationTemplateData;
     }
 
-    private boolean checkInstallationRequestTaskType(RequestTaskType requestTaskType) {
-        switch (requestTaskType) {
-            case INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW:
-            case PERMIT_ISSUANCE_APPLICATION_REVIEW:
-            case PERMIT_ISSUANCE_TRACK_PAYMENT:
-            case PERMIT_ISSUANCE_CONFIRM_PAYMENT:
-            case PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW:
-            case PERMIT_VARIATION_APPLICATION_REVIEW:
-            case PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT:
-            case PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW:
-            case PERMIT_VARIATION_APPLICATION_PEER_REVIEW:
-            case AER_APPLICATION_VERIFICATION_SUBMIT:
-            case AER_AMEND_APPLICATION_VERIFICATION_SUBMIT:
-            case AER_APPLICATION_REVIEW:
-                return true;
-            default: return false;
-        }
-    }
-
-    private boolean checkAviationRequestTaskType(RequestTaskType requestTaskType) {
-        switch (requestTaskType) {
-            case EMP_ISSUANCE_UKETS_APPLICATION_REVIEW:
-            case EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW:
-            case EMP_ISSUANCE_UKETS_TRACK_PAYMENT:
-            case EMP_ISSUANCE_CORSIA_TRACK_PAYMENT:
-            case EMP_ISSUANCE_UKETS_CONFIRM_PAYMENT:
-            case EMP_ISSUANCE_CORSIA_CONFIRM_PAYMENT:
-            case EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW:
-            case EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEW:
-            case EMP_VARIATION_UKETS_APPLICATION_REVIEW:
-            case EMP_VARIATION_CORSIA_APPLICATION_REVIEW:
-            case EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT:
-            case EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT:
-            case EMP_VARIATION_UKETS_APPLICATION_PEER_REVIEW:
-            case EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEW:
-            case EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_PEER_REVIEW:
-            case EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_PEER_REVIEW:
-            case AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT:
-            case AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT:
-            case AVIATION_AER_UKETS_AMEND_APPLICATION_VERIFICATION_SUBMIT:
-            case AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT:
-            case AVIATION_AER_UKETS_APPLICATION_REVIEW:
-            case AVIATION_AER_CORSIA_APPLICATION_REVIEW:
-                return true;
-            default: return false;
-        }
+    private boolean isSupportedRole(String role) {
+        return Set.of(RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER, RoleTypeConstants.OPERATOR).contains(role);
     }
 
     private EmailNotificationTemplateData defaultEmailNotificationTemplateData (String homePage, RequestTask requestTask, String role) {

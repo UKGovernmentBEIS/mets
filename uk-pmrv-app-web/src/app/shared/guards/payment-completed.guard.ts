@@ -23,12 +23,12 @@ export class PaymentCompletedGuard {
       .slice(0, 1);
 
     const isAviation = lastSegment[0].path === 'aviation';
-    const isHseti = ['hseti'].includes(lastSegment[0].path);
+    const isTasksWorkflow = ['hseti', 'ner'].includes(lastSegment[0].path);
     const isWorkflow = segment.filter((seg) => seg.path === 'workflows').length > 0;
     let aviationRedirectStringUrl = isAviation ? `/${segment[0].path}/${segment[1].path}/${segment[2].path}` : null;
     let redirectUrlPath = aviationRedirectStringUrl
       ? aviationRedirectStringUrl
-      : isHseti
+      : isTasksWorkflow
         ? `/tasks/${route.paramMap.get('taskId')}/${lastSegment[0].path}`
         : `/${lastSegment[0].path}/${route.paramMap.get('taskId')}`;
 
@@ -39,7 +39,7 @@ export class PaymentCompletedGuard {
 
       redirectUrlPath = aviationRedirectStringUrl
         ? aviationRedirectStringUrl
-        : isHseti
+        : isTasksWorkflow
           ? `/${segment[0].path}/${segment[1].path}/${segment[2].path}/${segment[3].path}/tasks/${route.paramMap.get('taskId')}/${lastSegment[0].path}`
           : `/${segment[0].path}/${segment[1].path}/${segment[2].path}/${segment[3].path}/${lastSegment[0].path}/${route.paramMap.get('taskId')}`;
     }
@@ -48,7 +48,8 @@ export class PaymentCompletedGuard {
       lastSegment[0].path === 'permit-issuance' ||
       lastSegment[0].path === 'permit-variation' ||
       lastSegment[0].path === 'permit-transfer' ||
-      lastSegment[0].path === 'permit-surrender'
+      lastSegment[0].path === 'permit-surrender' ||
+      lastSegment[0].path === 'ner'
         ? this.router.parseUrl(redirectUrlPath.concat(`/review/payment-not-completed`))
         : this.router.parseUrl(redirectUrlPath.concat('/payment-not-completed'));
 
@@ -58,8 +59,10 @@ export class PaymentCompletedGuard {
       first(),
       map((state) => {
         const paymentCompleted =
-          isAviation || isHseti ? state.requestTaskItem?.requestInfo?.paymentCompleted : !!state.paymentCompleted;
-        return isHseti
+          isAviation || isTasksWorkflow
+            ? state.requestTaskItem?.requestInfo?.paymentCompleted
+            : !!state.paymentCompleted;
+        return isTasksWorkflow
           ? !!paymentCompleted || redirectUrl
           : !(store as any).isPaymentRequired || !!paymentCompleted || redirectUrl;
       }),

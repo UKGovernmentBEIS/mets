@@ -12,6 +12,7 @@ import { RequiredChange } from './changes-requested-template.type';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangesRequestedTemplateComponent {
+  @Input() verificationRequired: boolean;
   @Input() requiredChanges: Array<RequiredChange> = [];
   @Input() reviewAttachments: { [key: string]: string };
   @Input() notes: string;

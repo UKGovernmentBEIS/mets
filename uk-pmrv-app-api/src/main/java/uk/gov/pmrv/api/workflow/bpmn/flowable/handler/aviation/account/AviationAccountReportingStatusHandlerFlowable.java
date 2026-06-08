@@ -5,17 +5,17 @@ import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.account.aviation.service.reportingstatus.AviationAccountReportingStatusPopulationService;
+import uk.gov.pmrv.api.account.aviation.service.reportingstatus.AviationAccountReportingStatusService;
 
 @Service
 @RequiredArgsConstructor
 public class AviationAccountReportingStatusHandlerFlowable implements JavaDelegate {
 
-    private final AviationAccountReportingStatusPopulationService aviationAccountReportingStatusPopulationService;
+    private final AviationAccountReportingStatusService aviationAccountReportingStatusService;
 
     @Override
     @Transactional
     public void execute(DelegateExecution delegateExecution) {
-        aviationAccountReportingStatusPopulationService.populateReportingStatusesForNewYear();
+        aviationAccountReportingStatusService.populateReportingStatusesForNewYear();
     }
 }

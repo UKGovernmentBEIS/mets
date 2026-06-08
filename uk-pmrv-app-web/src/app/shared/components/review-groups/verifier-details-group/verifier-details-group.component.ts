@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
-import { AerVerificationReport } from 'pmrv-api';
+import { AerVerificationReport, VerificationBodyEmissionSchemeDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-verifier-details-group',
@@ -9,7 +9,8 @@ import { AerVerificationReport } from 'pmrv-api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifierDetailsGroupComponent {
-  @Input() isEditable = false;
-  @Input() showVerifierDetails = true;
-  @Input() verificationReport: AerVerificationReport;
+  readonly isEditable = input(false);
+  readonly showVerifierDetails = input(true);
+  readonly verificationReport = input<AerVerificationReport>(undefined);
+  readonly emissionsTradingScheme = input<VerificationBodyEmissionSchemeDTO['emissionTradingScheme']>(undefined);
 }

@@ -75,6 +75,8 @@ import { InstallationAuditApplicationSubmitRequestTaskPayload } from './installa
 import { InstallationInspectionApplicationSubmitRequestTaskPayload } from './installationInspectionApplicationSubmitRequestTaskPayload';
 import { InstallationInspectionOperatorRespondRequestTaskPayload } from './installationInspectionOperatorRespondRequestTaskPayload';
 import { InstallationOnsiteInspectionApplicationSubmitRequestTaskPayload } from './installationOnsiteInspectionApplicationSubmitRequestTaskPayload';
+import { NERApplicationAmendsSubmitRequestTaskPayload } from './nERApplicationAmendsSubmitRequestTaskPayload';
+import { NERApplicationRegulatorReviewSubmitRequestTaskPayload } from './nERApplicationRegulatorReviewSubmitRequestTaskPayload';
 import { NerApplicationSubmitRequestTaskPayload } from './nerApplicationSubmitRequestTaskPayload';
 import { NERApplicationVerificationSubmitRequestTaskPayload } from './nERApplicationVerificationSubmitRequestTaskPayload';
 import { NonComplianceApplicationSubmitRequestTaskPayload } from './nonComplianceApplicationSubmitRequestTaskPayload';
@@ -90,6 +92,7 @@ import { PermitCessationSubmitRequestTaskPayload } from './permitCessationSubmit
 import { PermitIssuanceApplicationAmendsSubmitRequestTaskPayload } from './permitIssuanceApplicationAmendsSubmitRequestTaskPayload';
 import { PermitIssuanceApplicationReviewRequestTaskPayload } from './permitIssuanceApplicationReviewRequestTaskPayload';
 import { PermitIssuanceApplicationSubmitRequestTaskPayload } from './permitIssuanceApplicationSubmitRequestTaskPayload';
+import { PermitIssuanceApplicationWaitForReviewRequestTaskPayload } from './permitIssuanceApplicationWaitForReviewRequestTaskPayload';
 import { PermitNotificationApplicationReviewRequestTaskPayload } from './permitNotificationApplicationReviewRequestTaskPayload';
 import { PermitNotificationApplicationSubmitRequestTaskPayload } from './permitNotificationApplicationSubmitRequestTaskPayload';
 import { PermitNotificationFollowUpApplicationAmendsSubmitRequestTaskPayload } from './permitNotificationFollowUpApplicationAmendsSubmitRequestTaskPayload';
@@ -106,10 +109,12 @@ import { PermitTransferAApplicationRequestTaskPayload } from './permitTransferAA
 import { PermitTransferBApplicationAmendsSubmitRequestTaskPayload } from './permitTransferBApplicationAmendsSubmitRequestTaskPayload';
 import { PermitTransferBApplicationRequestTaskPayload } from './permitTransferBApplicationRequestTaskPayload';
 import { PermitTransferBApplicationReviewRequestTaskPayload } from './permitTransferBApplicationReviewRequestTaskPayload';
+import { PermitTransferBWaitForReviewRequestTaskPayload } from './permitTransferBWaitForReviewRequestTaskPayload';
 import { PermitVariationApplicationAmendsSubmitRequestTaskPayload } from './permitVariationApplicationAmendsSubmitRequestTaskPayload';
 import { PermitVariationApplicationReviewRequestTaskPayload } from './permitVariationApplicationReviewRequestTaskPayload';
 import { PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload } from './permitVariationApplicationSubmitRegulatorLedRequestTaskPayload';
 import { PermitVariationApplicationSubmitRequestTaskPayload } from './permitVariationApplicationSubmitRequestTaskPayload';
+import { PermitVariationWaitForReviewRequestTaskPayload } from './permitVariationWaitForReviewRequestTaskPayload';
 import { RdeForceDecisionRequestTaskPayload } from './rdeForceDecisionRequestTaskPayload';
 import { RdeResponseRequestTaskPayload } from './rdeResponseRequestTaskPayload';
 import { ReturnOfAllowancesApplicationPeerReviewRequestTaskPayload } from './returnOfAllowancesApplicationPeerReviewRequestTaskPayload';
@@ -240,6 +245,8 @@ export interface RequestTaskDTO {
     | 'NER_WAIT_FOR_PEER_REVIEW'
     | 'NER_WAIT_FOR_AMENDS'
     | 'NER_APPLICATION_AMENDS_SUBMIT'
+    | 'NER_AMEND_APPLICATION_VERIFICATION_SUBMIT'
+    | 'NER_AMEND_WAIT_FOR_VERIFICATION'
     | 'NER_MAKE_PAYMENT'
     | 'NER_TRACK_PAYMENT'
     | 'NER_CONFIRM_PAYMENT'
@@ -536,6 +543,8 @@ export interface RequestTaskDTO {
     | InstallationInspectionApplicationSubmitRequestTaskPayload
     | InstallationInspectionOperatorRespondRequestTaskPayload
     | InstallationOnsiteInspectionApplicationSubmitRequestTaskPayload
+    | NERApplicationAmendsSubmitRequestTaskPayload
+    | NERApplicationRegulatorReviewSubmitRequestTaskPayload
     | NERApplicationVerificationSubmitRequestTaskPayload
     | NerApplicationSubmitRequestTaskPayload
     | NonComplianceApplicationSubmitRequestTaskPayload
@@ -551,6 +560,7 @@ export interface RequestTaskDTO {
     | PermitIssuanceApplicationAmendsSubmitRequestTaskPayload
     | PermitIssuanceApplicationReviewRequestTaskPayload
     | PermitIssuanceApplicationSubmitRequestTaskPayload
+    | PermitIssuanceApplicationWaitForReviewRequestTaskPayload
     | PermitNotificationApplicationReviewRequestTaskPayload
     | PermitNotificationApplicationSubmitRequestTaskPayload
     | PermitNotificationFollowUpApplicationAmendsSubmitRequestTaskPayload
@@ -567,10 +577,12 @@ export interface RequestTaskDTO {
     | PermitTransferBApplicationAmendsSubmitRequestTaskPayload
     | PermitTransferBApplicationRequestTaskPayload
     | PermitTransferBApplicationReviewRequestTaskPayload
+    | PermitTransferBWaitForReviewRequestTaskPayload
     | PermitVariationApplicationAmendsSubmitRequestTaskPayload
     | PermitVariationApplicationReviewRequestTaskPayload
     | PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload
     | PermitVariationApplicationSubmitRequestTaskPayload
+    | PermitVariationWaitForReviewRequestTaskPayload
     | RdeForceDecisionRequestTaskPayload
     | RdeResponseRequestTaskPayload
     | ReturnOfAllowancesApplicationPeerReviewRequestTaskPayload

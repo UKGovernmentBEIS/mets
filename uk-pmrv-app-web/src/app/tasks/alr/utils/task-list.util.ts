@@ -6,6 +6,7 @@ import { TaskItemStatus } from '@shared/task-list/task-list.interface';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 import {
+  ALRAlrDataRegulatorReviewDecision,
   ALRApplicationAuthorityReviewOutcome,
   ALRApplicationRegulatorReviewSubmitRequestTaskPayload,
   ALRApplicationSubmitRequestTaskPayload,
@@ -129,7 +130,8 @@ export const resolveRegulatorSectionStatus = (
   }
 
   if (statusKey === 'ALR' && payload?.regulatorReviewSectionsCompleted?.[statusKey] !== undefined) {
-    return payload.regulatorReviewGroupDecisions?.[statusKey]?.['type'] === 'ACCEPTED'
+    return (payload.regulatorReviewGroupDecisions?.[statusKey] as ALRAlrDataRegulatorReviewDecision)?.['type'] ===
+      'ACCEPTED'
       ? 'accepted'
       : 'operator to amend';
   }
@@ -137,7 +139,10 @@ export const resolveRegulatorSectionStatus = (
     (statusKey === 'OPINION_STATEMENT' || statusKey === 'OVERALL_DECISION') &&
     payload?.regulatorReviewSectionsCompleted?.[statusKey] !== undefined
   ) {
-    return payload.regulatorReviewGroupDecisions?.[statusKey]?.['type'] === 'ACCEPTED' ? 'accepted' : 'undecided';
+    return (payload.regulatorReviewGroupDecisions?.[statusKey] as ALRAlrDataRegulatorReviewDecision)?.['type'] ===
+      'ACCEPTED'
+      ? 'accepted'
+      : 'undecided';
   }
 
   return 'undecided';
@@ -150,7 +155,7 @@ export function submitReviewActivityAndOpinionStatementComplete(
     payload?.regulatorReviewSectionsCompleted?.['ALR'] === true &&
     payload?.regulatorReviewSectionsCompleted?.['OPINION_STATEMENT'] === true &&
     payload?.regulatorReviewSectionsCompleted?.['OVERALL_DECISION'] === true &&
-    payload?.regulatorReviewGroupDecisions?.['ALR']?.['type'] === 'ACCEPTED'
+    (payload?.regulatorReviewGroupDecisions?.['ALR'] as ALRAlrDataRegulatorReviewDecision)?.['type'] === 'ACCEPTED'
   );
 }
 

@@ -1,0 +1,25 @@
+<app-ner-task taskType="NER_APPLICATION_AMENDS_SUBMIT">
+  <app-page-heading>Changes requested by the regulator</app-page-heading>
+
+  <govuk-error-summary *ngIf="displayErrorSummary$ | async" [form]="form"></govuk-error-summary>
+
+  <h2 app-summary-header class="govuk-heading-m">Operator details</h2>
+
+  <ng-container *ngIf="payload() as payload">
+    <app-changes-requested-template
+      [requiredChanges]="payload.regulatorReviewGroupDecisions?.NER?.['details']?.requiredChanges"
+      [reviewAttachments]="payload.regulatorReviewAttachments"
+      [downloadUrl]="nerService.getBaseFileDownloadUrl()"></app-changes-requested-template>
+  </ng-container>
+
+  <form (ngSubmit)="confirm()" [formGroup]="form">
+    <div formControlName="changesRequested" govuk-checkboxes>
+      <govuk-checkbox
+        [value]="true"
+        label="I have made changes and want to mark this task as complete"></govuk-checkbox>
+    </div>
+    <div *ngIf="isEditable()" class="govuk-button-group">
+      <button appPendingButton govukButton type="submit">Confirm and complete</button>
+    </div>
+  </form>
+</app-ner-task>

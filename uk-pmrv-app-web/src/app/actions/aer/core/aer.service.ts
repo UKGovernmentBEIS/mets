@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 
-import { map, Observable } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 
 import {
   AerApplicationAmendsSubmittedRequestActionPayload,
@@ -8,6 +9,7 @@ import {
   AerApplicationReturnedForAmendsRequestActionPayload,
   AerApplicationSubmittedRequestActionPayload,
   AerApplicationVerificationSubmittedRequestActionPayload,
+  InstallationAccountViewService,
   RequestActionDTO,
 } from 'pmrv-api';
 
@@ -15,7 +17,10 @@ import { CommonActionsStore } from '../../store/common-actions.store';
 
 @Injectable({ providedIn: 'root' })
 export class AerService {
-  constructor(private readonly store: CommonActionsStore) {}
+  constructor(
+    private readonly store: CommonActionsStore,
+    private readonly installationAccountViewService: InstallationAccountViewService,
+  ) {}
 
   get requestAction$(): Observable<RequestActionDTO> {
     return this.store.requestAction$;
@@ -66,5 +71,16 @@ export class AerService {
   private get verificationAttachments() {
     return (this.store.getValue().action.payload as AerApplicationCompletedRequestActionPayload)
       ?.verificationAttachments;
+  }
+
+  getEmissionsTradingSchemeSignal() {
+    return toSignal(
+      this.requestAction$.pipe(
+        switchMap((requestActionDTO) =>
+          this.installationAccountViewService.getInstallationAccountById(requestActionDTO.requestAccountId),
+        ),
+        map((result) => result.accountPermitDto?.account.emissionTradingScheme),
+      ),
+    );
   }
 }

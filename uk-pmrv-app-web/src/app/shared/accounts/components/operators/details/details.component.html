@@ -3,6 +3,9 @@
     <form (ngSubmit)="onSubmit()" *ngIf="form$ | async as form" [formGroup]="form">
       <govuk-error-summary *ngIf="isSummaryDisplayed | async" [form]="form"></govuk-error-summary>
       <app-page-heading size="xl">User details</app-page-heading>
+      <p class="govuk-body lastLogin">
+        Last signed in {{ lastLoginDate() ? (lastLoginDate() | govukDate: 'datetime') : 'over 90 days' }}
+      </p>
       <app-user-input phoneType="full"></app-user-input>
 
       <app-two-fa-link

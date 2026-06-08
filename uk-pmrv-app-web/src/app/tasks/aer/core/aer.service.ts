@@ -29,6 +29,7 @@ import {
   CalculationRegionalDataCalculationMethod,
   CalculationSourceStreamEmission,
   ChargingZoneDTO,
+  InstallationAccountViewService,
   ReportingDataService,
   RequestTaskActionPayload,
   RequestTaskActionProcessDTO,
@@ -56,6 +57,7 @@ export class AerService extends TasksHelperService {
     businessErrorService: BusinessErrorService,
     private readonly reportingDataService: ReportingDataService,
     private readonly sourceStreamsService: SourceStreamsService,
+    private readonly installationAccountViewService: InstallationAccountViewService,
   ) {
     super(store, tasksService, businessErrorService);
   }
@@ -562,5 +564,14 @@ export class AerService extends TasksHelperService {
 
   getDeliveryZones(postCode: string): Observable<Array<ChargingZoneDTO>> {
     return this.reportingDataService.getChargingZonesByPostCode(postCode);
+  }
+
+  getEmissionsTradingSchemeSignal() {
+    return toSignal(
+      this.requestAccountId$.pipe(
+        switchMap((accountId) => this.installationAccountViewService.getInstallationAccountById(accountId)),
+        map((result) => result.accountPermitDto?.account.emissionTradingScheme),
+      ),
+    );
   }
 }

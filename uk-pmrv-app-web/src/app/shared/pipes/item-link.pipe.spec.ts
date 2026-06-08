@@ -1537,6 +1537,66 @@ describe('ItemLinkPipe', () => {
       taskType: 'NER_WAIT_FOR_VERIFICATION',
       expectedPath: ['/tasks', taskId, 'ner', 'submit'],
     },
+    {
+      requestType: 'NER',
+      taskType: 'NER_AMEND_WAIT_FOR_VERIFICATION',
+      expectedPath: ['/tasks', taskId, 'ner', 'submit'],
+    },
+    {
+      requestType: 'NER',
+      taskType: 'NER_APPLICATION_VERIFICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'ner', 'verification-submit'],
+    },
+    {
+      requestType: 'NER',
+      taskType: 'NER_AMEND_APPLICATION_VERIFICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'ner', 'verification-submit'],
+    },
+    {
+      requestType: 'NER',
+      taskType: 'NER_WAIT_FOR_REVIEW',
+      expectedPath: ['/tasks', taskId, 'ner', 'submit'],
+    },
+    {
+      requestType: 'NER',
+      taskType: 'NER_APPLICATION_AMENDS_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'ner', 'submit'],
+    },
+    {
+      requestType: 'NER',
+      taskType: 'NER_MAKE_PAYMENT',
+      expectedPath: ['/payment', taskId, 'make'],
+    },
+    {
+      requestType: 'NER',
+      taskType: 'NER_TRACK_PAYMENT',
+      expectedPath: ['/payment', taskId, 'track'],
+    },
+    {
+      requestType: 'NER',
+      taskType: 'NER_CONFIRM_PAYMENT',
+      expectedPath: ['/payment', taskId, 'track'],
+    },
+    {
+      requestType: 'NER',
+      taskType: 'NER_APPLICATION_REVIEW',
+      expectedPath: ['/tasks', taskId, 'ner', 'review'],
+    },
+    {
+      requestType: 'NER',
+      taskType: 'NER_WAIT_FOR_AMENDS',
+      expectedPath: ['/tasks', taskId, 'ner', 'review'],
+    },
+    {
+      requestType: 'NER',
+      taskType: 'NER_WAIT_FOR_PEER_REVIEW',
+      expectedPath: ['/tasks', taskId, 'ner', 'review'],
+    },
+    {
+      requestType: 'NER',
+      taskType: 'NER_APPLICATION_PEER_REVIEW',
+      expectedPath: ['/tasks', taskId, 'ner', 'review'],
+    },
 
     // NULL
     {

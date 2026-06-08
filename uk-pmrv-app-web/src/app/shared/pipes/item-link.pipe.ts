@@ -759,9 +759,23 @@ export class ItemLinkPipe implements PipeTransform {
         switch (value?.taskType) {
           case 'NER_APPLICATION_SUBMIT':
           case 'NER_WAIT_FOR_VERIFICATION':
+          case 'NER_AMEND_WAIT_FOR_VERIFICATION':
+          case 'NER_WAIT_FOR_REVIEW':
+          case 'NER_APPLICATION_AMENDS_SUBMIT':
             return [routerLooks + 'tasks', value.taskId, 'ner', 'submit'];
           case 'NER_APPLICATION_VERIFICATION_SUBMIT':
+          case 'NER_AMEND_APPLICATION_VERIFICATION_SUBMIT':
             return [routerLooks + 'tasks', value.taskId, 'ner', 'verification-submit'];
+          case 'NER_MAKE_PAYMENT':
+            return [routerLooks + 'payment', value.taskId, 'make'];
+          case 'NER_TRACK_PAYMENT':
+          case 'NER_CONFIRM_PAYMENT':
+            return [routerLooks + 'payment', value.taskId, 'track'];
+          case 'NER_APPLICATION_REVIEW':
+          case 'NER_WAIT_FOR_AMENDS':
+          case 'NER_WAIT_FOR_PEER_REVIEW':
+          case 'NER_APPLICATION_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'ner', 'review'];
 
           default:
             return ['.'];

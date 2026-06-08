@@ -14,6 +14,7 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetai
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -88,6 +89,18 @@ public class BDRVerificationSubmitServiceTest {
                         .verificationData(verificationData)
                         .verificationSectionsCompleted(Map.of("group", List.of(true)))
                         .build();
+
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO2 = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.CORSIA)
+                .accreditationReferenceNumber("accreditationRefNum2")
+                .accreditationName("name2")
+                .build();
+
         BDRApplicationVerificationSubmitRequestTaskPayload taskPayload =
                 BDRApplicationVerificationSubmitRequestTaskPayload.builder()
                         .payloadType(RequestTaskPayloadType.BDR_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD)
@@ -95,9 +108,8 @@ public class BDRVerificationSubmitServiceTest {
                         .verificationReport(BDRVerificationReport.builder()
                                 .verificationBodyDetails(VerificationBodyDetails.builder()
                                         .name("nameNew")
-                                        .accreditationReferenceNumber("accreditationRefNumNew")
                                         .address(AddressDTO.builder().city("cityNew").country("countryNew").line1("lineNew").build())
-                                        .emissionTradingSchemes(Set.of(EmissionTradingScheme.UK_ETS_INSTALLATIONS, EmissionTradingScheme.CORSIA))
+                                        .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO, verificationBodyEmissionSchemeDTO2))
                                         .build())
                                 .build())
                         .build();

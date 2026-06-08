@@ -109,6 +109,7 @@ export class OperatorsComponent implements OnInit {
   userId$ = this.authStore.pipe(selectUserId, takeUntil(this.destroy$));
   refresh$ = new ReplaySubject<void>(1);
   currentDomain$ = this.authStore.pipe(selectCurrentDomain);
+  lastOperator$: Observable<UserAuthorityInfoDTO | undefined>;
 
   constructor(
     private readonly fb: UntypedFormBuilder,
@@ -166,6 +167,18 @@ export class OperatorsComponent implements OnInit {
         ),
       ),
     ]).pipe(map(([operators, bodies]) => operators.concat(bodies)));
+
+    this.lastOperator$ = operatorsManagement$.pipe(
+      map(({ authorities }) =>
+        authorities?.reduce<(typeof authorities)[0] | undefined>((latest, current) => {
+          if (!current.lastLoginDate) return latest;
+          if (!latest) return current;
+
+          return new Date(current.lastLoginDate) > new Date(latest.lastLoginDate) ? current : latest;
+        }, undefined),
+      ),
+    );
+
     this.contactType$ = operatorsManagement$.pipe(map((operators) => operators.contactTypes));
     this.isEditable$ = operatorsManagement$.pipe(map((operators) => operators.editable));
     this.userType$ = this.accountId$.pipe(

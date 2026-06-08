@@ -15,6 +15,7 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCustomContext;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -27,6 +28,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstan
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceCivilPenaltyRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceOutcome;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonCompliancePeerReviewRequestedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.service.NonComplianceCivilPenaltyApplyService;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.validation.NonCompliancePeerReviewValidator;
 
@@ -51,6 +53,9 @@ class NonComplianceCivilPenaltyRequestPeerReviewActionHandlerTest {
     @Mock
     private WorkflowService workflowService;
 
+    @Mock
+    private NonCompliancePeerReviewActionHelper peerReviewActionHelper;
+
     @Test
     void process() {
 
@@ -71,8 +76,14 @@ class NonComplianceCivilPenaltyRequestPeerReviewActionHandlerTest {
             .payload(taskPayload)
             .processTaskId("processTaskId")
             .build();
+        final NonCompliancePeerReviewRequestedRequestActionPayload actionPayload =
+            NonCompliancePeerReviewRequestedRequestActionPayload.builder()
+                .payloadType(RequestActionPayloadType.NON_COMPLIANCE_PEER_REVIEW_REQUESTED_PAYLOAD)
+                .submittedTo("Peer Reviewer Name")
+                .build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
+        when(peerReviewActionHelper.buildPeerReviewRequestedPayload(selectedPeerReviewer)).thenReturn(actionPayload);
 
         handler.process(
             requestTaskId,
@@ -88,9 +99,10 @@ class NonComplianceCivilPenaltyRequestPeerReviewActionHandlerTest {
                 appUser);
         verify(applyService, times(1))
             .saveRequestPeerReviewAction(requestTask, selectedPeerReviewer);
+        verify(peerReviewActionHelper, times(1)).buildPeerReviewRequestedPayload(selectedPeerReviewer);
         verify(requestService, times(1)).addActionToRequest(
             requestTask.getRequest(),
-            null,
+            actionPayload,
             RequestActionType.NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_REQUESTED,
             appUser.getUserId()
         );

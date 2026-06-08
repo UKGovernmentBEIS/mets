@@ -23,6 +23,7 @@ export class PreviewDocumentsComponent {
   @Input() previewDocuments: DocumentFilenameAndDocumentType[];
   @Input() decisionNotification: DecisionNotification;
   @Input() linkFontSize = 'govuk-!-font-size-19';
+  @Input() hideDecisionFromPermit: boolean = false;
 
   disabled$ = new BehaviorSubject(false);
 
@@ -38,7 +39,8 @@ export class PreviewDocumentsComponent {
       this.documentPreviewService
         .getDocumentPreview(this.taskId, {
           documentType: document.documentType,
-          decisionNotification: this.decisionNotification,
+          decisionNotification:
+            document?.documentType === 'PERMIT' && this.hideDecisionFromPermit ? null : this.decisionNotification,
         })
         .pipe(this.pendingRequest.trackRequest())
         .subscribe((blob: any) => {

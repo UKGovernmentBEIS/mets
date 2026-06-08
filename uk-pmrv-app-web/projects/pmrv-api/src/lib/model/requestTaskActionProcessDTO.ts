@@ -118,8 +118,16 @@ import { InstallationAccountOpeningSubmitDecisionRequestTaskActionPayload } from
 import { InstallationAuditApplicationSaveRequestTaskActionPayload } from './installationAuditApplicationSaveRequestTaskActionPayload';
 import { InstallationInspectionOperatorRespondSaveRequestTaskActionPayload } from './installationInspectionOperatorRespondSaveRequestTaskActionPayload';
 import { InstallationOnsiteInspectionApplicationSaveRequestTaskActionPayload } from './installationOnsiteInspectionApplicationSaveRequestTaskActionPayload';
+import { NERApplicationAmendsSaveRequestTaskActionPayload } from './nERApplicationAmendsSaveRequestTaskActionPayload';
+import { NERApplicationAmendsSubmitRequestTaskActionPayload } from './nERApplicationAmendsSubmitRequestTaskActionPayload';
+import { NERApplicationAmendsSubmitToVerifierRequestTaskActionPayload } from './nERApplicationAmendsSubmitToVerifierRequestTaskActionPayload';
+import { NERApplicationRegulatorReviewSaveTaskActionPayload } from './nERApplicationRegulatorReviewSaveTaskActionPayload';
 import { NERApplicationSubmitToVerifierRequestTaskActionPayload } from './nERApplicationSubmitToVerifierRequestTaskActionPayload';
+import { NERApplicationVerificationReturnToOperatorRequestTaskActionPayload } from './nERApplicationVerificationReturnToOperatorRequestTaskActionPayload';
+import { NERApplicationVerificationSaveRequestTaskActionPayload } from './nERApplicationVerificationSaveRequestTaskActionPayload';
+import { NERRegulatorReviewReturnForAmendsTaskActionPayload } from './nERRegulatorReviewReturnForAmendsTaskActionPayload';
 import { NerSaveApplicationRequestTaskActionPayload } from './nerSaveApplicationRequestTaskActionPayload';
+import { NERSaveRegulatorReviewGroupDecisionRequestTaskActionPayload } from './nERSaveRegulatorReviewGroupDecisionRequestTaskActionPayload';
 import { NonComplianceAmendDetailsRequestTaskActionPayload } from './nonComplianceAmendDetailsRequestTaskActionPayload';
 import { NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload } from './nonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload';
 import { NonComplianceCloseApplicationRequestTaskActionPayload } from './nonComplianceCloseApplicationRequestTaskActionPayload';
@@ -311,16 +319,25 @@ export interface RequestTaskActionProcessDTO {
     | 'NER_UPLOAD_ATTACHMENT'
     | 'NER_SAVE_APPLICATION'
     | 'NER_APPLICATION_SUBMIT_TO_VERIFIER'
+    | 'NER_RECALL_FROM_VERIFICATION'
+    | 'NER_APPLICATION_SAVE_VERIFICATION'
+    | 'NER_VERIFICATION_UPLOAD_ATTACHMENT'
+    | 'NER_SUBMIT_VERIFICATION'
+    | 'NER_VERIFICATION_RETURN_TO_OPERATOR'
     | 'NER_SUBMIT_APPLICATION'
     | 'NER_SAVE_APPLICATION_REVIEW'
-    | 'NER_SAVE_REVIEW_GROUP_DECISION'
+    | 'NER_SAVE_REGULATOR_REVIEW_GROUP_DECISION'
+    | 'NER_REGULATOR_REVIEW_RETURN_FOR_AMENDS'
     | 'NER_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT'
+    | 'NER_APPLICATION_AMENDS_SAVE'
+    | 'NER_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR'
+    | 'NER_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER'
     | 'NER_NOTIFY_OPERATOR_FOR_DECISION'
     | 'NER_COMPLETE_REVIEW'
+    | 'NER_WITHDRAW_APPLICATION'
     | 'NER_REQUEST_PEER_REVIEW'
     | 'NER_SAVE_REVIEW_DETERMINATION'
     | 'NER_SUBMIT_PEER_REVIEW_DECISION'
-    | 'NER_REVIEW_RETURN_FOR_AMENDS'
     | 'NER_SAVE_APPLICATION_AMEND'
     | 'NER_SUBMIT_APPLICATION_AMEND'
     | 'NER_SAVE_AUTHORITY_RESPONSE'
@@ -751,7 +768,15 @@ export interface RequestTaskActionProcessDTO {
     | InstallationAuditApplicationSaveRequestTaskActionPayload
     | InstallationInspectionOperatorRespondSaveRequestTaskActionPayload
     | InstallationOnsiteInspectionApplicationSaveRequestTaskActionPayload
+    | NERApplicationAmendsSaveRequestTaskActionPayload
+    | NERApplicationAmendsSubmitRequestTaskActionPayload
+    | NERApplicationAmendsSubmitToVerifierRequestTaskActionPayload
+    | NERApplicationRegulatorReviewSaveTaskActionPayload
     | NERApplicationSubmitToVerifierRequestTaskActionPayload
+    | NERApplicationVerificationReturnToOperatorRequestTaskActionPayload
+    | NERApplicationVerificationSaveRequestTaskActionPayload
+    | NERRegulatorReviewReturnForAmendsTaskActionPayload
+    | NERSaveRegulatorReviewGroupDecisionRequestTaskActionPayload
     | NerSaveApplicationRequestTaskActionPayload
     | NonComplianceAmendDetailsRequestTaskActionPayload
     | NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload

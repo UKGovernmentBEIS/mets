@@ -9,9 +9,9 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.dto.UserAuthoritiesDTO;
 import uk.gov.netz.api.authorization.core.domain.dto.UserAuthorityDTO;
 import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
+import uk.gov.netz.api.mireport.system.accountuserscontacts.OperatorUserInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.operator.service.OperatorUserInfoService;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.AccountOperatorsUsersAuthoritiesInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.UserAuthorityInfoDTO;
@@ -47,7 +47,7 @@ class AccountOperatorUserAuthorityQueryOrchestratorTest {
         Long accountId = 1L;
         String user = "user";
 
-        UserInfoDTO userInfo = UserInfoDTO.builder().userId(user).build();
+        OperatorUserInfoDTO userInfo = OperatorUserInfoDTO.builder().id(user).build();
         UserAuthorityInfoDTO accountOperatorUserAuthorityInfo =
             UserAuthorityInfoDTO.builder().userId(user).authorityStatus(ACTIVE).build();
 

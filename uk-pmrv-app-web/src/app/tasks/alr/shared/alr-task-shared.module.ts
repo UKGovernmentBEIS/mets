@@ -7,19 +7,12 @@ import { TaskTypeToBreadcrumbPipe } from '@shared/pipes/task-type-to-breadcrumb.
 import { SharedModule } from '@shared/shared.module';
 
 import { AlrService } from '../core';
-import { ALRReturnLinkComponent, AlrReviewGroupDecisionComponent, AlrTaskComponent } from './components';
+import { ALRReturnLinkComponent, AlrTaskComponent } from './components';
 import { AlrTaskReviewComponent } from './components/alr-task-review/alr-task-review.component';
 
 @NgModule({
-  imports: [
-    ALRReturnLinkComponent,
-    AlrReviewGroupDecisionComponent,
-    AlrTaskComponent,
-    AlrTaskReviewComponent,
-    RouterModule,
-    SharedModule,
-  ],
+  imports: [ALRReturnLinkComponent, AlrTaskComponent, AlrTaskReviewComponent, RouterModule, SharedModule],
   providers: [AlrService, CapitalizeFirstPipe, ItemNamePipe, TaskTypeToBreadcrumbPipe],
-  exports: [ALRReturnLinkComponent, AlrReviewGroupDecisionComponent, AlrTaskComponent, AlrTaskReviewComponent],
+  exports: [ALRReturnLinkComponent, AlrTaskComponent, AlrTaskReviewComponent],
 })
 export class AlrTaskSharedModule {}

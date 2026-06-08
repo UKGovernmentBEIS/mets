@@ -335,7 +335,7 @@ export class DetailsComponent implements OnInit {
     },
     {
       permission: 'REVIEW_NER',
-      task: 'Review',
+      task: 'Review/Submit',
       type: 'NER',
     },
     {

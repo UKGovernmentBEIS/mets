@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
-import { AccountUpdateCommencementDateDTO } from '../model/accountUpdateCommencementDateDTO';
+import { AviationAccountReportingObligationFirstYearDTO } from '../model/aviationAccountReportingObligationFirstYearDTO';
 import { AviationAccountUpdateDTO } from '../model/aviationAccountUpdateDTO';
 import { BASE_PATH } from '../variables';
 
@@ -171,50 +171,53 @@ export class AviationAccountUpdateService {
   }
 
   /**
-   * Update and Validate the commencement date of the account
+   * Validate and update the first year of reporting obligation for an aviation account
    * @param id The account id
-   * @param accountUpdateCommencementDateDTO
+   * @param aviationAccountReportingObligationFirstYearDTO
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public updateCommencementDate1(
+  public updateRegistryReportingFirstYear1(
     id: number,
-    accountUpdateCommencementDateDTO: AccountUpdateCommencementDateDTO,
+    aviationAccountReportingObligationFirstYearDTO: AviationAccountReportingObligationFirstYearDTO,
   ): Observable<any>;
-  public updateCommencementDate1(
+  public updateRegistryReportingFirstYear1(
     id: number,
-    accountUpdateCommencementDateDTO: AccountUpdateCommencementDateDTO,
+    aviationAccountReportingObligationFirstYearDTO: AviationAccountReportingObligationFirstYearDTO,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpResponse<any>>;
-  public updateCommencementDate1(
+  public updateRegistryReportingFirstYear1(
     id: number,
-    accountUpdateCommencementDateDTO: AccountUpdateCommencementDateDTO,
+    aviationAccountReportingObligationFirstYearDTO: AviationAccountReportingObligationFirstYearDTO,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpEvent<any>>;
-  public updateCommencementDate1(
+  public updateRegistryReportingFirstYear1(
     id: number,
-    accountUpdateCommencementDateDTO: AccountUpdateCommencementDateDTO,
+    aviationAccountReportingObligationFirstYearDTO: AviationAccountReportingObligationFirstYearDTO,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<any>;
-  public updateCommencementDate1(
+  public updateRegistryReportingFirstYear1(
     id: number,
-    accountUpdateCommencementDateDTO: AccountUpdateCommencementDateDTO,
+    aviationAccountReportingObligationFirstYearDTO: AviationAccountReportingObligationFirstYearDTO,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<any> {
     if (id === null || id === undefined) {
-      throw new Error('Required parameter id was null or undefined when calling updateCommencementDate1.');
+      throw new Error('Required parameter id was null or undefined when calling updateRegistryReportingFirstYear1.');
     }
-    if (accountUpdateCommencementDateDTO === null || accountUpdateCommencementDateDTO === undefined) {
+    if (
+      aviationAccountReportingObligationFirstYearDTO === null ||
+      aviationAccountReportingObligationFirstYearDTO === undefined
+    ) {
       throw new Error(
-        'Required parameter accountUpdateCommencementDateDTO was null or undefined when calling updateCommencementDate1.',
+        'Required parameter aviationAccountReportingObligationFirstYearDTO was null or undefined when calling updateRegistryReportingFirstYear1.',
       );
     }
 
@@ -249,8 +252,8 @@ export class AviationAccountUpdateService {
     }
 
     return this.httpClient.post<any>(
-      `${this.configuration.basePath}/v1.0/aviation/accounts/${encodeURIComponent(String(id))}/commencement-date`,
-      accountUpdateCommencementDateDTO,
+      `${this.configuration.basePath}/v1.0/aviation/accounts/${encodeURIComponent(String(id))}/registry-reporting-first-year`,
+      aviationAccountReportingObligationFirstYearDTO,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

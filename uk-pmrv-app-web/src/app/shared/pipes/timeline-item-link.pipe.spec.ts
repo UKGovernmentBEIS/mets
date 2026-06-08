@@ -1321,7 +1321,43 @@ describe('TimelineItemLinkPipe', () => {
     requestAction.type = 'NER_APPLICATION_CANCELLED';
     expect(pipe.transform(requestAction)).toBe(null);
 
+    requestAction.type = 'NER_RECALLED_FROM_VERIFICATION';
+    expect(pipe.transform(requestAction)).toBe(null);
+
+    requestAction.type = 'NER_PEER_REVIEW_REQUESTED';
+    expect(pipe.transform(requestAction)).toBe(null);
+
+    requestAction.type = 'NER_APPLICATION_RE_INITIATED';
+    expect(pipe.transform(requestAction)).toBe(null);
+
     requestAction.type = 'NER_APPLICATION_SENT_TO_VERIFIER';
     expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'ner', 'submitted']);
+
+    requestAction.type = 'NER_APPLICATION_VERIFICATION_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'ner', 'submitted']);
+
+    requestAction.type = 'NER_APPLICATION_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'ner', 'submitted']);
+
+    requestAction.type = 'NER_APPLICATION_AMENDS_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'ner', 'submitted']);
+
+    requestAction.type = 'NER_APPLICATION_AMENDS_SENT_TO_VERIFIER';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'ner', 'submitted']);
+
+    requestAction.type = 'NER_APPLICATION_COMPLETED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'ner', 'submitted']);
+
+    requestAction.type = 'NER_VERIFICATION_RETURNED_TO_OPERATOR';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'ner', 'returned-to-operator']);
+
+    requestAction.type = 'NER_APPLICATION_RETURNED_FOR_AMENDS';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'ner', 'return-for-amends']);
+
+    requestAction.type = 'NER_PEER_REVIEW_ACCEPTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'ner', 'peer-review-decision']);
+
+    requestAction.type = 'NER_PEER_REVIEW_REJECTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'ner', 'peer-review-decision']);
   });
 });

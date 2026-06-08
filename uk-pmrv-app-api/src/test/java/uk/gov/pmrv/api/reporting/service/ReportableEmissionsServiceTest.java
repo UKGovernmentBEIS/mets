@@ -9,6 +9,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
+import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
+import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.reporting.domain.InstallationReportableEmissionsUpdatedEvent;
 import uk.gov.pmrv.api.reporting.domain.ReportableEmissionsEntity;
 import uk.gov.pmrv.api.reporting.domain.ReportableEmissionsSaveParams;
@@ -38,6 +40,12 @@ class ReportableEmissionsServiceTest {
 
     @Mock
     private ReportableEmissionsRepository reportableEmissionsRepository;
+
+    @Mock
+    private AccountRepository accountRepository;
+
+    @Mock
+    private InstallationAccountQueryService installationAccountQueryService;
     
     @Mock
     private ApplicationEventPublisher publisher;

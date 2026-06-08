@@ -6,22 +6,37 @@ import { Observable } from 'rxjs';
 import { CommonActionsStore } from '@actions/store/common-actions.store';
 import { AttachedFile } from '@shared/types/attached-file.type';
 
-import { NERApplicationSubmittedRequestActionPayload, RequestActionDTO } from 'pmrv-api';
+import {
+  NERApplicationCompletedRequestActionPayload,
+  NERApplicationSubmittedRequestActionPayload,
+  NERApplicationVerificationSubmittedRequestActionPayload,
+  NERRegulatorReviewReturnedForAmendsRequestActionPayload,
+  PeerReviewDecisionSubmittedRequestActionPayload,
+  RequestActionDTO,
+} from 'pmrv-api';
 
 @Injectable({ providedIn: 'root' })
 export class NerActionService {
   private readonly store = inject(CommonActionsStore);
 
-  private getBaseFileDownloadUrl() {
+  getBaseFileDownloadUrl() {
     const actionId = this.store.actionId;
     return `/actions/${actionId}/file-download/attachment/`;
   }
 
-  get payload$(): Observable<NERApplicationSubmittedRequestActionPayload> {
+  get payload$(): Observable<
+    | NERApplicationSubmittedRequestActionPayload
+    | NERRegulatorReviewReturnedForAmendsRequestActionPayload
+    | PeerReviewDecisionSubmittedRequestActionPayload
+  > {
     return this.store.payload$;
   }
 
-  get payload(): Signal<NERApplicationSubmittedRequestActionPayload> {
+  get payload(): Signal<
+    | NERApplicationSubmittedRequestActionPayload
+    | NERRegulatorReviewReturnedForAmendsRequestActionPayload
+    | PeerReviewDecisionSubmittedRequestActionPayload
+  > {
     return toSignal(this.payload$);
   }
 
@@ -41,16 +56,16 @@ export class NerActionService {
     return toSignal(this.requestActionType$);
   }
 
-  getOperatorDownloadUrlFile(alrFile: string): AttachedFile {
+  getOperatorDownloadUrlFile(file: string): AttachedFile {
     const url = this.getBaseFileDownloadUrl();
     const attachments: { [key: string]: string } = (
       this.store.getValue().action.payload as NERApplicationSubmittedRequestActionPayload
     )?.nerAttachments;
 
-    return alrFile
+    return file
       ? {
-          downloadUrl: url + `${alrFile}`,
-          fileName: attachments[alrFile],
+          downloadUrl: url + `${file}`,
+          fileName: attachments[file],
         }
       : null;
   }
@@ -60,6 +75,62 @@ export class NerActionService {
     const attachments: { [key: string]: string } = (
       this.store.getValue().action.payload as NERApplicationSubmittedRequestActionPayload
     )?.nerAttachments;
+
+    return (
+      files?.map((id) => ({
+        downloadUrl: url + `${id}`,
+        fileName: attachments[id],
+      })) ?? []
+    );
+  }
+
+  getVerifierDownloadUrlFile(file: string): AttachedFile {
+    const url = this.getBaseFileDownloadUrl();
+    const attachments: { [key: string]: string } = (
+      this.store.getValue().action.payload as NERApplicationVerificationSubmittedRequestActionPayload
+    )?.verificationAttachments;
+
+    return file
+      ? {
+          downloadUrl: url + `${file}`,
+          fileName: attachments[file],
+        }
+      : null;
+  }
+
+  getVerifierDownloadUrlFiles(files: string[]): AttachedFile[] {
+    const url = this.getBaseFileDownloadUrl();
+    const attachments: { [key: string]: string } = (
+      this.store.getValue().action.payload as NERApplicationVerificationSubmittedRequestActionPayload
+    )?.verificationAttachments;
+
+    return (
+      files?.map((id) => ({
+        downloadUrl: url + `${id}`,
+        fileName: attachments[id],
+      })) ?? []
+    );
+  }
+
+  getRegulatorDownloadUrlFile(file: string): AttachedFile {
+    const url = this.getBaseFileDownloadUrl();
+    const attachments: { [key: string]: string } = (
+      this.store.getValue().action.payload as NERApplicationCompletedRequestActionPayload
+    )?.regulatorReviewAttachments;
+
+    return file
+      ? {
+          downloadUrl: url + `${file}`,
+          fileName: attachments[file],
+        }
+      : null;
+  }
+
+  getRegulatorDownloadUrlFiles(files: string[]): AttachedFile[] {
+    const attachments: { [key: string]: string } = (
+      this.store.getValue().action.payload as NERRegulatorReviewReturnedForAmendsRequestActionPayload
+    )?.regulatorReviewAttachments;
+    const url = this.getBaseFileDownloadUrl();
 
     return (
       files?.map((id) => ({

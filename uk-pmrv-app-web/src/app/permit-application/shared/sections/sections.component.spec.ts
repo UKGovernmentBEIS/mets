@@ -73,7 +73,7 @@ describe('SectionsComponent', () => {
       ).toEqual([
         'Define permit type',
         'Installation and operator details',
-        'Other environmental permits or licences',
+        'Other environmental permits or licenses',
         'Description of the installation',
         'Regulated activities carried out at the installation',
         'Estimated annual CO2e',

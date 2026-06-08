@@ -15,8 +15,7 @@ import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { isFUMM } from '@aviation/shared/components/emp/emission-sources/isFUMM';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { screen, waitForElementToBeRemoved } from '@testing-library/angular';
-import userEvent from '@testing-library/user-event';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 
 import { MonitoringApproachFormProvider, MonitoringSummaryComponent } from '../../monitoring-approach';
 import { basePath } from './helpers';

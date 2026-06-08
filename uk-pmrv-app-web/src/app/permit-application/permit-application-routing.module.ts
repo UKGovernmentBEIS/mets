@@ -188,15 +188,15 @@ const permitRoutes: PermitRoute[] = [
     children: [
       {
         path: '',
-        data: { pageTitle: 'Other environmental permits or licences' },
+        data: { pageTitle: 'Other environmental permits or licenses' },
         component: OtherPermitsComponent,
         canDeactivate: [PendingRequestGuard],
       },
       {
         path: 'summary',
         data: {
-          pageTitle: 'Other environmental permits or licences - Summary page',
-          breadcrumb: 'Other environmental permits or licences',
+          pageTitle: 'Other environmental permits or licenses - Summary page',
+          breadcrumb: 'Other environmental permits or licenses',
         },
         component: OtherPermitsSummaryComponent,
         canActivate: [SummaryGuard],

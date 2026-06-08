@@ -32,6 +32,7 @@ public class NonComplianceCivilPenaltyPeerDecisionActionHandler
     private final RequestService requestService;
     private final RequestTaskService requestTaskService;
     private final WorkflowService workflowService;
+    private final NonCompliancePeerReviewActionHelper peerReviewActionHelper;
 
     @Override
     public void process(final Long requestTaskId,
@@ -48,6 +49,10 @@ public class NonComplianceCivilPenaltyPeerDecisionActionHandler
                 taskActionPayload,
                 RequestActionPayloadType.NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
             );
+
+        actionPayload.setSubmittedTo(peerReviewActionHelper.resolveMainRegulatorName(
+                request.getId(),
+                RequestActionType.NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_REQUESTED));
 
         final RequestActionType type = actionPayload.getDecision().getType() == PeerReviewDecisionType.AGREE ?
             RequestActionType.NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_ACCEPTED :

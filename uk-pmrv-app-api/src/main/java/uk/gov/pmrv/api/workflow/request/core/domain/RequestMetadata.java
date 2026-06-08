@@ -28,6 +28,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalReques
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueRequestMetadata;
@@ -57,6 +58,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQ
                 @DiscriminatorMapping(schema = ALRRequestMetaData.class, value = "ALR"),
                 @DiscriminatorMapping(schema = HSETIRequestMetadata.class, value = "HSE_TI"),
                 @DiscriminatorMapping(schema = WasteQDRRequestMetaData.class, value = "WASTE_QDR"),
+                @DiscriminatorMapping(schema = NERRequestMetadata.class, value = "NER"),
 
                 // Aviation related request metadata
                 @DiscriminatorMapping(schema = AviationAerRequestMetadata.class, value = "AVIATION_AER"),
@@ -90,6 +92,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.wasteqdr.domain.WasteQ
         @JsonSubTypes.Type(value = ALRRequestMetaData.class, name = "ALR"),
         @JsonSubTypes.Type(value = HSETIRequestMetadata.class, name = "HSE_TI"),
         @JsonSubTypes.Type(value = WasteQDRRequestMetaData.class, name = "WASTE_QDR"),
+        @JsonSubTypes.Type(value = NERRequestMetadata.class, name = "NER"),
 
         // Aviation related request metadata
         @JsonSubTypes.Type(value = AviationAerRequestMetadata.class, name = "AVIATION_AER"),

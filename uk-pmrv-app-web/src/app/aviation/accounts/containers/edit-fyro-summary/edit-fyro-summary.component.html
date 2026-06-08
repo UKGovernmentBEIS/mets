@@ -1,0 +1,36 @@
+@if (currentState(); as currentState) {
+  <app-page-heading caption="Update first year of reporting obligation">Check your answers</app-page-heading>
+
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>First year of reporting obligation</dt>
+      <dd govukSummaryListRowValue>
+        {{ currentState?.commencementDate | govukDate }}
+      </dd>
+      <dd govukSummaryListRowActions>
+        <a
+          govukLink
+          hidden-text="first year of reporting obligation"
+          [routerLink]="['../']"
+          [state]="{ changing: true }">
+          Change
+        </a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ currentState?.reason }}
+      </dd>
+      <dd govukSummaryListRowActions>
+        <a hidden-text="reason" [routerLink]="['../']" govukLink>Change</a>
+      </dd>
+    </div>
+  </dl>
+  <button govukButton type="button" (click)="onContinue()">Confirm and complete</button>
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <a govukLink [routerLink]="['../../']">Return to aviation operator's details</a>
+  </div>
+}

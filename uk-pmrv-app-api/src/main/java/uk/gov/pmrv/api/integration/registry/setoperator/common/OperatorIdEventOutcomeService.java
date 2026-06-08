@@ -78,7 +78,7 @@ public class OperatorIdEventOutcomeService {
             eventOutcome.setOutcome(IntegrationEventOutcome.SUCCESS);
             log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.INSTALLATION_SERVICE_KEY, event.getEmitterId(),
                     NotifyRegistryUtils.OPERATOR_ID_INTEGRATION_POINT_KEY, "Operator Id received from registry " + event);
-            publisher.publishEvent(InstallationAccountUpdatedRegistryEvent.builder().accountId(account.getId()).isFromSetOperatorId(true).build());
+            publisher.publishEvent(InstallationAccountUpdatedRegistryEvent.builder().accountId(account.getId()).skipRequestAction(true).build());
             publisher.publishEvent(AccountContactRegistryEvent.builder().accountsIds(List.of(account.getId())).build());
             installationSetOperatorIdWithholdFlagUpdateService.notifyRegistryWithWithholdFlag(account.getId());
             installationSetOperatorIdRegistryEmissionsService.notifyRegistryWithEmissions(account.getId());

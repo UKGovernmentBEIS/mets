@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.service.NerUploadAttachmentService;
 
 @ExtendWith(MockitoExtension.class)
 class NerUploadAttachmentServiceTest {

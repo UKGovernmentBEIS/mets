@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { throwError } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, asyncData, BasePage, CountryServiceStub, mockClass } from '@testing';
 import { KeycloakService } from 'keycloak-angular';
 
-import { VerificationBodiesService, VerificationBodyUpdateDTO } from 'pmrv-api';
+import { VerificationBodiesService, VerificationBodyEmissionSchemeDTO } from 'pmrv-api';
 
 import { SharedUserModule } from '../../shared-user/shared-user.module';
 import { ContactsComponent } from '../contacts/contacts.component';
@@ -74,9 +74,8 @@ describe('DetailsComponent', () => {
       return this.query<HTMLInputElement>('#types-0').checked;
     }
 
-    set validForm(verificationBody: VerificationBodyUpdateDTO) {
+    set validForm(verificationBody: VerificationBodyEmissionSchemeDTO) {
       this.setInputValue('#details.name', verificationBody.name);
-      this.setInputValue('#details.accreditationRefNum', verificationBody.accreditationReferenceNumber);
       this.setInputValue('#details.address.line1', verificationBody.address.line1);
       this.setInputValue('#details.address.line2', verificationBody.address.line2);
       this.setInputValue('#details.address.city', verificationBody.address.city);
@@ -90,8 +89,10 @@ describe('DetailsComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [DetailsComponent, FormComponent, ContactsComponent],
-      imports: [SharedModule, RouterTestingModule, SharedUserModule],
+      imports: [SharedModule, SharedUserModule],
       providers: [
+        provideRouter([]),
+        provideHttpClientTesting(),
         { provide: VerificationBodiesService, useValue: verificationBodiesService },
         { provide: CountryService, useClass: CountryServiceStub },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
@@ -113,7 +114,6 @@ describe('DetailsComponent', () => {
 
   it('should fill the form with the existing verification body information', () => {
     expect(page.name).toEqual(validVerificationBodyUpdate.name);
-    expect(page.accreditationReferenceNumber).toEqual(validVerificationBodyUpdate.accreditationReferenceNumber);
     expect(page.line1).toEqual(validVerificationBodyUpdate.address.line1);
     expect(page.line2).toEqual(validVerificationBodyUpdate.address.line2 ?? '');
     expect(page.city).toEqual(validVerificationBodyUpdate.address.city);
@@ -135,20 +135,6 @@ describe('DetailsComponent', () => {
     expect(verificationBodiesService.updateVerificationBody).toHaveBeenCalledWith(validVerificationBodyUpdate);
     expect(navigateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith(['..'], { relativeTo: activatedRouteStub });
-  });
-
-  it('should handle already existing accreditation reference number', () => {
-    verificationBodiesService.updateVerificationBody.mockReturnValueOnce(
-      throwError(() => new HttpErrorResponse({ status: 400, error: { code: 'VERBODY1001' } })),
-    );
-
-    page.validForm = validVerificationBodyUpdate;
-
-    page.submitButton.click();
-    fixture.detectChanges();
-
-    expect(page.errorSummary).toBeTruthy();
-    expect(page.errorSummary.textContent).toContain('Enter a unique Accreditation reference number');
   });
 
   it('should display the error page if the verification body no longer exists on submission', async () => {

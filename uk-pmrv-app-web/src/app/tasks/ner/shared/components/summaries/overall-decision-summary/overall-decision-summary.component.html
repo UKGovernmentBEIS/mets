@@ -1,0 +1,31 @@
+@let vm = this.vm();
+
+<app-ner-task
+  [heading]="vm.heading"
+  caption="Overall decision"
+  [taskType]="vm.requestTaskType"
+  [returnLinkLevelsUp]="vm.returnLinkLevelsUp">
+  @if (vm.isReviewTask) {
+    <h2 class="govuk-heading-m">Verifier information</h2>
+  }
+
+  <app-shared-overall-decision-summary-template
+    [isEditable]="vm.isEditable"
+    [overallDecision]="vm.overallDecision"></app-shared-overall-decision-summary-template>
+
+  @if (!vm.hideSubmit) {
+    <div class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and continue</button>
+    </div>
+  }
+
+  @if (vm.isReviewTask) {
+    <app-shared-review-group-decision
+      [isEditable]="vm.isDecisionEditable"
+      [payload]="vm.payload"
+      [downloadUrl]="vm.downloadUrl"
+      [requestTaskId]="vm.requestTaskId"
+      [hideAmendsOption]="true"
+      (formSubmit)="onDecisionSubmit($event)"></app-shared-review-group-decision>
+  }
+</app-ner-task>

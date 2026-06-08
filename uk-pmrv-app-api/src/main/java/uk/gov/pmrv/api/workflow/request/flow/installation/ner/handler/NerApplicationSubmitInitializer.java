@@ -2,6 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.ner.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
@@ -21,10 +22,19 @@ public class NerApplicationSubmitInitializer implements InitializeRequestTaskHan
 
         NerRequestPayload nerRequestPayload = (NerRequestPayload) request.getPayload();
 
+        Long verificationBodyId = !ObjectUtils.isEmpty(nerRequestPayload.getVerificationReport()) ?
+                nerRequestPayload.getVerificationReport().getVerificationBodyId() :
+                null;
+
         return NerApplicationSubmitRequestTaskPayload.builder()
             .payloadType(RequestTaskPayloadType.NER_APPLICATION_SUBMIT_PAYLOAD)
             .ner(nerRequestPayload.getNer())
             .nerFileVersion(nerRequestPayload.getNerFileVersion())
+            .nerAttachments(nerRequestPayload.getNerAttachments())
+            .nerSectionsCompleted(nerRequestPayload.getNerSectionsCompleted())
+            .verificationPerformed(nerRequestPayload.isVerificationPerformed())
+            .verificationSectionsCompleted(nerRequestPayload.getVerificationSectionsCompleted())
+            .verificationBodyId(verificationBodyId)
             .build();
     }
 

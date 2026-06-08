@@ -7,7 +7,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
+import uk.gov.pmrv.api.account.aviation.service.reportingstatus.AviationAccountReportingStatusService;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
@@ -17,6 +20,7 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.Aviation
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateRequestTypeValidationResult;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,6 +38,9 @@ public class AviationDoECorsiaInitiateValidatorServiceTest {
 
     @Mock
     private RequestQueryService requestQueryService;
+
+    @Mock
+    private AviationAccountReportingStatusService aviationAccountReportingStatusService;
 
     @Test
     void getApplicableAccountStatuses() {
@@ -68,6 +75,10 @@ public class AviationDoECorsiaInitiateValidatorServiceTest {
         when(requestQueryService.existByRequestTypeAndStatusAndAccountIdAndMetadataYear(
                 RequestType.AVIATION_DOE_CORSIA,
                 RequestStatus.IN_PROGRESS, accountId, aerRequestMetadata.getYear())).thenReturn(false);
+
+        when(aviationAccountReportingStatusService.getReportingStatusByYear(accountId, aerRequestMetadata.getYear()))
+                .thenReturn(Optional.of(AviationAccountReportingStatus.builder()
+                        .status(AviationAccountReportingStatusType.REQUIRED_TO_REPORT).build()));
 
         RequestCreateRequestTypeValidationResult result = validator.validateRequestType(accountId, requestDetailsDTO);
 

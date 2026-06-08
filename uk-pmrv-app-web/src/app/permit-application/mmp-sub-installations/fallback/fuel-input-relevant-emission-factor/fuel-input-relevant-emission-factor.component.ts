@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormArray, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, Observable, startWith, switchMap } from 'rxjs';
+import { combineLatest, first, map, Observable, startWith, switchMap, take } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
@@ -171,6 +171,7 @@ export class FuelInputRelevantEmissionFactorFAComponent extends ProductBenchmark
         }),
         first(),
         switchMap(() => combineLatest([this.productBenchmarkType$])),
+        take(1),
       )
       .subscribe(([productBenchmarkType]) => {
         this.store.setState({

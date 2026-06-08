@@ -716,4 +716,84 @@
 		</sql>
 	</changeSet>
 
+	<changeSet id="0_2_0_add_user_mi_report_type" author="Stavroula.PAPAGIANNAKOPOULOU@trasys.gr">
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report_system)" />
+			<column name="competent_authority" value="ENGLAND" />
+			<column name="type" value="LIST_OF_USER_REPORT_ENTRIES" />
+			<column name="account_type" value="INSTALLATION" />
+			<column name="entity_type" value="PmrvMiReportSystemEntity" />
+		</insert>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report_system)" />
+			<column name="competent_authority" value="NORTHERN_IRELAND" />
+			<column name="type" value="LIST_OF_USER_REPORT_ENTRIES" />
+			<column name="account_type" value="INSTALLATION" />
+			<column name="entity_type" value="PmrvMiReportSystemEntity" />
+		</insert>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report_system)" />
+			<column name="competent_authority" value="OPRED" />
+			<column name="type" value="LIST_OF_USER_REPORT_ENTRIES" />
+			<column name="account_type" value="INSTALLATION" />
+			<column name="entity_type" value="PmrvMiReportSystemEntity" />
+		</insert>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report_system)" />
+			<column name="competent_authority" value="SCOTLAND" />
+			<column name="type" value="LIST_OF_USER_REPORT_ENTRIES" />
+			<column name="account_type" value="INSTALLATION" />
+			<column name="entity_type" value="PmrvMiReportSystemEntity" />
+		</insert>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report_system)" />
+			<column name="competent_authority" value="WALES" />
+			<column name="type" value="LIST_OF_USER_REPORT_ENTRIES" />
+			<column name="account_type" value="INSTALLATION" />
+			<column name="entity_type" value="PmrvMiReportSystemEntity" />
+		</insert>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report_system)" />
+			<column name="competent_authority" value="ENGLAND" />
+			<column name="type" value="LIST_OF_USER_REPORT_ENTRIES" />
+			<column name="account_type" value="AVIATION" />
+			<column name="entity_type" value="PmrvMiReportSystemEntity" />
+		</insert>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report_system)" />
+			<column name="competent_authority" value="NORTHERN_IRELAND" />
+			<column name="type" value="LIST_OF_USER_REPORT_ENTRIES" />
+			<column name="account_type" value="AVIATION" />
+			<column name="entity_type" value="PmrvMiReportSystemEntity" />
+		</insert>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report_system)" />
+			<column name="competent_authority" value="OPRED" />
+			<column name="type" value="LIST_OF_USER_REPORT_ENTRIES" />
+			<column name="account_type" value="AVIATION" />
+			<column name="entity_type" value="PmrvMiReportSystemEntity" />
+		</insert>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report_system)" />
+			<column name="competent_authority" value="SCOTLAND" />
+			<column name="type" value="LIST_OF_USER_REPORT_ENTRIES" />
+			<column name="account_type" value="AVIATION" />
+			<column name="entity_type" value="PmrvMiReportSystemEntity" />
+		</insert>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report_system)" />
+			<column name="competent_authority" value="WALES" />
+			<column name="type" value="LIST_OF_USER_REPORT_ENTRIES" />
+			<column name="account_type" value="AVIATION" />
+			<column name="entity_type" value="PmrvMiReportSystemEntity" />
+		</insert>
+		<rollback>
+			<sql>
+				delete
+				from mi_report_system
+				where type = 'LIST_OF_USER_REPORT_ENTRIES';
+			</sql>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>

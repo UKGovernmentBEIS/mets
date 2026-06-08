@@ -1,0 +1,11 @@
+import {
+  ALRApplicationRegulatorReviewSubmitRequestTaskPayload,
+  ALRApplicationVerificationSubmitRequestTaskPayload,
+  BDRApplicationRegulatorReviewSubmitRequestTaskPayload,
+  NERApplicationRegulatorReviewSubmitRequestTaskPayload,
+} from 'pmrv-api';
+
+export type ReviewDecisionPayload = ALRApplicationRegulatorReviewSubmitRequestTaskPayload &
+  ALRApplicationVerificationSubmitRequestTaskPayload &
+  NERApplicationRegulatorReviewSubmitRequestTaskPayload &
+  BDRApplicationRegulatorReviewSubmitRequestTaskPayload;

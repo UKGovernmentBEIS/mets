@@ -1,8 +1,10 @@
 import { Paging } from '@shared/model';
 
 import {
+  AccountDetailsHistoryDTO,
   AviationAccountCreationDTO,
   AviationAccountEmpDTO,
+  AviationAccountReportingObligationFirstYearDTO,
   AviationAccountReportingStatusHistoryCreationDTO,
   AviationAccountReportingStatusHistoryDTO,
   LegalEntityDTO,
@@ -24,6 +26,17 @@ export interface CurrentAccountState {
   account: AviationAccountEmpDTO;
   reportingStatusHistory: ReportingStatusHistoryState;
   reportingStatus: ReportingStatusState;
+  upsertFirstYearOfReportingObligation?: AviationAccountReportingObligationFirstYearDTO;
+  accountDetailsHistory: AccountDetailsHistoryState;
+}
+
+export interface AccountDetailsHistoryState {
+  history: AccountDetailsHistoryDTO[];
+  total: number;
+  paging: {
+    page: number;
+    pageSize: number;
+  };
 }
 
 export interface ReportingStatusHistoryState {
@@ -89,6 +102,15 @@ export const initialCurrentAccountState: CurrentAccountState = {
   account: null,
   reportingStatus: initialReportingStatusState,
   reportingStatusHistory: {
+    history: [],
+    total: 0,
+    paging: {
+      page: 1,
+      pageSize: 30,
+    },
+  },
+  upsertFirstYearOfReportingObligation: null,
+  accountDetailsHistory: {
     history: [],
     total: 0,
     paging: {

@@ -6,13 +6,13 @@ import { lastValueFrom, of } from 'rxjs';
 
 import {
   mockAuthorityService,
-  mockKeycloakService,
+  mockKeycloak,
   mockTermsAndConditionsService,
   mockUsersService,
 } from '@core/guards/mocks';
 import { AuthStore } from '@core/store/auth';
 import { ActivatedRouteStub } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 
 import { AuthoritiesService, TermsAndConditionsService, UsersService } from 'pmrv-api';
 
@@ -30,7 +30,7 @@ describe('AviationAuthGuard', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       providers: [
-        { provide: KeycloakService, useValue: mockKeycloakService },
+        { provide: Keycloak, useValue: mockKeycloak },
         { provide: UsersService, useValue: mockUsersService },
         { provide: AuthoritiesService, useValue: mockAuthorityService },
         { provide: TermsAndConditionsService, useValue: mockTermsAndConditionsService },

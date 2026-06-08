@@ -38,6 +38,9 @@ public class BpmnProcessConstants {
     public static final String REVIEW_OUTCOME = "reviewOutcome";
     public static final String REVIEW_DECISION_TYPE_OUTCOME = "reviewDecisionTypeOutcome";
 
+    // amends outcome
+    public static final String AMENDS_OUTCOME = "amendsOutcome";
+
     // rfi
     public static final String RFI_REQUESTED = "rfiRequested";
     public static final String RFI_START_TIME = "rfiStartTime";
@@ -89,6 +92,7 @@ public class BpmnProcessConstants {
     public static final String NOI_PENALTY_LIABLE = "noiPenaltyLiable";
     
     // NER
+    public static final String NER_INITIATION_TYPE = "nerInitiationType";
     public static final String NER_SUBMIT_OUTCOME = "nerSubmitOutcome";
     public static final String SEND_NOTICE = "sendNotice";
     public static final String AUTHORITY_RESPONSE = "authorityResponse";

@@ -2,7 +2,8 @@ import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { KeycloakService } from 'keycloak-angular';
+import { mockKeycloak } from '@core/guards/mocks';
+import Keycloak from 'keycloak-js';
 
 import { OperatorUserDTO } from 'pmrv-api';
 
@@ -36,7 +37,11 @@ describe('SuccessComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [SuccessComponent],
       imports: [SharedModule, RouterTestingModule],
-      providers: [AuthService, KeycloakService, { provide: APP_BASE_HREF, useValue: '/installation-aviation/' }],
+      providers: [
+        AuthService,
+        { provide: Keycloak, useValue: mockKeycloak },
+        { provide: APP_BASE_HREF, useValue: '/installation-aviation/' },
+      ],
     }).compileComponents();
 
     TestBed.inject(UserRegistrationStore).setState({

@@ -1,5 +1,5 @@
 <app-ner-task heading="Upload new entrant reserve" caption="New entrant reserve" [taskType]="requestTaskType()">
-  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()" [showBackLink]="false">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()">
     <div class="govuk-!-width-three-quarters">
       <app-file-input
         [downloadUrl]="getDocumentDownloadUrl"
@@ -7,6 +7,7 @@
         headerSize="s"
         label="Upload file"
         listTitle="Uploaded file"
+        [customHintTemplate]="hintTemplate"
         [showFilesizeHint]="false"
         [fileNameTransformer]="renameFile.bind(this)" />
 
@@ -27,3 +28,15 @@
     </div>
   </app-wizard-step>
 </app-ner-task>
+
+<ng-template #hintTemplate>
+  Use the
+  <a
+    class="govuk-link"
+    href="https://www.gov.uk/government/publications/uk-ets-activity-level-report-template"
+    target="_blank"
+    rel="noreferrer noopener">
+    activity level report (ALR) template
+  </a>
+  to create your new entrant data report.
+</ng-template>

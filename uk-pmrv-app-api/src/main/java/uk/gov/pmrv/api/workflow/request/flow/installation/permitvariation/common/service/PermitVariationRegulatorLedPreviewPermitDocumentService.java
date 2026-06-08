@@ -19,6 +19,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submit
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.UUID;
@@ -44,23 +45,30 @@ public class PermitVariationRegulatorLedPreviewPermitDocumentService extends Per
 
         final RequestTask requestTask = requestTaskService.findTaskById(taskId);
         final PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload taskPayload =
-            (PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload) requestTask.getPayload();
+                (PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload) requestTask.getPayload();
         final Request request = requestTask.getRequest();
         final Long accountId = request.getAccountId();
 
         final Permit permit = taskPayload.getPermit();
         final PermitType permitType = taskPayload.getPermitType();
-        final PermitVariationRegulatorLedGrantDetermination determination = taskPayload.getDetermination();
-        final LocalDate activationDate = determination.getActivationDate();
-        final String logChanges = determination.getLogChanges();
         final Map<UUID, String> attachments = taskPayload.getAttachments();
-        final SortedMap<String, BigDecimal> annualEmissionsTargets = determination.getAnnualEmissionsTargets();
+
+        LocalDate activationDate = null;
+        String logChanges = null;
+        SortedMap<String, BigDecimal> annualEmissionsTargets = null;
+
+        final PermitVariationRegulatorLedGrantDetermination determination = taskPayload.getDetermination();
+        if (determination != null) {
+            activationDate = determination.getActivationDate();
+            logChanges = determination.getLogChanges();
+            annualEmissionsTargets = determination.getAnnualEmissionsTargets();
+        }
 
         return this.getFile(decisionNotification, request, accountId, permit, permitType, activationDate, annualEmissionsTargets, attachments, logChanges);
     }
 
     @Override
-    public RequestTaskType getType() {
-        return RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT;
+    public List<RequestTaskType> getTypes() {
+        return List.of(RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT);
     }
 }

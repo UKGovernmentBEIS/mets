@@ -10,8 +10,7 @@ import { RequestTaskPageComponent } from '@aviation/request-task/containers';
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { screen, waitForElementToBeRemoved } from '@testing-library/dom';
-import userEvent from '@testing-library/user-event';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 
 import { EMP_CHILD_ROUTES } from '../../../emp.routes';
 import { dataGapsFormProvider } from '../data-gaps-form.provider';

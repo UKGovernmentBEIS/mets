@@ -243,4 +243,82 @@
             </sql>
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_update_request_payment_fee_for_NER" author="vasileios.vitzilaios@keyes.eu">
+        <sql>
+            UPDATE request_payment_fee
+            SET amount = '1497.83'
+            WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'ENGLAND'
+                  AND request_type = 'NER'
+            )
+              AND type = 'FIXED';
+
+            UPDATE request_payment_fee
+            SET amount = '1'
+            WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'SCOTLAND'
+                  AND request_type = 'NER'
+            )
+              AND type = 'FIXED';
+
+            UPDATE request_payment_fee
+            SET amount = '1579'
+            WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'NORTHERN_IRELAND'
+                  AND request_type = 'NER'
+            )
+              AND type = 'FIXED';
+
+            UPDATE request_payment_fee
+            SET amount = '0'
+            WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'WALES'
+                  AND request_type = 'NER'
+            )
+              AND type = 'FIXED';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE request_payment_fee
+                SET amount = '1271'
+                WHERE fee_method_id IN (
+                    SELECT id FROM request_payment_fee_method
+                    WHERE competent_authority = 'ENGLAND'
+                      AND request_type = 'NER'
+                )
+                  AND type = 'FIXED';
+
+                UPDATE request_payment_fee
+                SET amount = '2535'
+                WHERE fee_method_id IN (
+                    SELECT id FROM request_payment_fee_method
+                    WHERE competent_authority = 'SCOTLAND'
+                      AND request_type = 'NER'
+                )
+                  AND type = 'FIXED';
+
+                UPDATE request_payment_fee
+                SET amount = '1358'
+                WHERE fee_method_id IN (
+                    SELECT id FROM request_payment_fee_method
+                    WHERE competent_authority = 'NORTHERN_IRELAND'
+                      AND request_type = 'NER'
+                )
+                  AND type = 'FIXED';
+
+                UPDATE request_payment_fee
+                SET amount = '2959'
+                WHERE fee_method_id IN (
+                    SELECT id FROM request_payment_fee_method
+                    WHERE competent_authority = 'WALES'
+                      AND request_type = 'NER'
+                )
+                  AND type = 'FIXED';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -26,7 +26,6 @@ describe('FormComponent', () => {
 
     set validForm(verificationBody: Omit<Required<VerificationBodyDTO>, 'id' | 'status'>) {
       this.setInputValue('#details.name', verificationBody.name);
-      this.setInputValue('#details.accreditationRefNum', verificationBody.accreditationReferenceNumber);
       this.setInputValue('#details.address.line1', verificationBody.address.line1);
       this.setInputValue('#details.address.line2', verificationBody.address.line2);
       this.setInputValue('#details.address.city', verificationBody.address.city);
@@ -36,7 +35,11 @@ describe('FormComponent', () => {
     }
 
     set accrediationRefNum(value: string) {
-      this.setInputValue('#details.accreditationRefNum', value);
+      this.setInputValue('#accreditationRefNum_UK_ETS_INSTALLATIONS', value);
+    }
+
+    set accrediationName(value: string) {
+      this.setInputValue('#accreditationName_UK_ETS_INSTALLATIONS', value);
     }
 
     set UK_ETS_AVIATION_checked(value: boolean) {
@@ -47,7 +50,7 @@ describe('FormComponent', () => {
       this.check('#types-0', value);
     }
 
-    private check(selector: string, value): void {
+    private check(selector: string, value: any): void {
       const checkbox = this.query<HTMLInputElement>(selector);
       if ((value && !checkbox.checked) || (!value && checkbox.checked)) {
         checkbox.click();
@@ -66,8 +69,7 @@ describe('FormComponent', () => {
   })
   class TestComponent {
     submit = jest.fn();
-
-    constructor(@Inject(VERIFICATION_BODY_FORM) readonly form: FormGroup) {}
+    readonly form = inject(VERIFICATION_BODY_FORM) as FormGroup;
   }
 
   beforeEach(async () => {
@@ -93,6 +95,7 @@ describe('FormComponent', () => {
 
   it('should require at least one type checked', () => {
     page.validForm = verificationBody;
+    page.accrediationRefNum = 'Accreditation ref num';
     page.submitButton.click();
     fixture.detectChanges();
 
@@ -105,6 +108,7 @@ describe('FormComponent', () => {
     expect(component.formGroupDirective.form.valid).toBeFalsy();
 
     page.UK_ETS_INSTALLATIONS_checked = true;
+    page.accrediationRefNum = 'Accreditation ref num';
     page.submitButton.click();
     fixture.detectChanges();
 

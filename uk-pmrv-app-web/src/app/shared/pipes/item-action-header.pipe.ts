@@ -199,21 +199,23 @@ export class ItemActionHeaderPipe implements PipeTransform {
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED':
-      case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED':
-      case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_ACCEPTED':
-      case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_REJECTED':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
       case 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED':
+        return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
+
+      case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED':
+      case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_ACCEPTED':
+      case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_REJECTED':
       case 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_REQUESTED':
       case 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_ACCEPTED':
       case 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_REJECTED':
-        return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
-
-      case 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED':
       case 'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_REQUESTED':
       case 'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_ACCEPTED':
       case 'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_REJECTED':
+        return `${itemActionTypePipe.transform(item.type)}${item?.submittedTo ? ` to ${item.submittedTo}` : ''} by ${item.submitter}`;
+
+      case 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
       case 'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED':
@@ -385,6 +387,19 @@ export class ItemActionHeaderPipe implements PipeTransform {
 
       case 'NER_APPLICATION_CANCELLED':
       case 'NER_APPLICATION_SENT_TO_VERIFIER':
+      case 'NER_APPLICATION_VERIFICATION_SUBMITTED':
+      case 'NER_RECALLED_FROM_VERIFICATION':
+      case 'NER_APPLICATION_SUBMITTED':
+      case 'NER_VERIFICATION_RETURNED_TO_OPERATOR':
+      case 'NER_APPLICATION_RETURNED_FOR_AMENDS':
+      case 'NER_APPLICATION_AMENDS_SUBMITTED':
+      case 'NER_APPLICATION_AMENDS_SENT_TO_VERIFIER':
+      case 'NER_PEER_REVIEW_REQUESTED':
+      case 'NER_PEER_REVIEW_ACCEPTED':
+      case 'NER_PEER_REVIEW_REJECTED':
+      case 'NER_APPLICATION_DEEMED_WITHDRAWN':
+      case 'NER_APPLICATION_COMPLETED':
+      case 'NER_APPLICATION_RE_INITIATED':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
       default:

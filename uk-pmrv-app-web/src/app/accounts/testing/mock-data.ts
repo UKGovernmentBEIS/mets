@@ -27,6 +27,7 @@ export const mockOperatorListData: AccountOperatorsUsersAuthoritiesInfoDTO = {
       roleName: 'Operator admin',
       userId: 'userTest1',
       authorityCreationDate: '2019-12-21T13:42:43.050682Z',
+      lastLoginDate: '27 April 2026 11:06:01',
     },
     {
       authorityStatus: 'ACTIVE',
@@ -36,6 +37,7 @@ export const mockOperatorListData: AccountOperatorsUsersAuthoritiesInfoDTO = {
       roleName: 'Operator',
       userId: 'userTest2',
       authorityCreationDate: '2020-12-21T13:42:43.050682Z',
+      lastLoginDate: '27 April 2026 11:06:02',
     },
     {
       authorityStatus: 'DISABLED',
@@ -45,6 +47,7 @@ export const mockOperatorListData: AccountOperatorsUsersAuthoritiesInfoDTO = {
       roleName: 'Operator',
       userId: 'userTest3',
       authorityCreationDate: '2020-10-13T13:42:43.050682Z',
+      lastLoginDate: '27 April 2026 11:06:03',
     },
     {
       authorityStatus: 'ACTIVE',
@@ -54,6 +57,7 @@ export const mockOperatorListData: AccountOperatorsUsersAuthoritiesInfoDTO = {
       roleName: 'Operator',
       userId: 'userTest4',
       authorityCreationDate: '2021-01-13T13:42:43.050682Z',
+      lastLoginDate: '27 April 2026 11:06:04',
     },
     {
       authorityStatus: 'PENDING',
@@ -63,6 +67,7 @@ export const mockOperatorListData: AccountOperatorsUsersAuthoritiesInfoDTO = {
       roleName: 'Operator',
       userId: 'userTest5',
       authorityCreationDate: '2021-01-14T13:42:43.050682Z',
+      lastLoginDate: '27 April 2026 11:06:05',
     },
   ] as UserAuthorityInfoDTO[],
   contactTypes: {

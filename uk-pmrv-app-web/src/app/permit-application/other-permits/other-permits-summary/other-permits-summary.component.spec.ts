@@ -63,7 +63,7 @@ describe('OtherPermitsSummaryComponent', () => {
       expect(component).toBeTruthy();
     });
 
-    it('should list the other permits and licences', () => {
+    it('should list the other permits and licenses', () => {
       expect(page.permits).toHaveLength(2);
       expect(
         page.permits.map((permit) => Array.from(permit.querySelectorAll('dd')).map((dd) => dd.textContent)),

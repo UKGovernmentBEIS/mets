@@ -45,3 +45,20 @@ export const canActivateEditReportingStatusSummary: CanActivateFn = (route) => {
     createUrlTreeFromSnapshot(route, ['../'])
   );
 };
+
+export const canDeactivateFyro: CanActivateFn = () => {
+  const operatorAccountsStore = inject(AviationAccountsStore);
+
+  operatorAccountsStore.resetUpsertFyro();
+
+  return true;
+};
+
+export const canActivateFyroSummary: CanActivateFn = (route) => {
+  const operatorAccountsStore = inject(AviationAccountsStore);
+
+  return (
+    !isNil(operatorAccountsStore.getState()?.currentAccount?.upsertFirstYearOfReportingObligation) ||
+    createUrlTreeFromSnapshot(route, ['../'])
+  );
+};

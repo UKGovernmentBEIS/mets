@@ -1,9 +1,7 @@
 package uk.gov.pmrv.api.verificationbody.domain;
 
 import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -12,24 +10,23 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uk.gov.pmrv.api.common.domain.Address;
-import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
 
 import java.time.LocalDateTime;
@@ -43,10 +40,11 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @EntityListeners({AuditingEntityListener.class})
 @Table(name = "verification_body")
-@NamedEntityGraph(name = "emissionTradingSchemes-graph", attributeNodes = @NamedAttributeNode("emissionTradingSchemes"))
 @NamedQuery(
         name = VerificationBody.NAMED_QUERY_FIND_BY_ID,
         query = "select vb from VerificationBody vb "
@@ -55,21 +53,30 @@ import java.util.Set;
         name = VerificationBody.NAMED_QUERY_FIND_ACTIVE_VER_BODIES_ACCREDITED_TO_EMISSION_TRADING_SCHEME,
         query = "select new uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyNameInfoDTO(vb.id, vb.name) "
                 + "from VerificationBody vb "
-                + "inner join vb.emissionTradingSchemes ets "
-                + "where ets = :emissionTradingScheme "
-                + "and vb.status = 'ACTIVE'")
+                + "join vb.emissionSchemes ets "
+                + "where ets.emissionTradingScheme = :emissionTradingScheme "
+                + "and vb.status = 'ACTIVE'"
+)
 @NamedQuery(
         name = VerificationBody.NAMED_QUERY_IS_VER_BODY_ACCREDITED_TO_EMISSION_TRADING_SCHEME,
         query = "select count(vb) > 0 "
                 + "from VerificationBody vb "
-                + "inner join vb.emissionTradingSchemes ets "
+                + "join vb.emissionSchemes ets "
                 + "where vb.id = :vbId "
-                + "and ets = :emissionTradingScheme "
-                + "and vb.status = 'ACTIVE'")
+                + "and ets.emissionTradingScheme = :emissionTradingScheme "
+                + "and vb.status = 'ACTIVE'"
+)
+@NamedQuery(
+        name = VerificationBody.NAMED_QUERY_IS_VER_BODY_WITH_VER_BODY_EMISSION_SCHEMES,
+        query = "select vb "
+                + "from VerificationBody vb "
+                + "inner join VerificationBodyEmissionScheme vbem on vb.id = vbem.verificationBody.id "
+                + "where vb.id = :vbId ")
 public class VerificationBody {
     public static final String NAMED_QUERY_FIND_BY_ID = "VerificationBody.findById";
     public static final String NAMED_QUERY_FIND_ACTIVE_VER_BODIES_ACCREDITED_TO_EMISSION_TRADING_SCHEME = "VerificationBody.findActiveVerificationBodiesAccreditedToEmissionTradingScheme";
     public static final String NAMED_QUERY_IS_VER_BODY_ACCREDITED_TO_EMISSION_TRADING_SCHEME = "VerificationBody.isVerificationBodyAccreditedToEmissionTradingScheme";
+    public static final String NAMED_QUERY_IS_VER_BODY_WITH_VER_BODY_EMISSION_SCHEMES = "VerificationBody.findVerificationBodyWithVerBodyEmissionSchemes";
 
     @EqualsAndHashCode.Exclude
     @Id
@@ -102,23 +109,17 @@ public class VerificationBody {
     @CreatedDate
     private LocalDateTime createdDate;
 
-    @Column(name = "accreditation_reference_number", unique = true)
-    @NotBlank
-    private String accreditationReferenceNumber;
-
-    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "verificationBody", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    @ElementCollection
-    @CollectionTable(name = "verification_body_emission_trading_scheme", joinColumns = @JoinColumn(name = "verification_body_id"))
-    @Column(name="emission_trading_scheme")
-    @Enumerated(EnumType.STRING)
-    private Set<EmissionTradingScheme> emissionTradingSchemes = new HashSet<>();
+    private Set<VerificationBodyEmissionScheme> emissionSchemes = new HashSet<>();
 
-    public void removeEmissionTradingSchemes(Set<EmissionTradingScheme> schemes) {
-        emissionTradingSchemes.removeAll(schemes);
+    public void addEmissionScheme(VerificationBodyEmissionScheme scheme) {
+        emissionSchemes.add(scheme);
+        scheme.setVerificationBody(this);
     }
 
-    public void addEmissionTradingSchemes(Set<EmissionTradingScheme> schemes) {
-        emissionTradingSchemes.addAll(schemes);
+    public void removeEmissionScheme(VerificationBodyEmissionScheme scheme) {
+        emissionSchemes.remove(scheme);
+        scheme.setVerificationBody(null);
     }
 }

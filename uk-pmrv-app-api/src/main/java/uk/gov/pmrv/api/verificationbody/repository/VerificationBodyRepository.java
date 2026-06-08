@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.verificationbody.repository;
 
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,9 +16,9 @@ import java.util.Set;
 @Repository
 public interface VerificationBodyRepository extends JpaRepository<VerificationBody, Long> {
 
-    @EntityGraph(value = "emissionTradingSchemes-graph", type = EntityGraph.EntityGraphType.FETCH)
-    @Query(name = VerificationBody.NAMED_QUERY_FIND_BY_ID)
-    Optional<VerificationBody> findByIdEagerEmissionTradingSchemes(Long id);
+    @Transactional(readOnly = true)
+    @Query(name = VerificationBody.NAMED_QUERY_IS_VER_BODY_WITH_VER_BODY_EMISSION_SCHEMES)
+    Optional<VerificationBody> findVerificationBodyWithVerBodyEmissionSchemes(Long vbId);
 
     @Transactional(readOnly = true)
     Optional<VerificationBody> findByIdAndStatus(Long id, VerificationBodyStatus status);

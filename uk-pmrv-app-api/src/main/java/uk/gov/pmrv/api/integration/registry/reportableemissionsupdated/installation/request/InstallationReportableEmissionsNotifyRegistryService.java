@@ -13,6 +13,7 @@ import uk.gov.netz.api.configuration.service.ConfigurationService;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountInfoDTO;
+import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
@@ -94,6 +95,17 @@ class InstallationReportableEmissionsNotifyRegistryService {
 			return;
 		}
 
+		if (event.isFromAerMarkedAsNotRequired()
+				&& (InstallationAccountStatus.SURRENDERED.equals(account.getStatus())
+				|| InstallationAccountStatus.REVOKED.equals(account.getStatus())
+				|| InstallationAccountStatus.TRANSFERRED.equals(account.getStatus()))
+				&& !event.isFromDre()
+				&& event.getReportableEmissions() == null) {
+
+			notifyRegistry(event, account, requestId);
+			return;
+		}
+
 		if (event.isFromDre()) {
 			notifyRegistry(event, account, requestId);
 			return;
@@ -110,6 +122,7 @@ class InstallationReportableEmissionsNotifyRegistryService {
 		if (aerConditionsAreSatisfied(aerRequestPayload, aerRequestMetadata, event)) {
 			notifyRegistry(event, account, requestId);
 		}
+
 	}
 
 	private boolean isPermitTypeRetrievable(AerRequestPayload aerRequestPayload, Long accountId) {

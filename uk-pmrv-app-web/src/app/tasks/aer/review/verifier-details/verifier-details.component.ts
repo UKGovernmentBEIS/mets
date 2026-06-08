@@ -12,7 +12,9 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
   standalone: false,
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Verifier details">
-      <app-verifier-details-group [verificationReport]="verificationReportData$ | async"></app-verifier-details-group>
+      <app-verifier-details-group
+        [verificationReport]="verificationReportData$ | async"
+        [emissionsTradingScheme]="emissionsTradingScheme()"></app-verifier-details-group>
       <app-verification-review-group-decision
         (notification)="notification = $event"></app-verification-review-group-decision>
     </app-aer-task-review>
@@ -20,10 +22,12 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifierDetailsComponent {
-  notification = this.router.getCurrentNavigation()?.extras.state?.notification;
+  notification = this.router.currentNavigation()?.extras.state?.notification;
   verificationReportData$ = (this.aerService.getPayload() as Observable<AerApplicationReviewRequestTaskPayload>).pipe(
     map((payload) => payload.verificationReport),
   );
+
+  readonly emissionsTradingScheme = this.aerService.getEmissionsTradingSchemeSignal();
 
   constructor(
     private readonly aerService: AerService,

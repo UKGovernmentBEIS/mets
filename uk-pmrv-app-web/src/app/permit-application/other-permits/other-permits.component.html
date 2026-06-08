@@ -3,15 +3,13 @@
     (formSubmit)="onSubmit()"
     [formGroup]="form"
     caption="Installation details"
-    heading="Other environmental permits or licences"
+    heading="Other environmental permits or licenses"
     submitText="Confirm and complete"
-    [hideSubmit]="(store.isEditable$ | async) === false"
-  >
+    [hideSubmit]="(store.isEditable$ | async) === false">
     <app-boolean-radio-group
       controlName="exist"
       hint="Examples include the ‘Environmental Protection Regulations’ and ‘Discharges to surface water and groundwater environmental’ permits."
-      legend="Does the installation have any other environmental permits or licences?"
-    >
+      legend="Does the installation have any other environmental permits or licenses?">
       <div govukConditionalContent>
         <div formArrayName="envPermitOrLicences">
           <fieldset
@@ -19,8 +17,7 @@
             [formGroupName]="i"
             [disabled]="(store.isEditable$ | async) === false"
             govukFieldset
-            id="other-permit-{{ i }}"
-          >
+            id="other-permit-{{ i }}">
             <legend govukLegend>Environmental permit or licence {{ i + 1 }}</legend>
             <button
               (click)="permits.removeAt(i)"
@@ -30,42 +27,36 @@
               appAddAnother
               govukSecondaryButton
               type="button"
-              #removeButton
-            >
+              #removeButton>
               Remove
             </button>
             <div
               formControlName="type"
               govuk-text-input
               hint="For example, ‘Environmental Protection Regulations’."
-              label="Type"
-            ></div>
+              label="Type"></div>
             <div
               formControlName="num"
               govuk-text-input
               hint="The number is on the permit or licence."
-              label="Number"
-            ></div>
+              label="Number"></div>
             <div
               formControlName="issuingAuthority"
               govuk-text-input
               hint="For example, ‘Environment Agency’."
-              label="Issuing authority"
-            ></div>
+              label="Issuing authority"></div>
             <div
               formControlName="permitHolder"
               govuk-text-input
               hint="For example, the name of the individuals, company or organisation that has legal rights and obligations under the permit or licence."
-              label="Permit holder"
-            ></div>
+              label="Permit holder"></div>
           </fieldset>
 
           <button
             (click)="addOtherPermit()"
             [disabled]="(store.isEditable$ | async) === false"
             govukSecondaryButton
-            type="button"
-          >
+            type="button">
             Add another permit
           </button>
         </div>

@@ -12,6 +12,7 @@ import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.verificationbody.domain.VerificationBody;
+import uk.gov.pmrv.api.verificationbody.domain.VerificationBodyEmissionScheme;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyNameInfoDTO;
 import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
 
@@ -37,13 +38,10 @@ class VerificationBodyRepositoryIT extends AbstractContainerBaseTest {
     @Test
     void findActiveVerificationBodiesAccreditedToType() {
         VerificationBody vb1 = createVerificationBody("vb1", "accredRefNum1",
-            VerificationBodyStatus.ACTIVE, Set.of(EmissionTradingScheme.UK_ETS_INSTALLATIONS));
+            VerificationBodyStatus.ACTIVE);
 
-        VerificationBody vb2 = createVerificationBody("vb2", "accredRefNum2",
-            VerificationBodyStatus.ACTIVE, Set.of(EmissionTradingScheme.UK_ETS_AVIATION));
-
-        VerificationBody vb3 = createVerificationBody("vb3", "accredRefNum3",
-            VerificationBodyStatus.DISABLED, Set.of(EmissionTradingScheme.UK_ETS_INSTALLATIONS));
+        VerificationBody vb2 = createVerificationBody("vb3", "accredRefNum2",
+            VerificationBodyStatus.DISABLED);
 
         flushAndClear();
 
@@ -59,33 +57,24 @@ class VerificationBodyRepositoryIT extends AbstractContainerBaseTest {
 
     @Test
     void findByIdEagerEmissionTradingSchemes() {
-        Set<EmissionTradingScheme> emissionTradingSchemes = Set.of(
-            EmissionTradingScheme.UK_ETS_INSTALLATIONS,
-            EmissionTradingScheme.UK_ETS_AVIATION
-        );
         VerificationBody vb = createVerificationBody(
             "vb1",
             "accredRefNum1",
-            VerificationBodyStatus.ACTIVE,
-            emissionTradingSchemes
+            VerificationBodyStatus.ACTIVE
         );
 
         flushAndClear();
 
         //invoke
-        Optional<VerificationBody> result = repo.findByIdEagerEmissionTradingSchemes(vb.getId());
+        Optional<VerificationBody> result = repo.findVerificationBodyWithVerBodyEmissionSchemes(vb.getId());
 
         //assert
-        assertThat(result)
-                .isNotEmpty()
-                .contains(vb);
-        assertThat(result.get().getEmissionTradingSchemes()).
-            containsExactlyInAnyOrder(EmissionTradingScheme.UK_ETS_INSTALLATIONS, EmissionTradingScheme.UK_ETS_AVIATION);
+        assertThat(result).isNotEmpty().contains(vb);
     }
 
     @Test
     void existsByIdAndStatus_true() {
-        VerificationBody vb = createVerificationBody("vb1", "accredRefNum1", VerificationBodyStatus.ACTIVE, Set.of());
+        VerificationBody vb = createVerificationBody("vb1", "accredRefNum1", VerificationBodyStatus.ACTIVE);
         entityManager.persist(vb);
         flushAndClear();
 
@@ -94,7 +83,7 @@ class VerificationBodyRepositoryIT extends AbstractContainerBaseTest {
 
     @Test
     void existsByIdAndStatus_false() {
-        VerificationBody vb = createVerificationBody("vb1", "accredRefNum1", VerificationBodyStatus.DISABLED, Set.of());
+        VerificationBody vb = createVerificationBody("vb1", "accredRefNum1", VerificationBodyStatus.DISABLED);
         entityManager.persist(vb);
         flushAndClear();
 
@@ -103,7 +92,7 @@ class VerificationBodyRepositoryIT extends AbstractContainerBaseTest {
 
     @Test
     void existsByIdAndStatusNot_false() {
-        VerificationBody vb = createVerificationBody("vb1", "accredRefNum1", VerificationBodyStatus.DISABLED, Set.of());
+        VerificationBody vb = createVerificationBody("vb1", "accredRefNum1", VerificationBodyStatus.DISABLED);
         entityManager.persist(vb);
         flushAndClear();
 
@@ -112,7 +101,7 @@ class VerificationBodyRepositoryIT extends AbstractContainerBaseTest {
 
     @Test
     void existsByIdAndStatusNot_true() {
-        VerificationBody vb = createVerificationBody("vb1", "accredRefNum1", VerificationBodyStatus.ACTIVE, Set.of());
+        VerificationBody vb = createVerificationBody("vb1", "accredRefNum1", VerificationBodyStatus.ACTIVE);
         entityManager.persist(vb);
         flushAndClear();
 
@@ -122,7 +111,7 @@ class VerificationBodyRepositoryIT extends AbstractContainerBaseTest {
     @Test
     void isVerificationBodyAccreditedToEmissionTradingScheme_return_true() {
         VerificationBody vb = createVerificationBody("vb1", "accredRefNum1",
-            VerificationBodyStatus.ACTIVE, Set.of(EmissionTradingScheme.UK_ETS_INSTALLATIONS));
+            VerificationBodyStatus.ACTIVE);
 
         flushAndClear();
 
@@ -132,7 +121,7 @@ class VerificationBodyRepositoryIT extends AbstractContainerBaseTest {
     @Test
     void isVerificationBodyAccreditedToEmissionTradingScheme_return_false() {
         VerificationBody vb = createVerificationBody("vb1", "accredRefNum1",
-            VerificationBodyStatus.ACTIVE, Set.of(EmissionTradingScheme.UK_ETS_INSTALLATIONS));
+            VerificationBodyStatus.ACTIVE);
 
         flushAndClear();
 
@@ -142,7 +131,7 @@ class VerificationBodyRepositoryIT extends AbstractContainerBaseTest {
     @Test
     void isVerificationBodyAccreditedToEmissionTradingScheme_not_active_return_false() {
         VerificationBody vb = createVerificationBody("vb1", "accredRefNum1",
-            VerificationBodyStatus.DISABLED, Set.of(EmissionTradingScheme.UK_ETS_INSTALLATIONS));
+            VerificationBodyStatus.DISABLED);
 
         flushAndClear();
 
@@ -152,10 +141,10 @@ class VerificationBodyRepositoryIT extends AbstractContainerBaseTest {
     @Test
     void findByIdNot(){
         VerificationBody vb1 = createVerificationBody("vb1", "accredRefNum1",
-            VerificationBodyStatus.ACTIVE, Set.of(EmissionTradingScheme.UK_ETS_INSTALLATIONS));
+            VerificationBodyStatus.ACTIVE);
 
         VerificationBody vb2 = createVerificationBody("vb2", "accredRefNum2",
-            VerificationBodyStatus.ACTIVE, Set.of(EmissionTradingScheme.UK_ETS_AVIATION));
+            VerificationBodyStatus.ACTIVE);
 
         flushAndClear();
 
@@ -172,17 +161,27 @@ class VerificationBodyRepositoryIT extends AbstractContainerBaseTest {
         entityManager.clear();
     }
 
-    private VerificationBody createVerificationBody(String name, String accreditationRefNum, VerificationBodyStatus status,
-                                                    Set<EmissionTradingScheme> emissionTradingSchemes) {
+    private VerificationBody createVerificationBody(String name, String accreditationRefNum, VerificationBodyStatus status) {
         VerificationBody vb =
                 VerificationBody.builder()
                     .name(name)
                     .status(status)
                     .address(Address.builder().city("city").country("GR").line1("line1").postcode("postcode").build())
                     .createdDate(LocalDateTime.now())
-                    .accreditationReferenceNumber(accreditationRefNum)
-                    .emissionTradingSchemes(emissionTradingSchemes)
                     .build();
+        VerificationBodyEmissionScheme verificationBodyEmissionScheme1 = VerificationBodyEmissionScheme.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber(accreditationRefNum)
+                .accreditationName("name1")
+                .verificationBody(vb)
+                .build();
+        VerificationBodyEmissionScheme verificationBodyEmissionScheme2 = VerificationBodyEmissionScheme.builder()
+                .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber(accreditationRefNum + "2")
+                .accreditationName("name2")
+                .verificationBody(vb)
+                .build();
+        vb.setEmissionSchemes(Set.of(verificationBodyEmissionScheme1, verificationBodyEmissionScheme2));
         entityManager.persist(vb);
         return vb;
     }

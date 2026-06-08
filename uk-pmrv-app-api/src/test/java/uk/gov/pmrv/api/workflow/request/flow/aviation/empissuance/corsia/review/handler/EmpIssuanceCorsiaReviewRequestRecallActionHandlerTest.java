@@ -20,7 +20,10 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActio
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.submit.domain.EmpIssuanceCorsiaRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestRecallEmailNotificationHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestTaskActionEmptyPayload;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class EmpIssuanceCorsiaReviewRequestRecallActionHandlerTest {
@@ -36,6 +39,9 @@ class EmpIssuanceCorsiaReviewRequestRecallActionHandlerTest {
 
     @Mock
     private WorkflowService workflowService;
+
+    @Mock
+    private List<RequestRecallEmailNotificationHandler> handlers;
 
     @Test
     void getTypes() {

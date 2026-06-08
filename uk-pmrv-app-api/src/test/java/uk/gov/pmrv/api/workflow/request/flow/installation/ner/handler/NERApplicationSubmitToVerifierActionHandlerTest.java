@@ -10,6 +10,7 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
@@ -71,7 +72,7 @@ public class NERApplicationSubmitToVerifierActionHandlerTest {
         verify(requestTaskService, times(1)).findTaskById(taskId);
 
         verify(nerApplyService, times(1))
-                .submitToVerifier(payload, task, user);
+                .submitToVerifier(payload, task, user, RequestActionType.NER_APPLICATION_SENT_TO_VERIFIER);
 
         verify(workflowService, times(1)).completeTask(
                 processId,

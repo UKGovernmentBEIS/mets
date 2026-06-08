@@ -1,10 +1,24 @@
 <app-ner-task heading="Upload monitoring methodology plan" caption="New entrant reserve" [taskType]="requestTaskType()">
   <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()" [showBackLink]="false">
     <div class="govuk-!-width-three-quarters">
+      <p class="govuk-body">To download the MMP:</p>
+      <ul class="govuk-list govuk-list--number" style="padding-left: 40px">
+        <li>Select the relevant account from your dashboard.</li>
+        <li>Select 'Start a variation'.</li>
+        <li>Complete the 'Monitoring methodology plan' section. You do not need to submit the permit variation.</li>
+        <li>Download the draft version of the permit preview PDF, then upload it here.</li>
+      </ul>
       <p class="govuk-body">
-        You must upload an MMP that sets out the monitoring methodologies and data sources you used to gather the data
-        for this NER application.
+        <a
+          href="https://manage-emissions-reporting.service.gov.uk/contact-us"
+          rel="noreferrer noopener"
+          target="_blank"
+          class="govuk-link">
+          Contact your regulator
+        </a>
+        if you need help with starting a permit variation.
       </p>
+
       <app-file-input
         [downloadUrl]="getDocumentDownloadUrl"
         formControlName="file"

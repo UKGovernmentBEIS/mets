@@ -9,10 +9,9 @@ import { RequestTaskDTO } from 'pmrv-api';
   selector: 'app-ner-task',
   imports: [SharedModule, TaskSharedModule],
   template: `
-    <app-page-heading *ngIf="heading" [caption]="caption">{{ heading }}</app-page-heading>
-
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
+      <div class="govuk-grid-column-{{ contentWidth }}">
+        <app-page-heading *ngIf="heading" [caption]="caption">{{ heading }}</app-page-heading>
         <govuk-notification-banner *ngIf="notification" type="success">
           <h1 class="govuk-notification-banner__heading">Details updated</h1>
         </govuk-notification-banner>
@@ -31,4 +30,5 @@ export class NerTaskComponent {
   @Input() caption: string;
   @Input() taskType: RequestTaskDTO['type'];
   @Input() returnLinkLevelsUp = 1;
+  @Input() contentWidth: 'one-quarter' | 'one-third' | 'one-half' | 'two-thirds' | 'three-quarters' | 'full' = 'full';
 }

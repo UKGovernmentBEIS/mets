@@ -6971,11 +6971,232 @@ Thank you.$$
             </sql>
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_update_email_assigned_notification_for_operator_role_template" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            <![CDATA[
+            UPDATE notification_template
+            SET text = $$You have been assigned a new task. [Sign in to your account](${homeUrl}) to view this task.
+
+<#if userRoleType?? && (userRoleType == 'REGULATOR' || userRoleType == 'VERIFIER' || userRoleType == 'OPERATOR') && hasWorkflowId?? && hasWorkflowId>
+Workflow ID: ${workflowId}
+
+Task name: ${requestTaskType}
+
+<#if accountName?? && accountType?? && accountType == 'INSTALLATION'>
+Installation name: ${accountName}
+</#if>
+
+<#if operatorName??>Operator name: ${operatorName}</#if>
+</#if>
+
+This is an automatic email - please do not reply to this address.$$
+WHERE name = 'EmailAssignedTask';
+            ]]>
+
+       </sql>
+        <rollback>
+            <sql>
+                <![CDATA[
+            UPDATE notification_template
+            SET text = $$You have been assigned a new task. [Sign in to your account](${homeUrl}) to view this task.
+
+<#if userRoleType?? && (userRoleType == 'REGULATOR' || userRoleType == 'VERIFIER') && hasWorkflowId?? && hasWorkflowId>
+Workflow ID: ${workflowId}
+
+Task name: ${requestTaskType}
+
+<#if accountName?? && accountType?? && accountType == 'INSTALLATION'>
+Installation name: ${accountName}
+</#if>
+
+<#if operatorName??>Operator name: ${operatorName}</#if>
+</#if>
+
+This is an automatic email - please do not reply to this address.$$
+            WHERE name = 'EmailAssignedTask';
+            ]]>
+            </sql>
+        </rollback>
+    </changeSet>
     <changeSet id="0_2_0_update_2_bdrs2_completed_notification_templates" author="dridakisc@unisystems.gr">
         <sql>
             update notification_template set text = 'The regulator has reviewed your stage 2 baseline data report (BDRS2) application and sent it to the UK ETS Authority.
 
 The regulator will contact you if necessary.' where name = 'BDRS2 completed';
         </sql>
+    </changeSet>
+    <changeSet id="0_2_0_insert_NER_completed_notification_templates" author="alekopoulosd@unisystems.gr">
+        <sql>
+        <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                text,
+                competent_authority,
+                account_type,
+                workflow,
+                role_type,
+                is_managed)
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'NER completed',
+                       'New entrant reserve (NER) application',
+                       'The regulator has completed its review of your New Entrant Reserve (NER) application and it will be submitted to the UK ETS Authority for approval.
+
+Should any further information be required, your regulator will contact you.',
+                       UNNEST(ARRAY['ENGLAND','OPRED','SCOTLAND','WALES','NORTHERN_IRELAND']),
+                       'INSTALLATION',
+                       'NER',
+                       null,
+                       false
+                   );
+            ]]>
+    </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template WHERE name = 'NER completed';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_NER_withdrawn_notification_templates" author="alekopoulosd@unisystems.gr">
+        <sql>
+        <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                text,
+                competent_authority,
+                account_type,
+                workflow,
+                role_type,
+                is_managed)
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'NER withdrawn',
+                       'New entrant reserve (NER) application',
+                       'Your New Entrant Reserve (NER) application has been withdrawn.
+
+You can initiate a new application from the account page.',
+                       UNNEST(ARRAY['ENGLAND','OPRED','SCOTLAND','WALES','NORTHERN_IRELAND']),
+                       'INSTALLATION',
+                       'NER',
+                       null,
+                       false
+                   );
+            ]]>
+    </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template WHERE name = 'NER withdrawn';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_recalled_by_operator_notification_template" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            <![CDATA[
+            WITH
+                constants (name, subject, text_content) AS (
+                    VALUES (
+                               'Recalled by Operator',
+                               'Manage your UK ETS reporting - ${recalledByOperatorType}',
+                               'A task has been removed from your account so that the Operator can perform updates. Sign in to your account for more details.
+
+<#if workflowId??>
+Workflow ID: ${workflowId}
+</#if>
+
+<#if accountName?? && accountType?? && accountType == ''INSTALLATION''>
+Installation name: ${accountName}
+</#if>
+
+<#if operatorName??>Operator name: ${operatorName}</#if>
+
+This is an automatic email – please do not reply to this address.'
+                           )
+                ),
+                templates_to_create (ca_name, account_type) AS (
+                    VALUES
+                        ('ENGLAND',        'INSTALLATION'),
+                        ('SCOTLAND',       'INSTALLATION'),
+                        ('WALES',          'INSTALLATION'),
+                        ('NORTHERN_IRELAND', 'INSTALLATION'),
+                        ('OPRED',          'INSTALLATION')
+                )
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            SELECT
+                nextval('notification_template_seq'),
+                c.name,
+                c.subject,
+                t.ca_name,
+                null,
+                t.account_type,
+                null,
+                null,
+                false,
+                CURRENT_TIMESTAMP,
+                c.text_content
+            FROM
+                constants c
+                    CROSS JOIN
+                templates_to_create t;
+            ]]>
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template
+                WHERE name = 'Recalled by Operator'
+                AND competent_authority IN (
+                'ENGLAND',
+                'SCOTLAND',
+                'WALES',
+                'NORTHERN_IRELAND',
+                'OPRED'
+                )
+                AND account_type IN ('INSTALLATION');
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_minor_update_2_recalled_by_operator_notification_template"
+               author="stavroula.papagiannakopoulou@trasys.gr">
+
+        <sql>
+        <![CDATA[
+            update notification_template
+            set text = 'A task has been removed from your account so that the Operator can perform updates.
+
+<#if workflowId??>
+Workflow ID: ${workflowId}
+</#if>
+
+<#if accountName?? && accountType?? && accountType == "INSTALLATION">
+Installation name: ${accountName}
+</#if>
+
+<#if operatorName??>
+Operator name: ${operatorName}
+</#if>
+
+This is an automatic email – please do not reply to this address.'
+            where name = 'Recalled by Operator' and account_type = 'INSTALLATION';
+            ]]>
+    </sql>
     </changeSet>
 </databaseChangeLog>

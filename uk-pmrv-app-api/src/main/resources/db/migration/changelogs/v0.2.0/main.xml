@@ -40,7 +40,10 @@
 	<include file="changelog_account_aviation_data_migration.xml" relativeToChangelogFile="true" />
 	<include file="changelog_baseline_data_report.xml" relativeToChangelogFile="true" />
 	<include file="changelog_withholding_of_allowances_data_migration.xml" relativeToChangelogFile="true" />
+	<include file="changelog_account_details_history.xml" relativeToChangelogFile="true" />
     <include file="changelog_flowable_create_schema.xml" relativeToChangelogFile="true" />
     <include file="changelog_flowable_ddl.xml" relativeToChangelogFile="true" />
     <include file="changelog_migrate_from_camunda_to_flowable.xml" relativeToChangelogFile="true" />
+	<include file="changelog_verification_body.xml" relativeToChangelogFile="true" />
+
 </databaseChangeLog>

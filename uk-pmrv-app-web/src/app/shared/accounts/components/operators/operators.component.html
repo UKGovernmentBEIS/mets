@@ -7,6 +7,15 @@
 
   <app-page-heading size="l">Users, contacts and verifiers</app-page-heading>
 
+  @if (lastOperator$ | async; as operator) {
+    <p class="govuk-hint lastLogin">
+      Last operator to sign in: {{ operator.firstName }} {{ operator.lastName }},
+      {{ operator.lastLoginDate | govukDate: 'datetime' }}
+    </p>
+  } @else {
+    <p class="govuk-hint lastLogin">Last operator to sign in: Over 90 days</p>
+  }
+
   <ng-container *ngIf="(isAccountEditable$ | async) === true && isEditable$ | async">
     <ng-container [ngSwitch]="roleType$ | async">
       <ng-container *ngSwitchCase="'OPERATOR'">

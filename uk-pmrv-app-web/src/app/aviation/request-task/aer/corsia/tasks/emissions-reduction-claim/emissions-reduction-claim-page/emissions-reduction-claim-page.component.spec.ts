@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -10,8 +10,7 @@ import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { RequestTaskFileService } from '@shared/services/request-task-file-service/request-task-file.service';
 import { mockClass } from '@testing';
 import { screen } from '@testing-library/angular';
-import userEvent from '@testing-library/user-event';
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 
 import { AviationAerCorsiaEmissionsReductionClaim, TasksService } from 'pmrv-api';
 
@@ -63,8 +62,9 @@ describe('EmissionsReductionClaimPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EmissionsReductionClaimPageComponent, RouterTestingModule],
+      imports: [EmissionsReductionClaimPageComponent],
       providers: [
+        provideRouter([]),
         { provide: TASK_FORM_PROVIDER, useClass: EmissionsReductionClaimFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
         { provide: TasksService, useValue: tasksService },

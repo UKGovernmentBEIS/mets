@@ -1,12 +1,14 @@
 import { Routes } from '@angular/router';
 
+import { routerInputDataResolver } from '@actions/request-action.util';
+import { VerificationReturnedToOperatorComponent } from '@shared/components/verification-returned-to-operator/verification-returned-to-operator.component';
+
 import {
   Bdrs2BaselineSubmittedComponent,
   Bdrs2OpinionStatementSubmittedComponent,
   Bdrs2OverallDecisionSubmittedComponent,
   Bdrs2PeerReviewDecisionComponent,
   Bdrs2ReturnedForAmendsComponent,
-  BdrS2ReturnedToOperatorComponent,
   Bdrs2SubmittedComponent,
   OutcomeCompletedComponent,
 } from '.';
@@ -49,8 +51,11 @@ export const BDRS2_ACTION_ROUTES: Routes = [
   },
   {
     path: 'returned-to-operator',
+    resolve: {
+      input: routerInputDataResolver,
+    },
     data: { pageTitle: 'Stage 2 baseline data report returned to operator from verifier' },
-    component: BdrS2ReturnedToOperatorComponent,
+    component: VerificationReturnedToOperatorComponent,
   },
   {
     path: 'return-for-amends',

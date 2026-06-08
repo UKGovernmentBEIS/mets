@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -24,6 +24,7 @@ import { saveNotFoundOperatorError } from '../errors/business-error';
 })
 export class DetailsComponent implements OnInit {
   userFullName: string;
+  readonly lastLoginDate = signal(null);
 
   userId$ = this.activatedRoute.paramMap.pipe(map((parameters) => parameters.get('userId')));
   accountId$ = this.activatedRoute.paramMap.pipe(map((parameters) => Number(parameters.get('accountId'))));
@@ -34,6 +35,7 @@ export class DetailsComponent implements OnInit {
   private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain);
   form$: Observable<UntypedFormGroup> = this.activatedRoute.data.pipe(
     map(({ user }: { user: OperatorUserDTO }) => {
+      this.lastLoginDate.set(user?.lastLoginDate);
       this.userFullName = user.firstName + ' ' + user.lastName;
 
       return this.fb.group({

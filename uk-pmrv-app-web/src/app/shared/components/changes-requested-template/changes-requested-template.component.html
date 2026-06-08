@@ -1,6 +1,13 @@
 <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
   <ng-content></ng-content>
 
+  @if (verificationRequired !== null && verificationRequired !== undefined) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Does the operator need to send the amendments to the verifier?</dt>
+      <dd govukSummaryListRowValue>{{ verificationRequired ? 'Yes' : 'No' }}</dd>
+    </div>
+  }
+
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Changes required</dt>
     <dd govukSummaryListRowValue>

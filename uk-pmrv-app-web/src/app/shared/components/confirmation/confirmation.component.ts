@@ -10,14 +10,14 @@ import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <govuk-panel class="pre-wrap" [title]="title">
-          {{ titleContent }}
-          <div *ngIf="titleContentId" style="font-weight: bold;">{{ titleContentId }}</div>
+          @if (titleContent) {
+            {{ titleContent }}
+          }
+          @if (titleContentId) {
+            <div style="font-weight: bold;">{{ titleContentId }}</div>
+          }
         </govuk-panel>
-        <ng-container
-          *ngTemplateOutlet="
-            whatHappensNextTemplate ? whatHappensNextTemplate : defaultWhatHappensNextTemplate
-          "></ng-container>
-        <ng-template #defaultWhatHappensNextTemplate></ng-template>
+        <ng-container *ngTemplateOutlet="whatHappensNextTemplate ? whatHappensNextTemplate : null"></ng-container>
         <a govukLink [routerLink]="returnToLink">Return to dashboard</a>
       </div>
     </div>

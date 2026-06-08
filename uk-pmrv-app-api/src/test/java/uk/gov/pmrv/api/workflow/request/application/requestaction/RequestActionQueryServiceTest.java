@@ -106,9 +106,9 @@ class RequestActionQueryServiceTest {
             .thenReturn(userAllowedRequestActionTypes);
         
         List<RequestActionInfoDTO> result = service.getRequestActionsByRequestId(requestId, authUser);
-        
-        assertThat(result.size()).isEqualTo(1);
-        assertThat(result.get(0)).isEqualTo(RequestActionInfoDTO.builder()
+
+        assertThat(result).hasSize(1);
+        assertThat(result.getFirst()).isEqualTo(RequestActionInfoDTO.builder()
                 .id(1L)
                 .type(RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED)
                 .submitter("fn ln 1")

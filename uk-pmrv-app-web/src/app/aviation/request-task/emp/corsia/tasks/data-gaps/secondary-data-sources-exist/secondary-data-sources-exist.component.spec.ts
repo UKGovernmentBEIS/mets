@@ -11,8 +11,7 @@ import { EMP_CHILD_ROUTES } from '@aviation/request-task/emp/corsia/emp.routes';
 import { EmpRequestTaskPayloadCorsia, RequestTaskStore } from '@aviation/request-task/store';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { screen, waitForElementToBeRemoved } from '@testing-library/dom';
-import userEvent from '@testing-library/user-event';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 
 import { dataGapsFormProvider } from '../data-gaps-form.provider';
 import { certPayloadPopulated, createDataGapsFixture } from '../tests/fixture';

@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, Signal, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 
@@ -17,7 +17,13 @@ import { CommonTasksState } from '@tasks/store/common-tasks.state';
 
 import { TasksService } from 'pmrv-api';
 
-import { recallActionTypeMap, recallReturnToTextMap } from './recall';
+import { getType, recallActionTypeMap, recallReturnToTextMap } from './recall';
+
+interface ViewModel {
+  type: string;
+  returnToText: string;
+  isRecallSubmitted: boolean;
+}
 
 @Component({
   selector: 'app-shared-recall',
@@ -26,10 +32,11 @@ import { recallActionTypeMap, recallReturnToTextMap } from './recall';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecallSharedComponent {
-  isRecallSubmitted = signal(false);
-  requestType = resolveRequestType(this.location.path());
-  state: Signal<CommonTasksState> = toSignal(this.storeResolver.getStore(this.requestType, false).pipe(first()));
-  returnToText = recallReturnToTextMap[this.state().requestTaskItem.requestTask.type];
+  private readonly requestType = resolveRequestType(this.location.path());
+  private readonly state: Signal<CommonTasksState> = toSignal(
+    this.storeResolver.getStore(this.requestType, false).pipe(first()),
+  );
+  private readonly isRecallSubmitted = signal(false);
 
   constructor(
     private readonly storeResolver: StoreContextResolver,
@@ -38,6 +45,14 @@ export class RecallSharedComponent {
     private readonly location: Location,
     protected readonly businessErrorService: BusinessErrorService,
   ) {}
+
+  vm: Signal<ViewModel> = computed(() => {
+    const requestType = this.state().requestTaskItem.requestTask.type;
+    const type = getType(requestType);
+    const returnToText = recallReturnToTextMap[requestType];
+
+    return { type, returnToText, isRecallSubmitted: this.isRecallSubmitted() };
+  });
 
   onRecall() {
     const state = this.state();

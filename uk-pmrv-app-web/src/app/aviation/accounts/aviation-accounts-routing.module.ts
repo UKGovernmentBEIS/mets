@@ -32,6 +32,8 @@ import {
   EditCommencementDateAviationAccountComponent,
   ViewAviationAccountComponent,
 } from './containers';
+import { AccountDetailsHistoryComponent } from './containers/aviation-account-details-history/aviation-account-details-history.component';
+import { EditFyroSummaryComponent } from './containers/edit-fyro-summary/edit-fyro-summary.component';
 import { EditReportingStatusComponent } from './containers/edit-reporting-status';
 import { EditReportingStatusSummaryComponent } from './containers/edit-reporting-status-summary/edit-reporting-status-summary.component';
 import {
@@ -40,10 +42,13 @@ import {
   CreateAviationAccountSummaryGuard,
   EditAviationAccountGuard,
 } from './guards';
+import { AviationAccountDetailsHistoryGuard } from './guards/account-details-history-category.guard';
 import {
   canActivateEditReportingStatus,
   canActivateEditReportingStatusSummary,
+  canActivateFyroSummary,
   canDeactivateEditReportingStatus,
+  canDeactivateFyro,
 } from './guards/account-guards';
 import { AviationAccountGuard } from './guards/aviation-account.guard';
 import { AviationAccountReportingStatusHistoryGuard } from './guards/aviation-account-reporting-status-history.guard';
@@ -144,13 +149,22 @@ const routes: Routes = [
           },
           {
             path: 'edit-commencement-date',
-            data: {
-              pageTitle: 'Account - first year of reporting obligation',
-              breadcrumb: 'Edit first year of reporting obligation account',
-            },
-            component: EditCommencementDateAviationAccountComponent,
             canActivate: [EditAviationAccountGuard],
-            canDeactivate: [PendingRequestGuard, EditAviationAccountGuard],
+            canDeactivate: [canDeactivateFyro, EditAviationAccountGuard],
+            children: [
+              { path: '', component: EditCommencementDateAviationAccountComponent },
+              {
+                path: 'summary',
+
+                data: {
+                  pageTitle: 'Account - first year of reporting obligation summary',
+                  breadcrumb: 'Edit first year of reporting obligation account summary',
+                  backlink: '../',
+                },
+                canActivate: [canActivateFyroSummary],
+                component: EditFyroSummaryComponent,
+              },
+            ],
           },
           {
             path: 'users',
@@ -244,6 +258,13 @@ const routes: Routes = [
                 ],
               },
             ],
+          },
+          {
+            path: 'account-details-history',
+            data: { pageTitle: 'Account details history', breadcrumb: true },
+            component: AccountDetailsHistoryComponent,
+            canActivate: [AviationAccountDetailsHistoryGuard],
+            canDeactivate: [AviationAccountDetailsHistoryGuard],
           },
           {
             path: 'reporting-status-history',

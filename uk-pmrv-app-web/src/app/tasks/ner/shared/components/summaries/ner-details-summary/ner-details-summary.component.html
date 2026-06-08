@@ -1,0 +1,38 @@
+@let vm = this.vm();
+
+<app-ner-task
+  [heading]="vm.heading"
+  [caption]="vm.caption"
+  [taskType]="vm.requestTaskType"
+  [returnLinkLevelsUp]="vm.returnLinkLevelsUp">
+  @if (vm.isReviewTask) {
+    <h2 class="govuk-heading-m">Operator information</h2>
+  }
+
+  <app-ner-details-summary-template
+    [isEditable]="vm.isEditable"
+    [ner]="vm.ner"
+    [nerFile]="vm.nerFile"
+    [nerSupportingFiles]="vm.nerSupportingFiles"
+    [mmpFile]="vm.mmpFile"
+    [mmpSupportingFiles]="vm.mmpSupportingFiles"></app-ner-details-summary-template>
+
+  @if (!vm.hideSubmit) {
+    <div class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onSubmit()">Confirm and complete</button>
+    </div>
+  }
+
+  @if (vm.showDecision) {
+    <app-shared-review-group-decision
+      [isEditable]="vm.isDecisionEditable"
+      [payload]="vm.payload"
+      [downloadUrl]="vm.downloadUrl"
+      [requestTaskId]="vm.requestTaskId"
+      (formSubmit)="onDecisionSubmit($event)"></app-shared-review-group-decision>
+  }
+
+  @if (vm.isOutcomeSubtask) {
+    <app-ner-review-outcome [enableSummary]="vm.enableSummary"></app-ner-review-outcome>
+  }
+</app-ner-task>

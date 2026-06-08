@@ -58,18 +58,22 @@ public abstract class DocumentTemplateCommonParamsAbstractProvider implements Do
             .build();
 
         // Signatory params
-        final RegulatorUserDTO signatoryUser = regulatorUserAuthService.getRegulatorUserById(signatory);
-        final FileInfoDTO signatureInfo = signatoryUser.getSignature();
-        if (signatureInfo == null) {
-            throw new BusinessException(ErrorCode.USER_SIGNATURE_NOT_EXIST, signatory);
+        SignatoryTemplateParams signatoryParams = null;
+        if (signatory != null) {
+            final RegulatorUserDTO signatoryUser = regulatorUserAuthService.getRegulatorUserById(signatory);
+            final FileInfoDTO signatureInfo = signatoryUser.getSignature();
+            if (signatureInfo == null) {
+                throw new BusinessException(ErrorCode.USER_SIGNATURE_NOT_EXIST, signatory);
+            }
+            final FileDTO signatorySignature = userAuthService.getUserSignature(signatureInfo.getUuid())
+                    .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, signatureInfo.getUuid()));
+            signatoryParams = SignatoryTemplateParams.builder()
+                    .fullName(signatoryUser.getFullName())
+                    .jobTitle(signatoryUser.getJobTitle())
+                    .signature(signatorySignature.getFileContent())
+                    .build();
         }
-        final FileDTO signatorySignature = userAuthService.getUserSignature(signatureInfo.getUuid())
-            .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, signatureInfo.getUuid()));
-        final SignatoryTemplateParams signatoryParams = SignatoryTemplateParams.builder()
-            .fullName(signatoryUser.getFullName())
-            .jobTitle(signatoryUser.getJobTitle())
-            .signature(signatorySignature.getFileContent())
-            .build();
+
 
         // workflow params
         // request end date is set when the request closes, so for the permit issuance flow it is null at this point

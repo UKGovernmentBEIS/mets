@@ -14,6 +14,7 @@ import { PeerReviewDecision } from './peerReviewDecision';
 
 export interface AviationAerCorsiaAnnualOffsettingPeerReviewDescisionActionPayloadAllOf {
   decision?: PeerReviewDecision;
+  submittedTo?: string;
   aviationAerCorsiaAnnualOffsetting?: AviationAerCorsiaAnnualOffsetting;
   aviationAerCorsiaAnnualOffsettingSectionsCompleted?: { [key: string]: boolean };
 }

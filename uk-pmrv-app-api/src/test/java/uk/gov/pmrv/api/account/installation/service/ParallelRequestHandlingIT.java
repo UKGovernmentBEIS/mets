@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import uk.gov.netz.api.authorization.rules.services.authorityinfo.providers.VerificationBodyAuthorityInfoProvider;
 import uk.gov.netz.api.authorization.rules.services.resource.AccountAuthorizationResourceService;
 import uk.gov.netz.api.authorization.rules.services.resource.AccountRequestAuthorizationResourceService;
 import uk.gov.netz.api.common.AbstractContainerBaseTest;
@@ -95,6 +96,9 @@ class ParallelRequestHandlingIT extends AbstractContainerBaseTest {
 
     @MockitoBean
     private InstallationEmissionsUpdatedEventListener installationEmissionsUpdatedEventListener;
+
+    @MockitoBean
+    private VerificationBodyAuthorityInfoProvider verificationBodyAuthorityInfoProvider;
 
     @BeforeEach
     void setUp() {

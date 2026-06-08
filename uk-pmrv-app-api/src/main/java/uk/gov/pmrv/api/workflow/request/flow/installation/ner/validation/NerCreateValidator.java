@@ -8,6 +8,7 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccou
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
@@ -37,14 +38,25 @@ public class NerCreateValidator extends RequestCreateAccountRelatedValidator {
         // this is safe to call, as RequestType.NER is tied to AccountType.INSTALLATION
         final InstallationAccountDTO accountDTOById = installationAccountQueryService.getAccountDTOById(accountId);
         List<Request> BDRrequestsList = requestRepository.findByAccountIdAndType(accountId, RequestType.BDR);
+        List<Request> completedNERrequestsList = requestRepository.findByAccountIdAndTypeInAndStatusIn(accountId, Set.of(RequestType.NER), Set.of(RequestStatus.COMPLETED));
 
-        boolean isNEREligible = accountDTOById.getEmitterType() == EmitterType.GHGE
+        RequestCreateValidationResult result = RequestCreateValidationResult.builder().build();
+
+        boolean isNERAvailable = accountDTOById.getEmitterType() == EmitterType.GHGE
                 && accountDTOById.getFaStatus() == false
                 && BDRrequestsList.isEmpty();
 
-        if (!isNEREligible) {
-            return RequestCreateValidationResult.builder().isAvailable(false).build();
+        if (!isNERAvailable) {
+            result.setAvailable(false);
+            return result;
         }
+
+        if (!completedNERrequestsList.isEmpty()) {
+            result.setValid(false);
+            return result;
+        }
+
+
         return super.validateAction(accountId);
     }
     

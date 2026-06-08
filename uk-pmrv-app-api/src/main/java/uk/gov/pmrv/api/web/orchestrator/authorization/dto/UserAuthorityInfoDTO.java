@@ -20,4 +20,5 @@ public class UserAuthorityInfoDTO {
     private String roleCode;
     private LocalDateTime authorityCreationDate;
     private AuthorityStatus authorityStatus;
+    private String lastLoginDate;
 }

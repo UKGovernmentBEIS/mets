@@ -5,8 +5,7 @@
       <app-task-header-info
         *ngIf="isTask$ | async"
         [assignee]="(store.select('assignee') | async).assigneeFullName"
-        [daysRemaining]="store.select('daysRemaining') | async"
-      ></app-task-header-info>
+        [daysRemaining]="store.select('daysRemaining') | async"></app-task-header-info>
     </app-page-heading>
 
     <ng-container *ngIf="info$ | async as info">
@@ -28,8 +27,7 @@
             (click)="notifyOperator()"
             govukButton
             title="Notify Operator for decision"
-            type="button"
-          >
+            type="button">
             Notify Operator of decision
           </button>
 
@@ -38,8 +36,7 @@
             (click)="sendPeerReview()"
             govukButton
             title="Send for peer review"
-            type="button"
-          >
+            type="button">
             Send for peer review
           </button>
 
@@ -51,8 +48,7 @@
             (click)="sendReturnForAmends()"
             govukButton
             title="Return for amends"
-            type="button"
-          >
+            type="button">
             Return for amends
           </button>
         </div>
@@ -71,8 +67,7 @@
             app-task-item
             [link]="(determinationStatus$ | async) === 'cannot start yet' ? '' : 'determination/summary'"
             linkText="Overall decision"
-            [status]="determinationStatus$ | async"
-          ></li>
+            [status]="determinationStatus$ | async"></li>
         </ul>
       </ng-container>
 
@@ -85,20 +80,18 @@
           *ngFor="let action of requestActions$ | async"
           [action]="action"
           [link]="action | timelineItemLink"
-          [state]="navigationState"
-        ></app-timeline-item>
+          [state]="navigationState"></app-timeline-item>
       </app-timeline>
     </ng-container>
 
-    <a govukLink routerLink="/dashboard"> Return to: Dashboard </a>
+    <a govukLink routerLink="/dashboard">Return to: Dashboard</a>
   </div>
   <div *ngIf="isRelatedActionsSectionVisible$ | async" class="govuk-grid-column-one-third">
     <app-related-actions
       [isAssignable$]="store.isAssignableAndCapable$"
       [taskId$]="taskId$"
       [allowedActions$]="store.select('allowedRequestTaskActions')"
-      [requestInfo$]="store"
-    ></app-related-actions>
+      [requestInfo$]="store"></app-related-actions>
   </div>
 
   @if (previewDocuments$ | async) {
@@ -107,9 +100,8 @@
         [taskId]="taskId$ | async"
         [previewDocuments]="previewDocuments$ | async"
         [decisionNotification]="decisionNotification$ | async"
-        linkFontSize="govuk-!-font-size-16"
-      >
-      </app-preview-documents>
+        [hideDecisionFromPermit]="true"
+        linkFontSize="govuk-!-font-size-16"></app-preview-documents>
     </div>
   }
 </div>

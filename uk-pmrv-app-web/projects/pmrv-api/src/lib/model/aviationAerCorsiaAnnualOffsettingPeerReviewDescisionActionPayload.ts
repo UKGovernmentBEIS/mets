@@ -15,6 +15,7 @@ import { RequestActionPayload } from './requestActionPayload';
 
 export interface AviationAerCorsiaAnnualOffsettingPeerReviewDescisionActionPayload extends RequestActionPayload {
   decision: PeerReviewDecision;
+  submittedTo?: string;
   aviationAerCorsiaAnnualOffsetting?: AviationAerCorsiaAnnualOffsetting;
   aviationAerCorsiaAnnualOffsettingSectionsCompleted?: { [key: string]: boolean };
 }

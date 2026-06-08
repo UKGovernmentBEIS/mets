@@ -11,10 +11,13 @@
  */
 import { InstallationOperatorDetails } from './installationOperatorDetails';
 import { NER } from './nER';
+import { NERVerificationReport } from './nERVerificationReport';
 
 export interface NERApplicationSubmittedRequestActionPayloadAllOf {
   ner?: NER;
   installationOperatorDetails?: InstallationOperatorDetails;
   verificationPerformed?: boolean;
+  verificationReport?: NERVerificationReport;
   nerAttachments?: { [key: string]: string };
+  verificationAttachments?: { [key: string]: string };
 }

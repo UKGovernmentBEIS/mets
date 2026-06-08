@@ -71,12 +71,14 @@ export class ImprovementNegativeComponent {
     const isCostUnreasonable = this.form.get('justification').value.includes('isCostUnreasonable');
     const isTechnicallyInfeasible = this.form.get('justification').value.includes('isTechnicallyInfeasible');
     const technicalInfeasibilityExplanation = this.form.get('technicalInfeasibilityExplanation').value;
+    const costUnreasonableExplanation = this.form.get('costUnreasonableExplanation').value;
 
     return {
       ...payload?.operatorImprovementResponses[this.reference],
       isCostUnreasonable: isCostUnreasonable,
       isTechnicallyInfeasible: isTechnicallyInfeasible,
       technicalInfeasibilityExplanation: isTechnicallyInfeasible ? technicalInfeasibilityExplanation : null,
+      costUnreasonableExplanation: isCostUnreasonable ? costUnreasonableExplanation : null,
       files: this.form.get('files').value?.map((file) => file.uuid),
     };
   }

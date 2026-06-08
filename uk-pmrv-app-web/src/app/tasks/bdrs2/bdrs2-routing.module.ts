@@ -9,6 +9,12 @@ import { ConfirmationComponent as PeerReviewDecisionConfirmationComponent } from
 import { PeerReviewDecisionComponent } from '@shared/components/peer-review-decision/peer-review-decision.component';
 import { PeerReviewDecisionGuard } from '@shared/components/peer-review-decision/peer-review-decision.guard';
 import { RecallSharedComponent } from '@shared/components/recall/recall.component';
+import {
+  TasksReturnToOperatorComponent,
+  tasksReturnToOperatorFormProvider,
+  TasksReturnToOperatorSummaryComponent,
+} from '@tasks/shared/components';
+import { tasksReturnToOperatorGuard } from '@tasks/shared/guards';
 
 import {
   BaselineReviewComponent,
@@ -53,15 +59,11 @@ import {
 import { bdrs2SendReportBacklinkResolver, bdrs2UploadFileBacklinkResolver } from './utils';
 import {
   BaselineVerifierReviewComponent,
-  BdrS2ReturnToOperatorComponent,
-  BdrS2ReturnToOperatorSummaryComponent,
   OpinionStatementSummaryComponent,
   OpinionStatementSummaryGuard,
   OverallDecisionAssessmentComponent,
   OverallDecisionSummaryComponent,
   OverallDecisionSummaryGuard,
-  returnToOperatorFormProvider,
-  returnToOperatorGuard,
   SendBdrs2ReportComponent,
   UploadOpinionStatementComponent,
   VerificationSubmitComponent,
@@ -186,17 +188,18 @@ const routes: Routes = [
       },
       {
         path: 'return-to-operator-for-changes',
-        providers: [returnToOperatorFormProvider],
+        providers: [tasksReturnToOperatorFormProvider],
         children: [
           {
             path: '',
-            component: BdrS2ReturnToOperatorComponent,
+            data: { pageTitle: 'Changes required by the operator' },
+            component: TasksReturnToOperatorComponent,
           },
           {
             path: 'summary',
-            canActivate: [returnToOperatorGuard],
+            canActivate: [tasksReturnToOperatorGuard],
             data: { pageTitle: 'Check your answers', breadcrumb: true },
-            component: BdrS2ReturnToOperatorSummaryComponent,
+            component: TasksReturnToOperatorSummaryComponent,
           },
         ],
       },

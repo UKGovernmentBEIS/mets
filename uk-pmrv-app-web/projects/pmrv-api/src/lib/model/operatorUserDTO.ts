@@ -17,4 +17,5 @@ export interface OperatorUserDTO {
   lastName: string;
   phoneNumber?: PhoneNumberDTO;
   mobileNumber?: PhoneNumberDTO;
+  lastLoginDate?: string;
 }

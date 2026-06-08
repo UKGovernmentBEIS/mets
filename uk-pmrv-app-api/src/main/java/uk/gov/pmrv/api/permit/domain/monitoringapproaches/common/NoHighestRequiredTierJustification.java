@@ -25,6 +25,10 @@ public class NoHighestRequiredTierJustification {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean isCostUnreasonable;
 
+    @Size(max = 10000)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String costUnreasonableExplanation;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean isTechnicallyInfeasible;
 

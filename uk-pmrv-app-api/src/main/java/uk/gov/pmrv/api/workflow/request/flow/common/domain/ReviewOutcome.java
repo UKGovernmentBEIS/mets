@@ -6,5 +6,6 @@ public enum ReviewOutcome {
     PEER_REVIEW_REQUIRED,
     AMENDS_NEEDED,
     COMPLETED,
+    DEEMED_WITHDRAWN,
     SKIPPED,
 }

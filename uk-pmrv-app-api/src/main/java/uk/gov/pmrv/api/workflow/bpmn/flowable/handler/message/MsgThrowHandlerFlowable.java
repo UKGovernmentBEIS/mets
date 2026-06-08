@@ -1,9 +1,12 @@
 package uk.gov.pmrv.api.workflow.bpmn.flowable.handler.message;
 
+import java.util.Objects;
 import org.flowable.common.engine.impl.el.FixedValue;
 import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.JavaDelegate;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -12,6 +15,7 @@ import uk.gov.pmrv.api.workflow.bpmn.flowable.FlowableWorkflowService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 
 @Service
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "flowable.process.enabled", havingValue = "true", matchIfMissing = false)
 public class MsgThrowHandlerFlowable implements JavaDelegate {
@@ -23,6 +27,8 @@ public class MsgThrowHandlerFlowable implements JavaDelegate {
 
 	@Override
 	public void execute(DelegateExecution execution) {
+		Objects.requireNonNull(messageName, "messageName field was not injected by BPMN");
+
 		final String messageNameStr = (String) messageName.getValue(execution);
 		final String requestId = (String) execution.getVariable(BpmnProcessConstants.REQUEST_ID);
 		

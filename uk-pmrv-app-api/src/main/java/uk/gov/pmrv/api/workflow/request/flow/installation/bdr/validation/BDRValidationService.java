@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.poi.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
@@ -150,7 +150,7 @@ public class BDRValidationService {
     public void validateBDRFileName(@Valid @NotNull String bdrFileName) {
         boolean isValid = false;
 
-        if (StringUtil.isNotBlank(bdrFileName))
+        if (StringUtils.isNotBlank(bdrFileName))
             isValid = PATTERN.matcher(bdrFileName).matches();
 
         if(!isValid) {

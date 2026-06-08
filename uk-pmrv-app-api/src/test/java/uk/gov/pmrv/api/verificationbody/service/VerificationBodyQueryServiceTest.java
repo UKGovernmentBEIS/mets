@@ -16,15 +16,19 @@ import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.verificationbody.domain.VerificationBody;
+import uk.gov.pmrv.api.verificationbody.domain.VerificationBodyEmissionScheme;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyInfoDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyInfoResponseDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyNameInfoDTO;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
 import uk.gov.pmrv.api.verificationbody.repository.VerificationBodyRepository;
 
+
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -141,49 +145,75 @@ class VerificationBodyQueryServiceTest {
     @Test
     void getVerificationBodyOptById() {
         Long verificationBodyId = 1L;
-        VerificationBody vb = VerificationBody.builder().name("vb").id(verificationBodyId).build();
+        VerificationBodyEmissionScheme verificationBodyEmissionScheme = VerificationBodyEmissionScheme.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accrRefNum")
+                .accreditationName("name1")
+                .build();
+        VerificationBody vb = VerificationBody.builder()
+                .name("vb")
+                .id(verificationBodyId)
+                .emissionSchemes(Set.of(verificationBodyEmissionScheme))
+                .build();
         
-        when(verificationBodyRepository.findByIdEagerEmissionTradingSchemes(verificationBodyId))
+        when(verificationBodyRepository.findVerificationBodyWithVerBodyEmissionSchemes(verificationBodyId))
             .thenReturn(Optional.of(vb));
         
         Optional<VerificationBodyDTO> result = service.getVerificationBodyOptById(verificationBodyId);
         
-        assertThat(result.get()).isEqualTo(VerificationBodyDTO.builder().name("vb").id(verificationBodyId).build());
-        verify(verificationBodyRepository, times(1)).findByIdEagerEmissionTradingSchemes(verificationBodyId);
+        assertThat(result.get()).isEqualTo(VerificationBodyDTO.builder()
+                .name("vb")
+                .id(verificationBodyId)
+                .verificationBodyEmissionSchemes(Set.of(VerificationBodyEmissionSchemeDTO.builder()
+                        .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                        .accreditationReferenceNumber("accrRefNum")
+                        .accreditationName("name1")
+                        .build()))
+                .build());
+        verify(verificationBodyRepository, times(1)).findVerificationBodyWithVerBodyEmissionSchemes(verificationBodyId);
     }
     
     @Test
     void getVerificationBodyOptById_not_found() {
         Long verificationBodyId = 1L;
         
-        when(verificationBodyRepository.findByIdEagerEmissionTradingSchemes(verificationBodyId))
+        when(verificationBodyRepository.findVerificationBodyWithVerBodyEmissionSchemes(verificationBodyId))
             .thenReturn(Optional.empty());
         
         Optional<VerificationBodyDTO> result = service.getVerificationBodyOptById(verificationBodyId);
         
         assertThat(result).isEmpty();
-        verify(verificationBodyRepository, times(1)).findByIdEagerEmissionTradingSchemes(verificationBodyId);
+        verify(verificationBodyRepository, times(1)).findVerificationBodyWithVerBodyEmissionSchemes(verificationBodyId);
     }
     
     @Test
     void getVerificationBodyById() {
         Long verificationBodyId = 1L;
-        VerificationBody vb = VerificationBody.builder().name("vb").id(verificationBodyId).build();
+        VerificationBodyEmissionScheme verificationBodyEmissionScheme = VerificationBodyEmissionScheme.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accrRefNum")
+                .accreditationName("name1")
+                .build();
+        VerificationBody vb = VerificationBody.builder()
+                .name("vb")
+                .id(verificationBodyId)
+                .emissionSchemes(Set.of(verificationBodyEmissionScheme))
+                .build();
         
-        when(verificationBodyRepository.findByIdEagerEmissionTradingSchemes(verificationBodyId))
+        when(verificationBodyRepository.findVerificationBodyWithVerBodyEmissionSchemes(verificationBodyId))
             .thenReturn(Optional.of(vb));
         
         VerificationBodyDTO result = service.getVerificationBodyById(verificationBodyId);
         
         assertThat(result.getId()).isEqualTo(verificationBodyId);
-        verify(verificationBodyRepository, times(1)).findByIdEagerEmissionTradingSchemes(verificationBodyId);
+        verify(verificationBodyRepository, times(1)).findVerificationBodyWithVerBodyEmissionSchemes(verificationBodyId);
     }
     
     @Test
     void getVerificationBodyById_not_found() {
         Long verificationBodyId = 1L;
         
-        when(verificationBodyRepository.findByIdEagerEmissionTradingSchemes(verificationBodyId))
+        when(verificationBodyRepository.findVerificationBodyWithVerBodyEmissionSchemes(verificationBodyId))
             .thenReturn(Optional.empty());
         
         BusinessException be = assertThrows(BusinessException.class, () ->
@@ -191,7 +221,7 @@ class VerificationBodyQueryServiceTest {
         
         assertThat(be.getErrorCode()).isEqualTo(ErrorCode.RESOURCE_NOT_FOUND);
         
-        verify(verificationBodyRepository, times(1)).findByIdEagerEmissionTradingSchemes(verificationBodyId);
+        verify(verificationBodyRepository, times(1)).findVerificationBodyWithVerBodyEmissionSchemes(verificationBodyId);
     }
     
     @Test
@@ -231,9 +261,8 @@ class VerificationBodyQueryServiceTest {
         List<VerificationBodyNameInfoDTO> verificationBodies = List
                 .of(VerificationBodyNameInfoDTO.builder().id(1L).name("1").build());
         
-        when(verificationBodyRepository.findActiveVerificationBodiesAccreditedToEmissionTradingScheme(ets))
-            .thenReturn(verificationBodies);
-    
+        when(verificationBodyRepository.findActiveVerificationBodiesAccreditedToEmissionTradingScheme(ets)).thenReturn(verificationBodies);
+
         List<VerificationBodyNameInfoDTO> result = service.getAllActiveVerificationBodiesAccreditedToEmissionTradingScheme(ets);
         assertThat(result).isEqualTo(verificationBodies);
         

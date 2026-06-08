@@ -58,6 +58,12 @@
       [withRegistryId]="
         (accountInfo$ | async)?.emissionTradingScheme === 'UK_ETS_AVIATION'
       "></app-aviation-account-summary-info>
+
+    @if ((userRoleType$ | async) === 'REGULATOR') {
+      <p>
+        <a govukLink routerLink="account-details-history">View operator details history</a>
+      </p>
+    }
   </div>
   <app-account-reporting-status
     [editable]="

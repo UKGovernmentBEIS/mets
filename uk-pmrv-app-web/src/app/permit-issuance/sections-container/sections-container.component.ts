@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { first, map, Observable, take } from 'rxjs';
 
 import { permitTypeMapLowercase } from '@permit-application/shared/utils/permit';
+import { getPreviewDocumentsInfo } from '@permit-application/shared/utils/previewDocuments.utils';
 
 import { RequestActionsService, RequestItemsService } from 'pmrv-api';
 
@@ -33,6 +34,12 @@ export class SectionsContainerComponent extends SectionsContainerAbstractCompone
       const permitText = state.permitType === 'WASTE' ? 'monitoring plan' : 'permit';
 
       return `Apply for a ${state.permitType ? permitTypeMapLowercase?.[state.permitType] + ' ' + permitText : permitText}`;
+    }),
+  );
+
+  previewDocuments$ = this.store.pipe(
+    map((state) => {
+      return getPreviewDocumentsInfo(state.requestTaskType, null, state.permitType);
     }),
   );
 

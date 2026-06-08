@@ -22,7 +22,6 @@ import {
   ALRApplicationSubmitRequestTaskPayload,
   ALRApplicationVerificationSubmitRequestTaskPayload,
   ALRAuthorityResponseSubmitRequestTaskPayload,
-  ALRReviewDecision,
   ALRSaveAuthorityResponseTaskActionPayload,
   InstallationAccountViewService,
   RequestMetadata,
@@ -94,6 +93,10 @@ export class AlrService extends TasksHelperService {
 
   get requestId() {
     return this.store.requestId;
+  }
+
+  get requestTaskId() {
+    return this.store.requestTaskId;
   }
 
   installationAccountId$ = this.requestTaskItem$.pipe(
@@ -261,78 +264,6 @@ export class AlrService extends TasksHelperService {
       catchTaskReassignedBadRequest(() =>
         this.businessErrorService.showErrorForceNavigation(requestTaskReassignedError()),
       ),
-    );
-  }
-
-  postGroupDecisionReview(
-    value: any,
-    dataType: ALRReviewDecision['reviewDataType'],
-    groupKey: string,
-    attachments?: { uuid: string; file: File }[],
-  ) {
-    return this.store.pipe(
-      first(),
-      switchMap((state) =>
-        this.tasksService.processRequestTaskAction({
-          requestTaskActionType: 'ALR_SAVE_REGULATOR_REVIEW_GROUP_DECISION',
-          requestTaskId: state.requestTaskItem.requestTask.id,
-          requestTaskActionPayload: {
-            payloadType: 'ALR_SAVE_REGULATOR_REVIEW_GROUP_DECISION_PAYLOAD',
-            group: groupKey,
-            decision: {
-              ...value,
-              reviewDataType: dataType,
-            },
-            regulatorReviewSectionsCompleted: {
-              ...(state.requestTaskItem.requestTask.payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload)
-                ?.regulatorReviewSectionsCompleted,
-              ...{ [groupKey]: true },
-            },
-          } as RequestTaskActionPayload,
-        }),
-      ),
-      catchNotFoundRequest(ErrorCode.NOTFOUND1001, () =>
-        this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
-      ),
-      catchTaskReassignedBadRequest(() =>
-        this.businessErrorService.showErrorForceNavigation(requestTaskReassignedError()),
-      ),
-      tap(() => {
-        const state = this.store.getState();
-        this.store.setState({
-          ...state,
-          requestTaskItem: {
-            ...state.requestTaskItem,
-            requestTask: {
-              ...state.requestTaskItem.requestTask,
-              payload: {
-                ...state.requestTaskItem.requestTask.payload,
-                regulatorReviewGroupDecisions: {
-                  ...(
-                    state.requestTaskItem.requestTask.payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload
-                  ).regulatorReviewGroupDecisions,
-                  [groupKey]: {
-                    reviewDataType: dataType,
-                    ...value,
-                  },
-                },
-                regulatorReviewAttachments: {
-                  ...(
-                    state.requestTaskItem.requestTask.payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload
-                  ).regulatorReviewAttachments,
-                  ...attachments?.reduce((result, item) => ({ ...result, [item.uuid]: item.file.name }), {}),
-                },
-                regulatorReviewSectionsCompleted: {
-                  ...(
-                    state.requestTaskItem.requestTask.payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload
-                  )?.regulatorReviewSectionsCompleted,
-                  ...{ [groupKey]: true },
-                },
-              } as ALRApplicationRegulatorReviewSubmitRequestTaskPayload,
-            },
-          },
-        });
-      }),
     );
   }
 

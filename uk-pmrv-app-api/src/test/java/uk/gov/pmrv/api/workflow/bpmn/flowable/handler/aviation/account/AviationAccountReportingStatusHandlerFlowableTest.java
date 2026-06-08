@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.account.aviation.service.reportingstatus.AviationAccountReportingStatusPopulationService;
+import uk.gov.pmrv.api.account.aviation.service.reportingstatus.AviationAccountReportingStatusService;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 class AviationAccountReportingStatusHandlerFlowableTest {
 
     @Mock
-    private AviationAccountReportingStatusPopulationService aviationAccountReportingStatusPopulationService;
+    private AviationAccountReportingStatusService aviationAccountReportingStatusService;
 
     @Mock
     private DelegateExecution delegateExecution;
@@ -29,9 +29,9 @@ class AviationAccountReportingStatusHandlerFlowableTest {
     @Test
     void execute_shouldPopulateReportingStatusesForNewYear() {
         handler.execute(delegateExecution);
-        verify(aviationAccountReportingStatusPopulationService, times(1))
+        verify(aviationAccountReportingStatusService, times(1))
                 .populateReportingStatusesForNewYear();
-        verifyNoMoreInteractions(aviationAccountReportingStatusPopulationService);
+        verifyNoMoreInteractions(aviationAccountReportingStatusService);
 
         verifyNoInteractions(delegateExecution);
     }
@@ -39,13 +39,13 @@ class AviationAccountReportingStatusHandlerFlowableTest {
     @Test
     void execute_shouldPropagateException_fromService() {
         RuntimeException ex = new RuntimeException("exception");
-        doThrow(ex).when(aviationAccountReportingStatusPopulationService)
+        doThrow(ex).when(aviationAccountReportingStatusService)
                 .populateReportingStatusesForNewYear();
         org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class, () -> handler.execute(delegateExecution));
 
-        verify(aviationAccountReportingStatusPopulationService, times(1))
+        verify(aviationAccountReportingStatusService, times(1))
                 .populateReportingStatusesForNewYear();
-        verifyNoMoreInteractions(aviationAccountReportingStatusPopulationService);
+        verifyNoMoreInteractions(aviationAccountReportingStatusService);
         verifyNoInteractions(delegateExecution);
     }
 }

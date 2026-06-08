@@ -34,11 +34,11 @@
                 <a [routerLink]="['workflows', workflow.id]" govukLink>
                   {{ workflow.id | hsetiWorkflowId }} {{ workflowName(workflow.requestType) }}
                 </a>
-                <ng-container *ngIf="workflow.requestType === 'AER'">
+                @if (['AER', 'NER'].includes(workflow.requestType)) {
                   <div>
                     {{ workflow.requestMetadata | reportingSubheading }}
                   </div>
-                </ng-container>
+                }
                 <div>Created: {{ workflow.creationDate | govukDate }}</div>
               </div>
               <div class="govuk-grid-column-one-quarter">

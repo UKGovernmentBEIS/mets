@@ -105,6 +105,10 @@ export class BdrService extends TasksHelperService {
     return toSignal(this.daysRemaining$);
   }
 
+  get requestTaskId() {
+    return this.store.requestTaskId;
+  }
+
   installationAccountId$ = this.requestTaskItem$.pipe(
     switchMap((requestTaskItem) =>
       this.installationAccountViewService.getInstallationAccountById(requestTaskItem.requestInfo.accountId),

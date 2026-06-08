@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -20,15 +20,28 @@ describe('VerifierDetailsGroupComponent', () => {
       <app-verifier-details-group
         [showVerifierDetails]="showVerifierDetails"
         [isEditable]="isEditable"
-        [verificationReport]="verificationReport"></app-verifier-details-group>
+        [verificationReport]="verificationReport"
+        [emissionsTradingScheme]="emissionsTradingScheme()"></app-verifier-details-group>
     `,
   })
   class TestComponent {
     showVerifierDetails = true;
     isEditable = false;
+    emissionsTradingScheme = signal('EU_ETS_INSTALLATIONS');
     verificationReport = {
       verificationBodyDetails: {
-        accreditationReferenceNumber: '1313',
+        verificationBodyEmissionSchemeDTOS: [
+          {
+            emissionTradingScheme: 'UK_ETS_AVIATION',
+            accreditationReferenceNumber: '1313',
+            accreditationName: 'accreditationName 1',
+          },
+          {
+            emissionTradingScheme: 'EU_ETS_INSTALLATIONS',
+            accreditationReferenceNumber: '354',
+            accreditationName: 'accreditationName 2',
+          },
+        ],
         address: {
           city: 'City',
           country: 'GR',
@@ -36,7 +49,6 @@ describe('VerifierDetailsGroupComponent', () => {
           line2: 'street 2',
           postcode: '111 80',
         },
-        emissionTradingSchemes: ['CORSIA', 'EU_ETS_INSTALLATIONS'],
         name: 'VB Company',
       },
       verificationTeamDetails: {
@@ -93,7 +105,7 @@ describe('VerifierDetailsGroupComponent', () => {
       ],
       [
         ['Accreditation number', 'National accreditation body'],
-        ['1313', 'CORSIA EU ETS Installations'],
+        ['354', 'accreditationName 2'],
       ],
       [
         ['Name', 'Email', 'Telephone number'],
@@ -134,7 +146,7 @@ describe('VerifierDetailsGroupComponent', () => {
       ],
       [
         ['Accreditation number', 'National accreditation body'],
-        ['1313', 'CORSIA EU ETS Installations'],
+        ['354', 'accreditationName 2'],
       ],
     ]);
 
@@ -154,7 +166,7 @@ describe('VerifierDetailsGroupComponent', () => {
       ],
       [
         ['Accreditation number', 'National accreditation body'],
-        ['1313', 'CORSIA EU ETS Installations'],
+        ['354', 'accreditationName 2'],
       ],
       [
         ['Name', 'Email', 'Telephone number'],

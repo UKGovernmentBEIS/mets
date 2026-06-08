@@ -607,9 +607,25 @@ export class TimelineItemLinkPipe implements PipeTransform {
         return [routerLooks + 'actions', value.id, 'waste-qdr', 'returned-for-amends'];
 
       case 'NER_APPLICATION_CANCELLED':
+      case 'NER_RECALLED_FROM_VERIFICATION':
+      case 'NER_PEER_REVIEW_REQUESTED':
+      case 'NER_APPLICATION_RE_INITIATED':
         return null;
       case 'NER_APPLICATION_SENT_TO_VERIFIER':
+      case 'NER_APPLICATION_VERIFICATION_SUBMITTED':
+      case 'NER_APPLICATION_SUBMITTED':
+      case 'NER_APPLICATION_AMENDS_SUBMITTED':
+      case 'NER_APPLICATION_AMENDS_SENT_TO_VERIFIER':
+      case 'NER_APPLICATION_DEEMED_WITHDRAWN':
+      case 'NER_APPLICATION_COMPLETED':
         return [routerLooks + 'actions', value.id, 'ner', 'submitted'];
+      case 'NER_VERIFICATION_RETURNED_TO_OPERATOR':
+        return [routerLooks + 'actions', value.id, 'ner', 'returned-to-operator'];
+      case 'NER_APPLICATION_RETURNED_FOR_AMENDS':
+        return [routerLooks + 'actions', value.id, 'ner', 'return-for-amends'];
+      case 'NER_PEER_REVIEW_ACCEPTED':
+      case 'NER_PEER_REVIEW_REJECTED':
+        return [routerLooks + 'actions', value.id, 'ner', 'peer-review-decision'];
 
       default:
         throw new Error('Provide an action url');

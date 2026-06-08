@@ -12,13 +12,15 @@ import { RecallSharedComponent } from '@shared/components/recall/recall.componen
 import { BdrOpinionStatementReviewComponent } from '@tasks/bdr/review/opinion-statement/opinion-statement-review.component';
 import { BdrOverallDecisionReviewComponent } from '@tasks/bdr/review/overall-decision/overall-decision-review.component';
 import {
-  OPINION_STATEMENT,
-  OVERALL_DECISION,
-} from '@tasks/bdr/shared/components/decision/bdr-review-decision/bdr-verification-review-group-decision.form.util';
-import {
   OverallDecisionAssessmentComponent,
   OverallDecisionSummaryComponent,
 } from '@tasks/bdr/verification-submit/overall-decision';
+import {
+  TasksReturnToOperatorComponent,
+  tasksReturnToOperatorFormProvider,
+  TasksReturnToOperatorSummaryComponent,
+} from '@tasks/shared/components';
+import { tasksReturnToOperatorGuard } from '@tasks/shared/guards';
 
 import {
   BaselineReviewComponent,
@@ -54,13 +56,9 @@ import { BdrChangesRequestedComponent } from './submit/changes-requested/bdr-cha
 import { bdrSendReportBacklinkResolver } from './submit/submit.wizard';
 import {
   BaselineVerifierReviewComponent,
-  BdrReturnToOperatorComponent,
-  BdrReturnToOperatorSummaryComponent,
   OpinionStatementSummaryComponent,
   OpinionStatementSummaryGuard,
   overallDecisionSummaryGuard,
-  returnToOperatorFormProvider,
-  returnToOperatorGuard,
   SendBdrReportComponent,
   UploadOpinionStatementComponent,
   VerificationSubmitContainerComponent,
@@ -91,13 +89,13 @@ const routes: Routes = [
           },
           {
             path: 'regulator',
-            data: { pageTitle: 'Send to regulator', backlink: ({ backlinkUrl }) => backlinkUrl },
+            data: { pageTitle: 'Send to regulator', backlink: ({ backlinkUrl }: any) => backlinkUrl },
             resolve: { backlinkUrl: bdrSendReportBacklinkResolver },
             component: SendReportRegulatorComponent,
           },
           {
             path: 'verifier',
-            data: { pageTitle: 'Send report for verification', backlink: ({ backlinkUrl }) => backlinkUrl },
+            data: { pageTitle: 'Send report for verification', backlink: ({ backlinkUrl }: any) => backlinkUrl },
             resolve: { backlinkUrl: bdrSendReportBacklinkResolver },
             canActivate: [SendReportVerifierGuard],
             component: SendReportVerifierComponent,
@@ -169,17 +167,17 @@ const routes: Routes = [
       },
       {
         path: 'return-to-operator-for-changes',
-        providers: [returnToOperatorFormProvider],
+        providers: [tasksReturnToOperatorFormProvider],
         children: [
           {
             path: '',
-            component: BdrReturnToOperatorComponent,
+            component: TasksReturnToOperatorComponent,
           },
           {
             path: 'summary',
-            canActivate: [returnToOperatorGuard],
+            canActivate: [tasksReturnToOperatorGuard],
             data: { pageTitle: 'Check your answers', breadcrumb: true },
-            component: BdrReturnToOperatorSummaryComponent,
+            component: TasksReturnToOperatorSummaryComponent,
           },
         ],
       },
@@ -269,13 +267,13 @@ const routes: Routes = [
       },
       {
         path: 'opinion-statement',
-        data: { pageTitle: 'BDR verification opinion statement', groupKey: OPINION_STATEMENT, breadcrumb: true },
+        data: { pageTitle: 'BDR verification opinion statement', groupKey: 'OPINION_STATEMENT', breadcrumb: true },
 
         component: BdrOpinionStatementReviewComponent,
       },
       {
         path: 'overall-decision',
-        data: { pageTitle: 'BDR overall decision', groupKey: OVERALL_DECISION, breadcrumb: true },
+        data: { pageTitle: 'BDR overall decision', groupKey: 'OVERALL_DECISION', breadcrumb: true },
 
         component: BdrOverallDecisionReviewComponent,
       },
@@ -320,7 +318,7 @@ const routes: Routes = [
             path: 'upload-files',
             data: {
               pageTitle: 'Upload the baseline data report file - Outcome of regulator review',
-              backlink: ({ backlinkUrl }) => backlinkUrl,
+              backlink: ({ backlinkUrl }: any) => backlinkUrl,
             },
             resolve: { backlinkUrl: outcomeReviewBacklinkResolver },
             component: OutcomeUploadFilesComponent,

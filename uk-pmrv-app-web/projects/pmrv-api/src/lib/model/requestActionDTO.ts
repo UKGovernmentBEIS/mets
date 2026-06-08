@@ -107,7 +107,11 @@ import { InstallationAccountUpdatedRegistryIntegrationRequestActionPayload } fro
 import { InstallationInspectionApplicationSubmittedRequestActionPayload } from './installationInspectionApplicationSubmittedRequestActionPayload';
 import { InstallationInspectionOperatorRespondedRequestActionPayload } from './installationInspectionOperatorRespondedRequestActionPayload';
 import { InstallationReportableEmissionsRegistryIntegrationRequestActionPayload } from './installationReportableEmissionsRegistryIntegrationRequestActionPayload';
+import { NERApplicationCompletedRequestActionPayload } from './nERApplicationCompletedRequestActionPayload';
 import { NERApplicationSubmittedRequestActionPayload } from './nERApplicationSubmittedRequestActionPayload';
+import { NERApplicationVerificationSubmittedRequestActionPayload } from './nERApplicationVerificationSubmittedRequestActionPayload';
+import { NERRegulatorReviewReturnedForAmendsRequestActionPayload } from './nERRegulatorReviewReturnedForAmendsRequestActionPayload';
+import { NERVerificationReturnedToOperatorRequestActionPayload } from './nERVerificationReturnedToOperatorRequestActionPayload';
 import { NonComplianceApplicationClosedRequestActionPayload } from './nonComplianceApplicationClosedRequestActionPayload';
 import { NonComplianceApplicationSubmittedRequestActionPayload } from './nonComplianceApplicationSubmittedRequestActionPayload';
 import { NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload } from './nonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload';
@@ -115,6 +119,7 @@ import { NonComplianceDailyPenaltyNoticeApplicationSubmittedRequestActionPayload
 import { NonComplianceDetailsAmendedRequestActionPayload } from './nonComplianceDetailsAmendedRequestActionPayload';
 import { NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload } from './nonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload';
 import { NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload } from './nonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload';
+import { NonCompliancePeerReviewRequestedRequestActionPayload } from './nonCompliancePeerReviewRequestedRequestActionPayload';
 import { NotificationRegistryIntegrationRequestActionPayload } from './notificationRegistryIntegrationRequestActionPayload';
 import { PaymentCancelledRequestActionPayload } from './paymentCancelledRequestActionPayload';
 import { PaymentProcessedRequestActionPayload } from './paymentProcessedRequestActionPayload';
@@ -264,18 +269,23 @@ export interface RequestActionDTO {
     | 'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED'
     | 'NER_APPLICATION_CANCELLED'
     | 'NER_APPLICATION_SENT_TO_VERIFIER'
+    | 'NER_APPLICATION_VERIFICATION_SUBMITTED'
     | 'NER_APPLICATION_SUBMITTED'
+    | 'NER_RECALLED_FROM_VERIFICATION'
+    | 'NER_VERIFICATION_RETURNED_TO_OPERATOR'
     | 'NER_PEER_REVIEW_REQUESTED'
-    | 'NER_PEER_REVIEWER_ACCEPTED'
-    | 'NER_PEER_REVIEWER_REJECTED'
+    | 'NER_PEER_REVIEW_ACCEPTED'
+    | 'NER_PEER_REVIEW_REJECTED'
     | 'NER_APPLICATION_RETURNED_FOR_AMENDS'
+    | 'NER_APPLICATION_AMENDS_SENT_TO_VERIFIER'
     | 'NER_APPLICATION_AMENDS_SUBMITTED'
-    | 'NER_APPLICATION_CLOSED'
+    | 'NER_APPLICATION_COMPLETED'
     | 'NER_APPLICATION_DEEMED_WITHDRAWN'
     | 'NER_APPLICATION_PROCEEDED_TO_AUTHORITY'
     | 'NER_APPLICATION_ACCEPTED'
     | 'NER_APPLICATION_ACCEPTED_WITH_CORRECTIONS'
     | 'NER_APPLICATION_REJECTED'
+    | 'NER_APPLICATION_RE_INITIATED'
     | 'DOAL_APPLICATION_PROCEEDED_TO_AUTHORITY'
     | 'DOAL_APPLICATION_PEER_REVIEW_REQUESTED'
     | 'DOAL_APPLICATION_PEER_REVIEWER_ACCEPTED'
@@ -607,7 +617,11 @@ export interface RequestActionDTO {
     | InstallationInspectionApplicationSubmittedRequestActionPayload
     | InstallationInspectionOperatorRespondedRequestActionPayload
     | InstallationReportableEmissionsRegistryIntegrationRequestActionPayload
+    | NERApplicationCompletedRequestActionPayload
     | NERApplicationSubmittedRequestActionPayload
+    | NERApplicationVerificationSubmittedRequestActionPayload
+    | NERRegulatorReviewReturnedForAmendsRequestActionPayload
+    | NERVerificationReturnedToOperatorRequestActionPayload
     | NonComplianceApplicationClosedRequestActionPayload
     | NonComplianceApplicationSubmittedRequestActionPayload
     | NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload
@@ -615,6 +629,7 @@ export interface RequestActionDTO {
     | NonComplianceDetailsAmendedRequestActionPayload
     | NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload
     | NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload
+    | NonCompliancePeerReviewRequestedRequestActionPayload
     | NotificationRegistryIntegrationRequestActionPayload
     | PaymentCancelledRequestActionPayload
     | PaymentProcessedRequestActionPayload

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.poi.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.netz.api.common.exception.BusinessException;
@@ -54,7 +54,7 @@ public class BDRS2ValidationService {
     public void validateBDRS2FileName(@Valid @NotNull String bdrs2FileName) {
         boolean isValid = false;
 
-        if (StringUtil.isNotBlank(bdrs2FileName))
+        if (StringUtils.isNotBlank(bdrs2FileName))
             isValid = PATTERN.matcher(bdrs2FileName).matches();
 
         if(!isValid) {

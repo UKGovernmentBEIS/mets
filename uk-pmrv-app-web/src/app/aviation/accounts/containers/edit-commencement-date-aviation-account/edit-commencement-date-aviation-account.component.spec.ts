@@ -34,7 +34,7 @@ describe('EditCommencementDateAviationAccountComponent', () => {
   });
 
   it('should patch form with account info', () => {
-    const expectedFormValue = { commencementDate: new Date('2023-01-01') as any };
+    const expectedFormValue = { commencementDate: new Date('2023-01-01') as any, reason: null };
 
     component.ngOnInit();
 

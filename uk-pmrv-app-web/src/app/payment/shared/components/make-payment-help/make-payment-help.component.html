@@ -1,10 +1,20 @@
 <ng-container
   *ngIf="
-    (requestType$ | async) === 'PERMIT_VARIATION' && ['SCOTLAND', 'WALES'].includes(competentAuthority$ | async);
+    ((competentAuthority$ | async) === 'SCOTLAND' &&
+      ['PERMIT_VARIATION', 'NER', 'PERMIT_TRANSFER_A', 'PERMIT_TRANSFER_B'].includes(requestType$ | async)) ||
+    ((requestType$ | async) === 'PERMIT_VARIATION' && (competentAuthority$ | async) === 'WALES');
     else defaultHelp
   ">
   <ng-container *ngIf="(competentAuthority$ | async) === 'SCOTLAND'">
-    <p class="govuk-body">There are charges for variation, please contact SEPA to find out amount to be paid.</p>
+    <p *ngIf="(requestType$ | async) === 'PERMIT_VARIATION'" class="govuk-body">
+      There are charges for variation, please contact SEPA to find out amount to be paid.
+    </p>
+    <p *ngIf="(requestType$ | async) === 'NER'" class="govuk-body">
+      There are charges for new entrant reserve application, please contact SEPA to find out the amount to be paid.
+    </p>
+    <p *ngIf="['PERMIT_TRANSFER_A', 'PERMIT_TRANSFER_B'].includes(requestType$ | async)" class="govuk-body">
+      There are charges for permit transfer application, please contact SEPA to find out the amount to be paid.
+    </p>
     <p class="govuk-body">
       <a
         class="govuk-link"

@@ -79,13 +79,15 @@ public class DocumentTemplateProcessService {
               context.put("competentAuthorityLogo2",
                     new ByteArrayImageProvider(new ByteArrayInputStream(templateParams.getCompetentAuthorityParams().getLogo()), false));
 
-              //add signatory signature
-              metadata.addFieldAsImage("signature");
-              context.put("signature", new ByteArrayImageProvider(new ByteArrayInputStream(templateParams.getSignatoryParams().getSignature()), true));
-              metadata.addFieldAsImage("signature2");//TODO:
-              context.put("signature2", new ByteArrayImageProvider(new ByteArrayInputStream(templateParams.getSignatoryParams().getSignature()), true));
-              context.put("signature3", new ByteArrayImageProvider(new ByteArrayInputStream(templateParams.getSignatoryParams().getSignature()), true));
-              metadata.addFieldAsImage("signature3");
+              if(templateParams.getSignatoryParams() != null) {
+                  //add signatory signature
+                  metadata.addFieldAsImage("signature");
+                  context.put("signature", new ByteArrayImageProvider(new ByteArrayInputStream(templateParams.getSignatoryParams().getSignature()), true));
+                  metadata.addFieldAsImage("signature2");//TODO:
+                  context.put("signature2", new ByteArrayImageProvider(new ByteArrayInputStream(templateParams.getSignatoryParams().getSignature()), true));
+                  context.put("signature3", new ByteArrayImageProvider(new ByteArrayInputStream(templateParams.getSignatoryParams().getSignature()), true));
+                  metadata.addFieldAsImage("signature3");
+              }
 
               // add params
               context.put("competentAuthority", templateParams.getCompetentAuthorityParams());

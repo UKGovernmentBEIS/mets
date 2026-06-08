@@ -11,14 +11,14 @@
  */
 import { AddressDTO } from './addressDTO';
 import { AdminVerifierUserInvitationDTO } from './adminVerifierUserInvitationDTO';
+import { VerificationBodyEmissionSchemeDTO } from './verificationBodyEmissionSchemeDTO';
 
 /**
  * The verification body creation dto
  */
 export interface VerificationBodyCreationDTO {
   name: string;
-  accreditationReferenceNumber: string;
   address: AddressDTO;
-  emissionTradingSchemes: Array<'UK_ETS_INSTALLATIONS' | 'EU_ETS_INSTALLATIONS' | 'UK_ETS_AVIATION' | 'CORSIA'>;
+  verificationBodyEmissionSchemes: Array<VerificationBodyEmissionSchemeDTO>;
   adminVerifierUserInvitation: AdminVerifierUserInvitationDTO;
 }

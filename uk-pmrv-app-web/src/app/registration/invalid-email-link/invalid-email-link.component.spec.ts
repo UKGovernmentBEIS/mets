@@ -3,8 +3,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { mockKeycloak } from '@core/guards/mocks';
+import { AuthService } from '@core/services/auth.service';
 import { ActivatedRouteSnapshotStub } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 
 import { GovukComponentsModule } from 'govuk-components';
 
@@ -14,13 +16,16 @@ describe('InvalidEmailLinkComponent', () => {
   let component: InvalidEmailLinkComponent;
   let fixture: ComponentFixture<InvalidEmailLinkComponent>;
   let route: ActivatedRoute;
-  let keycloakService: KeycloakService;
+  let authService: AuthService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [GovukComponentsModule, RouterTestingModule],
       declarations: [InvalidEmailLinkComponent],
-      providers: [KeycloakService, { provide: APP_BASE_HREF, useValue: '/installation-aviation/' }],
+      providers: [
+        { provide: Keycloak, useValue: mockKeycloak },
+        { provide: APP_BASE_HREF, useValue: '/installation-aviation/' },
+      ],
     }).compileComponents();
   });
 
@@ -29,7 +34,7 @@ describe('InvalidEmailLinkComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
     route = TestBed.inject(ActivatedRoute);
-    keycloakService = TestBed.inject(KeycloakService);
+    authService = TestBed.inject(AuthService);
   });
 
   it('should create', () => {
@@ -84,7 +89,7 @@ describe('InvalidEmailLinkComponent', () => {
   });
 
   it('should sign in on anchor click', () => {
-    const signInSpy = jest.spyOn(keycloakService, 'login');
+    const signInSpy = jest.spyOn(authService, 'login');
     route.snapshot = new ActivatedRouteSnapshotStub(null, { code: 'USER1001' });
 
     component.ngOnInit();

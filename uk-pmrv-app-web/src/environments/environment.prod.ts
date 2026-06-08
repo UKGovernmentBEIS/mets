@@ -2,11 +2,10 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import { KeycloakOptions } from 'keycloak-angular';
 import { KeycloakConfig, KeycloakInitOptions } from 'keycloak-js';
 
-// Add here your keycloak setup infos
 const keycloakConfig: KeycloakConfig = {
+  url: '',
   realm: 'uk-pmrv',
   clientId: 'uk-pmrv-web-app',
 };
@@ -15,15 +14,6 @@ const keycloakInitOptions: KeycloakInitOptions = {
   onLoad: 'check-sso',
   enableLogging: true,
   pkceMethod: 'S256',
-};
-
-const keycloakOptions: KeycloakOptions = {
-  config: keycloakConfig,
-  initOptions: keycloakInitOptions,
-  enableBearerInterceptor: true,
-  loadUserProfileAtStartUp: true,
-  bearerExcludedUrls: [],
-  shouldAddToken: ({ url }) => !url.includes('api.pwnedpasswords.com'),
 };
 
 const apiOptions = {
@@ -36,7 +26,8 @@ const timeoutBanner = {
 
 export const environment = {
   production: true,
-  keycloakOptions,
+  keycloakConfig,
+  keycloakInitOptions,
   apiOptions,
   timeoutBanner,
 };

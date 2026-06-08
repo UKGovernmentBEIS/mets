@@ -14,6 +14,8 @@ import { RequestTaskPayload } from './requestTaskPayload';
 
 export interface NerApplicationSubmitRequestTaskPayload extends RequestTaskPayload {
   ner?: NER;
+  verificationSectionsCompleted?: { [key: string]: Array<boolean> };
+  regulatorReviewSectionsCompleted?: { [key: string]: boolean };
   nerSectionsCompleted?: { [key: string]: boolean };
   nerAttachments?: { [key: string]: string };
   nerFileVersion?: number;

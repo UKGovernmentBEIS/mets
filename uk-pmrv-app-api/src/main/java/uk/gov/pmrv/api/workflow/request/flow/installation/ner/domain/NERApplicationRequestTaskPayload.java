@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,6 +27,12 @@ import java.util.stream.Stream;
 public class NERApplicationRequestTaskPayload extends RequestTaskPayload {
 
     private NER ner;
+
+    @Builder.Default
+    private Map<String, List<Boolean>> verificationSectionsCompleted = new HashMap<>();
+
+    @Builder.Default
+    private Map<String, Boolean> regulatorReviewSectionsCompleted = new HashMap<>();
 
     @Builder.Default
     private Map<String, Boolean> nerSectionsCompleted = new HashMap<>();

@@ -23,7 +23,7 @@ class RequestActionMapperTest {
     private RequestActionMapper mapper;
     
     @BeforeEach
-    public void init() {
+    void init() {
         mapper = Mappers.getMapper(RequestActionMapper.class);
     }
     
@@ -68,6 +68,7 @@ class RequestActionMapperTest {
         assertThat(result.getType()).isEqualTo(RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED);
         assertThat(result.getId()).isEqualTo(1L);
         assertThat(result.getSubmitter()).isEqualTo("fn ln");
+        assertThat(result.getSubmittedTo()).isNull();
     }
     
     @Test

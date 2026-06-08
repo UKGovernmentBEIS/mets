@@ -7,6 +7,7 @@ import { firstValueFrom, of, throwError } from 'rxjs';
 
 import { AuthStore } from '@core/store/auth';
 import { BusinessTestingModule, expectBusinessErrorToBe } from '@error/testing/business-error';
+import { GovukDatePipe } from '@shared/pipes/govuk-date.pipe';
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage } from '@testing';
 
@@ -62,6 +63,10 @@ describe('DetailsComponent', () => {
     get links() {
       return this.queryAll<HTMLLinkElement>('a');
     }
+
+    get lastLogin() {
+      return this.query<HTMLElement>('.lastLogin');
+    }
   }
 
   beforeEach(async () => {
@@ -70,7 +75,7 @@ describe('DetailsComponent', () => {
       updateOperatorUserById: jest.fn().mockReturnValue(of(operator)),
     };
     activatedRoute = new ActivatedRouteStub({ accountId: '1', userId: operatorUserRole.userId }, null, {
-      user: operator,
+      user: { ...operator, lastLoginDate: '27 April 2026 11:06:06' },
     });
     await TestBed.configureTestingModule({
       imports: [BusinessTestingModule, RouterTestingModule, SharedModule],
@@ -78,6 +83,7 @@ describe('DetailsComponent', () => {
       providers: [
         { provide: OperatorUsersService, useValue: operatorUsersService },
         { provide: ActivatedRoute, useValue: activatedRoute },
+        GovukDatePipe,
       ],
     }).compileComponents();
 
@@ -171,5 +177,11 @@ describe('DetailsComponent', () => {
     activatedRoute.setParamMap({ userId: '222' });
 
     await expect(firstValueFrom(component.isLoggedUser$)).resolves.toEqual(false);
+  });
+
+  it('should display the last login', () => {
+    const datePipe = new GovukDatePipe();
+    const expectedDate = datePipe.transform('27 April 2026 11:06:05', 'datetime');
+    expect(page.lastLogin.textContent.trim()).toEqual(`Last signed in ${expectedDate}`);
   });
 });

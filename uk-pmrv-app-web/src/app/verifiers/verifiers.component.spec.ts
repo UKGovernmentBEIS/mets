@@ -8,7 +8,7 @@ import { of, throwError } from 'rxjs';
 
 import {
   mockAuthorityService,
-  mockKeycloakService,
+  mockKeycloak,
   mockTermsAndConditionsService,
   mockUsersService,
 } from '@core/guards/mocks';
@@ -18,7 +18,7 @@ import { ErrorCodes } from '@error/business-errors';
 import { BusinessTestingModule, expectBusinessErrorToBe } from '@error/testing/business-error';
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, asyncData, BasePage, changeInputValue, MockType } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 import { cloneDeep } from 'lodash-es';
 
 import {
@@ -113,7 +113,7 @@ describe('VerifiersComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: VerifierAuthoritiesService, useValue: verifierAuthoritiesService },
         { provide: VBSiteContactsService, useValue: vbSiteContactsService },
-        { provide: KeycloakService, useValue: mockKeycloakService },
+        { provide: Keycloak, useValue: mockKeycloak },
         { provide: UsersService, useValue: mockUsersService },
         { provide: AuthoritiesService, useValue: mockAuthorityService },
         { provide: TermsAndConditionsService, useValue: mockTermsAndConditionsService },

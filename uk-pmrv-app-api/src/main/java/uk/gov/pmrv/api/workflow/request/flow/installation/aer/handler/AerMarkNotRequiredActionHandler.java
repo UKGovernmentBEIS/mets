@@ -17,7 +17,6 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerMarkNotR
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.mapper.AerMapper;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +57,7 @@ public class AerMarkNotRequiredActionHandler {
                         .reportableEmissions(null)
                         .isFromDre(false)
                         .isFromRegulator(true)
+                        .isFromAerMarkedAsNotRequired(true)
                         .requestId(requestId)
                         .build();
 

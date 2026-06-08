@@ -1,1 +1,2 @@
-export * from './ner-details/ner-details.component';
+export * from './opinion-statement';
+export * from './overall-decision';

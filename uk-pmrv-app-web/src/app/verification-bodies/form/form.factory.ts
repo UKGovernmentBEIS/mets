@@ -7,10 +7,12 @@ import { AddressInputComponent } from '../../shared/address-input/address-input.
 
 export const VERIFICATION_BODY_FORM = new InjectionToken<UntypedFormGroup>('Verification body form');
 
+import { vbTypes, VerificationBodyTypePipe } from '@shared/pipes/verification-body-type.pipe';
+
 export const verificationBodyFormFactory: FactoryProvider = {
   provide: VERIFICATION_BODY_FORM,
-  useFactory: (fb: UntypedFormBuilder) =>
-    fb.group({
+  useFactory: (fb: UntypedFormBuilder) => {
+    const form = fb.group({
       details: fb.group({
         name: [
           null,
@@ -19,19 +21,50 @@ export const verificationBodyFormFactory: FactoryProvider = {
             GovukValidators.maxLength(255, 'Your first name should not be larger than 255 characters'),
           ],
         ],
-        accreditationRefNum: [
-          null,
-          [
-            GovukValidators.required('Enter the Accreditation reference number'),
-            GovukValidators.maxLength(
-              25,
-              'Accreditation reference number must not be more than 25 characters long, including spaces',
-            ),
-          ],
-        ],
         address: fb.group(AddressInputComponent.controlsFactory(null)),
       }),
       types: [[], GovukValidators.required('Select at least one type of verification body')],
-    }),
+      accreditationRefNum_UK_ETS_INSTALLATIONS: [null],
+      accreditationRefNum_EU_ETS_INSTALLATIONS: [null],
+      accreditationRefNum_UK_ETS_AVIATION: [null],
+      accreditationRefNum_CORSIA: [null],
+      accreditationName_UK_ETS_INSTALLATIONS: [null],
+      accreditationName_EU_ETS_INSTALLATIONS: [null],
+      accreditationName_UK_ETS_AVIATION: [null],
+      accreditationName_CORSIA: [null],
+    });
+
+    const typesControl = form.get('types');
+    const verificationBodyTypePipe = new VerificationBodyTypePipe();
+
+    if (typesControl) {
+      typesControl.valueChanges.subscribe((selectedTypes: string[]) => {
+        vbTypes.forEach((type) => {
+          const ctrl = form.get(`accreditationRefNum_${type}`);
+
+          if (!ctrl) return;
+
+          if (selectedTypes.includes(type)) {
+            ctrl.setValidators([
+              GovukValidators.required(
+                `Enter the accreditation reference number for ${verificationBodyTypePipe.transform(type)}`,
+              ),
+              GovukValidators.maxLength(
+                25,
+                'Accreditation reference number must not be more than 25 characters long, including spaces',
+              ),
+            ]);
+          } else {
+            ctrl.clearValidators();
+            ctrl.reset(null, { emitEvent: false });
+          }
+
+          ctrl.updateValueAndValidity({ emitEvent: false });
+        });
+      });
+    }
+
+    return form;
+  },
   deps: [UntypedFormBuilder],
 };

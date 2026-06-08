@@ -62,7 +62,7 @@ public class AviationAccountUpdatedNotifyRegistryService {
         }
         AccountUpdatingEvent accountUpdatingEvent = buildAccountUpdatingPayload(accountDTO,emp,monitoringPlanIdOptional);
         registryProducer.produce(accountUpdatingEvent);
-        if(!event.isFromSetOperatorId()) {
+        if(!event.isSkipRequestAction()) {
             requestActionService.addRequestAction(event.getRequestId(),accountDTO,emp);
         }
 

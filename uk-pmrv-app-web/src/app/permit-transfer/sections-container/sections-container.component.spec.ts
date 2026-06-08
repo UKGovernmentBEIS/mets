@@ -81,8 +81,8 @@ describe('TransferSectionsContainerComponent', () => {
     createComponent();
 
     expect(hostElement.querySelector('app-page-heading h1').textContent).toContain('Full transfer of permit');
-    expect(hostElement.querySelector('li[title="Tranfer details"] h2').textContent).toEqual('Tranfer details');
-    expect(hostElement.querySelector('li[title="Tranfer details"] ul govuk-tag').textContent.trim()).toEqual(
+    expect(hostElement.querySelector('li[title="Transfer details"] h2').textContent).toEqual('Transfer details');
+    expect(hostElement.querySelector('li[title="Transfer details"] ul govuk-tag').textContent.trim()).toEqual(
       'not started',
     );
     expect(hostElement.querySelector('ol > li:last-child ul > li a')).toBeNull();
@@ -102,8 +102,8 @@ describe('TransferSectionsContainerComponent', () => {
     });
 
     expect(hostElement.querySelector('app-page-heading h1').textContent).toContain('Full transfer of permit');
-    expect(hostElement.querySelector('li[title="Tranfer details"] h2').textContent).toEqual('Tranfer details');
-    expect(hostElement.querySelector('li[title="Tranfer details"] ul govuk-tag').textContent.trim()).toEqual(
+    expect(hostElement.querySelector('li[title="Transfer details"] h2').textContent).toEqual('Transfer details');
+    expect(hostElement.querySelector('li[title="Transfer details"] ul govuk-tag').textContent.trim()).toEqual(
       'completed',
     );
     expect(hostElement.querySelector('ol > li:last-child ul > li a')).toBeTruthy();

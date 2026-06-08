@@ -5,8 +5,7 @@
       <app-task-header-info
         *ngIf="isTask$ | async"
         [assignee]="(store.select('assignee') | async).assigneeFullName"
-        [daysRemaining]="store.select('daysRemaining') | async"
-      ></app-task-header-info>
+        [daysRemaining]="store.select('daysRemaining') | async"></app-task-header-info>
     </app-page-heading>
     <ng-container *ngIf="info$ | async as info">
       <ng-container [ngSwitch]="requestTaskType$ | async">
@@ -28,8 +27,7 @@
           (click)="notifyOperator()"
           govukButton
           title="Notify Operator for decision"
-          type="button"
-        >
+          type="button">
           Notify Operator of decision
         </button>
 
@@ -38,8 +36,7 @@
           (click)="sendPeerReview()"
           govukButton
           title="Send for peer review"
-          type="button"
-        >
+          type="button">
           Send for peer review
         </button>
 
@@ -51,8 +48,7 @@
           (click)="sendReturnForAmends()"
           govukButton
           title="Return for amends"
-          type="button"
-        >
+          type="button">
           Return for amends
         </button>
       </div>
@@ -69,8 +65,7 @@
           app-task-item
           link="transfer-details"
           linkText="Confirm the transfer details"
-          [status]="confirmTransferDetailsReviewStatus$ | async"
-        ></li>
+          [status]="confirmTransferDetailsReviewStatus$ | async"></li>
       </ul>
 
       <h2 class="govuk-heading-m">Permit details</h2>
@@ -81,8 +76,7 @@
           app-task-item
           [link]="(determinationStatus$ | async) === 'cannot start yet' ? '' : 'determination/summary'"
           linkText="Overall decision"
-          [status]="determinationStatus$ | async"
-        ></li>
+          [status]="determinationStatus$ | async"></li>
       </ul>
     </ng-container>
 
@@ -95,15 +89,22 @@
         *ngFor="let action of requestActions$ | async"
         [action]="action"
         [link]="action | timelineItemLink"
-        [state]="navigationState"
-      ></app-timeline-item>
+        [state]="navigationState"></app-timeline-item>
     </app-timeline>
   </div>
   <div *ngIf="isRelatedActionsSectionVisible$ | async" class="govuk-grid-column-one-third">
     <app-related-actions
       [isAssignable$]="store.isAssignableAndCapable$"
       [taskId$]="taskId$"
-      [allowedActions$]="store.select('allowedRequestTaskActions')"
-    ></app-related-actions>
+      [allowedActions$]="store.select('allowedRequestTaskActions')"></app-related-actions>
   </div>
+
+  @if (previewDocuments$ | async) {
+    <div class="govuk-grid-column-one-third">
+      <app-preview-documents
+        [taskId]="taskId$ | async"
+        [previewDocuments]="previewDocuments$ | async"
+        linkFontSize="govuk-!-font-size-16"></app-preview-documents>
+    </div>
+  }
 </div>

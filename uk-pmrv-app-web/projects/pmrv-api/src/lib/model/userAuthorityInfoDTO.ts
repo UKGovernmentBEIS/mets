@@ -18,4 +18,5 @@ export interface UserAuthorityInfoDTO {
   roleCode?: string;
   authorityCreationDate?: string;
   authorityStatus?: 'PENDING' | 'TEMP_DISABLED_PENDING' | 'ACTIVE' | 'DISABLED' | 'ACCEPTED' | 'TEMP_DISABLED';
+  lastLoginDate?: string;
 }

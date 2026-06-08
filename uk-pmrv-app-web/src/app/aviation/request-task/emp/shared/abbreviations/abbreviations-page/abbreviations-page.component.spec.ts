@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { screen } from '@testing-library/angular';
-import userEvent from '@testing-library/user-event';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 import produce from 'immer';
 
 import { EmpRequestTaskPayloadUkEts, RequestTaskStore } from '../../../../store';
@@ -20,8 +19,9 @@ describe('AbbreviationsPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AbbreviationsPageComponent, RouterTestingModule],
+      imports: [AbbreviationsPageComponent],
       providers: [
+        provideRouter([]),
         { provide: TASK_FORM_PROVIDER, useClass: AbbreviationsFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
       ],

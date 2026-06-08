@@ -45,6 +45,8 @@ class NonComplianceDailyPenaltyNoticePeerDecisionActionHandlerTest {
     @Mock
     private WorkflowService workflowService;
 
+    @Mock
+    private NonCompliancePeerReviewActionHelper peerReviewActionHelper;
 
     @Test
     void process() {
@@ -62,26 +64,32 @@ class NonComplianceDailyPenaltyNoticePeerDecisionActionHandlerTest {
         final String processTaskId = "processTaskId";
         final Request request = Request.builder().id("1").build();
         final RequestTask requestTask = RequestTask.builder().id(2L).request(request).processTaskId(processTaskId).build();
-        
+        final String mainRegulatorName = "Main Regulator Name";
+
         when(requestTaskService.findTaskById(2L)).thenReturn(requestTask);
+        when(peerReviewActionHelper.resolveMainRegulatorName(
+                request.getId(),
+                RequestActionType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED))
+            .thenReturn(mainRegulatorName);
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_SUBMIT_PEER_REVIEW_DECISION,
             appUser,
             payload);
 
-        ArgumentCaptor<PeerReviewDecisionSubmittedRequestActionPayload> actionPayloadArgumentCaptor =
+        final ArgumentCaptor<PeerReviewDecisionSubmittedRequestActionPayload> actionPayloadCaptor =
             ArgumentCaptor.forClass(PeerReviewDecisionSubmittedRequestActionPayload.class);
 
         verify(requestService, times(1)).addActionToRequest(
             eq(request),
-            actionPayloadArgumentCaptor.capture(),
+            actionPayloadCaptor.capture(),
             eq(RequestActionType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_ACCEPTED),
             eq(userId));
 
-        final PeerReviewDecisionSubmittedRequestActionPayload captorValue = actionPayloadArgumentCaptor.getValue();
+        final PeerReviewDecisionSubmittedRequestActionPayload captorValue = actionPayloadCaptor.getValue();
         assertThat(captorValue.getDecision()).isEqualTo(decision);
         assertThat(captorValue.getPayloadType()).isEqualTo(RequestActionPayloadType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD);
+        assertThat(captorValue.getSubmittedTo()).isEqualTo(mainRegulatorName);
 
         verify(workflowService, times(1)).completeTask(processTaskId, Map.of(
             BpmnProcessConstants.NON_COMPLIANCE_OUTCOME, NonComplianceOutcome.SUBMITTED

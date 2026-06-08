@@ -10,10 +10,12 @@
  * Do not edit the class manually.
  */
 import { AddressDTO } from './addressDTO';
+import { VerificationBodyEmissionSchemeDTO } from './verificationBodyEmissionSchemeDTO';
 
 export interface VerificationBodyDetails {
   name?: string;
-  accreditationReferenceNumber?: string;
   address?: AddressDTO;
+  accreditationReferenceNumber?: string;
   emissionTradingSchemes?: Array<'UK_ETS_INSTALLATIONS' | 'EU_ETS_INSTALLATIONS' | 'UK_ETS_AVIATION' | 'CORSIA'>;
+  verificationBodyEmissionSchemeDTOS?: Array<VerificationBodyEmissionSchemeDTO>;
 }

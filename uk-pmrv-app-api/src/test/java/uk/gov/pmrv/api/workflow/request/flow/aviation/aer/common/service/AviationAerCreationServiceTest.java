@@ -20,6 +20,7 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.common.service.A
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 
+import java.time.Year;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -191,4 +192,48 @@ class AviationAerCreationServiceTest {
         verify(aviationAerCreationValidatorService, times(1)).validateReportingYear(eq(accountId), any());
         verifyNoInteractions(aviationAccountQueryService, aviationAerUkEtsCreationRequestParamsBuilderService, startProcessRequestService);
     }
+
+    @Test
+    void createAerFromFirstYearOfReportingObligation_when_ukets() {
+        Long accountId = 1L;
+        Year year = Year.of(2022);
+        EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
+        AviationAccountInfoDTO aviationAccountInfo = AviationAccountInfoDTO.builder()
+                .emissionTradingScheme(emissionTradingScheme)
+                .build();
+        RequestParams requestParams = RequestParams.builder().build();
+
+        RequestCreateValidationResult validResult = RequestCreateValidationResult.builder().valid(true).build();
+
+        when(aviationAerCreationValidatorService.validateReportingYear(accountId, year)).thenReturn(validResult);
+        when(aviationAerUkEtsCreationRequestParamsBuilderService.getEmissionTradingScheme()).thenReturn(emissionTradingScheme);
+        when(aviationAerUkEtsCreationRequestParamsBuilderService.buildRequestParams(accountId, year)).thenReturn(requestParams);
+
+        aviationAerCreationService.createAerFromFirstYearOfReportingObligation(accountId, year,emissionTradingScheme);
+
+        verify(aviationAerCreationValidatorService, times(1)).validateReportingYear(accountId, year);
+        verify(aviationAerUkEtsCreationRequestParamsBuilderService, times(1)).buildRequestParams(accountId, year);
+        verify(startProcessRequestService, times(1)).startProcess(requestParams);
+        verifyNoInteractions(aviationAerReportingObligationService);
+    }
+
+
+    @Test
+    void createAerFromFirstYearOfReportingObligation_when_already_exists_for_year_throw_error() {
+        Long accountId = 1L;
+        Year year = Year.of(2022);
+
+        RequestCreateValidationResult invalidResult = RequestCreateValidationResult.builder().valid(false).build();
+
+        when(aviationAerCreationValidatorService.validateReportingYear(eq(accountId), any())).thenReturn(invalidResult);
+
+        BusinessException businessException = assertThrows(BusinessException.class,
+                () -> aviationAerCreationService.createAerFromFirstYearOfReportingObligation(accountId, year, EmissionTradingScheme.UK_ETS_AVIATION));
+
+        assertEquals(MetsErrorCode.AVIATION_AER_ALREADY_EXISTS_FOR_REPORTING_YEAR, businessException.getErrorCode());
+
+        verify(aviationAerCreationValidatorService, times(1)).validateReportingYear(eq(accountId), any());
+        verifyNoInteractions(aviationAccountQueryService, aviationAerUkEtsCreationRequestParamsBuilderService, startProcessRequestService);
+    }
+
 }

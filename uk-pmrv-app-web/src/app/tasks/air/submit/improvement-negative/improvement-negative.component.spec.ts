@@ -60,6 +60,10 @@ describe('ImprovementNegativeComponent', () => {
       this.setInputValue('#technicalInfeasibilityExplanation', value);
     }
 
+    set costUnreasonableExplanation(value: string) {
+      this.setInputValue('#costUnreasonableExplanation', value);
+    }
+
     set filesValue(value: File[]) {
       this.setInputValue('input[type="file"]', value);
     }
@@ -173,6 +177,7 @@ describe('ImprovementNegativeComponent', () => {
       ]);
 
       page.unreasonableCost.click();
+      page.costUnreasonableExplanation = 'Test description 4';
       page.technicalInfeasibility.click();
       page.technicalInfeasibilityExplanation = 'Test description 2';
 
@@ -189,6 +194,7 @@ describe('ImprovementNegativeComponent', () => {
                 isCostUnreasonable: true,
                 isTechnicallyInfeasible: true,
                 technicalInfeasibilityExplanation: 'Test description 2',
+                costUnreasonableExplanation: 'Test description 4',
                 files: [uuid3, uuid4],
               },
             },
@@ -271,6 +277,7 @@ describe('ImprovementNegativeComponent', () => {
                 ...mockAirApplicationSubmitPayload.operatorImprovementResponses?.[reference],
                 isCostUnreasonable: false,
                 technicalInfeasibilityExplanation: 'Test description 2 edited',
+                costUnreasonableExplanation: null,
                 files: [uuid3, uuid4],
               },
             },

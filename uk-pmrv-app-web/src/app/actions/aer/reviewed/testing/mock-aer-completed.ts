@@ -54,5 +54,6 @@ export const mockStateCompleted = {
         SUMMARY_OF_CONDITIONS: mockVerificationDataReviewDecision,
       },
     },
+    requestAccountId: 35,
   },
 } as CommonActionsState;

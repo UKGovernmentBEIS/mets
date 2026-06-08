@@ -43,6 +43,13 @@ export const improvementNegativeFormProvider = {
         },
         GovukValidators.required(noJustification),
       ],
+      costUnreasonableExplanation: [
+        {
+          value: operatorImprovementResponse?.costUnreasonableExplanation ?? null,
+          disabled: !state.isEditable,
+        },
+        [GovukValidators.maxLength(10000, maxLength)],
+      ],
       technicalInfeasibilityExplanation: [
         {
           value: operatorImprovementResponse?.technicalInfeasibilityExplanation ?? null,

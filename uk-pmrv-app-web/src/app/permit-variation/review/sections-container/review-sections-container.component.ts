@@ -92,7 +92,11 @@ export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbs
             decision: {
               operators: [],
               externalContacts: [],
-              signatory: state.assignee.assigneeUserId,
+              signatory:
+                requestTaskType === 'PERMIT_VARIATION_APPLICATION_PEER_REVIEW' ||
+                requestTaskType === 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW'
+                  ? state.assignee.assigneeUserId
+                  : null,
             },
           }
         : null;

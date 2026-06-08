@@ -112,7 +112,6 @@ public class MigrationVbService extends MigrationBaseService {
         String country = countryRepository.findByName(legacyVb.getCountry()).map(Country::getCode).orElse(null);
         VerificationBodyEditDTO verificationBodyEditDTO = VerificationBodyEditDTO.builder()
             .name(legacyVb.getName())
-            .accreditationReferenceNumber(legacyVb.getReferenceNumber())
             .address(AddressDTO.builder()
                     .line1(legacyVb.getLine1())
                     .line2(legacyVb.getLine2())
@@ -120,7 +119,6 @@ public class MigrationVbService extends MigrationBaseService {
                     .postcode(legacyVb.getPostcode())
                     .country(country)
                     .build())
-            .emissionTradingSchemes(emissionTradingSchemes)
             .build();
 
         Set<ConstraintViolation<VerificationBodyEditDTO>> constraintViolations =

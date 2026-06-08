@@ -31,7 +31,7 @@ export class PermitsSummaryTemplateComponent {
             { key: 'Issuing authority', value: permit.issuingAuthority },
             { key: 'Permit holder', value: permit.permitHolder },
           ])
-        : [[{ key: 'Any other environmental permits or licences', value: 'No' }]]
+        : [[{ key: 'Any other environmental permits or licenses', value: 'No' }]]
       : null;
   }
 }

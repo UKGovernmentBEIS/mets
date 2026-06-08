@@ -1,8 +1,9 @@
+import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { CapitalizeFirstPipe } from '@shared/pipes/capitalize-first.pipe';
-import { nerSubmitMockState } from '@tasks/ner/test';
+import { nerMockVerificationState, nerReviewMockState, nerSubmitMockState } from '@tasks/ner/test';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage } from '@testing';
 
@@ -14,13 +15,19 @@ describe('TaskListComponent', () => {
   let page: Page;
   let store: CommonTasksStore;
 
+  const runOnPushChangeDetection = async (fixture: ComponentFixture<any>): Promise<void> => {
+    const changeDetectorRef = fixture.debugElement.injector.get<ChangeDetectorRef>(ChangeDetectorRef);
+    changeDetectorRef.detectChanges();
+    return fixture.whenStable();
+  };
+
   class Page extends BasePage<NerTaskListComponent> {
     get heading(): string {
       return this.query<HTMLHeadingElement>('h1').textContent.trim();
     }
 
     get taskList() {
-      return this.queryAll('.govuk-grid-column-full > ul.app-task-list__items .app-task-list__task-name').map((el) =>
+      return this.queryAll('.govuk-grid-column-full > ul.app-task-list .app-task-list__task-name').map((el) =>
         el.textContent.trim(),
       );
     }
@@ -45,8 +52,34 @@ describe('TaskListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display all HTMLElements', () => {
+  it('should display all HTMLElements for submit', () => {
     expect(page.heading).toEqual('Complete new entrant reserve');
     expect(page.taskList).toEqual(['New entrant reserve', 'Send application']);
+  });
+
+  it('should display all HTMLElements for verification', async () => {
+    store.setState(nerMockVerificationState);
+    await runOnPushChangeDetection(fixture);
+
+    expect(page.heading).toEqual('Verify new entrant reserve');
+    expect(page.taskList).toEqual([
+      'New entrant reserve',
+      'NER verification opinion statement',
+      'Overall decision',
+      'Send application',
+    ]);
+  });
+
+  it('should display all HTMLElements for review', async () => {
+    store.setState(nerReviewMockState);
+    await runOnPushChangeDetection(fixture);
+
+    expect(page.heading).toEqual('Review new entrant reserve');
+    expect(page.taskList).toEqual([
+      'New entrant reserve',
+      'NER verification opinion statement',
+      'Overall decision',
+      'Outcome of regulator review',
+    ]);
   });
 });

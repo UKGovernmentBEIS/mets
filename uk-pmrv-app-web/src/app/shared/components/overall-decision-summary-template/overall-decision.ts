@@ -11,6 +11,8 @@ import {
   BDRVerificationReport,
   BDRVerifiedSatisfactoryOverallVerificationAssessment,
   BDRVerifiedWithCommentsOverallVerificationAssessment,
+  NERVerifiedSatisfactoryOverallVerificationAssessment,
+  NERVerifiedWithCommentsOverallVerificationAssessment,
 } from 'pmrv-api';
 
 export type OverallVerificationAssessment = BDRVerifiedSatisfactoryOverallVerificationAssessment &
@@ -21,7 +23,9 @@ export type OverallVerificationAssessment = BDRVerifiedSatisfactoryOverallVerifi
   ALRNotVerifiedOverallVerificationAssessment &
   BDRS2VerifiedSatisfactoryOverallVerificationAssessment &
   BDRS2VerifiedWithCommentsOverallVerificationAssessment &
-  BDRS2NotVerifiedOverallVerificationAssessment;
+  BDRS2NotVerifiedOverallVerificationAssessment &
+  NERVerifiedSatisfactoryOverallVerificationAssessment &
+  NERVerifiedWithCommentsOverallVerificationAssessment;
 
 export const overallDecisionWizardCompleted = (
   overallAssessment: (BDRVerificationReport | ALRVerificationReport | BDRS2VerificationReport)['overallAssessment'],

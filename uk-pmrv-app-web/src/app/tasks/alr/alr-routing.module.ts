@@ -9,6 +9,12 @@ import { ConfirmationComponent as PeerReviewDecisionConfirmationComponent } from
 import { PeerReviewDecisionComponent } from '@shared/components/peer-review-decision/peer-review-decision.component';
 import { PeerReviewDecisionGuard } from '@shared/components/peer-review-decision/peer-review-decision.guard';
 import { RecallSharedComponent } from '@shared/components/recall/recall.component';
+import {
+  TasksReturnToOperatorComponent,
+  tasksReturnToOperatorFormProvider,
+  TasksReturnToOperatorSummaryComponent,
+} from '@tasks/shared/components';
+import { tasksReturnToOperatorGuard } from '@tasks/shared/guards';
 
 import {
   AlrApprovedAllocationsComponent,
@@ -80,19 +86,12 @@ import {
 import {
   ActivityVerifierReviewComponent,
   AlrOpinionStatementSummaryComponent,
-  AlrReturnToOperatorComponent,
-  AlrReturnToOperatorSummaryComponent,
   AlrUploadOpinionStatementComponent,
   OverallDecisionAssessmentComponent,
   OverallDecisionSummaryComponent,
-  returnToOperatorFormProvider,
   VerificationSubmitTaskListComponent,
 } from './verification-submit';
-import {
-  opinionStatementSummaryGuard,
-  overallDecisionSummaryGuard,
-  returnToOperatorGuard,
-} from './verification-submit/guards';
+import { opinionStatementSummaryGuard, overallDecisionSummaryGuard } from './verification-submit/guards';
 
 const routes: Routes = [
   {
@@ -144,7 +143,7 @@ const routes: Routes = [
           },
           {
             path: 'question',
-            data: { pageTitle: 'Upload the activity level report file' },
+            data: { pageTitle: 'Submit your application' },
             component: AlrSendReportQuestionComponent,
           },
         ],
@@ -218,18 +217,18 @@ const routes: Routes = [
       },
       {
         path: 'return-to-operator-for-changes',
-        providers: [returnToOperatorFormProvider],
+        providers: [tasksReturnToOperatorFormProvider],
         children: [
           {
             path: '',
             data: { pageTitle: 'Changes required by the operator' },
-            component: AlrReturnToOperatorComponent,
+            component: TasksReturnToOperatorComponent,
           },
           {
             path: 'summary',
-            canActivate: [returnToOperatorGuard],
+            canActivate: [tasksReturnToOperatorGuard],
             data: { pageTitle: 'Check your answers', breadcrumb: true },
-            component: AlrReturnToOperatorSummaryComponent,
+            component: TasksReturnToOperatorSummaryComponent,
           },
         ],
       },
@@ -419,7 +418,10 @@ const routes: Routes = [
               },
               {
                 path: 'reason',
-                data: { pageTitle: 'Close - reason', backlink: ({ backlinkUrl }) => backlinkUrl || '../..' },
+                data: {
+                  pageTitle: 'Close - reason',
+                  backlink: ({ backlinkUrl }: { backlinkUrl: string }) => backlinkUrl || '../..',
+                },
                 resolve: { backlinkUrl: determinationBacklinkResolver },
                 canActivate: [AlrDeterminationCloseGuard],
                 component: AlrReasonComponent,
@@ -429,7 +431,7 @@ const routes: Routes = [
                 path: 'latest-activity',
                 data: {
                   pageTitle: 'Upload the latest activity level report file',
-                  backlink: ({ backlinkUrl }) => backlinkUrl || '../reason',
+                  backlink: ({ backlinkUrl }: { backlinkUrl: string }) => backlinkUrl || '../reason',
                 },
                 resolve: { backlinkUrl: determinationBacklinkResolver },
                 component: AlrLatestActivityComponent,
@@ -438,7 +440,7 @@ const routes: Routes = [
                 path: 'upload-latest-activity',
                 data: {
                   pageTitle: 'Upload the latest activity level report file',
-                  backlink: ({ backlinkUrl }) => backlinkUrl || '../latest-activity',
+                  backlink: ({ backlinkUrl }: { backlinkUrl: string }) => backlinkUrl || '../latest-activity',
                 },
                 resolve: { backlinkUrl: determinationBacklinkResolver },
                 component: AlrUploadLatestActivityComponent,
@@ -468,7 +470,7 @@ const routes: Routes = [
                 path: 'reason',
                 data: {
                   pageTitle: 'Proceed authority - reason',
-                  backlink: ({ backlinkUrl }) => backlinkUrl || '../..',
+                  backlink: ({ backlinkUrl }: { backlinkUrl: string }) => backlinkUrl || '../..',
                 },
                 resolve: { backlinkUrl: determinationBacklinkResolver },
                 component: AlrProceedAuthorityReasonComponent,
@@ -479,7 +481,7 @@ const routes: Routes = [
                 path: 'withholding-of-allowances',
                 data: {
                   pageTitle: 'Has a withholding of allowances notice been issued?',
-                  backlink: ({ backlinkUrl }) => backlinkUrl || '../reason',
+                  backlink: ({ backlinkUrl }: { backlinkUrl: string }) => backlinkUrl || '../reason',
                 },
                 resolve: { backlinkUrl: determinationBacklinkResolver },
                 component: AlrWithholdingOfAllowancesComponent,
@@ -490,7 +492,7 @@ const routes: Routes = [
                 path: 'preliminary-allocation',
                 data: {
                   pageTitle: 'Will you send a preliminary allocation letter?',
-                  backlink: ({ backlinkUrl }) => backlinkUrl || '../withholding-of-allowances',
+                  backlink: ({ backlinkUrl }: { backlinkUrl: string }) => backlinkUrl || '../withholding-of-allowances',
                 },
                 resolve: { backlinkUrl: determinationBacklinkResolver },
                 component: AlrPreliminaryAllocationComponent,
@@ -685,7 +687,7 @@ const routes: Routes = [
             path: 'upload-latest-activity',
             data: {
               pageTitle: 'Upload the latest activity level report file',
-              backlink: ({ backlinkUrl }) => backlinkUrl,
+              backlink: ({ backlinkUrl }: { backlinkUrl: string }) => backlinkUrl,
             },
             resolve: { backlinkUrl: alrUploadActivityBacklinkResolver },
             component: AlrAuthorityUploadLatestActivityComponent,

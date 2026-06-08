@@ -7,19 +7,25 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.enums.NERReviewGroup;
+import uk.gov.pmrv.api.workflow.request.flow.payment.domain.RequestPayloadPayable;
+import uk.gov.pmrv.api.workflow.request.flow.payment.domain.RequestPaymentInfo;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.EnumMap;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @AllArgsConstructor
-public class NerRequestPayload extends RequestPayload {
+public class NerRequestPayload extends RequestPayload implements RequestPayloadPayable {
 
     private NER ner;
+
+    private RequestPaymentInfo requestPaymentInfo;
 
     @Builder.Default
     private int nerFileVersion = 1;
@@ -43,8 +49,16 @@ public class NerRequestPayload extends RequestPayload {
     @Builder.Default
     private Map<String, Boolean> nerSectionsCompleted = new HashMap<>();
 
+    private NERApplicationRegulatorReviewOutcome regulatorReviewOutcome;
+
     @Builder.Default
-    private Map<String, Boolean> reviewSectionsCompleted = new HashMap<>();
+    private Map<String, Boolean> regulatorReviewSectionsCompleted = new HashMap<>();
+
+    @Builder.Default
+    private Map<NERReviewGroup, NERReviewDecision> regulatorReviewGroupDecisions = new EnumMap<>(NERReviewGroup.class);
+
+    @Builder.Default
+    private Map<UUID, String> regulatorReviewAttachments = new HashMap<>();
 
     public void incrementNerFileVersion() {
         this.nerFileVersion += 1;

@@ -16,7 +16,8 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
     <app-page-heading>Check your answers</app-page-heading>
     <app-verifier-details-group
       [isEditable]="isEditable$ | async"
-      [verificationReport]="verificationReportData$ | async"></app-verifier-details-group>
+      [verificationReport]="verificationReportData$ | async"
+      [emissionsTradingScheme]="emissionsTradingScheme()"></app-verifier-details-group>
     <div *ngIf="(isEditable$ | async) === true" class="govuk-button-group">
       <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
     </div>
@@ -25,10 +26,12 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryComponent implements OnInit {
-  verificationReportData$ = (
+  readonly verificationReportData$ = (
     this.aerService.getPayload() as Observable<AerApplicationVerificationSubmitRequestTaskPayload>
   ).pipe(map((payload) => payload.verificationReport));
-  isEditable$ = this.aerService.isEditable$;
+  readonly isEditable$ = this.aerService.isEditable$;
+
+  readonly emissionsTradingScheme = this.aerService.getEmissionsTradingSchemeSignal();
 
   constructor(
     readonly pendingRequest: PendingRequestService,

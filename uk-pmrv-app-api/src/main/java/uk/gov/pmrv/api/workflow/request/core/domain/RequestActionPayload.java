@@ -66,6 +66,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComp
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceDetailsAmendedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonCompliancePeerReviewRequestedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.BatchReissueCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.BatchReissueSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueCompletedRequestActionPayload;
@@ -121,6 +122,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIRegu
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionOperatorRespondedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationVerificationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERRegulatorReviewReturnedForAmendsRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERVerificationReturnedToOperatorRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permanentcessation.domain.PermanentCessationApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationDeemedWithdrawnRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationGrantedRequestActionPayload;
@@ -267,9 +272,18 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload.class, value = "NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = NonComplianceDetailsAmendedRequestActionPayload.class, value = "NON_COMPLIANCE_DETAILS_AMENDED_PAYLOAD"),
+                @DiscriminatorMapping(schema = NonCompliancePeerReviewRequestedRequestActionPayload.class, value = "NON_COMPLIANCE_PEER_REVIEW_REQUESTED_PAYLOAD"),
+
 
                 @DiscriminatorMapping(schema = NERApplicationSubmittedRequestActionPayload.class, value = "NER_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "NER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = NERApplicationVerificationSubmittedRequestActionPayload.class, value = "NER_APPLICATION_VERIFICATION_SUBMITTED_PAYLOADD"),
+                @DiscriminatorMapping(schema = NERVerificationReturnedToOperatorRequestActionPayload.class, value = "NER_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD"),
+                @DiscriminatorMapping(schema = NERRegulatorReviewReturnedForAmendsRequestActionPayload.class, value = "NER_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
+                @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "NER_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = NERApplicationCompletedRequestActionPayload.class, value = "NER_APPLICATION_COMPLETED_PAYLOAD"),
+                @DiscriminatorMapping(schema = NERApplicationCompletedRequestActionPayload.class, value = "NER_APPLICATION_DEEM_WITHDRAWN_PAYLOAD"),
+
 
 
                 @DiscriminatorMapping(schema = DoalApplicationProceededToAuthorityRequestActionPayload.class, value = "DOAL_APPLICATION_PROCEEDED_TO_AUTHORITY_PAYLOAD"),
@@ -519,10 +533,16 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload.class, name = "NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = NonComplianceDetailsAmendedRequestActionPayload.class, name = "NON_COMPLIANCE_DETAILS_AMENDED_PAYLOAD"),
-
+        @JsonSubTypes.Type(value = NonCompliancePeerReviewRequestedRequestActionPayload.class, name = "NON_COMPLIANCE_PEER_REVIEW_REQUESTED_PAYLOAD"),
 
         @JsonSubTypes.Type(value = NERApplicationSubmittedRequestActionPayload.class, name = "NER_APPLICATION_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = NERApplicationVerificationSubmittedRequestActionPayload.class, name = "NER_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "NER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = NERVerificationReturnedToOperatorRequestActionPayload.class, name = "NER_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD"),
+        @JsonSubTypes.Type(value = NERRegulatorReviewReturnedForAmendsRequestActionPayload.class, name = "NER_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
+        @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "NER_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = NERApplicationCompletedRequestActionPayload.class, name = "NER_APPLICATION_COMPLETED_PAYLOAD"),
+        @JsonSubTypes.Type(value = NERApplicationCompletedRequestActionPayload.class, name = "NER_APPLICATION_DEEM_WITHDRAWN_PAYLOAD"),
 
         @JsonSubTypes.Type(value = DoalApplicationProceededToAuthorityRequestActionPayload.class, name = "DOAL_APPLICATION_PROCEEDED_TO_AUTHORITY_PAYLOAD"),
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "DOAL_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),

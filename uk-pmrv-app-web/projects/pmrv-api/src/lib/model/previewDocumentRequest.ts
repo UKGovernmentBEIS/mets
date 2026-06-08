@@ -80,5 +80,5 @@ export interface PreviewDocumentRequest {
     | 'EMP_VARIATION_CORSIA_DEEMED_WITHDRAWN'
     | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMITTED'
     | 'AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED';
-  decisionNotification: DecisionNotification;
+  decisionNotification?: DecisionNotification;
 }

@@ -60,4 +60,12 @@
       [taskId$]="taskId$"
       [allowedActions$]="store.select('allowedRequestTaskActions')"></app-related-actions>
   </div>
+  @if (previewDocuments$ | async) {
+    <div class="govuk-grid-column-one-third">
+      <app-preview-documents
+        [taskId]="taskId$ | async"
+        [previewDocuments]="previewDocuments$ | async"
+        linkFontSize="govuk-!-font-size-16"></app-preview-documents>
+    </div>
+  }
 </div>

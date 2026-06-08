@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class NERVerificationOpinionStatement {
 
+    @NotNull
     private UUID opinionStatementFile;
 
     @Builder.Default

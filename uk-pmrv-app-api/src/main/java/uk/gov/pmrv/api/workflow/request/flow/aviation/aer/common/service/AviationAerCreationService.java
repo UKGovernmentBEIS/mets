@@ -55,6 +55,13 @@ public class AviationAerCreationService {
         }
     }
 
+    public void createAerFromFirstYearOfReportingObligation(Long accountId, Year year, EmissionTradingScheme emissionTradingScheme) {
+
+        validateReportingYearUniqueness(accountId, year);
+
+        createRequestAviationAer(accountId, emissionTradingScheme, year);
+    }
+
     private Request createRequestAviationAer(Long accountId, EmissionTradingScheme emissionTradingScheme, Year reportingYear) {
         RequestParams requestParams = getRequestParamsBuilderService(emissionTradingScheme)
             .map(service -> service.buildRequestParams(accountId, reportingYear))

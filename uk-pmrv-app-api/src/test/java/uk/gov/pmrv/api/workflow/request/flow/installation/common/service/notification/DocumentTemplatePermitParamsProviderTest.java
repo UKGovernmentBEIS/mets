@@ -9,6 +9,7 @@ import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
@@ -63,7 +64,6 @@ import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStream;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamType;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreams;
-import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
@@ -527,7 +527,8 @@ class DocumentTemplatePermitParamsProviderTest {
                 "variationRequestInfoList", allRequestsInfoList,
                 "referenceSources", referenceSources,
                 "analysisMethods", analysisMethods,
-                "transfers", List.of(transfer)
+                "transfers", List.of(transfer),
+                "documentIsDraft",false
                 )
             )
         );

@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.poi.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.netz.api.common.exception.BusinessException;
@@ -48,8 +48,8 @@ public class ALRValidationService {
 
     public void validateALRFileName(@Valid @NotNull String alrFileName) {
         boolean isValid = false;
-
-        if (StringUtil.isNotBlank(alrFileName))
+        
+        if (StringUtils.isNotBlank(alrFileName))
             isValid = PATTERN.matcher(alrFileName).matches();
 
         if(!isValid) {

@@ -8,8 +8,7 @@ import { selectIsFeatureEnabled } from '@core/config/config.selectors';
 import { ConfigStore } from '@core/config/config.store';
 import { UserState } from '@core/store/auth';
 import { AuthStore } from '@core/store/auth/auth.store';
-import { KeycloakService } from 'keycloak-angular';
-import { KeycloakLoginOptions, KeycloakProfile } from 'keycloak-js';
+import Keycloak, { KeycloakLoginOptions, KeycloakProfile } from 'keycloak-js';
 
 import { AuthoritiesService, TermsAndConditionsService, UserDTO, UsersService, UserTermsVersionDTO } from 'pmrv-api';
 
@@ -25,7 +24,7 @@ export class AuthService {
   constructor(
     private readonly authStore: AuthStore,
     private readonly configStore: ConfigStore,
-    private readonly keycloakService: KeycloakService,
+    private readonly keycloak: Keycloak,
     private readonly usersService: UsersService,
     private readonly authorityService: AuthoritiesService,
     private readonly termsAndConditionsService: TermsAndConditionsService,
@@ -40,7 +39,7 @@ export class AuthService {
       leaf = leaf.firstChild;
     }
 
-    return this.keycloakService.login({
+    return this.keycloak.login({
       ...options,
       ...(leaf.data?.blockSignInRedirect ? { redirectUri: this._baseRedirectUri } : null),
     });
@@ -48,8 +47,10 @@ export class AuthService {
 
   logout(redirectPath = ''): Promise<void> {
     const isDev = environment.production === false;
-    return this.keycloakService
-      .logout(redirectPath || isDev ? this._baseRedirectUri + redirectPath : location.origin)
+    return this.keycloak
+      .logout({
+        redirectUri: redirectPath || isDev ? this._baseRedirectUri + redirectPath : location.origin,
+      })
       .then(() => this.authStore.setIsLoggedIn(false));
   }
 
@@ -79,7 +80,7 @@ export class AuthService {
   }
 
   loadUserProfile(): Observable<KeycloakProfile> {
-    return from(this.keycloakService.loadUserProfile()).pipe(tap((profile) => this.authStore.setUserProfile(profile)));
+    return from(this.keycloak.loadUserProfile()).pipe(tap((profile) => this.authStore.setUserProfile(profile)));
   }
 
   loadUserTerms(): Observable<UserTermsVersionDTO> {
@@ -90,6 +91,6 @@ export class AuthService {
   }
 
   loadIsLoggedIn(): Observable<boolean> {
-    return of(this.keycloakService.isLoggedIn()).pipe(tap((isLoggedIn) => this.authStore.setIsLoggedIn(isLoggedIn)));
+    return of(!!this.keycloak.authenticated).pipe(tap((isLoggedIn) => this.authStore.setIsLoggedIn(isLoggedIn)));
   }
 }

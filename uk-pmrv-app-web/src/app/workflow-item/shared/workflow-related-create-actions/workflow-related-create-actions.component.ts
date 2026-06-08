@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, first, Observable, switchMap, take, takeUntil, tap } from 'rxjs';
+import { combineLatest, Observable, switchMap, take, takeUntil, tap } from 'rxjs';
 
 import { selectIsFeatureEnabled } from '@core/config/config.selectors';
 import { ConfigStore } from '@core/config/config.store';
-import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AuthStore, selectCurrentDomain } from '@core/store';
 import { ItemLinkPipe } from '@shared/pipes/item-link.pipe';
@@ -34,7 +33,7 @@ import { createRequestCreateActionProcessDTO, requestCreateActionTypeLabelMap } 
               </a>
             </li>
           }
-          @if (hasMarkAsNotRequiredAccess$ | async) {
+          @if (hasMarkAsNotRequiredAccess) {
             <li>
               <a govukLink routerLink="." (click)="onMarkAsNotRequired()">Mark workflow as not required</a>
             </li>
@@ -51,6 +50,7 @@ export class WorkflowRelatedCreateActionsComponent implements OnInit {
   @Input() accountId$: Observable<number>;
   @Input() requestId$: Observable<string>;
   @Input() requestCreateActionsTypes$: Observable<RequestCreateActionProcessDTO['requestCreateActionType'][]>;
+  @Input() hasMarkAsNotRequiredAccess: boolean;
 
   private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, take(1));
   private readonly corsia3yearOffsettingEnabled$ = this.configStore.pipe(
@@ -60,7 +60,6 @@ export class WorkflowRelatedCreateActionsComponent implements OnInit {
   isAviation: boolean;
 
   requestCreateActionTypeLabelMap = requestCreateActionTypeLabelMap;
-  hasMarkAsNotRequiredAccess$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly requestsService: RequestsService,
@@ -69,7 +68,6 @@ export class WorkflowRelatedCreateActionsComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly authStore: AuthStore,
-    readonly pendingRequest: PendingRequestService,
     private readonly configStore: ConfigStore,
   ) {}
 
@@ -88,18 +86,6 @@ export class WorkflowRelatedCreateActionsComponent implements OnInit {
     this.currentDomain$.subscribe((domain) => {
       this.isAviation = domain === 'AVIATION';
     });
-
-    this.requestId$
-      .pipe(
-        first(),
-        switchMap((requestId) => {
-          return this.requestsService.hasAccessMarkAsNotRequired(requestId);
-        }),
-        this.pendingRequest.trackRequest(),
-      )
-      .subscribe((access: boolean) => {
-        this.hasMarkAsNotRequiredAccess$.next(access);
-      });
   }
 
   onClick(requestCreateActionType: RequestCreateActionProcessDTO['requestCreateActionType']): void {

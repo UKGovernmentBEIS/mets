@@ -1,0 +1,30 @@
+@let vm = this.vm();
+
+@if (enableSummary) {
+  <h2 class="govuk-heading-m">Regulator’s review information</h2>
+
+  <app-ner-review-outcome-summary
+    [isEditable]="vm.isEditable"
+    [outcome]="vm.outcome"
+    [nerFile]="vm.nerFile"
+    [supportingFiles]="vm.supportingFiles"
+    [hideSubmit]="vm.hideSubmit"></app-ner-review-outcome-summary>
+} @else {
+  <div class="govuk-!-width-two-thirds">
+    <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!vm.isEditable">
+      <div
+        formControlName="opinion"
+        govuk-radio
+        legend="What is your opinion on new entrant reserve application?"
+        legendSize="small">
+        <govuk-radio-option
+          value="PROCEED_TO_AUTHORITY"
+          label="Regulator will send NER application to the UK ETS Authority for final assessment"></govuk-radio-option>
+        <govuk-radio-option value="WITHDRAW" label="NER application has been withdrawn"></govuk-radio-option>
+      </div>
+
+      <h3 class="govuk-heading-s">Review notes (not visible to the operator)</h3>
+      <div formControlName="notes" govuk-textarea [maxLength]="10000"></div>
+    </app-wizard-step>
+  </div>
+}

@@ -17,9 +17,9 @@ const buildOperatorBusinessLink: (accountId: number) => Pick<BusinessError, 'lin
 const operatorErrorWithAccountIdFactory = (errorFactory: () => BusinessError) => (accountId: number) =>
   errorFactory().withLink(buildOperatorBusinessLink(accountId));
 
-const buildNotAllowedAERVerificationInProgressError = () =>
+const buildNotAllowedVerificationInProgressError = () =>
   new BusinessError(
-    'You cannot change verifier as there is an AER verification assessment in progress. You can either recall the assessment or wait until it is completed.',
+    'You cannot change the verifier, while a task is under verification. You can either recall the assessment or wait until it is completed.',
   );
 
 export const viewPartiallyNotFoundOperatorError = operatorErrorWithAccountIdFactory(buildViewPartiallyNotFoundError);
@@ -31,7 +31,7 @@ export const saveNotFoundOperatorError = operatorErrorWithAccountIdFactory(build
 export const viewNotFoundOperatorError = operatorErrorWithAccountIdFactory(buildViewNotFoundError);
 
 export const changeNotAllowedVerificationBodyError = operatorErrorWithAccountIdFactory(
-  buildNotAllowedAERVerificationInProgressError,
+  buildNotAllowedVerificationInProgressError,
 );
 
 export const saveNotFoundVerificationBodyError = (accountId: number) =>

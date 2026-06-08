@@ -3,13 +3,14 @@
 <ng-container *ngFor="let task of availableTasks$ | async">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <h2 class="govuk-heading-m">{{ task.title }}</h2>
+      @if (!task.isHidden) {
+        <h2 class="govuk-heading-m">{{ task.title }}</h2>
+      }
+
       <ng-container *ngFor="let property of task.properties">
-        <ng-template [ngIf]="!property.errors.length" [ngIfElse]="errors">
+        <ng-template [ngIf]="!property.errors.length && !property.isHidden" [ngIfElse]="errors">
           <div>
-            <ng-container
-              [ngTemplateOutlet]="taskContent"
-              [ngTemplateOutletContext]="{ $implicit: property }"></ng-container>
+            <p class="govuk-body" [innerHtml]="property.content"></p>
             <button (click)="onRequestButtonClick(property.type)" appPendingButton govukButton type="button">
               {{ property.button }}
             </button>
@@ -27,22 +28,4 @@
   </div>
 
   <hr class="govuk-section-break govuk-section-break--m" />
-
-  <ng-template #taskContent let-property>
-    <p class="govuk-body">
-      @switch (property.type) {
-        @case ('NER') {
-          <div>{{ property.content }}</div>
-
-          <ul class="govuk-list govuk-list--bullet">
-            <li>a new entrant data report that has been verified in accordance with the Verification Regulation</li>
-            <li>an MMP</li>
-          </ul>
-        }
-        @default {
-          <div>{{ property.content }}</div>
-        }
-      }
-    </p>
-  </ng-template>
 </ng-container>

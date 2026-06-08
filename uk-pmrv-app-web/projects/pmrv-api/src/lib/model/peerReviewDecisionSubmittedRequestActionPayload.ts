@@ -14,4 +14,5 @@ import { RequestActionPayload } from './requestActionPayload';
 
 export interface PeerReviewDecisionSubmittedRequestActionPayload extends RequestActionPayload {
   decision: PeerReviewDecision;
+  submittedTo?: string;
 }

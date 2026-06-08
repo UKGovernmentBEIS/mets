@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+		logicalFilePath="v0.2.0/changelog_verification_body.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_1_update_verification_body_emission_trading_scheme_table" author="stavroula.papagiannakopoulou@trasys.gr">
+        <createSequence sequenceName="verification_body_emission_trading_scheme_seq" schemaName="public" startValue="1"/>
+
+        <addColumn tableName="verification_body_emission_trading_scheme">
+            <column name="id" type="BIGINT"/>
+        </addColumn>
+
+        <update tableName="verification_body_emission_trading_scheme">
+            <column name="id" valueSequenceNext="verification_body_emission_trading_scheme_seq"/>
+            <where>id IS NULL</where>
+        </update>
+
+        <addNotNullConstraint tableName="verification_body_emission_trading_scheme" columnName="id" columnDataType="BIGINT"/>
+
+        <addPrimaryKey tableName="verification_body_emission_trading_scheme" columnNames="id" constraintName="pk_ver_body_emission_scheme"/>
+
+        <addDefaultValue tableName="verification_body_emission_trading_scheme" columnName="id"
+                         defaultValueSequenceNext="verification_body_emission_trading_scheme_seq"/>
+
+        <addColumn tableName="verification_body_emission_trading_scheme">
+            <column name="accreditation_reference_number" type="varchar(255)" remarks="The accreditation reference number">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="verification_body_emission_trading_scheme">
+            <column name="accreditation_name" type="varchar(1000)" remarks="The accreditation name of the verification body">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <rollback>
+            <dropDefaultValue tableName="verification_body_emission_trading_scheme" columnName="id"/>
+            <dropPrimaryKey tableName="verification_body_emission_trading_scheme" constraintName="pk_ver_body_emission_scheme"/>
+            <dropNotNullConstraint tableName="verification_body_emission_trading_scheme" columnName="id" columnDataType="BIGINT"/>
+            <dropColumn tableName="verification_body_emission_trading_scheme" columnName="id"/>
+            <dropColumn tableName="verification_body_emission_trading_scheme" columnName="accreditation_reference_number"/>
+            <dropColumn tableName="verification_body_emission_trading_scheme" columnName="accreditation_name"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_1_migrate_accreditation_reference_number" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            UPDATE verification_body_emission_trading_scheme vbes
+            SET accreditation_reference_number = vb.accreditation_reference_number
+            FROM verification_body vb
+            WHERE vb.id = vbes.verification_body_id AND vbes.accreditation_reference_number IS NULL;
+        </sql>
+    </changeSet>
+    <changeSet id="0_2_1_drop_accreditation_reference_number_from_verification_body" author="stavroula.papagiannakopoulou@trasys.gr">
+        <dropColumn tableName="verification_body" columnName="accreditation_reference_number"/>
+
+        <rollback>
+            <addColumn tableName="verification_body">
+                <column name="accreditation_reference_number" type="varchar(255)"/>
+            </addColumn>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

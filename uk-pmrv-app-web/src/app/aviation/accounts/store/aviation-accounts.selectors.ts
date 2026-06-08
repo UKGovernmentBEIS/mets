@@ -1,7 +1,9 @@
 import { map, OperatorFunction, pipe } from 'rxjs';
 
 import {
+  AccountDetailsHistoryListResponse,
   AviationAccountEmpDTO,
+  AviationAccountReportingObligationFirstYearDTO,
   AviationAccountReportingStatusHistoryCreationDTO,
   AviationAccountReportingStatusHistoryListResponse,
   EmpDetailsDTO,
@@ -9,6 +11,7 @@ import {
 
 import { Paging } from '../../../shared/model';
 import {
+  AccountDetailsHistoryState,
   AviationAccountDetails,
   AviationAccountsState,
   CreateAccountState,
@@ -62,6 +65,9 @@ export const selectUpsertReportingStatus: OperatorFunction<
   map((state) => state.upsertStatus),
 );
 
+export const selectUpsertFyro: OperatorFunction<AviationAccountsState, AviationAccountReportingObligationFirstYearDTO> =
+  pipe(map((state) => state.currentAccount?.upsertFirstYearOfReportingObligation));
+
 export const selectReportingStatusHistory: OperatorFunction<
   AviationAccountsState,
   AviationAccountReportingStatusHistoryListResponse['reportingStatusHistoryList']
@@ -114,4 +120,34 @@ export const selectReportingStatusesList: OperatorFunction<
 > = pipe(
   selectReportingStatus,
   map((state) => state?.statuses),
+);
+
+export const selectAccountDetailsHistoryState: OperatorFunction<AviationAccountsState, AccountDetailsHistoryState> =
+  pipe(map((state) => state.currentAccount?.accountDetailsHistory));
+
+export const selectAccountDetailsHistory: OperatorFunction<
+  AviationAccountsState,
+  AccountDetailsHistoryListResponse['accountDetailsHistoryList']
+> = pipe(
+  selectAccountDetailsHistoryState,
+  map((state) => state?.history),
+);
+
+export const selectAccountDetailsHistoryTotal: OperatorFunction<AviationAccountsState, number> = pipe(
+  selectAccountDetailsHistoryState,
+  map((state) => state?.total),
+);
+
+export const selectAccountDetailsHistoryPaging: OperatorFunction<AviationAccountsState, Paging> = pipe(
+  selectAccountDetailsHistoryState,
+  map((state) => state?.paging),
+);
+
+export const selectAccountDetailsHistoryPage: OperatorFunction<AviationAccountsState, number> = pipe(
+  selectAccountDetailsHistoryPaging,
+  map((paging) => paging?.page),
+);
+export const selectAccountDetailsHistoryPageSize: OperatorFunction<AviationAccountsState, number> = pipe(
+  selectAccountDetailsHistoryPaging,
+  map((paging) => paging?.pageSize),
 );

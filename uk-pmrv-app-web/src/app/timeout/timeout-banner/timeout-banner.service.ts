@@ -1,16 +1,29 @@
-import { Injectable } from '@angular/core';
+import { effect, inject, Injectable } from '@angular/core';
 
-import { BehaviorSubject, EMPTY, filter, map, switchMap, tap, timer } from 'rxjs';
+import { BehaviorSubject, EMPTY, switchMap, tap, timer } from 'rxjs';
 
 import { AuthService } from '@core/services/auth.service';
-import { KeycloakEventType, KeycloakService } from 'keycloak-angular';
+import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TimeoutBannerService {
+  private readonly keycloak = inject(Keycloak);
+  private readonly keycloakEvent = inject(KEYCLOAK_EVENT_SIGNAL);
+  private readonly authService = inject(AuthService);
+
+  timeOffsetSeconds = environment.timeoutBanner.timeOffsetSeconds;
+
+  timeExtensionAllowed$ = new BehaviorSubject<boolean>(true);
+  isVisible$ = new BehaviorSubject<boolean>(false);
+
+  countDownTime$ = new BehaviorSubject<number>(this.calculateCountdownTime());
+  private initialRefreshTokenExpOffset = this.refreshTokenExpOffset;
+
   private get refreshTokenParsed() {
-    return this.keycloak.getKeycloakInstance()?.refreshTokenParsed;
+    return this.keycloak.refreshTokenParsed;
   }
 
   private get refreshTokenParsedExp() {
@@ -25,39 +38,24 @@ export class TimeoutBannerService {
     return this.refreshTokenParsedExp - this.refreshTokenParsedIat;
   }
 
-  timeOffsetSeconds = environment.timeoutBanner.timeOffsetSeconds;
+  constructor() {
+    effect(() => {
+      const event = this.keycloakEvent();
+      if (!event) return;
 
-  timeExtensionAllowed$ = new BehaviorSubject<boolean>(true);
-  isVisible$ = new BehaviorSubject<boolean>(false);
+      switch (event.type) {
+        case KeycloakEventType.AuthRefreshSuccess:
+          this.countDownTime$.next(this.calculateCountdownTime());
 
-  countDownTime$ = new BehaviorSubject<number>(this.calculateCountdownTime());
-  private initialRefreshTokenExpOffset = this.refreshTokenExpOffset;
-
-  constructor(
-    private readonly keycloak: KeycloakService,
-    private readonly authService: AuthService,
-  ) {
-    this.keycloak.keycloakEvents$
-      .pipe(
-        map((event) => event?.type),
-        filter((eventType) =>
-          [KeycloakEventType.OnAuthRefreshSuccess, KeycloakEventType.OnAuthLogout].includes(eventType),
-        ),
-      )
-      .subscribe((eventType) => {
-        switch (eventType) {
-          case KeycloakEventType.OnAuthRefreshSuccess:
-            this.countDownTime$.next(this.calculateCountdownTime());
-
-            if (this.refreshTokenExpOffset < this.initialRefreshTokenExpOffset) {
-              this.timeExtensionAllowed$.next(false);
-            }
-            break;
-          case KeycloakEventType.OnAuthLogout:
-            this.idleLogout();
-            break;
-        }
-      });
+          if (this.refreshTokenExpOffset < this.initialRefreshTokenExpOffset) {
+            this.timeExtensionAllowed$.next(false);
+          }
+          break;
+        case KeycloakEventType.AuthLogout:
+          this.idleLogout();
+          break;
+      }
+    });
 
     this.countDownTime$
       .pipe(
@@ -84,9 +82,7 @@ export class TimeoutBannerService {
   }
 
   extendSession() {
-    if (this.keycloak.getKeycloakInstance()) {
-      this.keycloak.updateToken(-1).then(() => this.isVisible$.next(false));
-    }
+    this.keycloak.updateToken(-1).then(() => this.isVisible$.next(false));
   }
 
   signOut() {

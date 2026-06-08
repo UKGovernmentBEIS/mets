@@ -13,7 +13,10 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionTyp
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestRecallEmailNotificationHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestTaskActionEmptyPayload;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,6 +39,9 @@ class PermitReviewRequestRecallActionHandlerTest {
 
     @Mock
     private RequestService requestService;
+
+    @Mock
+    private List<RequestRecallEmailNotificationHandler> handlers;
 
     @Test
     void process() {

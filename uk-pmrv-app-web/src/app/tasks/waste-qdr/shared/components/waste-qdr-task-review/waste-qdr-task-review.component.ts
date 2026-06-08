@@ -12,14 +12,12 @@ import { WasteQdrReturnLinkComponent } from '../waste-qdr-return-link/waste-qdr-
   selector: 'app-waste-qdr-task-common',
   imports: [RouterModule, SharedModule, WasteQdrReturnLinkComponent],
   template: `
-    <div class="govuk-!-width-two-thirds">
-      <govuk-notification-banner *ngIf="notification" type="success">
-        <h1 class="govuk-notification-banner__heading">Details updated</h1>
-      </govuk-notification-banner>
-      <app-page-heading *ngIf="heading" [caption]="caption">{{ heading }}</app-page-heading>
-      <ng-content></ng-content>
-      <app-waste-qdr-return-link [returnLink]="returnLink" [title]="returnLinkTitle"></app-waste-qdr-return-link>
-    </div>
+    <govuk-notification-banner *ngIf="notification" type="success">
+      <h1 class="govuk-notification-banner__heading">Details updated</h1>
+    </govuk-notification-banner>
+    <app-page-heading *ngIf="heading" [caption]="caption">{{ heading }}</app-page-heading>
+    <ng-content></ng-content>
+    <app-waste-qdr-return-link [returnLink]="returnLink" [title]="returnLinkTitle"></app-waste-qdr-return-link>
   `,
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,

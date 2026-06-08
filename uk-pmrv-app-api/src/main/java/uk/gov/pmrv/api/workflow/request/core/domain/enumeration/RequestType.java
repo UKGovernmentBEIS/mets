@@ -186,6 +186,14 @@ public enum RequestType {
                 .collect(Collectors.toSet());
     }
 
+    public static Set<RequestType> getAvailableForNERCreateRequestTypes(@NotNull AccountType accountType) {
+        Set<RequestType> requestTypes = Set.of(NER);
+
+        return requestTypes.stream()
+                .filter(requestType -> accountType.equals(requestType.getAccountType()))
+                .collect(Collectors.toSet());
+    }
+
     public static Set<RequestType> getAvailableForAERCreateRequestTypes(@NotNull AccountType accountType, @NotNull EmissionTradingScheme emissionTradingScheme) {
         Set<RequestType> requestTypes = Set.of(
                 AER,

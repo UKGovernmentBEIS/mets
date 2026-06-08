@@ -120,13 +120,19 @@ public class AviationReportableEmissionsNotifyRegistryService {
 	private boolean aviationAerConditionsAreSatisfied(AviationReportableEmissionsUpdatedEvent event,
 													  AviationAerUkEtsRequestPayload aerRequestPayload) {
 		boolean isVerificationPerformed = aerRequestPayload.isVerificationPerformed();
-		if (!isVerificationPerformed && !event.isFromRegulator()) {
+		if (!isVerificationPerformed) {
+			if (!event.isFromRegulator()) {
+				log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
+						INTEGRATION_POINT_KEY,
+						"Emissions updated are not sent to ETS Registry on operator non-verified AER submission");
+				return false;
+			}
 			log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
-				INTEGRATION_POINT_KEY,
-				"Emissions updated are not sent to ETS Registry on operator non-verified AER submission");
-			return false;
+					INTEGRATION_POINT_KEY,
+					"Emissions updated are sent to ETS Registry: regulator completed non-verified AER, no date validation required");
+			return true;
 		}
-		if (isVerificationPerformed && event.isFromRegulator()) {
+		if (event.isFromRegulator()) {
 			log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
 				INTEGRATION_POINT_KEY,
 				"Emissions updated are not sent to ETS Registry on regulator verified AER review completed");
@@ -143,11 +149,17 @@ public class AviationReportableEmissionsNotifyRegistryService {
 		boolean isVerificationPerformed = aerRequestPayload.isVerificationPerformed();
 		boolean isInProgress = RequestStatus.IN_PROGRESS.equals(aerRequest.getStatus());
 
-		if (!isVerificationPerformed && isInProgress) {
+		if (!isVerificationPerformed){
+			if (isInProgress) {
+				log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
+						INTEGRATION_POINT_KEY,
+						"Set operator id emissions are not sent to ETS Registry: non-verified AER is still in progress (not yet completed)");
+				return false;
+			}
 			log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
 					INTEGRATION_POINT_KEY,
-					"Set operator id emissions are not sent to ETS Registry: non-verified AER is still in progress (not yet completed)");
-			return false;
+					"Emissions updated are sent to ETS Registry: non-verified AER completed by regulator, no date validation required");
+			return true;
 		}
 
 		return setOperatorReportingPeriodConditionsAreSatisfied(event,aerRequest);

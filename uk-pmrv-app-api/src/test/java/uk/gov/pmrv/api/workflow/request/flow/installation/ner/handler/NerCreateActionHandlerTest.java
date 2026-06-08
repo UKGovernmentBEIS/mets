@@ -2,6 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.ner.handler;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -9,15 +10,18 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestCreateActionEmptyPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NER;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.enums.NERInitiationType;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -25,38 +29,61 @@ import static org.mockito.Mockito.when;
 class NerCreateActionHandlerTest {
 
 	@InjectMocks
-    private NerCreateActionHandler cut;
-    
-    @Mock
-    private StartProcessRequestService startProcessRequestService;
+	private NerCreateActionHandler cut;
 
-    @Test
-    void process() {
-		
-    	final Long accountId = 1L;
+	@Mock
+	private StartProcessRequestService startProcessRequestService;
+
+	@Test
+	void process() {
+
+		final Long accountId = 1L;
 		final AppUser appUser = AppUser.builder().userId("user").build();
 		final RequestCreateActionEmptyPayload payload = RequestCreateActionEmptyPayload.builder().build();
-		final RequestParams requestParams = RequestParams.builder()
-	            .type(RequestType.NER)
-	            .accountId(accountId)
-	            .requestPayload(NerRequestPayload.builder()
-					.ner(NER.builder().build())
-	                .payloadType(RequestPayloadType.NER_REQUEST_PAYLOAD)
-	                .operatorAssignee(appUser.getUserId())
-	                .build())
-	            .build();
-		
-		when(startProcessRequestService.startProcess(requestParams)).thenReturn(Request.builder().id("reqId").build());
-		
+
+		when(startProcessRequestService.startProcess(any(RequestParams.class)))
+				.thenReturn(Request.builder().id("reqId").build());
+
 		final String result = cut.process(accountId, payload, appUser);
-		
+
 		assertThat(result).isEqualTo("reqId");
-		
-		verify(startProcessRequestService, times(1)).startProcess(requestParams);
-    }
-    
-    @Test
-    void getRequestCreateActionType() {
-    	assertThat(cut.getRequestCreateActionType()).isEqualTo(RequestCreateActionType.NER);
-    }
+
+		ArgumentCaptor<RequestParams> requestParamsCaptor =
+				ArgumentCaptor.forClass(RequestParams.class);
+
+		verify(startProcessRequestService).startProcess(requestParamsCaptor.capture());
+
+		RequestParams requestParams = requestParamsCaptor.getValue();
+
+		assertThat(requestParams.getAccountId()).isEqualTo(accountId);
+		assertThat(requestParams.getType()).isEqualTo(RequestType.NER);
+
+		NerRequestPayload requestPayload =
+				(NerRequestPayload) requestParams.getRequestPayload();
+
+		assertThat(requestPayload.getPayloadType())
+				.isEqualTo(RequestPayloadType.NER_REQUEST_PAYLOAD);
+		assertThat(requestPayload.getOperatorAssignee())
+				.isEqualTo(appUser.getUserId());
+		assertThat(requestPayload.getNer()).isNotNull();
+
+		NERRequestMetadata requestMetadata =
+				(NERRequestMetadata) requestParams.getRequestMetadata();
+
+		assertThat(requestMetadata.getType())
+				.isEqualTo(RequestMetadataType.NER);
+		assertThat(requestMetadata.getNerInitiationType())
+				.isEqualTo(NERInitiationType.INITIATED);
+
+		assertThat(requestParams.getProcessVars())
+				.containsEntry(
+						BpmnProcessConstants.NER_INITIATION_TYPE,
+						NERInitiationType.INITIATED);
+	}
+
+	@Test
+	void getRequestCreateActionType() {
+		assertThat(cut.getRequestCreateActionType())
+				.isEqualTo(RequestCreateActionType.NER);
+	}
 }

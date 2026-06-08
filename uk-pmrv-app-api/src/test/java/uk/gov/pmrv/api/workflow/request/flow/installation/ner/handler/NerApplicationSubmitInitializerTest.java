@@ -12,8 +12,12 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NER;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERVerificationReport;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerRequestPayload;
+
+import java.util.List;
+import java.util.Map;
 
 @ExtendWith(MockitoExtension.class)
 class NerApplicationSubmitInitializerTest {
@@ -24,17 +28,39 @@ class NerApplicationSubmitInitializerTest {
     @Test
     void initializePayload() {
 
-        final Request request = Request.builder().payload(NerRequestPayload.builder().ner(NER.builder().build()).build()).build();
-        NerRequestPayload nerRequestPayload = (NerRequestPayload) request.getPayload();
+        final Long verificationBodyId = 123L;
 
+        final NERVerificationReport verificationReport = NERVerificationReport.builder()
+                .verificationBodyId(verificationBodyId)
+                .build();
+
+        final NER ner = NER.builder().build();
+
+        final NerRequestPayload nerRequestPayload = NerRequestPayload.builder()
+                .ner(ner)
+                .nerFileVersion(2)
+                .verificationPerformed(true)
+                .verificationSectionsCompleted(Map.of("SECTION", List.of(Boolean.TRUE)))
+                .verificationReport(verificationReport)
+                .build();
+
+        final Request request = Request.builder()
+                .payload(nerRequestPayload)
+                .build();
 
         final RequestTaskPayload requestTaskPayload = initializer.initializePayload(request);
 
-        assertEquals(requestTaskPayload, NerApplicationSubmitRequestTaskPayload.builder()
-            .payloadType(RequestTaskPayloadType.NER_APPLICATION_SUBMIT_PAYLOAD)
-            .ner(nerRequestPayload.getNer())
-            .nerFileVersion(1)
-            .build());
+        assertEquals(
+                NerApplicationSubmitRequestTaskPayload.builder()
+                        .payloadType(RequestTaskPayloadType.NER_APPLICATION_SUBMIT_PAYLOAD)
+                        .ner(nerRequestPayload.getNer())
+                        .nerFileVersion(nerRequestPayload.getNerFileVersion())
+                        .verificationPerformed(nerRequestPayload.isVerificationPerformed())
+                        .verificationSectionsCompleted(nerRequestPayload.getVerificationSectionsCompleted())
+                        .verificationBodyId(verificationBodyId)
+                        .build(),
+                requestTaskPayload
+        );
     }
 
     @Test

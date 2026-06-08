@@ -3,13 +3,12 @@
     (formSubmit)="onSubmit()"
     [formGroup]="form"
     submitText="Continue"
-    [hideSubmit]="(isEditable$ | async) === false"
-  >
+    [hideSubmit]="(isEditable$ | async) === false">
     <app-verifier-details-group
       [showVerifierDetails]="false"
       [isEditable]="isEditable$ | async"
       [verificationReport]="verificationReportData$ | async"
-    >
+      [emissionsTradingScheme]="emissionsTradingScheme()">
       <h2 class="govuk-heading-m">Verifier contact</h2>
       <div formControlName="name" govuk-text-input label="Name"></div>
       <div formControlName="email" govuk-text-input label="Email"></div>
@@ -22,15 +21,13 @@
         [maxLength]="10000"
         formControlName="etsTechnicalExperts"
         govuk-textarea
-        label="Technical Experts (ETS Auditor)"
-      ></div>
+        label="Technical Experts (ETS Auditor)"></div>
       <div formControlName="independentReviewer" govuk-text-input label="Independent Reviewer"></div>
       <div
         [maxLength]="10000"
         formControlName="technicalExperts"
         govuk-textarea
-        label="Technical Experts (Independent Review)"
-      ></div>
+        label="Technical Experts (Independent Review)"></div>
       <div formControlName="authorisedSignatoryName" govuk-text-input label="Name of authorised signatory"></div>
     </app-verifier-details-group>
   </app-wizard-step>

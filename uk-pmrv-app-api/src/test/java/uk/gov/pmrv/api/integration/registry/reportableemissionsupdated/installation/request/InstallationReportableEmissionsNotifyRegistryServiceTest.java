@@ -16,6 +16,7 @@ import uk.gov.netz.api.configuration.service.ConfigurationService;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountInfoDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
+import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
@@ -83,7 +84,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_eventIsFromAerMarkedAsNotRequired_Send_Null() {
-		InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, true, Year.now().minusYears(1));
+		InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, true, Year.now().minusYears(1), false);
 		event.setReportableEmissions(null);// marked as not required means null reportable emissions
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		AccountEmissionsUpdatedRequestEvent
@@ -100,9 +101,27 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 	}
 
 	@Test
+	void notifyRegistry_eventIsFromAerMarkedAsNotRequired_sendToRegistry() {
+		InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, true, Year.now().minusYears(1), true);
+		event.setReportableEmissions(null);// marked as not required means null reportable emissions
+		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
+		account.setStatus(InstallationAccountStatus.SURRENDERED);
+		Request aerRequest = getDummyAerRequest(true, RequestType.AER, PermitType.GHGE);
+
+		when(installationAccountQueryService.getInstallationAccountInfoDTOById(1L)).thenReturn(account);
+		when(aerRequestQueryService.findAerByAccountIdAndYear(1L,Year.now().minusYears(1).getValue())).thenReturn(Optional.of(aerRequest));
+
+		cut.notifyRegistry(event);
+
+		verify(installationAccountQueryService, times(1)).getInstallationAccountInfoDTOById(1L);
+		verify(reportableEmissionsSendToRegistryProducer, times(1)).produce(any(AccountEmissionsUpdatedRequestEvent.class), any(KafkaTemplate.class));
+		verify(notificationEmailService, never()).notifyRecipient(any(), any());
+	}
+
+	@Test
 	void notifyRegistry_accountConditionsNotSatisfied_emitterTypeIsNotGHGE_doNotSend() {
 
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest(true, RequestType.AER, PermitType.HSE);
 
@@ -118,7 +137,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_accountConditionsNotSatisfied_emitterTypeIsNotSpecified_send() {
-				InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(true, false, Year.now().minusYears(1));
+				InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(true, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		AccountEmissionsUpdatedRequestEvent
 			accountEmissionsUpdatedRequestEvent = getEmissionsUpdatedEvent(event, account);
@@ -143,7 +162,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 	@Test
 	void notifyRegistry_accountConditionsNotSatisfied_emissionTradingSchemeIs_EU_ETS_doNotSend() {
 
-		InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+		InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		account.setEmissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS);
 
@@ -162,7 +181,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 	@Test
 	void notifyRegistry_accountConditionsNotSatisfied_emissionTradingSchemeIs_UK_ETS_Send() {
 
-		InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+		InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 
 		when(configurationService.getConfigurationByKey("aer.installation.reporting-period.to")).thenReturn(Optional.of(ConfigurationDTO
@@ -188,7 +207,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_eventIsFromDRE_accountHasRegistryId_send(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(true, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(true, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		AccountEmissionsUpdatedRequestEvent
 			accountEmissionsUpdatedRequestEvent = getEmissionsUpdatedEvent(event, account);
@@ -205,7 +224,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_longValue_send(){
-		InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(true, false, Year.now().minusYears(1));
+		InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(true, false, Year.now().minusYears(1), false);
 		event.setReportableEmissions(new BigDecimal(1234567890123.34));
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		AccountEmissionsUpdatedRequestEvent
@@ -223,7 +242,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_eventIsFromDRE_accountDoesNotHaveRegistryId_doNotSend(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(true, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(true, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(false, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest(true, RequestType.AER, PermitType.GHGE);
 
@@ -242,7 +261,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsNotSatisfied_aerRequestDoesNotExist_doNotSend(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 
 		when(installationAccountQueryService.getInstallationAccountInfoDTOById(1L)).thenReturn(account);
@@ -262,7 +281,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsNotSatisfied_verifiedAerComesFromRegulator_doNotSend(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, true, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, true, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest( true, RequestType.AER, PermitType.GHGE);
 
@@ -279,7 +298,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsNotSatisfied_nonVerifiedAerComesFromOperator_doNotSend(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest( false, RequestType.AER, PermitType.GHGE);
 
@@ -296,7 +315,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsNotSatisfied_aerInitiatorTypeNotAerNotRevocationNotSurrender_doNotSend(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest( true, RequestType.PERMIT_VARIATION, PermitType.GHGE);
 
@@ -317,7 +336,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsNotSatisfied_aerInitiatorTypeAer_reportingPeriodFromConfigurationDoesNotExist_doNotSend(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest(true, RequestType.AER, PermitType.GHGE);
 
@@ -344,7 +363,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsNotSatisfied_aerInitiatorTypeAer_reportingPeriodToConfigurationDoesNotExist_doNotSend(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest(true, RequestType.AER, PermitType.GHGE);
 
@@ -371,7 +390,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsNotSatisfied_aerInitiatorTypeAer_submittedYearIsNotPreviousYear_doNotSend(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false,  Year.now().minusYears(2));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false,  Year.now().minusYears(2), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest(true, RequestType.AER, PermitType.GHGE);
 
@@ -388,7 +407,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsNotSatisfied_aerInitiatorTypeAer_outsideOfReportingPeriod_doNotSend(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest(true, RequestType.AER, PermitType.GHGE);
 
@@ -421,7 +440,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsSatisfied_aerInitiatorTypeAer_accountHasRegistryId_send(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest( true, RequestType.AER, PermitType.GHGE);
 		AccountEmissionsUpdatedRequestEvent
@@ -455,7 +474,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsSatisfied_aerInitiatorTypeAer_accountDoesNotHaveRegistryId_doNotSend(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false,  Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false,  Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(false, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest( true, RequestType.AER, PermitType.GHGE);
 
@@ -492,7 +511,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsSatisfied_aerInitiatorTypeRevocation_accountHasRegistryId_send(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest(true, RequestType.PERMIT_REVOCATION, PermitType.GHGE);
 		AccountEmissionsUpdatedRequestEvent
@@ -511,7 +530,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsSatisfied_aerInitiatorTypeRevocation_accountDoesNotHaveRegistryId_doNotSend(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(false, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest( true, RequestType.PERMIT_REVOCATION, PermitType.GHGE);
 
@@ -532,7 +551,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsSatisfied_aerInitiatorTypeSurrender_accountHasRegistryId_send(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(true, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest(true, RequestType.PERMIT_SURRENDER, PermitType.GHGE);
 		AccountEmissionsUpdatedRequestEvent
@@ -551,7 +570,7 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 
 	@Test
 	void notifyRegistry_aerConditionsSatisfied_aerInitiatorTypeSurrender_accountDoesNotHaveRegistryId_doNotSend(){
-    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1));
+    	InstallationReportableEmissionsUpdatedEvent event = getDummyEvent(false, false, Year.now().minusYears(1), false);
 		InstallationAccountInfoDTO account = getDummyAccount(false, EmitterType.GHGE);
 		Request aerRequest = getDummyAerRequest( true, RequestType.PERMIT_SURRENDER, PermitType.GHGE);
 
@@ -842,13 +861,14 @@ class InstallationReportableEmissionsNotifyRegistryServiceTest {
 			.reportingYear(event.getYear()).build();
 	}
 
-	private InstallationReportableEmissionsUpdatedEvent getDummyEvent(Boolean isFromDRE, Boolean isFromRegulator, Year year) {
+	private InstallationReportableEmissionsUpdatedEvent getDummyEvent(Boolean isFromDRE, Boolean isFromRegulator, Year year, Boolean isFromAerMarkedAsNotRequired) {
 		Long accountId = 1L;
 		return InstallationReportableEmissionsUpdatedEvent.builder()
     			.accountId(accountId)
     			.isFromDre(isFromDRE)
     			.reportableEmissions(new BigDecimal(10.34))
 				.isFromRegulator(isFromRegulator)
+				.isFromAerMarkedAsNotRequired(isFromAerMarkedAsNotRequired)
     			.year(year)
     			.build();
 	}

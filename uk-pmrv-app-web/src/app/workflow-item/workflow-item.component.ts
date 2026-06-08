@@ -2,8 +2,19 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, map, of, shareReplay, switchMap, takeUntil, withLatestFrom } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  first,
+  map,
+  of,
+  shareReplay,
+  switchMap,
+  takeUntil,
+  withLatestFrom,
+} from 'rxjs';
 
+import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AuthStore, selectUserRoleType } from '@core/store/auth';
 import { BackLinkService } from '@shared/back-link/back-link.service';
@@ -37,6 +48,7 @@ import { WorkflowItemAbstractComponent } from './workflow-item-abstract.componen
 })
 export class WorkflowItemComponent extends WorkflowItemAbstractComponent implements OnInit {
   private readonly quarterNamePipe = new QuarterNamePipe();
+  hasMarkAsNotRequiredAccess$ = new BehaviorSubject<boolean>(false);
 
   currentTab$ = new BehaviorSubject<string>(null);
   isAviation = this.router.url.includes('/aviation/');
@@ -90,10 +102,10 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
         return this.requestsService.getAvailableAerWorkflows(requestInfo.id);
       } else if (
         roleType === 'REGULATOR' &&
-        ['BDR'].includes(requestInfo.requestType) &&
+        ['BDR', 'NER'].includes(requestInfo.requestType) &&
         requestInfo.requestStatus === 'COMPLETED'
       ) {
-        return of({ BDR: { valid: true } });
+        return of({ [requestInfo.requestType]: { valid: true } });
       } else if (
         roleType === 'REGULATOR' &&
         ['BDRS2'].includes(requestInfo.requestType) &&
@@ -144,6 +156,7 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
     private readonly requestActionsService: RequestActionsService,
     private readonly withholdFlagRequestsService: WithholdFlagRequestsService,
     private readonly titleService: Title,
+    readonly pendingRequest: PendingRequestService,
   ) {
     super(authStore, router, route, backLinkService, destroy$);
   }
@@ -156,6 +169,24 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
       );
 
     this.requestInfo$.subscribe(({ requestType }) => this.titleService.setTitle(workflowDetailsTypesMap[requestType]));
+
+    combineLatest([this.requestInfo$, this.userRoleType$, this.requestId$])
+      .pipe(
+        first(),
+        switchMap(([requestInfo, roleType, requestId]) => {
+          if (
+            roleType === 'REGULATOR' &&
+            ['AER', 'AVIATION_AER_CORSIA', 'AVIATION_AER_UKETS'].includes(requestInfo.requestType)
+          )
+            return this.requestsService.hasAccessMarkAsNotRequired(requestId);
+
+          return of(false);
+        }),
+        this.pendingRequest.trackRequest(),
+      )
+      .subscribe((access: boolean) => {
+        this.hasMarkAsNotRequiredAccess$.next(access);
+      });
   }
 
   private sortTimeline(res: RequestActionInfoDTO[]): RequestActionInfoDTO[] {

@@ -2,9 +2,7 @@
   header="Full transfer of permit"
   [customContentTemplate]="customContentTemplate"
   expectedTaskType="PERMIT_TRANSFER_A_APPLICATION_SUBMIT"
-  [notification]="notification"
->
-</app-base-task-container-component>
+  [notification]="notification"></app-base-task-container-component>
 
 <ng-template #customContentTemplate>
   <ol class="app-task-list" *ngIf="transferDetailsStatus$ | async as transferDetailsStatus">
@@ -14,8 +12,7 @@
           app-task-item
           [link]="(canViewSectionDetails$ | async) ? './summary' : null"
           linkText="Provide transfer details"
-          [status]="transferDetailsStatus"
-        ></li>
+          [status]="transferDetailsStatus"></li>
       </ul>
     </li>
     <li app-task-section title="Send application">
@@ -24,8 +21,7 @@
           app-task-item
           [link]="transferDetailsStatus === 'complete' ? './send-application' : null"
           linkText="Send to the new operator"
-          [status]="transferDetailsStatus === 'complete' ? 'not started' : 'cannot start yet'"
-        ></li>
+          [status]="transferDetailsStatus === 'complete' ? 'not started' : 'cannot start yet'"></li>
       </ul>
     </li>
   </ol>

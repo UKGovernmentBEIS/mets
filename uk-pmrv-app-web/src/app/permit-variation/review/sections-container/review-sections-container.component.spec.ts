@@ -348,9 +348,9 @@ describe('ReviewSectionsContainerComponent', () => {
       expect(navigateSpy).toHaveBeenCalledWith(['notify-operator'], { relativeTo: route });
     });
 
-    it('should not display links for pdf in peer review', () => {
+    it('should display links for permit draft pdf in peer review', () => {
       const textContent = hostElement.querySelector('app-preview-documents').textContent;
-      expect(textContent).toBe('');
+      expect(textContent).toBe('Document preview permit_preview.pdf ');
     });
   });
 });

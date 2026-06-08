@@ -76,6 +76,8 @@ export function resolveRequestTaskActionType(
       return 'ALR_REQUEST_PEER_REVIEW';
     case 'BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT':
       return 'BDRS2_REQUEST_PEER_REVIEW';
+    case 'NER_APPLICATION_REVIEW':
+      return 'NER_REQUEST_PEER_REVIEW';
 
     default:
       return null;
@@ -154,6 +156,8 @@ export function resolveRequestTaskActionPayloadType(
       return 'ALR_REQUEST_PEER_REVIEW_PAYLOAD';
     case 'BDRS2_APPLICATION_REGULATOR_REVIEW_SUBMIT':
       return 'BDRS2_REQUEST_PEER_REVIEW_PAYLOAD';
+    case 'NER_APPLICATION_REVIEW':
+      return 'NER_REQUEST_PEER_REVIEW_PAYLOAD';
 
     default:
       return null;
@@ -245,6 +249,8 @@ export function resolveReturnToText(
       }
     case 'alr':
       return { text: 'Review activity level report', link: '..' };
+    case 'ner':
+      return { text: 'Review new entrant reserve', link: '..' };
   }
 }
 
@@ -257,6 +263,7 @@ export const resolveReferenceCodeText = (requestTaskType: RequestTaskDTO['type']
     case 'INSTALLATION_AUDIT_APPLICATION_SUBMIT':
     case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT':
     case 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+    case 'NER_APPLICATION_REVIEW':
       return 'Your reference number';
 
     default:

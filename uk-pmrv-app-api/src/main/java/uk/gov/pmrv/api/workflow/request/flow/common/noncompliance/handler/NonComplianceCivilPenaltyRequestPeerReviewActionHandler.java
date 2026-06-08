@@ -17,8 +17,9 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceCivilPenaltyRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceOutcome;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonCompliancePeerReviewRequestedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.service.NonComplianceCivilPenaltyApplyService;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.validation.NonCompliancePeerReviewValidator;
 
@@ -32,6 +33,7 @@ public class NonComplianceCivilPenaltyRequestPeerReviewActionHandler
     private final NonComplianceCivilPenaltyApplyService applyService;
     private final RequestService requestService;
     private final WorkflowService workflowService;
+    private final NonCompliancePeerReviewActionHelper peerReviewActionHelper;
 
 
     @Override
@@ -59,9 +61,12 @@ public class NonComplianceCivilPenaltyRequestPeerReviewActionHandler
 
         applyService.saveRequestPeerReviewAction(requestTask, payload.getPeerReviewer());
 
+        final NonCompliancePeerReviewRequestedRequestActionPayload actionPayload =
+                peerReviewActionHelper.buildPeerReviewRequestedPayload(payload.getPeerReviewer());
+
         requestService.addActionToRequest(
                 requestTask.getRequest(),
-                null,
+                actionPayload,
                 RequestActionType.NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_REQUESTED,
                 appUser.getUserId()
         );

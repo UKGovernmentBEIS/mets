@@ -1,15 +1,20 @@
-<ng-container *ngIf="requestMetadata() as metadata">
-  <app-waste-qdr-task-common *ngIf="vm() as vm" returnLink="../" [breadcrumb]="true" heading="Quarterly data report">
-    <app-waste-qdr-summary-template
-      [reportProvided]="vm.reportProvided"
-      quartelyTitle="Will you provide a quarterly data report for {{ metadata.quarter | quarterName }} {{
-        metadata.year
-      }}?"
-      [qdrReport]="vm.qdrReport"
-      [notes]="vm.notes"
-      [reasonForUnprovided]="vm.reasonForUnprovided"
-      [supportingFiles]="vm.supportingFiles"></app-waste-qdr-summary-template>
+@let vm = this.vm();
 
-    <app-waste-qdr-review-group-decision (notification)="notification = $event"></app-waste-qdr-review-group-decision>
-  </app-waste-qdr-task-common>
-</ng-container>
+<app-waste-qdr-task-common returnLink="../" [breadcrumb]="true" heading="Quarterly data report">
+  <app-waste-qdr-summary-template
+    [reportProvided]="vm.reportProvided"
+    quartelyTitle="Will you provide a quarterly data report for {{ vm.requestMetadata.quarter | quarterName }} {{
+      vm.requestMetadata.year
+    }}?"
+    [qdrReport]="vm.qdrReport"
+    [notes]="vm.payload.qdr.notes"
+    [reasonForUnprovided]="vm.payload.qdr.reasonForUnprovided"
+    [supportingFiles]="vm.supportingFiles"></app-waste-qdr-summary-template>
+
+  <app-shared-review-group-decision
+    [isEditable]="vm.isEditable"
+    [payload]="$any(vm.payload)"
+    [downloadUrl]="vm.downloadUrl"
+    [requestTaskId]="vm.requestTaskId"
+    (formSubmit)="onSubmit($event)"></app-shared-review-group-decision>
+</app-waste-qdr-task-common>

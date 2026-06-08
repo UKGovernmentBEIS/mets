@@ -14,7 +14,10 @@ export interface VerificationBodyUser {
   userId?: string;
   Verification_body_name?: string;
   Account_status?: string;
-  Accreditation_reference_number?: string;
+  Accreditation_reference_number_for_UK_ETS_Installations?: string;
+  Accreditation_reference_number_for_EU_ETS_Installations?: string;
+  Accreditation_reference_number_for_UK_ETS_Aviations?: string;
+  Accreditation_reference_number_for_CORSIA?: string;
   Is_accredited_for_UK_ETS_Installations?: boolean;
   Is_accredited_for_EU_ETS_Installations_?: boolean;
   Is_accredited_for_UK_ETS_Aviations?: boolean;

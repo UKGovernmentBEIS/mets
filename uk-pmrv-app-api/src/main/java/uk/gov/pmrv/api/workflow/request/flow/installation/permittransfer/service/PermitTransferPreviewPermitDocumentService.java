@@ -13,12 +13,14 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.service.permit.PermitPreviewCreatePermitDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.service.permit.PermitPreviewDocumentService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceApplicationRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceGrantDetermination;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBApplicationReviewRequestTaskPayload;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.UUID;
@@ -34,19 +36,24 @@ public class PermitTransferPreviewPermitDocumentService implements PermitPreview
     public FileDTO create(final Long taskId, final DecisionNotification decisionNotification) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(taskId);
-        final PermitTransferBApplicationReviewRequestTaskPayload taskPayload =
-                (PermitTransferBApplicationReviewRequestTaskPayload) requestTask.getPayload();
+        final PermitIssuanceApplicationRequestTaskPayload taskPayload =
+                (PermitIssuanceApplicationRequestTaskPayload) requestTask.getPayload();
         final Request request = requestTask.getRequest();
         final Long accountId = request.getAccountId();
 
         final Permit permit = taskPayload.getPermit();
         final PermitType permitType = taskPayload.getPermitType();
-        final PermitIssuanceGrantDetermination determination = (PermitIssuanceGrantDetermination) taskPayload.getDetermination();
-        final LocalDate activationDate = determination.getActivationDate();
-        final SortedMap<String, BigDecimal> annualEmissionsTargets = determination.getAnnualEmissionsTargets();
+        LocalDate activationDate = null;
+        SortedMap<String, BigDecimal> annualEmissionsTargets = null;
+
+        if (taskPayload instanceof PermitIssuanceApplicationReviewRequestTaskPayload reviewPayload
+                && reviewPayload.getDetermination() instanceof PermitIssuanceGrantDetermination grantDetermination) {
+            activationDate = grantDetermination.getActivationDate();
+            annualEmissionsTargets = grantDetermination.getAnnualEmissionsTargets();
+        }
         final Map<UUID, String> attachments = taskPayload.getAttachments();
 
-        final int consolidationNumber = 1; // consolidation number default value
+        final int consolidationNumber = 1;
 
         return permitPreviewCreatePermitDocumentService.getFile(
                 decisionNotification,
@@ -63,7 +70,15 @@ public class PermitTransferPreviewPermitDocumentService implements PermitPreview
     }
 
     @Override
-    public RequestTaskType getType() {
-        return RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_REVIEW;
+    public List<RequestTaskType> getTypes() {
+        return List.of(
+                RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_REVIEW,
+                RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW,
+                RequestTaskType.PERMIT_TRANSFER_B_WAIT_FOR_PEER_REVIEW,
+                RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_SUBMIT,
+                RequestTaskType.PERMIT_TRANSFER_B_WAIT_FOR_AMENDS,
+                RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_AMENDS_SUBMIT,
+                RequestTaskType.PERMIT_TRANSFER_B_WAIT_FOR_REVIEW
+        );
     }
 }

@@ -80,6 +80,8 @@ export function resolveRequestTaskActionType(
       return 'AVIATION_DOE_CORSIA_SUBMIT_PEER_REVIEW_DECISION';
     case 'ALR_APPLICATION_PEER_REVIEW':
       return 'ALR_SUBMIT_PEER_REVIEW_DECISION';
+    case 'NER_APPLICATION_PEER_REVIEW':
+      return 'NER_SUBMIT_PEER_REVIEW_DECISION';
 
     default:
       return null;
@@ -158,6 +160,8 @@ export function resolveRequestTaskActionPayloadType(
       return 'AVIATION_DOE_CORSIA_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
     case 'ALR_APPLICATION_PEER_REVIEW':
       return 'ALR_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
+    case 'NER_APPLICATION_PEER_REVIEW':
+      return 'NER_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
 
     default:
       return null;
@@ -229,6 +233,8 @@ export function resolveReturnToText(requestType: UrlRequestType, requestTaskType
       return 'Peer review permanent cessation';
     case 'alr':
       return 'Activity level report peer review';
+    case 'ner':
+      return 'Peer review new entrant reserve';
 
     default:
       return null;

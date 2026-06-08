@@ -8,7 +8,6 @@ import { SharedModule } from '@shared/shared.module';
 
 import { BdrTaskComponent } from './components/bdr-task/bdr-task.component';
 import { BdrTaskReviewComponent } from './components/bdr-task-review/bdr-task-review.component';
-import { BdrReviewGroupDecisionComponent } from './components/decision/bdr-review-group-decision/bdr-review-group-decision.component';
 import { BDRReturnLinkComponent } from './components/return-link/return-link.component';
 import { TaskStatusPipe } from './pipes/task-status.pipe';
 import { BdrService } from './services/bdr.service';
@@ -16,7 +15,6 @@ import { BdrService } from './services/bdr.service';
 @NgModule({
   imports: [
     BDRReturnLinkComponent,
-    BdrReviewGroupDecisionComponent,
     BdrTaskComponent,
     BdrTaskReviewComponent,
     RouterModule,
@@ -24,12 +22,6 @@ import { BdrService } from './services/bdr.service';
     TaskStatusPipe,
   ],
   providers: [BdrService, CapitalizeFirstPipe, ItemNamePipe, TaskTypeToBreadcrumbPipe],
-  exports: [
-    BDRReturnLinkComponent,
-    BdrReviewGroupDecisionComponent,
-    BdrTaskComponent,
-    BdrTaskReviewComponent,
-    TaskStatusPipe,
-  ],
+  exports: [BDRReturnLinkComponent, BdrTaskComponent, BdrTaskReviewComponent, TaskStatusPipe],
 })
 export class BdrTaskSharedModule {}

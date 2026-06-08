@@ -8,50 +8,121 @@
   [daysRemaining]="vm.daysRemaining"></app-base-task-container-component>
 
 <ng-template #waitContentTemplate>
-  <govuk-warning-text>{{ vm.warningText }}</govuk-warning-text>
+  <govuk-warning-text>{{ vm.warningText.text }}</govuk-warning-text>
+
+  @if (vm.warningText.extraText) {
+    <p class="govuk-body" [innerHTML]="vm.warningText.extraText"></p>
+  }
 </ng-template>
 
 <ng-template #taskContentTemplate>
-  <h2 class="govuk-heading-m">New entrant reserve details</h2>
+  <div class="govuk-button-group">
+    @if (vm.allowReturnForAmends) {
+      <button (click)="sendReturnForAmends()" govukButton title="Return for amendments" type="button">
+        Return for amendments
+      </button>
+    }
 
-  <ul app-task-item-list>
-    <li
-      app-task-item
-      [link]="vm.redirectDetailsLink"
-      linkText="New entrant reserve"
-      [status]="vm.detailsSectionStatus"></li>
+    @if (vm.allowCompleteOrWithdraw) {
+      <button (click)="completeOrWithdraw()" govukButton [title]="vm.completeOrWithdrawButtonText" type="button">
+        {{ vm.completeOrWithdrawButtonText }}
+      </button>
+    }
 
-    @if (vm.hasVerificationReport) {
+    @if (vm.allowPeerReviewDecision) {
+      <button (click)="peerReviewDecision()" govukButton title="Peer review decision" type="button">
+        Peer review decision
+      </button>
+    }
+
+    @if (vm.allowSendForPeerReview) {
+      <button (click)="sendForPeerReview()" govukButton title="Send for peer review" type="button">
+        Send for peer review
+      </button>
+    }
+  </div>
+
+  <ul class="app-task-list">
+    <ng-container *ngIf="vm.requestTaskType === 'NER_APPLICATION_AMENDS_SUBMIT'">
+      <h2 class="govuk-heading-m govuk-!-margin-0">Regulator comments</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="changes-requested"
+          linkText="Changes requested by the regulator"
+          [status]="vm.changesRequestedSectionStatus"></li>
+      </ul>
+    </ng-container>
+
+    <li app-task-section title="New entrant reserve details">
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          [link]="vm.redirectDetailsLink"
+          linkText="New entrant reserve"
+          [status]="vm.detailsSectionStatus"></li>
+      </ul>
+    </li>
+
+    @if (vm.isVerificationTask) {
       <li app-task-section title="Verification opinion statement">
         <ul app-task-item-list>
-          <li
-            app-task-item
-            [link]="vm.redirectOpinionStatementLink"
-            linkText="NER verification opinion statement"
-            [status]="vm.opinionStatementSectionStatus"></li>
+          <ng-container [ngTemplateOutlet]="opinionStatementTemplate" />
         </ul>
       </li>
+
       <li app-task-section title="Overall decision">
+        <ul app-task-item-list>
+          <ng-container [ngTemplateOutlet]="overallDecisionTemplate" />
+        </ul>
+      </li>
+    }
+
+    @if (vm.isReviewTask) {
+      <li app-task-section title="Verification opinion statement">
+        <ul app-task-item-list>
+          <ng-container [ngTemplateOutlet]="opinionStatementTemplate" />
+          <ng-container [ngTemplateOutlet]="overallDecisionTemplate" />
+        </ul>
+      </li>
+
+      <li app-task-section title="Outcome of regulator review">
         <ul app-task-item-list>
           <li
             app-task-item
-            [link]="vm.redirectOverallDecisionLink"
-            linkText="Overall decision"
-            [status]="vm.overallDecisionStatus"></li>
+            [link]="vm.redirectReviewOutcomeLink"
+            linkText="Outcome of regulator review"
+            [status]="vm.reviewOutcomeStatus"></li>
+        </ul>
+      </li>
+    }
+
+    @if (vm.isSubmitRequestTask) {
+      <li app-task-section title="Send application">
+        <ul app-task-item-list>
+          <li
+            app-task-item
+            [link]="vm.redirectSendReportLink"
+            linkText="Send application"
+            [status]="vm.sendReportSectionStatus"></li>
         </ul>
       </li>
     }
   </ul>
+</ng-template>
 
-  @if (vm.isSubmitRequestTask) {
-    <h2 class="govuk-heading-m">Send application</h2>
+<ng-template #opinionStatementTemplate>
+  <li
+    app-task-item
+    [link]="vm.redirectOpinionStatementLink"
+    linkText="NER verification opinion statement"
+    [status]="vm.opinionStatementSectionStatus"></li>
+</ng-template>
 
-    <ul app-task-item-list>
-      <li
-        app-task-item
-        [link]="vm.sectionsCompleted ? vm.redirectSendReportLink : null"
-        linkText="Send application"
-        [status]="vm.sendReportSectionStatus"></li>
-    </ul>
-  }
+<ng-template #overallDecisionTemplate>
+  <li
+    app-task-item
+    [link]="vm.redirectOverallDecisionLink"
+    linkText="Overall decision"
+    [status]="vm.overallDecisionStatus"></li>
 </ng-template>

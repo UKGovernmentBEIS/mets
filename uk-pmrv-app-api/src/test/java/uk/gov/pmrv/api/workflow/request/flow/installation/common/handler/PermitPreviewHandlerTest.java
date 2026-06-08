@@ -1,15 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.common.handler;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
-
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -19,19 +9,28 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.service.permit.PermitPreviewDocumentService;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.PermitIssuanceReviewPeerReviewPermitDocumentService;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.PermitIssuanceReviewPreviewPermitDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.service.PermitVariationRegulatorLedPeerReviewPreviewPermitDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.service.PermitVariationRegulatorLedPreviewPermitDocumentService;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.service.PermitVariationPeerReviewPreviewPermitDocumentService;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.service.PermitVariationReviewPreviewPermitDocumentService;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PermitPreviewHandlerTest {
@@ -55,18 +54,14 @@ class PermitPreviewHandlerTest {
     private static Stream<Arguments> provideGenerateDocumentTestArguments() {
 
         List<Arguments> arguments = List.of(
-                Arguments.of(mock(PermitVariationPeerReviewPreviewPermitDocumentService.class), RequestTaskType.PERMIT_VARIATION_APPLICATION_PEER_REVIEW),
-                Arguments.of(mock(PermitVariationReviewPreviewPermitDocumentService.class),RequestTaskType.PERMIT_VARIATION_APPLICATION_REVIEW),
                 Arguments.of(mock(PermitVariationRegulatorLedPreviewPermitDocumentService.class),RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT),
-                Arguments.of(mock(PermitIssuanceReviewPeerReviewPermitDocumentService.class),RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW),
-                Arguments.of(mock(PermitIssuanceReviewPreviewPermitDocumentService.class),RequestTaskType.PERMIT_ISSUANCE_APPLICATION_REVIEW),
                 Arguments.of(mock(PermitVariationRegulatorLedPeerReviewPreviewPermitDocumentService.class),RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW)
                 );
 
         for(Arguments arg: arguments){
             PermitPreviewDocumentService service = ((PermitPreviewDocumentService) Arrays.stream(arg.get()).toList().get(0));
             RequestTaskType requestTaskType = ((RequestTaskType) Arrays.stream(arg.get()).toList().get(1));
-            when(service.getType()).thenReturn(requestTaskType);
+            when(service.getTypes()).thenReturn(List.of(requestTaskType));
             when(service.create(taskId, decisionNotification)).thenReturn(fileDTO);
         }
 

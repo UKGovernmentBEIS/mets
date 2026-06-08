@@ -13,6 +13,6 @@ public class InstallationAccountUpdatedRegistryEvent {
 
     private Long accountId;
     private String requestId;
-    private boolean isFromSetOperatorId;
+    private boolean skipRequestAction;
 
 }

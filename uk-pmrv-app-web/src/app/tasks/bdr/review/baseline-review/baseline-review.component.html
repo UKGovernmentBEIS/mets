@@ -9,5 +9,10 @@
     [files]="files()"
     [mmpFiles]="mmpFiles()"></app-bdr-baseline-summary-template>
 
-  <app-bdr-review-group-decision (notification)="notification = $event"></app-bdr-review-group-decision>
+  <app-shared-review-group-decision
+    [isEditable]="isEditable()"
+    [payload]="$any(payload())"
+    [downloadUrl]="downloadUrl"
+    [requestTaskId]="requestTaskId"
+    (formSubmit)="onSubmit($event)"></app-shared-review-group-decision>
 </app-bdr-task-review>

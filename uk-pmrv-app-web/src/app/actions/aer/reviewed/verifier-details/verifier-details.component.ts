@@ -13,7 +13,8 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Verifier details" [breadcrumb]="true">
       <app-verifier-details-group
-        [verificationReport]="(payload$ | async).verificationReport"></app-verifier-details-group>
+        [verificationReport]="(payload$ | async).verificationReport"
+        [emissionsTradingScheme]="emissionsTradingScheme()"></app-verifier-details-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -24,6 +25,8 @@ export class VerifierDetailsComponent {
   decisionData$ = combineLatest([this.payload$, this.route.data]).pipe(
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
+
+  readonly emissionsTradingScheme = this.aerService.getEmissionsTradingSchemeSignal();
 
   constructor(
     private readonly aerService: AerService,

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Set;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -12,6 +13,7 @@ import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.verificationbody.domain.VerificationBody;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEditDTO;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 
 class VerificationBodyMapperTest {
 
@@ -25,16 +27,24 @@ class VerificationBodyMapperTest {
     @Test
     void toVerificationBody() {
         String name = "name";
-        String accreditationRefNum = "accreditationRefNum";
         AddressDTO address = AddressDTO.builder().line1("line1").line2("line2").city("city").country("country").postcode("code").build();
-        Set<EmissionTradingScheme> emissionTradingSchemes =
-            Set.of(EmissionTradingScheme.UK_ETS_INSTALLATIONS, EmissionTradingScheme.UK_ETS_AVIATION);
+
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO2 = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.UK_ETS_AVIATION)
+                .accreditationReferenceNumber("accreditationRefNum2")
+                .accreditationName("name2")
+                .build();
+        Set<VerificationBodyEmissionSchemeDTO> verificationBodyEmissionSchemeDTOS = Set.of(verificationBodyEmissionSchemeDTO, verificationBodyEmissionSchemeDTO2);
 
         VerificationBodyEditDTO verificationBodyEditDTO = VerificationBodyEditDTO.builder()
             .name(name)
-            .accreditationReferenceNumber(accreditationRefNum)
             .address(address)
-            .emissionTradingSchemes(emissionTradingSchemes)
+            .verificationBodyEmissionSchemes(verificationBodyEmissionSchemeDTOS)
             .build();
 
         //invoke
@@ -43,7 +53,6 @@ class VerificationBodyMapperTest {
         //assertions
         assertThat(verificationBody).isNotNull();
         assertEquals(name, verificationBody.getName());
-        assertEquals(accreditationRefNum, verificationBody.getAccreditationReferenceNumber());
 
         Address verificationBodyAddress = verificationBody.getAddress();
         assertThat(verificationBodyAddress).isNotNull();
@@ -53,8 +62,6 @@ class VerificationBodyMapperTest {
         assertEquals(address.getCountry(), verificationBodyAddress.getCountry());
         assertEquals(address.getPostcode(), verificationBodyAddress.getPostcode());
 
-        assertThat(verificationBody.getEmissionTradingSchemes())
-                .hasSize(2)
-                .containsExactlyInAnyOrder(EmissionTradingScheme.UK_ETS_INSTALLATIONS, EmissionTradingScheme.UK_ETS_AVIATION);
+        assertThat(verificationBody.getEmissionSchemes()).hasSize(2);
     }
 }

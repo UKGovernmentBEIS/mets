@@ -1,0 +1,6 @@
+# Require approval from the DevOps team for Jenkinsfile & .github changes
+/Jenkinsfile @UKGovernment-IDET/DevOps
+/.github/ @UKGovernment-IDET/DevOps
+
+# Global Owners
+* @tangopoulosUni @geobourazanas @nikopoulos-trasys @dridakisc @vvitzilaios

@@ -8,11 +8,13 @@ import BigNumber from 'bignumber.js';
 import {
   AerRequestMetadata,
   AviationAerCorsia3YearPeriodOffsettingRequestMetadata,
+  AviationAerCorsiaAnnualOffsettingRequestMetadata,
   AviationAerCorsiaRequestMetadata,
   AviationAerRequestMetadata,
   AviationDoECorsiaRequestMetadata,
   BDRRequestMetadata,
   BDRS2RequestMetadata,
+  NERRequestMetadata,
   RequestMetadata,
 } from 'pmrv-api';
 
@@ -25,7 +27,7 @@ export class ReportingSubheadingPipe implements PipeTransform {
   private readonly overallDecisionTypePipe = new OverallDecisionTypePipe();
 
   transform(metadata: RequestMetadata): string {
-    switch (metadata.type) {
+    switch (metadata?.type) {
       case 'AER': {
         const overallAssessment = this.assessmentTypePipe.transform(
           (metadata as AerRequestMetadata)?.overallAssessmentType,
@@ -63,7 +65,8 @@ export class ReportingSubheadingPipe implements PipeTransform {
           : `${overallAssessment}`;
       }
       case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING': {
-        const calculatedAnnualOffsetting = metadata['calculatedAnnualOffsetting'];
+        const calculatedAnnualOffsetting = (metadata as AviationAerCorsiaAnnualOffsettingRequestMetadata)
+          .calculatedAnnualOffsetting;
 
         return calculatedAnnualOffsetting !== undefined
           ? format(new BigNumber(calculatedAnnualOffsetting)) + ' tCO2 - annual offsetting requirements'
@@ -78,9 +81,11 @@ export class ReportingSubheadingPipe implements PipeTransform {
           : '';
       }
       case 'BDR':
-        return this.assessmentTypePipe.transform((metadata as BDRRequestMetadata)?.overallAssessmentType);
       case 'BDRS2':
-        return this.assessmentTypePipe.transform((metadata as BDRS2RequestMetadata)?.overallAssessmentType);
+      case 'NER':
+        return this.assessmentTypePipe.transform(
+          (metadata as BDRRequestMetadata | BDRS2RequestMetadata | NERRequestMetadata)?.overallAssessmentType,
+        );
 
       case 'AVIATION_DOE_CORSIA': {
         const corsiaMetadata = metadata as AviationDoECorsiaRequestMetadata;

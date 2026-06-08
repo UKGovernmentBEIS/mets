@@ -12,5 +12,27 @@
         <li app-task-item link="details" linkText="New entrant reserve"></li>
       </ul>
     </li>
+
+    @if (vm.hasVerificationReport) {
+      <li app-task-section title="Verification opinion statement">
+        <ul app-task-item-list>
+          <li app-task-item link="opinion-statement" linkText="NER verification opinion statement"></li>
+        </ul>
+      </li>
+
+      <li app-task-section title="Overall decision">
+        <ul app-task-item-list>
+          <li app-task-item link="overall-decision" linkText="Overall decision"></li>
+        </ul>
+      </li>
+    }
+
+    @if (vm.hasOutcome) {
+      <li app-task-section title="Outcome of regulator review">
+        <ul app-task-item-list>
+          <li app-task-item link="outcome" linkText="Outcome of regulator review"></li>
+        </ul>
+      </li>
+    }
   </ul>
 </ng-template>

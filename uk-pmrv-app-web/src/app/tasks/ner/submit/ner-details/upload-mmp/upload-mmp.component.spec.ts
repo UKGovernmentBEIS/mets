@@ -142,7 +142,7 @@ describe('UploadMmpComponent', () => {
           },
         },
         {
-          details: false,
+          NER: false,
         },
       ),
     );

@@ -2,12 +2,13 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { filter, map, Observable, takeUntil } from 'rxjs';
+import { combineLatest, filter, map, Observable, takeUntil } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { ReviewGroupDecisionStatus } from '@permit-application/review/types/review.permit.type';
 import { ReviewSectionsContainerAbstractComponent } from '@permit-application/shared/review-sections/review-sections-container-abstract.component';
 import { permitTypeMap } from '@permit-application/shared/utils/permit';
+import { getPreviewDocumentsInfo } from '@permit-application/shared/utils/previewDocuments.utils';
 import { BackLinkService } from '@shared/back-link/back-link.service';
 import { TaskItemStatus } from '@shared/task-list/task-list.interface';
 
@@ -57,6 +58,12 @@ export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbs
         ].includes(state.requestTaskType) ||
         ['PERMIT_TRANSFER_B_APPLICATION_GRANTED'].includes(state.requestActionType),
     ),
+  );
+
+  previewDocuments$ = combineLatest([this.store, this.determinationStatus$]).pipe(
+    map(([state, determinationStatus]) => {
+      return getPreviewDocumentsInfo(state.requestTaskType, determinationStatus, state.permitType);
+    }),
   );
 
   constructor(

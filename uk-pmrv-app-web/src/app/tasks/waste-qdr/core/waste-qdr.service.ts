@@ -50,6 +50,10 @@ export class WasteQdrService extends TasksHelperService {
     return this.store.requestId;
   }
 
+  get requestTaskId() {
+    return this.store.requestTaskId;
+  }
+
   getDownloadUrlFile(file: string): AttachedFile {
     const attachments: { [key: string]: string } =
       (this.store.getValue().requestTaskItem.requestTask.payload as WasteQDRApplicationSubmitRequestTaskPayload)

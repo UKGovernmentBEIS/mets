@@ -57,4 +57,6 @@ public abstract class AccountDTO {
 	private Long sopId;
 
 	private Integer registryId;
+
+	private Long verificationBodyId;
 }

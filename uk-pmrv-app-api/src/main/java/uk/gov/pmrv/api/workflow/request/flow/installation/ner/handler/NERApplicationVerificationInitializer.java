@@ -64,7 +64,7 @@ public class NERApplicationVerificationInitializer implements InitializeRequestT
 
     @Override
     public Set<RequestTaskType> getRequestTaskTypes() {
-        return Set.of(RequestTaskType.NER_APPLICATION_VERIFICATION_SUBMIT);
+        return Set.of(RequestTaskType.NER_APPLICATION_VERIFICATION_SUBMIT, RequestTaskType.NER_AMEND_APPLICATION_VERIFICATION_SUBMIT);
     }
 
     private boolean isVbChanged(Long requestVBId, Long verificationReportVBId) {

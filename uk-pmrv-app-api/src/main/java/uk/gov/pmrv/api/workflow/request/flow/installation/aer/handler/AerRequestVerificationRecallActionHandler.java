@@ -7,17 +7,16 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActio
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestRecallActionHandler;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestRecallEmailNotificationHandler;
 
 import java.util.List;
 
 @Component
 public class AerRequestVerificationRecallActionHandler extends RequestRecallActionHandler {
 
-
-    public AerRequestVerificationRecallActionHandler(RequestTaskService requestTaskService,
-                                                     RequestService requestService,
-                                                     WorkflowService workflowService) {
-        super(requestTaskService, requestService, workflowService);
+    public AerRequestVerificationRecallActionHandler(RequestTaskService requestTaskService, RequestService requestService,
+                                                     WorkflowService workflowService, List<RequestRecallEmailNotificationHandler> handlers) {
+        super(requestTaskService, requestService, workflowService, handlers);
     }
 
     @Override

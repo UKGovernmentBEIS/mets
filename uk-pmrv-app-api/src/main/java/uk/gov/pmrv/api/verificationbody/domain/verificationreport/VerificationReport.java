@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.verificationbody.domain.verificationreport;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +16,6 @@ public abstract class VerificationReport {
 
     private Long verificationBodyId;
 
+    @Valid
     private VerificationBodyDetails verificationBodyDetails;
 }

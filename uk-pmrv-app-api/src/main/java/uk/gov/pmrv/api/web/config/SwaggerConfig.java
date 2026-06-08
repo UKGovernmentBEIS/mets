@@ -25,6 +25,7 @@ import uk.gov.netz.api.mireport.system.executedactions.ExecutedRequestActionsMiR
 import uk.gov.netz.api.mireport.system.executedactions.ExecutedRequestActionsMiReportResult;
 import uk.gov.netz.api.mireport.system.outstandingrequesttasks.OutstandingRegulatorRequestTasksMiReportParams;
 import uk.gov.netz.api.mireport.system.outstandingrequesttasks.OutstandingRequestTasksMiReportResult;
+import uk.gov.pmrv.api.mireport.system.common.userreportentry.UsersMiReportResult;
 import uk.gov.pmrv.api.mireport.system.common.verificationbodyusers.VerificationBodyUsersMiReportResult;
 
 /**
@@ -76,6 +77,7 @@ public class SwaggerConfig {
                 ExecutedRequestActionsMiReportResult.class,
                 OutstandingRequestTasksMiReportResult.class,
                 VerificationBodyUsersMiReportResult.class,
+                UsersMiReportResult.class,
                 
                 // mi report system params
                 EmptyMiReportSystemParams.class,

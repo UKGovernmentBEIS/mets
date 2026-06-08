@@ -4,9 +4,11 @@ import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 
+import java.util.List;
+
 public interface PermitPreviewDocumentService {
 
     FileDTO create(Long taskId, DecisionNotification decisionNotification);
     
-    RequestTaskType getType();
+    List<RequestTaskType> getTypes();
 }

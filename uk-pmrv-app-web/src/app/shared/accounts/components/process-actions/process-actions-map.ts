@@ -5,11 +5,13 @@ export interface WorkflowLabelProperties {
   type: RequestCreateActionProcessDTO['requestCreateActionType'];
   errors: string[];
   content?: string;
+  isHidden?: boolean;
 }
 
 export interface WorkflowLabel {
   title: string;
   properties: WorkflowLabelProperties[];
+  isHidden?: boolean;
 }
 
 export type WorkflowArray = Array<Partial<WorkflowLabel>>;

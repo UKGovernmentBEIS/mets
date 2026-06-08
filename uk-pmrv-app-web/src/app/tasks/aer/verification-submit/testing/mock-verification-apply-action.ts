@@ -20,7 +20,13 @@ export const mockVerificationApplyPayload: AerApplicationVerificationSubmitReque
     },
     verificationBodyDetails: {
       name: 'My Verification Body',
-      accreditationReferenceNumber: '6789',
+      verificationBodyEmissionSchemeDTOS: [
+        {
+          emissionTradingScheme: 'UK_ETS_INSTALLATIONS',
+          accreditationReferenceNumber: '123456',
+          accreditationName: 'accreditationName 1',
+        },
+      ],
       address: {
         line1: 'line',
         line2: null,
@@ -28,7 +34,6 @@ export const mockVerificationApplyPayload: AerApplicationVerificationSubmitReque
         country: 'GR',
         postcode: '1231',
       },
-      emissionTradingSchemes: ['UK_ETS_INSTALLATIONS', 'EU_ETS_INSTALLATIONS'],
     },
     uncorrectedMisstatements: {
       areThereUncorrectedMisstatements: false,

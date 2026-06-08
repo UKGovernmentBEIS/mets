@@ -44,8 +44,8 @@ public class VerificationBodyQueryService {
     
     @Transactional(readOnly = true)
     public Optional<VerificationBodyDTO> getVerificationBodyOptById(Long verificationBodyId) {
-		return verificationBodyRepository.findByIdEagerEmissionTradingSchemes(verificationBodyId)
-				.map(verificationBodyMapper::toVerificationBodyDTO);
+        return verificationBodyRepository.findVerificationBodyWithVerBodyEmissionSchemes(verificationBodyId)
+                .map(verificationBodyMapper::toVerificationBodyDTOWithEmissionSchemes);
     }
     
     @Transactional(readOnly = true)

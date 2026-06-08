@@ -1,6 +1,9 @@
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
+import { AerService } from '@actions/aer/core/aer.service';
 import { BasePage } from '@testing';
 import { KeycloakService } from 'keycloak-angular';
 
@@ -28,14 +31,17 @@ describe('VerifierDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
-      providers: [KeycloakService],
+      imports: [AerModule],
+      providers: [KeycloakService, provideRouter([]), provideHttpClientTesting()],
     }).compileComponents();
   });
 
   beforeEach(() => {
     store = TestBed.inject(CommonActionsStore);
     store.setState(mockStateReviewed);
+
+    const aerService = TestBed.inject(AerService);
+    jest.spyOn(aerService, 'getEmissionsTradingSchemeSignal').mockReturnValue(signal('UK_ETS_INSTALLATIONS'));
 
     fixture = TestBed.createComponent(VerifierDetailsComponent);
     component = fixture.componentInstance;
@@ -48,14 +54,18 @@ describe('VerifierDetailsComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should expose the emissions trading scheme from the service', () => {
+    expect(component.emissionsTradingScheme()).toBe('UK_ETS_INSTALLATIONS');
+  });
+
   it('should show summary details', () => {
     expect(page.heading).toEqual('Verifier details');
     expect(page.summaryListValues).toHaveLength(13);
     expect(page.summaryListValues).toEqual([
       ['Company name', 'My Verification Body'],
       ['Address', 'line town1231'],
-      ['Accreditation number', '6789'],
-      ['National accreditation body', 'UK ETS Installations EU ETS Installations'],
+      ['Accreditation number', 'Accreditation ref num'],
+      ['National accreditation body', 'Accreditation name'],
       ['Name', 'VerifierAdminFirst VerifierAdminLast'],
       ['Email', 'verifieradmin@xx.gr'],
       ['Telephone number', '6995286257'],

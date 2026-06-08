@@ -153,6 +153,10 @@ export function getHeadingMap(year?: number): Partial<Record<RequestTaskDTO['typ
     HSE_TI_CONFIRM_PAYMENT: allocationPeriod
       ? `Track payment for ${allocationPeriod} HSE target increase application`
       : '',
+
+    NER_MAKE_PAYMENT: 'Pay for new entrant reserve',
+    NER_TRACK_PAYMENT: 'Track payment for new entrant reserve',
+    NER_CONFIRM_PAYMENT: 'Track payment for new entrant reserve',
   };
 }
 
@@ -219,6 +223,10 @@ export const paymentHintInfo: Partial<Record<RequestTaskDTO['type'], string>> = 
   HSE_TI_TRACK_PAYMENT: 'The application cannot be completed until the payment has been received',
   HSE_TI_MAKE_PAYMENT: 'Your application cannot be processed until this payment is received',
   HSE_TI_CONFIRM_PAYMENT: 'The application cannot be completed until the payment has been received',
+
+  NER_TRACK_PAYMENT: 'The application cannot be completed until the payment has been received',
+  NER_MAKE_PAYMENT: 'Your application cannot be processed until this payment is received',
+  NER_CONFIRM_PAYMENT: 'The application cannot be completed until the payment has been received',
 };
 
 export function trackShouldDisplayMarkPaidConfirmationInfo(requestType: RequestInfoDTO['type']): boolean {

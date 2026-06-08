@@ -2,7 +2,7 @@
   <div class="govuk-grid-row">
     <div
       [class]="
-        (validRequestCreateActionsTypes$ | async)?.length > 0
+        (validRequestCreateActionsTypes$ | async)?.length > 0 || (hasMarkAsNotRequiredAccess$ | async)
           ? 'govuk-grid-column-two-thirds'
           : 'govuk-grid-column-full'
       ">
@@ -45,12 +45,16 @@
         }
       </govuk-tabs>
     </div>
-    @if ((accountId$ | async) !== null && (validRequestCreateActionsTypes$ | async)?.length > 0) {
+    @if (
+      (accountId$ | async) !== null &&
+      ((validRequestCreateActionsTypes$ | async)?.length > 0 || (hasMarkAsNotRequiredAccess$ | async))
+    ) {
       <div class="govuk-grid-column-one-third">
         <app-workflow-related-create-actions
           [accountId$]="accountId$"
           [requestId$]="requestId$"
-          [requestCreateActionsTypes$]="validRequestCreateActionsTypes$"></app-workflow-related-create-actions>
+          [requestCreateActionsTypes$]="validRequestCreateActionsTypes$"
+          [hasMarkAsNotRequiredAccess]="hasMarkAsNotRequiredAccess$ | async"></app-workflow-related-create-actions>
       </div>
     }
   </div>

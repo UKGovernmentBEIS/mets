@@ -4,14 +4,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import {
   mockAuthorityService,
-  mockKeycloakService,
+  mockKeycloak,
   mockTermsAndConditionsService,
   mockUsersService,
 } from '@core/guards/mocks';
 import { AccountType, AuthStore, DomainsLoginStatuses, UserState } from '@core/store/auth';
 import { SharedModule } from '@shared/shared.module';
 import { BasePage } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 
 import { GovukComponentsModule } from 'govuk-components';
 
@@ -57,7 +57,7 @@ describe('LandingPageComponent', () => {
       imports: [GovukComponentsModule, SharedModule, RouterTestingModule],
       declarations: [LandingPageComponent],
       providers: [
-        { provide: KeycloakService, useValue: mockKeycloakService },
+        { provide: Keycloak, useValue: mockKeycloak },
         { provide: UsersService, useValue: mockUsersService },
         { provide: AuthoritiesService, useValue: mockAuthorityService },
         { provide: TermsAndConditionsService, useValue: mockTermsAndConditionsService },

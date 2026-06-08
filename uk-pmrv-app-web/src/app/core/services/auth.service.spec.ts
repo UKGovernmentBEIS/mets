@@ -16,8 +16,8 @@ import {
   selectUserTerms,
   UserState,
 } from '@core/store';
-import { ActivatedRouteSnapshotStub, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
+import { ActivatedRouteSnapshotStub } from '@testing';
+import Keycloak from 'keycloak-js';
 
 import { AuthoritiesService, TermsAndConditionsService, TermsDTO, UsersService, UserTermsVersionDTO } from 'pmrv-api';
 
@@ -29,8 +29,12 @@ describe('AuthService', () => {
   let configStore: ConfigStore;
   let activatedRoute: ActivatedRoute;
 
-  const keycloakService = mockClass(KeycloakService);
-  keycloakService.logout.mockReturnValue(Promise.resolve());
+  const keycloak: Partial<Keycloak> & { authenticated: boolean } = {
+    login: jest.fn(),
+    logout: jest.fn().mockReturnValue(Promise.resolve()),
+    loadUserProfile: jest.fn(),
+    authenticated: false,
+  };
 
   const user = {
     email: 'test@test.com',
@@ -63,7 +67,7 @@ describe('AuthService', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       providers: [
-        { provide: KeycloakService, useValue: keycloakService },
+        { provide: Keycloak, useValue: keycloak },
         { provide: UsersService, useValue: usersService },
         { provide: AuthoritiesService, useValue: authoritiesService },
         { provide: TermsAndConditionsService, useValue: termsService },
@@ -77,7 +81,7 @@ describe('AuthService', () => {
 
     service = TestBed.inject(AuthService);
     activatedRoute = TestBed.inject(ActivatedRoute);
-    keycloakService.loadUserProfile.mockResolvedValue({ email: 'test@test.com' });
+    (keycloak.loadUserProfile as jest.Mock).mockResolvedValue({ email: 'test@test.com' });
   });
 
   afterEach(() => {
@@ -92,15 +96,15 @@ describe('AuthService', () => {
     await service.login();
     await service.loadUser();
 
-    expect(keycloakService.login).toHaveBeenCalledTimes(1);
-    expect(keycloakService.login).toHaveBeenCalledWith({});
+    expect(keycloak.login).toHaveBeenCalledTimes(1);
+    expect(keycloak.login).toHaveBeenCalledWith({});
     expect(usersService.getCurrentUser).toHaveBeenCalledTimes(1);
   });
 
   it('should logout', async () => {
     await service.logout();
 
-    expect(keycloakService.logout).toHaveBeenCalled();
+    expect(keycloak.logout).toHaveBeenCalled();
   });
 
   it('should load and update user status', async () => {
@@ -111,7 +115,7 @@ describe('AuthService', () => {
 
   it('should update all user info when checkUser is called', async () => {
     await expect(firstValueFrom(authStore.asObservable())).resolves.toEqual(initialState);
-    keycloakService.isLoggedIn.mockReturnValue(false);
+    keycloak.authenticated = false;
 
     await expect(firstValueFrom(service.checkUser())).resolves.toBeUndefined();
 
@@ -122,7 +126,7 @@ describe('AuthService', () => {
     await expect(firstValueFrom(authStore.pipe(selectUserProfile))).resolves.toBeNull();
 
     authStore.setIsLoggedIn(null);
-    keycloakService.isLoggedIn.mockReturnValue(true);
+    keycloak.authenticated = true;
 
     await expect(firstValueFrom(service.checkUser())).resolves.toBeUndefined();
 
@@ -148,8 +152,8 @@ describe('AuthService', () => {
 
     await service.login();
 
-    expect(keycloakService.login).toHaveBeenCalledTimes(1);
-    expect(keycloakService.login).toHaveBeenCalledWith({ redirectUri: service.baseRedirectUri });
+    expect(keycloak.login).toHaveBeenCalledTimes(1);
+    expect(keycloak.login).toHaveBeenCalledWith({ redirectUri: service.baseRedirectUri });
   });
 
   it('should not invoke load user terms service when terms feature is disabled', async () => {

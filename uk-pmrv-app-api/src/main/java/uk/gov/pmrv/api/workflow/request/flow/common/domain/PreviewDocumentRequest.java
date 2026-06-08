@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.common.domain;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +16,5 @@ public class PreviewDocumentRequest {
     @NotNull
     private DocumentTemplateType documentType;
 
-    @NotNull
-    @Valid
     private DecisionNotification decisionNotification;
 }

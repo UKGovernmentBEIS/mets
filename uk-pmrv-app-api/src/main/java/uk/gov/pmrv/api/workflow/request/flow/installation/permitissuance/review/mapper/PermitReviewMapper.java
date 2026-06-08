@@ -22,6 +22,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationRejectedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationWaitForReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceDeemedWithdrawnDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceGrantDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceRejectDetermination;
@@ -62,6 +63,11 @@ public interface PermitReviewMapper {
     @Mapping(target = "installationOperatorDetails", ignore = true)
     PermitIssuanceApplicationReviewRequestTaskPayload toPermitIssuanceApplicationReviewRequestTaskPayload(
         PermitIssuanceRequestPayload permitIssuanceRequestPayload, RequestTaskPayloadType payloadType);
+
+    @Mapping(target = "payloadType", source = "payloadType")
+    @Mapping(target = "installationOperatorDetails", ignore = true)
+    PermitIssuanceApplicationWaitForReviewRequestTaskPayload toPermitIssuanceApplicationWaitForReviewRequestTaskPayload(
+            PermitIssuanceRequestPayload permitIssuanceRequestPayload, RequestTaskPayloadType payloadType);
 
     @Mapping(target = "payloadType", expression = "java(uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType.PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT_PAYLOAD)")
     @Mapping(target = "reviewGroupDecisions", source = "reviewGroupDecisions", qualifiedByName = "reviewGroupDecisionsForOperatorAmend")

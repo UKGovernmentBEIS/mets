@@ -1,14 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { EmpUkEtsStoreDelegate } from '@aviation/request-task/store/delegates';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { ActivatedRouteStub, mockClass } from '@testing';
 import { screen } from '@testing-library/angular';
-import userEvent from '@testing-library/user-event';
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 
 import { TasksService } from 'pmrv-api';
 
@@ -25,7 +23,7 @@ describe('ChangesRequestedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChangesRequestedComponent, RouterTestingModule],
+      imports: [ChangesRequestedComponent],
       providers: [
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
         { provide: ActivatedRoute, useValue: activatedRouteStub },

@@ -8,7 +8,7 @@ import { ConfigStore } from '@core/config/config.store';
 import {
   mockAuthorityService,
   mockAuthService,
-  mockKeycloakService,
+  mockKeycloak,
   mockTermsAndConditionsService,
   mockUsersService,
 } from '@core/guards/mocks';
@@ -16,7 +16,7 @@ import { AuthService } from '@core/services/auth.service';
 import { AuthStore } from '@core/store/auth';
 import { LatestTermsStore } from '@core/store/latest-terms/latest-terms.store';
 import { ActivatedRouteStub } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 
 import { AuthoritiesService, TermsAndConditionsService, UsersService } from 'pmrv-api';
 
@@ -36,7 +36,7 @@ describe('TermsAndConditionsGuard', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       providers: [
-        { provide: KeycloakService, useValue: mockKeycloakService },
+        { provide: Keycloak, useValue: mockKeycloak },
         { provide: UsersService, useValue: mockUsersService },
         { provide: AuthoritiesService, useValue: mockAuthorityService },
         { provide: TermsAndConditionsService, useValue: mockTermsAndConditionsService },

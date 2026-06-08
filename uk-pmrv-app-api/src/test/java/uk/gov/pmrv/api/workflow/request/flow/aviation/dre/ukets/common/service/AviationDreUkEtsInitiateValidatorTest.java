@@ -2,15 +2,16 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.netz.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
-import uk.gov.pmrv.api.account.domain.enumeration.AccountStatus;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
+import uk.gov.pmrv.api.account.aviation.service.reportingstatus.AviationAccountReportingStatusService;
+import uk.gov.pmrv.api.account.domain.enumeration.AccountStatus;
 import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
@@ -25,10 +26,12 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestCreateValidat
 
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -46,6 +49,9 @@ class AviationDreUkEtsInitiateValidatorTest {
 
     @Mock
     private RequestQueryService requestQueryService;
+
+    @Mock
+    private AviationAccountReportingStatusService aviationAccountReportingStatusService;
 
     @Test
     void getApplicableAccountStatuses() {
@@ -104,6 +110,10 @@ class AviationDreUkEtsInitiateValidatorTest {
         when(requestQueryService.findRequestDetailsById(requestId))
                 .thenReturn(requestDetailsDTO);
 
+        when(aviationAccountReportingStatusService.getReportingStatusByYear(any(),any()))
+                .thenReturn(Optional.of(AviationAccountReportingStatus.builder()
+                        .status(AviationAccountReportingStatusType.REQUIRED_TO_REPORT).build()));
+
         RequestCreateAccountStatusValidationResult accountStatusValidationResult = RequestCreateAccountStatusValidationResult.builder()
                 .valid(true)
                 .build();
@@ -154,6 +164,9 @@ class AviationDreUkEtsInitiateValidatorTest {
 
         when(requestQueryService.existByRequestTypeAndStatusAndAccountIdAndMetadataYear(RequestType.AVIATION_DRE_UKETS, RequestStatus.IN_PROGRESS, accountId, year))
                 .thenReturn(false);
+        when(aviationAccountReportingStatusService.getReportingStatusByYear(any(),any()))
+                .thenReturn(Optional.of(AviationAccountReportingStatus.builder()
+                        .status(AviationAccountReportingStatusType.REQUIRED_TO_REPORT).build()));
 
         // Invoke
         final RequestCreateValidationResult result = validator.validateAction(accountId, payload);

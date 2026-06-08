@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, first, map, Observable, of, switchMap, take, withLatestFrom } from 'rxjs';
 
 import { permitTypeMapLowercase } from '@permit-application/shared/utils/permit';
+import { getPreviewDocumentsInfo } from '@permit-application/shared/utils/previewDocuments.utils';
 
 import { PermitVariationReviewDecision, RequestActionsService, RequestItemsService } from 'pmrv-api';
 
@@ -35,6 +36,11 @@ export class SectionsContainerComponent extends SectionsContainerAbstractCompone
       (state) =>
         `Make a change to ${this.store.isVariationRegulatorLedRequest ? 'the' : 'your'} ${permitTypeMapLowercase?.[state.permitType]} permit`,
     ),
+  );
+  previewDocuments$ = this.store.pipe(
+    map((state) => {
+      return getPreviewDocumentsInfo(state.requestTaskType, null, state.permitType);
+    }),
   );
 
   isOperatorLed = !this.store.isVariationRegulatorLedRequest;

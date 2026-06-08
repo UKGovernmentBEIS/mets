@@ -13,5 +13,5 @@
 export interface DecisionNotification {
   operators?: Array<string>;
   externalContacts?: Array<number>;
-  signatory: string;
+  signatory?: string;
 }

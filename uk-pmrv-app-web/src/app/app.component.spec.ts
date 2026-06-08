@@ -4,11 +4,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { BehaviorSubject, of } from 'rxjs';
 
+import { mockKeycloak, mockKeycloakEventSignal } from '@core/guards/mocks';
 import { BREADCRUMB_ITEMS, BreadcrumbItem } from '@core/navigation/breadcrumbs';
 import { AuthStore, LoginStatus } from '@core/store/auth';
 import { SharedModule } from '@shared/shared.module';
 import { BasePage, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
+import { KEYCLOAK_EVENT_SIGNAL } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 
 import { BulkDownloadService, UserStateDTO } from 'pmrv-api';
 
@@ -85,7 +87,8 @@ describe('AppComponent', () => {
       imports: [RouterTestingModule, SharedModule, TimeoutModule],
       declarations: [AppComponent],
       providers: [
-        KeycloakService,
+        { provide: Keycloak, useValue: mockKeycloak },
+        { provide: KEYCLOAK_EVENT_SIGNAL, useValue: mockKeycloakEventSignal },
         { provide: APP_BASE_HREF, useValue: '/installation-aviation/' },
         { provide: BulkDownloadService, useValue: bulkDownloadService },
       ],

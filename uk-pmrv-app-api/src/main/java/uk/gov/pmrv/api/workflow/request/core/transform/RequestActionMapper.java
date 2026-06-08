@@ -4,8 +4,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
+import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionInfoDTO;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestActionSubmittedToAware;
 
 /**
  * The Request Mapper.
@@ -16,7 +18,13 @@ import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionInfoDTO;
 public interface RequestActionMapper {
     
     @Mapping(target = "id", source = "requestAction.id")
+    @Mapping(target = "submittedTo", expression = "java(extractSubmittedTo(requestAction))")
     RequestActionInfoDTO toRequestActionInfoDTO(RequestAction requestAction);
+
+    default String extractSubmittedTo(RequestAction requestAction) {
+        final RequestActionPayload payload = requestAction.getPayload();
+        return payload instanceof RequestActionSubmittedToAware aware ? aware.getSubmittedTo() : null;
+    }
 
     @Mapping(target = "requestId", source = "request.id")
     @Mapping(target = "requestAccountId", source = "request.accountId")

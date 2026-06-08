@@ -309,7 +309,7 @@ describe('ItemActionTypePipe', () => {
       'Initial penalty notice sent to operator',
     );
     expect(pipe.transform('NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED')).toEqual(
-      'Peer review of initial penalty requested',
+      'Peer review of initial penalty submitted',
     );
     expect(pipe.transform('NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_ACCEPTED')).toEqual(
       'Peer review agreement for initial penalty submitted',
@@ -322,7 +322,7 @@ describe('ItemActionTypePipe', () => {
       'Notice of intent sent to operator',
     );
     expect(pipe.transform('NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_REQUESTED')).toEqual(
-      'Peer review of notice of intent requested',
+      'Peer review of notice of intent submitted',
     );
     expect(pipe.transform('NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_ACCEPTED')).toEqual(
       'Peer review agreement for notice of intent submitted',
@@ -335,7 +335,7 @@ describe('ItemActionTypePipe', () => {
       'Penalty notice sent to operator',
     );
     expect(pipe.transform('NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_REQUESTED')).toEqual(
-      'Peer review of penalty requested',
+      'Peer review of penalty submitted',
     );
     expect(pipe.transform('NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_ACCEPTED')).toEqual(
       'Peer review agreement for penalty submitted',
@@ -627,6 +627,21 @@ describe('ItemActionTypePipe', () => {
 
     expect(pipe.transform('NER_APPLICATION_CANCELLED')).toEqual('New entrant reserve application cancelled');
     expect(pipe.transform('NER_APPLICATION_SENT_TO_VERIFIER')).toEqual('Submitted to verifier');
+    expect(pipe.transform('NER_APPLICATION_AMENDS_SENT_TO_VERIFIER')).toEqual('Submitted to verifier');
+    expect(pipe.transform('NER_APPLICATION_VERIFICATION_SUBMITTED')).toEqual(
+      'Verification statement submitted to operator',
+    );
+    expect(pipe.transform('NER_RECALLED_FROM_VERIFICATION')).toEqual('Recalled');
+    expect(pipe.transform('NER_APPLICATION_SUBMITTED')).toEqual('Submitted to regulator');
+    expect(pipe.transform('NER_APPLICATION_AMENDS_SUBMITTED')).toEqual('Submitted to regulator');
+    expect(pipe.transform('NER_VERIFICATION_RETURNED_TO_OPERATOR')).toEqual('Returned to operator for changes');
+    expect(pipe.transform('NER_APPLICATION_RETURNED_FOR_AMENDS')).toEqual('New entrance reserve returned to operator');
+    expect(pipe.transform('NER_PEER_REVIEW_REQUESTED')).toEqual('Peer review requested');
+    expect(pipe.transform('NER_PEER_REVIEW_ACCEPTED')).toEqual('Peer review agreement submitted');
+    expect(pipe.transform('NER_PEER_REVIEW_REJECTED')).toEqual('Peer review disagreement submitted');
+    expect(pipe.transform('NER_APPLICATION_DEEMED_WITHDRAWN')).toEqual('Withdrawn');
+    expect(pipe.transform('NER_APPLICATION_COMPLETED')).toEqual('Completed');
+    expect(pipe.transform('NER_APPLICATION_RE_INITIATED')).toEqual('Reopened');
 
     expect(pipe.transform(undefined)).toEqual('Approved Application');
   });

@@ -12,6 +12,7 @@
 
 export interface NoHighestRequiredTierJustification {
   isCostUnreasonable?: boolean;
+  costUnreasonableExplanation?: string;
   isTechnicallyInfeasible?: boolean;
   technicalInfeasibilityExplanation?: string;
   files?: Array<string>;

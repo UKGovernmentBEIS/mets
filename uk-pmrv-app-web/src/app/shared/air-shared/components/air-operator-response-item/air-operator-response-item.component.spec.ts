@@ -83,6 +83,7 @@ describe('AirOperatorResponseItemComponent', () => {
       isCostUnreasonable: true,
       isTechnicallyInfeasible: true,
       technicalInfeasibilityExplanation: 'Test description 2',
+      costUnreasonableExplanation: 'Test description 4',
       files: ['111111', '222222'],
     } as OperatorAirImprovementNoResponse as OperatorAirImprovementResponseAll;
     fixture.detectChanges();
@@ -93,9 +94,12 @@ describe('AirOperatorResponseItemComponent', () => {
       'No',
       'Change',
       'Justification for not meeting the highest tier',
-      'Unreasonable costTechnical infeasibility',
+      'Unreasonable cost  Technical infeasibility',
       'Change',
-      'Explain why it is technically infeasible to meet the highest tier',
+      'Explain why unreasonable costs would be incurred, as set out in Article 18 of the Monitoring and Reporting Regulations (MRR)',
+      'Test description 4',
+      'Change',
+      'Explain why it is not technically feasible to meet the highest tier, as set out in Article 17 of the Monitoring and Reporting Regulations (MRR)',
       'Test description 2',
       'Change',
       'Uploaded files',

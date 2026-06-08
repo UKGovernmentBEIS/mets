@@ -5,6 +5,8 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
+import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.reporting.domain.InstallationReportableEmissionsUpdatedEvent;
 import uk.gov.pmrv.api.reporting.domain.ReportableEmissionsEntity;
 import uk.gov.pmrv.api.reporting.domain.ReportableEmissionsSaveParams;
@@ -25,6 +27,8 @@ public class ReportableEmissionsService {
     private final ReportableEmissionsRepository reportableEmissionsRepository;
     private final ApplicationEventPublisher publisher;
     private static final AccountEmissionsMapper accountEmissionsMapper = Mappers.getMapper(AccountEmissionsMapper.class);
+    private final AccountRepository accountRepository;
+    private final InstallationAccountQueryService installationAccountQueryService;
 
     public Map<Year, BigDecimal> getReportableEmissions(Long accountId, Set<Year> years) {
         

@@ -19,5 +19,6 @@ public class ReportableEmissionsSaveParams {
     private BigDecimal reportableEmissions;
     private boolean isFromDre;
     private  boolean isFromRegulator;
+    private boolean isFromAerMarkedAsNotRequired;
     private String requestId;
 }

@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.api.files.common.utils.MimeTypeUtils;
@@ -68,7 +68,7 @@ public class DocumentFileGeneratorService {
             generatedFile = documentTemplateProcessService.generateFileDocumentFromTemplate(
                     fileDocumentTemplate, templateParams,fileNameToGenerate);
         } catch (DocumentTemplateProcessException e) {
-            log.error(String.format(
+             log.error(String.format(
                     "Document template file generation failed for template: %s, requestId: %s, account name: %s",
                     fileDocumentTemplate.getFileName(),
                     templateParams.getWorkflowParams().getRequestId(),

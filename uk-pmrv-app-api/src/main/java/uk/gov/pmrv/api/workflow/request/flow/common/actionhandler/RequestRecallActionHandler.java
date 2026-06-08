@@ -12,6 +12,8 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestTaskActionEmptyPayload;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public abstract class RequestRecallActionHandler implements RequestTaskActionHandler<RequestTaskActionEmptyPayload> {
@@ -19,6 +21,7 @@ public abstract class RequestRecallActionHandler implements RequestTaskActionHan
     private final RequestTaskService requestTaskService;
     private final RequestService requestService;
     private final WorkflowService workflowService;
+    private final List<RequestRecallEmailNotificationHandler> handlers;
 
     public abstract RequestActionType getRequestActionType();
 
@@ -34,6 +37,11 @@ public abstract class RequestRecallActionHandler implements RequestTaskActionHan
             null,
             getRequestActionType(),
             appUser.getUserId());
+
+        handlers.stream()
+                .filter(h -> h.getRequestType().equals(request.getType()))
+                .findFirst()
+                .ifPresent(h -> h.sendRecallEmailNotification(request));
 
         workflowService.completeTask(requestTask.getProcessTaskId());
     }

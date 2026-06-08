@@ -1,0 +1,143 @@
+@if ((isEditable && canEdit()) || isOnEditState()) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <form (ngSubmit)="onSubmit()" [formGroup]="form">
+        @if (hasError()) {
+          <govuk-error-summary [form]="form"></govuk-error-summary>
+        }
+
+        <div
+          formControlName="decision"
+          govuk-radio
+          legend="What is your decision on the information submitted?"
+          legendSize="medium">
+          <govuk-radio-option value="ACCEPTED" label="Accepted"></govuk-radio-option>
+          @if (!hideAmendsOption) {
+            <govuk-radio-option value="OPERATOR_AMENDS_NEEDED" label="Operator amendments needed">
+              <div govukConditionalContent>
+                @if (!hasNoVerification()) {
+                  <h3 #conditionalHeader class="govuk-heading-s">
+                    <strong>Does the operator need to send the amendments to the verifier?</strong>
+                  </h3>
+                  <div formControlName="verificationRequired" govuk-radio [isInline]="true">
+                    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+                    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+                  </div>
+                }
+
+                <h3 #conditionalHeader class="govuk-heading-s">Changes required by the operator</h3>
+
+                <div formArrayName="requiredChanges">
+                  @for (requiredChange of requiredChanges.controls; track $index) {
+                    <fieldset
+                      [formGroupName]="$index"
+                      [disabled]="!isEditable"
+                      govukFieldset
+                      id="required=changes-{{ $index }}">
+                      <legend class="govuk-heading-s">Required change {{ $index + 1 }}</legend>
+                      @if (requiredChanges.length > 1) {
+                        <button
+                          (click)="requiredChanges.removeAt($index)"
+                          [disabled]="!isEditable"
+                          [heading]="conditionalHeader"
+                          appAddAnother
+                          govukSecondaryButton
+                          type="button"
+                          #removeButton>
+                          Remove
+                        </button>
+                      }
+                      <div govuk-textarea [maxLength]="10000" formControlName="reason"></div>
+
+                      <app-multiple-file-input
+                        [baseDownloadUrl]="downloadUrl"
+                        [label]="
+                          (uploadedFiles[$index] | async) === true
+                            ? 'Upload a different file'
+                            : 'Upload a file (optional)'
+                        "
+                        headerSize="s"
+                        [listTitle]="fileListTitle()"
+                        formControlName="files"></app-multiple-file-input>
+                    </fieldset>
+                  }
+
+                  <button
+                    (click)="addOtherRequiredChange()"
+                    [disabled]="!isEditable"
+                    govukSecondaryButton
+                    type="button">
+                    Add another required change
+                  </button>
+                </div>
+              </div>
+            </govuk-radio-option>
+          }
+        </div>
+
+        <div
+          govuk-textarea
+          [maxLength]="10000"
+          formControlName="notes"
+          label="Notes"
+          hint="The operator cannot view this"></div>
+
+        <button appPendingButton govukButton type="submit">Confirm</button>
+      </form>
+    </div>
+  </div>
+} @else {
+  @let decisionData = this.decisionData();
+
+  <h2
+    app-summary-header
+    class="govuk-heading-m"
+    (changeClick)="changeEditState(true)"
+    [changeRoute]="isEditable ? '.' : null">
+    Decision Summary
+  </h2>
+  <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+    @if (decisionData?.type === 'OPERATOR_AMENDS_NEEDED' && !hasNoVerification()) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Does the operator need to send the amendments to the verifier?</dt>
+        <dd govukSummaryListRowValue>{{ decisionData.details?.['verificationRequired'] ? 'Yes' : 'No' }}</dd>
+      </div>
+    }
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Decision status</dt>
+      <dd govukSummaryListRowValue>{{ decisionData.type | reviewBdrAlrGroupDecision }}</dd>
+    </div>
+
+    @if ($any(decisionData).details?.requiredChanges?.length > 0) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Changes required by operator</dt>
+
+        <dd govukSummaryListRowValue>
+          @for (requiredChange of $any(decisionData).details.requiredChanges; track $index) {
+            <div class="pre-wrap">
+              {{ $index + 1 }}. {{ requiredChange.reason }}
+              <br />
+
+              @if (requiredChange?.files?.length > 0) {
+                <app-summary-download-files
+                  [files]="getRegulatorDownloadUrlFiles(requiredChange?.files)"></app-summary-download-files>
+              }
+            </div>
+
+            @if (!$last) {
+              <br />
+            }
+          }
+        </dd>
+      </div>
+    }
+
+    @if (decisionData?.details?.notes) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Notes</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>{{ decisionData.details.notes }}</dd>
+      </div>
+    }
+  </dl>
+}

@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -11,8 +10,7 @@ import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { RequestTaskFileService } from '@shared/services/request-task-file-service/request-task-file.service';
 import { ActivatedRouteStub, mockClass } from '@testing';
 import { screen } from '@testing-library/angular';
-import userEvent from '@testing-library/user-event';
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 import produce from 'immer';
 
 import { AviationOperatorDetails, TasksService } from 'pmrv-api';
@@ -33,7 +31,7 @@ describe('OperatorDetailsNameComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OperatorDetailsNameComponent, RouterTestingModule],
+      imports: [OperatorDetailsNameComponent],
       providers: [
         { provide: TASK_FORM_PROVIDER, useClass: OperatorDetailsFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },

@@ -18,7 +18,10 @@ public class VerificationBodyUsersRepository {
     public List<VerificationBodyUser> findAllVerificationBodyUsers(EntityManager entityManager) {
 
         return entityManager.createNativeQuery("select verification_body.name as \"verificationBodyName\", verification_body.status as \"accountStatus\", " +
-                " verification_body.accreditation_reference_number as \"accreditationReferenceNumber\", " +
+                "emissionTradingSchemeUKETSInstallations.accreditation_reference_number as \"accreditationReferenceNumberUKETSInstallations\", " +
+                "emissionTradingSchemeEUETSInstallations.accreditation_reference_number as \"accreditationReferenceNumberEUETSInstallations\", " +
+                "emissionTradingSchemeUKETSAviation.accreditation_reference_number as \"accreditationReferenceNumberUKETSAviation\", " +
+                "emissionTradingSchemeCorsia.accreditation_reference_number as \"accreditationReferenceNumberCorsia\", " +
                 " case when emissionTradingSchemeUKETSInstallations.emission_trading_scheme is not null then true else false end as \"isAccreditedForUKETSInstallations\", " +
                 " case when emissionTradingSchemeEUETSInstallations.emission_trading_scheme is not null then true else false end as \"isAccreditedForEUETSInstallations\", " +
                 " case when emissionTradingSchemeUKETSAviation.emission_trading_scheme is not null then true else false end as \"isAccreditedForUKETSAviation\", " +
@@ -35,7 +38,10 @@ public class VerificationBodyUsersRepository {
                 .unwrap(NativeQuery.class)
                 .addScalar("verificationBodyName", StandardBasicTypes.STRING)
                 .addScalar("accountStatus", StandardBasicTypes.STRING)
-                .addScalar("accreditationReferenceNumber", StandardBasicTypes.STRING)
+                .addScalar("accreditationReferenceNumberUKETSInstallations", StandardBasicTypes.STRING)
+                .addScalar("accreditationReferenceNumberEUETSInstallations", StandardBasicTypes.STRING)
+                .addScalar("accreditationReferenceNumberUKETSAviation", StandardBasicTypes.STRING)
+                .addScalar("accreditationReferenceNumberCorsia", StandardBasicTypes.STRING)
                 .addScalar("isAccreditedForUKETSInstallations", StandardBasicTypes.BOOLEAN)
                 .addScalar("isAccreditedForEUETSInstallations", StandardBasicTypes.BOOLEAN)
                 .addScalar("isAccreditedForUKETSAviation", StandardBasicTypes.BOOLEAN)
@@ -52,11 +58,17 @@ public class VerificationBodyUsersRepository {
                     VerificationBodyUser result = new VerificationBodyUser();
                     result.setVerificationBodyName((String)map.get("verificationBodyName"));
                     result.setAccountStatus((String)map.get("accountStatus"));
-                    result.setAccreditationReferenceNumber((String)map.get("accreditationReferenceNumber"));
+
+                    result.setAccreditationReferenceNumberUKETSInstallations((String)map.get("accreditationReferenceNumberUKETSInstallations"));
+                    result.setAccreditationReferenceNumberEUETSInstallations((String)map.get("accreditationReferenceNumberEUETSInstallations"));
+                    result.setAccreditationReferenceNumberUKETSAviation((String)map.get("accreditationReferenceNumberUKETSAviation"));
+                    result.setAccreditationReferenceNumberCorsia((String)map.get("accreditationReferenceNumberCorsia"));
+
                     result.setIsAccreditedForUKETSInstallations((Boolean)map.get("isAccreditedForUKETSInstallations"));
                     result.setIsAccreditedForEUETSInstallations((Boolean) map.get("isAccreditedForEUETSInstallations"));
                     result.setIsAccreditedForUKETSAviation((Boolean)map.get("isAccreditedForUKETSAviation"));
                     result.setIsAccreditedForCorsia((Boolean)map.get("isAccreditedForCorsia"));
+
                     result.setRole((String)map.get("role"));
                     result.setAuthorityStatus((String)map.get("authorityStatus"));
                     result.setUserId((String)map.get("userId"));

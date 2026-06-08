@@ -19,6 +19,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submit
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.UUID;
@@ -60,8 +61,8 @@ public class PermitVariationRegulatorLedPeerReviewPreviewPermitDocumentService e
     }
 
     @Override
-    public RequestTaskType getType() {
-        return RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW;
+    public List<RequestTaskType> getTypes() {
+        return List.of(RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW,RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_WAIT_FOR_PEER_REVIEW);
     }
 
 }

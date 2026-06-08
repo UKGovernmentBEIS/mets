@@ -106,7 +106,7 @@ describe('UploadNerComponent', () => {
     expect(page.errorSummaryListContents.length).toEqual(1);
   });
 
-  it('should submit a valid form and navigate to next page', async () => {
+  it('should submit a valid form and navigate to next page', () => {
     const navigateSpy = jest.spyOn(router, 'navigate');
     tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
     attachmentService.uploadRequestTaskAttachment.mockReturnValue(
@@ -145,7 +145,7 @@ describe('UploadNerComponent', () => {
           },
         },
         {
-          details: false,
+          NER: false,
         },
       ),
     );

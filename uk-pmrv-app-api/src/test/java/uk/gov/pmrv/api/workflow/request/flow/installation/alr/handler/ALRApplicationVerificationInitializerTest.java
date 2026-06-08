@@ -11,6 +11,8 @@ import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyDetailsQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -166,8 +168,13 @@ public class ALRApplicationVerificationInitializerTest {
     }
 
     private VerificationBodyDetails buildVBDetails(String ref) {
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         return VerificationBodyDetails.builder()
-                .accreditationReferenceNumber(ref)
+                .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
                 .build();
     }
 

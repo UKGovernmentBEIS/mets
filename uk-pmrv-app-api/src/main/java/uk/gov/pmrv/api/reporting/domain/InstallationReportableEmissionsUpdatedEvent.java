@@ -12,4 +12,5 @@ public class InstallationReportableEmissionsUpdatedEvent extends ReportableEmiss
 
     private String requestId;
     private boolean isSetOperatorId;
+    private boolean isFromAerMarkedAsNotRequired;
 }

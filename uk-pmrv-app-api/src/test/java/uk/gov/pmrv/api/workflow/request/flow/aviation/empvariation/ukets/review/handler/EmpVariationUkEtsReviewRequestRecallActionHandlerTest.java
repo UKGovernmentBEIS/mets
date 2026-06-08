@@ -21,7 +21,10 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActio
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.domain.EmpVariationUkEtsRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestRecallEmailNotificationHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestTaskActionEmptyPayload;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class EmpVariationUkEtsReviewRequestRecallActionHandlerTest {
@@ -37,6 +40,9 @@ class EmpVariationUkEtsReviewRequestRecallActionHandlerTest {
 
     @Mock
     private WorkflowService workflowService;
+
+    @Mock
+    private List<RequestRecallEmailNotificationHandler> handlers;
 
     @Test
     void process() {

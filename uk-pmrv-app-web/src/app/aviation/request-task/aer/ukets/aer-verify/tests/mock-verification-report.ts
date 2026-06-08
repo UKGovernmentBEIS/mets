@@ -4,7 +4,6 @@ export const VERIFICATION_REPORT: AviationAerUkEtsVerificationReport = {
   verificationBodyId: 1,
   verificationBodyDetails: {
     name: 'VB Company',
-    accreditationReferenceNumber: '1313',
     address: {
       city: 'City',
       country: 'GR',
@@ -12,7 +11,18 @@ export const VERIFICATION_REPORT: AviationAerUkEtsVerificationReport = {
       line2: 'street 2',
       postcode: '111 80',
     },
-    emissionTradingSchemes: ['UK_ETS_AVIATION', 'EU_ETS_INSTALLATIONS', 'CORSIA', 'UK_ETS_INSTALLATIONS'],
+    verificationBodyEmissionSchemeDTOS: [
+      {
+        emissionTradingScheme: 'UK_ETS_AVIATION',
+        accreditationReferenceNumber: '556',
+        accreditationName: 'accreditationName 1',
+      },
+      {
+        emissionTradingScheme: 'EU_ETS_INSTALLATIONS',
+        accreditationReferenceNumber: '354',
+        accreditationName: 'accreditationName 2',
+      },
+    ],
   },
   verificationTeamDetails: {
     authorisedSignatoryName: 'authorised signatory name',

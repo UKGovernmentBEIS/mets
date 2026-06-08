@@ -43,6 +43,6 @@ describe('AirOperatorResponseDataItemComponent', () => {
   });
 
   it('should show all html elements', () => {
-    expect(page.airOperatorResponseDataItemContents).toEqual(['Operator comments', 'Test explanation 1', '']);
+    expect(page.airOperatorResponseDataItemContents).toEqual(['Operator comments', 'Test explanation 1']);
   });
 });

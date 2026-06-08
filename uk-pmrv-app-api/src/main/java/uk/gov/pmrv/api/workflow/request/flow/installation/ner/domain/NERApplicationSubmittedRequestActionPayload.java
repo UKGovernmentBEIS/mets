@@ -34,17 +34,17 @@ public class NERApplicationSubmittedRequestActionPayload extends RequestActionPa
 
     private boolean verificationPerformed;
 
-//    private NERVerificationReport verificationReport;
+    private NERVerificationReport verificationReport;
 
     @Builder.Default
     private Map<UUID, String> nerAttachments = new HashMap<>();
 
-//    @Builder.Default
-//    private Map<UUID, String> verificationAttachments = new HashMap<>();
+    @Builder.Default
+    private Map<UUID, String> verificationAttachments = new HashMap<>();
 
     @Override
     public Map<UUID, String> getAttachments() {
-        return Stream.of(nerAttachments)
+        return Stream.of(nerAttachments, verificationAttachments)
                 .flatMap(map -> map.entrySet().stream())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }

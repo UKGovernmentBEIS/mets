@@ -1,7 +1,9 @@
 import { Routes } from '@angular/router';
 
+import { routerInputDataResolver } from '@actions/request-action.util';
 import { PendingRequestGuard } from '@core/guards/pending-request.guard';
 import { RecallSharedComponent } from '@shared/components/recall/recall.component';
+import { VerificationReturnedToOperatorComponent } from '@shared/components/verification-returned-to-operator/verification-returned-to-operator.component';
 
 import {
   AlrActionCompletedComponent,
@@ -15,7 +17,6 @@ import {
   AlrOverallDecisionSubmittedComponent,
   AlrPeerReviewDecisionComponent,
   AlrReturnedForAmendsComponent,
-  AlrReturnedToOperatorComponent,
   AlrSubmittedComponent,
 } from '.';
 import { AlrMarkedAsNotRequiredDetailsComponent } from './marked-as-not-required/marked-as-not-required.component';
@@ -63,8 +64,11 @@ export const ALR_ACTION_ROUTES: Routes = [
   },
   {
     path: 'returned-to-operator',
+    resolve: {
+      input: routerInputDataResolver,
+    },
     data: { pageTitle: 'Activity level report returned to operator from verifier' },
-    component: AlrReturnedToOperatorComponent,
+    component: VerificationReturnedToOperatorComponent,
   },
   {
     path: 'recall-from-verifier',

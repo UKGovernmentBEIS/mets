@@ -1,0 +1,34 @@
+@for (historyItem of history; track historyItem) {
+  <h2 class="govuk-heading-m">{{ historyItem.creationDate | govukDate: 'datetime' }}</h2>
+  <p class="govuk-body">{{ historyItem.changedBy }} made changes to:</p>
+
+  <govuk-table [columns]="columns" [data]="[historyItem]">
+    <ng-template let-column="column" let-row="row">
+      @switch (column.field) {
+        @case ('category') {
+          <span class="govuk-heading-s">{{ row[column.field] | accountDetailsHistoryCategory }}</span>
+        }
+        @case ('previousValue') {
+          @if (row['category'] === 'FIRST_YEAR_OF_REPORTING_OBLIGATION') {
+            {{ row[column.field] | govukDate }}
+          } @else {
+            {{ row[column.field] }}
+          }
+        }
+        @case ('newValue') {
+          @if (row['category'] === 'FIRST_YEAR_OF_REPORTING_OBLIGATION') {
+            {{ row[column.field] | govukDate }}
+          } @else {
+            {{ row[column.field] }}
+          }
+        }
+        @case ('reason') {
+          <span class="pre-wrap">{{ row[column.field] }}</span>
+        }
+        @default {
+          {{ row[column.field] }}
+        }
+      }
+    </ng-template>
+  </govuk-table>
+}

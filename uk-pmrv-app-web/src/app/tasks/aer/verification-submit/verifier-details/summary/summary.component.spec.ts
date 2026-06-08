@@ -1,10 +1,12 @@
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
 import { AerModule } from '@tasks/aer/aer.module';
+import { AerService } from '@tasks/aer/core/aer.service';
 import { mockPostBuild } from '@tasks/aer/verification-submit/testing/mock-state';
 import { mockState } from '@tasks/aer/verification-submit/testing/mock-verification-apply-action';
 import { SummaryComponent } from '@tasks/aer/verification-submit/verifier-details/summary/summary.component';
@@ -38,14 +40,22 @@ describe('SummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
-      providers: [KeycloakService, { provide: TasksService, useValue: tasksService }],
+      imports: [AerModule],
+      providers: [
+        provideRouter([]),
+        provideHttpClientTesting(),
+        KeycloakService,
+        { provide: TasksService, useValue: tasksService },
+      ],
     }).compileComponents();
   });
 
   beforeEach(() => {
     store = TestBed.inject(CommonTasksStore);
     store.setState(mockState);
+
+    const aerService = TestBed.inject(AerService);
+    jest.spyOn(aerService, 'getEmissionsTradingSchemeSignal').mockReturnValue(signal('UK_ETS_INSTALLATIONS'));
 
     fixture = TestBed.createComponent(SummaryComponent);
     component = fixture.componentInstance;
@@ -66,7 +76,7 @@ describe('SummaryComponent', () => {
 
     expect(page.summaryListValues).toEqual([
       ['My Verification Body', 'line town1231'],
-      ['6789', 'UK ETS Installations EU ETS Installations'],
+      ['123456', 'accreditationName 1'],
       ['VerifierAdminFirst VerifierAdminLast', 'Change', 'verifieradmin@xx.gr', 'Change', '6995286257', 'Change'],
       [
         'Lead ETS Auditor',

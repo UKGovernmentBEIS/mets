@@ -372,47 +372,51 @@ class AviationReportableEmissionsNotifyRegistryServiceTest {
 	}
 
 	@Test
-	void not_notify_if_beforeValidYear() {
-		Year inValidYear = Year.now().minusYears(2);
+	void notifyRegistry_regulator_nonVerified_anyYear_sends() {
+		Year anyYear = Year.now().minusYears(2);
 		Long accountId = 1L;
 		Double totalEmissions = 10.23;
-		AviationReportableEmissionsUpdatedEvent event = createEvent(accountId, inValidYear.getValue(), totalEmissions, false, true);
 		Integer registryId = 123456;
+		AviationReportableEmissionsUpdatedEvent event = createEvent(accountId, anyYear.getValue(), totalEmissions, false, true);
 		when(aviationAccountQueryService.getAviationAccountInfoDTOById(accountId)).thenReturn(createAccount(accountId, registryId));
 		when(aviationReportableEmissionsRepository.findByAccountIdAndYear(event.getAccountId(), event.getYear()))
-				.thenReturn(reportableEmissions(accountId, inValidYear.getValue()));
-		when(aviationAerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, inValidYear)).thenReturn(Optional
+				.thenReturn(reportableEmissions(accountId, anyYear.getValue()));
+		when(aviationAerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, anyYear)).thenReturn(Optional
 			.of(getDummyAerRequest(false)));
 
 		cut.notifyRegistry(event);
 
 		verify(aviationAccountQueryService, times(1)).getAviationAccountInfoDTOById(accountId);
 		verify(aviationReportableEmissionsRepository, times(1)).findByAccountIdAndYear(event.getAccountId(), event.getYear());
-		verify(aviationAerRequestQueryService, times(1)).findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, inValidYear);
-		verify(reportableEmissionsSendToRegistryProducer, never())
-				.produce(any(AccountEmissionsUpdatedRequestEvent.class), any(KafkaTemplate.class));
+		verify(aviationAerRequestQueryService, times(1)).findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, anyYear);
+		verify(reportableEmissionsSendToRegistryProducer, times(1))
+				.produce(producedAccountEvent(registryId, new BigDecimal(totalEmissions), anyYear.getValue()),
+						aviationAccountEmissionsUpdatedKafkaTemplate);
+		verify(configurationService, never()).getConfigurationByKey(any());
 	}
 
 	@Test
-	void not_notify_if_outsideValidPeriod() {
-		Year inValidYear = Year.now().minusYears(0);
+	void notifyRegistry_regulator_nonVerified_outsidePeriod_sends() {
+		Year currentYear = Year.now();
 		Long accountId = 1L;
 		Double totalEmissions = 10.23;
-		AviationReportableEmissionsUpdatedEvent event = createEvent(accountId, inValidYear.getValue(), totalEmissions, false, true);
 		Integer registryId = 123456;
+		AviationReportableEmissionsUpdatedEvent event = createEvent(accountId, currentYear.getValue(), totalEmissions, false, true);
 		when(aviationAccountQueryService.getAviationAccountInfoDTOById(accountId)).thenReturn(createAccount(accountId, registryId));
 		when(aviationReportableEmissionsRepository.findByAccountIdAndYear(event.getAccountId(), event.getYear()))
-				.thenReturn(reportableEmissions(accountId, inValidYear.getValue()));
-		when(aviationAerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, inValidYear)).thenReturn(Optional
+				.thenReturn(reportableEmissions(accountId, currentYear.getValue()));
+		when(aviationAerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, currentYear)).thenReturn(Optional
 			.of(getDummyAerRequest(false)));
 
 		cut.notifyRegistry(event);
 
 		verify(aviationAccountQueryService, times(1)).getAviationAccountInfoDTOById(accountId);
 		verify(aviationReportableEmissionsRepository, times(1)).findByAccountIdAndYear(event.getAccountId(), event.getYear());
-		verify(aviationAerRequestQueryService, times(1)).findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, inValidYear);
-		verify(reportableEmissionsSendToRegistryProducer, never())
-				.produce(any(AccountEmissionsUpdatedRequestEvent.class), any(KafkaTemplate.class));
+		verify(aviationAerRequestQueryService, times(1)).findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, currentYear);
+		verify(reportableEmissionsSendToRegistryProducer, times(1))
+				.produce(producedAccountEvent(registryId, new BigDecimal(totalEmissions), currentYear.getValue()),
+						aviationAccountEmissionsUpdatedKafkaTemplate);
+		verify(configurationService, never()).getConfigurationByKey(any());
 	}
 
 	@Test
@@ -479,6 +483,66 @@ class AviationReportableEmissionsNotifyRegistryServiceTest {
 		verify(aviationAerRequestQueryService, times(1)).findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, validYear);
 		verify(reportableEmissionsSendToRegistryProducer, never())
 			.produce(any(AccountEmissionsUpdatedRequestEvent.class), any(KafkaTemplate.class));
+	}
+
+	@Test
+	void notifyRegistry_historical_nonVerified_completed_sends() {
+		Year year = Year.now().minusYears(2);
+		Long accountId = 1L;
+		Double totalEmissions = 10.23;
+		Integer registryId = 123456;
+		AviationReportableEmissionsUpdatedEvent event = AviationReportableEmissionsUpdatedEvent.builder()
+				.accountId(accountId)
+				.isFromDre(false)
+				.isFromRegulator(false)
+				.isHistorical(true)
+				.reportableEmissions(new BigDecimal(totalEmissions))
+				.year(year)
+				.build();
+		Request completedRequest = Request.builder()
+				.payload(AviationAerUkEtsRequestPayload.builder().verificationPerformed(false).build())
+				.type(RequestType.AVIATION_AER_UKETS)
+				.accountId(accountId)
+				.status(RequestStatus.COMPLETED)
+				.build();
+		when(aviationAccountQueryService.getAviationAccountInfoDTOById(accountId)).thenReturn(createAccount(accountId, registryId));
+		when(aviationReportableEmissionsRepository.findByAccountIdAndYear(event.getAccountId(), event.getYear()))
+				.thenReturn(reportableEmissions(accountId, year.getValue()));
+		when(aviationAerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, year))
+				.thenReturn(Optional.of(completedRequest));
+
+		cut.notifyRegistry(event);
+
+		verify(reportableEmissionsSendToRegistryProducer, times(1))
+				.produce(producedAccountEvent(registryId, new BigDecimal(totalEmissions), year.getValue()),
+						aviationAccountEmissionsUpdatedKafkaTemplate);
+		verify(configurationService, never()).getConfigurationByKey(any());
+	}
+
+	@Test
+	void notifyRegistry_historical_nonVerified_inProgress_noSend() {
+		Year year = Year.now().minusYears(1);
+		Long accountId = 1L;
+		Double totalEmissions = 10.23;
+		Integer registryId = 123456;
+		AviationReportableEmissionsUpdatedEvent event = AviationReportableEmissionsUpdatedEvent.builder()
+				.accountId(accountId)
+				.isFromDre(false)
+				.isFromRegulator(false)
+				.isHistorical(true)
+				.reportableEmissions(new BigDecimal(totalEmissions))
+				.year(year)
+				.build();
+		when(aviationAccountQueryService.getAviationAccountInfoDTOById(accountId)).thenReturn(createAccount(accountId, registryId));
+		when(aviationReportableEmissionsRepository.findByAccountIdAndYear(event.getAccountId(), event.getYear()))
+				.thenReturn(reportableEmissions(accountId, year.getValue()));
+		when(aviationAerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, RequestType.AVIATION_AER_UKETS, year))
+				.thenReturn(Optional.of(getDummyAerRequest(false)));
+
+		cut.notifyRegistry(event);
+
+		verify(reportableEmissionsSendToRegistryProducer, never())
+				.produce(any(AccountEmissionsUpdatedRequestEvent.class), any(KafkaTemplate.class));
 	}
 
 	private Request getDummyAerRequest(Boolean isVerificationPerfomed) {

@@ -2,12 +2,12 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.common.service.permit
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.account.installation.transform.InstallationCategoryMapper;
-import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.installation.domain.InstallationAccountTemplateParams;
 import uk.gov.pmrv.api.permit.domain.Permit;
@@ -53,7 +53,9 @@ public class PermitPreviewCreatePermitDocumentService {
                            final int consolidationNumber,
                            final List<PermitVariationRequestInfo> infoList) {
 
-        final String signatory = decisionNotification.getSignatory();
+        final String signatory = decisionNotification != null
+                ? decisionNotification.getSignatory()
+                : null;
 
         final PermitEntityDto permitEntityDto =
             this.createPermitEntityDto(accountId, permit, permitType, activationDate, annualEmissionsTargets, attachments, consolidationNumber);
@@ -116,7 +118,7 @@ public class PermitPreviewCreatePermitDocumentService {
         
         // permit id has to be set explicitly as it might not exist in the database yet (e.g. permit issuance)
         templateParams.setPermitId(permitEntityDto.getId());
-        
+
         return templateParams;
     }
 
@@ -132,9 +134,12 @@ public class PermitPreviewCreatePermitDocumentService {
         };
         accountParams.setEmitterType(emitterType.name());
 
-        final BigDecimal quantity = permit.getEstimatedAnnualEmissions().getQuantity();
-        final InstallationCategory installationCategory =
-            InstallationCategoryMapper.getInstallationCategory(emitterType, quantity);
-        accountParams.setInstallationCategory(installationCategory.getDescription());
+        if(permit!=null && permit.getEstimatedAnnualEmissions()!=null){
+            final BigDecimal quantity = permit.getEstimatedAnnualEmissions().getQuantity();
+            final InstallationCategory installationCategory =
+                    InstallationCategoryMapper.getInstallationCategory(emitterType, quantity);
+            accountParams.setInstallationCategory(installationCategory.getDescription());
+        }
+
     }
 }

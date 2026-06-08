@@ -2,6 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.ner.validation;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -14,12 +15,14 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestCreateValidatorService;
 
 import java.util.List;
+import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 class NerCreateValidatorTest {
@@ -49,6 +52,12 @@ class NerCreateValidatorTest {
         when(requestRepository.findByAccountIdAndType(accountId, RequestType.BDR))
                 .thenReturn(List.of());
 
+        when(requestRepository.findByAccountIdAndTypeInAndStatusIn(
+                eq(accountId),
+                eq(Set.of(RequestType.NER)),
+                eq(Set.of(RequestStatus.COMPLETED))))
+                .thenReturn(List.of());
+
         final RequestCreateValidationResult result = validator.validateAction(accountId);
 
         assertFalse(result.isAvailable());
@@ -65,6 +74,12 @@ class NerCreateValidatorTest {
                         .build());
 
         when(requestRepository.findByAccountIdAndType(accountId, RequestType.BDR))
+                .thenReturn(List.of());
+
+        when(requestRepository.findByAccountIdAndTypeInAndStatusIn(
+                eq(accountId),
+                eq(Set.of(RequestType.NER)),
+                eq(Set.of(RequestStatus.COMPLETED))))
                 .thenReturn(List.of());
 
         final RequestCreateValidationResult result = validator.validateAction(accountId);
@@ -85,9 +100,39 @@ class NerCreateValidatorTest {
         when(requestRepository.findByAccountIdAndType(accountId, RequestType.BDR))
                 .thenReturn(List.of(mock(Request.class)));
 
+        when(requestRepository.findByAccountIdAndTypeInAndStatusIn(
+                eq(accountId),
+                eq(Set.of(RequestType.NER)),
+                eq(Set.of(RequestStatus.COMPLETED))))
+                .thenReturn(List.of());
+
         final RequestCreateValidationResult result = validator.validateAction(accountId);
 
         assertFalse(result.isAvailable());
+    }
+
+    @Test
+    void validate_whenCompletedNERExists_thenInvalid() {
+        final long accountId = 1L;
+
+        when(installationAccountQueryService.getAccountDTOById(accountId))
+                .thenReturn(InstallationAccountDTO.builder()
+                        .emitterType(EmitterType.GHGE)
+                        .faStatus(false)
+                        .build());
+
+        when(requestRepository.findByAccountIdAndType(accountId, RequestType.BDR))
+                .thenReturn(List.of());
+
+        when(requestRepository.findByAccountIdAndTypeInAndStatusIn(
+                eq(accountId),
+                eq(Set.of(RequestType.NER)),
+                eq(Set.of(RequestStatus.COMPLETED))))
+                .thenReturn(List.of(mock(Request.class)));
+
+        final RequestCreateValidationResult result = validator.validateAction(accountId);
+
+        assertFalse(result.isValid());
     }
 
     @Test
@@ -101,6 +146,12 @@ class NerCreateValidatorTest {
                         .build());
 
         when(requestRepository.findByAccountIdAndType(accountId, RequestType.BDR))
+                .thenReturn(List.of());
+
+        when(requestRepository.findByAccountIdAndTypeInAndStatusIn(
+                eq(accountId),
+                eq(Set.of(RequestType.NER)),
+                eq(Set.of(RequestStatus.COMPLETED))))
                 .thenReturn(List.of());
 
         when(requestCreateValidatorService.validate(

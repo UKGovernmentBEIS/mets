@@ -17,5 +17,6 @@ public class RequestActionInfoDTO {
     private Long id;
     private RequestActionType type;
     private String submitter;
+    private String submittedTo;
     private LocalDateTime creationDate;
 }

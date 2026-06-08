@@ -50,6 +50,8 @@ const relatedRequestTaskActions: Array<RequestTaskActionProcessDTO['requestTaskA
   'ALR_RECALL_FROM_VERIFICATION',
   'HSE_TI_CANCEL',
   'NER_CANCEL_APPLICATION',
+  'NER_RECALL_FROM_VERIFICATION',
+  'NER_VERIFICATION_RETURN_TO_OPERATOR',
 ];
 
 export function hasRelatedViewActions(type: RequestInfoDTO['type']) {
@@ -227,6 +229,11 @@ function actionDetails(
 
     case 'HSE_TI_CANCEL':
       return { text: 'Cancel task', link: ['cancel'] };
+
+    case 'NER_RECALL_FROM_VERIFICATION':
+      return { text: 'Recall NER application from verifier', link: ['recall-from-verifier'] };
+    case 'NER_VERIFICATION_RETURN_TO_OPERATOR':
+      return { text: 'Return to operator for changes', link: ['return-to-operator-for-changes'] };
 
     default:
       return null;

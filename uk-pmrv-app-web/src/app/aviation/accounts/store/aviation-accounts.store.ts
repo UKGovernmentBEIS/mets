@@ -9,8 +9,10 @@ import { Paging } from '@shared/model';
 import produce from 'immer';
 
 import {
+  AccountDetailsHistoryDTO,
   AviationAccountCreationDTO,
   AviationAccountEmpDTO,
+  AviationAccountReportingObligationFirstYearDTO,
   AviationAccountReportingStatusHistoryCreationDTO,
   AviationAccountReportingStatusHistoryDTO,
   AviationAccountReportingStatusService,
@@ -247,14 +249,91 @@ export class AviationAccountsStore extends Store<AviationAccountsState> {
       .pipe(this.pendingRequestService.trackRequest());
   }
 
-  editAccountCommencementDate(): Observable<HttpResponse<void>> {
-    const existingAccount = this.getState().currentAccount.account.aviationAccount;
-    const accountToUpdate: {
-      commencementDate: string;
-    } = (({ commencementDate }) => ({ commencementDate }))(existingAccount);
+  resetUpsertFyro() {
+    this.setState(
+      produce(this.getState(), (state) => {
+        state.currentAccount.upsertFirstYearOfReportingObligation = undefined;
+      }),
+    );
+  }
+
+  editFirstYearOfReportingObligation(fyro: AviationAccountReportingObligationFirstYearDTO): void {
+    this.setState(
+      produce(this.getState(), (state) => {
+        state.currentAccount.upsertFirstYearOfReportingObligation = fyro;
+      }),
+    );
+  }
+
+  submitFirstYearOfReportingObligation(fyro: AviationAccountReportingObligationFirstYearDTO): Observable<any> {
+    const accountId = this.getState().currentAccount.account.aviationAccount.id;
+    const accountFyroToUpdate = {
+      commencementDate: fyro?.commencementDate,
+      reason: fyro?.reason,
+    };
 
     return this.aviationAccountUpdateService
-      .updateCommencementDate1(this.getState().currentAccount.account.aviationAccount.id, accountToUpdate, 'response')
-      .pipe(this.pendingRequestService.trackRequest());
+      .updateRegistryReportingFirstYear1(accountId, accountFyroToUpdate, 'response')
+      .pipe(
+        this.pendingRequestService.trackRequest(),
+        switchMap(() => {
+          const { paging } = this.getState().currentAccount.reportingStatus;
+          return this.reportingStatusService.getAllReportingStatuses(accountId, 0, paging.pageSize);
+        }),
+        tap((res) => {
+          this.setReportingStatuses(res?.reportingStatusList);
+          this.setReportingStatusTotal(res?.total);
+        }),
+      );
+  }
+
+  setAccountDetailsHistory(history: AccountDetailsHistoryDTO[]) {
+    const state = this.getState();
+    this.setState({
+      ...state,
+      currentAccount: {
+        ...state.currentAccount,
+        accountDetailsHistory: {
+          ...state.currentAccount.accountDetailsHistory,
+          history,
+        },
+      },
+    });
+  }
+
+  setAccountDetailsHistoryTotal(total: number) {
+    const state = this.getState();
+    this.setState({
+      ...state,
+      currentAccount: {
+        ...state.currentAccount,
+        accountDetailsHistory: {
+          ...state.currentAccount.accountDetailsHistory,
+          total,
+        },
+      },
+    });
+  }
+
+  setAccountDetailsHistoryPaging(paging: Paging) {
+    const state = this.getState();
+    this.setState({
+      ...state,
+      currentAccount: {
+        ...state.currentAccount,
+        accountDetailsHistory: {
+          ...state.currentAccount.accountDetailsHistory,
+          paging,
+        },
+      },
+    });
+  }
+
+  resetAccountDetailsHistory() {
+    this.setState(
+      produce(this.getState(), (state) => {
+        state.currentAccount.accountDetailsHistory = initialCurrentAccountState.accountDetailsHistory;
+      }),
+    );
   }
 }

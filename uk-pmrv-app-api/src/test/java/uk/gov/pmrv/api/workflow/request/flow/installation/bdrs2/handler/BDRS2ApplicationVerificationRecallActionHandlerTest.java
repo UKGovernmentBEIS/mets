@@ -16,6 +16,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActio
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestRecallEmailNotificationHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestTaskActionEmptyPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RequestPayload;
 
@@ -40,6 +41,9 @@ public class BDRS2ApplicationVerificationRecallActionHandlerTest {
 
     @Mock
     private WorkflowService workflowService;
+
+    @Mock
+    private List<RequestRecallEmailNotificationHandler> handlers;
 
     @Test
     void process() {

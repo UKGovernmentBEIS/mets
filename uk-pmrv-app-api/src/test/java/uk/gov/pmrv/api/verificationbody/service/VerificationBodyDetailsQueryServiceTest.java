@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyDTO;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
 
@@ -37,7 +38,6 @@ class VerificationBodyDetailsQueryServiceTest {
         final VerificationBodyDTO verificationBodyDTO = VerificationBodyDTO.builder()
                 .id(vbId)
                 .name("name")
-                .accreditationReferenceNumber("accrRefNum")
                 .status(VerificationBodyStatus.ACTIVE)
                 .address(AddressDTO.builder()
                         .line1("line1")
@@ -45,14 +45,19 @@ class VerificationBodyDetailsQueryServiceTest {
                         .country("GR")
                         .postcode("postcode")
                         .build())
-                .emissionTradingSchemes(Set.of(EmissionTradingScheme.CORSIA))
                 .build();
+
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
+        verificationBodyDTO.setVerificationBodyEmissionSchemes(Set.of(verificationBodyEmissionSchemeDTO));
 
         final VerificationBodyDetails expected = VerificationBodyDetails.builder()
                 .name(verificationBodyDTO.getName())
-                .accreditationReferenceNumber(verificationBodyDTO.getAccreditationReferenceNumber())
                 .address(verificationBodyDTO.getAddress())
-                .emissionTradingSchemes(verificationBodyDTO.getEmissionTradingSchemes())
+                .verificationBodyEmissionSchemeDTOS(verificationBodyDTO.getVerificationBodyEmissionSchemes())
                 .build();
 
         when(verificationBodyQueryService.getVerificationBodyOptById(vbId)).thenReturn(Optional.of(verificationBodyDTO));

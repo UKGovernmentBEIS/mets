@@ -13,6 +13,7 @@ import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountCreatedEvent;
+import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusCreatedEvent;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountCreationDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
@@ -28,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -105,6 +107,13 @@ class AviationAccountCreationServiceTest {
                 .accountId(accountId)
                 .emissionTradingScheme(emissionTradingScheme)
                 .build());
+
+        verify(eventPublisher, atLeastOnce())
+                .publishEvent(AviationAccountReportingStatusCreatedEvent.builder()
+                        .accountId(accountId)
+                        .emissionTradingScheme(emissionTradingScheme)
+                        .year(any())
+                        .build());
 
         ArgumentCaptor<AviationAccount> accountCaptor = ArgumentCaptor.forClass(AviationAccount.class);
         verify(aviationAccountRepository, times(1)).save(accountCaptor.capture());

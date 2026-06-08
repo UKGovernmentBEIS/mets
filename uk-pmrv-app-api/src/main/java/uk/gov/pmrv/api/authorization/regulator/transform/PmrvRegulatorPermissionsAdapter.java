@@ -90,8 +90,8 @@ import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_INST
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_INSTALLATION_ONSITE_INSPECTION_PEER_REVIEW_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_NER_PEER_REVIEW_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_NER_PEER_REVIEW_VIEW_TASK;
-import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_NER_REVIEW_EXECUTE_TASK;
-import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_NER_REVIEW_VIEW_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_NER_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_NER_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_NON_COMPLIANCE_PEER_REVIEW_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_NON_COMPLIANCE_PEER_REVIEW_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_NON_COMPLIANCE_SUBMIT_EXECUTE_TASK;
@@ -492,10 +492,10 @@ public class PmrvRegulatorPermissionsAdapter extends AbstarctRegulatorPermission
             .put(new RegulatorPermissionGroupLevel(REVIEW_NER, NONE), List.of());
         permissionGroupLevelsConfig
             .put(new RegulatorPermissionGroupLevel(REVIEW_NER, VIEW_ONLY),
-                List.of(PERM_NER_REVIEW_VIEW_TASK));
+                List.of(PERM_NER_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK));
         permissionGroupLevelsConfig
             .put(new RegulatorPermissionGroupLevel(REVIEW_NER, EXECUTE),
-                List.of(PERM_NER_REVIEW_VIEW_TASK, PERM_NER_REVIEW_EXECUTE_TASK));
+                List.of(PERM_NER_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK, PERM_NER_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK));
 
         // PEER_REVIEW_NER
         permissionGroupLevelsConfig

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus.PENDING;
 
 import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.verificationbody.domain.VerificationBody;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEditDTO;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyInfoDTO;
 import uk.gov.pmrv.api.verificationbody.repository.VerificationBodyRepository;
 import uk.gov.pmrv.api.verificationbody.transform.VerificationBodyMapper;
@@ -37,13 +39,17 @@ class VerificationBodyCreationServiceTest {
     @Test
     void createVerificationBody() {
         String vbName = "vbName";
-        String accreditationReferenceNumber = "accreditationReferenceNumber";
+        VerificationBody verificationBody = VerificationBody.builder().name(vbName).build();
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationReferenceNumber")
+                .accreditationName("name1")
+                .build();
+        Set<VerificationBodyEmissionSchemeDTO> verificationBodyEmissionSchemeDTOS = Set.of(verificationBodyEmissionSchemeDTO);
         VerificationBodyEditDTO verificationBodyCreationInfoDTO = VerificationBodyEditDTO.builder()
             .name(vbName)
-            .accreditationReferenceNumber(accreditationReferenceNumber)
-            .emissionTradingSchemes(Set.of(EmissionTradingScheme.UK_ETS_INSTALLATIONS))
+            .verificationBodyEmissionSchemes(verificationBodyEmissionSchemeDTOS)
             .build();
-        VerificationBody verificationBody = VerificationBody.builder().name(vbName).build();
         VerificationBodyInfoDTO verificationBodyInfoDTO = VerificationBodyInfoDTO.builder().name(vbName).status(PENDING).build();
         VerificationBody savedVerificationBody = VerificationBody.builder().name(vbName).status(PENDING).build();
 
@@ -54,7 +60,7 @@ class VerificationBodyCreationServiceTest {
         VerificationBodyInfoDTO actualVerificationBodyInfoDTO =
             verificationBodyCreationService.createVerificationBody(verificationBodyCreationInfoDTO);
 
-        verify(accreditationRefNumValidationService, times(1)).validate(accreditationReferenceNumber);
+        verify(accreditationRefNumValidationService, times(1)).validateCreate("accreditationReferenceNumber");
         verify(verificationBodyMapper, times(1)).toVerificationBody(verificationBodyCreationInfoDTO);
         verify(verificationBodyRepository, times(1)).save(verificationBody);
         verify(verificationBodyMapper, times(1)).toVerificationBodyInfoDTO(verificationBody);

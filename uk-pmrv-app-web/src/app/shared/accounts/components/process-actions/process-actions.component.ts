@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, map, Observable, switchMap, take, withLatestFrom } from 'rxjs';
 
+import { ConfigStore } from '@core/config/config.store';
 import { AuthStore, selectCurrentDomain, selectUserRoleType, UserState } from '@core/store/auth';
 import { AccountStatusPipe } from '@shared/pipes/account-status.pipe';
 import { ItemLinkPipe } from '@shared/pipes/item-link.pipe';
@@ -13,6 +15,7 @@ import {
   InstallationAccountDTO,
   RequestCreateActionProcessDTO,
   RequestCreateValidationResult,
+  RequestDetailsDTO,
   RequestItemsService,
   RequestsService,
 } from 'pmrv-api';
@@ -29,9 +32,10 @@ import { WorkflowArray, WorkflowLabel, WorkflowLabelProperties } from './process
 export class ProcessActionsComponent implements OnInit {
   accountId$: Observable<number>;
   availableTasks$: Observable<WorkflowLabel[]>;
+  isAviation: boolean;
 
   private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, take(1));
-  isAviation: boolean;
+  private readonly configFeatures = toSignal(this.configStore.asObservable().pipe(map((state) => state.features)));
 
   private readonly variationWorkflow: WorkflowLabel = {
     title: 'Make a permanent change to your permit plan related to emissions, emission equipment or legal changes',
@@ -113,8 +117,13 @@ export class ProcessActionsComponent implements OnInit {
           button: 'Start an NER application',
           type: 'NER',
           errors: [],
-          content:
-            'If you are an eligible new entrant and wish to apply for a free allocation from the NER, you must upload both:',
+          content: `
+            If you are an eligible new entrant and wish to apply for a free allocation from the NER, you must upload both:
+            <ul class="govuk-list govuk-list--bullet">
+              <li>a new entrant data report that has been verified in accordance with the Verification Regulation</li>
+              <li>an MMP</li>
+            </ul>
+            `,
         },
       ],
     },
@@ -263,9 +272,12 @@ export class ProcessActionsComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly itemLinkPipe: ItemLinkPipe,
+    private readonly configStore: ConfigStore,
   ) {}
 
   ngOnInit(): void {
+    const { nerEnabled } = this.configFeatures();
+
     this.currentDomain$.subscribe((domain) => {
       this.isAviation = domain === 'AVIATION';
     });
@@ -282,30 +294,36 @@ export class ProcessActionsComponent implements OnInit {
       ),
       map(([validationResults, userRoleWorkflowMessagesMap]) => {
         const allowedWorkflowTypes = Object.keys(validationResults);
+
         return userRoleWorkflowMessagesMap
           .filter((workflow) => {
             const currentWorkflowTypes = workflow.properties.map((property) => property.type);
 
-            return allowedWorkflowTypes.some(
-              (allowedWorkflowType: RequestCreateActionProcessDTO['requestCreateActionType']) =>
-                currentWorkflowTypes.includes(allowedWorkflowType),
+            return allowedWorkflowTypes.some((allowedWorkflowType) =>
+              currentWorkflowTypes.includes(allowedWorkflowType as WorkflowLabelProperties['type']),
             );
           })
           .map((workflow) => {
-            const properties = (workflow.properties as WorkflowLabelProperties[])
+            const properties = workflow.properties
               .filter((property) => allowedWorkflowTypes.includes(property.type))
-              .map((property) => ({
-                button: property.button,
-                type: property.type,
-                content: property.content,
-                errors: validationResults[property.type].valid
-                  ? []
-                  : this.createErrorMessages(property.type, validationResults[property.type]),
-              }));
+              .map((property) => {
+                const isWorkflowHidden = !nerEnabled && property.type === 'NER';
+                return {
+                  button: property.button,
+                  type: property.type,
+                  content: property.content,
+                  isHidden: isWorkflowHidden,
+                  errors:
+                    validationResults[property.type].valid || isWorkflowHidden
+                      ? []
+                      : this.createErrorMessages(property.type, validationResults[property.type]),
+                };
+              });
 
             return {
               title: workflow.title,
               properties,
+              isHidden: properties.filter((property) => property.isHidden).length === properties.length,
             };
           });
       }),
@@ -394,7 +412,7 @@ export class ProcessActionsComponent implements OnInit {
   }
 
   private getTransformedRequestTypeFragment(requestType: RequestCreateActionProcessDTO['requestCreateActionType']) {
-    const result = workflowDetailsTypesMap[requestType]?.toLowerCase();
+    const result = workflowDetailsTypesMap[requestType as RequestDetailsDTO['requestType']]?.toLowerCase();
 
     return ['AIR', 'INSTALLATION_ONSITE_INSPECTION', 'INSTALLATION_AUDIT'].includes(requestType)
       ? `an ${result}`

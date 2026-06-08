@@ -74,4 +74,6 @@ public final class PmrvEmailNotificationTemplateConstants {
 
     public static final String REQUEST_TASK_TYPE = "requestTaskType";
     public static final String REQUEST_TYPE = "requestType";
+
+    public static final String RECALLED_BY_OPERATOR_TYPE = "recalledByOperatorType";
 }

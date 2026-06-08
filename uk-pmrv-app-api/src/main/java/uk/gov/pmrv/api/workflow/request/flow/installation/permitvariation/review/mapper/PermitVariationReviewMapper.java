@@ -11,6 +11,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.D
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.GrantDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationApplicationReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationWaitForReviewRequestTaskPayload;
 
 @Mapper(componentModel = "spring", config = MapperConfig.class)
 public interface PermitVariationReviewMapper {
@@ -18,7 +19,11 @@ public interface PermitVariationReviewMapper {
     @Mapping(target = "payloadType", source = "payloadType")
     PermitVariationApplicationReviewRequestTaskPayload toPermitVariationApplicationReviewRequestTaskPayload(
         PermitVariationRequestPayload requestPayload, RequestTaskPayloadType payloadType);
-    
+
+    @Mapping(target = "payloadType", source = "payloadType")
+    PermitVariationWaitForReviewRequestTaskPayload toPermitVariationWaitForReviewRequestTaskPayload(
+            PermitVariationRequestPayload requestPayload, RequestTaskPayloadType payloadType);
+
     PermitContainer toPermitContainer(PermitVariationApplicationReviewRequestTaskPayload reviewRequestTaskPayload);
     
     @AfterMapping

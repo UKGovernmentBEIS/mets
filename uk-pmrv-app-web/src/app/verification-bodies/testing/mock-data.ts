@@ -3,8 +3,8 @@ import {
   UsersAuthoritiesInfoDTO,
   VerificationBodyCreationDTO,
   VerificationBodyDTO,
+  VerificationBodyEmissionSchemeDTO,
   VerificationBodyInfoResponseDTO,
-  VerificationBodyUpdateDTO,
 } from 'pmrv-api';
 
 export const mockVerificationBodies: VerificationBodyInfoResponseDTO = {
@@ -18,7 +18,13 @@ export const mockVerificationBodies: VerificationBodyInfoResponseDTO = {
 
 export const verificationBody: Omit<Required<VerificationBodyDTO>, 'id' | 'status'> = {
   name: 'Body test name',
-  accreditationReferenceNumber: 'Accreditation ref num',
+  verificationBodyEmissionSchemes: [
+    {
+      emissionTradingScheme: 'UK_ETS_INSTALLATIONS',
+      accreditationReferenceNumber: 'Accreditation ref num',
+      accreditationName: 'Accreditation name',
+    },
+  ],
   address: {
     city: 'Body city',
     country: 'GR',
@@ -26,7 +32,6 @@ export const verificationBody: Omit<Required<VerificationBodyDTO>, 'id' | 'statu
     line2: null,
     postcode: 'Body post',
   },
-  emissionTradingSchemes: ['UK_ETS_INSTALLATIONS'],
 };
 
 export const validVerificationBodyCreation: VerificationBodyCreationDTO = {
@@ -40,7 +45,7 @@ export const validVerificationBodyCreation: VerificationBodyCreationDTO = {
   },
 };
 
-export const validVerificationBodyUpdate: VerificationBodyUpdateDTO = {
+export const validVerificationBodyUpdate: VerificationBodyEmissionSchemeDTO = {
   ...verificationBody,
   ...{ id: 123 },
 };

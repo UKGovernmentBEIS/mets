@@ -14,9 +14,12 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class PeerReviewDecisionSubmittedRequestActionPayload extends RequestActionPayload {
+public class PeerReviewDecisionSubmittedRequestActionPayload extends RequestActionPayload
+        implements RequestActionSubmittedToAware {
 
     @NotNull
     @Valid
     private PeerReviewDecision decision;
+
+    private String submittedTo;
 }

@@ -60,8 +60,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationRegulatorReviewSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationVerificationSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRAuthorityResponseSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationWaitForAuthorityReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRAuthorityResponseSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationRegulatorReviewSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationSubmitRequestTaskPayload;
@@ -84,11 +84,14 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.audit.domai
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionOperatorRespondRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.onsiteinspection.domain.InstallationOnsiteInspectionApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationAmendsSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationRegulatorReviewSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationVerificationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permanentcessation.domain.PermanentCessationApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationWaitForReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.submit.domain.PermitIssuanceApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationSubmitRequestTaskPayload;
@@ -106,8 +109,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBApplicationRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBApplicationReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBWaitForReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.amendsubmit.domain.PermitVariationApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationApplicationReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationWaitForReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submit.domain.PermitVariationApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.returnofallowances.domain.ReturnOfAllowancesApplicationPeerReviewRequestTaskPayload;
@@ -147,6 +152,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PermitIssuanceApplicationReviewRequestTaskPayload.class, value = "PERMIT_ISSUANCE_WAIT_FOR_AMENDS_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitIssuanceApplicationReviewRequestTaskPayload.class, value = "PERMIT_ISSUANCE_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitIssuanceApplicationAmendsSubmitRequestTaskPayload.class, value = "PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = PermitIssuanceApplicationWaitForReviewRequestTaskPayload.class, value = "PERMIT_ISSUANCE_WAIT_FOR_REVIEW_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = PermitSurrenderApplicationReviewRequestTaskPayload.class, value = "PERMIT_SURRENDER_APPLICATION_PEER_REVIEW_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitSurrenderApplicationReviewRequestTaskPayload.class, value = "PERMIT_SURRENDER_APPLICATION_REVIEW_PAYLOAD"),
@@ -179,6 +185,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload.class, value = "PERMIT_VARIATION_WAIT_FOR_PEER_REVIEW_REGULATOR_LED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitVariationApplicationAmendsSubmitRequestTaskPayload.class, value = "PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitVariationApplicationReviewRequestTaskPayload.class, value = "PERMIT_VARIATION_WAIT_FOR_AMENDS_PAYLOAD"),
+                @DiscriminatorMapping(schema = PermitVariationWaitForReviewRequestTaskPayload.class, value = "PERMIT_VARIATION_WAIT_FOR_REVIEW_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = PermitTransferAApplicationRequestTaskPayload.class, value = "PERMIT_TRANSFER_A_APPLICATION_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitTransferBApplicationRequestTaskPayload.class, value = "PERMIT_TRANSFER_B_APPLICATION_SUBMIT_PAYLOAD"),
@@ -187,6 +194,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PermitTransferBApplicationAmendsSubmitRequestTaskPayload.class, value = "PERMIT_TRANSFER_B_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitTransferBApplicationReviewRequestTaskPayload.class, value = "PERMIT_TRANSFER_B_WAIT_FOR_AMENDS_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitTransferBApplicationReviewRequestTaskPayload.class, value = "PERMIT_TRANSFER_B_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = PermitTransferBWaitForReviewRequestTaskPayload.class, value = "PERMIT_TRANSFER_B_WAIT_FOR_REVIEW_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = NonComplianceApplicationSubmitRequestTaskPayload.class, value = "NON_COMPLIANCE_APPLICATION_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = NonComplianceDailyPenaltyNoticeRequestTaskPayload.class, value = "NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PAYLOAD"),
@@ -202,6 +210,11 @@ import java.util.UUID;
 
                 @DiscriminatorMapping(schema = NerApplicationSubmitRequestTaskPayload.class, value = "NER_APPLICATION_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = NERApplicationVerificationSubmitRequestTaskPayload.class, value = "NER_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = NERApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "NER_APPLICATION_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = NERApplicationAmendsSubmitRequestTaskPayload.class, value = "NER_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = NERApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "NER_WAIT_FOR_AMENDS_PAYLOAD"),
+                @DiscriminatorMapping(schema = NERApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "NER_APPLICATION_PEER_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = NERApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "NER_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = DoalApplicationSubmitRequestTaskPayload.class, value = "DOAL_APPLICATION_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = DoalApplicationSubmitRequestTaskPayload.class, value = "DOAL_APPLICATION_PEER_REVIEW_PAYLOAD"),
@@ -385,6 +398,7 @@ import java.util.UUID;
     @JsonSubTypes.Type(value = PermitIssuanceApplicationReviewRequestTaskPayload.class, name = "PERMIT_ISSUANCE_WAIT_FOR_AMENDS_PAYLOAD"),
     @JsonSubTypes.Type(value = PermitIssuanceApplicationReviewRequestTaskPayload.class, name = "PERMIT_ISSUANCE_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = PermitIssuanceApplicationAmendsSubmitRequestTaskPayload.class, name = "PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = PermitIssuanceApplicationWaitForReviewRequestTaskPayload.class, name = "PERMIT_ISSUANCE_WAIT_FOR_REVIEW_PAYLOAD"),
 
     @JsonSubTypes.Type(value = PermitSurrenderApplicationReviewRequestTaskPayload.class, name = "PERMIT_SURRENDER_APPLICATION_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = PermitSurrenderApplicationReviewRequestTaskPayload.class, name = "PERMIT_SURRENDER_APPLICATION_REVIEW_PAYLOAD"),
@@ -417,6 +431,7 @@ import java.util.UUID;
     @JsonSubTypes.Type(value = PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload.class, name = "PERMIT_VARIATION_WAIT_FOR_PEER_REVIEW_REGULATOR_LED_PAYLOAD"),
     @JsonSubTypes.Type(value = PermitVariationApplicationAmendsSubmitRequestTaskPayload.class, name = "PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = PermitVariationApplicationReviewRequestTaskPayload.class, name = "PERMIT_VARIATION_WAIT_FOR_AMENDS_PAYLOAD"),
+    @JsonSubTypes.Type(value = PermitVariationWaitForReviewRequestTaskPayload.class, name = "PERMIT_VARIATION_WAIT_FOR_REVIEW_PAYLOAD"),
 
     @JsonSubTypes.Type(value = PermitTransferAApplicationRequestTaskPayload.class, name = "PERMIT_TRANSFER_A_APPLICATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = PermitTransferBApplicationRequestTaskPayload.class, name = "PERMIT_TRANSFER_B_APPLICATION_SUBMIT_PAYLOAD"),
@@ -425,6 +440,7 @@ import java.util.UUID;
     @JsonSubTypes.Type(value = PermitTransferBApplicationAmendsSubmitRequestTaskPayload.class, name = "PERMIT_TRANSFER_B_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = PermitTransferBApplicationReviewRequestTaskPayload.class, name = "PERMIT_TRANSFER_B_WAIT_FOR_AMENDS_PAYLOAD"),
     @JsonSubTypes.Type(value = PermitTransferBApplicationReviewRequestTaskPayload.class, name = "PERMIT_TRANSFER_B_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = PermitTransferBWaitForReviewRequestTaskPayload.class, name = "PERMIT_TRANSFER_B_WAIT_FOR_REVIEW_PAYLOAD"),
 
     @JsonSubTypes.Type(value = NonComplianceApplicationSubmitRequestTaskPayload.class, name = "NON_COMPLIANCE_APPLICATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = NonComplianceDailyPenaltyNoticeRequestTaskPayload.class, name = "NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PAYLOAD"),
@@ -440,8 +456,13 @@ import java.util.UUID;
 
     @JsonSubTypes.Type(value = NerApplicationSubmitRequestTaskPayload.class, name = "NER_APPLICATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = NERApplicationVerificationSubmitRequestTaskPayload.class, name = "NER_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = NERApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "NER_APPLICATION_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = NERApplicationAmendsSubmitRequestTaskPayload.class, name = "NER_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = NERApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "NER_WAIT_FOR_AMENDS_PAYLOAD"),
+    @JsonSubTypes.Type(value = NERApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "NER_APPLICATION_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = NERApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "NER_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
-@JsonSubTypes.Type(value = DoalApplicationSubmitRequestTaskPayload.class, name = "DOAL_APPLICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = DoalApplicationSubmitRequestTaskPayload.class, name = "DOAL_APPLICATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = DoalApplicationSubmitRequestTaskPayload.class, name = "DOAL_APPLICATION_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = DoalApplicationSubmitRequestTaskPayload.class, name = "DOAL_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = DoalAuthorityResponseRequestTaskPayload.class, name = "DOAL_AUTHORITY_RESPONSE_PAYLOAD"),

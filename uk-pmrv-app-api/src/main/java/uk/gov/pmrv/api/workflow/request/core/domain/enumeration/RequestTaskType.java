@@ -1032,7 +1032,9 @@ public enum RequestTaskType {
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
                 RequestTaskActionType.NER_APPLICATION_SAVE_VERIFICATION,
-                RequestTaskActionType.NER_VERIFICATION_UPLOAD_ATTACHMENT
+                RequestTaskActionType.NER_VERIFICATION_UPLOAD_ATTACHMENT,
+                RequestTaskActionType.NER_SUBMIT_VERIFICATION,
+                RequestTaskActionType.NER_VERIFICATION_RETURN_TO_OPERATOR
             );
         }
     },
@@ -1041,6 +1043,7 @@ public enum RequestTaskType {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
+                    RequestTaskActionType.NER_RECALL_FROM_VERIFICATION
             );
         }
     },
@@ -1050,13 +1053,14 @@ public enum RequestTaskType {
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
                 RequestTaskActionType.NER_SAVE_APPLICATION_REVIEW,
-                RequestTaskActionType.NER_SAVE_REVIEW_GROUP_DECISION,
+                RequestTaskActionType.NER_SAVE_REGULATOR_REVIEW_GROUP_DECISION,
                 RequestTaskActionType.NER_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT,
                 RequestTaskActionType.NER_SAVE_REVIEW_DETERMINATION,
                 RequestTaskActionType.NER_REQUEST_PEER_REVIEW,
-                RequestTaskActionType.NER_REVIEW_RETURN_FOR_AMENDS,
+                RequestTaskActionType.NER_REGULATOR_REVIEW_RETURN_FOR_AMENDS,
                 RequestTaskActionType.NER_NOTIFY_OPERATOR_FOR_DECISION,
-                RequestTaskActionType.NER_COMPLETE_REVIEW
+                RequestTaskActionType.NER_COMPLETE_REVIEW,
+                RequestTaskActionType.NER_WITHDRAW_APPLICATION
             );
         }
     },
@@ -1068,24 +1072,23 @@ public enum RequestTaskType {
         }
     },
 
-    NER_APPLICATION_PEER_REVIEW(true, RequestType.NER, RequestExpirationType.APPLICATION_REVIEW, SupportingTaskType.PEER_REVIEW) {
+    NER_APPLICATION_PEER_REVIEW(true, RequestType.NER, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
-                RequestTaskActionType.NER_SUBMIT_PEER_REVIEW_DECISION,
-                RequestTaskActionType.NER_UPLOAD_ATTACHMENT
+                RequestTaskActionType.NER_SUBMIT_PEER_REVIEW_DECISION
             );
         }
     },
 
-    NER_WAIT_FOR_PEER_REVIEW(true, RequestType.NER, RequestExpirationType.APPLICATION_REVIEW) {
+    NER_WAIT_FOR_PEER_REVIEW(true, RequestType.NER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of();
         }
     },
 
-    NER_WAIT_FOR_AMENDS(true, RequestType.NER, RequestExpirationType.APPLICATION_REVIEW) {
+    NER_WAIT_FOR_AMENDS(true, RequestType.NER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of();
@@ -1096,27 +1099,46 @@ public enum RequestTaskType {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
-                RequestTaskActionType.NER_SAVE_APPLICATION_AMEND,
-                RequestTaskActionType.NER_UPLOAD_ATTACHMENT,
-                RequestTaskActionType.NER_SUBMIT_APPLICATION_AMEND);
+                    RequestTaskActionType.NER_APPLICATION_AMENDS_SAVE,
+                    RequestTaskActionType.NER_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER,
+                    RequestTaskActionType.NER_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR,
+                    RequestTaskActionType.NER_UPLOAD_ATTACHMENT);
         }
     },
 
-    NER_MAKE_PAYMENT(true, RequestType.NER) {
+    NER_AMEND_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.NER) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.NER_APPLICATION_SAVE_VERIFICATION,
+                    RequestTaskActionType.NER_SUBMIT_VERIFICATION,
+                    RequestTaskActionType.NER_VERIFICATION_UPLOAD_ATTACHMENT
+            );
+        }
+    },
+
+    NER_AMEND_WAIT_FOR_VERIFICATION(true, RequestType.NER) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(RequestTaskActionType.NER_RECALL_FROM_VERIFICATION);
+        }
+    },
+
+    NER_MAKE_PAYMENT(true, RequestType.NER, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    NER_TRACK_PAYMENT(true, RequestType.NER) {
+    NER_TRACK_PAYMENT(true, RequestType.NER, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    NER_CONFIRM_PAYMENT(true, RequestType.NER) {
+    NER_CONFIRM_PAYMENT(true, RequestType.NER, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();

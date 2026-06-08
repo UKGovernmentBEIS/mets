@@ -21,6 +21,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComp
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.service.NonComplianceDailyPenaltyNoticeApplyService;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.validation.NonCompliancePeerReviewValidator;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonCompliancePeerReviewRequestedRequestActionPayload;
 
 @Component
 @RequiredArgsConstructor
@@ -32,6 +33,7 @@ public class NonComplianceDailyPenaltyNoticeRequestPeerReviewActionHandler
     private final NonComplianceDailyPenaltyNoticeApplyService applyService;
     private final RequestService requestService;
     private final WorkflowService workflowService;
+    private final NonCompliancePeerReviewActionHelper peerReviewActionHelper;
 
 
     @Override
@@ -59,9 +61,12 @@ public class NonComplianceDailyPenaltyNoticeRequestPeerReviewActionHandler
 
         applyService.saveRequestPeerReviewAction(requestTask, payload.getPeerReviewer());
 
+        final NonCompliancePeerReviewRequestedRequestActionPayload actionPayload =
+                peerReviewActionHelper.buildPeerReviewRequestedPayload(payload.getPeerReviewer());
+
         requestService.addActionToRequest(
                 requestTask.getRequest(),
-                null,
+                actionPayload,
                 RequestActionType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED,
                 appUser.getUserId()
         );

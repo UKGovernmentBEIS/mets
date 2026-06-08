@@ -13,6 +13,7 @@ import { OperatorAirImprovementResponse } from './operatorAirImprovementResponse
 
 export interface OperatorAirImprovementNoResponse extends OperatorAirImprovementResponse {
   isCostUnreasonable?: boolean;
+  costUnreasonableExplanation?: string;
   isTechnicallyInfeasible?: boolean;
   technicalInfeasibilityExplanation?: string;
   files?: Array<string>;

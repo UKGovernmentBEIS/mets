@@ -11,7 +11,7 @@
  */
 
 export interface NERVerificationOpinionStatement {
-  opinionStatementFile?: string;
+  opinionStatementFile: string;
   supportingFiles?: Array<string>;
   notes?: string;
 }

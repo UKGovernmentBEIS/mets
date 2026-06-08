@@ -828,7 +828,7 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED',
       }),
-    ).toEqual('Peer review of initial penalty requested by John Bolt');
+    ).toEqual('Peer review of initial penalty submitted by John Bolt');
 
     expect(
       pipe.transform({
@@ -854,9 +854,33 @@ describe('ItemActionHeaderPipe', () => {
     expect(
       pipe.transform({
         ...baseRequestAction,
+        submittedTo: 'Jack Doe',
+        type: 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review of initial penalty submitted to Jack Doe by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        submittedTo: 'Jack Doe',
+        type: 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement for initial penalty submitted to Jack Doe by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        submittedTo: 'Jack Doe',
+        type: 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement for initial penalty submitted to Jack Doe by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
         type: 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_REQUESTED',
       }),
-    ).toEqual('Peer review of notice of intent requested by John Bolt');
+    ).toEqual('Peer review of notice of intent submitted by John Bolt');
 
     expect(
       pipe.transform({
@@ -871,6 +895,30 @@ describe('ItemActionHeaderPipe', () => {
         type: 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_REJECTED',
       }),
     ).toEqual('Peer review disagreement for notice of intent submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        submittedTo: 'Jack Doe',
+        type: 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review of notice of intent submitted to Jack Doe by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        submittedTo: 'Jack Doe',
+        type: 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement for notice of intent submitted to Jack Doe by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        submittedTo: 'Jack Doe',
+        type: 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement for notice of intent submitted to Jack Doe by John Bolt');
   });
 
   it('should return Aviation Account Closure Cancelled', () => {
@@ -1804,5 +1852,96 @@ describe('ItemActionHeaderPipe', () => {
         type: 'NER_APPLICATION_SENT_TO_VERIFIER',
       }),
     ).toEqual('Submitted to verifier by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_APPLICATION_VERIFICATION_SUBMITTED',
+      }),
+    ).toEqual('Verification statement submitted to operator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_RECALLED_FROM_VERIFICATION',
+      }),
+    ).toEqual('Recalled by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_APPLICATION_SUBMITTED',
+      }),
+    ).toEqual('Submitted to regulator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_VERIFICATION_RETURNED_TO_OPERATOR',
+      }),
+    ).toEqual('Returned to operator for changes by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_APPLICATION_RETURNED_FOR_AMENDS',
+      }),
+    ).toEqual('New entrance reserve returned to operator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_APPLICATION_AMENDS_SUBMITTED',
+      }),
+    ).toEqual('Submitted to regulator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_APPLICATION_AMENDS_SENT_TO_VERIFIER',
+      }),
+    ).toEqual('Submitted to verifier by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review requested by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_PEER_REVIEW_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_PEER_REVIEW_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_APPLICATION_DEEMED_WITHDRAWN',
+      }),
+    ).toEqual('Withdrawn by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_APPLICATION_COMPLETED',
+      }),
+    ).toEqual('Completed by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'NER_APPLICATION_RE_INITIATED',
+      }),
+    ).toEqual('Reopened by John Bolt');
   });
 });

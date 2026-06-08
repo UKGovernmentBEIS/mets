@@ -8,9 +8,9 @@ import { logGoogleEvent } from '@core/analytics';
 import { AuthStore } from '@core/store';
 import { PermitIssuanceStore } from '@permit-issuance/store/permit-issuance.store';
 import { AerService } from '@tasks/aer/core/aer.service';
-import { HttpMethods } from 'keycloak-angular/lib/core/interfaces/keycloak-options';
+import { HttpMethod } from 'keycloak-angular';
 
-type AllowedRoute = { method: HttpMethods; endpoint: string };
+type AllowedRoute = { method: HttpMethod; endpoint: string };
 
 const taskActionRoute = {
   method: 'POST',

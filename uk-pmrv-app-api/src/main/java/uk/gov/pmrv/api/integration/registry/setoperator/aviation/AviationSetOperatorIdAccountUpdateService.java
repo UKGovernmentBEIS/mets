@@ -26,7 +26,7 @@ public class AviationSetOperatorIdAccountUpdateService {
         publisher.publishEvent(AviationAccountUpdatedRegistryEvent.builder()
                 .accountId(accountId)
                 .emissionsMonitoringPlan(emissionsMonitoringPlanUkEts)
-                .isFromSetOperatorId(true)
+                .skipRequestAction(true)
                 .build());
 
     }

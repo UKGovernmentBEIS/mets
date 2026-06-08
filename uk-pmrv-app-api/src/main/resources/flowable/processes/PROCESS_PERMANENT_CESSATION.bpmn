@@ -22,9 +22,6 @@
     <serviceTask id="Activity_1gi5la1" name="Update Workflow status to CANCELLED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
       <extensionElements>
         <flowable:field name="requestStatus">
-          <flowable:string><![CDATA[CANCELLED]]></flowable:string>
-        </flowable:field>
-        <flowable:field name="requestStatus">
             <flowable:string>CANCELLED</flowable:string>
         </flowable:field>
         <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>

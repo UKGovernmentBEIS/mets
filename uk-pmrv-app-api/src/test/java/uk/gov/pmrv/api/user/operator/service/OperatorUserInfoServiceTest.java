@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.netz.api.userinfoapi.UserInfoDTO;
+import uk.gov.netz.api.mireport.system.accountuserscontacts.OperatorUserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.UserInfoService;
 
 import java.util.List;
@@ -24,14 +24,14 @@ class OperatorUserInfoServiceTest {
 
     @Test
     void getOperatorUsersInfo() {
-        List<UserInfoDTO> userInfoDTOList = List.of(UserInfoDTO.builder()
+        List<OperatorUserInfoDTO> userInfoDTOList = List.of(OperatorUserInfoDTO.builder()
                 .firstName("firstName")
                 .lastName("lastName")
                 .build());
 
-        when(userInfoService.getUsersInfo(List.of("userId"))).thenReturn(userInfoDTOList);
+        when(userInfoService.getOperatorUsersInfo(List.of("userId"))).thenReturn(userInfoDTOList);
 
-        List<UserInfoDTO> result = operatorUserInfoService.getOperatorUsersInfo(List.of("userId"));
+        List<OperatorUserInfoDTO> result = operatorUserInfoService.getOperatorUsersInfo(List.of("userId"));
         assertEquals(userInfoDTOList, result);
     }
 }

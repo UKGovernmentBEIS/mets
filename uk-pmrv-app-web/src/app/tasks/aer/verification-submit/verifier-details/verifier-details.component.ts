@@ -24,6 +24,8 @@ export class VerifierDetailsComponent {
   ).pipe(map((payload) => payload.verificationReport));
   isEditable$ = this.aerService.isEditable$;
 
+  readonly emissionsTradingScheme = this.aerService.getEmissionsTradingSchemeSignal();
+
   constructor(
     @Inject(AER_TASK_FORM) readonly form: UntypedFormGroup,
     readonly pendingRequest: PendingRequestService,

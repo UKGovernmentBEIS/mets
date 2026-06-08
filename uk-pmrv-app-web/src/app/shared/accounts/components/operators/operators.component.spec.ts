@@ -8,6 +8,7 @@ import { of, throwError } from 'rxjs';
 import { AuthService } from '@core/services/auth.service';
 import { AuthStore } from '@core/store/auth';
 import { BusinessTestingModule, expectBusinessErrorToBe } from '@error/testing/business-error';
+import { GovukDatePipe } from '@shared/pipes/govuk-date.pipe';
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, asyncData, BasePage, changeInputValue, MockType, RouterStubComponent } from '@testing';
 import { cloneDeep } from 'lodash-es';
@@ -137,6 +138,10 @@ describe('OperatorsComponent', () => {
     get detailsSummary() {
       return this.query<HTMLSpanElement>('.govuk-details__summary-text');
     }
+
+    get lastLogin() {
+      return this.query<HTMLElement>('.lastLogin');
+    }
   }
 
   const operatorAuthoritiesService: MockType<OperatorAuthoritiesService> = {
@@ -194,6 +199,7 @@ describe('OperatorsComponent', () => {
         { provide: AuthoritiesService, useValue: authoritiesService },
         { provide: OperatorAuthoritiesService, useValue: operatorAuthoritiesService },
         { provide: AccountVerificationBodyService, useValue: accountVerificationBodyService },
+        GovukDatePipe,
       ],
     }).compileComponents();
 
@@ -537,6 +543,12 @@ describe('OperatorsComponent', () => {
         '',
         'Replace verifier',
       ]);
+    });
+
+    it('should display the last login', () => {
+      const datePipe = new GovukDatePipe();
+      const expectedDate = datePipe.transform('27 April 2026 11:06:05', 'datetime');
+      expect(page.lastLogin.textContent.trim()).toEqual(`Last operator to sign in: Frank Sinatra, ${expectedDate}`);
     });
   });
 

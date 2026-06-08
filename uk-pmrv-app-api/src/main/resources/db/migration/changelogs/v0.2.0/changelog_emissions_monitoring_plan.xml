@@ -51,4 +51,20 @@
         </rollback>
     </changeSet>
 
+
+    <changeSet id="0_2_0_update_emp_issuing_authority_saudi_arabia" author="stavroula.papagiannakopoulou@trasys.gr">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(1) from emp_issuing_authority where name = 'Saudi Arabia - The General Authority of Civil Aviation (GACA)';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            insert into emp_issuing_authority (id, name) VALUES (nextval('emp_issuing_authority_seq'), 'Saudi Arabia - The General Authority of Civil Aviation (GACA)');
+        </sql>
+
+        <rollback>
+            delete from emp_issuing_authority where name = 'Saudi Arabia - The General Authority of Civil Aviation (GACA)';
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

@@ -32,7 +32,9 @@ import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerOp
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationData;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
 import uk.gov.pmrv.api.aviationreporting.ukets.service.AviationAerUkEtsSubmittedEmissionsCalculationService;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.AviationOperatorDetails;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyDetailsQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -78,11 +80,16 @@ class AviationAerUkEtsApplicationVerificationSubmitInitializerTest {
             				.build())
             		.build())
             .build();
-        
+
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         AviationAerUkEtsVerificationReport requestVerificationReport = AviationAerUkEtsVerificationReport.builder()
         		.verificationBodyId(requestVBId)
         		.verificationBodyDetails(VerificationBodyDetails.builder()
-        				.accreditationReferenceNumber("old vb details")
+                        .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
         				.build())
         		.safExists(Boolean.TRUE)
         		.verificationData(AviationAerUkEtsVerificationData.builder()
@@ -124,9 +131,14 @@ class AviationAerUkEtsApplicationVerificationSubmitInitializerTest {
         BigDecimal totalEmissions = BigDecimal.valueOf(12588.45);
         when(aviationAerUkEtsEmissionsCalculationService.calculateTotalSubmittedEmissions(aer))
         	.thenReturn(totalEmissions);
-        
+
+        VerificationBodyEmissionSchemeDTO latestVerificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         VerificationBodyDetails latestVerificationBodyDetails = VerificationBodyDetails.builder()
-                .accreditationReferenceNumber("accr_ref_number")
+                .verificationBodyEmissionSchemeDTOS(Set.of(latestVerificationBodyEmissionSchemeDTO))
                 .build();
         when(verificationBodyDetailsQueryService.getVerificationBodyDetails(requestVBId))
             .thenReturn(Optional.of(latestVerificationBodyDetails));
@@ -205,11 +217,16 @@ class AviationAerUkEtsApplicationVerificationSubmitInitializerTest {
                   .build())
             .saf(AviationAerSaf.builder().exist(Boolean.FALSE).build())
             .build();
-        
+
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         AviationAerUkEtsVerificationReport requestVerificationReport = AviationAerUkEtsVerificationReport.builder()
         		.verificationBodyId(reportVBId)
         		.verificationBodyDetails(VerificationBodyDetails.builder()
-        				.accreditationReferenceNumber("old vb details")
+                        .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
         				.build())
         		.safExists(Boolean.TRUE)
         		.verificationData(AviationAerUkEtsVerificationData.builder()
@@ -251,9 +268,14 @@ class AviationAerUkEtsApplicationVerificationSubmitInitializerTest {
         BigDecimal totalEmissions = BigDecimal.valueOf(12588.45);
         when(aviationAerUkEtsEmissionsCalculationService.calculateTotalSubmittedEmissions(aer))
         	.thenReturn(totalEmissions);
-        
+
+        VerificationBodyEmissionSchemeDTO latestVerificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         VerificationBodyDetails latestVerificationBodyDetails = VerificationBodyDetails.builder()
-                .accreditationReferenceNumber("accr_ref_number")
+                .verificationBodyEmissionSchemeDTOS(Set.of(latestVerificationBodyEmissionSchemeDTO))
                 .build();
         when(verificationBodyDetailsQueryService.getVerificationBodyDetails(requestVBId))
             .thenReturn(Optional.of(latestVerificationBodyDetails));

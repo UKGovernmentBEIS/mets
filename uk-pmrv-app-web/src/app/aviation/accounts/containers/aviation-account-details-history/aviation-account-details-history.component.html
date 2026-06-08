@@ -1,0 +1,25 @@
+@if (vm$ | async; as vm) {
+  <app-page-heading size="l">Operator details history</app-page-heading>
+  <p class="govuk-body">Only changes made through the account details tab are shown here.</p>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      @if (vm.accountDetailsHistory?.length) {
+        <app-aviation-account-details-history-list
+          [columns]="vm.columns"
+          [history]="vm.accountDetailsHistory"></app-aviation-account-details-history-list>
+        @if (vm.total > vm.pageSize) {
+          <app-pagination
+            [count]="vm.total"
+            (currentPageChange)="onPageChange($event)"
+            [pageSize]="vm.pageSize"></app-pagination>
+        }
+      } @else {
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            <p class="govuk-body no-results" tabindex="-1">There are no results to show</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}

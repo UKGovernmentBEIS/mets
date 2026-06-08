@@ -8,6 +8,7 @@ import { MiReportsListGuard } from './core/mi-reports-list.guard';
 import { CustomReportComponent } from './custom/custom.component';
 import { MiReportsComponent } from './mi-reports.component';
 import { RegulatorOutstandingRequestTasksComponent } from './regulator-outstanding-request-tasks/regulator-outstanding-request-tasks.component';
+import { UsersForServiceAuthorityComponent } from './users-for-service-authority/users-for-service-authority.component';
 import { VerificationBodiesUsersComponent } from './verification-bodies-users/verification-bodies-users.component';
 
 const routes: Routes = [
@@ -31,6 +32,11 @@ const routes: Routes = [
     path: 'regulator-outstanding-request-tasks',
     data: { breadcrumb: 'Regulator outstanding request tasks' },
     component: RegulatorOutstandingRequestTasksComponent,
+  },
+  {
+    path: 'user-report-entries',
+    data: { breadcrumb: 'List of users' },
+    component: UsersForServiceAuthorityComponent,
   },
   {
     path: 'accounts-regulators-sites-contacts',

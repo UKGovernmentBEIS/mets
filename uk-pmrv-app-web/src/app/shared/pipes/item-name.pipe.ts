@@ -632,9 +632,28 @@ export class ItemNamePipe implements PipeTransform {
       case 'NER_APPLICATION_SUBMIT':
         return 'Complete new entrant reserve';
       case 'NER_WAIT_FOR_VERIFICATION':
+      case 'NER_AMEND_WAIT_FOR_VERIFICATION':
         return 'New entrant reserve sent to verifier';
       case 'NER_APPLICATION_VERIFICATION_SUBMIT':
+      case 'NER_AMEND_APPLICATION_VERIFICATION_SUBMIT':
         return 'Verify new entrant reserve';
+      case 'NER_WAIT_FOR_REVIEW':
+        return 'New entrant reserve sent to regulator';
+      case 'NER_MAKE_PAYMENT':
+        return 'Pay for new entrant reserve fee';
+      case 'NER_TRACK_PAYMENT':
+      case 'NER_CONFIRM_PAYMENT':
+        return 'Track payment for new entrant reserve';
+      case 'NER_APPLICATION_REVIEW':
+        return 'Review new entrant reserve';
+      case 'NER_WAIT_FOR_AMENDS':
+        return 'New entrance reserve returned to operator';
+      case 'NER_APPLICATION_AMENDS_SUBMIT':
+        return `Amend new entrant reserve`;
+      case 'NER_WAIT_FOR_PEER_REVIEW':
+        return 'New entrant reserve sent to peer reviewer';
+      case 'NER_APPLICATION_PEER_REVIEW':
+        return 'Peer review new entrant reserve';
 
       default:
         return null;

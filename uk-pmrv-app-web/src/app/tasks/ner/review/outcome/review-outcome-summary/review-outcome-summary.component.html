@@ -1,0 +1,93 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>What is your opinion on new entrant reserve application?</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{
+        outcome.opinion === 'PROCEED_TO_AUTHORITY'
+          ? 'Regulator will send NER application to the UK ETS Authority for final assessment'
+          : 'NER application has been withdrawn'
+      }}
+    </dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a
+          govukLink
+          [routerLink]="['..']"
+          [state]="{ changing: true }"
+          hidden-text="review opinion for new entrant reserve review outcome">
+          Change
+        </a>
+      </dd>
+    }
+  </div>
+
+  @if (outcome.notes) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Review notes (not visible to the operator)</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ outcome.notes }}
+      </dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a
+            govukLink
+            [routerLink]="['..']"
+            [state]="{ changing: true }"
+            hidden-text="review notes for new entrant reserve review outcome">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+  }
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Uploaded new entrant reserve</dt>
+    <dd govukSummaryListRowValue>
+      @if (nerFile) {
+        <app-summary-download-files [files]="[nerFile]"></app-summary-download-files>
+      } @else {
+        No file uploaded
+      }
+    </dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a
+          govukLink
+          [routerLink]="['..', 'upload-ner']"
+          [state]="{ changing: true }"
+          hidden-text="uploaded new entrant reserve file">
+          Change
+        </a>
+      </dd>
+    }
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Uploaded supporting files</dt>
+    <dd govukSummaryListRowValue>
+      @if (supportingFiles?.length > 0) {
+        <app-summary-download-files [files]="supportingFiles"></app-summary-download-files>
+      } @else {
+        No files uploaded
+      }
+    </dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a
+          govukLink
+          [routerLink]="['..', 'upload-ner']"
+          [state]="{ changing: true }"
+          hidden-text="uploaded supporting files for new entrant reserve">
+          Change
+        </a>
+      </dd>
+    }
+  </div>
+</dl>
+
+@if (isEditable && !hideSubmit) {
+  <div class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+}

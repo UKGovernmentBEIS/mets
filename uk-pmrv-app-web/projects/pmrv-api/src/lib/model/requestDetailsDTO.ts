@@ -27,6 +27,7 @@ import { EmpBatchReissueRequestMetadata } from './empBatchReissueRequestMetadata
 import { EmpVariationRequestMetadata } from './empVariationRequestMetadata';
 import { HSETIRequestMetadata } from './hSETIRequestMetadata';
 import { InstallationInspectionRequestMetadata } from './installationInspectionRequestMetadata';
+import { NERRequestMetadata } from './nERRequestMetadata';
 import { PermitBatchReissueRequestMetadata } from './permitBatchReissueRequestMetadata';
 import { PermitIssuanceRequestMetadata } from './permitIssuanceRequestMetadata';
 import { PermitNotificationRequestMetadata } from './permitNotificationRequestMetadata';
@@ -115,6 +116,7 @@ export interface RequestDetailsDTO {
     | EmpVariationRequestMetadata
     | HSETIRequestMetadata
     | InstallationInspectionRequestMetadata
+    | NERRequestMetadata
     | PermitBatchReissueRequestMetadata
     | PermitIssuanceRequestMetadata
     | PermitNotificationRequestMetadata

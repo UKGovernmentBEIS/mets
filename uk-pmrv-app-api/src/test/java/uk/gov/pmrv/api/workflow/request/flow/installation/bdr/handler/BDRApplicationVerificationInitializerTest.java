@@ -13,6 +13,8 @@ import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyDetailsQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -58,10 +60,16 @@ public class BDRApplicationVerificationInitializerTest {
         Long requestVBId = 2L;
         final UUID verificationAttachment = UUID.randomUUID();
 
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
+
         BDRVerificationReport verificationReport = BDRVerificationReport.builder()
         		.verificationBodyId(requestVBId)
         		.verificationBodyDetails(VerificationBodyDetails.builder()
-        				.accreditationReferenceNumber("old vb details")
+                        .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
         				.build())
         		.verificationData(BDRVerificationData.builder().build())
         		.build();
@@ -110,8 +118,13 @@ public class BDRApplicationVerificationInitializerTest {
                         .build())
                 .build();
 
+        VerificationBodyEmissionSchemeDTO latestVerificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         VerificationBodyDetails latestVerificationBodyDetails = VerificationBodyDetails.builder()
-                .accreditationReferenceNumber("accr_ref_number")
+                .verificationBodyEmissionSchemeDTOS(Set.of(latestVerificationBodyEmissionSchemeDTO))
                 .build();
 
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(accountId))
@@ -143,10 +156,15 @@ public class BDRApplicationVerificationInitializerTest {
         Long reportVBId = 2L;
         final UUID verificationAttachment = UUID.randomUUID();
 
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         BDRVerificationReport verificationReport = BDRVerificationReport.builder()
         		.verificationBodyId(reportVBId)
         		.verificationBodyDetails(VerificationBodyDetails.builder()
-        				.accreditationReferenceNumber("old vb details")
+                        .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
         				.build())
         		.verificationData(BDRVerificationData.builder().build())
         		.build();
@@ -195,8 +213,13 @@ public class BDRApplicationVerificationInitializerTest {
                         .build())
                 .build();
 
+        VerificationBodyEmissionSchemeDTO latestVerificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         VerificationBodyDetails latestVerificationBodyDetails = VerificationBodyDetails.builder()
-                .accreditationReferenceNumber("accr_ref_number")
+                .verificationBodyEmissionSchemeDTOS(Set.of(latestVerificationBodyEmissionSchemeDTO))
                 .build();
 
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(accountId))

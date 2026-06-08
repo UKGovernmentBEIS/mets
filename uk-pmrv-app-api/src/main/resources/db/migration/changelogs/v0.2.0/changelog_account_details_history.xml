@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.2.0/changelog_account_details_history.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_0_create_table_account_details_history" author="mitzelose@unisystems.gr">
+        <sql>
+            CREATE SEQUENCE IF NOT EXISTS account_details_history_seq
+            START WITH 1
+            INCREMENT BY 1
+            NO MINVALUE
+            NO MAXVALUE
+            CACHE 1;
+
+            CREATE TABLE IF NOT EXISTS account_details_history (
+                id BIGINT PRIMARY KEY DEFAULT nextval('account_details_history_seq'),
+                account_id BIGINT NOT NULL,
+                creation_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                changed_by VARCHAR(255) NOT NULL,
+                category VARCHAR(255) NOT NULL,
+                previous_value JSONB NOT NULL,
+                new_value JSONB NOT NULL,
+                reason VARCHAR,
+
+                CONSTRAINT fk_account_details_history_account
+                FOREIGN KEY (account_id)
+                REFERENCES account(id)
+                );
+
+            CREATE INDEX IF NOT EXISTS idx_account_details_history_account_id
+                ON account_details_history(account_id);
+        </sql>
+        <rollback>
+            DROP INDEX IF EXISTS idx_account_details_history_account_id;
+
+            DROP TABLE IF EXISTS account_details_history;
+
+            DROP SEQUENCE IF EXISTS account_details_history_seq;
+        </rollback>
+
+    </changeSet>
+
+</databaseChangeLog>

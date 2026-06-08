@@ -20,8 +20,17 @@ public class VerificationBodyUser {
     @JsonProperty(value = "Account status")
     private String accountStatus;
 
-    @JsonProperty(value = "Accreditation reference number")
-    private String accreditationReferenceNumber;
+    @JsonProperty(value = "Accreditation reference number for UK ETS Installations")
+    private String accreditationReferenceNumberUKETSInstallations;
+
+    @JsonProperty(value = "Accreditation reference number for EU ETS Installations")
+    private String accreditationReferenceNumberEUETSInstallations;
+
+    @JsonProperty(value = "Accreditation reference number for UK ETS Aviations")
+    private String accreditationReferenceNumberUKETSAviation;
+
+    @JsonProperty(value = "Accreditation reference number for CORSIA")
+    private String accreditationReferenceNumberCorsia;
 
     @JsonProperty(value = "Is accredited for UK ETS Installations?")
     private Boolean isAccreditedForUKETSInstallations;

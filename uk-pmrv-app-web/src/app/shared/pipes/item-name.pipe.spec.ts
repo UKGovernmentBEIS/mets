@@ -741,6 +741,18 @@ describe('ItemNamePipe', () => {
 
     expect(pipe.transform('NER_APPLICATION_SUBMIT')).toEqual('Complete new entrant reserve');
     expect(pipe.transform('NER_WAIT_FOR_VERIFICATION')).toEqual('New entrant reserve sent to verifier');
+    expect(pipe.transform('NER_AMEND_WAIT_FOR_VERIFICATION')).toEqual('New entrant reserve sent to verifier');
+    expect(pipe.transform('NER_APPLICATION_VERIFICATION_SUBMIT')).toEqual('Verify new entrant reserve');
+    expect(pipe.transform('NER_AMEND_APPLICATION_VERIFICATION_SUBMIT')).toEqual('Verify new entrant reserve');
+    expect(pipe.transform('NER_WAIT_FOR_REVIEW')).toEqual('New entrant reserve sent to regulator');
+    expect(pipe.transform('NER_APPLICATION_REVIEW')).toEqual('Review new entrant reserve');
+    expect(pipe.transform('NER_MAKE_PAYMENT')).toEqual('Pay for new entrant reserve fee');
+    expect(pipe.transform('NER_TRACK_PAYMENT')).toEqual('Track payment for new entrant reserve');
+    expect(pipe.transform('NER_CONFIRM_PAYMENT')).toEqual('Track payment for new entrant reserve');
+    expect(pipe.transform('NER_WAIT_FOR_AMENDS')).toEqual('New entrance reserve returned to operator');
+    expect(pipe.transform('NER_APPLICATION_AMENDS_SUBMIT')).toEqual('Amend new entrant reserve');
+    expect(pipe.transform('NER_WAIT_FOR_PEER_REVIEW')).toEqual('New entrant reserve sent to peer reviewer');
+    expect(pipe.transform('NER_APPLICATION_PEER_REVIEW')).toEqual('Peer review new entrant reserve');
 
     expect(pipe.transform(null)).toBeNull();
   });

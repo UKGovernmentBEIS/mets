@@ -13,11 +13,13 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.core.repository.RequestActionRepository;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInfoResolver;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Validated
 @Service
@@ -25,6 +27,7 @@ import java.util.List;
 public class RequestService {
 
     private final RequestRepository requestRepository;
+    private final RequestActionRepository requestActionRepository;
     private final RequestActionUserInfoResolver requestActionUserInfoResolver;
 
     /**
@@ -101,6 +104,11 @@ public class RequestService {
     @Transactional
     public List<Request> getByAccountIdAndType(Long accountId, RequestType requestType) {
        return requestRepository.findByAccountIdAndType(accountId, requestType);
+    }
+
+    public Optional<String> findSubmitterByRequestIdAndActionType(String requestId, RequestActionType actionType) {
+        return requestActionRepository.findFirstByRequestIdAndType(requestId, actionType)
+                .map(RequestAction::getSubmitter);
     }
 
     private void closeRequest(Request request) {

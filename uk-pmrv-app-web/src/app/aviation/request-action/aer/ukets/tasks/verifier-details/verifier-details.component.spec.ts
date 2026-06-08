@@ -1,3 +1,5 @@
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
@@ -5,6 +7,7 @@ import { RequestActionTaskComponent } from '@aviation/request-action/shared/comp
 import { AerUkEtsRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { SharedModule } from '@shared/shared.module';
+import { AerService } from '@tasks/aer/core/aer.service';
 import { ActivatedRouteStub, BasePage } from '@testing';
 
 import VerifierDetailsComponent from './verifier-details.component';
@@ -31,6 +34,7 @@ describe('VerifierDetailsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [SharedModule, RequestActionTaskComponent, VerifierDetailsComponent],
       providers: [
+        provideHttpClientTesting(),
         { provide: ActivatedRoute, useValue: route },
         { provide: TYPE_AWARE_STORE, useExisting: RequestActionStore },
       ],
@@ -45,7 +49,18 @@ describe('VerifierDetailsComponent', () => {
           verificationReport: {
             verificationBodyDetails: {
               name: 'VB Company',
-              accreditationReferenceNumber: '1313',
+              verificationBodyEmissionSchemeDTOS: [
+                {
+                  emissionTradingScheme: 'UK_ETS_AVIATION',
+                  accreditationReferenceNumber: '1313',
+                  accreditationName: 'accreditationName 1',
+                },
+                {
+                  emissionTradingScheme: 'EU_ETS_INSTALLATIONS',
+                  accreditationReferenceNumber: '354',
+                  accreditationName: 'accreditationName 2',
+                },
+              ],
               address: {
                 city: 'City',
                 country: 'GR',
@@ -53,7 +68,6 @@ describe('VerifierDetailsComponent', () => {
                 line2: 'street 2',
                 postcode: '111 80',
               },
-              emissionTradingSchemes: ['UK_ETS_AVIATION', 'EU_ETS_INSTALLATIONS', 'CORSIA', 'UK_ETS_INSTALLATIONS'],
             },
             verificationTeamDetails: {
               authorisedSignatoryName: 'authorised signatory name',
@@ -74,6 +88,9 @@ describe('VerifierDetailsComponent', () => {
       regulatorViewer: false,
     });
 
+    const aerService = TestBed.inject(AerService);
+    jest.spyOn(aerService, 'getEmissionsTradingSchemeSignal').mockReturnValue(signal('UK_ETS_INSTALLATIONS'));
+
     fixture = TestBed.createComponent(VerifierDetailsComponent);
     page = new Page(fixture);
     fixture.detectChanges();
@@ -90,7 +107,7 @@ describe('VerifierDetailsComponent', () => {
       ['Company name', 'VB Company'],
       ['Address', 'street 1  , street 2 City111 80'],
       ['Accreditation number', '1313'],
-      ['National accreditation body', 'UK ETS Aviation  EU ETS Installations  CORSIA  UK ETS Installations'],
+      ['National accreditation body', 'accreditationName 1'],
       ['Name', 'Verifier Name'],
       ['Email', 'test@test.com'],
       ['Telephone number', '6691423232'],

@@ -33,6 +33,29 @@ export function getPreviewDocumentsInfo(
   permitType?: PermitIssuanceApplicationReviewRequestTaskPayload['permitType'],
 ): DocumentFilenameAndDocumentType[] {
   switch (taskActionType) {
+    case 'PERMIT_ISSUANCE_APPLICATION_SUBMIT':
+    case 'PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT':
+    case 'PERMIT_ISSUANCE_APPLICATION_REVIEW':
+    case 'PERMIT_ISSUANCE_WAIT_FOR_REVIEW':
+    case 'PERMIT_ISSUANCE_WAIT_FOR_AMENDS':
+    case 'PERMIT_ISSUANCE_WAIT_FOR_PEER_REVIEW':
+    case 'PERMIT_VARIATION_APPLICATION_SUBMIT':
+    case 'PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT':
+    case 'PERMIT_VARIATION_APPLICATION_REVIEW':
+    case 'PERMIT_VARIATION_WAIT_FOR_AMENDS':
+    case 'PERMIT_VARIATION_WAIT_FOR_REVIEW':
+    case 'PERMIT_VARIATION_WAIT_FOR_PEER_REVIEW':
+    case 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT':
+    case 'PERMIT_VARIATION_REGULATOR_LED_WAIT_FOR_PEER_REVIEW':
+    case 'PERMIT_TRANSFER_B_APPLICATION_SUBMIT':
+    case 'PERMIT_TRANSFER_B_APPLICATION_AMENDS_SUBMIT':
+    case 'PERMIT_TRANSFER_B_APPLICATION_REVIEW':
+    case 'PERMIT_TRANSFER_B_WAIT_FOR_PEER_REVIEW':
+    case 'PERMIT_TRANSFER_B_WAIT_FOR_AMENDS':
+    case 'PERMIT_TRANSFER_B_WAIT_FOR_REVIEW':
+    case 'PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW':
+      return [buildPreviewInfo('PERMIT')];
+
     case 'PERMIT_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED':
     case 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW':
       return [buildPreviewInfo('PERMIT_VARIATION_REGULATOR_LED_APPROVED'), buildPreviewInfo('PERMIT')];
@@ -53,13 +76,31 @@ export function getPreviewDocumentsInfo(
         case 'approved':
           return [buildPreviewInfo('PERMIT_VARIATION_ACCEPTED'), buildPreviewInfo('PERMIT')];
         case 'rejected':
-          return [buildPreviewInfo('PERMIT_VARIATION_REJECTED')];
+          return [buildPreviewInfo('PERMIT_VARIATION_REJECTED'), buildPreviewInfo('PERMIT')];
         case 'deemed withdrawn':
-          return [buildPreviewInfo('PERMIT_VARIATION_DEEMED_WITHDRAWN')];
+          return [buildPreviewInfo('PERMIT_VARIATION_DEEMED_WITHDRAWN'), buildPreviewInfo('PERMIT')];
       }
       break;
 
     case 'PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW':
+      switch (determinationStatus) {
+        case 'granted':
+          switch (permitType) {
+            case 'GHGE':
+              return [buildPreviewInfo('PERMIT_ISSUANCE_GHGE_ACCEPTED'), buildPreviewInfo('PERMIT')];
+            case 'HSE':
+              return [buildPreviewInfo('PERMIT_ISSUANCE_HSE_ACCEPTED'), buildPreviewInfo('PERMIT')];
+            case 'WASTE':
+              return [buildPreviewInfo('PERMIT_ISSUANCE_WASTE_ACCEPTED'), buildPreviewInfo('PERMIT')];
+          }
+          break;
+        case 'rejected':
+          return [buildPreviewInfo('PERMIT_ISSUANCE_REJECTED'), buildPreviewInfo('PERMIT')];
+        case 'deemed withdrawn':
+          return [buildPreviewInfo('PERMIT_ISSUANCE_DEEMED_WITHDRAWN'), buildPreviewInfo('PERMIT')];
+      }
+      break;
+
     case 'PERMIT_ISSUANCE_NOTIFY_OPERATOR_FOR_DECISION':
       switch (determinationStatus) {
         case 'granted':

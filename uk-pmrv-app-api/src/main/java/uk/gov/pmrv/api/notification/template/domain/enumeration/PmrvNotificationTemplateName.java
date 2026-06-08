@@ -78,7 +78,12 @@ public enum PmrvNotificationTemplateName {
 
 
     BDR_COMPLETED("BDR completed"),
-    BDRS2_COMPLETED("BDRS2 completed")
+    BDRS2_COMPLETED("BDRS2 completed"),
+
+    NER_COMPLETED("NER completed"),
+    NER_WITHDRAWN("NER withdrawn"),
+
+    RECALLED_BY_OPERATOR("Recalled by Operator")
     ;
 
 

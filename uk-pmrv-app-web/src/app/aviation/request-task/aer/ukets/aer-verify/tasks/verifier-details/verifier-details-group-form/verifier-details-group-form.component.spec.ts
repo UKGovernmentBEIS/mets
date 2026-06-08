@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
@@ -15,8 +15,9 @@ describe('AerVerifierDetailsGroupFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerVerifierDetailsGroupFormComponent, RouterTestingModule],
+      imports: [AerVerifierDetailsGroupFormComponent],
       providers: [
+        provideRouter([]),
         { provide: TASK_FORM_PROVIDER, useClass: VerifierDetailsFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
       ],
@@ -50,8 +51,8 @@ describe('AerVerifierDetailsGroupFormComponent', () => {
     ).toEqual([
       [['Company name'], ['VB Company']],
       [['Address'], ['street 1  , street 2 City111 80']],
-      [['Accreditation number'], ['1313']],
-      [['National accreditation body'], ['UK ETS Aviation  EU ETS Installations  CORSIA  UK ETS Installations']],
+      [['Accreditation number'], ['556']],
+      [['National accreditation body'], ['accreditationName 1']],
       [
         ['Name', 'Email', 'Telephone number'],
         ['Verifier Name', 'test@test.com', '6691423232'],
@@ -87,8 +88,8 @@ describe('AerVerifierDetailsGroupFormComponent', () => {
     ).toEqual([
       [['Company name'], ['VB Company']],
       [['Address'], ['street 1  , street 2 City111 80']],
-      [['Accreditation number'], ['1313']],
-      [['National accreditation body'], ['UK ETS Aviation  EU ETS Installations  CORSIA  UK ETS Installations']],
+      [['Accreditation number'], ['556']],
+      [['National accreditation body'], ['accreditationName 1']],
     ]);
 
     fixture.componentInstance.showVerifierDetails = true;
@@ -103,8 +104,8 @@ describe('AerVerifierDetailsGroupFormComponent', () => {
     ).toEqual([
       [['Company name'], ['VB Company']],
       [['Address'], ['street 1  , street 2 City111 80']],
-      [['Accreditation number'], ['1313']],
-      [['National accreditation body'], ['UK ETS Aviation  EU ETS Installations  CORSIA  UK ETS Installations']],
+      [['Accreditation number'], ['556']],
+      [['National accreditation body'], ['accreditationName 1']],
       [
         ['Name', 'Email', 'Telephone number'],
         ['Verifier Name', 'Change', 'test@test.com', 'Change', '6691423232', 'Change'],

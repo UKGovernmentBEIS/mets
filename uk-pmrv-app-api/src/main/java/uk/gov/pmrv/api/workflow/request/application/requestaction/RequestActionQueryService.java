@@ -21,7 +21,6 @@ import uk.gov.pmrv.api.workflow.request.core.transform.RequestActionMapper;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -48,11 +47,11 @@ public class RequestActionQueryService {
     
     @Transactional(readOnly = true)
     public List<RequestActionInfoDTO> getRequestActionsByRequestId(String requestId, AppUser authUser) {
-        List<RequestAction> requestActions = requestActionRepository.findAllByRequestId(requestId);
-        List<RequestAction> userGrantedRequestActions = filterUserGrantedRequestActions(authUser, requestActions);
+        final List<RequestAction> requestActions = requestActionRepository.findAllByRequestId(requestId);
+        final List<RequestAction> userGrantedRequestActions = filterUserGrantedRequestActions(authUser, requestActions);
         return userGrantedRequestActions.stream()
                 .map(requestActionMapper::toRequestActionInfoDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
     
     private List<RequestAction> filterUserGrantedRequestActions(AppUser authUser, List<RequestAction> requestActions) {
@@ -61,7 +60,7 @@ public class RequestActionQueryService {
         
         return requestActions.stream()
                 .filter(requestAction -> userAllowedRequestActionTypes.contains(requestAction.getType().name()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

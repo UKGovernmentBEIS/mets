@@ -30,4 +30,6 @@ public class OperatorUserDTO extends UserDTO {
     @PhoneNumberIntegrity(message = "{userAccount.mobileNumber.typeMismatch}")
     @Valid
     private PhoneNumberDTO mobileNumber;
+
+    private String lastLoginDate;
 }

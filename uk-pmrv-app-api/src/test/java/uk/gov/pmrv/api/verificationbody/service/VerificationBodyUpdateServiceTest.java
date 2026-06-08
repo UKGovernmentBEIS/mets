@@ -13,16 +13,16 @@ import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.verificationbody.domain.VerificationBody;
-import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEditDTO;
+import uk.gov.pmrv.api.verificationbody.domain.VerificationBodyEmissionScheme;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyUpdateDTO;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEditDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyUpdateStatusDTO;
 import uk.gov.pmrv.api.verificationbody.domain.event.VerificationBodyStatusDisabledEvent;
 import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
-import uk.gov.pmrv.api.verificationbody.event.AccreditationEmissionTradingSchemeNotAvailableEvent;
 import uk.gov.pmrv.api.verificationbody.repository.VerificationBodyRepository;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -60,56 +60,87 @@ class VerificationBodyUpdateServiceTest {
     @Test
     void updateVerificationBody() {
         Long verificationBodyId = 1L;
-        
-        VerificationBody verificationBody =
-                VerificationBody.builder()
-                    .id(verificationBodyId)
-                    .name("nameOld")
-                    .accreditationReferenceNumber("accreditationRefNumOld")
-                    .address(Address.builder().city("cityOld").country("countryOld").line1("lineOld").build())
-                    .build();
 
-        Set<EmissionTradingScheme> emissionTradingSchemes = new HashSet<>();
-        emissionTradingSchemes.add(EmissionTradingScheme.UK_ETS_INSTALLATIONS);
-        emissionTradingSchemes.add(EmissionTradingScheme.UK_ETS_AVIATION);
-        verificationBody.setEmissionTradingSchemes(emissionTradingSchemes);
+        VerificationBodyEmissionScheme verificationBodyEmissionScheme1 = VerificationBodyEmissionScheme.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
 
-        Set<EmissionTradingScheme> schemes = new HashSet<>();
-        schemes.add(EmissionTradingScheme.UK_ETS_INSTALLATIONS);
-        schemes.add(EmissionTradingScheme.CORSIA);
+        VerificationBodyEmissionScheme verificationBodyEmissionScheme2 = VerificationBodyEmissionScheme.builder()
+                .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum2")
+                .accreditationName("name2")
+                .build();
+
+        VerificationBody verificationBody = VerificationBody.builder()
+                .id(verificationBodyId)
+                .name("nameOld")
+                .address(Address.builder()
+                        .city("cityOld")
+                        .country("countryOld")
+                        .line1("lineOld")
+                        .build())
+                .build();
+
+        verificationBody.addEmissionScheme(verificationBodyEmissionScheme1);
+        verificationBody.addEmissionScheme(verificationBodyEmissionScheme2);
+
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionScheme3 =
+                VerificationBodyEmissionSchemeDTO.builder()
+                        .emissionTradingScheme(EmissionTradingScheme.CORSIA)
+                        .accreditationReferenceNumber("accredRefNum3")
+                        .accreditationName("name3")
+                        .build();
 
         VerificationBodyUpdateDTO verificationBodyUpdateDTO =
                 VerificationBodyUpdateDTO.builder()
-                    .id(verificationBodyId)
-                    .verificationBody(
-                            VerificationBodyEditDTO.builder()
-                                .name("nameNew")
-                                .accreditationReferenceNumber("accreditationRefNumNew")
-                                .address(AddressDTO.builder().city("cityNew").country("countryNew").line1("lineNew").build())
-                                .emissionTradingSchemes(schemes)
-                                .build()
-                            )
-                    .build();
-        
-        
-        when(verificationBodyRepository.findByIdEagerEmissionTradingSchemes(verificationBodyId))
-            .thenReturn(Optional.of(verificationBody));
-        
-        //invoke
-        service.updateVerificationBody(verificationBodyUpdateDTO);
-        
-        assertThat(verificationBody.getName()).isEqualTo(verificationBodyUpdateDTO.getVerificationBody().getName());
-        assertThat(verificationBody.getAddress().getCity()).isEqualTo(verificationBodyUpdateDTO.getVerificationBody().getAddress().getCity());
-        assertThat(verificationBody.getAddress().getCountry()).isEqualTo(verificationBodyUpdateDTO.getVerificationBody().getAddress().getCountry());
-        assertThat(verificationBody.getAddress().getLine1()).isEqualTo(verificationBodyUpdateDTO.getVerificationBody().getAddress().getLine1());
-        assertThat(verificationBody.getEmissionTradingSchemes()).containsExactlyInAnyOrder(EmissionTradingScheme.UK_ETS_INSTALLATIONS, EmissionTradingScheme.CORSIA);
+                        .id(verificationBodyId)
+                        .verificationBody(
+                                VerificationBodyEditDTO.builder()
+                                        .name("nameNew")
+                                        .address(AddressDTO.builder()
+                                                .city("cityNew")
+                                                .country("countryNew")
+                                                .line1("lineNew")
+                                                .build())
+                                        .verificationBodyEmissionSchemes(Set.of(verificationBodyEmissionScheme3))
+                                        .build()
+                        )
+                        .build();
 
-        verify(verificationBodyRepository, times(1)).findByIdEagerEmissionTradingSchemes(verificationBodyId);
+        when(verificationBodyRepository.findVerificationBodyWithVerBodyEmissionSchemes(verificationBodyId))
+                .thenReturn(Optional.of(verificationBody));
+
+        // invoke
+        service.updateVerificationBody(verificationBodyUpdateDTO);
+
+        // asserts
+        assertThat(verificationBody.getName())
+                .isEqualTo(verificationBodyUpdateDTO.getVerificationBody().getName());
+
+        assertThat(verificationBody.getAddress().getCity())
+                .isEqualTo(verificationBodyUpdateDTO.getVerificationBody().getAddress().getCity());
+
+        assertThat(verificationBody.getAddress().getCountry())
+                .isEqualTo(verificationBodyUpdateDTO.getVerificationBody().getAddress().getCountry());
+
+        assertThat(verificationBody.getAddress().getLine1())
+                .isEqualTo(verificationBodyUpdateDTO.getVerificationBody().getAddress().getLine1());
+
+        verify(verificationBodyRepository, times(1))
+                .findVerificationBodyWithVerBodyEmissionSchemes(verificationBodyId);
+
         verify(accreditationRefNumValidationService, times(1))
-            .validate(verificationBodyUpdateDTO.getVerificationBody().getAccreditationReferenceNumber(), verificationBodyId);
-        verify(eventPublisher, times(1))
-            .publishEvent(new AccreditationEmissionTradingSchemeNotAvailableEvent(verificationBodyId, Set.of(EmissionTradingScheme.UK_ETS_AVIATION)));
-        
+                .validateUpdate(
+                        verificationBodyUpdateDTO.getVerificationBody()
+                                .getVerificationBodyEmissionSchemes()
+                                .stream()
+                                .findFirst()
+                                .get()
+                                .getAccreditationReferenceNumber(),
+                        verificationBodyId
+                );
     }
 
     @Test

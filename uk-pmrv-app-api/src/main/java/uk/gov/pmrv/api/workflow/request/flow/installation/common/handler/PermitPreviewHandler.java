@@ -2,8 +2,8 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.common.handler;
 
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
@@ -29,7 +29,7 @@ public class PermitPreviewHandler extends PreviewDocumentAbstractHandler {
         
         final RequestTaskType taskType = requestTaskService.findTaskById(taskId).getType();
         final PermitPreviewDocumentService service =
-            services.stream().filter(s -> s.getType().equals(taskType)).findFirst().orElseThrow(
+            services.stream().filter(s -> s.getTypes().contains(taskType)).findFirst().orElseThrow(
                 () -> new BusinessException(MetsErrorCode.INVALID_DOCUMENT_TEMPLATE_FOR_REQUEST_TASK, taskType)
             );
         return service.create(taskId, decisionNotification);
@@ -43,11 +43,30 @@ public class PermitPreviewHandler extends PreviewDocumentAbstractHandler {
     @Override
     protected List<RequestTaskType> getTaskTypes() {
         return List.of(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_REVIEW,
+                        RequestTaskType.PERMIT_ISSUANCE_APPLICATION_SUBMIT,
+                        RequestTaskType.PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT,
                         RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW,
-                       RequestTaskType.PERMIT_VARIATION_APPLICATION_REVIEW,
-                       RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT,
+                        RequestTaskType.PERMIT_ISSUANCE_WAIT_FOR_REVIEW,
+                        RequestTaskType.PERMIT_ISSUANCE_WAIT_FOR_PEER_REVIEW,
+                        RequestTaskType.PERMIT_ISSUANCE_WAIT_FOR_AMENDS,
+
+                        RequestTaskType.PERMIT_VARIATION_APPLICATION_REVIEW,
+                        RequestTaskType.PERMIT_VARIATION_APPLICATION_SUBMIT,
+                        RequestTaskType.PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT,
+                        RequestTaskType.PERMIT_VARIATION_WAIT_FOR_AMENDS,
+                        RequestTaskType.PERMIT_VARIATION_WAIT_FOR_REVIEW,
+                        RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT,
                         RequestTaskType.PERMIT_VARIATION_APPLICATION_PEER_REVIEW,
+                        RequestTaskType.PERMIT_VARIATION_WAIT_FOR_PEER_REVIEW,
+                        RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW,
+                        RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_WAIT_FOR_PEER_REVIEW,
+
                         RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_REVIEW,
-                      RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW);
+                        RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW,
+                        RequestTaskType.PERMIT_TRANSFER_B_WAIT_FOR_PEER_REVIEW,
+                        RequestTaskType.PERMIT_TRANSFER_B_WAIT_FOR_AMENDS,
+                        RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_SUBMIT,
+                        RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_AMENDS_SUBMIT,
+                        RequestTaskType.PERMIT_TRANSFER_B_WAIT_FOR_REVIEW);
     }
 }

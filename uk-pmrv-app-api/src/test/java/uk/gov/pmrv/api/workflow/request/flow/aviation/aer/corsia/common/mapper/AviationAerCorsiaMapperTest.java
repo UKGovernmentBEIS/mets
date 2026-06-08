@@ -13,6 +13,7 @@ import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.FlightIdentification;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.FlightIdentificationType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.AviationCorsiaOperatorDetails;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaApplicationCompletedRequestActionPayload;
@@ -28,6 +29,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecision
 
 import java.time.Year;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,8 +52,17 @@ class AviationAerCorsiaMapperTest {
                 .build())
             .build();
         Map<UUID, String> aerAttachments = Map.of(UUID.randomUUID(), "attachment");
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
+        VerificationBodyDetails verificationBodyDetails = VerificationBodyDetails.builder()
+                .name("vb_name")
+                .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
+                .build();
         AviationAerCorsiaVerificationReport verificationReport = AviationAerCorsiaVerificationReport.builder()
-            .verificationBodyDetails(VerificationBodyDetails.builder().name("vb_name").accreditationReferenceNumber("refNumber").build())
+            .verificationBodyDetails(verificationBodyDetails)
             .verificationData(AviationAerCorsiaVerificationData.builder()
                 .verifierDetails(AviationAerCorsiaVerifierDetails.builder()
                     .verificationTeamLeader(AviationAerCorsiaVerificationTeamLeader.builder()
@@ -117,8 +128,17 @@ class AviationAerCorsiaMapperTest {
             AviationAerCorsiaReviewGroup.SERVICE_CONTACT_DETAILS, aerDataReviewDecision
         );
         Map<UUID, String> reviewAttachments = Map.of(UUID.randomUUID(), "reviewAttachment");
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
+        VerificationBodyDetails verificationBodyDetails = VerificationBodyDetails.builder()
+                .name("vb_name")
+                .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
+                .build();
         AviationAerCorsiaVerificationReport verificationReport = AviationAerCorsiaVerificationReport.builder()
-            .verificationBodyDetails(VerificationBodyDetails.builder().name("vb_name").accreditationReferenceNumber("refNumber").build())
+            .verificationBodyDetails(verificationBodyDetails)
             .verificationData(AviationAerCorsiaVerificationData.builder()
                 .verifierDetails(
                     AviationAerCorsiaVerifierDetails.builder()

@@ -56,7 +56,7 @@ export class NerDetailsUploadNerComponent {
           {
             nerFiles: {
               file: file.value?.uuid,
-              supportingFiles: supportingFiles.value?.map((file) => file.uuid),
+              supportingFiles: supportingFiles.value?.map((file: any) => file.uuid),
             },
             notes: notes.value,
           },
@@ -65,7 +65,7 @@ export class NerDetailsUploadNerComponent {
             ...this.getNerAttachments(),
           },
           false,
-          'details',
+          'NER',
         )
         .pipe(this.pendingRequest.trackRequest())
         .subscribe(() => this.router.navigate(nextWizardStep, { relativeTo: this.route }));
@@ -76,8 +76,10 @@ export class NerDetailsUploadNerComponent {
 
   private getNerAttachments() {
     const attachments =
-      this.form.controls.supportingFiles.value?.reduce((acc, file) => ({ ...acc, [file.uuid]: file.file.name }), {}) ||
-      {};
+      this.form.controls.supportingFiles.value?.reduce(
+        (acc: any, file: any) => ({ ...acc, [file.uuid]: file.file.name }),
+        {},
+      ) || {};
 
     const report = this.form.controls.file.value;
     if (report) {

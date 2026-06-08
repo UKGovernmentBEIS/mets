@@ -27,12 +27,14 @@ import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.permit.domain.abbreviations.Abbreviations;
 import uk.gov.pmrv.api.reporting.domain.Aer;
 import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationData;
 import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.pmrv.api.reporting.domain.verification.OpinionStatement;
 import uk.gov.pmrv.api.reporting.domain.verification.VerificationTeamDetails;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyDetailsQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -84,11 +86,16 @@ class AerApplicationVerificationSubmitInitializerTest {
         final long accountId = 1L;
         Long requestVBId = 2L;
         final Year reportingYear = Year.now().minusYears(1);
-        
+
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         AerVerificationReport requestVerificationReport = AerVerificationReport.builder()
         		.verificationBodyId(requestVBId)
         		.verificationBodyDetails(VerificationBodyDetails.builder()
-        				.accreditationReferenceNumber("old vb details")
+                        .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
         				.build())
         		.verificationData(AerVerificationData.builder()
         				.verificationTeamDetails(VerificationTeamDetails.builder()
@@ -133,9 +140,15 @@ class AerApplicationVerificationSubmitInitializerTest {
                         .postcode("postcode")
                         .build())
                 .build();
-        
+
+
+        VerificationBodyEmissionSchemeDTO latestVerificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         VerificationBodyDetails latestVerificationBodyDetails = VerificationBodyDetails.builder()
-                .accreditationReferenceNumber("accr_ref_number")
+                .verificationBodyEmissionSchemeDTOS(Set.of(latestVerificationBodyEmissionSchemeDTO))
                 .build();
 
 
@@ -170,11 +183,16 @@ class AerApplicationVerificationSubmitInitializerTest {
         Long requestVBId = 1L;
         Long reportVBId = 2L;
         final Year reportingYear = Year.now().minusYears(1);
-        
+
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         AerVerificationReport requestVerificationReport = AerVerificationReport.builder()
         		.verificationBodyId(reportVBId)
         		.verificationBodyDetails(VerificationBodyDetails.builder()
-        				.accreditationReferenceNumber("old vb details")
+        				.verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
         				.build())
         		.verificationData(AerVerificationData.builder()
         				.verificationTeamDetails(VerificationTeamDetails.builder()
@@ -219,9 +237,14 @@ class AerApplicationVerificationSubmitInitializerTest {
                         .postcode("postcode")
                         .build())
                 .build();
-        
+
+        VerificationBodyEmissionSchemeDTO latestVerificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         VerificationBodyDetails latestVerificationBodyDetails = VerificationBodyDetails.builder()
-                .accreditationReferenceNumber("accr_ref_number")
+                .verificationBodyEmissionSchemeDTOS(Set.of(latestVerificationBodyEmissionSchemeDTO))
                 .build();
 
 

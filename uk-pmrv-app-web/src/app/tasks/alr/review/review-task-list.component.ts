@@ -98,11 +98,11 @@ export class AlrReviewTaskListComponent {
       allowCompleteReview:
         allSectionsReviewComplete(payload) &&
         (payload?.regulatorReviewOutcome.determination.type === 'CLOSED_ALR' ||
-          !payload?.regulatorReviewOutcome.determination?.['needsOfficialNotice']),
+          !(payload?.regulatorReviewOutcome.determination as any)?.['needsOfficialNotice']),
       allowNotify:
         allSectionsReviewComplete(payload) &&
         payload?.regulatorReviewOutcome.determination.type === 'PROCEED_TO_AUTHORITY' &&
-        payload?.regulatorReviewOutcome.determination?.['needsOfficialNotice'],
+        (payload?.regulatorReviewOutcome.determination as any)?.['needsOfficialNotice'],
       allowSendForPeerReview: allSectionsReviewComplete(payload),
       allowPeerReviewDecision: requestTaskItem.allowedRequestTaskActions.includes('ALR_SUBMIT_PEER_REVIEW_DECISION'),
     };

@@ -437,6 +437,9 @@
             <extensionElements>
                 <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
                 <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+                <flowable:field name="requestStatus">
+                    <flowable:string>COMPLETED</flowable:string>
+                </flowable:field>
             </extensionElements>
         </serviceTask>
         <serviceTask id="Activity_1o74eu7" name="Add Completed Request Action" flowable:delegateExpression="#{aviationAerUkEtsCompletedAddRequestActionHandlerFlowable}">

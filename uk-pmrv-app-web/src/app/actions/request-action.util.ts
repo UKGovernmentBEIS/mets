@@ -1,3 +1,6 @@
+import { inject } from '@angular/core';
+import { ResolveFn } from '@angular/router';
+
 import { ItemActionTypePipe } from '@shared/pipes/item-action-type.pipe';
 
 import { RequestActionDTO } from 'pmrv-api';
@@ -5,6 +8,7 @@ import { RequestActionDTO } from 'pmrv-api';
 import { OperatorSubmittedComponent } from './aer/submitted/workflow-report/operator-submitted/operator-submitted.component';
 import { OperatorToVerifierComponent } from './aer/submitted/workflow-report/operator-to-verifier/operator-to-verifier.component';
 import { VerifierSubmittedComponent } from './aer/submitted/workflow-report/verifier-submitted/verifier-submitted.component';
+import { CommonActionsStore } from './store/common-actions.store';
 
 export const reportableAerRequestActionTypes: RequestActionDTO['type'][] = [
   'AER_APPLICATION_SUBMITTED',
@@ -33,4 +37,14 @@ export const getActionTitle = (requestActionType: RequestActionDTO['type']): str
   const itemActionTypePipe = new ItemActionTypePipe();
 
   return itemActionTypePipe.transform(requestActionType);
+};
+
+export const routerInputDataResolver: ResolveFn<{
+  changesRequired: string;
+  actionType: RequestActionDTO['type'];
+}> = () => {
+  const store = inject(CommonActionsStore);
+  const { type, payload } = store.getState().action;
+
+  return { changesRequired: (payload as any).changesRequired, actionType: type };
 };

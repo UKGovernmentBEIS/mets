@@ -57,7 +57,7 @@ class InstallationAccountCommandOrchestratorTest {
 
         Long accountId = 1L;
         AccountUpdateRegistryReportingFirstYearDTO dto = new AccountUpdateRegistryReportingFirstYearDTO();
-        InstallationAccountUpdatedRegistryEvent event = InstallationAccountUpdatedRegistryEvent.builder().accountId(accountId).build();
+        InstallationAccountUpdatedRegistryEvent event = InstallationAccountUpdatedRegistryEvent.builder().accountId(accountId).skipRequestAction(true).build();
         dto.setRegistryReportingFirstYear(2024);
 
         when(permitQueryService.getPermitContainerByAccountId(accountId)).thenReturn(null);

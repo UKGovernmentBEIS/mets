@@ -11,8 +11,10 @@ import { CustomReportComponent } from './custom/custom.component';
 import { MiReportsComponent } from './mi-reports.component';
 import { MiReportsRoutingModule } from './mi-reports-routing.module';
 import { AuthorityStatusPipe } from './pipes/authority-status.pipe';
+import { UserRoleAllTypesPipe } from './pipes/user-role-all-types.pipe';
 import { VerificationBodyStatusPipe } from './pipes/verification-body-status.pipe';
 import { RegulatorOutstandingRequestTasksComponent } from './regulator-outstanding-request-tasks/regulator-outstanding-request-tasks.component';
+import { UsersForServiceAuthorityComponent } from './users-for-service-authority/users-for-service-authority.component';
 import { VerificationBodiesUsersComponent } from './verification-bodies-users/verification-bodies-users.component';
 
 @NgModule({
@@ -25,6 +27,8 @@ import { VerificationBodiesUsersComponent } from './verification-bodies-users/ve
     CustomReportComponent,
     MiReportsComponent,
     RegulatorOutstandingRequestTasksComponent,
+    UsersForServiceAuthorityComponent,
+    UserRoleAllTypesPipe,
     VerificationBodiesUsersComponent,
     VerificationBodyStatusPipe,
   ],

@@ -56,7 +56,9 @@ public class RequestCreateActionAccountResourceTypeHandler<T extends RequestCrea
 
                 Set<RequestType> availableForBDRS2CreateRequestTypes = RequestType.getAvailableForBDRS2CreateRequestTypes(accountType);
 
-                Set<RequestType> allAvailableRequests = Stream.of(availableForAccountCreateRequestTypes,availableForAERCreateRequestTypes,availableForBDRCreateRequestTypes, availableForBDRS2CreateRequestTypes)
+                Set<RequestType> availableForNERCreateRequestTypes = RequestType.getAvailableForNERCreateRequestTypes(accountType);
+
+                Set<RequestType> allAvailableRequests = Stream.of(availableForAccountCreateRequestTypes,availableForAERCreateRequestTypes,availableForBDRCreateRequestTypes, availableForBDRS2CreateRequestTypes, availableForNERCreateRequestTypes)
                         .flatMap(Set::stream).collect(Collectors.toSet());
 
                 if(!allAvailableRequests.contains(requestCreateActionType.getType())) {

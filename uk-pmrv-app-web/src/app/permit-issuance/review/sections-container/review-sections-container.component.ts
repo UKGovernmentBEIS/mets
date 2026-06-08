@@ -47,12 +47,12 @@ export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbs
   permitTypeMap = permitTypeMap;
   userProfile$ = this.authStore.pipe(selectUserProfile);
 
-  decisionNotification$: Observable<DecisionNotification> = this.userProfile$.pipe(
-    map((userProfile) => {
+  decisionNotification$: Observable<DecisionNotification> = combineLatest([this.store, this.userProfile$]).pipe(
+    map(([state, userProfile]) => {
       return {
         operators: [''],
         externalContacts: [],
-        signatory: userProfile?.id,
+        signatory: state.requestTaskType === 'PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW' ? userProfile?.id : null,
       };
     }),
   );

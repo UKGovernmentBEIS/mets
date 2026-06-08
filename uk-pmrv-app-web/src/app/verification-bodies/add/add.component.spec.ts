@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { of, throwError } from 'rxjs';
 
@@ -35,13 +36,26 @@ describe('AddComponent', () => {
 
     set validForm(verificationBody: VerificationBodyCreationDTO) {
       this.setInputValue('#details.name', verificationBody.name);
-      this.setInputValue('#details.accreditationRefNum', verificationBody.accreditationReferenceNumber);
       this.setInputValue('#details.address.line1', verificationBody.address.line1);
       this.setInputValue('#details.address.line2', verificationBody.address.line2);
       this.setInputValue('#details.address.city', verificationBody.address.city);
       this.setInputValue('#details.address.country', verificationBody.address.country);
       this.setInputValue('#details.address.postcode', verificationBody.address.postcode);
-      this.query<HTMLInputElement>('#types-0').click();
+
+      const typesCheckbox = this.query<HTMLInputElement>('#types-0');
+      typesCheckbox.checked = true;
+      typesCheckbox.dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+
+      this.setInputValue(
+        '#accreditationRefNum_UK_ETS_INSTALLATIONS',
+        verificationBody.verificationBodyEmissionSchemes?.[0]?.accreditationReferenceNumber,
+      );
+      this.setInputValue(
+        '#accreditationName_UK_ETS_INSTALLATIONS',
+        verificationBody.verificationBodyEmissionSchemes?.[0]?.accreditationName,
+      );
+
       this.setInputValue(
         '#adminVerifierUserInvitation.firstName',
         verificationBody.adminVerifierUserInvitation.firstName,
@@ -61,8 +75,12 @@ describe('AddComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AddComponent, FormComponent],
-      imports: [SharedModule, RouterTestingModule],
-      providers: [{ provide: CountryService, useClass: CountryServiceStub }],
+      imports: [SharedModule],
+      providers: [
+        provideRouter([]),
+        provideHttpClientTesting(),
+        { provide: CountryService, useClass: CountryServiceStub },
+      ],
     }).compileComponents();
     verificationBodiesService = TestBed.inject(VerificationBodiesService);
   });
@@ -103,19 +121,5 @@ describe('AddComponent', () => {
 
     expect(page.errorSummary).toBeTruthy();
     expect(page.errorSummary.textContent).toContain('This user email already exists in the service');
-  });
-
-  it('should handle already existing accreditation reference number', () => {
-    jest
-      .spyOn(verificationBodiesService, 'createVerificationBody')
-      .mockReturnValueOnce(throwError(() => new HttpErrorResponse({ status: 400, error: { code: 'VERBODY1001' } })));
-
-    page.validForm = validVerificationBodyCreation;
-
-    page.submitButton.click();
-    fixture.detectChanges();
-
-    expect(page.errorSummary).toBeTruthy();
-    expect(page.errorSummary.textContent).toContain('Enter a unique Accreditation reference number');
   });
 });

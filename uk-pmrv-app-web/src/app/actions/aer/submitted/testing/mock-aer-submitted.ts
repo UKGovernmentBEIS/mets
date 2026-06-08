@@ -316,7 +316,13 @@ export const mockStateReviewed = {
       verificationReport: {
         verificationBodyDetails: {
           name: 'My Verification Body',
-          accreditationReferenceNumber: '6789',
+          verificationBodyEmissionSchemeDTOS: [
+            {
+              emissionTradingScheme: 'UK_ETS_INSTALLATIONS',
+              accreditationReferenceNumber: 'Accreditation ref num',
+              accreditationName: 'Accreditation name',
+            },
+          ],
           address: {
             line1: 'line',
             line2: null,
@@ -324,7 +330,6 @@ export const mockStateReviewed = {
             country: 'GR',
             postcode: '1231',
           },
-          emissionTradingSchemes: ['UK_ETS_INSTALLATIONS', 'EU_ETS_INSTALLATIONS'],
         },
         verificationTeamDetails: {
           leadEtsAuditor: 'Lead ETS Auditor',

@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, switchMap, take, tap } from 'rxjs';
+import { first, switchMap, tap } from 'rxjs';
 
 import { AviationAccountFormProvider } from '@aviation/accounts/services';
-import { AviationAccountsStore, selectAccount, selectAccountInfo } from '@aviation/accounts/store';
-import produce from 'immer';
+import { AviationAccountsStore, selectAccountInfo } from '@aviation/accounts/store';
+
+import { GovukValidators } from 'govuk-components';
 
 import { AviationAccountReportingStatusService } from 'pmrv-api';
 
@@ -17,6 +18,7 @@ import { AviationAccountReportingStatusService } from 'pmrv-api';
     <app-wizard-step (formSubmit)="onContinue()" [formGroup]="form" heading="Edit first year of reporting obligation">
       <p class="govuk-body">First year of reporting obligation</p>
       <div formControlName="commencementDate" govuk-date-input></div>
+      <div govuk-textarea label="Reason" formControlName="reason"></div>
     </app-wizard-step>
     <a govukLink routerLink="../">Return to aviation operator's details</a>
   `,
@@ -24,8 +26,18 @@ import { AviationAccountReportingStatusService } from 'pmrv-api';
 })
 export class EditCommencementDateAviationAccountComponent implements OnInit, OnDestroy {
   private readonly accountInfo$ = this.store.pipe(selectAccountInfo, first());
+  public readonly upsertStatus = this.store.getState().currentAccount?.upsertFirstYearOfReportingObligation;
 
-  form = new FormGroup({ commencementDate: this.formProvider.getCommencementDateFormControl(true) });
+  maxReasonLength = 2000;
+  form = new FormGroup({
+    commencementDate: this.formProvider.getCommencementDateFormControl(true),
+    reason: new FormControl(this.upsertStatus?.reason, {
+      validators: [
+        GovukValidators.required('Enter a reason'),
+        GovukValidators.maxLength(this.maxReasonLength, `Enter up to ${this.maxReasonLength} characters`),
+      ],
+    }),
+  });
 
   constructor(
     private readonly formProvider: AviationAccountFormProvider,
@@ -38,7 +50,7 @@ export class EditCommencementDateAviationAccountComponent implements OnInit, OnD
   ngOnInit(): void {
     this.accountInfo$.subscribe((response) => {
       this.form.patchValue({
-        commencementDate: new Date(response?.commencementDate) as any,
+        commencementDate: new Date(this.upsertStatus?.commencementDate ?? response?.commencementDate) as any,
       });
     });
   }
@@ -66,24 +78,11 @@ export class EditCommencementDateAviationAccountComponent implements OnInit, OnD
 
   onContinue() {
     if (this.form.valid) {
-      this.store
-        .pipe(selectAccount, take(1))
-        .pipe(
-          tap((account) => {
-            this.store.setCurrentAccount(
-              produce(account, (updated) => {
-                updated.aviationAccount = {
-                  ...account.aviationAccount,
-                  ...this.form.value,
-                };
-              }),
-            );
-          }),
-          switchMap(() => this.store.editAccountCommencementDate()),
-        )
-        .subscribe(async () => {
-          await this.router.navigate(['../'], { relativeTo: this.route });
-        });
+      this.store.editFirstYearOfReportingObligation({
+        commencementDate: this.form.value.commencementDate,
+        reason: this.form.value.reason,
+      });
+      this.router.navigate(['./summary'], { relativeTo: this.route });
     }
   }
 }

@@ -12,6 +12,7 @@ import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountCreatedEvent;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusCreatedEvent;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusHistory;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountCreationDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatusType;
@@ -56,8 +57,10 @@ public class AviationAccountCreationService {
         account.setCreatedByUserId(appUser.getUserId());
 
         createAccountReportingStatus(account);
-        
+
         aviationAccountRepository.save(account);
+
+        publishReportingStatusEvents(account);
 
         publisher.publishEvent(AviationAccountCreatedEvent.builder()
             .accountId(account.getId())
@@ -112,9 +115,21 @@ public class AviationAccountCreationService {
                     .build());
 
             account.addReportingStatus(accountReportingStatus);
+
         }
 
+    }
 
+    private void publishReportingStatusEvents(AviationAccount account) {
+        int currentYear = Year.now().getValue();
+
+        getNumberOfReportingYears(account.getCommencementDate()).stream()
+                .filter(year -> year != currentYear)
+                .forEach(year -> publisher.publishEvent(AviationAccountReportingStatusCreatedEvent.builder()
+                        .accountId(account.getId())
+                        .year(Year.of(year))
+                        .emissionTradingScheme(account.getEmissionTradingScheme())
+                        .build()));
     }
 
     private List<Integer> getNumberOfReportingYears(LocalDate commencementDate) {

@@ -1,0 +1,17 @@
+@if (vm(); as vm) {
+  <app-base-action-container-component
+    header="New entrance reserve returned for amendments"
+    [customContentTemplate]="customContentTemplate"
+    [expectedActionType]="['NER_APPLICATION_RETURNED_FOR_AMENDS']"></app-base-action-container-component>
+
+  <ng-template #customContentTemplate>
+    <h2 app-summary-header class="govuk-heading-m">New entrance reserve details</h2>
+
+    <app-changes-requested-template
+      [requiredChanges]="$any(vm.decisionDetails)?.requiredChanges"
+      [reviewAttachments]="vm.regulatorReviewAttachments"
+      [downloadUrl]="vm.downloadUrl"
+      [notes]="$any(vm.decisionDetails)?.notes"
+      [verificationRequired]="$any(vm.decisionDetails)?.verificationRequired"></app-changes-requested-template>
+  </ng-template>
+}

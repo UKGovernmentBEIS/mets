@@ -1,5 +1,5 @@
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { ApplicationRef, DoBootstrap, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 
@@ -10,8 +10,13 @@ import { ConfigService } from '@core/config/config.service';
 import { AnalyticsInterceptor } from '@core/interceptors/analytics.interceptor';
 import { AuthService } from '@core/services/auth.service';
 import { LatestTermsService } from '@core/services/latest-terms.service';
-import { KeycloakAngularModule, KeycloakOptions, KeycloakService } from 'keycloak-angular';
-import { KeycloakConfig } from 'keycloak-js';
+import {
+  createKeycloakSignal,
+  INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
+  includeBearerTokenInterceptor,
+  KEYCLOAK_EVENT_SIGNAL,
+} from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 import { MarkdownModule } from 'ngx-markdown';
 
 import { ApiModule, Configuration } from 'pmrv-api';
@@ -34,14 +39,21 @@ import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-co
 import { TimeoutModule } from './timeout/timeout.module';
 import { VersionComponent } from './version/version.component';
 
-const keycloakService = new KeycloakService();
+// The Keycloak instance is constructed eagerly so anything injecting `Keycloak`
+// (AuthService, the bearer interceptor, etc.) resolves without ordering hazards.
+// The `auth-server-url` part of the config is only known after ConfigService
+// fetches the runtime config, so we keep the config object mutable and update
+// `keycloakConfig.url` in-place before calling `keycloakInstance.init(...)` —
+// Keycloak stores the config reference internally and reads `url` at init time.
+const keycloakConfig = { ...environment.keycloakConfig };
+const keycloakInstance = new Keycloak(keycloakConfig);
+const keycloakEventSignal = createKeycloakSignal(keycloakInstance);
 
 @NgModule({
   imports: [
     ApiModule.forRoot(() => new Configuration({ basePath: environment.apiOptions.baseUrl })),
     AppRoutingModule,
     BrowserModule,
-    KeycloakAngularModule,
     MarkdownModule.forRoot(markdownModuleConfig),
     SharedModule,
     TimeoutModule,
@@ -58,14 +70,21 @@ const keycloakService = new KeycloakService();
     VersionComponent,
   ],
   providers: [
+    provideHttpClient(withInterceptors([includeBearerTokenInterceptor]), withInterceptorsFromDi()),
     {
       provide: APP_BASE_HREF,
       useFactory: (pl: PlatformLocation) => pl.getBaseHrefFromDOM(),
       deps: [PlatformLocation],
     },
+    { provide: Keycloak, useValue: keycloakInstance },
+    { provide: KEYCLOAK_EVENT_SIGNAL, useValue: keycloakEventSignal },
     {
-      provide: KeycloakService,
-      useValue: keycloakService,
+      provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
+      useValue: [
+        {
+          urlPattern: new RegExp('^' + environment.apiOptions.baseUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+        },
+      ],
     },
     {
       provide: ErrorHandler,
@@ -96,14 +115,9 @@ export class AppModule implements DoBootstrap {
     const latestTermsService = appRef.injector.get(LatestTermsService);
     firstValueFrom(configService.initConfigState())
       .then((state) => {
-        const options: KeycloakOptions = {
-          ...environment.keycloakOptions,
-          config: {
-            ...(environment.keycloakOptions.config as KeycloakConfig),
-            url: state.keycloakServerUrl ?? (environment.keycloakOptions.config as KeycloakConfig).url,
-          },
-        };
-        return keycloakService.init(options);
+        keycloakConfig.url = state.keycloakServerUrl ?? environment.keycloakConfig.url;
+
+        return keycloakInstance.init(environment.keycloakInitOptions);
       })
       .then(() => firstValueFrom(authService.checkUser()))
       .then(() => firstValueFrom(latestTermsService.initLatestTerms()))

@@ -1,0 +1,47 @@
+@let vm = this.vm();
+
+<app-action-task header="Outcome of regulator review" [breadcrumb]="true">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>What is your opinion on new entrant reserve application?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{
+          vm.outcome.opinion === 'PROCEED_TO_AUTHORITY'
+            ? 'Regulator will send NER application to the UK ETS Authority for final assessment'
+            : 'NER application has been withdrawn'
+        }}
+      </dd>
+    </div>
+
+    @if (vm.outcome.notes) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Review notes (not visible to the operator)</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ vm.outcome.notes }}
+        </dd>
+      </div>
+    }
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded new entrant reserve</dt>
+      <dd govukSummaryListRowValue>
+        @if (vm.nerFile) {
+          <app-summary-download-files [files]="[vm.nerFile]"></app-summary-download-files>
+        } @else {
+          No file uploaded
+        }
+      </dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded supporting files</dt>
+      <dd govukSummaryListRowValue>
+        @if (vm.supportingFiles?.length > 0) {
+          <app-summary-download-files [files]="vm.supportingFiles"></app-summary-download-files>
+        } @else {
+          No files uploaded
+        }
+      </dd>
+    </div>
+  </dl>
+</app-action-task>

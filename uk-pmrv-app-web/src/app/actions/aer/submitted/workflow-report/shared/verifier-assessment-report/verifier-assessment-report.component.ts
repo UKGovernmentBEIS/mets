@@ -19,5 +19,8 @@ export class VerifierAssessmentReportComponent {
     map((payload) => payload.verificationReport?.activityLevelReport?.file),
     map((file) => (file ? this.aerService.getDownloadUrlFiles([file], true) : [])),
   );
+
+  readonly emissionsTradingScheme = this.aerService.getEmissionsTradingSchemeSignal();
+
   constructor(readonly aerService: AerService) {}
 }

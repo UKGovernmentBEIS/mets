@@ -16,6 +16,7 @@ import { DoalRequestCreateActionPayload } from './doalRequestCreateActionPayload
 import { HSETIRequestCreateActionPayload } from './hSETIRequestCreateActionPayload';
 import { InstallationAccountOpeningSubmitApplicationCreateActionPayload } from './installationAccountOpeningSubmitApplicationCreateActionPayload';
 import { InstallationAuditRequestCreateActionPayload } from './installationAuditRequestCreateActionPayload';
+import { NERRequestCreateActionPayload } from './nERRequestCreateActionPayload';
 import { ReportRelatedRequestCreateActionPayload } from './reportRelatedRequestCreateActionPayload';
 import { RequestCreateActionEmptyPayload } from './requestCreateActionEmptyPayload';
 import { WithholdingOfAllowancesReCreateActionPayload } from './withholdingOfAllowancesReCreateActionPayload';
@@ -34,6 +35,7 @@ export interface RequestCreateActionProcessDTO {
     | 'PERMIT_BATCH_REISSUE'
     | 'NON_COMPLIANCE'
     | 'NER'
+    | 'NER_RE_INITIATE'
     | 'DOAL'
     | 'INSTALLATION_ONSITE_INSPECTION'
     | 'INSTALLATION_AUDIT'
@@ -66,6 +68,7 @@ export interface RequestCreateActionProcessDTO {
     | HSETIRequestCreateActionPayload
     | InstallationAccountOpeningSubmitApplicationCreateActionPayload
     | InstallationAuditRequestCreateActionPayload
+    | NERRequestCreateActionPayload
     | ReportRelatedRequestCreateActionPayload
     | RequestCreateActionEmptyPayload
     | WithholdingOfAllowancesReCreateActionPayload;

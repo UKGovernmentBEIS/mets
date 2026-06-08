@@ -24,6 +24,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBWaitForReviewRequestTaskPayload;
 
 import java.util.AbstractMap;
 import java.util.Collection;
@@ -59,6 +60,14 @@ public interface PermitTransferMapper {
         PermitTransferBRequestPayload permitTransferBRequestPayload, 
         InstallationOperatorDetails installationOperatorDetails,
         RequestTaskPayloadType payloadType
+    );
+
+    @Mapping(target = "installationOperatorDetails", source = "installationOperatorDetails")
+    @Mapping(target = "payloadType", source = "payloadType")
+    PermitTransferBWaitForReviewRequestTaskPayload toPermitTransferBWaitForReviewRequestTaskPayload(
+            PermitTransferBRequestPayload permitTransferBRequestPayload,
+            InstallationOperatorDetails installationOperatorDetails,
+            RequestTaskPayloadType payloadType
     );
 
     @Mapping(target = "payloadType", expression = "java(uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType.PERMIT_TRANSFER_B_APPLICATION_AMENDS_SUBMIT_PAYLOAD)")

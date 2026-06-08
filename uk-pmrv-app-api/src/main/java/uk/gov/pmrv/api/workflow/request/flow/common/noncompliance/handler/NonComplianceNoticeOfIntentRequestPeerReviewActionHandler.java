@@ -19,6 +19,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstan
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceNoticeOfIntentRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceOutcome;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonCompliancePeerReviewRequestedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.service.NonComplianceNoticeOfIntentApplyService;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.validation.NonCompliancePeerReviewValidator;
 
@@ -32,6 +33,7 @@ public class NonComplianceNoticeOfIntentRequestPeerReviewActionHandler
     private final NonComplianceNoticeOfIntentApplyService applyService;
     private final RequestService requestService;
     private final WorkflowService workflowService;
+    private final NonCompliancePeerReviewActionHelper peerReviewActionHelper;
 
 
     @Override
@@ -59,9 +61,12 @@ public class NonComplianceNoticeOfIntentRequestPeerReviewActionHandler
 
         applyService.saveRequestPeerReviewAction(requestTask, payload.getPeerReviewer());
 
+        final NonCompliancePeerReviewRequestedRequestActionPayload actionPayload =
+                peerReviewActionHelper.buildPeerReviewRequestedPayload(payload.getPeerReviewer());
+
         requestService.addActionToRequest(
                 requestTask.getRequest(),
-                null,
+                actionPayload,
                 RequestActionType.NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_REQUESTED,
                 appUser.getUserId()
         );

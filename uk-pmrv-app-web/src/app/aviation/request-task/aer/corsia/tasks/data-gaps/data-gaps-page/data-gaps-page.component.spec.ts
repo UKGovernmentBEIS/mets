@@ -1,13 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { AerRequestTaskPayload, RequestTaskStore } from '@aviation/request-task/store';
 import { AerCorsiaStoreDelegate } from '@aviation/request-task/store/delegates/aer-corsia/aer-corsia-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { screen } from '@testing-library/angular';
-import userEvent from '@testing-library/user-event';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 import produce from 'immer';
 
 import { DataGapsFormProvider } from '../data-gaps-form.provider';
@@ -20,8 +19,9 @@ describe('DataGapsPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DataGapsPageComponent, RouterTestingModule],
+      imports: [DataGapsPageComponent],
       providers: [
+        provideRouter([]),
         { provide: TASK_FORM_PROVIDER, useClass: DataGapsFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
       ],

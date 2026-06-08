@@ -47,7 +47,7 @@ public class InstallationAccountCommandOrchestrator {
         }
 
         installationAccountUpdateService.updateRegistryReportingFirstYear(accountId, accountUpdateRegistryReportingFirstYearDTO);
-        publisher.publishEvent(InstallationAccountUpdatedRegistryEvent.builder().accountId(accountId).build());
+        publisher.publishEvent(InstallationAccountUpdatedRegistryEvent.builder().accountId(accountId).skipRequestAction(true).build());
 
     }
 

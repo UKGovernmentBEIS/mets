@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
@@ -30,7 +31,7 @@ public class NERApplicationSubmitToVerifierActionHandler implements RequestTaskA
                         AppUser appUser,
                         NERApplicationSubmitToVerifierRequestTaskActionPayload payload) {
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
-        nerApplyService.submitToVerifier(payload, requestTask, appUser);
+        nerApplyService.submitToVerifier(payload, requestTask, appUser, RequestActionType.NER_APPLICATION_SENT_TO_VERIFIER);
 
         // Complete task
         workflowService.completeTask(requestTask.getProcessTaskId(),

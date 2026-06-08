@@ -353,7 +353,7 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED':
         return `Initial penalty notice sent to operator`;
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED':
-        return 'Peer review of initial penalty requested';
+        return 'Peer review of initial penalty submitted';
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_ACCEPTED':
         return `Peer review agreement for initial penalty submitted`;
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_REJECTED':
@@ -362,7 +362,7 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED':
         return `Notice of intent sent to operator`;
       case 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_REQUESTED':
-        return 'Peer review of notice of intent requested';
+        return 'Peer review of notice of intent submitted';
       case 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_ACCEPTED':
         return `Peer review agreement for notice of intent submitted`;
       case 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_REJECTED':
@@ -371,7 +371,7 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED':
         return `Penalty notice sent to operator`;
       case 'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_REQUESTED':
-        return 'Peer review of penalty requested';
+        return 'Peer review of penalty submitted';
       case 'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_ACCEPTED':
         return `Peer review agreement for penalty submitted`;
       case 'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_REJECTED':
@@ -658,7 +658,31 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'NER_APPLICATION_CANCELLED':
         return 'New entrant reserve application cancelled';
       case 'NER_APPLICATION_SENT_TO_VERIFIER':
+      case 'NER_APPLICATION_AMENDS_SENT_TO_VERIFIER':
         return 'Submitted to verifier';
+      case 'NER_APPLICATION_VERIFICATION_SUBMITTED':
+        return 'Verification statement submitted to operator';
+      case 'NER_RECALLED_FROM_VERIFICATION':
+        return 'Recalled';
+      case 'NER_APPLICATION_SUBMITTED':
+      case 'NER_APPLICATION_AMENDS_SUBMITTED':
+        return 'Submitted to regulator';
+      case 'NER_VERIFICATION_RETURNED_TO_OPERATOR':
+        return 'Returned to operator for changes';
+      case 'NER_APPLICATION_RETURNED_FOR_AMENDS':
+        return 'New entrance reserve returned to operator';
+      case 'NER_PEER_REVIEW_REQUESTED':
+        return 'Peer review requested';
+      case 'NER_PEER_REVIEW_ACCEPTED':
+        return 'Peer review agreement submitted';
+      case 'NER_PEER_REVIEW_REJECTED':
+        return 'Peer review disagreement submitted';
+      case 'NER_APPLICATION_DEEMED_WITHDRAWN':
+        return 'Withdrawn';
+      case 'NER_APPLICATION_COMPLETED':
+        return 'Completed';
+      case 'NER_APPLICATION_RE_INITIATED':
+        return 'Reopened';
 
       default:
         return 'Approved Application';

@@ -12,6 +12,7 @@ import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.FlightIdentification;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.FlightIdentificationType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.AviationOperatorDetails;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEmissionSchemeDTO;
 import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerRequestMetadata;
@@ -27,6 +28,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecision
 
 import java.time.Year;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,8 +52,16 @@ class AviationAerUkEtsMapperTest {
                 .build())
             .build();
         Map<UUID, String> aerAttachments = Map.of(UUID.randomUUID(), "attachment");
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         AviationAerUkEtsVerificationReport verificationReport = AviationAerUkEtsVerificationReport.builder()
-            .verificationBodyDetails(VerificationBodyDetails.builder().name("vb_name").accreditationReferenceNumber("refNumber").build())
+            .verificationBodyDetails(VerificationBodyDetails.builder()
+                    .name("vb_name")
+                    .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
+                    .build())
             .verificationData(AviationAerUkEtsVerificationData.builder()
                 .verifierContact(AviationAerVerifierContact.builder().name("name").build())
                 .build())
@@ -115,8 +125,16 @@ class AviationAerUkEtsMapperTest {
             AviationAerUkEtsReviewGroup.SERVICE_CONTACT_DETAILS, aerDataReviewDecision
         );
         Map<UUID, String> reviewAttachments = Map.of(UUID.randomUUID(), "reviewAttachment");
+        VerificationBodyEmissionSchemeDTO verificationBodyEmissionSchemeDTO = VerificationBodyEmissionSchemeDTO.builder()
+                .emissionTradingScheme(EmissionTradingScheme.EU_ETS_INSTALLATIONS)
+                .accreditationReferenceNumber("accreditationRefNum")
+                .accreditationName("name1")
+                .build();
         AviationAerUkEtsVerificationReport verificationReport = AviationAerUkEtsVerificationReport.builder()
-            .verificationBodyDetails(VerificationBodyDetails.builder().name("vb_name").accreditationReferenceNumber("refNumber").build())
+            .verificationBodyDetails(VerificationBodyDetails.builder()
+                    .name("vb_name")
+                    .verificationBodyEmissionSchemeDTOS(Set.of(verificationBodyEmissionSchemeDTO))
+                    .build())
             .verificationData(AviationAerUkEtsVerificationData.builder()
                 .verifierContact(AviationAerVerifierContact.builder().name("name").build())
                 .build())

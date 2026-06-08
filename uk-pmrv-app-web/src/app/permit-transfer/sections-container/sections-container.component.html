@@ -20,7 +20,7 @@
         [submitLink]="(isTransferSubmissionStatusCannotStartedYetOrComplete$ | async) ? '' : './summary'"
         submitLinkText="Send to the regulator"
         [submitLinkStatus]="transferSubmissionStatus$ | async">
-        <li app-task-section title="Tranfer details">
+        <li app-task-section title="Transfer details">
           <ul app-task-item-list>
             <li
               app-task-item
@@ -52,4 +52,13 @@
       [taskId$]="taskId$"
       [allowedActions$]="store.select('allowedRequestTaskActions')"></app-related-actions>
   </div>
+
+  @if (previewDocuments$ | async) {
+    <div class="govuk-grid-column-one-third">
+      <app-preview-documents
+        [taskId]="taskId$ | async"
+        [previewDocuments]="previewDocuments$ | async"
+        linkFontSize="govuk-!-font-size-16"></app-preview-documents>
+    </div>
+  }
 </div>

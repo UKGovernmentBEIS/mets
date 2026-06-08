@@ -47,6 +47,10 @@ public enum MetsErrorCode implements NetzErrorCode {
     /** Codes for NER. */
     INVALID_NER("NER1001", HttpStatus.BAD_REQUEST, "Invalid NER"),
     NER_FILENAME_NOT_VALID("NER1002", HttpStatus.BAD_REQUEST, "NER file name is not valid"),
+    INVALID_NER_REVIEW("NER1003", HttpStatus.BAD_REQUEST, "Invalid NER review"),
+    NER_MUST_UNDERGO_VERIFICATION("NER1004", HttpStatus.BAD_REQUEST, "NER must undergo verification"),
+    NER_REQUEST_IS_NOT_NER("NER1005", HttpStatus.BAD_REQUEST, "Provided request id is not of type NER"),
+
 
 
     /** Codes for DOAL. */

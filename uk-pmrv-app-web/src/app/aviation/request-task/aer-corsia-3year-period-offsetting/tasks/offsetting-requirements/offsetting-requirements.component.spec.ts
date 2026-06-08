@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -8,8 +7,7 @@ import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { screen } from '@testing-library/angular';
-import userEvent from '@testing-library/user-event';
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 
 import { ThreeYearOffsettingRequirementsFormProvider } from '../../aer-corsia-3year-period-offsetting-form.provider';
 import {
@@ -30,8 +28,9 @@ describe('ThreeYearOffsettingRequirementsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ThreeYearOffsettingRequirementsComponent, RouterTestingModule],
+      imports: [ThreeYearOffsettingRequirementsComponent],
       providers: [
+        provideRouter([]),
         { provide: TASK_FORM_PROVIDER, useClass: ThreeYearOffsettingRequirementsFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
       ],

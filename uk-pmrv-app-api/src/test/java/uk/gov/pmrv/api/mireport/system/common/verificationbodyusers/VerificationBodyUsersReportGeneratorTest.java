@@ -50,7 +50,7 @@ class VerificationBodyUsersReportGeneratorTest {
         when(userAuthService.getUsersWithAttributes(Collections.singletonList(userId), VerifierUserInfoDTO.class))
                 .thenReturn(List.of(verifierUserInfoDTO));
         when(verificationBodyUsersRepository.findAllVerificationBodyUsers(entityManager))
-                .thenReturn(List.of(createVerificationBodyUser("Verification Body Name", InstallationAccountStatus.LIVE, "12345",
+                .thenReturn(List.of(createVerificationBodyUser("Verification Body Name", InstallationAccountStatus.LIVE,
                         "Verifier admin", AuthorityStatus.ACTIVE,  userId)));
 
         VerificationBodyUsersMiReportResult miReportResult =
@@ -67,13 +67,14 @@ class VerificationBodyUsersReportGeneratorTest {
     }
 
     private VerificationBodyUser createVerificationBodyUser(String verificationBodyName, InstallationAccountStatus accountStatus,
-                                                            String accreditationNumber, String role, AuthorityStatus authorityStatus,
+                                                            String role, AuthorityStatus authorityStatus,
                                                             String userId) {
 
         return VerificationBodyUser.builder()
                 .verificationBodyName(verificationBodyName)
                 .accountStatus(accountStatus.name())
-                .accreditationReferenceNumber(accreditationNumber)
+                .accreditationReferenceNumberUKETSInstallations("accreditationReferenceNumberUKETSInstallations")
+                .accreditationReferenceNumberCorsia("accreditationReferenceNumberCorsia")
                 .isAccreditedForUKETSInstallations(true)
                 .isAccreditedForEUETSInstallations(false)
                 .isAccreditedForUKETSAviation(false)

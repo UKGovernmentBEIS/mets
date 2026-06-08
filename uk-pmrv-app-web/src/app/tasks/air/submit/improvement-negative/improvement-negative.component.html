@@ -12,7 +12,15 @@
       <ng-container govukLegend>
         <span class="govuk-visually-hidden">Unreasonable cost</span>
       </ng-container>
-      <govuk-checkbox value="isCostUnreasonable" label="Unreasonable cost"></govuk-checkbox>
+      <govuk-checkbox value="isCostUnreasonable" label="Unreasonable cost">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="costUnreasonableExplanation"
+            govuk-textarea
+            [maxLength]="10000"
+            label="Explain why unreasonable costs would be incurred, as set out in Article 18 of the Monitoring and Reporting Regulations (MRR)"></div>
+        </ng-container>
+      </govuk-checkbox>
       <ng-container govukLegend>
         <span class="govuk-visually-hidden">Technical infeasibility</span>
       </ng-container>

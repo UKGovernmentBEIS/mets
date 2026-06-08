@@ -17,7 +17,7 @@ interface ViewModel {
 }
 
 @Component({
-  selector: 'app-ner-action-details',
+  selector: 'app-action-ner-details',
   imports: [ActionSharedModule, NerDetailsSummaryTemplateComponent],
   template: `
     @let vm = this.vm();

@@ -7,6 +7,7 @@ import { TaskStatusPipe } from '@permit-application/shared/pipes/task-status.pip
 import { SectionsContainerAbstractComponent } from '@permit-application/shared/sections/sections-container-abstract.component';
 import { StatusKey } from '@permit-application/shared/types/permit-task.type';
 import { getAvailableSections } from '@permit-application/shared/utils/available-sections';
+import { getPreviewDocumentsInfo } from '@permit-application/shared/utils/previewDocuments.utils';
 import { TaskItemStatus } from '@shared/task-list/task-list.interface';
 
 import { RequestActionsService, RequestItemsService } from 'pmrv-api';
@@ -54,6 +55,12 @@ export class SectionsContainerComponent extends SectionsContainerAbstractCompone
 
   isTransferSubmissionStatusCannotStartedYetOrComplete$ = this.transferSubmissionStatus$.pipe(
     map((status) => status === 'cannot start yet' || status === 'complete'),
+  );
+
+  previewDocuments$ = this.store.pipe(
+    map((state) => {
+      return getPreviewDocumentsInfo(state.requestTaskType, null, state.permitType);
+    }),
   );
 
   constructor(

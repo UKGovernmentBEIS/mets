@@ -1,6 +1,7 @@
 import {
   AviationAerCorsia3YearPeriodCreateActionPayload,
   AviationAerCorsiaAnnualOffsettingCreateActionPayload,
+  NERRequestCreateActionPayload,
   ReportRelatedRequestCreateActionPayload,
   RequestCreateActionEmptyPayload,
   RequestCreateActionProcessDTO,
@@ -20,6 +21,7 @@ export const requestCreateActionTypeLabelMap: Partial<
   AVIATION_DOE_CORSIA: 'Initiate estimation of emissions',
   ALR: 'Mark workflow as not required',
   WITHHOLDING_OF_ALLOWANCES: 'Reopen withhold workflow',
+  NER: 'Reopen new entrant reserve workflow',
 };
 
 export function createRequestCreateActionProcessDTO(
@@ -63,6 +65,14 @@ export function createRequestCreateActionProcessDTO(
           payloadType: 'WITHHOLDING_OF_ALLOWANCES_RE_CREATE_ACTION_PAYLOAD',
           requestId,
         } as WithholdingOfAllowancesReCreateActionPayload,
+      };
+    case 'NER':
+      return {
+        requestCreateActionType: 'NER_RE_INITIATE',
+        requestCreateActionPayload: {
+          payloadType: 'NER_CREATE_ACTION_PAYLOAD',
+          requestId,
+        } as NERRequestCreateActionPayload,
       };
 
     default:

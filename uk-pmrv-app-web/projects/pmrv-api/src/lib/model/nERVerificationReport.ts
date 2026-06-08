@@ -9,11 +9,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { NERNotVerifiedOverallVerificationAssessment } from './nERNotVerifiedOverallVerificationAssessment';
 import { NERVerificationOpinionStatement } from './nERVerificationOpinionStatement';
+import { NERVerifiedSatisfactoryOverallVerificationAssessment } from './nERVerifiedSatisfactoryOverallVerificationAssessment';
+import { NERVerifiedWithCommentsOverallVerificationAssessment } from './nERVerifiedWithCommentsOverallVerificationAssessment';
 import { VerificationBodyDetails } from './verificationBodyDetails';
 
 export interface NERVerificationReport {
   verificationBodyId?: number;
   verificationBodyDetails?: VerificationBodyDetails;
   opinionStatement?: NERVerificationOpinionStatement;
+  overallAssessment?:
+    | NERNotVerifiedOverallVerificationAssessment
+    | NERVerifiedSatisfactoryOverallVerificationAssessment
+    | NERVerifiedWithCommentsOverallVerificationAssessment;
 }

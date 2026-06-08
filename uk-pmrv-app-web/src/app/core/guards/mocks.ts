@@ -1,14 +1,20 @@
+import { signal } from '@angular/core';
+
 import { AuthService } from '@core/services/auth.service';
-import { KeycloakService } from 'keycloak-angular';
+import { KeycloakEvent, KeycloakEventType } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 import Mock = jest.Mock;
 import { AuthoritiesService, TermsAndConditionsService, UsersService } from 'pmrv-api';
 
-export const mockKeycloakService: Record<keyof KeycloakService, Mock> = {
+export const mockKeycloak: Partial<Keycloak> = {
   login: jest.fn(),
   logout: jest.fn(),
-  isLoggedIn: jest.fn(),
   loadUserProfile: jest.fn(),
-} as any;
+  updateToken: jest.fn(),
+  authenticated: false,
+};
+
+export const mockKeycloakEventSignal = signal<KeycloakEvent>({ type: KeycloakEventType.KeycloakAngularInit });
 
 export const mockAuthService: Record<keyof AuthService, Mock> = {
   checkUser: jest.fn(),

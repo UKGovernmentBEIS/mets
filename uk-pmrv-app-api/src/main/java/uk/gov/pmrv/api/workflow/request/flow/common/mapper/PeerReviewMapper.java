@@ -11,6 +11,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewDecisionSub
 public interface PeerReviewMapper {
 
     @Mapping(target = "payloadType", source = "payloadType")
+    @Mapping(target = "submittedTo", ignore = true)
     PeerReviewDecisionSubmittedRequestActionPayload toPeerReviewDecisionSubmittedRequestActionPayload(
         PeerReviewDecisionRequestTaskActionPayload taskActionPayload, RequestActionPayloadType payloadType);
 }
