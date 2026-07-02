@@ -12,7 +12,9 @@ import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestAccount
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERRequestCreateActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.enums.NERInitiationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.service.NERRegulatorReviewSubmitService;
 
 import java.util.Map;
 
@@ -22,6 +24,7 @@ public class NERReInitiateCreateActionHandler implements RequestAccountCreateAct
 
     private final RequestService requestService;
     private final StartProcessRequestService startProcessRequestService;
+    private final NERRegulatorReviewSubmitService nerRegulatorReviewSubmitService;
 
     @Override
     public String process(Long accountId, NERRequestCreateActionPayload payload, AppUser appUser) {
@@ -29,6 +32,7 @@ public class NERReInitiateCreateActionHandler implements RequestAccountCreateAct
         NERRequestMetadata requestMetadata = (NERRequestMetadata) request.getMetadata();
 
         requestMetadata.setNerInitiationType(NERInitiationType.RE_INITIATED);
+        nerRegulatorReviewSubmitService.prepareRequestPayloadForReopening((NerRequestPayload) request.getPayload());
 
         startProcessRequestService.reStartProcess(request, Map.of(BpmnProcessConstants.NER_INITIATION_TYPE, NERInitiationType.RE_INITIATED,
                 BpmnProcessConstants.SKIP_PAYMENT,true));

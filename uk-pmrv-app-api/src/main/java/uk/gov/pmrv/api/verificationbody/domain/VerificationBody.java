@@ -120,6 +120,5 @@ public class VerificationBody {
 
     public void removeEmissionScheme(VerificationBodyEmissionScheme scheme) {
         emissionSchemes.remove(scheme);
-        scheme.setVerificationBody(null);
     }
 }

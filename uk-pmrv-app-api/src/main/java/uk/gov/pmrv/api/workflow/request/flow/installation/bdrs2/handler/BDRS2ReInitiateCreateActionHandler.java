@@ -13,6 +13,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstan
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.ReportRelatedRequestCreateActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2InitiationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.service.BDRS2RegulatorReviewSubmitService;
 
 import java.util.Map;
 
@@ -22,6 +24,7 @@ public class BDRS2ReInitiateCreateActionHandler implements RequestAccountCreateA
 
     private final RequestService requestService;
     private final StartProcessRequestService startProcessRequestService;
+    private final BDRS2RegulatorReviewSubmitService bdrs2RegulatorReviewSubmitService;
 
     @Override
     public String process(Long accountId, ReportRelatedRequestCreateActionPayload payload, AppUser appUser) {
@@ -29,6 +32,7 @@ public class BDRS2ReInitiateCreateActionHandler implements RequestAccountCreateA
         BDRS2RequestMetadata requestMetadata = (BDRS2RequestMetadata) request.getMetadata();
 
         requestMetadata.setBdrs2InitiationType(BDRS2InitiationType.RE_INITIATED);
+        bdrs2RegulatorReviewSubmitService.prepareRequestPayloadForReopening((BDRS2RequestPayload) request.getPayload());
 
         startProcessRequestService.reStartProcess(request, Map.of(BpmnProcessConstants.BDRS2_INITIATION_TYPE, BDRS2InitiationType.RE_INITIATED));
 

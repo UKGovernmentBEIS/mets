@@ -71,7 +71,7 @@ public class NERValidationService {
 
         if (isVerificationRequiredFromReviewGroupDecisions(requestPayload.getRegulatorReviewGroupDecisions())) {
             if (!taskPayload.isVerificationPerformed())
-                throw new BusinessException(MetsErrorCode.ALR_MUST_UNDERGO_VERIFICATION);
+                throw new BusinessException(MetsErrorCode.NER_MUST_UNDERGO_VERIFICATION);
         }
     }
 

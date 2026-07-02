@@ -300,7 +300,7 @@ public class NERValidationServiceTest {
                 () -> nerValidationService.validateAmendsVerification(requestPayload, taskPayload));
 
         assertEquals(
-                MetsErrorCode.ALR_MUST_UNDERGO_VERIFICATION,
+                MetsErrorCode.NER_MUST_UNDERGO_VERIFICATION,
                 exception.getErrorCode());
     }
 

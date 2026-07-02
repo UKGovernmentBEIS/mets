@@ -28,6 +28,6 @@ describe('StartProcessComponent', () => {
   it('should render a continue button', () => {
     const element: HTMLElement = fixture.nativeElement;
     const anchors = element.querySelectorAll<HTMLAnchorElement>('a');
-    expect(anchors[0].href).toContain('/email');
+    expect(anchors[0].href).toContain('http://localhost/contact-us');
   });
 });

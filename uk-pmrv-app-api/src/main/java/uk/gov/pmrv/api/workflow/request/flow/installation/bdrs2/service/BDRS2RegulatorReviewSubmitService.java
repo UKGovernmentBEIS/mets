@@ -18,6 +18,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2Revi
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2SaveRegulatorReviewGroupDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2Files;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.mapper.BDRS2Mapper;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.validation.BDRS2ValidationService;
 
@@ -47,7 +48,11 @@ public class BDRS2RegulatorReviewSubmitService {
         validationService.validateRegulatorReviewOutcome(taskPayload);
         updateRequestPayload(requestTask, appUser);
 
-        UUID regulatorBdrs2File = taskPayload.getRegulatorReviewOutcome().getFile();
+    }
+
+    @Transactional
+    public void prepareRequestPayloadForReopening(BDRS2RequestPayload requestPayload){
+        UUID regulatorBdrs2File = requestPayload.getRegulatorReviewOutcome().getFile();
         if (regulatorBdrs2File != null) {
             incrementBdrs2FileVersionAndUpdateFile(regulatorBdrs2File, requestPayload);
         }
@@ -122,7 +127,8 @@ public class BDRS2RegulatorReviewSubmitService {
     }
 
     private void incrementBdrs2FileVersionAndUpdateFile(UUID regulatorBdrs2File, BDRS2RequestPayload requestPayload) {
-        UUID requestFile = Optional.ofNullable(requestPayload.getBdrs2().getBdrs2Files())
+        UUID requestFile = Optional.ofNullable(requestPayload.getBdrs2())
+                .map(BDRS2::getBdrs2Files)
                 .map(BDRS2Files::getFile)
                 .orElse(null);
 

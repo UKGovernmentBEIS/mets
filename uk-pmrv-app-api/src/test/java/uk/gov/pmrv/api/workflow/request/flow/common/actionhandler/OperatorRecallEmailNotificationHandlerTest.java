@@ -25,7 +25,10 @@ import uk.gov.pmrv.api.user.verifier.service.VerifierUserInfoService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestPayload;
 
 @ExtendWith(MockitoExtension.class)
 public class OperatorRecallEmailNotificationHandlerTest {
@@ -74,11 +77,18 @@ public class OperatorRecallEmailNotificationHandlerTest {
     }
 
     @Test
-    void sendRecallEmailNotification_installationAccount_notifyRecipient() {
+    void sendRecallEmailNotification_installationAccount_notifyAssignedVerifier() {
+        RequestTask requestTask = RequestTask.builder()
+                .type(RequestTaskType.AER_APPLICATION_VERIFICATION_SUBMIT)
+                .assignee("verifierAssignee")
+                .build();
+
         Request request = Request.builder()
                 .id("REQ-1")
                 .accountId(1L)
                 .competentAuthority(CompetentAuthorityEnum.ENGLAND)
+                .requestTasks(List.of(requestTask))
+                .payload(AerRequestPayload.builder().verifierAssignee("verifierAssignee").build())
                 .build();
 
         InstallationAccountDTO accountDTO = InstallationAccountDTO.builder()
@@ -87,31 +97,22 @@ public class OperatorRecallEmailNotificationHandlerTest {
                 .verificationBodyId(1L)
                 .build();
 
-        UserInfoDTO verifierUser = UserInfoDTO.builder().email("verifier@test.com").build();
+        UserInfoDTO verifierUser = UserInfoDTO.builder()
+                .email("assigned@test.com")
+                .build();
 
         when(accountQueryService.getAccountType(1L)).thenReturn(AccountType.INSTALLATION);
-
-        when(verifierAuthorityQueryService.findVerifierAdminsByVerificationBody(1L))
-                .thenReturn(List.of("verifier-admin"));
-
-        when(verifierUserInfoService.getVerifierUsersInfo(List.of("verifier-admin")))
-                .thenReturn(List.of(verifierUser));
-
-        when(installationAccountQueryService.getAccountDTOById(1L))
-                .thenReturn(accountDTO);
+        when(installationAccountQueryService.getAccountDTOById(1L)).thenReturn(accountDTO);
+        when(userAuthService.getUserByUserId("verifierAssignee")).thenReturn(verifierUser);
 
         operatorRecallEmailNotificationHandler.sendRecallEmailNotification(request);
 
-        verify(notificationEmailService, times(1))
-                .notifyRecipient(any(), eq("verifier@test.com"));
-
-        verifyNoInteractions(userAuthService);
+        verify(notificationEmailService).notifyRecipient(any(), eq("assigned@test.com"));
+        verifyNoInteractions(verifierAuthorityQueryService, verifierUserInfoService);
     }
 
     @Test
     void sendRecallEmailNotification_nonInstallationAccount_doNothing() {
-        String userId = "user1";
-
         Request request = Request.builder()
                 .accountId(1L)
                 .build();
@@ -120,19 +121,11 @@ public class OperatorRecallEmailNotificationHandlerTest {
 
         operatorRecallEmailNotificationHandler.sendRecallEmailNotification(request);
 
-        verify(notificationEmailService, never())
-                .notifyRecipient(any(), any());
-
-        verifyNoInteractions(
-                installationAccountQueryService,
-                verifierAuthorityQueryService,
-                verifierUserInfoService
-        );
+        verify(notificationEmailService, never()).notifyRecipient(any(), any());
     }
 
     @Test
     void sendRecallEmailNotification_noVerificationBody_doNothing() {
-
         Request request = Request.builder()
                 .id("REQ-1")
                 .accountId(1L)
@@ -144,16 +137,12 @@ public class OperatorRecallEmailNotificationHandlerTest {
                 .verificationBodyId(null)
                 .build();
 
-        when(accountQueryService.getAccountType(1L))
-                .thenReturn(AccountType.INSTALLATION);
-
-        when(installationAccountQueryService.getAccountDTOById(1L))
-                .thenReturn(accountDTO);
+        when(accountQueryService.getAccountType(1L)).thenReturn(AccountType.INSTALLATION);
+        when(installationAccountQueryService.getAccountDTOById(1L)).thenReturn(accountDTO);
 
         operatorRecallEmailNotificationHandler.sendRecallEmailNotification(request);
 
-        verify(notificationEmailService, never())
-                .notifyRecipient(any(), any());
+        verify(notificationEmailService, never()).notifyRecipient(any(), any());
     }
 
     @Test
@@ -163,8 +152,7 @@ public class OperatorRecallEmailNotificationHandlerTest {
                 .legalEntity(LegalEntityDTO.builder().name("Operator").build())
                 .build();
 
-        Map<String, Object> result =
-                operatorRecallEmailNotificationHandler.getTemplateParams(
+        Map<String, Object> result = operatorRecallEmailNotificationHandler.getTemplateParams(
                         accountDTO,
                         "REQ-1",
                         "TYPE",
@@ -189,7 +177,38 @@ public class OperatorRecallEmailNotificationHandlerTest {
                         "TYPE",
                         AccountType.INSTALLATION);
 
-        assertThat(result)
-                .containsEntry(PmrvEmailNotificationTemplateConstants.OPERATOR_NAME, null);
+        assertThat(result).containsEntry(PmrvEmailNotificationTemplateConstants.OPERATOR_NAME, null);
+    }
+
+    @Test
+    void sendRecallEmailNotification_installationAccount_notifyVerifierAdminWhenNoAssignedVerifier() {
+        Request request = Request.builder()
+                .id("REQ-1")
+                .accountId(1L)
+                .competentAuthority(CompetentAuthorityEnum.ENGLAND)
+                .payload(AerRequestPayload.builder().build())
+                .build();
+
+        InstallationAccountDTO accountDTO = InstallationAccountDTO.builder()
+                .name("Account name")
+                .legalEntity(LegalEntityDTO.builder().name("Operator").build())
+                .verificationBodyId(1L)
+                .build();
+
+        UserInfoDTO verifierUser = UserInfoDTO.builder()
+                .email("verifier@test.com")
+                .build();
+
+        when(accountQueryService.getAccountType(1L)).thenReturn(AccountType.INSTALLATION);
+        when(installationAccountQueryService.getAccountDTOById(1L)).thenReturn(accountDTO);
+        when(verifierAuthorityQueryService.findVerifierAdminsByVerificationBody(1L)).thenReturn(List.of("verifier-admin"));
+        when(verifierUserInfoService.getVerifierUsersInfo(List.of("verifier-admin"))).thenReturn(List.of(verifierUser));
+
+        operatorRecallEmailNotificationHandler.sendRecallEmailNotification(request);
+
+        verify(notificationEmailService).notifyRecipient(any(), eq("verifier@test.com"));
+        verify(verifierAuthorityQueryService).findVerifierAdminsByVerificationBody(1L);
+        verify(verifierUserInfoService).getVerifierUsersInfo(List.of("verifier-admin"));
+        verify(userAuthService, never()).getUserByUserId(any());
     }
 }

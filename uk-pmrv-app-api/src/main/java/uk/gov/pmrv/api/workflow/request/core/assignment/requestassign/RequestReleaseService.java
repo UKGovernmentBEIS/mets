@@ -39,7 +39,7 @@ public class RequestReleaseService {
                     releaseRequestFromRegulatorAssignee(request, requestTaskAssignee);
                     break;
                 case RoleTypeConstants.VERIFIER:
-                    //TODO: implement this one later
+                    releaseRequestFromVerifierAssignee(request, requestTaskAssignee);
                     break;
                 default:
                     throw new UnsupportedOperationException(String.format("User with role type %s not related with request assignment", requestTaskRoleType));
@@ -62,6 +62,15 @@ public class RequestReleaseService {
         if (!StringUtils.isEmpty(requestRegulatorAssignee) &&
             (requestRegulatorAssignee.equals(taskAssignee) || StringUtils.isEmpty(taskAssignee))) {
             requestPayload.setRegulatorAssignee(null);
+        }
+    }
+
+    private void releaseRequestFromVerifierAssignee(Request request, String taskAssignee) {
+        RequestPayload requestPayload = request.getPayload();
+        String requestVerifierAssignee = requestPayload.getVerifierAssignee();
+        if (!StringUtils.isEmpty(requestVerifierAssignee) &&
+                (requestVerifierAssignee.equals(taskAssignee) || StringUtils.isEmpty(taskAssignee))) {
+            requestPayload.setVerifierAssignee(null);
         }
     }
 }

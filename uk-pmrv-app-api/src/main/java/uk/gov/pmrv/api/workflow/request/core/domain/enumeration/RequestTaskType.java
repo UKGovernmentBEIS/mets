@@ -1055,10 +1055,8 @@ public enum RequestTaskType {
                 RequestTaskActionType.NER_SAVE_APPLICATION_REVIEW,
                 RequestTaskActionType.NER_SAVE_REGULATOR_REVIEW_GROUP_DECISION,
                 RequestTaskActionType.NER_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT,
-                RequestTaskActionType.NER_SAVE_REVIEW_DETERMINATION,
                 RequestTaskActionType.NER_REQUEST_PEER_REVIEW,
                 RequestTaskActionType.NER_REGULATOR_REVIEW_RETURN_FOR_AMENDS,
-                RequestTaskActionType.NER_NOTIFY_OPERATOR_FOR_DECISION,
                 RequestTaskActionType.NER_COMPLETE_REVIEW,
                 RequestTaskActionType.NER_WITHDRAW_APPLICATION
             );
@@ -1142,17 +1140,6 @@ public enum RequestTaskType {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
-        }
-    },
-
-    NER_AUTHORITY_RESPONSE(true, RequestType.NER, RequestExpirationType.APPLICATION_REVIEW) {
-        @Override
-        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
-            return List.of(
-                RequestTaskActionType.NER_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT,
-                RequestTaskActionType.NER_SAVE_AUTHORITY_RESPONSE,
-                RequestTaskActionType.NER_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
-            );
         }
     },
 

@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -258,5 +259,96 @@ class BDRS2RegulatorReviewSubmitServiceTest {
         assertEquals(userId, requestPayload.getRegulatorReviewer());
         assertEquals(regulatorReviewGroupDecisions, requestPayload.getRegulatorReviewGroupDecisions());
         assertEquals(reviewAttachments, requestPayload.getRegulatorReviewAttachments());
+    }
+
+    @Test
+    void prepareRequestPayloadForReopening_whenRegulatorFileDifferent_shouldTransferFileAndIncrementVersion() {
+        UUID regulatorFile = UUID.randomUUID();
+        UUID operatorFile = UUID.randomUUID();
+
+        BDRS2RequestPayload payload = BDRS2RequestPayload.builder()
+                .bdrs2(BDRS2.builder()
+                        .bdrs2Files(BDRS2Files.builder()
+                                .file(operatorFile)
+                                .build())
+                        .build())
+                .regulatorReviewOutcome(BDRS2ApplicationRegulatorReviewOutcome.builder()
+                        .file(regulatorFile)
+                        .build())
+                .build();
+
+        payload.setBdrs2Attachments(new HashMap<>());
+        payload.setRegulatorReviewAttachments(
+                new HashMap<>(Map.of(regulatorFile, "review-file.xlsx"))
+        );
+
+        Integer initialVersion = payload.getBdrs2FileVersion();
+
+        service.prepareRequestPayloadForReopening(payload);
+
+        assertThat(payload.getBdrs2FileVersion())
+                .isEqualTo(initialVersion + 1);
+
+        assertThat(payload.getBdrs2().getBdrs2Files().getFile())
+                .isEqualTo(regulatorFile);
+
+        assertThat(payload.getBdrs2Attachments())
+                .containsEntry(regulatorFile, "review-file.xlsx");
+
+        assertThat(payload.getRegulatorReviewAttachments())
+                .doesNotContainKey(regulatorFile);
+
+        assertThat(payload.getRegulatorReviewOutcome().getFile())
+                .isNull();
+    }
+
+    @Test
+    void prepareRequestPayloadForReopening_whenFilesAreSame_shouldDoNothing() {
+        UUID file = UUID.randomUUID();
+
+        BDRS2RequestPayload payload = BDRS2RequestPayload.builder()
+                .bdrs2(BDRS2.builder()
+                        .bdrs2Files(BDRS2Files.builder()
+                                .file(file)
+                                .build())
+                        .build())
+                .regulatorReviewOutcome(BDRS2ApplicationRegulatorReviewOutcome.builder()
+                        .file(file)
+                        .build())
+                .build();
+
+        payload.setBdrs2Attachments(new HashMap<>());
+        payload.setRegulatorReviewAttachments(
+                new HashMap<>(Map.of(file, "review-file.xlsx"))
+        );
+
+        Integer initialVersion = payload.getBdrs2FileVersion();
+
+        service.prepareRequestPayloadForReopening(payload);
+
+        assertThat(payload.getBdrs2FileVersion())
+                .isEqualTo(initialVersion);
+
+        assertThat(payload.getBdrs2().getBdrs2Files().getFile())
+                .isEqualTo(file);
+
+        assertThat(payload.getRegulatorReviewAttachments())
+                .containsKey(file);
+
+        assertThat(payload.getRegulatorReviewOutcome().getFile())
+                .isEqualTo(file);
+    }
+
+    @Test
+    void prepareRequestPayloadForReopening_whenRegulatorFileIsNull_shouldDoNothing() {
+        BDRS2RequestPayload payload = BDRS2RequestPayload.builder()
+                .regulatorReviewOutcome(BDRS2ApplicationRegulatorReviewOutcome.builder()
+                        .file(null)
+                        .build())
+                .build();
+
+        service.prepareRequestPayloadForReopening(payload);
+
+        assertThat(payload.getRegulatorReviewOutcome().getFile()).isNull();
     }
 }

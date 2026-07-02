@@ -253,10 +253,12 @@ class RequestReleaseServiceTest {
     void releaseRequest_verifier_task() {
         final String operatorAssignee = "operatorAssignee";
         final String regulatorAssignee = "regulatorAssignee";
+        final String verifierAssignee = "verifierAssignee";
         Request request = Request.builder()
             .payload(InstallationAccountOpeningRequestPayload.builder()
                 .operatorAssignee(operatorAssignee)
                 .regulatorAssignee(regulatorAssignee)
+                .verifierAssignee(verifierAssignee)
                 .build())
             .build();
         RequestTask requestTask = RequestTask.builder()
@@ -272,6 +274,56 @@ class RequestReleaseServiceTest {
 
         verify(authorizationRulesQueryService, times(1))
             .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name());
+    }
+
+    @Test
+    void releaseRequest_verifier_task_without_assignee() {
+        final String operatorAssignee = "operatorAssignee";
+        final String regulatorAssignee = "regulatorAssignee";
+        final String verifierAssignee = "verifierAssignee";
+        Request request = Request.builder()
+                .payload(InstallationAccountOpeningRequestPayload.builder()
+                        .operatorAssignee(operatorAssignee)
+                        .regulatorAssignee(regulatorAssignee)
+                        .verifierAssignee(verifierAssignee)
+                        .build())
+                .build();
+        RequestTask requestTask = RequestTask.builder()
+                .request(request)
+                .type(INSTALLATION_ACCOUNT_OPENING_ARCHIVE)
+                .build();
+
+        when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
+                .thenReturn(Optional.of(RoleTypeConstants.VERIFIER));
+
+        service.releaseRequest(requestTask);
+
+        assertNull(request.getPayload().getVerifierAssignee());
+        assertEquals(regulatorAssignee, request.getPayload().getRegulatorAssignee());
+
+        verify(authorizationRulesQueryService, times(1))
+                .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name());
+    }
+
+    @Test
+    void releaseRequest_verifier_request_operator_assignee_other_than_task_assignee() {
+        final String verifierAssignee = "verifierAssignee";
+        Request request = Request.builder()
+                .payload(InstallationAccountOpeningRequestPayload.builder().verifierAssignee(verifierAssignee).build())
+                .build();
+        RequestTask requestTask = RequestTask.builder()
+                .request(request)
+                .type(INSTALLATION_ACCOUNT_OPENING_ARCHIVE)
+                .assignee("assignee")
+                .build();
+
+        when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
+                .thenReturn(Optional.of(RoleTypeConstants.VERIFIER));
+
+        service.releaseRequest(requestTask);
+
+        verify(authorizationRulesQueryService, times(1))
+                .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name());
     }
 
     @Test

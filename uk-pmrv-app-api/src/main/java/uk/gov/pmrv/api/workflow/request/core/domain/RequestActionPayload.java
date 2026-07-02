@@ -276,7 +276,6 @@ import java.util.UUID;
 
 
                 @DiscriminatorMapping(schema = NERApplicationSubmittedRequestActionPayload.class, value = "NER_APPLICATION_SUBMITTED_PAYLOAD"),
-                @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "NER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = NERApplicationVerificationSubmittedRequestActionPayload.class, value = "NER_APPLICATION_VERIFICATION_SUBMITTED_PAYLOADD"),
                 @DiscriminatorMapping(schema = NERVerificationReturnedToOperatorRequestActionPayload.class, value = "NER_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD"),
                 @DiscriminatorMapping(schema = NERRegulatorReviewReturnedForAmendsRequestActionPayload.class, value = "NER_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),

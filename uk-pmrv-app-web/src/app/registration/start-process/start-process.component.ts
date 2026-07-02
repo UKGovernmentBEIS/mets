@@ -4,15 +4,20 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'app-start-process',
   standalone: false,
   template: `
-    <app-page-heading>Create a UK Emissions Trading Scheme reporting sign in</app-page-heading>
+    <app-page-heading>Create a sign in for the installations part of Manage your UK ETS reporting</app-page-heading>
     <div class="govuk-body">
-      <h2 class="govuk-heading-m">Before you start</h2>
-      <p>To create a sign in, you'll need:</p>
+      <p>You can create a sign in if you are an installation operator.</p>
+      <p>You will need:</p>
       <ul>
-        <li>a work email address that is not shared with anyone else</li>
+        <li>a work email address that only you use</li>
         <li>a mobile phone, tablet or browser to set up two-factor authentication</li>
       </ul>
-      <a govukButton routerLink="email">Continue</a>
+      <h2 class="govuk-heading-m">If you need an aviation or maritime sign in</h2>
+      <p>
+        <a class="govuk-link" href="/contact-us" target="_blank" rel="noreferrer noopener">Contact your regulator</a>
+        to ask for an invitation.
+      </p>
+      <a govukButton routerLink="email">Create an installations sign in</a>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

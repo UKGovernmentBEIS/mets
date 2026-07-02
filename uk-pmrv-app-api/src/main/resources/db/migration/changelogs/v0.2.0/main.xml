@@ -45,5 +45,7 @@
     <include file="changelog_flowable_ddl.xml" relativeToChangelogFile="true" />
     <include file="changelog_migrate_from_camunda_to_flowable.xml" relativeToChangelogFile="true" />
 	<include file="changelog_verification_body.xml" relativeToChangelogFile="true" />
+	<include file="changelog_request_task_wait_for_review_permit_emp_migration.xml" relativeToChangelogFile="true" />
+
 
 </databaseChangeLog>

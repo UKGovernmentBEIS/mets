@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.any;
@@ -233,5 +234,96 @@ public class NERRegulatorReviewSubmitServiceTest {
                 eq(RequestActionType.NER_APPLICATION_DEEMED_WITHDRAWN),
                 any()
         );
+    }
+
+    @Test
+    void prepareRequestPayloadForReopening_whenRegulatorFileDifferent_shouldTransferFileAndIncrementVersion() {
+        UUID regulatorFile = UUID.randomUUID();
+        UUID operatorFile = UUID.randomUUID();
+
+        NerRequestPayload payload = NerRequestPayload.builder()
+                .ner(NER.builder()
+                        .nerFiles(NERFiles.builder()
+                                .file(operatorFile)
+                                .build())
+                        .build())
+                .regulatorReviewOutcome(NERApplicationRegulatorReviewOutcome.builder()
+                        .nerFile(regulatorFile)
+                        .build())
+                .build();
+
+        payload.setNerAttachments(new HashMap<>());
+        payload.setRegulatorReviewAttachments(
+                new HashMap<>(Map.of(regulatorFile, "review-file.xlsx")));
+
+        Integer initialVersion = payload.getNerFileVersion();
+
+        service.prepareRequestPayloadForReopening(payload);
+
+        assertThat(payload.getNerFileVersion())
+                .isEqualTo(initialVersion + 1);
+
+        assertThat(payload.getNer().getNerFiles().getFile())
+                .isEqualTo(regulatorFile);
+
+        assertThat(payload.getNerAttachments())
+                .containsEntry(regulatorFile, "review-file.xlsx");
+
+        assertThat(payload.getRegulatorReviewAttachments())
+                .doesNotContainKey(regulatorFile);
+
+        assertThat(payload.getRegulatorReviewOutcome().getNerFile())
+                .isNull();
+    }
+
+    @Test
+    void prepareRequestPayloadForReopening_whenFilesAreSame_shouldDoNothing() {
+        UUID file = UUID.randomUUID();
+
+        NerRequestPayload payload = NerRequestPayload.builder()
+                .ner(NER.builder()
+                        .nerFiles(NERFiles.builder()
+                                .file(file)
+                                .build())
+                        .build())
+                .regulatorReviewOutcome(NERApplicationRegulatorReviewOutcome.builder()
+                        .nerFile(file)
+                        .build())
+                .build();
+
+        payload.setNerAttachments(new HashMap<>());
+        payload.setRegulatorReviewAttachments(
+                new HashMap<>(Map.of(file, "review-file.xlsx")));
+
+        Integer initialVersion = payload.getNerFileVersion();
+
+        service.prepareRequestPayloadForReopening(payload);
+
+        assertThat(payload.getNerFileVersion())
+                .isEqualTo(initialVersion);
+
+        assertThat(payload.getNer().getNerFiles().getFile())
+                .isEqualTo(file);
+
+        assertThat(payload.getRegulatorReviewAttachments())
+                .containsKey(file);
+
+        assertThat(payload.getRegulatorReviewOutcome().getNerFile())
+                .isEqualTo(file);
+    }
+
+    @Test
+    void prepareRequestPayloadForReopening_whenRegulatorFileIsNull_shouldDoNothing() {
+        NerRequestPayload payload = NerRequestPayload.builder()
+                .regulatorReviewOutcome(
+                        NERApplicationRegulatorReviewOutcome.builder()
+                                .nerFile(null)
+                                .build())
+                .build();
+
+        service.prepareRequestPayloadForReopening(payload);
+
+        assertThat(payload.getRegulatorReviewOutcome().getNerFile())
+                .isNull();
     }
 }

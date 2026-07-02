@@ -20,6 +20,8 @@ import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
@@ -42,48 +44,70 @@ public abstract class OperatorRecallEmailNotificationHandler implements RequestR
         if (accountType == AccountType.INSTALLATION) {
 
             InstallationAccountDTO account = installationAccountQueryService.getAccountDTOById(accountId);
-            String verifierEmail = getVerifierEmail(account);
-            if (verifierEmail == null) {
+
+            Long verificationBodyId = account.getVerificationBodyId();
+            if (verificationBodyId == null) {
+                return;
+            }
+
+            List<String> verifierEmails = getAssignedVerifierEmails(request);
+            if (verifierEmails.isEmpty()) {
+                verifierEmails = getVerifierAdminEmails(verificationBodyId);
+            }
+
+            if (verifierEmails.isEmpty()) {
                 return;
             }
 
             Map<String, Object> templateParams = getTemplateParams(account, request.getId(), getType(), accountType);
 
             final EmailData<PmrvEmailNotificationTemplateData> emailData = EmailData.<PmrvEmailNotificationTemplateData>builder()
-                            .notificationTemplateData(
-                                    PmrvEmailNotificationTemplateData.builder()
-                                            .competentAuthority(request.getCompetentAuthority())
-                                            .templateName(PmrvNotificationTemplateName.RECALLED_BY_OPERATOR.getName())
-                                            .templateParams(templateParams)
-                                            .accountType(accountType)
-                                            .build())
-                            .build();
+                    .notificationTemplateData(
+                            PmrvEmailNotificationTemplateData.builder()
+                                    .competentAuthority(request.getCompetentAuthority())
+                                    .templateName(PmrvNotificationTemplateName.RECALLED_BY_OPERATOR.getName())
+                                    .templateParams(templateParams)
+                                    .accountType(accountType)
+                                    .build())
+                    .build();
 
-            notificationEmailService.notifyRecipient(emailData, verifierEmail);
+            verifierEmails.forEach(email ->
+                    notificationEmailService.notifyRecipient(emailData, email));
         }
     }
 
-    private String getVerifierEmail(final   InstallationAccountDTO account) {
-        Long verificationBodyId = account.getVerificationBodyId();
-        if (verificationBodyId == null) {
-            return null;
+    private List<String> getAssignedVerifierEmails(Request request) {
+        String assignee = request.getPayload() != null ? request.getPayload().getVerifierAssignee() : null;
+
+        if (assignee == null) {
+            return Collections.emptyList();
         }
 
+        UserInfoDTO user = userAuthService.getUserByUserId(assignee);
+        if (user == null || user.getEmail() == null) {
+            return Collections.emptyList();
+        }
+
+        return List.of(user.getEmail());
+    }
+
+    private List<String> getVerifierAdminEmails(Long verificationBodyId) {
         List<String> verifierAdmins = verifierAuthorityQueryService.findVerifierAdminsByVerificationBody(verificationBodyId);
+
         if (verifierAdmins == null || verifierAdmins.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
 
-        List<UserInfoDTO> verifierUserInfoList = verifierUserInfoService.getVerifierUsersInfo(verifierAdmins);
-        if (verifierUserInfoList == null || verifierUserInfoList.isEmpty()) {
-            return null;
+        List<UserInfoDTO> verifierAdminUsers = verifierUserInfoService.getVerifierUsersInfo(verifierAdmins);
+
+        if (verifierAdminUsers == null || verifierAdminUsers.isEmpty()) {
+            return Collections.emptyList();
         }
 
-        UserInfoDTO verifierUserInfo = verifierUserInfoList.getFirst();
-        if (verifierUserInfo == null || verifierUserInfo.getEmail() == null) {
-            return null;
-        }
-        return verifierUserInfo.getEmail();
+        return verifierAdminUsers.stream()
+                .map(UserInfoDTO::getEmail)
+                .filter(Objects::nonNull)
+                .toList();
     }
 
     protected Map<String, Object> getTemplateParams(InstallationAccountDTO account, String workflowId,

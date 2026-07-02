@@ -20,8 +20,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERRegulato
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationRegulatorReviewSaveTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationCompletedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationRegulatorReviewOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERFiles;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NER;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.enums.NERReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.enums.NERReviewOpinion;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.mapper.NERMapper;
@@ -89,9 +89,16 @@ public class NERRegulatorReviewSubmitService {
         validationService.validateRegulatorReviewOutcome(reviewRequestTaskPayload, NERReviewOpinion.PROCEED_TO_AUTHORITY);
 
         updateRequestPayload(requestTask, appUser);
-        incrementNerFileVersion(reviewRequestTaskPayload, (NerRequestPayload) request.getPayload());
-
         addRequestAction(request.getId(), RequestActionPayloadType.NER_APPLICATION_COMPLETED_PAYLOAD, RequestActionType.NER_APPLICATION_COMPLETED);
+    }
+
+
+    @Transactional
+    public void prepareRequestPayloadForReopening(NerRequestPayload requestPayload){
+        UUID regulatorNerFile = requestPayload.getRegulatorReviewOutcome().getNerFile();
+        if (regulatorNerFile != null) {
+            incrementNERFileVersionAndUpdateFile(regulatorNerFile, requestPayload);
+        }
     }
 
     @Transactional
@@ -154,26 +161,29 @@ public class NERRegulatorReviewSubmitService {
                         requestPayload.getVerificationReport(),
                         requestActionPayloadType);
 
-        actionPayload.setNerAttachments(requestPayload.getNerAttachments());
-        actionPayload.setRegulatorReviewAttachments(requestPayload.getRegulatorReviewAttachments());
-
         requestService.addActionToRequest(request,
                 actionPayload,
                 requestActionType,
                 requestPayload.getRegulatorReviewer());
     }
 
-    private void incrementNerFileVersion(NERApplicationRegulatorReviewSubmitRequestTaskPayload taskPayload, NerRequestPayload requestPayload) {
-        UUID requestFile = Optional.ofNullable(requestPayload.getNer().getNerFiles())
+    private void incrementNERFileVersionAndUpdateFile(UUID regulatorNerFile, NerRequestPayload requestPayload) {
+        UUID requestFile = Optional.ofNullable(requestPayload.getNer())
+                .map(NER::getNerFiles)
                 .map(NERFiles::getFile)
                 .orElse(null);
 
-        UUID taskFile = Optional.ofNullable(taskPayload.getRegulatorReviewOutcome())
-                .map(NERApplicationRegulatorReviewOutcome::getNerFile)
-                .orElse(null);
-
-        if (!Objects.equals(requestFile, taskFile)) {
+        if (!Objects.equals(requestFile, regulatorNerFile)) {
             requestPayload.incrementNerFileVersion();
+
+            //regulator ner file is transferred to operator side
+            requestPayload.getNer().getNerFiles().setFile(regulatorNerFile);
+            String fileName = requestPayload.getRegulatorReviewAttachments().get(regulatorNerFile);
+            requestPayload.getNerAttachments().put(regulatorNerFile, fileName);
+
+            //and removed from regulator side
+            requestPayload.getRegulatorReviewAttachments().remove(regulatorNerFile);
+            requestPayload.getRegulatorReviewOutcome().setNerFile(null);
         }
     }
 

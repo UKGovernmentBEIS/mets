@@ -297,8 +297,6 @@ import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RfiSubmitRequestTaskActi
     @JsonSubTypes.Type(value = NERApplicationAmendsSubmitRequestTaskActionPayload.class, name = "NER_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD"),
     @JsonSubTypes.Type(value = NERApplicationAmendsSaveRequestTaskActionPayload.class, name = "NER_APPLICATION_AMENDS_SAVE_PAYLOAD"),
     @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "NER_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD"),
-    @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "NER_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD"),
-    @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "NER_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD"),
 
     @JsonSubTypes.Type(value = DoalSaveApplicationRequestTaskActionPayload.class, name = "DOAL_SAVE_APPLICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "DOAL_SUBMIT_APPLICATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD"),
