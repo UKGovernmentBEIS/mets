@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { CookiesPopUpComponent } from './cookies-pop-up.component';
 
@@ -7,12 +7,12 @@ describe('CookiesPopUpComponent', () => {
   let component: CookiesPopUpComponent;
   let fixture: ComponentFixture<CookiesPopUpComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [CookiesPopUpComponent],
-      imports: [RouterTestingModule],
+      imports: [CookiesPopUpComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CookiesPopUpComponent);

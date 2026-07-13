@@ -6,6 +6,7 @@ export const articleReasonGroupTypeLabelsMap: Record<
 > = {
   ARTICLE_6A_REASONS: 'Article 6a reasons',
   ARTICLE_34H_REASONS: 'Article 34H reasons',
+  ARTICLE_5_REASONS: 'Article 5 of the FAR (NER applications)',
 };
 
 export const articleReasonItemsLabelsMap: Partial<

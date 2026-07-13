@@ -90,13 +90,15 @@ describe('SectionsContainerComponent', () => {
 
     it('should display about variation', () => {
       expect(hostElement.querySelector('li[title="Variation"] h2').textContent).toEqual('Variation');
-      expect(hostElement.querySelector('li[title="Variation"] ul govuk-tag').textContent.trim()).toEqual('not started');
+      expect(hostElement.querySelector('li[title="Variation"] ul .app-task-list__tag').textContent.trim()).toEqual(
+        'Not started',
+      );
     });
 
     it('should not display submit link', () => {
       expect(hostElement.querySelector('ol > li:last-child ul > li a')).toBeNull();
-      expect(hostElement.querySelector('ol > li:last-child ul > li > govuk-tag').textContent.trim()).toEqual(
-        'cannot start yet',
+      expect(hostElement.querySelector('ol > li:last-child ul > li .app-task-list__tag').textContent.trim()).toEqual(
+        'Cannot start yet',
       );
     });
   });
@@ -137,13 +139,15 @@ describe('SectionsContainerComponent', () => {
 
     it('should display about variation', () => {
       expect(hostElement.querySelector('li[title="Variation"] h2').textContent).toEqual('Variation');
-      expect(hostElement.querySelector('li[title="Variation"] ul govuk-tag').textContent.trim()).toEqual('completed');
+      expect(hostElement.querySelector('li[title="Variation"] ul .app-task-list__tag').textContent.trim()).toEqual(
+        'Completed',
+      );
     });
 
     it('should display submit link', () => {
       expect(hostElement.querySelector('ol > li:last-child ul > li a')).toBeTruthy();
-      expect(hostElement.querySelector('ol > li:last-child ul > li > govuk-tag').textContent.trim()).toEqual(
-        'not started',
+      expect(hostElement.querySelector('ol > li:last-child ul > li .app-task-list__tag').textContent.trim()).toEqual(
+        'Not started',
       );
     });
   });
@@ -196,13 +200,15 @@ describe('SectionsContainerComponent', () => {
       ).toBeTruthy();
 
       expect(
-        hostElement.querySelector('li[linktext="Amends needed for about the variation"] govuk-tag').textContent.trim(),
-      ).toEqual('not started');
+        hostElement
+          .querySelector('li[linktext="Amends needed for about the variation"] .app-task-list__tag')
+          .textContent.trim(),
+      ).toEqual('Not started');
     });
 
     it('should not display submit link', () => {
-      expect(hostElement.querySelector('ol > li:last-child ul > li > govuk-tag').textContent.trim()).toEqual(
-        'cannot start yet',
+      expect(hostElement.querySelector('ol > li:last-child ul > li .app-task-list__tag').textContent.trim()).toEqual(
+        'Cannot start yet',
       );
     });
   });
@@ -255,13 +261,15 @@ describe('SectionsContainerComponent', () => {
       ).toBeTruthy();
 
       expect(
-        hostElement.querySelector('li[linktext="Amends needed for about the variation"] govuk-tag').textContent.trim(),
-      ).toEqual('completed');
+        hostElement
+          .querySelector('li[linktext="Amends needed for about the variation"] .app-task-list__tag')
+          .textContent.trim(),
+      ).toEqual('Completed');
     });
 
     it('should display submit link', () => {
-      expect(hostElement.querySelector('ol > li:last-child ul > li > govuk-tag').textContent.trim()).toEqual(
-        'not started',
+      expect(hostElement.querySelector('ol > li:last-child ul > li .app-task-list__tag').textContent.trim()).toEqual(
+        'Not started',
       );
     });
   });

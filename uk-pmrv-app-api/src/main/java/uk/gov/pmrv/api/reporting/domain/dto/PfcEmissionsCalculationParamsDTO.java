@@ -12,19 +12,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.ObjectUtils;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationpfc.PFCCalculationMethod;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.pfc.OverVoltageSourceStreamEmissionCalculationMethodData;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.pfc.PfcSourceStreamEmissionCalculationMethodData;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.pfc.SlopeSourceStreamEmissionCalculationMethodData;
 
 import java.math.BigDecimal;
+import java.time.Year;
 import java.util.Objects;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+@SpELExpression(expression = "{#reportingYear != null && T(java.lang.Integer).parseInt(#reportingYear) >= 1}",
+    message = "reporting.pfc.emissionsCalculation.reportingYear.invalid")
 public class PfcEmissionsCalculationParamsDTO {
+
+    @NotNull
+    private Year reportingYear;
 
     @NotNull
     private PFCCalculationMethod calculationMethod;
@@ -63,7 +70,8 @@ public class PfcEmissionsCalculationParamsDTO {
 
         PfcEmissionsCalculationParamsDTO that = (PfcEmissionsCalculationParamsDTO) o;
 
-        return ObjectUtils.compare(calculationMethod, that.calculationMethod) == 0
+        return ObjectUtils.compare(reportingYear, that.reportingYear) == 0
+            && ObjectUtils.compare(calculationMethod, that.calculationMethod) == 0
             && pfcSourceStreamEmissionCalculationMethodData.equals(that.pfcSourceStreamEmissionCalculationMethodData)
             && ObjectUtils.compare(totalPrimaryAluminium, that.totalPrimaryAluminium) == 0;
     }
@@ -71,7 +79,7 @@ public class PfcEmissionsCalculationParamsDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(calculationMethod, totalPrimaryAluminium, pfcSourceStreamEmissionCalculationMethodData);
+        return Objects.hash(reportingYear, calculationMethod, totalPrimaryAluminium, pfcSourceStreamEmissionCalculationMethodData);
     }
 
 }

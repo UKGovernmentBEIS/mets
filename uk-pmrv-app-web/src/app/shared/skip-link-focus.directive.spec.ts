@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, Router, RouterOutlet } from '@angular/router';
 
 import { SkipLinkComponent } from 'govuk-components';
 
@@ -21,8 +20,9 @@ describe('SkipLinkFocusDirective', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([{ path: 'test', component: TestComponent }])],
-      declarations: [SkipLinkComponent, TestComponent, SkipLinkFocusDirective, RouterStubComponent],
+      imports: [SkipLinkComponent, RouterOutlet],
+      declarations: [TestComponent, SkipLinkFocusDirective, RouterStubComponent],
+      providers: [provideRouter([{ path: 'test', component: TestComponent }])],
     }).createComponent(TestComponent);
 
     fixture.detectChanges();

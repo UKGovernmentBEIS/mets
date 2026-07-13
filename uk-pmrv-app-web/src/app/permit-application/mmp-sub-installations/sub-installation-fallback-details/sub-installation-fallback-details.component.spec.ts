@@ -1,7 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -13,7 +12,7 @@ import { PermitIssuanceStore } from '@permit-issuance/store/permit-issuance.stor
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, asyncData, BasePage, mockClass } from '@testing';
 
-import { RequestTaskAttachmentsHandlingService, TasksService } from 'pmrv-api';
+import { RequestTaskAttachmentsHandlingService, SubInstallationTypesService, TasksService } from 'pmrv-api';
 
 import { mockDigitizedPlanFallbackDetails } from '../testing/mock';
 import { SubInstallationFallbackDetailsComponent } from './sub-installation-fallback-details.component';
@@ -25,6 +24,7 @@ describe('SubInstallationFallbackDetailsComponent', () => {
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let fixture: ComponentFixture<SubInstallationFallbackDetailsComponent>;
+  let subInstallationTypesService: Partial<jest.Mocked<SubInstallationTypesService>>;
 
   const attachmentService = mockClass(RequestTaskAttachmentsHandlingService);
   const route = new ActivatedRouteStub({}, {}, { permitTask: 'monitoringMethodologyPlans' });
@@ -79,16 +79,35 @@ describe('SubInstallationFallbackDetailsComponent', () => {
   };
 
   beforeEach(async () => {
+    subInstallationTypesService = {
+      getSubInstallationTypesDetails: jest.fn().mockReturnValue(
+        of([
+          {
+            subInstallationType: 'PRIMARY_ALUMINIUM',
+            valid: true,
+            coveredByUKCBAM: true,
+          },
+          {
+            subInstallationType: 'HEAT_BENCHMARK_CL',
+            valid: true,
+            coveredByUKCBAM: true,
+          },
+        ]),
+      ),
+    };
+
     await TestBed.configureTestingModule({
       declarations: [SubInstallationFallbackDetailsComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [SharedModule, SharedPermitModule],
       providers: [
+        provideRouter([]),
         { provide: ActivatedRoute, useValue: route },
         { provide: TasksService, useValue: tasksService },
         {
           provide: PermitApplicationStore,
           useExisting: PermitIssuanceStore,
         },
+        { provide: SubInstallationTypesService, useValue: subInstallationTypesService },
         { provide: RequestTaskAttachmentsHandlingService, useValue: attachmentService },
       ],
     }).compileComponents();

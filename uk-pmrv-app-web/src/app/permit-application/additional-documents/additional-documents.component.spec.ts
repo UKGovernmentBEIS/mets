@@ -120,7 +120,7 @@ describe('AdditionalDocumentsComponent', () => {
   it('should display an non empty form', () => {
     expect(page.existRadios.some((radio) => radio.checked)).toBeTruthy();
     expect(page.files).toHaveLength(2);
-    expect(page.fileList.classList).not.toContain('moj-hidden');
+    expect(page.fileList.hidden).toBe(false);
   });
 
   it('should not display the file input', () => {
@@ -184,7 +184,7 @@ describe('AdditionalDocumentsComponent', () => {
     expect(page.fileDeleteButtons.length).toEqual(0);
     expect(page.filesHeader[0].textContent).toEqual('Files added');
     expect(page.fileInput.disabled).toBeFalsy();
-    expect(page.fileList.classList).toContain('moj-hidden');
+    expect(page.fileList.hidden).toBe(true);
   });
 
   it('should require all fields to be populated', () => {

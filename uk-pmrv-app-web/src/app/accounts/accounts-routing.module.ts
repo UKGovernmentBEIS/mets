@@ -387,7 +387,7 @@ const routes: Routes = [
       },
       {
         path: 'trigger-doal',
-        data: { pageTitle: 'Start a determination of activity level change', breadcrumb: true },
+        data: { pageTitle: 'Start a determination of activity level', breadcrumb: true },
         component: TriggerDoalComponent,
         canDeactivate: [PendingRequestGuard],
       },

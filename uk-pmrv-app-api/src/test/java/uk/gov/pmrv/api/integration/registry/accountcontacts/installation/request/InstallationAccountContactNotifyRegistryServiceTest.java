@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.integration.model.metscontacts.MetsContactsEvent;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
+import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.integration.registry.accountcontacts.common.AccountContactRegistryIntegrationUtilityService;
 
 import static org.mockito.Mockito.verify;
@@ -45,6 +46,18 @@ class InstallationAccountContactNotifyRegistryServiceTest {
     @Test
     void notifyRegistry_does_not_send_event_when_registry_id_is_null() {
         Account account = buildAccount(null);
+
+        installationAccountContactNotifyRegistryService.notifyRegistry(account);
+
+        verifyNoInteractions(utilityService, registryProducer);
+    }
+
+    @Test
+    void notifyRegistry_does_not_send_event_when_account_is_transferred() {
+        Account account = InstallationAccount.builder()
+                .registryId(REGISTRY_ID)
+                .status(InstallationAccountStatus.TRANSFERRED)
+                .build();
 
         installationAccountContactNotifyRegistryService.notifyRegistry(account);
 

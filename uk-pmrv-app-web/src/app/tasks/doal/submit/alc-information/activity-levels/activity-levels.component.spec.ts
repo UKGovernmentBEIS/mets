@@ -70,7 +70,7 @@ describe('ActivityLevelsComponent', () => {
       [
         '2026',
         'District heating',
-        'Regulator rejects adjustment',
+        'Authority rejects adjustment',
         'changedActivityLevel',
         'activityLevel1Comment',
         '29 Nov 2022',

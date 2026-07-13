@@ -1,0 +1,19 @@
+<nav aria-label="Menu" class="govuk-header-legacy__navigation">
+  <button
+    class="govuk-header-legacy__menu-button"
+    [class.govuk-header-legacy__menu-button--open]="isNavigationOpen"
+    [attr.aria-controls]="identifier()"
+    [attr.aria-label]="menuButtonAriaLabel()"
+    [attr.aria-expanded]="isNavigationOpen"
+    type="button"
+    (click)="isNavigationOpen = !isNavigationOpen">
+    Menu
+  </button>
+  <ul
+    [id]="identifier()"
+    class="govuk-header-legacy__navigation-list"
+    [class.govuk-header-legacy__navigation--open]="isNavigationOpen"
+    [attr.aria-label]="ariaLabel()">
+    <ng-content />
+  </ul>
+</nav>

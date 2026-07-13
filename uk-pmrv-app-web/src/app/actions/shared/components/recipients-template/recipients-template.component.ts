@@ -24,6 +24,7 @@ export class RecipientsTemplateComponent {
   @Input() header: string;
   @Input() officialNoticeText: string = '';
   @Input() hasBorders = true;
+  @Input() isAviation = false;
 
   private readonly payload: Signal<recipientsPayloadType> = toSignal(this.store.payload$);
 
@@ -42,7 +43,7 @@ export class RecipientsTemplateComponent {
       noticeFile: officialNotice
         ? [
             {
-              downloadUrl: `/actions/${actionId}/file-download/document/${officialNotice.uuid}`,
+              downloadUrl: `${this.isAviation ? '/aviation' : ''}/actions/${actionId}/file-download/document/${officialNotice.uuid}`,
               fileName: officialNotice.name,
             },
           ]

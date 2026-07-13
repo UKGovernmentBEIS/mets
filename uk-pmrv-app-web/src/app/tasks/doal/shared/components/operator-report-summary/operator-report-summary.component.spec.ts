@@ -58,7 +58,7 @@ describe('OperatorReportSummaryComponent', () => {
   });
 
   it('should display all HTMLElements', () => {
-    expect(page.heading1.textContent.trim()).toEqual('Upload operator activity level report');
+    expect(page.heading1.textContent.trim()).toEqual('Upload operator report');
     expect(page.appOperatorReportSummaryTemplate).toBeTruthy();
     expect(page.appReturnTaskLink).toBeTruthy();
   });

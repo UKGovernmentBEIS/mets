@@ -36,7 +36,6 @@ describe('InternalServerErrorComponent', () => {
 
     it('should display all HTML elements', async () => {
       const element: HTMLElement = fixture.nativeElement;
-      const navigateByUrlSpy = jest.spyOn(router, 'navigateByUrl');
       const paragraphContents = Array.from(element.querySelectorAll<HTMLParagraphElement>('p')).map((el) =>
         el.textContent.trim(),
       );
@@ -46,15 +45,6 @@ describe('InternalServerErrorComponent', () => {
         'Try again later.',
         'Contact the UK ETS reporting helpdesk  if you have any questions.',
       ]);
-
-      const link: HTMLAnchorElement = element.querySelector<HTMLAnchorElement>('a');
-      link.click();
-
-      fixture.detectChanges();
-      await fixture.whenStable();
-
-      expect(navigateByUrlSpy).toHaveBeenCalledTimes(1);
-      expect(router.url).toBe('/contact-us');
     });
   });
 
@@ -75,7 +65,6 @@ describe('InternalServerErrorComponent', () => {
     });
 
     it('should display all HTML elements', async () => {
-      const navigateByUrlSpy = jest.spyOn(router, 'navigateByUrl');
       const element: HTMLElement = fixture.nativeElement;
       const paragraphContents = Array.from(element.querySelectorAll<HTMLParagraphElement>('p')).map((el) =>
         el.textContent.trim(),
@@ -83,16 +72,8 @@ describe('InternalServerErrorComponent', () => {
 
       expect(element.querySelector('h1').textContent).toEqual('Registry application data synchronisation error');
       expect(paragraphContents).toEqual([
-        "We're experiencing temporary difficulties in syncing data. Please try again later or contact the UK ETS reporting helpdesk for assistance.",
+        "We're experiencing temporary difficulties in syncing data. Please try again later or contact the  UK ETS reporting helpdesk  for assistance.",
       ]);
-      const link: HTMLAnchorElement = element.querySelector<HTMLAnchorElement>('a');
-      link.click();
-
-      fixture.detectChanges();
-      await fixture.whenStable();
-
-      expect(navigateByUrlSpy).toHaveBeenCalledTimes(1);
-      expect(router.url).toBe('/contact-us');
     });
   });
 });

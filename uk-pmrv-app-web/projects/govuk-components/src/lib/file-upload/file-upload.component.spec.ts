@@ -8,7 +8,7 @@ import { FileUploadComponent } from './file-upload.component';
 
 describe('FileUploadComponent', () => {
   @Component({
-    standalone: false,
+    imports: [FileUploadComponent, ReactiveFormsModule],
     template: '<div govukFileUpload [formControl]="control"></div>',
   })
   class TestComponent {
@@ -21,8 +21,7 @@ describe('FileUploadComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [FileUploadComponent, TestComponent, ErrorMessageComponent],
+      imports: [ReactiveFormsModule, FileUploadComponent, TestComponent, ErrorMessageComponent],
     }).compileComponents();
   });
 

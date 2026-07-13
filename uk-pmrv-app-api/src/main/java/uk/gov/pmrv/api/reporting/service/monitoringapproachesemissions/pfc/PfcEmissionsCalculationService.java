@@ -11,6 +11,7 @@ import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.pfc.SlopeS
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.Year;
 
 @Service
 public class PfcEmissionsCalculationService {
@@ -21,7 +22,8 @@ public class PfcEmissionsCalculationService {
         final BigDecimal totalPrimaryAluminium = pfcEmissionsCalculationParamsDTO.getTotalPrimaryAluminium(); // activity data value
 		final BigDecimal c2F6WeightFraction = pfcEmissionsCalculationParamsDTO
 				.getPfcSourceStreamEmissionCalculationMethodData().getC2F6WeightFraction();
-		
+        final Year reportingYear = pfcEmissionsCalculationParamsDTO.getReportingYear();
+
         final BigDecimal amountOfCF4;
         if (pfcEmissionsCalculationParamsDTO.getCalculationMethod() == PFCCalculationMethod.SLOPE) {
             amountOfCF4 = calculateAmountOfCF4BySlope(totalPrimaryAluminium,
@@ -31,14 +33,18 @@ public class PfcEmissionsCalculationService {
                 (OverVoltageSourceStreamEmissionCalculationMethodData) pfcEmissionsCalculationParamsDTO.getPfcSourceStreamEmissionCalculationMethodData());
         }
 
+        final BigDecimal gwpCF4 = GlobalWarmingPotential.PFC_CF4.getValue(reportingYear);
+        final BigDecimal gwpC2F6 = GlobalWarmingPotential.PFC_C2F6.getValue(reportingYear);
         final BigDecimal amountOfC2F6 = c2F6WeightFraction.multiply(amountOfCF4);
-        final BigDecimal totalCF4Emissions = amountOfCF4.multiply(GlobalWarmingPotential.PFC_CF4.getValue());
-        final BigDecimal totalC2F6Emissions = amountOfC2F6.multiply(GlobalWarmingPotential.PFC_C2F6.getValue());
+        final BigDecimal totalCF4Emissions = amountOfCF4.multiply(gwpCF4);
+        final BigDecimal totalC2F6Emissions = amountOfC2F6.multiply(gwpC2F6);
 
 		final BigDecimal reportableEmissions = ((totalCF4Emissions.add(totalC2F6Emissions))
 				.multiply(BigDecimal.valueOf(100))).divide(collectionEfficiency, MathContext.DECIMAL128);
 
         return PfcEmissionsCalculationDTO.builder()
+            .globalWarmingPotentialCF4(gwpCF4)
+            .globalWarmingPotentialC2F6(gwpC2F6)
             .amountOfCF4(amountOfCF4.setScale(5, RoundingMode.HALF_UP))
             .totalCF4Emissions(totalCF4Emissions.setScale(5, RoundingMode.HALF_UP))
             .amountOfC2F6(amountOfC2F6.setScale(5, RoundingMode.HALF_UP))

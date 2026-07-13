@@ -81,6 +81,6 @@ describe('ReviewComponent', () => {
 
   it('should render the review content', () => {
     expect(page.heading).toEqual('Review follow up response to a notification');
-    expect(page.sections.map((el) => el.textContent.trim())).toEqual(['Operator follow up response accepted']);
+    expect(page.sections.map((el) => el.textContent.trim())).toEqual(['Operator follow up response Accepted']);
   });
 });

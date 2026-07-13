@@ -49,11 +49,11 @@ describe('SubmittedComponent', () => {
     expect(page.heading).toEqual('Activity level determination sent to UK Authority');
     expect(page.tasksContents.map((el) => el.textContent.trim())).toEqual([
       'Upload activity level documentation',
-      'Upload operator activity level report',
-      'Upload verification report of the activity level report',
+      'Upload operator report',
+      'Upload verification report',
       'Upload additional documents',
       'Provide your determination',
-      'Provide information about this activity level change',
+      'Provide information about this activity level',
       'Provide determination of activity level',
     ]);
   });

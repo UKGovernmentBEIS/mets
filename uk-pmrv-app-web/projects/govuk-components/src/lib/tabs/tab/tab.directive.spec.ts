@@ -1,12 +1,12 @@
+import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { delay, of } from 'rxjs';
 
-import { TabsComponent } from '../index';
-import { TabDirective } from './tab.directive';
+import { TabDirective, TabsComponent } from '../index';
 
 describe('TabDirective', () => {
   describe('with mixed content source, database and static content', () => {
@@ -14,12 +14,14 @@ describe('TabDirective', () => {
     let fixture: ComponentFixture<TestComponent>;
 
     @Component({
-      standalone: false,
+      imports: [AsyncPipe, TabDirective, TabsComponent],
       template: `
         <govuk-tabs>
-          <ng-template govukTab *ngFor="let tab of tabs$ | async" [id]="tab.id" [label]="tab.label">
-            {{ tab.body }}
-          </ng-template>
+          @for (tab of tabs$ | async; track tab) {
+            <ng-template govukTab [id]="tab.id" [label]="tab.label">
+              {{ tab.body }}
+            </ng-template>
+          }
           <ng-template govukTab id="paragraph" label="A paragraph">
             <p>This is a paragraph</p>
           </ng-template>
@@ -35,8 +37,8 @@ describe('TabDirective', () => {
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        declarations: [TabsComponent, TestComponent, TabDirective],
-        imports: [RouterTestingModule],
+        imports: [TabsComponent, TestComponent, TabDirective],
+        providers: [provideRouter([])],
       }).compileComponents();
     });
 
@@ -73,12 +75,14 @@ describe('TabDirective', () => {
     let fixture: ComponentFixture<TestComponent>;
 
     @Component({
-      standalone: false,
+      imports: [TabsComponent, TabDirective, AsyncPipe],
       template: `
         <govuk-tabs>
-          <ng-template govukTab *ngFor="let tab of tabs$ | async" [id]="tab.id" [label]="tab.label">
-            {{ tab.body }}
-          </ng-template>
+          @for (tab of tabs$ | async; track tab) {
+            <ng-template govukTab [id]="tab.id" [label]="tab.label">
+              {{ tab.body }}
+            </ng-template>
+          }
         </govuk-tabs>
       `,
     })
@@ -88,8 +92,8 @@ describe('TabDirective', () => {
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        declarations: [TabsComponent, TestComponent, TabDirective],
-        imports: [RouterTestingModule],
+        imports: [TabsComponent, TestComponent, TabDirective],
+        providers: [provideRouter([])],
       }).compileComponents();
     });
 

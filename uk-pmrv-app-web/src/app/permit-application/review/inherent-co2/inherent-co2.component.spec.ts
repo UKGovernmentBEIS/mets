@@ -101,8 +101,8 @@ describe('InherentCO2Component', () => {
     expect(
       page.reviewSections.map((section) => [
         section.querySelector('a')?.textContent.trim() ?? section.querySelector('strong').textContent.trim(),
-        section.querySelector('govuk-tag').textContent.trim(),
+        section.querySelector('.app-task-list__tag').textContent.trim(),
       ]),
-    ).toEqual([['Inherent CO2 emissions', 'completed']]);
+    ).toEqual([['Inherent CO2 emissions', 'Completed']]);
   });
 });

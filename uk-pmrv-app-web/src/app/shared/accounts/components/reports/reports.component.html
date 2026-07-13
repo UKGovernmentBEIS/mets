@@ -74,7 +74,7 @@
                       !report.reportableReductionClaimEmissions) ||
                     report?.hasEmissionReportNotRequired
                   ">
-                  @if (report?.hasActiveDRE && report?.hasEmissionReportNotRequired && report?.reportableEmissions) {
+                  @if (report?.hasEmissionReportNotRequired && report?.reportableEmissions) {
                     {{ report.reportableEmissions | bigNumber }} tCO2
                   } @else {
                     No emissions reported
@@ -103,17 +103,16 @@
                   <div
                     class="govuk-!-margin-bottom-2 pre-wrap"
                     *ngIf="details?.requestMetadata?.type === 'AER' && details.requestStatus === 'NOT_REQUIRED'">
-                    0 tCO2
+                    {{ details.requestMetadata | reportingSubheading: details.requestStatus === 'NOT_REQUIRED' }}
                   </div>
                   <div class="govuk-!-margin-bottom-0 govuk-body-s">
                     Created on {{ details.creationDate | govukDate }}
                   </div>
                 </div>
-                <div class="govuk-grid-column-one-quarter">
-                  <span
-                    class="search-results-list_item_status govuk-tag govuk-tag--{{ details.requestStatus | tagColor }}">
-                    <strong>{{ details.requestStatus | i18nSelect: reportsStatusesTagMap }}</strong>
-                  </span>
+                <div class="govuk-grid-column-one-quarter search-results-list_item_status">
+                  <govuk-tag [color]="details.requestStatus | tagColor">
+                    {{ details.requestStatus | i18nSelect: reportsStatusesTagMap }}
+                  </govuk-tag>
                 </div>
               </div>
             </li>

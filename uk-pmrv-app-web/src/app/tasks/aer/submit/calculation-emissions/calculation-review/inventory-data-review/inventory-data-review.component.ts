@@ -13,6 +13,7 @@ import {
   of,
   shareReplay,
   switchMap,
+  take,
   tap,
   withLatestFrom,
 } from 'rxjs';
@@ -46,7 +47,7 @@ import { getCalculationReviewFormControls, getEmissionsElements, isRegionalDataS
 })
 export class InventoryDataReviewComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));
-  payload$ = this.aerService.getPayload();
+  payload$ = this.aerService.getPayload().pipe(take(1));
   isEditable$ = this.aerService.isEditable$;
 
   calculationFactor$ = new BehaviorSubject<string>(null);

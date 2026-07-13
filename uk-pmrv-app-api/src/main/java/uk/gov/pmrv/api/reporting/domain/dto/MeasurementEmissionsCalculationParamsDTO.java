@@ -5,9 +5,9 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.ObjectUtils;
 import uk.gov.netz.api.common.validation.SpELExpression;
 
@@ -17,7 +17,7 @@ import java.util.Objects;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @SpELExpression(expression = "{#containsBiomass == (#biomassPercentage != null)}",
     message = "aer.calculationApproach.emissionsCalculation.biomassPercentage.biomassContains")
 public class MeasurementEmissionsCalculationParamsDTO {

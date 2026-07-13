@@ -106,10 +106,10 @@ describe('InspectionsComponent', () => {
         'INS00055-2021-1  2021  Audit report',
       ]);
       expect(page.inspectionsStatusNames.map((tag) => tag.textContent.trim())).toEqual([
-        'IN PROGRESS',
-        'COMPLETED',
-        'COMPLETED',
-        'IN PROGRESS',
+        'In progress',
+        'Completed',
+        'Completed',
+        'In progress',
       ]);
 
       page.onSiteInspectionsTypeCheck.click();
@@ -165,7 +165,7 @@ describe('InspectionsComponent', () => {
         'INS00055-2022-1  2022  Audit report',
       ]);
 
-      expect(page.inspectionsStatusNames.map((tag) => tag.textContent.trim())).toEqual(['COMPLETED', 'COMPLETED']);
+      expect(page.inspectionsStatusNames.map((tag) => tag.textContent.trim())).toEqual(['Completed', 'Completed']);
     });
   });
 });

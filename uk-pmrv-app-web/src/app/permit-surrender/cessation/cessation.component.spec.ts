@@ -103,7 +103,7 @@ describe('CessationComponent', () => {
       'Confirm cessation of regulated activities',
     ]);
 
-    expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual(['not started']);
+    expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual(['Not started']);
   });
 
   it('should display in progress section when cessation exists but not completed', () => {
@@ -113,7 +113,7 @@ describe('CessationComponent', () => {
       'Confirm cessation of regulated activities',
     ]);
 
-    expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual(['in progress']);
+    expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual(['In progress']);
   });
 
   it('should display completed section when cessation exists and completed', () => {
@@ -123,7 +123,7 @@ describe('CessationComponent', () => {
       'Confirm cessation of regulated activities',
     ]);
 
-    expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual(['completed']);
+    expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual(['Completed']);
   });
 
   it('should display timeline items', () => {

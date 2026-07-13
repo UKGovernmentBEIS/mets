@@ -46,6 +46,7 @@ export class MethodsComponent {
           const sourceStreamEmission = pfc.sourceStreamEmissions?.[index];
 
           const parameters = {
+            reportingYear: payload.reportingYear,
             calculationMethod: sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData?.calculationMethod,
             totalPrimaryAluminium: sourceStreamEmission.totalPrimaryAluminium,
             ...this.getFormData(sourceStreamEmission),
@@ -81,6 +82,8 @@ export class MethodsComponent {
         ? {
             ...item,
             ...formData,
+            globalWarmingPotentialCF4: totals.globalWarmingPotentialCF4,
+            globalWarmingPotentialC2F6: totals.globalWarmingPotentialC2F6,
             amountOfCF4: totals.amountOfCF4,
             totalCF4Emissions: totals.totalCF4Emissions,
             amountOfC2F6: totals.amountOfC2F6,

@@ -109,11 +109,12 @@
       </li>
     </app-related-actions>
     <app-preview-documents
+      *ngIf="vm.previewDocuments"
+      linkFontSize="govuk-!-font-size-16"
       [taskId]="vm.taskId$ | async"
       [previewDocuments]="vm.previewDocuments"
       [decisionNotification]="vm.decisionNotification"
-      linkFontSize="govuk-!-font-size-16"
-      *ngIf="vm.previewDocuments"></app-preview-documents>
+      [hideDecision]="true"></app-preview-documents>
   </div>
 </div>
 

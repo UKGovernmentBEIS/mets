@@ -9,10 +9,10 @@ Child controls are automatically disabled when the content is hidden.
 
 ### Inputs
 
-- `legend` - A heading as a title
+- `label` - A heading as a title
 - `hint` - A hint with smaller font as a description
 - `size` - Defaults to `null`. Also accepts `small`
-- `legendSize` - Adjusts the legend size. Defaults to `large`. Accepts `normal` | `medium` | `large` | `heading`
+- `labelSize` - Adjusts the legend size. Defaults to `large`. Accepts `normal` | `medium` | `large` | `heading`
 
 `govuk-checkbox`:
 
@@ -24,13 +24,16 @@ Child controls are automatically disabled when the content is hidden.
 
 ```html
 <form [formGroup]="exampleForm">
-  <div govuk-checkboxes formControlName="exampleControlName" legend="exampleLegend"></div>
+  <div govuk-checkboxes formControlName="exampleControlName" label="exampleLegend"></div>
 </form>
 ```
 
 ```html
 <div govuk-checkboxes [formControl]="exampleControl">
-  <ng-container govukLegend>Object <span class="govuk-visually-hidden">help</span></ng-container>
+  <ng-container govukLegend>
+    Object
+    <span class="govuk-visually-hidden">help</span>
+  </ng-container>
 </div>
 ```
 

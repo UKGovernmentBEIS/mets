@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.2.0/changelog_permit_notification_metadata_migration.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_0_populate_permit_notification_type_in_metadata" author="vasileios.vitzilaios@keyes.eu">
+        <comment>Populate permitNotificationType (and otherFactorReportingType for OTHER_FACTOR) in metadata for existing PERMIT_NOTIFICATION requests</comment>
+        <sql>
+            UPDATE request r
+            SET metadata = COALESCE(r.metadata, jsonb_build_object('type', 'PERMIT_NOTIFICATION'))
+                || jsonb_build_object('permitNotificationType', r.payload -> 'permitNotification' ->> 'type')
+                || CASE
+                    WHEN r.payload -> 'permitNotification' ->> 'type' = 'OTHER_FACTOR'
+                        AND r.payload -> 'permitNotification' ->> 'reportingType' IS NOT NULL
+                    THEN jsonb_build_object('otherFactorReportingType', r.payload -> 'permitNotification' ->> 'reportingType')
+                    ELSE '{}'::jsonb
+                   END
+            WHERE r.type = 'PERMIT_NOTIFICATION'
+            AND r.payload -> 'permitNotification' ->> 'type' IS NOT NULL;
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE request r
+                SET metadata = r.metadata - 'permitNotificationType' - 'otherFactorReportingType'
+                WHERE r.type = 'PERMIT_NOTIFICATION'
+                AND r.payload -> 'permitNotification' ->> 'type' IS NOT NULL;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_fix_other_factor_permit_notification_type_in_metadata" author="vasileios.vitzilaios@keyes.eu">
+        <comment>Remove permitNotificationType from OTHER_FACTOR notification metadata as otherFactorReportingType is the specific value to display</comment>
+        <sql>
+            UPDATE request r
+            SET metadata = r.metadata - 'permitNotificationType'
+            WHERE r.type = 'PERMIT_NOTIFICATION'
+            AND r.payload -> 'permitNotification' ->> 'type' = 'OTHER_FACTOR';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE request r
+                SET metadata = r.metadata || jsonb_build_object('permitNotificationType', 'OTHER_FACTOR')
+                WHERE r.type = 'PERMIT_NOTIFICATION'
+                AND r.payload -> 'permitNotification' ->> 'type' = 'OTHER_FACTOR';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_populate_permit_notification_type_from_action_for_null_payload" author="vasileios.vitzilaios@keyes.eu">
+        <comment>Populate permit notification type metadata from request_action for requests with null payload; picks the newest valid action; skips in-progress.</comment>
+        <sql>
+            WITH latest_valid_action AS (
+                SELECT DISTINCT ON (ra.request_id) ra.request_id, ra.payload
+                FROM request_action ra
+                WHERE ra.payload -> 'permitNotification' ->> 'type' IS NOT NULL
+                ORDER BY ra.request_id, ra.creation_date DESC
+            )
+            UPDATE request r
+            SET metadata = COALESCE(r.metadata, jsonb_build_object('type', 'PERMIT_NOTIFICATION'))
+                || CASE
+                    WHEN lva.payload -> 'permitNotification' ->> 'type' != 'OTHER_FACTOR'
+                    THEN jsonb_build_object('permitNotificationType', lva.payload -> 'permitNotification' ->> 'type')
+                    ELSE '{}'::jsonb
+                   END
+                || CASE
+                    WHEN lva.payload -> 'permitNotification' ->> 'type' = 'OTHER_FACTOR'
+                    THEN jsonb_build_object('otherFactorReportingType', lva.payload -> 'permitNotification' ->> 'reportingType')
+                    ELSE '{}'::jsonb
+                   END
+            FROM latest_valid_action lva
+            WHERE r.id = lva.request_id
+              AND r.type = 'PERMIT_NOTIFICATION'
+              AND (r.payload IS NULL OR r.payload -> 'permitNotification' ->> 'type' IS NULL)
+              AND r.metadata -> 'permitNotificationType' IS NULL
+              AND r.metadata -> 'otherFactorReportingType' IS NULL;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

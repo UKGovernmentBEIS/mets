@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { LinkDirective } from '../../directives';
 import { HeaderNavListComponent } from './nav-list.component';
 
 describe('HeaderNavListComponent', () => {
   @Component({
-    standalone: false,
+    imports: [HeaderNavListComponent, HeaderNavListTestComponent, LinkDirective],
     template: `
       <govuk-header-nav-list
         ariaLabel="Aria label for test navigation"
@@ -26,8 +26,8 @@ describe('HeaderNavListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [HeaderNavListComponent, HeaderNavListTestComponent, LinkDirective],
+      imports: [HeaderNavListComponent, HeaderNavListTestComponent, LinkDirective],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 

@@ -17,8 +17,7 @@
         *ngIf="
           ('CALCULATION_PFC' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers as tiers;
           else addStream
-        "
-      >
+        ">
         <ng-container *ngIf="tiers && tiers[index$ | async]; else addStream">
           {{ tiers[index$ | async] | sourceStreamCategoryName | async }}
           <button *ngIf="(store.isEditable$ | async) === true" routerLink="delete" govukSecondaryButton type="button">
@@ -36,17 +35,14 @@
         app-task-item
         link="./category/summary"
         linkText="Source stream category"
-        [status]="'CALCULATION_PFC_Category' | taskStatus: (index$ | async) | async"
-      >
+        [status]="'CALCULATION_PFC_Category' | taskStatus: (index$ | async) | async">
         <app-category-summary-overview
           *ngIf="('CALCULATION_PFC_Category' | taskStatus: (index$ | async) | async) === 'complete'"
           [sourceStreamCategory]="
             ('CALCULATION_PFC' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async]
               .sourceStreamCategory
           "
-          cssClass="govuk-!-margin-bottom-0"
-        >
-        </app-category-summary-overview>
+          cssClass="govuk-!-margin-bottom-0"></app-category-summary-overview>
       </li>
     </ul>
 
@@ -56,19 +52,19 @@
         app-task-item
         link="activity-data/summary"
         linkText="Activity data"
-        [status]="'CALCULATION_PFC_Activity_Data' | taskStatus: (index$ | async) | async"
-      >
+        [status]="'CALCULATION_PFC_Activity_Data' | taskStatus: (index$ | async) | async">
         <ng-container *ngIf="('CALCULATION_PFC_Activity_Data' | taskStatus: (index$ | async) | async) === 'complete'">
           <ng-container
-            *ngIf="('CALCULATION_PFC' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers?.[index$ | async]?.activityData as activityData"
-          >
+            *ngIf="
+              ('CALCULATION_PFC' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers?.[(index$ | async)]
+                ?.activityData as activityData
+            ">
             <app-activity-data-summary-overview
               [isChangeLinkAvailable]="false"
               [activityDataSectionHasBottomBorder]="
                 activityData.isHighestRequiredTier !== undefined && !activityData.isHighestRequiredTier
               "
-              [justificationSectionHasBottomBorder]="false"
-            ></app-activity-data-summary-overview>
+              [justificationSectionHasBottomBorder]="false"></app-activity-data-summary-overview>
           </ng-container>
         </ng-container>
       </li>
@@ -76,12 +72,10 @@
         app-task-item
         link="emission-factor/summary"
         linkText="Emission factor"
-        [status]="'CALCULATION_PFC_Emission_Factor' | taskStatus: (index$ | async) | async"
-      >
+        [status]="'CALCULATION_PFC_Emission_Factor' | taskStatus: (index$ | async) | async">
         <ng-container *ngIf="('CALCULATION_PFC_Emission_Factor' | taskStatus: (index$ | async) | async) === 'complete'">
           <app-category-tier-emission-factor-summary-overview
-            [preview]="true"
-          ></app-category-tier-emission-factor-summary-overview>
+            [preview]="true"></app-category-tier-emission-factor-summary-overview>
         </ng-container>
       </li>
     </ul>
@@ -89,6 +83,5 @@
 
   <app-approach-return-link
     [parentTitle]="'CALCULATION_PFC' | monitoringApproachDescription"
-    reviewGroupUrl="pfc"
-  ></app-approach-return-link>
+    reviewGroupUrl="pfc"></app-approach-return-link>
 </app-permit-task>

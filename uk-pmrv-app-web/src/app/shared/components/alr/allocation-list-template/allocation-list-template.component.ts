@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { subInstallationNameLabelsMap } from '@shared/components/doal/activity-level-label.map';
+import { newSubInstallationNameLabelsMap } from '@shared/components/doal/activity-level-label.map';
 import { SharedModule } from '@shared/shared.module';
 
 import { GovukTableColumn } from 'govuk-components';
@@ -22,7 +22,7 @@ export class AllocationListTemplateComponent implements OnInit {
 
   dataSorted: ALRPreliminaryAllocation[] = [];
 
-  subInstallationNameLabelsMap = subInstallationNameLabelsMap;
+  subInstallationNameLabelsMap = newSubInstallationNameLabelsMap;
 
   ngOnInit(): void {
     this.dataSorted = this.data?.sort((a, b) =>
@@ -32,7 +32,7 @@ export class AllocationListTemplateComponent implements OnInit {
     this.columns = [
       { field: 'year', header: 'Year' },
       { field: 'subInstallationName', header: 'Sub-installation' },
-      { field: 'allowances', header: 'Allocation', alignRight: true },
+      { field: 'allowances', header: 'Allocation', isNumeric: true },
     ];
 
     if (this.editable) {

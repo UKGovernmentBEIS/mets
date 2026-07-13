@@ -3,24 +3,26 @@ package uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.n2o;
 import org.junit.jupiter.api.Test;
 import uk.gov.pmrv.api.reporting.domain.GlobalWarmingPotential;
 import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationDTO;
-import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationParamsDTO;
+import uk.gov.pmrv.api.reporting.domain.dto.MeasurementN2OEmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.measurement.MeasurementEmissionsCalculationService;
 import uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.measurement.n2o.MeasurementN2OEmissionsCalculationService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Year;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class MeasurementN2OEmissionsCalculationServiceTest {
+class MeasurementN2OEmissionsCalculationServiceTest {
 
     private MeasurementN2OEmissionsCalculationService measurementN2OEmissionsCalculationService =
         new MeasurementN2OEmissionsCalculationService(new MeasurementEmissionsCalculationService());
 
     @Test
-    void calculateEmissionsWithBiomass() {
-        MeasurementEmissionsCalculationParamsDTO measurementCO2EmissionsCalculationParamsDTO =
-            MeasurementEmissionsCalculationParamsDTO.builder()
+    void calculateEmissionsWithBiomass_legacyYear() {
+        MeasurementN2OEmissionsCalculationParamsDTO measurementCO2EmissionsCalculationParamsDTO =
+            MeasurementN2OEmissionsCalculationParamsDTO.builder()
+                .reportingYear(Year.of(2025))
                 .containsBiomass(true)
                 .biomassPercentage(new BigDecimal("61.00001"))
                 .operationalHours(new BigDecimal("102345678901"))
@@ -29,7 +31,7 @@ public class MeasurementN2OEmissionsCalculationServiceTest {
                 .build();
 
         MeasurementEmissionsCalculationDTO expected = MeasurementEmissionsCalculationDTO.builder()
-            .globalWarmingPotential(GlobalWarmingPotential.N2O.getValue())
+            .globalWarmingPotential(GlobalWarmingPotential.N2O.getValue(Year.of(2025)))
             .annualGasFlow(new BigDecimal("10474637989717071205790.72707"))
             .annualFossilAmountOfGreenhouseGas(new BigDecimal("418093127954345200.26550"))
             .sustainableBiomassEmissions(new BigDecimal("194874360887569672565.93979"))
@@ -43,9 +45,10 @@ public class MeasurementN2OEmissionsCalculationServiceTest {
     }
 
     @Test
-    void calculateEmissionsWithoutBiomass() {
-        MeasurementEmissionsCalculationParamsDTO measurementCO2EmissionsCalculationParamsDTO =
-            MeasurementEmissionsCalculationParamsDTO.builder()
+    void calculateEmissionsWithoutBiomass_legacyYear() {
+        MeasurementN2OEmissionsCalculationParamsDTO measurementCO2EmissionsCalculationParamsDTO =
+            MeasurementN2OEmissionsCalculationParamsDTO.builder()
+                .reportingYear(Year.of(2025))
                 .containsBiomass(false)
                 .operationalHours(BigDecimal.TEN)
                 .annualHourlyAverageFlueGasFlow(BigDecimal.TEN)
@@ -53,11 +56,36 @@ public class MeasurementN2OEmissionsCalculationServiceTest {
                 .build();
 
         MeasurementEmissionsCalculationDTO expected = MeasurementEmissionsCalculationDTO.builder()
-            .globalWarmingPotential(GlobalWarmingPotential.N2O.getValue())
+            .globalWarmingPotential(GlobalWarmingPotential.N2O.getValue(Year.of(2025)))
             .annualGasFlow(BigDecimal.valueOf(100).setScale(5, RoundingMode.HALF_UP))
             .annualFossilAmountOfGreenhouseGas(BigDecimal.valueOf(2).setScale(5, RoundingMode.HALF_UP))
             .sustainableBiomassEmissions(BigDecimal.ZERO.setScale(5, RoundingMode.HALF_UP))
             .reportableEmissions(BigDecimal.valueOf(596).setScale(5, RoundingMode.HALF_UP))
+            .build();
+
+        MeasurementEmissionsCalculationDTO actual =
+            measurementN2OEmissionsCalculationService.calculateEmissions(measurementCO2EmissionsCalculationParamsDTO);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void calculateEmissionsWithoutBiomass_updatedGwpYear() {
+        MeasurementN2OEmissionsCalculationParamsDTO measurementCO2EmissionsCalculationParamsDTO =
+            MeasurementN2OEmissionsCalculationParamsDTO.builder()
+                .reportingYear(Year.of(2026))
+                .containsBiomass(false)
+                .operationalHours(BigDecimal.TEN)
+                .annualHourlyAverageFlueGasFlow(BigDecimal.TEN)
+                .annualHourlyAverageGHGConcentration(BigDecimal.valueOf(20))
+                .build();
+
+        MeasurementEmissionsCalculationDTO expected = MeasurementEmissionsCalculationDTO.builder()
+            .globalWarmingPotential(GlobalWarmingPotential.N2O.getValue(Year.of(2026)))
+            .annualGasFlow(BigDecimal.valueOf(100).setScale(5, RoundingMode.HALF_UP))
+            .annualFossilAmountOfGreenhouseGas(BigDecimal.valueOf(2).setScale(5, RoundingMode.HALF_UP))
+            .sustainableBiomassEmissions(BigDecimal.ZERO.setScale(5, RoundingMode.HALF_UP))
+            .reportableEmissions(BigDecimal.valueOf(530).setScale(5, RoundingMode.HALF_UP))
             .build();
 
         MeasurementEmissionsCalculationDTO actual =

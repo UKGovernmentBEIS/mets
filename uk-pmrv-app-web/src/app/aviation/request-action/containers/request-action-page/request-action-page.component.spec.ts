@@ -16,7 +16,7 @@ class Page extends BasePage<RequestActionPageComponent> {
     return this.query('.govuk-caption-m').textContent.trim();
   }
   get sections(): HTMLUListElement[] {
-    return Array.from(this.queryAll<HTMLUListElement>('.app-task-list__item > .app-task-list__task-name'));
+    return Array.from(this.queryAll<HTMLUListElement>('.app-task-list__item .app-task-list__task-name'));
   }
 }
 

@@ -48,8 +48,8 @@ function isCloseDeterminationPopulated(determination: DoalClosedDetermination) {
 
 function isProceedAuthorityDeterminationPopulated(determination: DoalProceedToAuthorityDetermination) {
   return (
-    !!determination.articleReasonGroupType &&
-    !!determination.articleReasonItems?.length &&
+    ((!!determination.articleReasonGroupType && !!determination.articleReasonItems?.length) ||
+      (determination.articleReasonGroupType === 'ARTICLE_5_REASONS' && !determination.articleReasonItems?.length)) &&
     !!determination.reason &&
     determination.hasWithholdingOfAllowances !== undefined &&
     determination.hasWithholdingOfAllowances !== null &&

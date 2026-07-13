@@ -114,7 +114,7 @@ describe('PfcComponent', () => {
       expect(page.tables.length).toEqual(1);
       expect(page.rows.length).toEqual(2);
       expect(page.rows).toEqual([
-        ['the reference Anthracite', 'emission source 1 reference', 'Slope', '11332812', 'completed'],
+        ['the reference Anthracite', 'emission source 1 reference', 'Slope', '11332812', 'Completed'],
         ['Total emissions', '', '', '11332812 tCO2e', ''],
       ]);
     });

@@ -92,4 +92,120 @@
             </sql>
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_migrate_payload_for_already_existing_emp_ukets_wait_for_review_tasks" author="mitzelose@unisystems.gr">
+        <sql>
+            UPDATE request_task AS target
+            SET payload = source.payload
+                FROM request_task AS source
+            WHERE target.request_id = source.request_id
+              AND target.type = 'EMP_ISSUANCE_UKETS_WAIT_FOR_REVIEW'
+              AND target.payload IS NULL
+              AND source.type = 'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW'
+              AND source.payload IS NOT NULL
+              AND target.request_id IN (
+                SELECT id FROM request
+                WHERE type = 'EMP_ISSUANCE_UKETS' AND status = 'IN_PROGRESS');
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE request_task
+                SET payload = NULL
+                WHERE type = 'EMP_ISSUANCE_UKETS_WAIT_FOR_REVIEW'
+                AND request_id IN (
+                SELECT source.request_id
+                FROM request_task source
+                WHERE source.type = 'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW' )
+                AND request_id IN (
+                SELECT id FROM request
+                WHERE type = 'EMP_ISSUANCE_UKETS' AND status = 'IN_PROGRESS' );
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_migrate_payload_for_already_existing_emp_variation_ukets_wait_for_review_tasks" author="mitzelose@unisystems.gr">
+        <sql>
+            UPDATE request_task AS target
+            SET payload = source.payload
+                FROM request_task AS source
+            WHERE target.request_id = source.request_id
+              AND target.type = 'EMP_VARIATION_UKETS_WAIT_FOR_REVIEW'
+              AND target.payload IS NULL
+              AND source.type = 'EMP_VARIATION_UKETS_APPLICATION_REVIEW'
+              AND source.payload IS NOT NULL
+              AND target.request_id IN (
+                SELECT id FROM request
+                WHERE type = 'EMP_VARIATION_UKETS' AND status = 'IN_PROGRESS');
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE request_task
+                SET payload = NULL
+                WHERE type = 'EMP_VARIATION_UKETS_WAIT_FOR_REVIEW'
+                AND request_id IN (
+                SELECT source.request_id
+                FROM request_task source
+                WHERE source.type = 'EMP_VARIATION_UKETS_APPLICATION_REVIEW' )
+                AND request_id IN (
+                SELECT id FROM request
+                WHERE type = 'EMP_VARIATION_UKETS' AND status = 'IN_PROGRESS' );
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_migrate_payload_for_already_existing_emp_issuance_corsia_wait_for_review_tasks" author="mitzelose@unisystems.gr">
+        <sql>
+            UPDATE request_task AS target
+            SET payload = source.payload
+                FROM request_task AS source
+            WHERE target.request_id = source.request_id
+              AND target.type = 'EMP_ISSUANCE_CORSIA_WAIT_FOR_REVIEW'
+              AND target.payload IS NULL
+              AND source.type = 'EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW'
+              AND source.payload IS NOT NULL
+              AND target.request_id IN (
+                SELECT id FROM request
+                WHERE type = 'EMP_ISSUANCE_CORSIA' AND status = 'IN_PROGRESS');
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE request_task
+                SET payload = NULL
+                WHERE type = 'EMP_ISSUANCE_CORSIA_WAIT_FOR_REVIEW'
+                AND request_id IN (
+                SELECT source.request_id
+                FROM request_task source
+                WHERE source.type = 'EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW' )
+                AND request_id IN (
+                SELECT id FROM request
+                WHERE type = 'EMP_ISSUANCE_CORSIA' AND status = 'IN_PROGRESS' );
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_migrate_payload_for_already_existing_emp_variation_corsia_wait_for_review_tasks" author="mitzelose@unisystems.gr">
+        <sql>
+            UPDATE request_task AS target
+            SET payload = source.payload
+                FROM request_task AS source
+            WHERE target.request_id = source.request_id
+              AND target.type = 'EMP_VARIATION_CORSIA_WAIT_FOR_REVIEW'
+              AND target.payload IS NULL
+              AND source.type = 'EMP_VARIATION_CORSIA_APPLICATION_REVIEW'
+              AND source.payload IS NOT NULL
+              AND target.request_id IN (
+                SELECT id FROM request
+                WHERE type = 'EMP_VARIATION_CORSIA' AND status = 'IN_PROGRESS');
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE request_task
+                SET payload = NULL
+                WHERE type = 'EMP_VARIATION_CORSIA_WAIT_FOR_REVIEW'
+                AND request_id IN (
+                SELECT source.request_id
+                FROM request_task source
+                WHERE source.type = 'EMP_VARIATION_CORSIA_APPLICATION_REVIEW' )
+                AND request_id IN (
+                SELECT id FROM request
+                WHERE type = 'EMP_VARIATION_CORSIA' AND status = 'IN_PROGRESS' );
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

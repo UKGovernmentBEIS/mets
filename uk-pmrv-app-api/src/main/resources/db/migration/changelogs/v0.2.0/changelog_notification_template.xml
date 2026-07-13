@@ -7199,4 +7199,269 @@ This is an automatic email – please do not reply to this address.'
             ]]>
     </sql>
     </changeSet>
+    <changeSet id="update email body for registry id missing notification" author="mitzelose@unisystems.gr">
+
+        <sql>
+        <![CDATA[
+            UPDATE notification_template
+            SET text = 'Dear Regulator,
+
+The integration point `Update emissions value` has failed with error: `${errorMessage}` for Operator ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: N/A
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+Payload: Year: ${year}, Emissions: ${(emissions)!} Error message: `${errorMessage}`
+
+Thank you.',
+                last_updated_date = CURRENT_TIMESTAMP
+            where name='Registry integration email template missing registry id error'
+              and subject='ACTION REQUIRED - Error with integration point ''Update emissions value'' for Operator: ${operatorName} with Emitter ID: ${emitterId} '
+              and account_type in ('AVIATION','INSTALLATION');
+            ]]>
+    </sql>
+    </changeSet>
+    <changeSet id="0_2_0_insert_new_unassigned_task_received_notification_template" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            <![CDATA[
+            WITH
+                constants (name, subject, text_content) AS (
+                    VALUES (
+                               'New unassigned task received',
+                               'New unassigned task received - Manage your UK ETS reporting',
+                               'There is a new unassigned task. Sign in to your account to view this task.
+
+<#if workflowId??>
+Workflow ID: ${workflowId}
+</#if>
+
+<#if accountName?? && accountType?? && accountType == ''INSTALLATION''>
+Installation name: ${accountName}
+</#if>
+
+<#if operatorName??>Operator name: ${operatorName}</#if>
+
+This is an automatic email – please do not reply to this address.'
+                           )
+                ),
+                templates_to_create (ca_name, account_type) AS (
+                    VALUES
+                        ('ENGLAND',        'INSTALLATION'),
+                        ('SCOTLAND',       'INSTALLATION'),
+                        ('WALES',          'INSTALLATION'),
+                        ('NORTHERN_IRELAND', 'INSTALLATION'),
+                        ('OPRED',          'INSTALLATION'),
+                        ('ENGLAND',        'AVIATION'),
+                        ('SCOTLAND',       'AVIATION'),
+                        ('WALES',          'AVIATION'),
+                        ('NORTHERN_IRELAND', 'AVIATION'),
+                        ('OPRED',          'AVIATION')
+                )
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            SELECT
+                nextval('notification_template_seq'),
+                c.name,
+                c.subject,
+                t.ca_name,
+                null,
+                t.account_type,
+                null,
+                null,
+                false,
+                CURRENT_TIMESTAMP,
+                c.text_content
+            FROM
+                constants c
+                    CROSS JOIN
+                templates_to_create t;
+            ]]>
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template
+                WHERE name = 'New unassigned task received'
+                AND competent_authority IN (
+                'ENGLAND',
+                'SCOTLAND',
+                'WALES',
+                'NORTHERN_IRELAND',
+                'OPRED'
+                )
+                AND account_type IN ('INSTALLATION', 'AVIATION');
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_update_doal_templates_content_SUBMITTED" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="type" value="DOAL_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="DOAL Preliminary Allocation Letter Final v02-EA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="type" value="DOAL_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="DOAL Preliminary Allocation Letter Final v02-NI.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="type" value="DOAL_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="DOAL Preliminary Allocation Letter Final v02-SEPA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="type" value="DOAL_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="DOAL Preliminary Allocation Letter Final v02 - Activity Level Determination Preliminary Allocation Letter NRW June 26.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="type" value="DOAL_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="DOAL Preliminary Allocation Letter Final v02 25062026-OPRED.docx" />
+        </customChange>
+    </changeSet>
+    <changeSet id="0_2_0_update_doal_templates_content_ACCEPTED" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="type" value="DOAL_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Approval of Allocation (with corrections) Article 34H  6a Final v03-EA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="type" value="DOAL_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Approval of Allocation (with corrections) Article 34H &amp; 6a Final v02-NI.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="type" value="DOAL_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Approval of Allocation (with corrections) Article 34H &amp; 6a Final v02-SEPA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="type" value="DOAL_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Approval of Allocation (with corrections) Article 34H  6a Final v03 - Approval of Allocation Notice NRW June 26.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="type" value="DOAL_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Approval of Allocation (with corrections) Article 34H  6a 26.06.2026-OPRED.docx" />
+        </customChange>
+    </changeSet>
+    <changeSet id="0_2_0_update_doal_templates_content_REJECTED" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="type" value="DOAL_REJECTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Rejection of Allocation Article 34H &amp; 6a Final v03-EA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="type" value="DOAL_REJECTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Rejection of Allocation Article 34H &amp; 6a Final v02-NI.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="type" value="DOAL_REJECTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Rejection of Allocation Article 34H &amp; 6a Final v02-SEPA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="type" value="DOAL_REJECTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Rejection of Allocation Article 34H &amp; 6a Final v01 - Rejection of Allocation Notice NRW June 26.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="type" value="DOAL_REJECTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Rejection of Allocation Article 34H &amp; 6a Final v02-OPRED.docx" />
+        </customChange>
+    </changeSet>
+    <changeSet id="0_2_0_update_new_unassigned_task_received_notification_template" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+        <![CDATA[
+            update notification_template
+            set text = 'There is a new unassigned task. [Sign in to your account](${homeUrl}) to view this task.
+
+Task: ${requestTaskType}
+
+<#if workflowId??>
+Workflow ID: ${workflowId}
+</#if>
+
+<#if accountName?? && accountType?? && accountType == ''INSTALLATION''>
+Installation name: ${accountName}
+</#if>
+
+<#if operatorName??>Operator name: ${operatorName}</#if>
+
+This is an automatic email – please do not reply to this address.'
+            where name = 'New unassigned task received';
+            ]]>
+    </sql>
+    </changeSet>
+    <changeSet id="0_2_0_update_doal_templates_content_5-SUBMITTED_1-REJECTED" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="type" value="DOAL_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="DOAL Preliminary Allocation Letter Final v02-EA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="type" value="DOAL_REJECTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="Notice of DOAL Rejection of Allocation Article 34H &amp; 6a Final v03-EA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="type" value="DOAL_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="DOAL Preliminary Allocation Letter Final v02-NI.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="type" value="DOAL_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="DOAL Preliminary Allocation Letter Final v02-SEPA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="type" value="DOAL_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="DOAL Preliminary Allocation Letter Final v02 - Activity Level Determination Preliminary Allocation Letter NRW June 26.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="type" value="DOAL_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="DOAL Preliminary Allocation Letter Final v02 25062026-OPRED.docx" />
+        </customChange>
+    </changeSet>
 </databaseChangeLog>

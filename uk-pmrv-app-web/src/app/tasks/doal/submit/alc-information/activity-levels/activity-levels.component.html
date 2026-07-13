@@ -1,6 +1,6 @@
 <app-doal-task [breadcrumb]="true">
   <app-page-heading caption="Provide information about this activity level determination">
-    Provide updated activity level (optional)
+    Provide activity level (optional)
   </app-page-heading>
 
   <div class="govuk-hint">This will be entered into the official notice</div>
@@ -9,13 +9,15 @@
     [data]="$any(historicalActivityLevels$ | async)"
     [historical]="true"
     [editable]="false"
-    heading="History of activity level changes"></app-activity-level-list-template>
+    heading="History of activity level"
+    [isDoal]="true"></app-activity-level-list-template>
 
   <app-activity-level-list-template
     [data]="$any(activityLevels$ | async)"
     [historical]="false"
     [editable]="true"
-    heading="New activity level changes"></app-activity-level-list-template>
+    heading="New activity level"
+    [isDoal]="true"></app-activity-level-list-template>
 
   <ng-container *ngIf="(activityLevels$ | async).length; else noActivityLevel">
     <div class="govuk-button-group">

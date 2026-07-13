@@ -54,11 +54,10 @@
                     Created: {{ details.creationDate | govukDate }}
                   </div>
                 </div>
-                <div class="govuk-grid-column-one-quarter">
-                  <span
-                    class="search-results-list_item_status govuk-tag govuk-tag--{{ details.requestStatus | tagColor }}">
-                    <strong>{{ details.requestStatus | i18nSelect: inspectionsStatusesTagMap }}</strong>
-                  </span>
+                <div class="govuk-grid-column-one-quarter search-results-list_item_status">
+                  <govuk-tag [color]="details.requestStatus | tagColor">
+                    {{ details.requestStatus | i18nSelect: inspectionsStatusesTagMap }}
+                  </govuk-tag>
                 </div>
               </div>
             </li>

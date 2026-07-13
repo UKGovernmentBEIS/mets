@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.OperatorImprovementFollowUpResponse;
 import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.RegulatorImprovementResponse;
@@ -14,6 +15,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.vir.validation.VirExpirable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
+@NoArgsConstructor
 @SuperBuilder
 public class AviationVirApplicationRespondToRegulatorCommentsRequestTaskPayload extends
     AviationVirApplicationRequestTaskPayload implements VirExpirable {

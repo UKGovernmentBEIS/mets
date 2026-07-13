@@ -55,6 +55,9 @@ public abstract class FuelInputAndRelevantEmissionFactor {
     private Set<UUID> supportingFiles = new HashSet<>();
 
     public static List<SubInstallationType> getEmptyFIandREF_SubInstallationTypes() {
-        return List.of(SubInstallationType.PROCESS_EMISSIONS_CL,SubInstallationType.PROCESS_EMISSIONS_NON_CL);
+        return List.of(SubInstallationType.PROCESS_EMISSIONS_CL,
+                SubInstallationType.PROCESS_EMISSIONS_NON_CL,
+                SubInstallationType.PROCESS_EMISSIONS_CL_CBAM,
+                SubInstallationType.PROCESS_EMISSIONS_CL_NON_CBAM);
     }
 }

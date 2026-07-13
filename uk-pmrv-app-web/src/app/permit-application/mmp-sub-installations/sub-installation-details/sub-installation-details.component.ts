@@ -11,6 +11,8 @@ import { ProductBenchmarkComponent } from '@permit-application/shared/product-be
 import { PermitApplicationState } from '@permit-application/store/permit-application.state';
 import { PermitApplicationStore } from '@permit-application/store/permit-application.store';
 
+import { SubInstallationTypesService } from 'pmrv-api';
+
 import { exchangeabilityTypes, isProductBenchmark, productBenchmarkTypes } from '../mmp-sub-installations-status';
 import { productBenchmarkAddFormFactory } from './product-benchmark-details-form.provider';
 
@@ -25,17 +27,30 @@ export class SubInstallationDetailsComponent extends ProductBenchmarkComponent i
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));
 
-  productBenchmarkTypes$ = this.store.getTask('monitoringMethodologyPlans').pipe(
-    map((monitoringMethodologyPlans) => {
+  productBenchmarkTypes$ = combineLatest([
+    this.store.getTask('monitoringMethodologyPlans'),
+    this.subInstallationTypesService.getSubInstallationTypesDetails(),
+  ]).pipe(
+    map(([monitoringMethodologyPlans, subInstallationDetails]) => {
       let usedTypes = monitoringMethodologyPlans?.digitizedPlan?.subInstallations
-        ?.filter((subInstallation) => isProductBenchmark(subInstallation.subInstallationType))
+        ?.filter(
+          (subInstallation) =>
+            isProductBenchmark(subInstallation.subInstallationType) &&
+            subInstallationDetails.some(
+              (item) => item['subInstallationType'] === subInstallation.subInstallationType && item['valid'],
+            ),
+        )
         .map((productBenchmark) => productBenchmark.subInstallationType);
 
       if (this.form.value?.subInstallationType) {
         usedTypes = usedTypes.filter((item) => item !== this.form.value?.subInstallationType);
       }
 
-      return productBenchmarkTypes.filter((element) => !usedTypes?.includes(element));
+      return productBenchmarkTypes.filter(
+        (element) =>
+          !usedTypes?.includes(element) &&
+          subInstallationDetails.some((item) => item['subInstallationType'] === element && item['valid']),
+      );
     }),
   );
   subInstallationNo: string;
@@ -51,6 +66,7 @@ export class SubInstallationDetailsComponent extends ProductBenchmarkComponent i
     readonly route: ActivatedRoute,
     readonly pendingRequest: PendingRequestService,
     readonly store: PermitApplicationStore<PermitApplicationState>,
+    readonly subInstallationTypesService: SubInstallationTypesService,
   ) {
     super(store, router, route);
   }

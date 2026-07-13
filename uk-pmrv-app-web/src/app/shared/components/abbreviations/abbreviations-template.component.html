@@ -4,21 +4,18 @@
   [caption]="caption"
   heading="Definitions of abbreviations, acronyms and terminology"
   [submitText]="submitText"
-  [hideSubmit]="!isEditable"
->
+  [hideSubmit]="!isEditable">
   <app-boolean-radio-group
     controlName="exist"
-    legend="Are you using any abbreviations, acronyms or terminology in your permit application which may require definition?"
-  >
+    legend="Are you using any abbreviations, acronyms or terminology in your permit application which may require definition?">
     <div govukConditionalContent>
       <div formArrayName="abbreviationDefinitions">
         <fieldset
           *ngFor="let abbreviationDef of abbreviationDefs.controls; index as i"
           [formGroupName]="i"
           govukFieldset
-          id="abbreviation-def-{{ i }}"
-        >
-          <legend govukLegend>Definition {{ i + 1 }}</legend>
+          id="abbreviation-def-{{ i }}">
+          <legend govukLegend legendSize="medium">Definition {{ i + 1 }}</legend>
           <button
             (click)="abbreviationDefs.removeAt(i)"
             *ngIf="abbreviationDefs.length > 1"
@@ -26,8 +23,7 @@
             appAddAnother
             govukSecondaryButton
             type="button"
-            #removeButton
-          >
+            #removeButton>
             Remove
           </button>
           <div formControlName="abbreviation" govuk-text-input label="Abbreviation, acronym or terminology"></div>

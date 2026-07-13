@@ -8,23 +8,11 @@ import {
 
 import { DecisionStatus, FollowUpDecisionStatus } from '../../../tasks/permit-notification/core/section-status';
 import { TaskItemStatus } from '../task-list.interface';
-import { statusMap } from './status.map';
 
 @Component({
   selector: 'li[app-task-item]',
   standalone: false,
-  template: `
-    <span class="app-task-list__task-name" [class.govuk-!-margin-bottom-3]="hasContent">
-      <a *ngIf="link; else plainText" [routerLink]="link" govukLink>{{ linkText }}</a>
-      <ng-template #plainText>
-        <span>{{ linkText }}</span>
-      </ng-template>
-    </span>
-    <govuk-tag *ngIf="status" [color]="status | tagColor" class="app-task-list__tag">
-      {{ status | i18nSelect: statusMap }}
-    </govuk-tag>
-    <ng-content></ng-content>
-  `,
+  templateUrl: './task-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskItemComponent {
@@ -41,6 +29,4 @@ export class TaskItemComponent {
 
   // eslint-disable-next-line @angular-eslint/prefer-host-metadata-property
   @HostBinding('class.app-task-list__item') readonly taskListItem = true;
-
-  statusMap = statusMap;
 }

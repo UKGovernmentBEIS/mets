@@ -83,7 +83,7 @@ describe('OperatorDetailsOperatingLicenseComponent', () => {
     fixture.detectChanges();
 
     expect(screen.getAllByText(/Enter the operating licence number/)).toHaveLength(2);
-    expect(screen.getAllByText(/Select the authority that issued your operating licence/)).toHaveLength(1);
+    expect(screen.getAllByText(/Select the authority that issued your operating licence/)).toHaveLength(2);
   });
 
   it('should call the saveAer function with the correct data when the form is valid and navigate to organisation structure page', async () => {

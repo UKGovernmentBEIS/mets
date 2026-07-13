@@ -257,9 +257,13 @@
 
           @if (
             data?.fuelInputAndRelevantEmissionFactor?.['exists'] === true ||
-            !['HEAT_BENCHMARK_CL', 'HEAT_BENCHMARK_NON_CL', 'DISTRICT_HEATING_NON_CL'].includes(
-              data.subInstallationType
-            )
+            ![
+              'HEAT_BENCHMARK_CL',
+              'HEAT_BENCHMARK_NON_CL',
+              'DISTRICT_HEATING_NON_CL',
+              'HEAT_BENCHMARK_CL_CBAM',
+              'HEAT_BENCHMARK_CL_NON_CBAM',
+            ].includes(data.subInstallationType)
           ) {
             <div govukSummaryListRow>
               <dt govukSummaryListRowKey>Is there any fuel input from waste gases?</dt>

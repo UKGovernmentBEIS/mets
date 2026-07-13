@@ -205,9 +205,7 @@ describe('ItemNamePipe', () => {
     expect(pipe.transform('PERMANENT_CESSATION_APPLICATION_PEER_REVIEW')).toEqual('Peer review permanent cessation');
 
     expect(pipe.transform('DOAL_APPLICATION_SUBMIT')).toEqual('Determination of activity level');
-    expect(pipe.transform('DOAL_AUTHORITY_RESPONSE')).toEqual(
-      'Provide UK ETS Authority response for activity Level Change',
-    );
+    expect(pipe.transform('DOAL_AUTHORITY_RESPONSE')).toEqual('Provide UK ETS Authority response for activity level');
     expect(pipe.transform('DOAL_WAIT_FOR_PEER_REVIEW')).toEqual('Activity level determination sent to peer reviewer');
     expect(pipe.transform('DOAL_APPLICATION_PEER_REVIEW')).toEqual('Activity level determination peer review');
 

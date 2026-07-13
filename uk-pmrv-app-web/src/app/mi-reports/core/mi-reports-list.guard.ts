@@ -8,7 +8,7 @@ import { MiReportsService, MiReportSystemSearchResult } from 'pmrv-api';
 
 @Injectable({ providedIn: 'root' })
 export class MiReportsListGuard {
-  miReports: MiReportSystemSearchResult[];
+  standardReports: MiReportSystemSearchResult[];
 
   constructor(
     private readonly miReportsService: MiReportsService,
@@ -19,12 +19,12 @@ export class MiReportsListGuard {
     return this.authStore.pipe(selectCurrentDomain).pipe(
       take(1),
       switchMap((currentDomain) => this.miReportsService.getCurrentUserMiReports(currentDomain)),
-      tap((result) => (this.miReports = result)),
+      tap((result) => (this.standardReports = result)),
       map(() => true),
     );
   }
 
   resolve(): MiReportSystemSearchResult[] {
-    return this.miReports;
+    return this.standardReports;
   }
 }

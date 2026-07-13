@@ -1,5 +1,5 @@
 import { DOCUMENT, Location, ViewportScroller } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Router, Scroll } from '@angular/router';
 
 import { filter } from 'rxjs';
@@ -10,12 +10,12 @@ export interface ScrollState {
 
 @Injectable({ providedIn: 'root' })
 export class ScrollService {
-  constructor(
-    private readonly router: Router,
-    private readonly viewportScroller: ViewportScroller,
-    private readonly location: Location,
-    @Inject(DOCUMENT) private readonly document,
-  ) {
+  private readonly router = inject(Router);
+  private readonly viewportScroller = inject(ViewportScroller);
+  private readonly location = inject(Location);
+  private readonly document = inject(DOCUMENT);
+
+  constructor() {
     this.initialize();
   }
 
@@ -43,7 +43,7 @@ export class ScrollService {
   // Angular fails to do this https://github.com/angular/angular/issues/30067
   // move the sequential focus navigation starting point manually
   private focusTargetFragment(anchor: string) {
-    const target = (this.document as HTMLDocument).querySelector<HTMLElement>(`#${anchor}`);
+    const target = this.document.querySelector<HTMLElement>(`#${anchor}`);
     if (target && target !== this.document.activeElement) {
       const hasTabIndex = target.hasAttribute('tabIndex');
       const initialTabIndex = target.tabIndex;

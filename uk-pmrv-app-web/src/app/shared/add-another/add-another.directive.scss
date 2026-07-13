@@ -1,4 +1,4 @@
-@use 'govuk-frontend/govuk/base' as govuk;
+﻿@use 'base' as govuk;
 
 .moj-add-another {
   &__item {
@@ -36,6 +36,8 @@
 .moj-add-another__heading:focus {
   background-color: govuk.$govuk-focus-colour;
   color: govuk.$govuk-focus-text-colour;
-  box-shadow: 0 -2px govuk.$govuk-focus-colour, 0 4px govuk.$govuk-focus-text-colour;
+  box-shadow:
+    0 -2px govuk.$govuk-focus-colour,
+    0 4px govuk.$govuk-focus-text-colour;
   outline: none;
 }

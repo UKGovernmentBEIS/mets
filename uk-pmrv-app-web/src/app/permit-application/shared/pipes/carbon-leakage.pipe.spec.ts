@@ -29,7 +29,11 @@ describe('CarbonLeakagePipe', () => {
     expect(pipe.transform('GREY_CEMENT_CLINKER')).toEqual('Exposed');
     expect(pipe.transform('HOT_METAL')).toEqual('Exposed');
     expect(pipe.transform('HYDROGEN')).toEqual('Exposed');
+    expect(pipe.transform('HYDROGEN_CBAM')).toEqual('Exposed');
+    expect(pipe.transform('HYDROGEN_NON_CBAM')).toEqual('Exposed');
     expect(pipe.transform('IRON_CASTING')).toEqual('Exposed');
+    expect(pipe.transform('IRON_CASTING_CBAM')).toEqual('Exposed');
+    expect(pipe.transform('IRON_CASTING_NON_CBAM')).toEqual('Exposed');
     expect(pipe.transform('LIME')).toEqual('Exposed');
     expect(pipe.transform('LONG_FIBRE_KRAFT_PULP')).toEqual('Exposed');
     expect(pipe.transform('MINERAL_WOOL')).toEqual('Exposed');
@@ -61,6 +65,12 @@ describe('CarbonLeakagePipe', () => {
     expect(pipe.transform('HEAT_BENCHMARK_CL')).toEqual('Exposed');
     expect(pipe.transform('FUEL_BENCHMARK_CL')).toEqual('Exposed');
     expect(pipe.transform('PROCESS_EMISSIONS_CL')).toEqual('Exposed');
+    expect(pipe.transform('HEAT_BENCHMARK_CL_CBAM')).toEqual('Exposed');
+    expect(pipe.transform('HEAT_BENCHMARK_CL_NON_CBAM')).toEqual('Exposed');
+    expect(pipe.transform('FUEL_BENCHMARK_CL_CBAM')).toEqual('Exposed');
+    expect(pipe.transform('FUEL_BENCHMARK_CL_NON_CBAM')).toEqual('Exposed');
+    expect(pipe.transform('PROCESS_EMISSIONS_CL_CBAM')).toEqual('Exposed');
+    expect(pipe.transform('PROCESS_EMISSIONS_CL_NON_CBAM')).toEqual('Exposed');
 
     expect(pipe.transform('PLASTERBOARD')).toEqual('Not exposed');
     expect(pipe.transform('HEAT_BENCHMARK_NON_CL')).toEqual('Not exposed');

@@ -46,7 +46,7 @@ describe('InstallationDetailsGroupComponent', () => {
 
   it('should render the review groups', () => {
     expect(
-      Array.from(element.querySelectorAll<HTMLUListElement>('.app-task-list__item > .app-task-list__task-name')).map(
+      Array.from(element.querySelectorAll<HTMLUListElement>('.app-task-list__item .app-task-list__task-name')).map(
         (el) => el.textContent.trim(),
       ),
     ).toEqual([

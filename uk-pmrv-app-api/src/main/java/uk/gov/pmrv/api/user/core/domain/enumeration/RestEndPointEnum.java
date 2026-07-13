@@ -11,7 +11,7 @@ import uk.gov.netz.api.restclient.RestClientEndPoint;
  */
 @Getter
 @AllArgsConstructor
-public enum RestEndPointEnum implements RestClientEndPoint {
+public enum RestEndPointEnum implements RestClientEndPoint<String> {
 
     /** Protect the value of the source password being searched for. */
     PWNED_PASSWORDS("/range/{passwordHash}", HttpMethod.GET, new ParameterizedTypeReference<String>() {});

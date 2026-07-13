@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, viewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,20 +9,20 @@ describe('DebounceClickDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
+    imports: [DebounceClickDirective],
     template: `
       <button type="button" #button govukDebounceClick (debounceClick)="onClick()">Simple button</button>
     `,
   })
   class TestComponent {
-    @ViewChild('button') button: ElementRef;
+    readonly button = viewChild<ElementRef>('button');
 
     onClick(): void {}
   }
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      declarations: [TestComponent, DebounceClickDirective],
+      imports: [TestComponent],
     }).createComponent(TestComponent);
 
     fixture.detectChanges();

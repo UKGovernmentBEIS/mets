@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { GovukComponentsModule } from '../../govuk-components.module';
+import { ConditionalContentDirective, LabelDirective } from '../../directives';
+import { TextInputComponent } from '../../text-input/text-input.component';
+import { RadioComponent } from '../radio.component';
+import { RadioOptionComponent } from './radio-option.component';
 
 describe('RadioOptionComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
@@ -11,7 +14,14 @@ describe('RadioOptionComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
+    imports: [
+      RadioComponent,
+      ReactiveFormsModule,
+      RadioOptionComponent,
+      ConditionalContentDirective,
+      LabelDirective,
+      TextInputComponent,
+    ],
     template: `
       <div govuk-radio [formControl]="control">
         <govuk-radio-option [value]="1" label="First" />
@@ -32,8 +42,8 @@ describe('RadioOptionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, GovukComponentsModule],
-      declarations: [TestComponent],
+      imports: [ConditionalContentDirective],
+      providers: [ControlContainer],
     }).compileComponents();
   });
 
@@ -49,10 +59,9 @@ describe('RadioOptionComponent', () => {
   });
 
   it('should display custom labels', () => {
-    expect(Array.from(element.querySelectorAll('.govuk-radios__label')).map((label) => label.textContent)).toEqual([
-      'First',
-      'Second',
-    ]);
+    expect(
+      Array.from(element.querySelectorAll('.govuk-radios__label')).map((label) => label.textContent?.trim()),
+    ).toEqual(['First', 'Second']);
   });
 
   it('should hide and reveal conditional content', () => {

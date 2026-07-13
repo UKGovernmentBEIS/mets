@@ -80,7 +80,7 @@ describe('OperatorDetailsOrganisationStructureComponent', () => {
     expect(screen.getAllByText(/Select the option which shows the legal status of your organisation/)).toHaveLength(2);
     expect(screen.getAllByText(/Enter the first line of your address/)).toHaveLength(4);
     expect(screen.getAllByText(/Enter your town or city/)).toHaveLength(4);
-    expect(screen.getAllByText(/Enter your country/)).toHaveLength(1);
+    expect(screen.getAllByText(/Enter your country/)).toHaveLength(4);
 
     await user.click(screen.getByRole('radio', { name: /Limited company/ }));
     fixture.detectChanges();
@@ -89,7 +89,7 @@ describe('OperatorDetailsOrganisationStructureComponent', () => {
     expect(screen.getAllByText(/Say if you would like to enter a different contact address/)).toHaveLength(2);
     expect(screen.getAllByText(/Enter the first line of your address/)).toHaveLength(4);
     expect(screen.getAllByText(/Enter your town or city/)).toHaveLength(4);
-    expect(screen.getAllByText(/Enter your country/)).toHaveLength(1);
+    expect(screen.getAllByText(/Enter your country/)).toHaveLength(4);
 
     await user.click(screen.getByRole('radio', { name: /Individual/ }));
     fixture.detectChanges();
@@ -97,14 +97,14 @@ describe('OperatorDetailsOrganisationStructureComponent', () => {
     expect(screen.getAllByText(/Enter full name/)).toHaveLength(2);
     expect(screen.getAllByText(/Enter the first line of your address/)).toHaveLength(4);
     expect(screen.getAllByText(/Enter your town or city/)).toHaveLength(4);
-    expect(screen.getAllByText(/Enter your country/)).toHaveLength(1);
+    expect(screen.getAllByText(/Enter your country/)).toHaveLength(4);
 
     await user.click(screen.getByRole('radio', { name: /Partnership/ }));
     fixture.detectChanges();
 
     expect(screen.getAllByText(/Enter the first line of your address/)).toHaveLength(4);
     expect(screen.getAllByText(/Enter your town or city/)).toHaveLength(4);
-    expect(screen.getAllByText(/Enter your country/)).toHaveLength(1);
+    expect(screen.getAllByText(/Enter your country/)).toHaveLength(4);
     expect(screen.getAllByText(/Enter the name of partner/)).toHaveLength(2);
   });
 

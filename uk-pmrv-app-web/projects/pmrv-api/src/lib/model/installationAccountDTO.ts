@@ -28,6 +28,7 @@ export interface InstallationAccountDTO {
   acceptedDate?: string;
   sopId?: number;
   registryId?: number;
+  verificationBodyId?: number;
   status?:
     | 'UNAPPROVED'
     | 'DENIED'

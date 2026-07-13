@@ -66,6 +66,6 @@ describe('SubmitContainerComponent', () => {
     expect(page.operatorText.textContent.trim()).toEqual('Assigned to: Operator1 England');
     expect(page.daysRemainingText.textContent.trim()).toEqual('Days Remaining: Overdue');
     expect(page.verificationDataGroup).toBeTruthy();
-    expect(page.taskList.textContent.trim()).toEqual('Send to the regulator cannot start yet');
+    expect(page.taskList.textContent.trim()).toEqual('Send to the regulator Cannot start yet');
   });
 });

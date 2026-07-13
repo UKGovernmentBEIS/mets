@@ -1,0 +1,66 @@
+@if (isErrorSummaryDisplayed$ | async) {
+  <govuk-error-summary [form]="form"></govuk-error-summary>
+}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <app-page-heading size="xl">{{ report.reportName }}</app-page-heading>
+  </div>
+
+  <div class="govuk-grid-column-one-quarter">
+    <div class="govuk-button-group">
+      <a govukSecondaryButton routerLink="#" class="edit-report">Edit report</a>
+      <a govukSecondaryButton routerLink="#" class="delete-report">Delete report</a>
+    </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Categories</dt>
+        <dd govukSummaryListRowValue>
+          <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+            @for (category of categories; track category) {
+              <li>{{ category }}</li>
+            }
+          </ul>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Description</dt>
+        <dd govukSummaryListRowValue>{{ report.description }}</dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Last updated</dt>
+        <dd govukSummaryListRowValue>{{ report.lastUpdatedOn | govukDate }}</dd>
+      </div>
+    </dl>
+
+    <div class="govuk-inset-text">
+      You can modify the query below before running it. Changes made here will not be saved to the report unless you are
+      in edit mode.
+    </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">SQL query</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onExport()">
+      <div
+        formControlName="sqlQuery"
+        govuk-textarea
+        label="SQL query"
+        [isLabelHidden]="true"
+        rows="14"
+        [maxLength]="10000"></div>
+
+      <div class="govuk-button-group">
+        <button appPendingButton type="submit" govukButton>Export to excel</button>
+      </div>
+    </form>
+  </div>
+</div>

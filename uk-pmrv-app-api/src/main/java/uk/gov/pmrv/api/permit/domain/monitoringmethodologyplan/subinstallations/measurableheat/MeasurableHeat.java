@@ -32,14 +32,14 @@ public class MeasurableHeat {
     private MeasurableHeatExported measurableHeatExported;
 
     public static List<SubInstallationType> getMeasurableHeatProducedSupportingSubInstallationTypes() {
-        return List.of(SubInstallationType.HEAT_BENCHMARK_CL, SubInstallationType.HEAT_BENCHMARK_NON_CL, SubInstallationType.DISTRICT_HEATING_NON_CL);
+        return List.of(SubInstallationType.HEAT_BENCHMARK_CL, SubInstallationType.HEAT_BENCHMARK_NON_CL, SubInstallationType.HEAT_BENCHMARK_CL_CBAM, SubInstallationType.HEAT_BENCHMARK_CL_NON_CBAM, SubInstallationType.DISTRICT_HEATING_NON_CL);
     }
 
     public static List<SubInstallationType> getMeasurableHeatImportedSupportingSubInstallationTypes() {
-        return List.of(SubInstallationType.HEAT_BENCHMARK_CL, SubInstallationType.HEAT_BENCHMARK_NON_CL, SubInstallationType.DISTRICT_HEATING_NON_CL);
+        return List.of(SubInstallationType.HEAT_BENCHMARK_CL, SubInstallationType.HEAT_BENCHMARK_NON_CL, SubInstallationType.HEAT_BENCHMARK_CL_CBAM, SubInstallationType.HEAT_BENCHMARK_CL_NON_CBAM, SubInstallationType.DISTRICT_HEATING_NON_CL);
     }
 
     public static List<SubInstallationType> getMeasurableHeatExportedSupportingSubInstallationTypes() {
-        return List.of(SubInstallationType.FUEL_BENCHMARK_CL, SubInstallationType.FUEL_BENCHMARK_NON_CL);
+        return List.of(SubInstallationType.FUEL_BENCHMARK_CL, SubInstallationType.FUEL_BENCHMARK_NON_CL, SubInstallationType.FUEL_BENCHMARK_CL_CBAM, SubInstallationType.FUEL_BENCHMARK_CL_NON_CBAM);
     }
 }

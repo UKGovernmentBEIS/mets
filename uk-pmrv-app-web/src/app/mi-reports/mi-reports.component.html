@@ -1,18 +1,100 @@
-<app-page-heading size="xl">MI Reports</app-page-heading>
+@let reportingImprovementsEnabled = reportingImprovementsEnabled$ | async;
 
-<div class="overflow-auto overflow-auto-table govuk-!-padding-1">
-  <govuk-table [columns]="tableColumns" [data]="currentPageData$ | async">
-    <ng-template let-column="column" let-row="row">
-      <ng-container [ngSwitch]="column.field">
-        <ng-container *ngSwitchDefault>
-          <a [routerLink]="miReportTypeLinkMap[row.miReportType]" govukLink>{{ row[column.field] }}</a>
-        </ng-container>
-      </ng-container>
-    </ng-template>
-  </govuk-table>
-  <app-pagination
-    (currentPageChange)="currentPage$.next($event)"
-    [count]="totalPages$ | async"
-    [pageSize]="pageSize"
-  ></app-pagination>
+@if (notification) {
+  <govuk-notification-banner type="success">
+    <h1 class="govuk-notification-banner__heading">Report saved</h1>
+  </govuk-notification-banner>
+}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <app-page-heading size="xl">MI Reports</app-page-heading>
+  </div>
+
+  @if (reportingImprovementsEnabled) {
+    <div class="govuk-grid-column-one-quarter">
+      <button govukButton type="button" routerLink="./add-custom-report" class="add-custom-report">
+        Add a custom report
+      </button>
+    </div>
+  }
 </div>
+
+<govuk-tabs>
+  @if (reportingImprovementsEnabled) {
+    <ng-template govukTab id="custom" label="Custom reports">
+      <ng-container *ngTemplateOutlet="customTemplate"></ng-container>
+    </ng-template>
+  }
+  <ng-template govukTab id="standard" label="Standard reports">
+    <ng-container *ngTemplateOutlet="standardTemplate"></ng-container>
+  </ng-template>
+</govuk-tabs>
+
+<ng-template #customTemplate>
+  @let customData = (customCurrentPageData$ | async) || [];
+  @let selectedCategory = selectedCategory$ | async;
+
+  <div class="govuk-grid-row govuk-!-margin-bottom-4">
+    <div class="govuk-grid-column-one-third">
+      <label for="filterByCategory" class="govuk-label">Filter by category</label>
+      <select
+        id="filterByCategory"
+        class="govuk-select govuk-grid-column-full"
+        [ngModel]="selectedCategory"
+        (ngModelChange)="onCategoryChange($event)">
+        <option ngValue="">All</option>
+        @for (category of (categoryOptions$ | async) ?? []; track category.value) {
+          <option [ngValue]="category.value">{{ category.text }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (customData.length > 0) {
+    <govuk-table [columns]="customTableColumns" [data]="customData">
+      <ng-template let-column="column" let-row="row">
+        <ng-container [ngSwitch]="column.field">
+          <ng-container *ngSwitchCase="'reportName'">
+            <a [routerLink]="['./view-custom-report', row.id]" govukLink>{{ row[column.field] }}</a>
+          </ng-container>
+          <ng-container *ngSwitchCase="'categories'">
+            {{ row[column.field] }}
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            {{ row[column.field] }}
+          </ng-container>
+        </ng-container>
+      </ng-template>
+    </govuk-table>
+
+    <app-pagination
+      (currentPageChange)="customCurrentPage$.next($event)"
+      [count]="customTotalPages$ | async"
+      [pageSize]="pageSize"></app-pagination>
+  } @else if (selectedCategory) {
+    <p class="govuk-body">There are no matching reports.</p>
+    <p class="govuk-body">Improve your results by:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>removing filters</li>
+      <li>double-checking your spelling</li>
+    </ul>
+  } @else {
+    <p class="govuk-body">There are no reports available.</p>
+  }
+</ng-template>
+
+<ng-template #standardTemplate>
+  @let standardData = standardCurrentPageData$ | async;
+
+  <ul app-task-item-list>
+    @for (data of standardData; track data.id) {
+      <li
+        app-task-item
+        [link]="miReportTypeLinkMap[data.miReportType]"
+        [linkText]="miReportTypeDescriptionMap[data.miReportType]"></li>
+    } @empty {
+      <li>There are no reports available.</li>
+    }
+  </ul>
+</ng-template>

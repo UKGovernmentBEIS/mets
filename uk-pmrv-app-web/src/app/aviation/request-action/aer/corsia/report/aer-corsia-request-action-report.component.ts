@@ -48,6 +48,8 @@ import {
   AviationReportingService,
   LimitedCompanyOrganisation,
   RequestActionDTO,
+  RequestActionInfoDTO,
+  RequestActionsService,
 } from 'pmrv-api';
 
 interface ViewModel {
@@ -71,6 +73,9 @@ interface ViewModel {
   standardFuels$?: Observable<AviationAerCorsiaStandardFuelsTotalEmissions[]>;
   aerodromePairs$?: Observable<AviationAerCorsiaAerodromePairsTotalEmissions[]>;
   statePairs$?: Observable<AviationAerCorsiaInternationalFlightsEmissions>;
+  submittedToVerifierDate: string;
+  verifierSubmittedDate: string;
+  submittedToRegulatorDate: string;
 }
 
 @Component({
@@ -138,16 +143,38 @@ export class AerCorsiaRequestActionReportComponent implements OnInit, AfterViewI
             ...aviationAerCorsiaEmissionsCalculationDTO,
             year: (requestAction.payload as AerCorsiaRequestActionPayload)?.reportingYear,
           }),
+          this.requestActionsService
+            .getRequestActionsByRequestId(requestAction.requestId)
+            .pipe(map((res) => this.sortTimeline(res.filter((timeline) => timeline.id <= requestAction.id)))),
         ]),
         of(null),
       ).pipe(
         map((emissionsData) => {
-          const [totalEmissions, standardFuels, aerodromePairs, statePairs] = emissionsData ?? [null, null, null, null];
+          const [totalEmissions, standardFuels, aerodromePairs, statePairs, timelineActions] = emissionsData ?? [
+            null,
+            null,
+            null,
+            null,
+            null,
+          ];
 
           const aerCorsiaRequestActionPayload = requestAction.payload as AerCorsiaRequestActionPayload;
           return {
             header: getRequestActionHeader(requestAction.type, requestAction.payload),
             creationDate: creationDate,
+            submittedToVerifierDate: timelineActions.filter(
+              (action) =>
+                action.type === 'AVIATION_AER_CORSIA_APPLICATION_SENT_TO_VERIFIER' ||
+                action.type === 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SENT_TO_VERIFIER',
+            )?.[0]?.creationDate,
+            verifierSubmittedDate: timelineActions.filter(
+              (action) => action.type === 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMITTED',
+            )?.[0]?.creationDate,
+            submittedToRegulatorDate: timelineActions.filter(
+              (action) =>
+                action.type === 'AVIATION_AER_CORSIA_APPLICATION_SUBMITTED' ||
+                action.type === 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED',
+            )?.[0]?.creationDate,
             sections: getApplicationSubmittedTasks(requestAction.type, requestAction.payload, regulatorViewer, true),
             requestType: requestAction.requestType,
             payload: requestAction.payload as AerCorsiaRequestActionPayload,
@@ -249,6 +276,7 @@ export class AerCorsiaRequestActionReportComponent implements OnInit, AfterViewI
     private titleService: Title,
     private aviationReportingService: AviationReportingService,
     private requestActionReportService: RequestActionReportService,
+    private requestActionsService: RequestActionsService,
   ) {}
 
   ngOnInit(): void {
@@ -272,5 +300,9 @@ export class AerCorsiaRequestActionReportComponent implements OnInit, AfterViewI
         }, 500);
       },
     });
+  }
+
+  private sortTimeline(res: RequestActionInfoDTO[]): RequestActionInfoDTO[] {
+    return res.slice().sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
   }
 }

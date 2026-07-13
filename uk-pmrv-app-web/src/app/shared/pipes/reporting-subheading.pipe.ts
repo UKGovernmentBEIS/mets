@@ -1,5 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { NotificationTypePipe } from '@shared/components/permit-notification/pipes/notification-type.pipe';
+import { ReportingTypePipe } from '@shared/components/permit-notification/pipes/reporting-type.pipe';
 import { OverallAssessmentTypePipe } from '@shared/pipes/overall-assessment-type.pipe';
 import { OverallDecisionTypePipe } from '@shared/pipes/overall-decision-type.pipe';
 import { format } from '@shared/utils/bignumber.utils';
@@ -15,6 +17,7 @@ import {
   BDRRequestMetadata,
   BDRS2RequestMetadata,
   NERRequestMetadata,
+  PermitNotificationRequestMetadata,
   RequestMetadata,
 } from 'pmrv-api';
 
@@ -25,14 +28,21 @@ import {
 export class ReportingSubheadingPipe implements PipeTransform {
   private readonly assessmentTypePipe = new OverallAssessmentTypePipe();
   private readonly overallDecisionTypePipe = new OverallDecisionTypePipe();
+  private readonly notificationTypePipe = new NotificationTypePipe();
+  private readonly reportingTypePipe = new ReportingTypePipe();
 
-  transform(metadata: RequestMetadata): string {
+  transform(metadata: RequestMetadata, notRequired?: boolean): string {
     switch (metadata?.type) {
       case 'AER': {
         const overallAssessment = this.assessmentTypePipe.transform(
           (metadata as AerRequestMetadata)?.overallAssessmentType,
         );
 
+        if (notRequired) {
+          return (metadata as AerRequestMetadata).emissions
+            ? format(new BigNumber((metadata as AerRequestMetadata).emissions)) + ' tCO2e'
+            : '';
+        }
         return (metadata as AerRequestMetadata).emissions
           ? format(new BigNumber((metadata as AerRequestMetadata).emissions)) +
               ' tCO2e' +
@@ -107,6 +117,13 @@ export class ReportingSubheadingPipe implements PipeTransform {
           (metadata as AviationAerCorsiaRequestMetadata).totalEmissionsClaimedReductions
           ? emissionsString + offsettingString + claimedReductionString
           : 'No emissions reported';
+      }
+      case 'PERMIT_NOTIFICATION': {
+        const notificationMetadata = metadata as PermitNotificationRequestMetadata;
+        if (notificationMetadata.otherFactorReportingType) {
+          return this.reportingTypePipe.transform(notificationMetadata.otherFactorReportingType);
+        }
+        return this.notificationTypePipe.transform(notificationMetadata.permitNotificationType);
       }
       default:
         return '';

@@ -1,0 +1,5 @@
+@use 'base' as govuk;
+
+.govuk-error-summary__message-without-path {
+  color: govuk.$govuk-error-colour;
+}

@@ -5,6 +5,8 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.util.ObjectUtils;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 
+import java.util.regex.Pattern;
+
 import static uk.gov.netz.api.common.validation.ValidationUtils.addConstraintViolation;
 
 /**
@@ -12,7 +14,7 @@ import static uk.gov.netz.api.common.validation.ValidationUtils.addConstraintVio
  */
 public class LegalEntityValidator implements ConstraintValidator<LegalEntity, LegalEntityDTO> {
 
-    private static final int REF_NUMBER_MAX_SIZE = 15;
+    private static final Pattern CRN_PATTERN = Pattern.compile("[a-zA-Z0-9]{2}[0-9]{5}[a-zA-Z0-9]");
 
     /** Max length for no companies house reference number */
     private static final int NO_REF_NUMBER_MAX_SIZE = 500;
@@ -80,8 +82,8 @@ public class LegalEntityValidator implements ConstraintValidator<LegalEntity, Le
                 }
             }
         } else {
-            if (referenceNumber.length() > REF_NUMBER_MAX_SIZE) {
-                addConstraintViolation(context, "{legalEntity.referenceNumber.typeMismatch}", "referenceNumber");
+            if (!CRN_PATTERN.matcher(referenceNumber).matches()) {
+                addConstraintViolation(context, "{legalEntity.referenceNumber.invalidFormat}", "referenceNumber");
                 return false;
             }
             else if (!ObjectUtils.isEmpty(noReferenceNumberReason)) {

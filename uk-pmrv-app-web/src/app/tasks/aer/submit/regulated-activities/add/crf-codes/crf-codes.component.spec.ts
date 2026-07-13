@@ -62,7 +62,7 @@ describe('CrfCodesComponent', () => {
     }
 
     get errorSummaryLinks() {
-      return Array.from(this.query<HTMLDivElement>('.govuk-error-summary').querySelectorAll('a')).map((item) =>
+      return Array.from(this.query<HTMLDivElement>('.govuk-error-summary').querySelectorAll('li')).map((item) =>
         item.textContent.trim(),
       );
     }

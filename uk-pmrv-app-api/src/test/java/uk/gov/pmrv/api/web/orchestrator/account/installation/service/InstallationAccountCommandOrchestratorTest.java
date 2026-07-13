@@ -153,6 +153,26 @@ class InstallationAccountCommandOrchestratorTest {
     }
 
     @Test
+    void updateRegistryReportingFirstYear_whenAccountStatusIsAwaitingRevocation_shouldUpdateSuccessfully() {
+
+        Long accountId = 1L;
+        AccountUpdateRegistryReportingFirstYearDTO dto = new AccountUpdateRegistryReportingFirstYearDTO();
+        dto.setRegistryReportingFirstYear(2024);
+
+        PermitContainer permitContainer = new PermitContainer();
+        permitContainer.setPermitType(PermitType.GHGE);
+
+        when(permitQueryService.getPermitContainerByAccountId(accountId)).thenReturn(permitContainer);
+        when(installationAccountQueryService.getAccountDTOById(1L))
+                .thenReturn(InstallationAccountDTO.builder().status(InstallationAccountStatus.AWAITING_REVOCATION).build());
+
+        orchestrator.updateRegistryReportingFirstYear(accountId, dto);
+
+        verify(permitQueryService, times(1)).getPermitContainerByAccountId(accountId);
+        verify(installationAccountUpdateService, times(1)).updateRegistryReportingFirstYear(accountId, dto);
+    }
+
+    @Test
     void updateRegistryReportingFirstYear_whenAccountStatusIsInvalid_shouldThrowBusinessException() {
 
         Long accountId = 1L;

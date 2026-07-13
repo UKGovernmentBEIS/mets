@@ -44,7 +44,7 @@ describe('DeterminationComponent', () => {
     }
 
     get proceedToAuthorityButton() {
-      return this.buttons.filter((el) => el.innerHTML.trim() === 'Proceed to UK ETS authority')[0];
+      return this.buttons.filter((el) => el.innerHTML.trim() === 'Proceed to UK ETS Authority')[0];
     }
 
     get closeButton() {

@@ -66,8 +66,11 @@ export class UsersTableDirective implements OnInit {
         tap(() => this.cdRef.markForCheck()),
         shareReplay({ bufferSize: 1, refCount: false }),
       )
-      .subscribe((data) => (this.host.data = data));
-    this.host.sort.pipe(takeUntil(this.destroy$)).subscribe((event: SortEvent) => this.sorting$.next(event));
+      .subscribe((data) => this.host.data.set(data));
+
+    this.host.sort.subscribe((event: SortEvent) => {
+      this.sorting$.next(event);
+    });
   }
 
   private createSorterByColumn({ column, direction }: SortEvent): (a: UntypedFormGroup, b: UntypedFormGroup) => number {

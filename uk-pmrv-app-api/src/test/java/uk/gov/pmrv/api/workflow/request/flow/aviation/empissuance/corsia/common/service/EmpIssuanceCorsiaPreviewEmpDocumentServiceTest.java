@@ -1,11 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.common.service;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Map;
-import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,14 +12,20 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.common.service.emp.corsia.EmpCorsiaPreviewCreateEmpDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.review.domain.EmpIssuanceCorsiaApplicationReviewRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.review.service.EmpIssuanceCorsiaPeerReviewPreviewEmpDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
+
+import java.util.Map;
+import java.util.UUID;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EmpIssuanceCorsiaPreviewEmpDocumentServiceTest {
 
     @InjectMocks
-    private EmpIssuanceCorsiaPeerReviewPreviewEmpDocumentService service;
+    private EmpIssuanceCorsiaPreviewEmpDocumentService service;
 
     @Mock
     private RequestTaskService requestTaskService;

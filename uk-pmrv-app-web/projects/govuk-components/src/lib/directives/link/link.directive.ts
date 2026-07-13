@@ -1,65 +1,65 @@
-/* eslint-disable @angular-eslint/prefer-host-metadata-property */
-import {
-  ChangeDetectorRef,
-  Directive,
-  ElementRef,
-  HostBinding,
-  Input,
-  OnDestroy,
-  OnInit,
-  Optional,
-  Renderer2,
-} from '@angular/core';
+import { ChangeDetectorRef, Directive, ElementRef, inject, input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 
 import { filter, Subscription } from 'rxjs';
 
 @Directive({
   selector: 'a[govukLink]',
-  standalone: false,
+  host: {
+    '[class.govuk-link]': 'hasSimpleLink',
+    '[class.govuk-breadcrumbs__link]': 'hasBreadcrumbsLink',
+    '[class.govuk-footer__link]': 'hasFooterLink',
+    '[class.govuk-header-legacy__link]': 'hasHeaderLink',
+    '[class.govuk-notification-banner__link]': 'hasNotificationLink',
+  },
 })
 export class LinkDirective implements OnDestroy, OnInit {
-  @Input('govukLink') navLinkType: 'header' | 'footer' | 'meta' | 'breadcrumb' | 'notification' | '' = '';
+  private readonly elementRef = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
+  private readonly router = inject(Router);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly link = inject(RouterLink, { optional: true });
+  private readonly linkWithHref = inject(RouterLink, { optional: true });
+
+  readonly navLinkType = input<'header' | 'footer' | 'meta' | 'breadcrumb' | 'notification' | 'summaryAction' | ''>(
+    '',
+    {
+      alias: 'govukLink',
+    },
+  );
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  @Input('hidden-text') hiddenText: string = '';
+  readonly hiddenText = input<string>('', { alias: 'hidden-text' });
 
   private isActive = false;
   private subscription: Subscription;
   private liElement: HTMLLIElement;
 
-  constructor(
-    private readonly elementRef: ElementRef,
-    private readonly renderer: Renderer2,
-    private readonly router: Router,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-    @Optional() private readonly link?: RouterLink,
-    @Optional() private readonly linkWithHref?: RouterLink,
-  ) {}
-
-  @HostBinding('class.govuk-link') get hasSimpleLink() {
-    return !this.navLinkType;
+  get hasSimpleLink() {
+    const navLinkType = this.navLinkType();
+    return !navLinkType || navLinkType === 'summaryAction';
   }
 
-  @HostBinding('class.govuk-breadcrumbs__link') get hasBreadcrumbsLink() {
-    return this.navLinkType === 'breadcrumb';
+  get hasBreadcrumbsLink() {
+    return this.navLinkType() === 'breadcrumb';
   }
 
-  @HostBinding('class.govuk-footer__link') get hasFooterLink() {
-    return this.navLinkType === 'meta' || this.navLinkType === 'footer';
+  get hasFooterLink() {
+    const navLinkType = this.navLinkType();
+    return navLinkType === 'meta' || navLinkType === 'footer';
   }
 
-  @HostBinding('class.govuk-header__link') get hasHeaderLink() {
-    return this.navLinkType === 'header';
+  get hasHeaderLink() {
+    return this.navLinkType() === 'header';
   }
 
-  @HostBinding('class.govuk-notification-banner__link') get hasNotificationLink() {
-    return this.navLinkType === 'notification';
+  get hasNotificationLink() {
+    return this.navLinkType() === 'notification';
   }
 
   ngOnInit(): void {
     const element: HTMLElement = this.elementRef.nativeElement;
 
-    if (this.navLinkType) {
+    if (this.navLinkType()) {
       this.subscription = this.router.events
         .pipe(filter((s) => s instanceof NavigationEnd))
         .subscribe(() => this.update());
@@ -71,11 +71,12 @@ export class LinkDirective implements OnDestroy, OnInit {
       this.renderer.appendChild(this.liElement, element);
     }
 
-    if (this.hiddenText) {
+    const hiddenText = this.hiddenText();
+    if (hiddenText) {
       const span = this.renderer.createElement('span');
       this.renderer.addClass(span, 'govuk-visually-hidden');
 
-      const text = this.renderer.createText(` ${this.hiddenText}`);
+      const text = this.renderer.createText(` ${hiddenText}`);
       this.renderer.appendChild(span, text);
       this.renderer.appendChild(element, span);
     }
@@ -89,22 +90,26 @@ export class LinkDirective implements OnDestroy, OnInit {
   }
 
   private getLiClassName(): string {
-    switch (this.navLinkType) {
+    switch (this.navLinkType()) {
       case 'meta':
         return 'govuk-footer__inline-list-item';
       case 'footer':
         return 'govuk-footer__list-item';
       case 'header':
-        return 'govuk-header__navigation-item';
+        return 'govuk-header-legacy__navigation-item';
       case 'breadcrumb':
         return 'govuk-breadcrumbs__list-item';
+      case 'summaryAction':
+        return 'govuk-summary-card__action';
+      default:
+        return null;
     }
   }
 
   private getActiveLiClassName(): string {
-    switch (this.navLinkType) {
+    switch (this.navLinkType()) {
       case 'header':
-        return 'govuk-header__navigation-item--active';
+        return 'govuk-header-legacy__navigation-item--active';
       default:
         return null;
     }

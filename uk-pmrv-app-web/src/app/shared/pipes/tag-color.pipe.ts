@@ -27,34 +27,35 @@ export class TagColorPipe implements PipeTransform {
       | 'withdrawn',
   ): TagColor {
     switch (status) {
-      case 'not started':
-      case 'undecided':
       case 'cannot start yet':
       case 'CANCELLED':
       case 'CLOSED':
         return 'grey';
       case 'granted':
       case 'accepted':
+      case 'complete':
       case 'COMPLETED':
       case 'approved':
       case 'APPROVED':
         return 'green';
-      case 'operator to amend':
       case 'in progress':
       case 'IN_PROGRESS':
+        return 'teal';
+      case 'not started':
+      case 'undecided':
       case 'NOT_REQUIRED':
         return 'blue';
       case 'rejected':
-      case 'deemed withdrawn':
-      case 'withdrawn':
       case 'incomplete':
-      case 'WITHDRAWN':
       case 'REJECTED':
         return 'red';
+      case 'deemed withdrawn':
+      case 'withdrawn':
+      case 'WITHDRAWN':
+        return 'orange';
       case 'needs review':
+      case 'operator to amend':
         return 'yellow';
-      case 'complete':
-        return null;
       default:
         return null;
     }

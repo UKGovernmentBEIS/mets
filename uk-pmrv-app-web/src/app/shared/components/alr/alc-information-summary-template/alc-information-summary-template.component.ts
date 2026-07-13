@@ -16,4 +16,5 @@ import { AllocationListTemplateComponent } from '../allocation-list-template/all
 export class AlrAlcInformationSummaryTemplateComponent {
   @Input() data: ALRApplicationRegulatorReviewOutcome;
   @Input() editable: boolean;
+  @Input() year: number;
 }

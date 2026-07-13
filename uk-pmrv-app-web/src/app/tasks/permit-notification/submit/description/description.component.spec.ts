@@ -108,7 +108,7 @@ describe('DescriptionComponent', () => {
       fixture.detectChanges();
 
       expect(page.errorSummary).toBeTruthy();
-      expect(page.errors.map((error) => error.textContent.trim())).toEqual(['Enter details', 'Select one']);
+      expect(page.errors.map((error) => error.textContent.trim())).toEqual(['Select one', 'Enter details']);
       expect(tasksService.processRequestTaskAction).not.toHaveBeenCalled();
 
       page.typeRadios[2].click();

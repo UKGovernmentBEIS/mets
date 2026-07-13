@@ -1,3 +1,3 @@
-<strong class="govuk-tag" [ngClass]="color ? `govuk-tag--${color}` : null">
+<strong class="govuk-tag {{ color() ? `govuk-tag--${color()}` : '' }}">
   <ng-content />
 </strong>

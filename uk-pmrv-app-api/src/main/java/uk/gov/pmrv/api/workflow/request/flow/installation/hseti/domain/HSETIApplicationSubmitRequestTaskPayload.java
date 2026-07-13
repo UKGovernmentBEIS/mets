@@ -5,7 +5,7 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
+@NoArgsConstructor
 @SuperBuilder
 public class HSETIApplicationSubmitRequestTaskPayload extends HSETIApplicationRequestTaskPayload {
 

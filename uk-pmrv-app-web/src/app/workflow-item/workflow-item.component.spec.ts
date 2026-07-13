@@ -128,7 +128,7 @@ describe('WorkflowItemComponent', () => {
       });
 
       it('should display request details', () => {
-        expect(page.heading.textContent.trim()).toEqual('Permit application IN PROGRESS');
+        expect(page.heading.textContent.trim().replace(/\s+/g, ' ')).toEqual('Permit application In progress');
       });
 
       it('should display tasks to complete', () => {
@@ -174,7 +174,7 @@ describe('WorkflowItemComponent', () => {
       });
 
       it('should display request details', () => {
-        expect(page.heading.textContent.trim()).toEqual('Permit application IN PROGRESS');
+        expect(page.heading.textContent.trim().replace(/\s+/g, ' ')).toEqual('Permit application In progress');
       });
 
       it('should not display any task to complete', () => {
@@ -345,7 +345,7 @@ describe('WorkflowItemComponent', () => {
       });
 
       it('should display request details', () => {
-        expect(page.heading.textContent.trim()).toEqual('Batch variation COMPLETED');
+        expect(page.heading.textContent.trim().replace(/\s+/g, ' ')).toEqual('Batch variation Completed');
       });
 
       it('should display timeline', () => {

@@ -4,8 +4,7 @@
     (formSubmit)="onContinue()"
     [formGroup]="form"
     submitText="Continue"
-    [hideSubmit]="(store.isEditable$ | async) === false"
-  >
+    [hideSubmit]="(store.isEditable$ | async) === false">
     <span class="govuk-caption-l">{{ determination$ | async }}</span>
 
     <app-page-heading>Provide annual emissions targets for the current phase</app-page-heading>
@@ -16,8 +15,7 @@
         *ngFor="let permit of annualEmissionsTargets.controls; index as i"
         [formGroupName]="i"
         govukFieldset
-        id="annual-emissions-targets-{{ i }}"
-      >
+        id="annual-emissions-targets-{{ i }}">
         <legend govukLegend></legend>
         <button
           (click)="annualEmissionsTargets.removeAt(i)"
@@ -26,8 +24,7 @@
           appAddAnother
           govukSecondaryButton
           type="button"
-          #removeButton
-        >
+          #removeButton>
           Remove
         </button>
         <div class="govuk-grid-row">
@@ -44,8 +41,7 @@
         *ngIf="(store.isEditable$ | async) === true"
         (click)="addOtherAnnualEmissionsTarget()"
         govukSecondaryButton
-        type="button"
-      >
+        type="button">
         Add another target
       </button>
     </div>

@@ -1,0 +1,14 @@
+<div class="app-task-list__main-row">
+  <span class="app-task-list__task-name" [class.govuk-!-margin-bottom-3]="hasContent">
+    <a *ngIf="link; else plainText" [routerLink]="link" govukLink>{{ linkText }}</a>
+    <ng-template #plainText>
+      <span>{{ linkText }}</span>
+    </ng-template>
+  </span>
+  @if (status) {
+    <app-task-status-tag [status]="status"></app-task-status-tag>
+  }
+</div>
+<div class="govuk-!-width-full">
+  <ng-content></ng-content>
+</div>

@@ -1,6 +1,5 @@
 <app-permit-task
-  [breadcrumb]="[{ text: 'TRANSFERRED_CO2_N2O' | monitoringApproachDescription, link: ['transferred-co2'] }]"
->
+  [breadcrumb]="[{ text: 'TRANSFERRED_CO2_N2O' | monitoringApproachDescription, link: ['transferred-co2'] }]">
   <app-wizard-step
     [showBackLink]="true"
     (formSubmit)="onContineu()"
@@ -8,21 +7,18 @@
     [caption]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
     heading="Temperature and pressure measurement equipment"
     submitText="Continue"
-    [hideSubmit]="(store.isEditable$ | async) === false"
-  >
+    [hideSubmit]="(store.isEditable$ | async) === false">
     <app-boolean-radio-group
       controlName="exist"
-      legend="Is any equipment used for temperature and pressure measurement in the transport network?"
-    >
+      legend="Is any equipment used for temperature and pressure measurement in the transport network?">
       <ng-container govukConditionalContent>
         <div formArrayName="measurementDevices">
           <fieldset
             *ngFor="let device of measurementDevices.controls; index as i"
             [formGroupName]="i"
             govukFieldset
-            id="measurement-device-{{ i }}"
-          >
-            <legend govukLegend>Measurement device {{ i + 1 }}</legend>
+            id="measurement-device-{{ i }}">
+            <legend govukLegend legendSize="medium">Measurement device {{ i + 1 }}</legend>
             <button
               (click)="measurementDevices.removeAt(i)"
               *ngIf="measurementDevices.length > 1"
@@ -30,16 +26,14 @@
               appAddAnother
               govukSecondaryButton
               type="button"
-              #removeButton
-            >
+              #removeButton>
               Remove
             </button>
             <div
               formControlName="reference"
               govuk-text-input
               hint="For example, ‘M1 Meter south boiler 1’"
-              label="Reference"
-            ></div>
+              label="Reference"></div>
             <app-select-other formControlName="type" label="Type of measurement device">
               <option *ngFor="let option of measurementTypes" [value]="option">
                 {{ option | measurementDevicesType }}
@@ -52,8 +46,7 @@
               formControlName="location"
               govuk-text-input
               hint="For example, ‘Inside boiler house on control panel’ or ‘North terminal’"
-              label="Location"
-            ></div>
+              label="Location"></div>
           </fieldset>
 
           <button (click)="addMeasurementDevice()" govukSecondaryButton type="button">Add another</button>
@@ -64,6 +57,5 @@
   <app-approach-return-link
     [parentTitle]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
     reviewGroupUrl="transferred-co2"
-    [isNested]="true"
-  ></app-approach-return-link>
+    [isNested]="true"></app-approach-return-link>
 </app-permit-task>

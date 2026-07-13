@@ -168,10 +168,8 @@ describe('TaskTypeToBreadcrumbPipe', () => {
 
     expect(pipe.transform('NON_COMPLIANCE_APPLICATION_SUBMIT')).toEqual('Provide details of breach: non-compliance');
 
-    expect(pipe.transform('DOAL_APPLICATION_SUBMIT')).toEqual('Determination of activity level change');
-    expect(pipe.transform('DOAL_AUTHORITY_RESPONSE')).toEqual(
-      'Provide UK ETS Authority response for activity Level Change',
-    );
+    expect(pipe.transform('DOAL_APPLICATION_SUBMIT')).toEqual('Determination of activity level');
+    expect(pipe.transform('DOAL_AUTHORITY_RESPONSE')).toEqual('Provide UK ETS Authority response for activity level');
     expect(pipe.transform('DOAL_WAIT_FOR_PEER_REVIEW')).toEqual('Activity level determination sent to peer reviewer');
     expect(pipe.transform('DOAL_APPLICATION_PEER_REVIEW')).toEqual('Activity level determination peer review');
 

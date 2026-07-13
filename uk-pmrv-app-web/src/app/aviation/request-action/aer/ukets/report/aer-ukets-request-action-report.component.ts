@@ -51,6 +51,8 @@ import {
   AviationReportingService,
   LimitedCompanyOrganisation,
   RequestActionDTO,
+  RequestActionInfoDTO,
+  RequestActionsService,
   StandardFuelsTotalEmissions,
 } from 'pmrv-api';
 
@@ -77,6 +79,9 @@ interface ViewModel {
   domesticFlights$?: Observable<AviationAerDomesticFlightsEmissions>;
   nonDomesticFlights$?: Observable<AviationAerNonDomesticFlightsEmissions>;
   fuelTypes?: { id: string; key: string; value: string }[];
+  submittedToVerifierDate: string;
+  verifierSubmittedDate: string;
+  submittedToRegulatorDate: string;
 }
 
 @Component({
@@ -135,16 +140,32 @@ export class AerUketsRequestActionReportComponent implements OnInit, AfterViewIn
           this.aviationReportingService.getAerodromePairsEmissionsUkEts(aviationAerEmissionsCalculationDTO),
           this.aviationReportingService.getDomesticFlightsEmissionsUkEts(aviationAerEmissionsCalculationDTO),
           this.aviationReportingService.getNonDomesticFlightsEmissionsUkEts(aviationAerEmissionsCalculationDTO),
+          this.requestActionsService
+            .getRequestActionsByRequestId(requestAction.requestId)
+            .pipe(map((res) => this.sortTimeline(res.filter((timeline) => timeline.id <= requestAction.id)))),
         ]),
         of(null),
       ).pipe(
         map((emissionsData) => {
-          const [totalEmissions, standardFuels, aerodromePairs, domesticFlights, nonDomesticFlights] =
+          const [totalEmissions, standardFuels, aerodromePairs, domesticFlights, nonDomesticFlights, timelineActions] =
             emissionsData ?? [null, null, null, null, null];
           const aerUkEtsRequestActionPayload = requestAction.payload as AerUkEtsRequestActionPayload;
           return {
             header: getRequestActionHeader(requestAction.type, requestAction.payload),
             creationDate: creationDate,
+            submittedToVerifierDate: timelineActions.filter(
+              (action) =>
+                action.type === 'AVIATION_AER_UKETS_APPLICATION_SENT_TO_VERIFIER' ||
+                action.type === 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER',
+            )?.[0]?.creationDate,
+            verifierSubmittedDate: timelineActions.filter(
+              (action) => action.type === 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED',
+            )?.[0]?.creationDate,
+            submittedToRegulatorDate: timelineActions.filter(
+              (action) =>
+                action.type === 'AVIATION_AER_UKETS_APPLICATION_SUBMITTED' ||
+                action.type === 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED',
+            )?.[0]?.creationDate,
             sections: getApplicationSubmittedTasks(requestAction.type, requestAction.payload, regulatorViewer, false),
             requestType: requestAction.requestType,
             payload: aerUkEtsRequestActionPayload,
@@ -232,6 +253,7 @@ export class AerUketsRequestActionReportComponent implements OnInit, AfterViewIn
     private titleService: Title,
     private aviationReportingService: AviationReportingService,
     private requestActionReportService: RequestActionReportService,
+    private requestActionsService: RequestActionsService,
   ) {}
 
   ngOnInit(): void {
@@ -267,5 +289,9 @@ export class AerUketsRequestActionReportComponent implements OnInit, AfterViewIn
         value: FUEL_TYPES.find((f) => f.value === ft).consumption,
       };
     });
+  }
+
+  private sortTimeline(res: RequestActionInfoDTO[]): RequestActionInfoDTO[] {
+    return res.slice().sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
   }
 }

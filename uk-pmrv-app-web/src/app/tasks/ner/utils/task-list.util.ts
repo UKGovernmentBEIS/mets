@@ -31,12 +31,9 @@ export const nerWarningText: Partial<Record<RequestTaskDTO['type'], { text: stri
   NER_WAIT_FOR_REVIEW: {
     text: 'Waiting for the regulator to complete the review.',
     extraText: `
-    <a 
-      href="https://manage-emissions-reporting.service.gov.uk/contact-us"
-      rel="noreferrer noopener"
-      target="_blank"
-      class="govuk-link"
-    >Contact your regulator</a> to change or withdraw your NER application.`,
+    <a href="/contact-us" rel="noreferrer noopener" target="_blank" class="govuk-link">
+      Contact your regulator
+    </a> to change or withdraw your NER application.`,
   },
   NER_WAIT_FOR_AMENDS: { text: 'You cannot edit the report as the operator is due to amend it' },
   NER_WAIT_FOR_PEER_REVIEW: { text: 'Waiting for peer review, you cannot make any changes' },

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { SharedModule } from '@shared/shared.module';
 import { BasePage } from '@testing';
@@ -22,7 +22,8 @@ describe('RequestTwoFaResetComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RequestTwoFaResetComponent],
-      imports: [GovukComponentsModule, SharedModule, RouterTestingModule],
+      imports: [GovukComponentsModule, SharedModule],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RequestTwoFaResetComponent);

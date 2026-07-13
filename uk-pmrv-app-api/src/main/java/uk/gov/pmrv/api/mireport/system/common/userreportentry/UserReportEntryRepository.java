@@ -5,6 +5,7 @@ import org.hibernate.query.NativeQuery;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.Authority;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 
 import java.util.Collections;
@@ -56,4 +57,28 @@ public class UserReportEntryRepository {
                     return result;
                 }).getResultList();
     }
+
+    @Transactional(readOnly = true)
+    public List<Authority> findByCompetentAuthorityIsNotNull(EntityManager entityManager) {
+        return entityManager.createNativeQuery(
+        """
+            select * from au_authority auth
+            where auth.competent_authority is not null
+        """, Authority.class).getResultList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Authority> findByCodeIn(EntityManager entityManager, List<String> codes) {
+        if (codes == null || codes.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return entityManager.createNativeQuery(
+            """
+                select * from au_authority auth
+                where auth.code in (:codes)
+            """, Authority.class)
+            .setParameter("codes", codes).getResultList();
+    }
+
 }

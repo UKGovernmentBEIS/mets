@@ -3,7 +3,7 @@
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Decision</dt>
       <dd govukSummaryListRowValue>
-        {{ determination.type === 'CLOSED' ? 'Close task' : 'Proceed to UK ETS authority' }}
+        {{ determination.type === 'CLOSED' ? 'Close task' : 'Proceed to UK ETS Authority' }}
       </dd>
       <dd govukSummaryListRowActions *ngIf="editable">
         <a govukLink [routerLink]="['../..']" [state]="{ changing: true }">Change</a>
@@ -12,13 +12,13 @@
   </dl>
 
   <ng-container *ngIf="determination.type === 'CLOSED'; else proceedAuthority">
-    <app-doal-determination-close-summary-template [determination]="$any(determination)" [editable]="editable">
-    </app-doal-determination-close-summary-template>
+    <app-doal-determination-close-summary-template
+      [determination]="$any(determination)"
+      [editable]="editable"></app-doal-determination-close-summary-template>
   </ng-container>
   <ng-template #proceedAuthority>
     <app-doal-determination-proceed-authority-summary-template
       [determination]="$any(determination)"
-      [editable]="editable"
-    ></app-doal-determination-proceed-authority-summary-template>
+      [editable]="editable"></app-doal-determination-proceed-authority-summary-template>
   </ng-template>
 </ng-container>

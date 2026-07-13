@@ -89,7 +89,7 @@ describe('CivilPenaltyNoticeComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Upload penalty notice');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'not started',
+        'Not started',
       );
     });
   });
@@ -122,7 +122,7 @@ describe('CivilPenaltyNoticeComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Upload penalty notice');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'in progress',
+        'In progress',
       );
     });
   });
@@ -146,7 +146,7 @@ describe('CivilPenaltyNoticeComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Upload penalty notice');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'completed',
+        'Completed',
       );
     });
   });

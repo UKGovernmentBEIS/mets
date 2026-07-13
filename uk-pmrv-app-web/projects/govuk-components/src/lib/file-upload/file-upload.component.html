@@ -1,16 +1,21 @@
-<label [for]="identifier" class="govuk-label" [class.govuk-visually-hidden]="isLabelHidden">
-  {{ currentLabel }}
+<label
+  [for]="identifier"
+  [id]="`l.${identifier}`"
+  [class]="currentLabelSize()"
+  [class.govuk-visually-hidden]="isLabelHidden()">
+  {{ label() }}
 </label>
-<govuk-error-message *ngIf="control.touched && control.invalid" [errors]="control.errors" [identifier]="identifier" />
+@if (isTouched && control.invalid) {
+  <govuk-error-message [errors]="control.errors" [identifier]="identifier" />
+}
 <input
   (blur)="onBlur()"
   (change)="onChange($event)"
-  [accept]="accepted"
-  [class.govuk-file-upload--error]="control.invalid && control.touched"
+  [accept]="accepted()"
+  [class.govuk-file-upload--error]="control.invalid && isTouched"
   [disabled]="control.disabled"
   [id]="identifier"
-  [multiple]="isMultiple"
+  [multiple]="isMultiple()"
   [name]="identifier"
   class="govuk-file-upload"
-  type="file"
-/>
+  type="file" />

@@ -37,7 +37,7 @@ import { workflowTypesDomainMap } from './workflowTypesMap';
   standalone: false,
   templateUrl: './workflows.component.html',
   styles: `
-    span.search-results-list_item_status {
+    div.search-results-list_item_status govuk-tag {
       float: right;
     }
   `,

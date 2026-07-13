@@ -6,7 +6,7 @@
           <a [routerLink]="row | itemLink: (isAviation$ | async) : false" govukLink>
             {{ row[column.field] | itemName: row.requestId?.split('-')[1] : row.requestId?.split('-')[2] }}
           </a>
-          <div>
+          <div class="govuk-!-margin-top-2">
             <govuk-tag *ngIf="row.isNew">New</govuk-tag>
           </div>
         </ng-container>

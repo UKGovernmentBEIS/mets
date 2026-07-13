@@ -97,7 +97,7 @@ describe('OperatorDetailsAirOperatingCertificateComponent', () => {
     expect(screen.getByRole('alert')).toBeVisible();
     expect(screen.getAllByText(/Select yes or no/)).toHaveLength(2);
     expect(screen.getAllByText(/Enter a certificate number/)).toHaveLength(2);
-    expect(screen.getAllByText(/Select an issuing authority/)).toHaveLength(1);
+    expect(screen.getAllByText(/Select an issuing authority/)).toHaveLength(2);
   });
 
   it('should call the saveAer function with the correct data when the form is valid and navigate to next page', async () => {

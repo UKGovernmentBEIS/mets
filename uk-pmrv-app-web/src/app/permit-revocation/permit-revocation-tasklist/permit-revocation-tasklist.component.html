@@ -9,8 +9,7 @@
         <app-task-header-info
           *ngIf="isTask$ | async"
           [assignee]="requestTaskItem.requestTask.assigneeFullName"
-          [daysRemaining]="requestTaskItem.requestTask.daysRemaining"
-        ></app-task-header-info>
+          [daysRemaining]="requestTaskItem.requestTask.daysRemaining"></app-task-header-info>
       </app-page-heading>
 
       <ng-container [ngSwitch]="requestTaskItem.requestTask.type">
@@ -30,8 +29,7 @@
             (click)="notifyOperator()"
             govukButton
             title="Notify Operator for decision"
-            type="button"
-          >
+            type="button">
             Notify Operator of decision
           </button>
           <button
@@ -42,8 +40,7 @@
             (click)="sendPeerReview()"
             govukButton
             title="Send for peer review"
-            type="button"
-          >
+            type="button">
             Send for peer review
           </button>
           <button
@@ -51,8 +48,7 @@
             (click)="peerReviewDecision()"
             govukButton
             title="Peer review decision"
-            type="button"
-          >
+            type="button">
             Peer review decision
           </button>
         </div>
@@ -68,8 +64,7 @@
               : './apply/summary'
           "
           linkText="Reason for revocation"
-          [status]="'REVOCATION_APPLY' | taskStatus | async"
-        ></li>
+          [status]="'REVOCATION_APPLY' | taskStatus | async"></li>
       </ul>
 
       <!-- Related tasks -->
@@ -84,8 +79,7 @@
             *ngFor="let action of actions"
             [action]="action"
             [link]="action | timelineItemLink"
-            [state]="navigationState"
-          ></app-timeline-item>
+            [state]="navigationState"></app-timeline-item>
           <p class="govuk-body" *ngIf="actions?.length === 0">No timeline events</p>
         </app-timeline>
       </div>
@@ -95,7 +89,14 @@
     <app-related-actions
       [isAssignable$]="store.isAssignableAndCapable$"
       [taskId$]="taskId$"
-      [allowedActions$]="store.select('allowedRequestTaskActions')"
-    ></app-related-actions>
+      [allowedActions$]="store.select('allowedRequestTaskActions')"></app-related-actions>
+
+    @if (previewDocuments$ | async) {
+      <app-preview-documents
+        [taskId]="taskId$ | async"
+        [previewDocuments]="previewDocuments$ | async"
+        [decisionNotification]="decision$ | async"
+        linkFontSize="govuk-!-font-size-16"></app-preview-documents>
+    }
   </div>
 </div>

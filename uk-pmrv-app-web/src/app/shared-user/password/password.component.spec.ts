@@ -13,6 +13,8 @@ import { provideZxvbnServiceForPSM } from 'angular-password-strength-meter/zxcvb
 
 import { GovukComponentsModule } from 'govuk-components';
 
+import { ValidatePasswordService } from 'pmrv-api';
+
 import { SharedUserModule } from '../shared-user.module';
 import { PasswordComponent } from './password.component';
 import { PasswordService } from './password.service';
@@ -22,7 +24,7 @@ describe('PasswordComponent', () => {
   let component: PasswordComponent;
   let fixture: ComponentFixture<TestComponent>;
   let page: Page;
-  let passwordService: PasswordService;
+  let validatePasswordService: ValidatePasswordService;
 
   @Component({
     standalone: false,
@@ -71,7 +73,7 @@ describe('PasswordComponent', () => {
         SharedUserModule,
       ],
       declarations: [PasswordComponent, TestComponent],
-      providers: [PasswordService, provideZxvbnServiceForPSM()],
+      providers: [PasswordService, ValidatePasswordService, provideZxvbnServiceForPSM()],
     }).compileComponents();
   });
 
@@ -79,7 +81,7 @@ describe('PasswordComponent', () => {
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.debugElement.query(By.directive(PasswordComponent)).componentInstance;
     page = new Page(fixture);
-    passwordService = TestBed.inject(PasswordService);
+    validatePasswordService = TestBed.inject(ValidatePasswordService);
     fixture.detectChanges();
   });
 
@@ -88,8 +90,6 @@ describe('PasswordComponent', () => {
   });
 
   it('should require the password', () => {
-    jest.spyOn(passwordService, 'blacklisted').mockReturnValueOnce(of(null));
-
     page.passwordValue = '';
     page.repeatedPasswordValue = '';
 
@@ -107,41 +107,17 @@ describe('PasswordComponent', () => {
     ]);
   });
 
-  it('should require more than 12 characters for the password', () => {
-    jest.spyOn(passwordService, 'blacklisted').mockReturnValueOnce(of(null));
-
-    page.passwordValue = 'test';
-    page.repeatedPasswordValue = 'test';
-    page.submitButton.click();
-    fixture.detectChanges();
-
-    expect(component.formGroupDirective.form.get('password').errors.minlength).toEqual(
-      'Password must be 12 characters or more',
-    );
-    expect(page.inputErrors).toEqual([
-      'Error: Password must be 12 characters or more',
-      'Error: Enter a strong password',
-    ]);
-  });
-
   it('should not accept weak password', () => {
-    jest.spyOn(passwordService, 'blacklisted').mockReturnValueOnce(of(null));
-
     page.passwordValue = '12345678';
     page.repeatedPasswordValue = '12345678';
     page.submitButton.click();
     fixture.detectChanges();
 
     expect(component.formGroupDirective.form.get('password').errors.weakPassword).toEqual('Enter a strong password');
-    expect(page.inputErrors).toEqual([
-      'Error: Password must be 12 characters or more',
-      'Error: Enter a strong password',
-    ]);
+    expect(page.inputErrors).toEqual(['Error: Enter a strong password']);
   });
 
   it('should require the passwords to match', () => {
-    jest.spyOn(passwordService, 'blacklisted').mockReturnValueOnce(of(null));
-
     page.passwordValue = '12345678';
     page.repeatedPasswordValue = '123456789';
     page.submitButton.click();
@@ -150,25 +126,35 @@ describe('PasswordComponent', () => {
     expect(component.formGroupDirective.form.errors.notEquivalent).toEqual(
       'Password and re-typed password do not match. Please enter both passwords again',
     );
-    expect(page.inputErrors).toEqual([
-      'Error: Password must be 12 characters or more',
-      'Error: Enter a strong password',
-    ]);
+    expect(page.inputErrors).toEqual(['Error: Enter a strong password']);
   });
 
-  it('should not accept a blacklisted password', () => {
-    jest
-      .spyOn(passwordService, 'blacklisted')
-      .mockReturnValueOnce(of({ blacklisted: 'For security reasons you must change your password' }));
+  it('should not accept a blacklisted password', async () => {
+    const validatePasswordSpy = jest.spyOn(validatePasswordService, 'validatePassword').mockReturnValue(
+      of({
+        valid: false,
+        errors: [
+          {
+            code: 'PWNED',
+            message: 'Password has been blacklisted. Select another password.',
+          },
+          {
+            code: 'BLACKLISTED_PATTERN',
+            message: 'Password contains a commonly used or prohibited word or pattern.',
+          },
+        ],
+      }) as any,
+    );
 
     page.passwordValue = 'ThisIsAStrongP@ssw0rd';
-    page.repeatedPasswordValue = '123456789';
+    page.repeatedPasswordValue = 'ThisIsAStrongP@ssw0rd';
     page.submitButton.click();
     fixture.detectChanges();
 
-    expect(component.formGroupDirective.form.get('password').errors.blacklisted).toEqual(
-      'For security reasons you must change your password',
-    );
-    expect(page.inputErrors).toEqual(['Error: For security reasons you must change your password']);
+    expect(validatePasswordSpy).toHaveBeenCalledWith({ password: 'ThisIsAStrongP@ssw0rd' });
+    expect(page.inputErrors).toEqual([
+      'Error: Enter a password that does not contain words related to the service or your role',
+      'Error: Password has been blacklisted. Select another password',
+    ]);
   });
 });

@@ -82,8 +82,8 @@ describe('PermitSurrenderTaskListComponent', () => {
     ]);
 
     expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual([
-      'not started',
-      'cannot start yet',
+      'Not started',
+      'Cannot start yet',
     ]);
   });
 
@@ -103,8 +103,8 @@ describe('PermitSurrenderTaskListComponent', () => {
     fixture.detectChanges();
 
     expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual([
-      'in progress',
-      'cannot start yet',
+      'In progress',
+      'Cannot start yet',
     ]);
   });
 
@@ -123,7 +123,7 @@ describe('PermitSurrenderTaskListComponent', () => {
     });
     fixture.detectChanges();
 
-    expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual(['completed', 'not started']);
+    expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual(['Completed', 'Not started']);
   });
 
   it('should display related action links', () => {

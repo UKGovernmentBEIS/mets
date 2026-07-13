@@ -1,16 +1,51 @@
 import { FactoryProvider, InjectionToken } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+
+import { map } from 'rxjs';
 
 import { GovukValidators } from 'govuk-components';
+
+import { PasswordValidationResponseDTO, ValidatePasswordService } from 'pmrv-api';
 
 import { PasswordService } from './password.service';
 
 export const PASSWORD_FORM = new InjectionToken<UntypedFormGroup>('Password form');
 
+const apiPasswordErrorMap: Record<string, string> = {
+  INVALID_MIN_LENGTH: 'Password must be 12 characters or more',
+  INVALID_MAX_LENGTH: 'Password must be 127 characters or less',
+  BLACKLISTED_PATTERN: 'Enter a password that does not contain words related to the service or your role',
+  PWNED: 'Password has been blacklisted. Select another password',
+  PWNED_SERVICE_UNAVAILABLE: 'Password check service is temporarily unavailable. Please try again later',
+};
+
+const apiPasswordErrorMapper = (response: PasswordValidationResponseDTO) => {
+  if (response?.errors) {
+    return response.errors.reduce(
+      (acc, error) => {
+        acc[error.code] = apiPasswordErrorMap?.[error.code] ?? error.message;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
+  }
+  return null;
+};
+
 export const passwordFormFactory: FactoryProvider = {
   provide: PASSWORD_FORM,
-  useFactory: (fb: UntypedFormBuilder, passwordService: PasswordService) =>
-    fb.group(
+  deps: [UntypedFormBuilder, PasswordService, ValidatePasswordService],
+  useFactory: (
+    fb: UntypedFormBuilder,
+    passwordService: PasswordService,
+    validatePasswordService: ValidatePasswordService,
+  ) => {
+    const apiPasswordValidator: AsyncValidatorFn = (control: AbstractControl) =>
+      validatePasswordService
+        .validatePassword({ password: control?.value })
+        .pipe(map((res) => apiPasswordErrorMapper(res)));
+
+    return fb.group(
       {
         email: [{ value: null, disabled: true }],
         password: [
@@ -18,10 +53,9 @@ export const passwordFormFactory: FactoryProvider = {
           {
             validators: [
               GovukValidators.required('Please enter your password'),
-              GovukValidators.minLength(12, 'Password must be 12 characters or more'),
               (control) => passwordService.strong(control),
             ],
-            asyncValidators: (control) => passwordService.blacklisted(control),
+            asyncValidators: [apiPasswordValidator],
             updateOn: 'change',
           },
         ],
@@ -37,7 +71,8 @@ export const passwordFormFactory: FactoryProvider = {
             return password.value === validatePassword.value ? null : { notEquivalent: true };
           },
         ),
+        updateOn: 'submit',
       },
-    ),
-  deps: [UntypedFormBuilder, PasswordService],
+    );
+  },
 };

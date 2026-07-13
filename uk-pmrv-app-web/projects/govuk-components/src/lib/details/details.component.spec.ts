@@ -10,7 +10,7 @@ describe('DetailsComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
+    imports: [DetailsComponent],
     template: `
       <govuk-details [summary]="summary" />
     `,
@@ -21,7 +21,7 @@ describe('DetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DetailsComponent, TestComponent],
+      imports: [TestComponent],
     }).compileComponents();
   });
 

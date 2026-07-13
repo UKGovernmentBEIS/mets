@@ -24,6 +24,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRAlrDataR
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRReviewDecision;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalProceedToAuthorityDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.enums.DoalDeterminationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.ArticleReasonGroupType;
 
 
 import java.util.Map;
@@ -92,10 +93,12 @@ public class ALRValidationService {
         // Validate article reasons
         DoalProceedToAuthorityDetermination determination =
                 (DoalProceedToAuthorityDetermination) taskPayload.getRegulatorReviewOutcome().getDetermination();
+
+        boolean containsArticle5 = determination.getArticleReasonGroupType() == ArticleReasonGroupType.ARTICLE_5_REASONS;
         boolean areArticleReasonsValid = determination.getArticleReasonItems().stream()
                 .allMatch(item -> item.getGroupType().equals(determination.getArticleReasonGroupType()));
 
-        if(!areArticleReasonsValid) {
+        if(!areArticleReasonsValid || containsArticle5) {
             throw new BusinessException(MetsErrorCode.INVALID_ALR_ARTICLE_REASONS,
                     taskPayload);
         }

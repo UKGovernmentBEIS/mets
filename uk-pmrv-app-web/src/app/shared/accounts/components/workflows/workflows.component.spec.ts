@@ -111,7 +111,7 @@ describe('WorkflowsComponent', () => {
       expect(page.workflowNames.map((workflowName) => workflowName.textContent.trim())).toEqual([
         '2 Permit application',
       ]);
-      expect(page.workflowStatusNames.map((tag) => tag.textContent.trim())).toEqual(['IN PROGRESS']);
+      expect(page.workflowStatusNames.map((tag) => tag.textContent.trim())).toEqual(['In progress']);
     });
   });
 
@@ -147,7 +147,7 @@ describe('WorkflowsComponent', () => {
       expect(page.workflowNames.map((workflowName) => workflowName.textContent.trim())).toEqual([
         '2 Permit application',
       ]);
-      expect(page.workflowStatusNames.map((tag) => tag.textContent.trim())).toEqual(['IN PROGRESS']);
+      expect(page.workflowStatusNames.map((tag) => tag.textContent.trim())).toEqual(['In progress']);
     });
   });
 
@@ -183,7 +183,7 @@ describe('WorkflowsComponent', () => {
         pageSize: 30,
       });
 
-      expect(page.workflowStatusNames.map((tag) => tag.textContent.trim())).toEqual(['IN PROGRESS']);
+      expect(page.workflowStatusNames.map((tag) => tag.textContent.trim())).toEqual(['In progress']);
     });
   });
 });

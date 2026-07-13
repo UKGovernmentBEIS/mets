@@ -1,94 +1,82 @@
-<app-cookies-container *ngIf="(showCookiesBanner$ | async) === true"></app-cookies-container>
-<govuk-header title="Manage your UK Emissions Trading Scheme reporting">
-  <govuk-skip-link></govuk-skip-link>
+@if ((showCookiesBanner$ | async) === true) {
+  <app-cookies-container />
+}
+<govuk-header-legacy title="Manage your UK ETS reporting">
+  <govuk-skip-link />
   <govuk-header-actions-list>
-    <select
-      class="domain-picker"
-      *ngIf="(isLoggedIn$ | async) && (canSwitchDomain$ | async)"
-      [ngModel]="currentSelection()"
-      (ngModelChange)="onSelectionChangeDomainSwitch($event)"
-      (keydown)="onKeyDownDomainSwitch($event)"
-      (click)="onClickDomainSwitch()"
-      aria-label="Choose a domain">
-      <option title="View related to installation" ngValue="INSTALLATION">Installation view</option>
-      <option title="View related to aviation" ngValue="AVIATION">Aviation view</option>
-    </select>
-    <a
-      *ngIf="(isLoggedIn$ | async) && (isGatewayServiceEnabled$ | async)"
-      class="govuk-header__link"
-      [href]="serviceGatewayUrl">
-      Change service
-    </a>
-    <a routerLink *ngIf="isLoggedIn$ | async" class="govuk-header__link" (click)="logout($event)">Sign out</a>
+    @if ((isLoggedIn$ | async) && (canSwitchDomain$ | async)) {
+      <select
+        class="domain-picker"
+        [ngModel]="currentSelection()"
+        (ngModelChange)="onSelectionChangeDomainSwitch($event)"
+        (keydown)="onKeyDownDomainSwitch($event)"
+        (click)="onClickDomainSwitch()"
+        aria-label="Choose a domain">
+        <option title="View related to installation" ngValue="INSTALLATION">Installation view</option>
+        <option title="View related to aviation" ngValue="AVIATION">Aviation view</option>
+      </select>
+    }
+    @if ((isLoggedIn$ | async) && (isGatewayServiceEnabled$ | async)) {
+      <a class="govuk-header-legacy__link" [href]="serviceGatewayUrl">Change service</a>
+    }
+    @if (isLoggedIn$ | async) {
+      <a routerLink class="govuk-header-legacy__link" (click)="logout($event)">Sign out</a>
+    }
   </govuk-header-actions-list>
-  <app-navigation *ngIf="permissions$ | async as permissions">
-    <a
-      *ngIf="permissions.showRegulators || permissions.showVerifiers || permissions.showAuthorizedOperators"
-      [routerLink]="[(domainUrlPrefix$ | async) + '/dashboard']"
-      appNavigationLink>
-      Tasks
-    </a>
-    <a
-      *ngIf="permissions.showRegulators || permissions.showVerifiers || permissions.showAuthorizedOperators"
-      [routerLink]="[(domainUrlPrefix$ | async) + '/accounts']"
-      appNavigationLink>
-      Accounts
-    </a>
-    <a
-      *ngIf="permissions.showRegulators"
-      [routerLink]="[(domainUrlPrefix$ | async) + '/user/regulators']"
-      appNavigationLink>
-      Regulator users and contacts
-    </a>
-    <a
-      *ngIf="permissions.showRegulators"
-      [routerLink]="[(domainUrlPrefix$ | async) + '/verification-bodies']"
-      appNavigationLink>
-      Verification body accounts
-    </a>
-    <a *ngIf="permissions.showRegulators" [routerLink]="[(domainUrlPrefix$ | async) + '/templates']" appNavigationLink>
-      Templates
-    </a>
-    <a *ngIf="permissions.showRegulators" [routerLink]="[(domainUrlPrefix$ | async) + '/mi-reports']" appNavigationLink>
-      MI Reports
-    </a>
-    <a
-      *ngIf="permissions.showVerifiers"
-      [routerLink]="[(domainUrlPrefix$ | async) + '/user/verifiers']"
-      appNavigationLink>
-      Manage verifier users
-    </a>
-    <a
-      *ngIf="permissions.showRegulators"
-      [routerLink]="[(domainUrlPrefix$ | async) + '/workflows/batch-variations']"
-      appNavigationLink>
-      Batch variations
-    </a>
-    <a
-      *ngIf="permissions.hasAccessBulkDownload"
-      [routerLink]="[(domainUrlPrefix$ | async) + '/bulk-downloads']"
-      appNavigationLink>
-      Bulk downloads
-    </a>
-  </app-navigation>
-</govuk-header>
+  @if (permissions$ | async; as permissions) {
+    <govuk-header-nav-list-legacy identifier="navigation" ariaLabel="Primary navigation">
+      @if (permissions.showRegulators || permissions.showVerifiers || permissions.showAuthorizedOperators) {
+        <a [routerLink]="[(domainUrlPrefix$ | async) + '/dashboard']" govukLink="header">Tasks</a>
+      }
+      @if (permissions.showRegulators || permissions.showVerifiers || permissions.showAuthorizedOperators) {
+        <a [routerLink]="[(domainUrlPrefix$ | async) + '/accounts']" govukLink="header">Accounts</a>
+      }
+      @if (permissions.showRegulators) {
+        <a [routerLink]="[(domainUrlPrefix$ | async) + '/user/regulators']" govukLink="header">
+          Regulator users and contacts
+        </a>
+      }
+      @if (permissions.showRegulators) {
+        <a [routerLink]="[(domainUrlPrefix$ | async) + '/verification-bodies']" govukLink="header">
+          Verification body accounts
+        </a>
+      }
+      @if (permissions.showRegulators) {
+        <a [routerLink]="[(domainUrlPrefix$ | async) + '/templates']" govukLink="header">Templates</a>
+      }
+      @if (permissions.showRegulators) {
+        <a [routerLink]="[(domainUrlPrefix$ | async) + '/mi-reports']" govukLink="header">MI Reports</a>
+      }
+      @if (permissions.showVerifiers) {
+        <a [routerLink]="[(domainUrlPrefix$ | async) + '/user/verifiers']" govukLink="header">Manage verifier users</a>
+      }
+      @if (permissions.showRegulators) {
+        <a [routerLink]="[(domainUrlPrefix$ | async) + '/workflows/batch-variations']" govukLink="header">
+          Batch variations
+        </a>
+      }
+      @if (permissions.hasAccessBulkDownload) {
+        <a [routerLink]="[(domainUrlPrefix$ | async) + '/bulk-downloads']" govukLink="header">Bulk downloads</a>
+      }
+    </govuk-header-nav-list-legacy>
+  }
+</govuk-header-legacy>
 
 <section class="govuk-width-container">
   <app-phase-bar></app-phase-bar>
   <app-incorporate-header></app-incorporate-header>
   <app-breadcrumbs></app-breadcrumbs>
-  <app-identity-bar></app-identity-bar>
   <app-back-link></app-back-link>
   <main class="govuk-main-wrapper" id="main-content" role="main" tabindex="-1">
     <router-outlet></router-outlet>
   </main>
 </section>
-<govuk-footer crestSvg="./assets/images/govuk-crest.svg">
+<govuk-footer>
   <govuk-footer-meta-info>
     <a govukLink="meta" href="/privacy-notice">Privacy Notice</a>
-    <a govukLink="meta" routerLink="/contact-us">Contact us</a>
+    <a govukLink="meta" href="/contact-us">Contact us</a>
     <a govukLink="meta" routerLink="/accessibility">Accessibility Statement</a>
     <a govukLink="meta" routerLink="/legislation">UK ETS legislation</a>
   </govuk-footer-meta-info>
 </govuk-footer>
-<app-timeout-banner></app-timeout-banner>
+<app-timeout-banner />

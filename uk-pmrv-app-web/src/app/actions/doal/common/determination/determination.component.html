@@ -5,13 +5,12 @@
       <dl govuk-summary-list>
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Decision</dt>
-          <dd govukSummaryListRowValue>Proceed to UK ETS authority</dd>
+          <dd govukSummaryListRowValue>Proceed to UK ETS Authority</dd>
         </div>
       </dl>
       <app-doal-determination-proceed-authority-summary-template
         [determination]="determination"
-        [editable]="false"
-      ></app-doal-determination-proceed-authority-summary-template>
+        [editable]="false"></app-doal-determination-proceed-authority-summary-template>
     </ng-container>
     <ng-template #closed>
       <dl govuk-summary-list>
@@ -22,8 +21,7 @@
       </dl>
       <app-doal-determination-close-summary-template
         [determination]="determination"
-        [editable]="false"
-      ></app-doal-determination-close-summary-template>
+        [editable]="false"></app-doal-determination-close-summary-template>
     </ng-template>
   </ng-container>
 </app-doal-action-task>

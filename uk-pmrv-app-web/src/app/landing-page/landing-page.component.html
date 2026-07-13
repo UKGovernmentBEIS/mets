@@ -59,8 +59,7 @@
           <a
             class="govuk-button govuk-button--secondary govuk-button--start"
             routerLink="/registration"
-            draggable="false"
-          >
+            draggable="false">
             Create sign in
             <img class="govuk-button__start-icon" ngSrc="./assets/images/start-button-arrow.svg" alt="" />
           </a>
@@ -72,8 +71,7 @@
             <li>
               <a
                 govukLink
-                href="https://www.gov.uk/government/publications/participating-in-the-uk-ets/participating-in-the-uk-ets#registry"
-              >
+                href="https://www.gov.uk/government/publications/participating-in-the-uk-ets/participating-in-the-uk-ets#registry">
                 Participating in UK ETS
               </a>
             </li>
@@ -96,8 +94,7 @@
   <ng-template #firstLogin>
     <ng-container
       *ngIf="vm.hasOnlyInstallation || vm.hasNoLogin || vm.hasBothAccepted"
-      [ngTemplateOutlet]="installation"
-    ></ng-container>
+      [ngTemplateOutlet]="installation"></ng-container>
     <ng-container *ngIf="vm.hasOnlyAviation" [ngTemplateOutlet]="aviation"></ng-container>
   </ng-template>
 
@@ -143,15 +140,16 @@
   <ng-template #noRoleType>
     <app-page-heading>
       You need to create a sign in or
-      <a govukLink [routerLink]="['/contact-us']">contact your regulator or administrator</a> to create a sign in for
-      you.
+      <a govukLink href="/contact-us" rel="noreferrer noopener" target="_blank">
+        contact your regulator or administrator
+      </a>
+      to create a sign in for you.
     </app-page-heading>
     <a
       class="govuk-button govuk-button--secondary govuk-button--start"
       routerLink="."
       (click)="authService.logout()"
-      draggable="false"
-    >
+      draggable="false">
       Sign out
       <img class="govuk-button__start-icon" ngSrc="./assets/images/start-button-arrow.svg" alt="" />
     </a>
@@ -164,14 +162,15 @@
   </ng-template>
 
   <ng-template #userActivation>
-    <app-page-heading> Your user account needs to be activated. </app-page-heading>
+    <app-page-heading>Your user account needs to be activated.</app-page-heading>
     <p class="govuk-body">
       Your user account must be activated before you can sign in to the UK ETS reporting service.
     </p>
     <p class="govuk-body">
       If your account was created by your regulator, they will now activate your account. You'll receive an email once
-      your account has been activated. <a govukLink routerLink="/contact-us">Contact your regulator</a> if your account
-      has not been activated after 2 working days.
+      your account has been activated.
+      <a govukLink href="/contact-us" rel="noreferrer noopener" target="_blank">Contact your regulator</a>
+      if your account has not been activated after 2 working days.
     </p>
     <p class="govuk-body">
       If your account was created by an operator administrator, they will now activate your account. You'll receive an
@@ -191,9 +190,9 @@
         <div *ngIf="vm.installationEnabled === false" class="govuk-body">
           To access the service you'll need to create a new installation account.
         </div>
-        <a (click)="store.reset()" govukButton routerLink="/installation-account"
-          >Apply for a new installation account</a
-        >
+        <a (click)="store.reset()" govukButton routerLink="/installation-account">
+          Apply for a new installation account
+        </a>
         <div class="govuk-body govuk-!-font-weight-bold">
           If you want to be added to an existing installation account
         </div>

@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { of, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
@@ -74,6 +74,7 @@ describe('VerifierInvitationComponent', () => {
     page = new Page(fixture);
     router = TestBed.inject(Router);
     route = TestBed.inject(ActivatedRoute);
+    fixture.componentInstance.form.controls['password'].clearAsyncValidators();
     fixture.detectChanges();
   });
 
@@ -91,7 +92,6 @@ describe('VerifierInvitationComponent', () => {
       throwError(() => new HttpErrorResponse({ error: { code: 'EMAIL1001' }, status: 400 })),
     );
     const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
-    passwordService.blacklisted.mockReturnValue(of(null));
     passwordService.strong.mockReturnValue(null);
 
     component.form.get('password').setValue('ThisIsAStrongP@ssw0rd');
@@ -134,7 +134,6 @@ describe('VerifierInvitationComponent', () => {
 
     expect(verifierUsersRegistrationService.acceptAuthorityAndActivateVerifierUserFromInvite).not.toHaveBeenCalled();
 
-    passwordService.blacklisted.mockReturnValue(of(null));
     passwordService.strong.mockReturnValue(null);
     page.passwordValue = 'ThisIsAStrongP@ssw0rd';
     page.repeatedPasswordValue = 'ThisIsAStrongP@ssw0rd';

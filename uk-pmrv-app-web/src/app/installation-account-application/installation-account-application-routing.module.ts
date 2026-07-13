@@ -77,7 +77,7 @@ const formRoutes: Routes = [
           },
           {
             path: 'details',
-            data: { pageTitle: 'Enter the legal entity details' },
+            data: { pageTitle: 'Enter the legal entity details', backlink: '../regno' },
             canActivate: [LegalEntityDetailsOpGuard],
             canDeactivate: [PendingRequestGuard],
             component: LegalEntityDetailsOpComponent,

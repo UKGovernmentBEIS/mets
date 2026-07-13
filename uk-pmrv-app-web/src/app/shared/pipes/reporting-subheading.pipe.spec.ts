@@ -1,4 +1,4 @@
-import { RequestMetadata } from 'pmrv-api';
+import { PermitNotificationRequestMetadata, RequestMetadata } from 'pmrv-api';
 
 import { ReportingSubheadingPipe } from './reporting-subheading.pipe';
 
@@ -119,5 +119,23 @@ describe('ReportingSubheadingPipe', () => {
         '21319 tCO2 emissions from flights with offsetting requirements\n ' +
         '4000 tCO2 emissions claimed from CORSIA eligible fuels',
     );
+
+    const metadataPermitNotification: PermitNotificationRequestMetadata = {
+      type: 'PERMIT_NOTIFICATION',
+      permitNotificationType: 'TEMPORARY_CHANGE',
+    };
+    expect(pipe.transform(metadataPermitNotification)).toEqual('Temporary change to the permitted installation');
+
+    const metadataPermitNotificationOtherFactor: PermitNotificationRequestMetadata = {
+      type: 'PERMIT_NOTIFICATION',
+      otherFactorReportingType: 'RENOUNCE_FREE_ALLOCATIONS',
+    };
+    expect(pipe.transform(metadataPermitNotificationOtherFactor)).toEqual('Renounce free allocations');
+
+    const metadataPermitNotificationOtherIssue: PermitNotificationRequestMetadata = {
+      type: 'PERMIT_NOTIFICATION',
+      otherFactorReportingType: 'OTHER_ISSUE',
+    };
+    expect(pipe.transform(metadataPermitNotificationOtherIssue)).toEqual('Some other issue');
   });
 });

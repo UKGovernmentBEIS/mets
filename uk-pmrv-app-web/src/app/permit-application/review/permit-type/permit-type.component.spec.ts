@@ -108,9 +108,9 @@ describe('PermitTypeComponent', () => {
         expect(
           page.reviewSections.map((section) => [
             section.querySelector('a').textContent.trim(),
-            section.querySelector('govuk-tag').textContent.trim(),
+            section.querySelector('.app-task-list__tag').textContent.trim(),
           ]),
-        ).toEqual([['Permit type', 'not started']]);
+        ).toEqual([['Permit type', 'Not started']]);
       });
     });
 
@@ -141,9 +141,9 @@ describe('PermitTypeComponent', () => {
         expect(
           page.reviewSections.map((section) => [
             section.querySelector('a').textContent.trim(),
-            section.querySelector('govuk-tag').textContent.trim(),
+            section.querySelector('.app-task-list__tag').textContent.trim(),
           ]),
-        ).toEqual([['Permit type', 'completed']]);
+        ).toEqual([['Permit type', 'Completed']]);
       });
     });
   });

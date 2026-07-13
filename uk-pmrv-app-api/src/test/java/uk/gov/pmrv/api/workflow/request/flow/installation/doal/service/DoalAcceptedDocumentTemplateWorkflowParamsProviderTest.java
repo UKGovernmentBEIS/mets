@@ -56,7 +56,8 @@ class DoalAcceptedDocumentTemplateWorkflowParamsProviderTest {
                 .isEqualTo(Map.of(
                         "reportingYear", reportingYear,
                         "doal", doal,
-                        "authorityResponse", authorityResponse
+                        "authorityResponse", authorityResponse,
+                        "nerAndYear0", false
                 ));
     }
 }

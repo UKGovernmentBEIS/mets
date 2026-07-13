@@ -88,21 +88,21 @@ describe('ManagementProceduresComponent', () => {
       expect(
         page.reviewSections.map((section) => [
           section.querySelector('a')?.textContent.trim() ?? section.querySelector('strong').textContent.trim(),
-          section.querySelector('govuk-tag').textContent.trim(),
+          section.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
       ).toEqual([
-        ['Monitoring and reporting roles', 'not started'],
-        ['Assignment of responsibilities', 'completed'],
-        ['Monitoring plan appropriateness', 'not started'],
-        ['Data flow activities', 'not started'],
-        ['Quality assurance of IT used for data flow activities', 'not started'],
-        ['Review and validation of data', 'not started'],
-        ['Assessing and controlling risks', 'not started'],
-        ['Quality assurance of metering and measuring equipment', 'not started'],
-        ['Corrections and corrective actions', 'not started'],
-        ['Control of outsourced activities', 'not started'],
-        ['Record keeping and documentation', 'not started'],
-        ['Environmental management system', 'not started'],
+        ['Monitoring and reporting roles', 'Not started'],
+        ['Assignment of responsibilities', 'Completed'],
+        ['Monitoring plan appropriateness', 'Not started'],
+        ['Data flow activities', 'Not started'],
+        ['Quality assurance of IT used for data flow activities', 'Not started'],
+        ['Review and validation of data', 'Not started'],
+        ['Assessing and controlling risks', 'Not started'],
+        ['Quality assurance of metering and measuring equipment', 'Not started'],
+        ['Corrections and corrective actions', 'Not started'],
+        ['Control of outsourced activities', 'Not started'],
+        ['Record keeping and documentation', 'Not started'],
+        ['Environmental management system', 'Not started'],
       ]);
     });
   });
@@ -134,21 +134,21 @@ describe('ManagementProceduresComponent', () => {
       expect(
         page.reviewSections.map((section) => [
           section.querySelector('a')?.textContent.trim() ?? section.querySelector('strong').textContent.trim(),
-          section.querySelector('govuk-tag').textContent.trim(),
+          section.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
       ).toEqual([
-        ['Monitoring and reporting roles', 'not started'],
-        ['Assignment of responsibilities', 'completed'],
-        ['Monitoring plan appropriateness', 'not started'],
-        ['Data flow activities', 'not started'],
-        ['Quality assurance of IT used for data flow activities', 'not started'],
-        ['Review and validation of data', 'not started'],
-        ['Assessing and controlling risks', 'not started'],
-        ['Quality assurance of metering and measuring equipment', 'not started'],
-        ['Corrections and corrective actions', 'not started'],
-        ['Control of outsourced activities', 'not started'],
-        ['Record keeping and documentation', 'not started'],
-        ['Environmental management system', 'not started'],
+        ['Monitoring and reporting roles', 'Not started'],
+        ['Assignment of responsibilities', 'Completed'],
+        ['Monitoring plan appropriateness', 'Not started'],
+        ['Data flow activities', 'Not started'],
+        ['Quality assurance of IT used for data flow activities', 'Not started'],
+        ['Review and validation of data', 'Not started'],
+        ['Assessing and controlling risks', 'Not started'],
+        ['Quality assurance of metering and measuring equipment', 'Not started'],
+        ['Corrections and corrective actions', 'Not started'],
+        ['Control of outsourced activities', 'Not started'],
+        ['Record keeping and documentation', 'Not started'],
+        ['Environmental management system', 'Not started'],
       ]);
     });
   });

@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { GovukComponentsModule } from 'govuk-components';
@@ -23,6 +23,7 @@ describe('AsyncValidationFieldDirective', () => {
     fixture = TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, GovukComponentsModule],
       declarations: [AsyncValidationFieldDirective, TestComponent],
+      providers: [ControlContainer],
     }).createComponent(TestComponent);
 
     fixture.detectChanges();

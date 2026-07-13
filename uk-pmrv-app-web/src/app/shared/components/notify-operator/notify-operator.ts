@@ -71,9 +71,9 @@ export const returnToTextMapper = (requestTaskActionType: RequestTaskActionProce
     case 'DRE_SUBMIT_NOTIFY_OPERATOR':
       return 'Reportable emissions';
     case 'DOAL_PROCEED_TO_AUTHORITY_AND_NOTIFY_OPERATOR_FOR_DECISION':
-      return 'Determination of activity level change';
+      return 'Determination of activity level';
     case 'DOAL_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION':
-      return 'Provide UK ETS Authority response for activity Level Change';
+      return 'Provide UK ETS Authority response for activity level';
     case 'VIR_NOTIFY_OPERATOR_FOR_DECISION':
     case 'AVIATION_VIR_NOTIFY_OPERATOR_FOR_DECISION':
       return 'Review verifier improvement report';

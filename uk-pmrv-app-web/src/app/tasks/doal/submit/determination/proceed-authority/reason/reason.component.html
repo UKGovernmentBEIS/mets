@@ -3,7 +3,7 @@
     (formSubmit)="onSubmit()"
     [formGroup]="form"
     heading="Choose one or more reasons to support your determination"
-    caption="Proceed to UK ETS authority"
+    caption="Proceed to UK ETS Authority"
     submitText="Save and continue"
     [hideSubmit]="(editable$ | async) === false">
     <div formControlName="articleReasonGroupType" govuk-radio>
@@ -32,6 +32,9 @@
           </div>
         </ng-container>
       </govuk-radio-option>
+      <govuk-radio-option
+        [label]="'ARTICLE_5_REASONS' | i18nSelect: articleReasonGroupTypeLabelsMap"
+        value="ARTICLE_5_REASONS"></govuk-radio-option>
     </div>
 
     <h2 class="govuk-heading-m">Information about the selected reasons</h2>

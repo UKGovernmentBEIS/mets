@@ -5,5 +5,10 @@ export function accountFinalStatuses(status: InstallationAccountDTO['status']): 
 }
 
 export function accountFirstYearStatuses(status: InstallationAccountDTO['status']): boolean {
-  return status === 'LIVE' || status === 'AWAITING_SURRENDER' || status === 'AWAITING_TRANSFER';
+  return (
+    status === 'LIVE' ||
+    status === 'AWAITING_SURRENDER' ||
+    status === 'AWAITING_TRANSFER' ||
+    status === 'AWAITING_REVOCATION'
+  );
 }

@@ -82,7 +82,7 @@ describe('SubmitContainerComponent', () => {
     });
 
     it('should display HTML elements', () => {
-      expect(page.heading).toEqual('2025 Determination of activity level change');
+      expect(page.heading).toEqual('2025 Determination of activity level');
       expect(page.appSubmitSectionList).toBeTruthy();
       expect(page.notifyOperatorButton).toBeFalsy();
       expect(page.completeButton).toBeFalsy();

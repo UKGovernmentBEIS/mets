@@ -34,9 +34,9 @@ export class NavigationLinkDirective implements OnInit {
     const parentNode: HTMLElement = this.elementRef.nativeElement.parentNode;
     const element: HTMLElement = this.elementRef.nativeElement;
     this.liElement = this.renderer.createElement('li');
-    this.renderer.addClass(element, 'hmcts-primary-navigation__link');
+    this.renderer.addClass(element, 'govuk-service-navigation__link');
     this.renderer.addClass(element, 'govuk-link');
-    this.renderer.addClass(this.liElement, 'hmcts-primary-navigation__item');
+    this.renderer.addClass(this.liElement, 'govuk-service-navigation__item');
     this.renderer.appendChild(this.liElement, element);
     this.renderer.appendChild(parentNode, this.liElement);
   }
@@ -64,8 +64,10 @@ export class NavigationLinkDirective implements OnInit {
 
       if (hasActiveLinks) {
         this.renderer.setAttribute(this.elementRef.nativeElement, 'aria-current', 'page');
+        this.renderer.addClass(this.liElement, 'govuk-service-navigation__item--active');
       } else {
         this.renderer.removeAttribute(this.elementRef.nativeElement, 'aria-current');
+        this.renderer.removeClass(this.liElement, 'govuk-service-navigation__item--active');
       }
     }
   }

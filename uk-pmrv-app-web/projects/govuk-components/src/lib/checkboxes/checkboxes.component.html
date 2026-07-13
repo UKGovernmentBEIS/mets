@@ -1,17 +1,24 @@
 <fieldset [id]="identifier" govukFieldset>
-  <legend [size]="legendSize" govukLegend>
-    <ng-container *ngIf="legend; else customLegend">{{ legend }}</ng-container>
-    <ng-template #customLegend>
+  <legend [legendSize]="labelSize()" govukLegend [class.govuk-visually-hidden]="isLabelHidden()">
+    @if (label()) {
+      {{ label() }}
+    } @else {
       <ng-content select="[govukLegend]" />
-    </ng-template>
+    }
   </legend>
-  <span *ngIf="hint" govukFieldsetHint>{{ hint }}</span>
-  <govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="identifier" />
-  <div [class.govuk-checkboxes--small]="size === 'small'" class="govuk-checkboxes">
-    <ng-container *ngFor="let option of options">
-      <div *ngIf="option.divider" class="govuk-checkboxes__divider">{{ option.divider }}</div>
-      <ng-container [ngTemplateOutlet]="option.optionTemplate" />
-      <ng-container [ngTemplateOutlet]="option.conditionalTemplate" />
-    </ng-container>
+  @if (hint()) {
+    <div govukFieldsetHint [innerHTML]="hint()"></div>
+  }
+  @if (shouldDisplayErrors) {
+    <govuk-error-message [errors]="control.errors" [identifier]="identifier" />
+  }
+  <div [class.govuk-checkboxes--small]="size() === 'small'" class="govuk-checkboxes">
+    @for (option of options(); track option) {
+      @if (option?.divider()) {
+        <div class="govuk-checkboxes__divider">{{ option.divider() }}</div>
+      }
+      <ng-container [ngTemplateOutlet]="option.optionTemplate()" />
+      <ng-container [ngTemplateOutlet]="option.conditionalTemplate()" />
+    }
   </div>
 </fieldset>

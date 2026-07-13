@@ -23,7 +23,7 @@ export class PreviewDocumentsComponent {
   @Input() previewDocuments: DocumentFilenameAndDocumentType[];
   @Input() decisionNotification: DecisionNotification;
   @Input() linkFontSize = 'govuk-!-font-size-19';
-  @Input() hideDecisionFromPermit: boolean = false;
+  @Input() hideDecision: boolean = false;
 
   disabled$ = new BehaviorSubject(false);
 
@@ -32,7 +32,7 @@ export class PreviewDocumentsComponent {
     readonly pendingRequest: PendingRequestService,
   ) {}
 
-  getDocument(document: DocumentFilenameAndDocumentType, event) {
+  getDocument(document: DocumentFilenameAndDocumentType, event: Event) {
     event.preventDefault();
     if (!this.disabled$.getValue()) {
       this.disabled$.next(true);
@@ -40,7 +40,9 @@ export class PreviewDocumentsComponent {
         .getDocumentPreview(this.taskId, {
           documentType: document.documentType,
           decisionNotification:
-            document?.documentType === 'PERMIT' && this.hideDecisionFromPermit ? null : this.decisionNotification,
+            ['PERMIT', 'EMP_UKETS', 'EMP_CORSIA'].includes(document?.documentType) && this.hideDecision
+              ? null
+              : this.decisionNotification,
         })
         .pipe(this.pendingRequest.trackRequest())
         .subscribe((blob: any) => {

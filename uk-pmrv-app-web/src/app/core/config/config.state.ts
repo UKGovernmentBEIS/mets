@@ -8,6 +8,7 @@ export const FEATURES = [
   'wasteQdrEnabled',
   'bdrs2Enabled',
   'nerEnabled',
+  'reportingImprovementsEnabled',
 ] as const;
 export type FeatureName = (typeof FEATURES)[number];
 export type FeaturesConfig = { [key in FeatureName]?: boolean };

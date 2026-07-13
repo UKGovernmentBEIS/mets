@@ -90,7 +90,7 @@ describe('NoticeOfIntentComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Upload notice of intent');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'not started',
+        'Not started',
       );
     });
   });
@@ -122,7 +122,7 @@ describe('NoticeOfIntentComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Upload notice of intent');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'in progress',
+        'In progress',
       );
     });
   });
@@ -146,7 +146,7 @@ describe('NoticeOfIntentComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Upload notice of intent');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'completed',
+        'Completed',
       );
     });
   });

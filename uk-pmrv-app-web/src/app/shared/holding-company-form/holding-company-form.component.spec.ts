@@ -56,42 +56,42 @@ describe('HoldingCompanyFormComponent', () => {
     const labels = getFormFieldLabels(fixture);
     const text = labels[0].nativeElement.textContent;
 
-    expect(text).toStrictEqual('Holding company name');
+    expect(text).toStrictEqual(' Holding company name ');
   });
 
   it('should show registration number field', () => {
     const labels = getFormFieldLabels(fixture);
     const text = labels[1].nativeElement.textContent;
 
-    expect(text).toStrictEqual('Holding company registration number (optional)');
+    expect(text).toStrictEqual(' Holding company registration number (optional) ');
   });
 
   it('should show company address line 1 field', () => {
     const labels = getFormFieldLabels(fixture);
     const nameLabelText = labels[2].nativeElement.textContent;
 
-    expect(nameLabelText).toStrictEqual('Address line 1');
+    expect(nameLabelText).toStrictEqual(' Address line 1 ');
   });
 
   it('should show company address line 2 field', () => {
     const labels = getFormFieldLabels(fixture);
     const text = labels[3].nativeElement.textContent;
 
-    expect(text).toStrictEqual('Address line 2 (optional)');
+    expect(text).toStrictEqual(' Address line 2 (optional) ');
   });
 
   it('should show city field', () => {
     const labels = getFormFieldLabels(fixture);
     const text = labels[4].nativeElement.textContent;
 
-    expect(text).toStrictEqual('Town or city');
+    expect(text).toStrictEqual(' Town or city ');
   });
 
   it('should show post code field', () => {
     const labels = getFormFieldLabels(fixture);
     const nameLabelText = labels[5].nativeElement.textContent;
 
-    expect(nameLabelText).toStrictEqual('Post code');
+    expect(nameLabelText).toStrictEqual(' Post code ');
   });
 });
 

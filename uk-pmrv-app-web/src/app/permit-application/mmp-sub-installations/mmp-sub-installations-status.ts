@@ -99,9 +99,13 @@ export const resolveDirectlyAttributableEmissionsFABackLink: ResolveFn<any> = (r
 
         const backlinks = {
           HEAT_BENCHMARK_CL: heatTemplate,
+          HEAT_BENCHMARK_CL_CBAM: heatTemplate,
+          HEAT_BENCHMARK_CL_NON_CBAM: heatTemplate,
           HEAT_BENCHMARK_NON_CL: heatTemplate,
           DISTRICT_HEATING_NON_CL: heatTemplate,
           FUEL_BENCHMARK_CL: fuelTemplate,
+          FUEL_BENCHMARK_CL_CBAM: fuelTemplate,
+          FUEL_BENCHMARK_CL_NON_CBAM: fuelTemplate,
           FUEL_BENCHMARK_NON_CL: fuelTemplate,
         };
 
@@ -139,7 +143,11 @@ export function isProductBenchmarkComplete(productBenchmark: SubInstallation): b
   const specialAromatics =
     productBenchmark?.subInstallationType === 'AROMATICS' ? productBenchmark?.specialProduct : true;
   const specialHydrogen =
-    productBenchmark?.subInstallationType === 'HYDROGEN' ? productBenchmark?.specialProduct : true;
+    productBenchmark?.subInstallationType === 'HYDROGEN' ||
+    productBenchmark?.subInstallationType === 'HYDROGEN_CBAM' ||
+    productBenchmark?.subInstallationType === 'HYDROGEN_NON_CBAM'
+      ? productBenchmark?.specialProduct
+      : true;
   const specialSynthesisGas =
     productBenchmark?.subInstallationType === 'SYNTHESIS_GAS' ? productBenchmark?.specialProduct : true;
   const specialEthyleneOxideGlycols =
@@ -181,7 +189,11 @@ export function isFallbackApproachComplete(fallbackApproach: SubInstallation): b
     fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_NON_CL' ||
     fallbackApproach?.subInstallationType === 'DISTRICT_HEATING_NON_CL' ||
     fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_CL' ||
-    fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_NON_CL'
+    fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_NON_CL' ||
+    fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_CL_CBAM' ||
+    fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_CL_NON_CBAM' ||
+    fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_CL_CBAM' ||
+    fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_CL_NON_CBAM'
       ? fallbackApproach?.directlyAttributableEmissions
       : true;
 
@@ -190,27 +202,37 @@ export function isFallbackApproachComplete(fallbackApproach: SubInstallation): b
     fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_NON_CL' ||
     fallbackApproach?.subInstallationType === 'DISTRICT_HEATING_NON_CL' ||
     fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_CL' ||
-    fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_NON_CL'
+    fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_NON_CL' ||
+    fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_CL_CBAM' ||
+    fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_CL_NON_CBAM' ||
+    fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_CL_CBAM' ||
+    fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_CL_NON_CBAM'
       ? fallbackApproach?.fuelInputAndRelevantEmissionFactor
       : true;
 
   const measurableHeatProduced =
     fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_CL' ||
     fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_NON_CL' ||
-    fallbackApproach?.subInstallationType === 'DISTRICT_HEATING_NON_CL'
+    fallbackApproach?.subInstallationType === 'DISTRICT_HEATING_NON_CL' ||
+    fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_CL_CBAM' ||
+    fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_CL_NON_CBAM'
       ? fallbackApproach?.measurableHeat?.measurableHeatProduced
       : true;
 
   const measurableHeatImported =
     fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_CL' ||
     fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_NON_CL' ||
-    fallbackApproach?.subInstallationType === 'DISTRICT_HEATING_NON_CL'
+    fallbackApproach?.subInstallationType === 'DISTRICT_HEATING_NON_CL' ||
+    fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_CL_CBAM' ||
+    fallbackApproach?.subInstallationType === 'HEAT_BENCHMARK_CL_NON_CBAM'
       ? fallbackApproach?.measurableHeat?.measurableHeatImported
       : true;
 
   const measurableHeatExported =
     fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_CL' ||
-    fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_NON_CL'
+    fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_NON_CL' ||
+    fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_CL_CBAM' ||
+    fallbackApproach?.subInstallationType === 'FUEL_BENCHMARK_CL_NON_CBAM'
       ? fallbackApproach?.measurableHeat?.measurableHeatExported
       : true;
 
@@ -232,11 +254,17 @@ export function isFallbackApproachComplete(fallbackApproach: SubInstallation): b
 
 export const fallbackApproachTypes: SubInstallation['subInstallationType'][] = [
   'HEAT_BENCHMARK_CL',
+  'HEAT_BENCHMARK_CL_CBAM',
+  'HEAT_BENCHMARK_CL_NON_CBAM',
   'HEAT_BENCHMARK_NON_CL',
   'DISTRICT_HEATING_NON_CL',
   'FUEL_BENCHMARK_CL',
+  'FUEL_BENCHMARK_CL_CBAM',
+  'FUEL_BENCHMARK_CL_NON_CBAM',
   'FUEL_BENCHMARK_NON_CL',
   'PROCESS_EMISSIONS_CL',
+  'PROCESS_EMISSIONS_CL_CBAM',
+  'PROCESS_EMISSIONS_CL_NON_CBAM',
   'PROCESS_EMISSIONS_NON_CL',
 ];
 
@@ -263,7 +291,11 @@ export const productBenchmarkTypes: SubInstallation['subInstallationType'][] = [
   'GREY_CEMENT_CLINKER',
   'HOT_METAL',
   'HYDROGEN',
+  'HYDROGEN_CBAM',
+  'HYDROGEN_NON_CBAM',
   'IRON_CASTING',
+  'IRON_CASTING_CBAM',
+  'IRON_CASTING_NON_CBAM',
   'LIME',
   'LONG_FIBRE_KRAFT_PULP',
   'MINERAL_WOOL',
@@ -303,7 +335,11 @@ export const exchangeabilityTypes = [
   'EAF_HIGH_ALLOY_STEEL',
   'ETHYLENE_OXIDE_ETHYLENE_GLYCOLS',
   'HYDROGEN',
+  'HYDROGEN_CBAM',
+  'HYDROGEN_NON_CBAM',
   'IRON_CASTING',
+  'IRON_CASTING_CBAM',
+  'IRON_CASTING_NON_CBAM',
   'MINERAL_WOOL',
   'REFINERY_PRODUCTS',
   'STEAM_CRACKING',

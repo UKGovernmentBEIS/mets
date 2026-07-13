@@ -17,7 +17,7 @@
         [formGroupName]="i"
         govukFieldset
         id="monitoring-role-{{ i }}">
-        <legend govukLegend>Role {{ i + 1 }}</legend>
+        <legend govukLegend legendSize="medium">Role {{ i + 1 }}</legend>
         <button
           (click)="roles.removeAt(i)"
           *ngIf="roles.length > 1"

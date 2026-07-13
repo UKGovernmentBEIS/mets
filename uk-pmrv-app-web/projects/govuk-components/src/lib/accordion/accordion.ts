@@ -1,4 +1,4 @@
-import { InjectionToken } from '@angular/core';
+import { FactoryProvider, InjectionToken } from '@angular/core';
 
 export interface Accordion {
   id: string;
@@ -9,7 +9,7 @@ export interface Accordion {
 
 export const ACCORDION = new InjectionToken<Accordion>('Accordion');
 
-export const accordionFactory = {
+export const accordionFactory: FactoryProvider = {
   provide: ACCORDION,
   useFactory: () => ({ id: 'accordion', itemCount: 0 }),
 };

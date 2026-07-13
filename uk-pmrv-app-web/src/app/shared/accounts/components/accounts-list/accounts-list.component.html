@@ -14,10 +14,10 @@
           }
         </ul>
       </div>
-      <div class="govuk-grid-column-one-quarter">
-        <span class="govuk-tag govuk-tag--grey status-tag">
-          <strong>{{ account.status | accountStatus }}</strong>
-        </span>
+      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+        <govuk-tag color="grey">
+          {{ account.status | accountStatus }}
+        </govuk-tag>
       </div>
     </div>
   </li>

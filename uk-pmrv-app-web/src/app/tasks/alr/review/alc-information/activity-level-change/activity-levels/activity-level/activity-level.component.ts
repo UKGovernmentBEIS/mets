@@ -21,7 +21,7 @@ import { alrActivityLevelFormProvider } from './activity-level-form.provider';
       caption="New activity level changes"
       returnLinkTitle="Information about this activity level change">
       <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" submitText="Continue" [hideSubmit]="!isEditable()">
-        <app-activity-level-template-form></app-activity-level-template-form>
+        <app-activity-level-template-form [year]="year"></app-activity-level-template-form>
       </app-wizard-step>
     </app-alr-task-common>
   `,
@@ -34,6 +34,7 @@ export class AlrActivityLevelComponent {
 
   isEditable = this.alrService.isEditable;
   payload = this.alrService.payload as Signal<ALRApplicationRegulatorReviewSubmitRequestTaskPayload>;
+  readonly year = this.alrService.year;
 
   constructor(
     @Inject(ALR_TASK_FORM) readonly form: UntypedFormGroup,

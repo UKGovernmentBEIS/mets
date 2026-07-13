@@ -93,7 +93,7 @@ describe('ReviewSectionsComponent', () => {
 
     it('should display group sections', () => {
       expect(
-        Array.from(hostElement.querySelectorAll('li[app-task-item] > span')).map((section) =>
+        Array.from(hostElement.querySelectorAll('li[app-task-item] .app-task-list__task-name')).map((section) =>
           section.textContent.trim(),
         ),
       ).toEqual([
@@ -115,25 +115,25 @@ describe('ReviewSectionsComponent', () => {
       ]);
 
       expect(
-        Array.from(hostElement.querySelectorAll('li[app-task-item] > govuk-tag')).map((section) =>
+        Array.from(hostElement.querySelectorAll('li[app-task-item] .app-task-list__tag')).map((section) =>
           section.textContent.trim(),
         ),
       ).toEqual([
-        'accepted',
-        'accepted',
-        'accepted',
-        'accepted',
-        'accepted',
-        'accepted',
-        'accepted',
-        'accepted',
-        'accepted',
-        'accepted',
-        'accepted',
-        'accepted',
-        'accepted',
-        'accepted',
-        'accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
+        'Accepted',
       ]);
     });
   });

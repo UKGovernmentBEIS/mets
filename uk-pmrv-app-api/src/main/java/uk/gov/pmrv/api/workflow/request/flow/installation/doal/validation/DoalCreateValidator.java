@@ -29,7 +29,7 @@ public class DoalCreateValidator extends RequestCreateAccountRelatedValidator {
     public RequestCreateValidationResult validateAction(Long accountId) {
         final InstallationAccountDTO accountDTOById = installationAccountQueryService.getAccountDTOById(accountId);
         if (accountDTOById.getEmitterType() == EmitterType.HSE) {
-            return RequestCreateValidationResult.builder().isAvailable(false).build();
+            return RequestCreateValidationResult.builder().available(false).build();
         }
 
         return super.validateAction(accountId);

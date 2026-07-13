@@ -1,21 +1,23 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule, By } from '@angular/platform-browser';
+import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 
-import { FormErrorDirective } from '../directives';
-import { ErrorMessageComponent } from '../error-message/error-message.component';
 import { GovukValidators } from '../error-message/govuk-validators';
+import { LabelSizeType } from './label-size.type';
 import { TextareaComponent } from './textarea.component';
 
 describe('TextareaComponent', () => {
   @Component({
-    standalone: false,
-    template: '<div govuk-textarea [formControl]="control" [maxLength]="maxLength"></div>',
+    imports: [TextareaComponent, ReactiveFormsModule],
+    template:
+      '<div [labelSize]="labelSize" [isLabelHidden]="isLabelHidden" govuk-textarea [formControl]="control" [maxLength]="maxLength"></div>',
   })
   class TestComponent {
     control = new FormControl();
     maxLength: number;
+    isLabelHidden = false;
+    labelSize: LabelSizeType = 'normal';
   }
 
   let component: TextareaComponent;
@@ -24,11 +26,8 @@ describe('TextareaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, BrowserModule],
-      declarations: [TextareaComponent, TestComponent, ErrorMessageComponent, FormErrorDirective],
-    })
-      .overrideModule(BrowserModule, { set: { entryComponents: [ErrorMessageComponent] } })
-      .compileComponents();
+      providers: [ControlContainer],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -82,8 +81,7 @@ describe('TextareaComponent', () => {
     hostComponent.control.updateValueAndValidity();
     fixture.detectChanges();
 
-    expect(element.querySelector('.govuk-character-count__message').textContent.trim()).toEqual('');
-    expect(element.querySelector('.govuk-character-count__message.govuk-error-message')).toBeNull();
+    expect(element.querySelector('.govuk-character-count__message')).toBeNull();
 
     const withinLimit = '1234567890';
     hostComponent.control.setValue(withinLimit);
@@ -110,27 +108,27 @@ describe('TextareaComponent', () => {
     const hostElement: HTMLElement = fixture.nativeElement;
     const label = hostElement.querySelector('label');
 
-    component.isLabelHidden = false;
+    hostComponent.isLabelHidden = false;
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label');
 
-    component.labelSize = 'normal';
+    hostComponent.labelSize = 'normal';
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label');
 
-    component.labelSize = 'small';
+    hostComponent.labelSize = 'small';
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--s');
 
-    component.labelSize = 'medium';
+    hostComponent.labelSize = 'medium';
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--m');
 
-    component.labelSize = 'large';
+    hostComponent.labelSize = 'large';
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--l');

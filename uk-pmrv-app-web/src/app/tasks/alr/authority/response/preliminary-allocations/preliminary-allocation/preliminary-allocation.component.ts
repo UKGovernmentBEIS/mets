@@ -29,7 +29,8 @@ import { alrPreliminaryAllocationFormProvider } from './preliminary-allocation-f
         [isEditing]="createMode === false"
         submitText="Continue"
         newAllocationHeading="Add new allocation"
-        [isAlr]="true"></app-preliminary-allocation-details-template>
+        [isAlr]="true"
+        [year]="year"></app-preliminary-allocation-details-template>
     </app-alr-task-common>
   `,
   providers: [alrPreliminaryAllocationFormProvider],
@@ -39,6 +40,7 @@ export class AlrPreliminaryAllocationComponent {
   editable$: Observable<boolean> = this.alrService.isEditable$;
   index = this.route.snapshot.paramMap.get('index');
   createMode = this.index === null;
+  year = this.alrService.year;
 
   constructor(
     @Inject(ALR_TASK_FORM) readonly form: UntypedFormGroup,

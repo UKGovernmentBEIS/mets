@@ -12,6 +12,7 @@ import uk.gov.pmrv.api.reporting.domain.dto.FallbackEmissionsCalculationParamsDT
 import uk.gov.pmrv.api.reporting.domain.dto.InventoryEmissionCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationParamsDTO;
+import uk.gov.pmrv.api.reporting.domain.dto.MeasurementN2OEmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.PfcEmissionsCalculationDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.PfcEmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.RegionalInventoryEmissionCalculationParamsDTO;
@@ -85,7 +86,7 @@ public interface EmissionCalculationParamsMapper {
 
     @Mapping(target = "containsBiomass", source = "biomassPercentages.contains")
     @Mapping(target = "biomassPercentage", source = "biomassPercentages.biomassPercentage")
-    MeasurementEmissionsCalculationParamsDTO toMeasurementN2OEmissionsCalculationParamsDTO(
+    MeasurementN2OEmissionsCalculationParamsDTO toMeasurementN2OEmissionsCalculationParamsDTO(
         MeasurementN2OEmissionPointEmission measurementEmissionPointEmission);
 
 

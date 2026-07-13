@@ -3,14 +3,14 @@
     <div
       [class]="
         (validRequestCreateActionsTypes$ | async)?.length > 0 || (hasMarkAsNotRequiredAccess$ | async)
-          ? 'govuk-grid-column-two-thirds'
-          : 'govuk-grid-column-full'
+          ? 'govuk-grid-column-two-thirds search-results-list_item_status'
+          : 'govuk-grid-column-full search-results-list_item_status'
       ">
       <app-page-heading size="xl" [caption]="requestInfo.id">
         {{ title$ | async }} {{ workflowDetailsTypesMap[requestInfo.requestType] }}
-        <span class="search-results-list_item_status govuk-tag govuk-tag--{{ requestInfo.requestStatus | tagColor }}">
-          <strong>{{ requestInfo.requestStatus | i18nSelect: workflowStatusesTagMap }}</strong>
-        </span>
+        <govuk-tag [color]="requestInfo.requestStatus | tagColor">
+          {{ requestInfo.requestStatus | i18nSelect: workflowStatusesTagMap }}
+        </govuk-tag>
       </app-page-heading>
       @if (relatedTasks$ | async; as relatedTasks) {
         @if (relatedTasks.length > 0) {

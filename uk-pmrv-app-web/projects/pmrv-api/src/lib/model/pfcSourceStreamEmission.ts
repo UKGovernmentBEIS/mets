@@ -30,6 +30,8 @@ export interface PfcSourceStreamEmission {
   calculationCorrect: boolean;
   massBalanceApproachUsed?: boolean;
   providedEmissions?: PfcManuallyProvidedEmissions;
+  globalWarmingPotentialCF4: string;
+  globalWarmingPotentialC2F6: string;
   amountOfCF4: string;
   totalCF4Emissions: string;
   amountOfC2F6: string;

@@ -15,6 +15,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.PreviewDocumentAbstractHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.service.notification.InstallationPreviewOfficialNoticeService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalProceedToAuthorityDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.utils.DoalTotalAllocationsUtils;
 
 import java.time.Year;
@@ -72,10 +73,13 @@ public class DoalProceededToAuthorityOfficialLetterPreviewHandler extends Previe
         SortedSet<PreliminaryAllocation> preliminaryAllocations = taskPayload.getDoal().getActivityLevelChangeInformation()
                 .getPreliminaryAllocations();
         Map<Year, Integer> totalAllocationsPerYear = DoalTotalAllocationsUtils.generateTotalAllocationsPerYear(preliminaryAllocations);
+        DoalProceedToAuthorityDetermination determination = (DoalProceedToAuthorityDetermination) taskPayload.getDoal().getDetermination();
+
         return Map.of(
                 "activityLevels", activityLevels,
                 "allocations", preliminaryAllocations,
-                "allocationsPerYear", totalAllocationsPerYear
+                "allocationsPerYear", totalAllocationsPerYear,
+                "determination", determination
         );
     }
 }

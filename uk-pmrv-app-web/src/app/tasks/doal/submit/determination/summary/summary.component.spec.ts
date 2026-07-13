@@ -158,7 +158,7 @@ describe('SummaryComponent', () => {
 
     it('should display data', () => {
       expect(page.values.map((el) => el.textContent.trim())).toEqual([
-        'Proceed to UK ETS authority',
+        'Proceed to UK ETS Authority',
         'Article 6a of the Activity Level Changes Regulation (setting allocation under Article 3a - for year in which start of normal operation occurred only of new sub-installation)  Article 6a of the Activity Level Changes Regulation (setting HAL and allocation under Article 3a - after first full calendar year operation of new sub-installation)',
         'A comment',
         'Yes',

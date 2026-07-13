@@ -72,7 +72,8 @@
       <dt govukSummaryListRowKey>Reason</dt>
       <dd govukSummaryListRowValue>
         <ng-container *ngIf="reason?.type === 'DATA_GAP'">
-          Due to a data gap <br />
+          Due to a data gap
+          <br />
           <br />
           {{ reason?.reason }}
         </ng-container>
@@ -160,8 +161,7 @@
   <h2 class="govuk-heading-m">Calculation data</h2>
   <dl govuk-summary-list>
     <ng-container
-      *ngIf="$any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.calculationMethod === 'SLOPE'"
-    >
+      *ngIf="$any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.calculationMethod === 'SLOPE'">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Amount of anode effects per cell-day</dt>
         <dd govukSummaryListRowValue>
@@ -199,8 +199,7 @@
     <ng-container
       *ngIf="
         $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.calculationMethod === 'OVERVOLTAGE'
-      "
-    >
+      ">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Anode effect overvoltage per cell, in millivolts</dt>
         <dd govukSummaryListRowValue>
@@ -246,11 +245,11 @@
           [routerLink]="[
             $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.calculationMethod === 'SLOPE'
               ? '../method-a'
-              : '../method-b'
+              : '../method-b',
           ]"
-          [state]="{ changing: true }"
-          >Change</a
-        >
+          [state]="{ changing: true }">
+          Change
+        </a>
       </dd>
     </div>
 
@@ -265,11 +264,11 @@
           [routerLink]="[
             $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.calculationMethod === 'SLOPE'
               ? '../method-a'
-              : '../method-b'
+              : '../method-b',
           ]"
-          [state]="{ changing: true }"
-          >Change</a
-        >
+          [state]="{ changing: true }">
+          Change
+        </a>
       </dd>
     </div>
   </dl>
@@ -288,7 +287,9 @@
 
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Global warming potential</dt>
-      <dd govukSummaryListRowValue>7390 tonnes CO2 / tonnes CF4</dd>
+      <dd govukSummaryListRowValue>
+        {{ sourceStreamEmission?.globalWarmingPotentialCF4 | bigNumber }} tonnes CO2 / tonnes CF4
+      </dd>
       <dd govukSummaryListRowActions></dd>
     </div>
 
@@ -315,7 +316,9 @@
 
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Global warming potential</dt>
-      <dd govukSummaryListRowValue>12,000 tonnes CO2/ tonnes C2F6</dd>
+      <dd govukSummaryListRowValue>
+        {{ sourceStreamEmission?.globalWarmingPotentialC2F6 | bigNumber }} tonnes CO2 / tonnes C2F6
+      </dd>
       <dd govukSummaryListRowActions></dd>
     </div>
 

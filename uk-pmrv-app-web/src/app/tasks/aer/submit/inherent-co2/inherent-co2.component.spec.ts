@@ -50,8 +50,8 @@ describe('InherentCo2Component', () => {
     }
 
     get errorSummaryErrorList() {
-      return Array.from(this.query<HTMLDivElement>('.govuk-error-summary').querySelectorAll('a')).map((anchor) =>
-        anchor.textContent.trim(),
+      return Array.from(this.query<HTMLDivElement>('.govuk-error-summary').querySelectorAll('li')).map((item) =>
+        item.textContent.trim(),
       );
     }
   }

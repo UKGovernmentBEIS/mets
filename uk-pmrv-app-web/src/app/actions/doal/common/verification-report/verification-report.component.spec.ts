@@ -49,7 +49,7 @@ describe('VerificationReportComponent', () => {
   });
 
   it('should show summary details', () => {
-    expect(page.heading).toEqual('Upload verification report of the activity level report');
+    expect(page.heading).toEqual('Upload verification report');
     expect(page.summaryListValues).toHaveLength(2);
     expect(page.summaryListValues).toEqual([
       ['Uploaded file', '2.png'],

@@ -1,6 +1,7 @@
 package uk.gov.pmrv.api.common.reporting.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
@@ -8,6 +9,7 @@ import java.time.Year;
 
 @Data
 @SuperBuilder
+@NoArgsConstructor
 public abstract class ReportableEmissionsUpdatedEvent {
 
 	private Long accountId;

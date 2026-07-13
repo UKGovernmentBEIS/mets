@@ -1,16 +1,15 @@
 <app-doal-task [breadcrumb]="true">
   <app-page-heading caption="Provide UK ETS Authority response">
-    Provide authority approved allocation for each sub-installation
+    Provide Authority approved allocation for each sub-installation
   </app-page-heading>
 
   <app-doal-preliminary-allocation-list-template
     [data]="preliminaryAllocations$ | async"
-    [editable]="true"
-  ></app-doal-preliminary-allocation-list-template>
+    [editable]="true"></app-doal-preliminary-allocation-list-template>
 
   <ng-container *ngIf="(preliminaryAllocations$ | async).length; else noPreliminaryAllocation">
     <div class="govuk-button-group">
-      <a routerLink="./add" govukSecondaryButton type="button"> Add another item </a>
+      <a routerLink="./add" govukSecondaryButton type="button">Add another item</a>
     </div>
   </ng-container>
 

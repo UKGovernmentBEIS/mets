@@ -35,7 +35,7 @@ describe('CommentsResponseContainerComponent', () => {
       return Array.from(
         this.query<HTMLDivElement>(
           '.govuk-grid-column-two-thirds:nth-child(1) .govuk-grid-row:nth-child(2)',
-        ).querySelectorAll('h2, ul li span, govuk-tag, ul span, dt, dd:nth-child(2)'),
+        ).querySelectorAll('h2, ul li span, .app-task-list__tag, ul span, dt, dd:nth-child(2)'),
       ).map((item) => item.textContent.trim());
     }
   }
@@ -69,30 +69,30 @@ describe('CommentsResponseContainerComponent', () => {
     expect(page.pageContents).toEqual([
       'Item 1: F1: Acetylene: major: emission factor',
       'Respond to regulator',
-      'completed',
+      'Completed',
       "Regulator's response",
       'Test official response 1',
       'Item 1: Submit response',
       'Item 1: Send response to regulator',
-      'not started',
+      'Not started',
       'Item 2: F1: Acetylene: major: emission factor',
       'Respond to regulator',
-      'in progress',
+      'In progress',
       "Regulator's response",
       'Test official response 2',
       'Item 2: Submit response',
       'Item 2: Send response to regulator',
       'Item 2: Send response to regulator',
-      'cannot start yet',
+      'Cannot start yet',
       'Item 3: EP1: West side chimney: major',
       'Respond to regulator',
-      'not started',
+      'Not started',
       "Regulator's response",
       'Test official response 3',
       'Item 3: Submit response',
       'Item 3: Send response to regulator',
       'Item 3: Send response to regulator',
-      'cannot start yet',
+      'Cannot start yet',
     ]);
   });
 });

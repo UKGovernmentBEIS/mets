@@ -1,6 +1,7 @@
 import { ActivityLevel } from 'pmrv-api';
 
-export const subInstallationNameLabelsMap: Record<ActivityLevel['subInstallationName'], string> = {
+// new doal types
+export const newSubInstallationNameLabelsMap: Record<ActivityLevel['subInstallationName'], string> = {
   ADIPIC_ACID: 'Adipic acid',
   ALUMINIUM: 'Aluminium',
   AMMONIA: 'Ammonia',
@@ -22,13 +23,21 @@ export const subInstallationNameLabelsMap: Record<ActivityLevel['subInstallation
   FACING_BRICKS: 'Facing bricks',
   FLOAT_GLASS: 'Float glass',
   FUEL_CL: 'Fuel (CL)',
+  FUEL_CL_CBAM: 'Fuel (CL / CBAM)',
+  FUEL_CL_NON_CBAM: 'Fuel (CL / non-CBAM)',
   FUEL_NON_CL: 'Fuel (non-CL)',
   GREY_CEMENT_CLINKER: 'Grey cement clinker',
   HEAT_CL: 'Heat (CL)',
+  HEAT_CL_CBAM: 'Heat (CL / CBAM)',
+  HEAT_CL_NON_CBAM: 'Heat (CL / non-CBAM)',
   HEAT_NON_CL: 'Heat (non-CL)',
   HOT_METAL: 'Hot metal',
   HYDROGEN: 'Hydrogen',
+  HYDROGEN_CBAM: 'Hydrogen (CBAM)',
+  HYDROGEN_NON_CBAM: 'Hydrogen (non-CBAM)',
   IRON_CASTING: 'Iron casting',
+  IRON_CASTING_CBAM: 'Iron casting (CBAM)',
+  IRON_CASTING_NON_CBAM: 'Iron casting (non-CBAM)',
   LIME: 'Lime',
   LONG_FIBRE_KRAFT_PULP: 'Long fibre kraft pulp',
   MINERAL_WOOL: 'Mineral wool',
@@ -40,6 +49,8 @@ export const subInstallationNameLabelsMap: Record<ActivityLevel['subInstallation
   PLASTERBOARD: 'Plasterboard',
   PRE_BAKE_ANODE: 'Pre-bake anode',
   PROCESS_EMISSIONS_CL: 'Process emissions (CL)',
+  PROCESS_EMISSIONS_CL_CBAM: 'Process emissions (CL / CBAM)',
+  PROCESS_EMISSIONS_CL_NON_CBAM: 'Process emissions (CL / non-CBAM)',
   PROCESS_EMISSIONS_NON_CL: 'Process emissions (non-CL)',
   RECOVERED_PAPER_PULP: 'Recovered paper pulp',
   REFINERY_PRODUCTS: 'Refinery products',
@@ -62,7 +73,39 @@ export const subInstallationNameLabelsMap: Record<ActivityLevel['subInstallation
   WHITE_CEMENT_CLINKER: 'White cement clinker',
 };
 
-export const changeTypeLabelsMap: Omit<Record<ActivityLevel['changeType'], string>, 'OTHER'> = {
+//old alr types
+export const subInstallationNameLabelsMap: Partial<Record<ActivityLevel['subInstallationName'], string>> =
+  Object.fromEntries(
+    Object.entries(newSubInstallationNameLabelsMap).filter(
+      ([key]) =>
+        key !== 'FUEL_CL_CBAM' &&
+        key !== 'FUEL_CL_NON_CBAM' &&
+        key !== 'HEAT_CL_CBAM' &&
+        key !== 'HEAT_CL_NON_CBAM' &&
+        key !== 'PROCESS_EMISSIONS_CL_CBAM' &&
+        key !== 'PROCESS_EMISSIONS_CL_NON_CBAM' &&
+        key !== 'HYDROGEN_CBAM' &&
+        key !== 'HYDROGEN_NON_CBAM' &&
+        key !== 'IRON_CASTING_CBAM' &&
+        key !== 'IRON_CASTING_NON_CBAM',
+    ),
+  );
+
+//alr types 2027
+export const subInstallationNameLabelsMap2027: Partial<Record<ActivityLevel['subInstallationName'], string>> =
+  Object.fromEntries(
+    Object.entries(newSubInstallationNameLabelsMap).filter(
+      ([key]) =>
+        key !== 'FUEL_CL' &&
+        key !== 'HEAT_CL' &&
+        key !== 'PROCESS_EMISSIONS_CL' &&
+        key !== 'HYDROGEN' &&
+        key !== 'IRON_CASTING',
+    ),
+  );
+
+//old alr types
+export const alrChangeTypeLabelsMap: Omit<Partial<Record<Partial<ActivityLevel['changeType']>, string>>, 'OTHER'> = {
   CESSATION: 'Cessation',
   INCREASE: 'Increase',
   DECREASE: 'Decrease',
@@ -75,4 +118,29 @@ export const changeTypeLabelsMap: Omit<Record<ActivityLevel['changeType'], strin
     'NER: Allocation for year 0+2 based on the Historical Activity Level (HAL)',
   REGULATOR_REJECTS_ADJUSTMENT: 'Regulator rejects adjustment',
   NO_CHANGE: 'No change',
+};
+
+export const alrChangeTypeLabelsMap2027: Omit<
+  Partial<Record<Partial<ActivityLevel['changeType']>, string>>,
+  'OTHER'
+> = {
+  ...alrChangeTypeLabelsMap,
+  REGULATOR_REJECTS_ADJUSTMENT: 'Authority rejects adjustment',
+};
+
+//new doal types
+export const doalChangeTypeLabelsMap: Omit<Record<ActivityLevel['changeType'], string>, 'OTHER'> = {
+  CESSATION: 'Cessation',
+  INCREASE: 'Increase',
+  DECREASE: 'Decrease',
+  RETURN_TO_HISTORICAL_ACTIVITY_LEVELS_HAL: 'Return to Historical Activity Levels (HAL)',
+  NER_ALLOCATION_FOR_YEAR_0_BASED_ON_ACTIVITY_LEVEL_AL_IN_YEAR_0:
+    'NER: Allocation for year 0 based on Activity Level (AL) in year 0',
+  NER_ALLOCATION_FOR_YEAR_0_PLUS_1_BASED_ON_ACTIVITY_LEVEL_AL_IN_YEAR_0_PLUS_1:
+    'NER: Allocation for year 0+1 based on Activity Level (AL) in year 0+1',
+  NER_ALLOCATION_FOR_YEAR_0_PLUS_2_BASED_ON_THE_HISTORICAL_ACTIVITY_LEVEL_HAL:
+    'NER: Allocation for year 0+2 based on the Historical Activity Level (HAL)',
+  REGULATOR_REJECTS_ADJUSTMENT: 'Authority rejects adjustment',
+  NO_CHANGE: 'No change',
+  NEW_SUB_INSTALLATION: 'New sub-installation',
 };

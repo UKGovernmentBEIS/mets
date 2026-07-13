@@ -15,7 +15,7 @@ describe('AirImprovementDataGroupComponent', () => {
 
   class Page extends BasePage<AirImprovementDataGroupComponent> {
     get pageContents() {
-      return this.queryAll<HTMLDListElement>('h2, ul a, ul strong').map((item) => item.textContent.trim());
+      return this.queryAll<HTMLDListElement>('h2, ul a, ul .app-task-list__tag').map((item) => item.textContent.trim());
     }
   }
 
@@ -43,19 +43,19 @@ describe('AirImprovementDataGroupComponent', () => {
     expect(page.pageContents).toEqual([
       'Item 1: F1: Acetylene: major: emission factor',
       'Provide information about this improvement',
-      'completed',
+      'Completed',
       'Item 2: F1: Acetylene: major: emission factor',
       'Provide information about this improvement',
-      'in progress',
+      'In progress',
       'Item 3: EP1: West side chimney: major',
       'Provide information about this improvement',
-      'not started',
+      'Not started',
       'Item 4: EP1: West side chimney: major',
       'Provide information about this improvement',
-      'not started',
+      'Not started',
       'Item 5: F1: Acetylene: major',
       'Provide information about this improvement',
-      'not started',
+      'Not started',
     ]);
   });
 });

@@ -1,12 +1,13 @@
 {
-  "name": "govuk-components",
-  "version": "0.0.1",
+  "name": "@netz/govuk-components",
+  "version": "4.7.0",
   "peerDependencies": {
-    "@angular/common": "^15.2.5",
-    "@angular/core": "^15.2.5",
-    "govuk-frontend": "^3.9.1"
+    "@angular/common": "^20.3.16",
+    "@angular/core": "^20.3.16",
+    "govuk-frontend": "5.14.0"
   },
   "dependencies": {
-    "tslib": "^2.4.0"
-  }
+    "tslib": "^2.8.1"
+  },
+  "sideEffects": false
 }

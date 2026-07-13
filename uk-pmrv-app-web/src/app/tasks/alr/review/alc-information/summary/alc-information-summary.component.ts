@@ -22,6 +22,7 @@ export class ALCInformationSummaryComponent {
   alc$: Observable<ALRApplicationRegulatorReviewOutcome> = this.alrService.payload$.pipe(
     map((payload) => payload.regulatorReviewOutcome),
   );
+  year = this.alrService.year;
 
   constructor(
     readonly pendingRequest: PendingRequestService,

@@ -194,6 +194,8 @@ export class WasteGasBalanceComponent extends ProductBenchmarkComponent implemen
           STEAM_CRACKING: 'calculation-steam-cracking',
           AROMATICS: 'calculation-aromatics',
           HYDROGEN: 'calculation-hydrogen',
+          HYDROGEN_CBAM: 'calculation-hydrogen',
+          HYDROGEN_NON_CBAM: 'calculation-hydrogen',
           SYNTHESIS_GAS: 'calculation-synthesis-gas',
           ETHYLENE_OXIDE_ETHYLENE_GLYCOLS: 'calculation-ethylene-oxide-ethylene-glycols',
           VINYL_CHLORIDE_MONOMER: 'calculation-vinyl-chloride-monomer',

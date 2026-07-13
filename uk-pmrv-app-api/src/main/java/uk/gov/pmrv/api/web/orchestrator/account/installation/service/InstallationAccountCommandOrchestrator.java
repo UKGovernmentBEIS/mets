@@ -68,7 +68,7 @@ public class InstallationAccountCommandOrchestrator {
     private boolean validateAccountStatus(Long accountId) {
         InstallationAccountDTO installationAccountDTO = installationAccountQueryService.getAccountDTOById(accountId);
         return switch (installationAccountDTO.getStatus()) {
-            case LIVE, AWAITING_SURRENDER, AWAITING_TRANSFER -> true;
+            case LIVE, AWAITING_SURRENDER, AWAITING_TRANSFER, AWAITING_REVOCATION -> true;
             default -> false;
         };
     }

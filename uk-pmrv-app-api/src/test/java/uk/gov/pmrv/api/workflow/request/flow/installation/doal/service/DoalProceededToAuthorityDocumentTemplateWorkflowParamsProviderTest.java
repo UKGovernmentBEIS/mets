@@ -13,6 +13,7 @@ import uk.gov.pmrv.api.allowance.domain.enums.SubInstallationName;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateGenerationContextActionType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.ActivityLevelChangeInformation;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.Doal;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalProceedToAuthorityDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
 
 import java.time.Year;
@@ -94,6 +95,7 @@ class DoalProceededToAuthorityDocumentTemplateWorkflowParamsProviderTest {
                 Year.of(2020), 20,
                 Year.of(2021), 100
         );
+        DoalProceedToAuthorityDetermination determination = DoalProceedToAuthorityDetermination.builder().build();
 
         final DoalRequestPayload payload = DoalRequestPayload.builder()
                 .doal(Doal.builder()
@@ -101,6 +103,7 @@ class DoalProceededToAuthorityDocumentTemplateWorkflowParamsProviderTest {
                                 .activityLevels(activityLevels)
                                 .preliminaryAllocations(new TreeSet<>(allocations))
                                 .build())
+                        .determination(determination)
                         .build())
                 .build();
         final String requestId = "1";
@@ -109,7 +112,9 @@ class DoalProceededToAuthorityDocumentTemplateWorkflowParamsProviderTest {
                 .isEqualTo(Map.of(
                         "activityLevels", activityLevels,
                         "allocations", allocations,
-                        "allocationsPerYear", totalAllocations
+                        "allocationsPerYear", totalAllocations,
+                        "determination", determination
+
                 ));
         assertThat(activityLevels).containsExactly(first, second, third, fourth);
     }

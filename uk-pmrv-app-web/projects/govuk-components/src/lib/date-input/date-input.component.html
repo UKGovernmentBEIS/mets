@@ -1,14 +1,13 @@
 <!-- eslint-disable @angular-eslint/template/prefer-self-closing-tags -->
-<fieldset [id]="identifier" role="group" govukFieldset>
-  <legend [size]="size" govukLegend>
-    <ng-container *ngIf="label; else customLegend">{{ label }}</ng-container>
-    <ng-template #customLegend>
-      <ng-content select="[govukLegend]"></ng-content>
-    </ng-template>
-  </legend>
-  <span *ngIf="hint" govukFieldsetHint>{{ hint }}</span>
+<fieldset [id]="identifier" govukFieldset>
+  <legend [legendSize]="labelSize()" [class.govuk-visually-hidden]="isLabelHidden()" govukLegend>{{ label() }}</legend>
+  @if (hint()) {
+    <div govukFieldsetHint [innerHTML]="hint()"></div>
+  }
   <div [formGroup]="formGroup" class="govuk-date-input">
-    <govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="identifier" />
+    @if (shouldDisplayErrors) {
+      <govuk-error-message [errors]="control.errors" [identifier]="identifier" />
+    }
     <div class="govuk-date-input__item">
       <label [for]="`${identifier}-day`" class="govuk-label govuk-date-input__label">Day</label>
       <input

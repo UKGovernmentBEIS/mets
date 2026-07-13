@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 
-import { map } from 'rxjs';
+import { combineLatest, map, shareReplay } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
@@ -12,7 +13,7 @@ import { statusMap } from '@shared/task-list/task-item/status.map';
 
 import { GovukTableColumn } from 'govuk-components';
 
-import { RequestInfoDTO, SubInstallation } from 'pmrv-api';
+import { RequestInfoDTO, SubInstallation, SubInstallationTypesService } from 'pmrv-api';
 
 import { isFallbackApproach, isProductBenchmark } from './mmp-sub-installations-status';
 
@@ -26,31 +27,88 @@ export class MmpSubInstallationsComponent implements PendingRequest {
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));
   competentAuthority: RequestInfoDTO['competentAuthority'] = this.store.getState().competentAuthority;
   isEditable$ = this.store.pipe(map((state) => state.isEditable));
-  productBenchmarks$ = this.store
-    .getTask('monitoringMethodologyPlans')
-    .pipe(
-      map((monitoringMethodologyPlans) =>
-        monitoringMethodologyPlans?.digitizedPlan?.subInstallations?.filter((subInstallation) =>
-          isProductBenchmark(subInstallation.subInstallationType),
-        ),
-      ),
-    );
-  fallbackApproaches$ = this.store
-    .getTask('monitoringMethodologyPlans')
-    .pipe(
-      map((monitoringMethodologyPlans) =>
-        monitoringMethodologyPlans?.digitizedPlan?.subInstallations?.filter((subInstallation) =>
-          isFallbackApproach(subInstallation.subInstallationType),
-        ),
-      ),
+
+  getSubInstallationTypesDetails$ = this.subInstallationTypesService
+    .getSubInstallationTypesDetails()
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
+
+  productBenchmarks$ = combineLatest([
+    this.store.getTask('monitoringMethodologyPlans'),
+    this.getSubInstallationTypesDetails$,
+  ]).pipe(
+    map(([monitoringMethodologyPlans, subInstallationDetails]) => {
+      const data = monitoringMethodologyPlans?.digitizedPlan?.subInstallations
+        ?.filter((subInstallation) => {
+          return isProductBenchmark(subInstallation.subInstallationType);
+        })
+        .map((subInstallation) => {
+          const res = {
+            ...subInstallation,
+            coveredByUKCBAM: subInstallationDetails.find(
+              (item) => item['subInstallationType'] === subInstallation.subInstallationType,
+            )['coveredByUKCBAM'],
+          };
+          return res;
+        });
+
+      return data;
+    }),
+  );
+
+  fallbackApproaches$ = combineLatest([
+    this.store.getTask('monitoringMethodologyPlans'),
+    this.getSubInstallationTypesDetails$,
+  ]).pipe(
+    map(([monitoringMethodologyPlans, subInstallationDetails]) => {
+      return monitoringMethodologyPlans?.digitizedPlan?.subInstallations
+        ?.filter((subInstallation) => {
+          return isFallbackApproach(subInstallation.subInstallationType);
+        })
+        .map((subInstallation) => {
+          const res = {
+            ...subInstallation,
+            coveredByUKCBAM: subInstallationDetails.find(
+              (item) => item['subInstallationType'] === subInstallation.subInstallationType,
+            )['coveredByUKCBAM'],
+          };
+          return res;
+        });
+    }),
+  );
+
+  private readonly subInstallationTypesDetails = toSignal(this.getSubInstallationTypesDetails$);
+
+  columns: Signal<GovukTableColumn<any>[]> = computed(() => {
+    const subDetails = this.subInstallationTypesDetails();
+    const cbamToggle = subDetails.find(
+      (item) =>
+        (item.subInstallationType == 'HYDROGEN_CBAM' && item.valid) ||
+        (item.subInstallationType == 'HYDROGEN_NON_CBAM' && item.valid) ||
+        (item.subInstallationType == 'IRON_CASTING_CBAM' && item.valid) ||
+        (item.subInstallationType == 'IRON_CASTING_NON_CBAM' && item.valid) ||
+        (item.subInstallationType == 'FUEL_BENCHMARK_CL_CBAM' && item.valid) ||
+        (item.subInstallationType == 'FUEL_BENCHMARK_CL_NON_CBAM' && item.valid) ||
+        (item.subInstallationType == 'HEAT_BENCHMARK_CL_CBAM' && item.valid) ||
+        (item.subInstallationType == 'HEAT_BENCHMARK_CL_NON_CBAM' && item.valid) ||
+        (item.subInstallationType == 'PROCESS_EMISSIONS_CL_CBAM' && item.valid) ||
+        (item.subInstallationType == 'PROCESS_EMISSIONS_CL_NON_CBAM' && item.valid),
     );
 
-  columns: GovukTableColumn<any>[] = [
-    { field: 'type', header: 'Sub-installation type', widthClass: 'govuk-!-width-one-quarter' },
-    { field: 'carbon', header: 'Carbon leakage', widthClass: 'govuk-!-width--one-quarter' },
-    { field: 'action', header: '', widthClass: 'govuk-!-width-one-quarter' },
-    { field: 'status', header: '', widthClass: 'govuk-!-width-one-quarter' },
-  ];
+    return cbamToggle
+      ? [
+          { field: 'type', header: 'Sub-installation type', widthClass: 'govuk-!-width-one-quarter' },
+          { field: 'carbon', header: 'Carbon leakage', widthClass: 'govuk-!-width--one-quarter' },
+          { field: 'coveredByUKCBAM', header: 'Covered by UK CBAM', widthClass: 'govuk-!-width--one-quarter' },
+          { field: 'action', header: '', widthClass: 'govuk-input--width-10' },
+          { field: 'status', header: '' },
+        ]
+      : [
+          { field: 'type', header: 'Sub-installation type', widthClass: 'govuk-!-width-one-quarter' },
+          { field: 'carbon', header: 'Carbon leakage', widthClass: 'govuk-!-width--one-quarter' },
+          { field: 'action', header: '', widthClass: 'govuk-!-width-one-quarter' },
+          { field: 'status', header: '', widthClass: 'govuk-!-width-one-quarter' },
+        ];
+  });
 
   statusMap = statusMap;
 
@@ -58,6 +116,7 @@ export class MmpSubInstallationsComponent implements PendingRequest {
     readonly store: PermitApplicationStore<PermitApplicationState>,
     readonly pendingRequest: PendingRequestService,
     private readonly route: ActivatedRoute,
+    private readonly subInstallationTypesService: SubInstallationTypesService,
   ) {}
 
   hiddenTextOnRemove(type: SubInstallation['subInstallationType']): string {

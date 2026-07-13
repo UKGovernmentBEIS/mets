@@ -1,6 +1,27 @@
-<ng-container *ngIf="payload$ | async as payload">
+<ng-container *ngIf="vm$ | async as vm">
   <app-page-heading>{{ aerTitle$ | async }}</app-page-heading>
-  <p class="govuk-caption-m">{{ (requestAction$ | async)?.creationDate | govukDate: 'datetime' }}</p>
+  <div class="govuk-caption-m">
+    <strong>Date of timeline event:</strong>
+    {{ (requestAction$ | async)?.creationDate | govukDate: 'datetime' }}
+  </div>
+  @if (vm.submittedToVerifierDate) {
+    <div class="govuk-caption-m">
+      <strong>Date operator submitted report to verifier:</strong>
+      {{ vm.submittedToVerifierDate | govukDate: 'datetime' }}
+    </div>
+  }
+  @if (vm.verifierSubmittedDate) {
+    <div class="govuk-caption-m">
+      <strong>Date verifier submitted opinion on report:</strong>
+      {{ vm.verifierSubmittedDate | govukDate: 'datetime' }}
+    </div>
+  }
+  @if (vm.submittedToRegulatorDate) {
+    <div class="govuk-caption-m">
+      <strong>Date operator submitted report to regulator:</strong>
+      {{ vm.submittedToRegulatorDate | govukDate: 'datetime' }}
+    </div>
+  }
   <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible" />
 
   <div>
@@ -8,30 +29,28 @@
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
 
     <h2 class="govuk-heading-m govuk-!-margin-top-6">Installation details</h2>
-    <app-installation-details-group [payload]="payload"></app-installation-details-group>
+    <app-installation-details-group [payload]="vm.payload"></app-installation-details-group>
 
     <h2 class="govuk-heading-m govuk-!-margin-top-6">Fuels and equipment inventory</h2>
-    <app-fuels-group [aerData]="payload.aer"></app-fuels-group>
+    <app-fuels-group [aerData]="vm.payload.aer"></app-fuels-group>
   </div>
 
   <div class="pg-break"></div>
   <app-monitoring-approaches-report></app-monitoring-approaches-report>
 
   <h2 class="govuk-heading-m govuk-!-margin-top-6">Emission summary</h2>
-  <app-emissions-summary-group [data]="payload.aer"></app-emissions-summary-group>
+  <app-emissions-summary-group [data]="vm.payload.aer"></app-emissions-summary-group>
 
   <h2 class="govuk-heading-m govuk-!-margin-top-6">Additional information</h2>
   <app-additional-info-group
-    [aerData]="payload.aer"
-    [additionalDocumentFiles]="additionalDocumentFiles$ | async"
-  ></app-additional-info-group>
+    [aerData]="vm.payload.aer"
+    [additionalDocumentFiles]="additionalDocumentFiles$ | async"></app-additional-info-group>
 
-  <ng-container *ngIf="payload.aer?.activityLevelReport">
+  <ng-container *ngIf="vm.payload.aer?.activityLevelReport">
     <h2 class="govuk-heading-m govuk-!-margin-top-6">Activity level report</h2>
     <app-activity-level-report-group
-      [activityLevelReport]="payload.aer?.activityLevelReport"
-      [documentFiles]="activityLevelReportFiles$ | async"
-    ></app-activity-level-report-group>
+      [activityLevelReport]="vm.payload.aer?.activityLevelReport"
+      [documentFiles]="activityLevelReportFiles$ | async"></app-activity-level-report-group>
   </ng-container>
 
   <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible" />

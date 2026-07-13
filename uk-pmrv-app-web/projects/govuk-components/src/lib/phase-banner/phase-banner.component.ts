@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'govuk-phase-banner',
-  standalone: false,
   templateUrl: './phase-banner.component.html',
   styles: `
     .align-right {
@@ -12,11 +11,14 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
     .order-2 {
       order: 2;
     }
+    .govuk-phase-banner__text {
+      width: 100%;
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhaseBannerComponent {
-  @Input() phase: string;
-  @Input() tagColor: string;
-  @Input() tagAlign: 'right' | 'left' = 'left';
+  readonly phase = input<string>();
+  readonly tagColor = input<string>();
+  readonly tagAlign = input<'right' | 'left'>('left');
 }

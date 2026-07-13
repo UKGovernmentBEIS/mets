@@ -31,7 +31,11 @@ export class CarbonLeakagePipe implements PipeTransform {
       case 'GREY_CEMENT_CLINKER':
       case 'HOT_METAL':
       case 'HYDROGEN':
+      case 'HYDROGEN_CBAM':
+      case 'HYDROGEN_NON_CBAM':
       case 'IRON_CASTING':
+      case 'IRON_CASTING_CBAM':
+      case 'IRON_CASTING_NON_CBAM':
       case 'LIME':
       case 'LONG_FIBRE_KRAFT_PULP':
       case 'MINERAL_WOOL':
@@ -63,6 +67,12 @@ export class CarbonLeakagePipe implements PipeTransform {
       case 'HEAT_BENCHMARK_CL':
       case 'FUEL_BENCHMARK_CL':
       case 'PROCESS_EMISSIONS_CL':
+      case 'HEAT_BENCHMARK_CL_CBAM':
+      case 'HEAT_BENCHMARK_CL_NON_CBAM':
+      case 'FUEL_BENCHMARK_CL_CBAM':
+      case 'FUEL_BENCHMARK_CL_NON_CBAM':
+      case 'PROCESS_EMISSIONS_CL_CBAM':
+      case 'PROCESS_EMISSIONS_CL_NON_CBAM':
         return 'Exposed';
 
       case 'PLASTERBOARD':

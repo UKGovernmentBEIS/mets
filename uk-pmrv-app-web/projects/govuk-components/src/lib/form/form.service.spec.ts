@@ -2,19 +2,21 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { GovukComponentsModule } from '../govuk-components.module';
+import { TextInputComponent } from '../text-input/text-input.component';
 import { FormService } from './form.service';
 
 describe('FormService', () => {
   let service: FormService;
 
   @Component({
-    standalone: false,
+    imports: [ReactiveFormsModule, FormsModule, TextInputComponent],
     template: `
       <div [formGroup]="formGroup">
         <div govuk-text-input formControlName="test"></div>
         <div formArrayName="list">
-          <div govuk-text-input *ngFor="let control of list.controls; let i = index" [formControlName]="i"></div>
+          @for (control of list.controls; track control) {
+            <div govuk-text-input [formControlName]="$index"></div>
+          }
         </div>
       </div>
 
@@ -37,8 +39,7 @@ describe('FormService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, FormsModule, GovukComponentsModule],
-      declarations: [TestComponent],
+      imports: [ReactiveFormsModule, FormsModule, TextInputComponent, TestComponent],
     });
     service = TestBed.inject(FormService);
   });

@@ -1,31 +1,43 @@
-/* eslint-disable @angular-eslint/prefer-host-metadata-property */
-import { Directive, ElementRef, HostBinding, HostListener } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, inject, input } from '@angular/core';
 
 @Directive({
   selector:
-    'a[govukButton], a[govukSecondaryButton], a[govukWarnButton], button[govukButton], button[govukWarnButton], button[govukSecondaryButton]',
-  standalone: false,
+    'a[govukButton], a[govukSecondaryButton], a[govukWarnButton], a[govukInverseButton], button[govukButton], button[govukWarnButton], button[govukSecondaryButton], button[govukInverseButton]',
+  host: {
+    '[attr.aria-disabled]': 'ariaDisabled',
+    '[attr.role]': 'roleLink',
+    '[class.govuk-button]': 'elementClass',
+    '[class.govuk-button--secondary]': 'secondaryButton',
+    '[class.govuk-button--warning]': 'warningButton',
+    '(keydown)': 'onKeyDown($event)',
+    '[attr.disabled]': 'ariaDisabled',
+    '[class.govuk-button--disabled]': 'ariaDisabled',
+  },
 })
 export class ButtonDirective {
-  constructor(private readonly elementRef: ElementRef) {}
+  private readonly elementRef = inject(ElementRef);
 
-  @HostBinding('attr.aria-disabled')
-  @HostBinding('class.govuk-button--disabled')
+  readonly disabled = input(false, { transform: booleanAttribute });
+
   get ariaDisabled(): boolean | null {
-    return ButtonDirective.isButton(this.nativeElement) && this.nativeElement.disabled ? true : null;
+    return (ButtonDirective.isAnchor(this.nativeElement) || ButtonDirective.isButton(this.nativeElement)) &&
+      this.disabled()
+      ? true
+      : null;
   }
 
-  @HostBinding('class.govuk-button')
+  get roleLink(): string | null {
+    return ButtonDirective.isAnchor(this.nativeElement) && this.disabled() ? 'link' : null;
+  }
+
   get elementClass(): boolean {
     return true;
   }
 
-  @HostBinding('class.govuk-button--secondary')
   get secondaryButton(): boolean {
     return this.nativeElement.hasAttribute('govuksecondarybutton');
   }
 
-  @HostBinding('class.govuk-button--warning')
   get warningButton(): boolean {
     return this.nativeElement.hasAttribute('govukwarnbutton');
   }
@@ -38,9 +50,12 @@ export class ButtonDirective {
     return nativeElement.tagName === 'BUTTON';
   }
 
-  @HostListener('keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent): void {
-    if (event.code === 'Space') {
+  private static isAnchor(nativeElement: HTMLButtonElement | HTMLAnchorElement): nativeElement is HTMLAnchorElement {
+    return nativeElement.tagName === 'A';
+  }
+
+  onKeyDown(event: Event): void {
+    if ((event as KeyboardEvent)?.code === 'Space') {
       event.target.dispatchEvent(new MouseEvent('click'));
     }
   }

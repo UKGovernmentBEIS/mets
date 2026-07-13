@@ -53,25 +53,25 @@ describe('PaginationComponent', () => {
   });
 
   it('should calculate total pages', () => {
-    expect(fixture.debugElement.queryAll(By.css('.hmcts-pagination__item')).length).toEqual(0);
+    expect(fixture.debugElement.queryAll(By.css('.govuk-pagination__item')).length).toEqual(0);
 
     hostComponent.count = 36;
     hostComponent.pageSize = 10;
     fixture.detectChanges();
 
-    expect(fixture.debugElement.queryAll(By.css('.hmcts-pagination__item')).length).toEqual(5);
+    expect(fixture.debugElement.queryAll(By.css('.govuk-pagination__item')).length).toEqual(4);
     expect(component.pageNumbers).toEqual([1, 2, 3, 4]);
 
     hostComponent.count = 53;
     hostComponent.pageSize = 10;
     fixture.detectChanges();
 
-    expect(fixture.debugElement.queryAll(By.css('.hmcts-pagination__item')).length).toEqual(7);
+    expect(fixture.debugElement.queryAll(By.css('.govuk-pagination__item')).length).toEqual(6);
     expect(component.pageNumbers).toEqual([1, 2, 3, 4, 5, 6]);
   });
 
   it('should emit currentPage', async () => {
-    const links = element.querySelectorAll<HTMLLIElement>('.hmcts-pagination__item--active');
+    const links = element.querySelectorAll<HTMLLIElement>('.govuk-pagination__item--current');
     expect(hostComponent.currentPage).toEqual(1);
     expect(links.length).toEqual(0);
 
@@ -79,7 +79,7 @@ describe('PaginationComponent', () => {
     hostComponent.pageSize = 10;
     fixture.detectChanges();
 
-    const page3 = fixture.debugElement.queryAll(By.css('.hmcts-pagination__link'))[1].nativeElement;
+    const page3 = fixture.debugElement.queryAll(By.css('.govuk-pagination__link'))[2].nativeElement;
     expect(page3.textContent.trim()).toEqual('3');
 
     page3.click();
@@ -95,8 +95,8 @@ describe('PaginationComponent', () => {
     hostComponent.pageSize = 10;
     fixture.detectChanges();
 
-    expect(fixture.debugElement.queryAll(By.css('.hmcts-pagination__item--dots')).length).toEqual(1);
-    expect(fixture.debugElement.queryAll(By.css('.hmcts-pagination__item')).length).toEqual(5);
+    expect(fixture.debugElement.queryAll(By.css('.govuk-pagination__item--ellipses')).length).toEqual(1);
+    expect(fixture.debugElement.queryAll(By.css('.govuk-pagination__item')).length).toEqual(4);
   });
 
   it('should limit page size to the current count', () => {
@@ -105,7 +105,7 @@ describe('PaginationComponent', () => {
     fixture.detectChanges();
 
     const getDetails = () =>
-      Array.from(element.querySelector('.hmcts-pagination__results').querySelectorAll('strong')).map(
+      Array.from(element.querySelector('.govuk-grid-column-one-third p').querySelectorAll('strong')).map(
         (text) => text.textContent,
       );
 
@@ -115,7 +115,7 @@ describe('PaginationComponent', () => {
     hostComponent.pageSize = 10;
     fixture.detectChanges();
 
-    fixture.debugElement.queryAll(By.css('.hmcts-pagination__link'))[1].nativeElement.click();
+    fixture.debugElement.queryAll(By.css('.govuk-pagination__link'))[1].nativeElement.click();
     fixture.detectChanges();
 
     expect(getDetails()).toEqual(['11', '15', '15']);
@@ -126,20 +126,20 @@ describe('PaginationComponent', () => {
     hostComponent.pageSize = 10;
     fixture.detectChanges();
 
-    expect(fixture.debugElement.queryAll(By.css('.hmcts-pagination__item--prev'))).toHaveLength(0);
-    expect(fixture.debugElement.queryAll(By.css('.hmcts-pagination__item--next'))).toHaveLength(1);
+    expect(fixture.debugElement.queryAll(By.css('.govuk-pagination__prev'))).toHaveLength(0);
+    expect(fixture.debugElement.queryAll(By.css('.govuk-pagination__next'))).toHaveLength(1);
 
-    fixture.debugElement.queryAll(By.css('.hmcts-pagination__link'))[0].nativeElement.click();
+    fixture.debugElement.queryAll(By.css('.govuk-pagination__link'))[1].nativeElement.click();
     fixture.detectChanges();
 
-    expect(fixture.debugElement.queryAll(By.css('.hmcts-pagination__item--prev'))).toHaveLength(1);
-    expect(fixture.debugElement.queryAll(By.css('.hmcts-pagination__item--next'))).toHaveLength(1);
+    expect(fixture.debugElement.queryAll(By.css('.govuk-pagination__prev'))).toHaveLength(1);
+    expect(fixture.debugElement.queryAll(By.css('.govuk-pagination__next'))).toHaveLength(1);
 
-    fixture.debugElement.queryAll(By.css('.hmcts-pagination__link'))[2].nativeElement.click();
+    fixture.debugElement.queryAll(By.css('.govuk-pagination__link'))[3].nativeElement.click();
     fixture.detectChanges();
 
-    expect(fixture.debugElement.queryAll(By.css('.hmcts-pagination__item--prev'))).toHaveLength(1);
-    expect(fixture.debugElement.queryAll(By.css('.hmcts-pagination__item--next'))).toHaveLength(0);
+    expect(fixture.debugElement.queryAll(By.css('.govuk-pagination__prev'))).toHaveLength(1);
+    expect(fixture.debugElement.queryAll(By.css('.govuk-pagination__next'))).toHaveLength(0);
   });
 
   it('should not display a page if no results exist', () => {
@@ -147,7 +147,7 @@ describe('PaginationComponent', () => {
     hostComponent.pageSize = 0;
     fixture.detectChanges();
 
-    const links = element.querySelectorAll('.hmcts-pagination__item');
+    const links = element.querySelectorAll('.govuk-pagination__item');
 
     expect(links.length).toEqual(0);
   });

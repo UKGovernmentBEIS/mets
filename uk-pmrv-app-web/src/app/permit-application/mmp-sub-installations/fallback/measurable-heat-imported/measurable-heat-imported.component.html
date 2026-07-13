@@ -13,18 +13,20 @@
 
       <div
         govuk-checkboxes
-        legend="Is any measurable heat imported to this sub-installation?"
-        legendSize="medium"
+        label="Is any measurable heat imported to this sub-installation?"
+        labelSize="medium"
         hint="Select all that apply."
         formControlName="measurableHeatImportedActivities">
         <govuk-checkbox
           value="MEASURABLE_HEAT_IMPORTED_OTHER_SOURCES"
           label="Imported from other sources"
-          hint="Including heat imported from other installations, or, where measurable heat is consumed by more than one sub-installation, including measurbale heat exported <br />Do not include measurable heat imported from fuel benchmark sub-installations or from waste gases."></govuk-checkbox>
+          hint="Including heat imported from other installations, or, where measurable heat is consumed by more than one sub-installation, including measurbale heat exported
+Do not include measurable heat imported from fuel benchmark sub-installations or from waste gases."></govuk-checkbox>
         <govuk-checkbox
           value="MEASURABLE_HEAT_IMPORTED_PRODUCT_BENCHMARK"
           label="Imported from product benchmark"
-          hint="Including heat imported from other installations, or, where measurable heat is consumed by more than one sub-installation, including measurbale heat exported <br />Do not include measurable heat from sub-installations producing pulp."></govuk-checkbox>
+          hint="Including heat imported from other installations, or, where measurable heat is consumed by more than one sub-installation, including measurbale heat exported
+Do not include measurable heat from sub-installations producing pulp."></govuk-checkbox>
         <govuk-checkbox
           value="MEASURABLE_HEAT_IMPORTED_PULP"
           label="Imported from pulp"
@@ -62,7 +64,7 @@
             [formGroupName]="i"
             govukFieldset
             id="dataSource-def-{{ i }}">
-            <legend govukLegend>Data source {{ i + 1 }}</legend>
+            <legend govukLegend legendSize="medium">Data source {{ i + 1 }}</legend>
 
             <button
               (click)="dataSourcesFormArray.removeAt(i)"

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { map } from 'rxjs';
 
+import { getPermitRevocationPreviewDocumentsInfo } from '@permit-revocation/utils/preview-documents-permit-revocation.util';
 import { BackLinkService } from '@shared/back-link/back-link.service';
 import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
@@ -18,7 +19,8 @@ import { PermitRevocationStore } from '../store/permit-revocation-store';
           [taskId]="taskId$ | async"
           [accountId]="accountId$ | async"
           [requestTaskActionType]="(route.data | async)?.requestTaskActionType"
-          [confirmationMessage]="confirmationMessage$ | async"></app-notify-operator>
+          [confirmationMessage]="confirmationMessage$ | async"
+          [previewDocuments]="previewDocuments$ | async"></app-notify-operator>
       </div>
     </div>
   `,
@@ -48,6 +50,11 @@ export class NotifyOperatorComponent implements OnInit {
           return 'Cessation complete';
       }
     }),
+  );
+
+  previewDocuments$ = this.route.data.pipe(
+    map((state) => state.requestTaskActionType),
+    map((requestTaskActionType) => getPermitRevocationPreviewDocumentsInfo(requestTaskActionType)),
   );
 
   ngOnInit(): void {

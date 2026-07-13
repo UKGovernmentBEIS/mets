@@ -27,6 +27,7 @@ import { UKCountryCodes } from '../types/country-codes';
   selector: 'div[app-phone-input]',
   standalone: false,
   templateUrl: './phone-input.component.html',
+  styleUrl: './phone-input.component.scss',
   providers: [DestroySubject],
 })
 export class PhoneInputComponent implements OnInit, DoCheck, ControlValueAccessor {

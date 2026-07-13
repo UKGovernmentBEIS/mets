@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
 
-import { LinkDirective } from '../directives';
 import { NotificationBannerComponent } from './notification-banner.component';
 
 describe('NotificationBannerComponent', () => {
@@ -12,39 +10,36 @@ describe('NotificationBannerComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
+    imports: [NotificationBannerComponent],
     template: `
       <govuk-notification-banner [type]="type" [heading]="heading">
         <h3 class="govuk-notification-banner__heading">Training outcome recorded and trainee withdrawn</h3>
-        <p class="govuk-body">
-          Contact
-          <a govukLink="notification" href="#">example&#64;department.gov.uk</a>
-          if you think there's a problem.
-        </p>
+        <p>Test content</p>
       </govuk-notification-banner>
     `,
   })
   class TestComponent {
-    type: NotificationBannerComponent['type'];
-    heading: string;
+    type: 'success' | 'neutral' = 'neutral';
+    heading?: string;
   }
 
   const getBanner = () => element.querySelector<HTMLDivElement>('.govuk-notification-banner');
   const getHeading = () => element.querySelector<HTMLHeadingElement>('.govuk-notification-banner__title');
 
-  const createComponent = (type: NotificationBannerComponent['type'], heading?: string) => {
+  const createComponent = (type: 'success' | 'neutral', heading?: string) => {
     fixture = TestBed.createComponent(TestComponent);
     fixture.componentInstance.type = type;
-    fixture.componentInstance.heading = heading;
+    if (heading !== undefined) {
+      fixture.componentInstance.heading = heading;
+    }
     component = fixture.debugElement.query(By.directive(NotificationBannerComponent)).componentInstance;
-    fixture.detectChanges();
     element = fixture.nativeElement;
+    fixture.detectChanges();
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [NotificationBannerComponent, TestComponent, LinkDirective],
+      imports: [TestComponent],
     }).compileComponents();
   });
 
@@ -71,7 +66,7 @@ describe('NotificationBannerComponent', () => {
 
     it('should project content', () => {
       expect(element.querySelector<HTMLHeadingElement>('.govuk-notification-banner__heading')).toBeTruthy();
-      expect(element.querySelector<HTMLAnchorElement>('.govuk-notification-banner__link')).toBeTruthy();
+      expect(element.querySelector<HTMLParagraphElement>('p')).toBeTruthy();
     });
 
     it('should not focus the element in neutral notifications', () => {

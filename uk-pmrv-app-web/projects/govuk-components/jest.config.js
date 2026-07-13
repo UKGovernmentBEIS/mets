@@ -3,5 +3,5 @@ const baseConfig = require('../../jest.config');
 module.exports = {
   ...baseConfig,
   rootDir: '../../',
-  roots: ['<rootDir>/projects'],
+  roots: ['<rootDir>/projects/govuk-components'],
 };

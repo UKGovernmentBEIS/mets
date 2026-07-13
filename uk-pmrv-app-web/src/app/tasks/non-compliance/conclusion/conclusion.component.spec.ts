@@ -89,7 +89,7 @@ describe('ConclusionComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Provide conclusion of non-compliance');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'not started',
+        'Not started',
       );
     });
   });
@@ -119,7 +119,7 @@ describe('ConclusionComponent', () => {
     it('should display conclusion section as in progress', () => {
       expect(page.sections.length).toEqual(1);
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'in progress',
+        'In progress',
       );
     });
   });
@@ -140,7 +140,7 @@ describe('ConclusionComponent', () => {
     it('should display conclusion section as completed', () => {
       expect(page.sections.length).toEqual(1);
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'completed',
+        'Completed',
       );
     });
   });

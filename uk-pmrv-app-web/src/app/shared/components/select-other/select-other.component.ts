@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 
-import { ConditionalContentDirective, FormService, GovukTextWidthClass } from 'govuk-components';
+import { ConditionalContentDirective, FormService, GovukSelectWidthClass } from 'govuk-components';
 
 @Component({
   selector: 'app-select-other',
@@ -19,7 +19,7 @@ import { ConditionalContentDirective, FormService, GovukTextWidthClass } from 'g
 export class SelectOtherComponent implements ControlValueAccessor, AfterContentInit {
   @Input() hint: string;
   @Input() label: string;
-  @Input() widthClass: GovukTextWidthClass;
+  @Input() widthClass: GovukSelectWidthClass;
   currentValue: string;
   onChange: (event: Event) => any;
   onBlur: () => any;

@@ -38,6 +38,7 @@ import { SecondsToMinutesPipe } from '@shared/pipes/seconds-to-minutes.pipe';
 import { SourceStreamDescriptionPipe } from '@shared/pipes/source-streams-description.pipe';
 import { SourceStreamTypePipe } from '@shared/pipes/source-streams-type.pipe';
 import { TagColorPipe } from '@shared/pipes/tag-color.pipe';
+import { TagStylePipe } from '@shared/pipes/tag-style.pipe';
 import { TemplateFilePipe } from '@shared/pipes/template-file.pipe';
 import { TimelineItemLinkPipe } from '@shared/pipes/timeline-item-link.pipe';
 import { UserContactPipe } from '@shared/pipes/user-contact.pipe';
@@ -147,6 +148,7 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
     SourceStreamTypePipe,
     SubInstallationTypePipe,
     TagColorPipe,
+    TagStylePipe,
     TemplateFilePipe,
     TimelineItemLinkPipe,
     TransferredCO2N2ODirectionsPipe,
@@ -224,6 +226,7 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
     StatusApplicationTypePipe,
     SubInstallationTypePipe,
     TagColorPipe,
+    TagStylePipe,
     TaskTypeToBreadcrumbPipe,
     TemplateFilePipe,
     TimelineItemLinkPipe,

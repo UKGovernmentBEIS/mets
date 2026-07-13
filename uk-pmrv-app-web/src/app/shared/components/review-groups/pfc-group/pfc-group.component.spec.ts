@@ -128,7 +128,7 @@ describe('PfcGroupComponent', () => {
       ),
     ).toEqual([
       [],
-      ['the reference Anthracite', 'emission source 1 reference', 'Slope', '11332812', 'completed'],
+      ['the reference Anthracite', 'emission source 1 reference', 'Slope', '11332812', 'Completed'],
       ['Total emissions', '', '', '11332812 tCO2e', ''],
     ]);
 

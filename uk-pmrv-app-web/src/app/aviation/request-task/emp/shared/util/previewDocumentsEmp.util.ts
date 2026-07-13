@@ -73,6 +73,14 @@ export function getPreviewDocumentsInfoEmp(
     case 'EMP_VARIATION_CORSIA_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED':
     case 'EMP_VARIATION_CORSIA_REVIEW_SUBMIT_PEER_REVIEW_DECISION_REGULATOR_LED':
       return [buildPreviewInfo('EMP_VARIATION_CORSIA_REGULATOR_LED_APPROVED'), buildPreviewInfo('EMP_CORSIA')];
+    case 'EMP_ISSUANCE_CORSIA_SUBMIT_APPLICATION':
+      return [buildPreviewInfo('EMP_CORSIA')];
+    case 'EMP_VARIATION_CORSIA_SUBMIT_APPLICATION':
+      return [buildPreviewInfo('EMP_CORSIA')];
+    case 'EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION':
+      return [buildPreviewInfo('EMP_UKETS')];
+    case 'EMP_VARIATION_UKETS_SUBMIT_APPLICATION':
+      return [buildPreviewInfo('EMP_UKETS')];
   }
 }
 

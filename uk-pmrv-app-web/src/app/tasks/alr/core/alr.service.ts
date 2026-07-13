@@ -67,6 +67,10 @@ export class AlrService extends TasksHelperService {
     return toSignal(this.requestMetadata$);
   }
 
+  get year(): number {
+    return this.requestMetadata()?.['year'];
+  }
+
   get daysRemaining(): Signal<number> {
     return toSignal(this.daysRemaining$);
   }

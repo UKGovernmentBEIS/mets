@@ -1,25 +1,26 @@
-import { ContentChildren, Directive, forwardRef, QueryList } from '@angular/core';
+import { contentChildren, Directive, forwardRef } from '@angular/core';
 import { AbstractControl, AbstractControlDirective, ControlContainer, NgControl } from '@angular/forms';
 
 @Directive({
   selector: '[govukConditionalContent]',
-  standalone: false,
 })
 export class ConditionalContentDirective {
-  @ContentChildren(NgControl, { descendants: true }) private readonly childControls: QueryList<NgControl>;
-  @ContentChildren(ControlContainer, { descendants: true })
-  private readonly childContainers: QueryList<ControlContainer>;
-  @ContentChildren(forwardRef(() => ConditionalContentDirective), { descendants: true })
-  private readonly childConditionals: QueryList<ConditionalContentDirective>;
+  private readonly childControls = contentChildren(NgControl, { descendants: true });
+  private readonly childContainers = contentChildren(ControlContainer, { descendants: true });
+
+  private readonly childConditionals = contentChildren(
+    forwardRef(() => ConditionalContentDirective),
+    { descendants: true },
+  );
 
   private get childControlsAndContainers(): AbstractControlDirective[] {
-    return [...this.childControls.toArray(), ...this.childContainers.toArray()];
+    return [...this.childControls(), ...this.childContainers()];
   }
 
   enableControls(): void {
     // There seems to be an extreme case in content projection that it detects itself
     const nestedControls: AbstractControl[] = [].concat(
-      ...this.childConditionals
+      ...this.childConditionals()
         .filter((conditional) => conditional !== this)
         .map((conditional) => conditional.childControlsAndContainers.map(({ control }) => control)),
     );
@@ -28,7 +29,9 @@ export class ConditionalContentDirective {
 
     this.childControlsAndContainers
       .filter(({ control }) => !nestedControls.includes(control))
-      .forEach(({ control }) => control.enable({ emitEvent: this.shouldEmitEvent(control) }));
+      .forEach(({ control }) => {
+        if (control) control.enable({ emitEvent: this.shouldEmitEvent(control) });
+      });
 
     nestedControls
       .filter((control, index) => nestedStatuses[index] === 'DISABLED' && !control.value)
@@ -36,9 +39,9 @@ export class ConditionalContentDirective {
   }
 
   disableControls(): void {
-    this.childControlsAndContainers.forEach(({ control }) =>
-      control.disable({ emitEvent: this.shouldEmitEvent(control) }),
-    );
+    this.childControlsAndContainers.forEach(({ control }) => {
+      if (control) control.disable({ emitEvent: this.shouldEmitEvent(control) });
+    });
   }
 
   private shouldEmitEvent(control: AbstractControl): boolean {

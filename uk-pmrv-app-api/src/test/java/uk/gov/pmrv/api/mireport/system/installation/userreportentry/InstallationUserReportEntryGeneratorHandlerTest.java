@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.netz.api.authorization.core.repository.AuthorityRepository;
 import uk.gov.netz.api.mireport.system.EmptyMiReportSystemParams;
 import uk.gov.netz.api.mireport.system.MiReportSystemResult;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
@@ -34,9 +33,6 @@ class InstallationUserReportEntryGeneratorHandlerTest {
     private UserReportEntryRepository userReportEntryRepository;
 
     @Mock
-    private AuthorityRepository authorityRepository;
-
-    @Mock
     private EntityManager entityManager;
 
     private InstallationUserReportEntryGeneratorHandler handler;
@@ -45,8 +41,7 @@ class InstallationUserReportEntryGeneratorHandlerTest {
     void setUp() {
         handler = new InstallationUserReportEntryGeneratorHandler(
                 userAuthService,
-                userReportEntryRepository,
-                authorityRepository
+                userReportEntryRepository
         );
     }
 

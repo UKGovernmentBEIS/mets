@@ -207,7 +207,7 @@ export function resolveReturnToText(
     case 'dre':
       return { text: 'Reportable emissions', link: '..' };
     case 'doal':
-      return { text: 'Determination of activity level change', link: '..' };
+      return { text: 'Determination of activity level', link: '..' };
     case 'aviation': {
       switch (requestTaskType) {
         case 'EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT':

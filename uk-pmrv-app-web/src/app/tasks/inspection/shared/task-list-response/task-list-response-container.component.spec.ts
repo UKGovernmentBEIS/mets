@@ -31,7 +31,7 @@ describe('TaskListResponseContainerComponent', () => {
       return this.queryAll('#taskList li')
         .map((row) => [
           row.querySelector('a') || row.querySelector('.app-task-list__task-name span'),
-          row.querySelector('govuk-tag'),
+          row.querySelector('.app-task-list__tag'),
           row.querySelector('p'),
         ])
         .map((pair) => pair.map((element) => element?.textContent?.trim() || ''));
@@ -67,15 +67,15 @@ describe('TaskListResponseContainerComponent', () => {
     expect(page.taskList).toEqual([
       [
         'Follow-up action 1',
-        'completed',
+        'Completed',
         mockInspectionRespondRequestTaskPayload.installationInspection.followUpActions[0].explanation,
       ],
       [
         'Follow-up action 2',
-        'in progress',
+        'In progress',
         mockInspectionRespondRequestTaskPayload.installationInspection.followUpActions[1].explanation,
       ],
-      ['Send to the regulator', 'cannot start yet', ''],
+      ['Send to the regulator', 'Cannot start yet', ''],
     ]);
   });
 });

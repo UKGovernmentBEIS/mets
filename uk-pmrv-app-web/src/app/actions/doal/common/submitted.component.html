@@ -1,9 +1,10 @@
 <app-base-action-container-component
   [header]="requestActionType$ | async | itemActionType"
   [customContentTemplate]="customContentTemplate"
-  [expectedActionType]="['DOAL_APPLICATION_PROCEEDED_TO_AUTHORITY', 'DOAL_APPLICATION_CLOSED']"
->
-</app-base-action-container-component>
+  [expectedActionType]="[
+    'DOAL_APPLICATION_PROCEEDED_TO_AUTHORITY',
+    'DOAL_APPLICATION_CLOSED',
+  ]"></app-base-action-container-component>
 
 <ng-template #customContentTemplate>
   <ol class="app-task-list">
@@ -12,8 +13,7 @@
         <li
           app-task-item
           [link]="(requestActionPayload$ | async).doal.operatorActivityLevelReport ? './operator-report' : null"
-          linkText="Upload operator activity level report"
-        ></li>
+          linkText="Upload operator report"></li>
         <li
           app-task-item
           [link]="
@@ -21,14 +21,12 @@
               ? './verification-report'
               : null
           "
-          linkText="Upload verification report of the activity level report"
-        ></li>
+          linkText="Upload verification report"></li>
         <li
           *ngIf="(requestActionPayload$ | async).doal.additionalDocuments as additionalDocuments"
           app-task-item
           [link]="additionalDocuments ? './additional-documents' : null"
-          linkText="Upload additional documents"
-        ></li>
+          linkText="Upload additional documents"></li>
       </ul>
     </li>
     <li app-task-section title="Provide your determination">
@@ -36,8 +34,7 @@
         <li
           app-task-item
           [link]="(requestActionPayload$ | async).doal.activityLevelChangeInformation ? './alc-information' : null"
-          linkText="Provide information about this activity level change"
-        ></li>
+          linkText="Provide information about this activity level"></li>
         <li app-task-item link="./determination" linkText="Provide determination of activity level"></li>
       </ul>
     </li>

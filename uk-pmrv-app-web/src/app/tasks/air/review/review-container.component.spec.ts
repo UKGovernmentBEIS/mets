@@ -62,6 +62,6 @@ describe('ReviewContainerComponent', () => {
     expect(page.heading1.textContent.trim()).toEqual('2022 Annual improvement report review');
     expect(page.operatorText.textContent.trim()).toEqual('Assigned to: Regulator1 England');
     expect(page.airImprovementDataGroupReview).toBeTruthy();
-    expect(page.taskListContent).toEqual(['Provide summary of improvements for official notice completed']);
+    expect(page.taskListContent).toEqual(['Provide summary of improvements for official notice Completed']);
   });
 });

@@ -21,7 +21,7 @@ import { DoalGrantAuthorityResponse } from 'pmrv-api';
         [form]="form"
         [isEditable]="editable$ | async"
         [isEditing]="createMode === false"></app-preliminary-allocation-details-template>
-      <a govukLink routerLink="..">Return to: Provide authority approved allocation for each sub-installation</a>
+      <a govukLink routerLink="..">Return to: Provide Authority approved allocation for each sub-installation</a>
     </app-doal-task>
   `,
   providers: [preliminaryAllocationFormProvider],

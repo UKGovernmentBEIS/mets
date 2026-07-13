@@ -101,7 +101,7 @@
 
       <ng-container *ngIf="accountOperatorUsersOther$ | async as usersInfo">
         <ng-container *ngIf="objectKeys(usersInfo).length > 0; else noUsers">
-          <div govuk-checkboxes formControlName="users" [legend]="usersToNotify$ | async" legendSize="medium">
+          <div govuk-checkboxes formControlName="users" [label]="usersToNotify$ | async" labelSize="medium">
             <govuk-checkbox
               *ngFor="let userInfo of usersInfo | keyvalue"
               [value]="userInfo.key"
@@ -122,8 +122,8 @@
           <div
             govuk-checkboxes
             formControlName="contacts"
-            [legend]="externalContactsToNotify$ | async"
-            legendSize="medium">
+            [label]="externalContactsToNotify$ | async"
+            labelSize="medium">
             <govuk-checkbox
               *ngFor="let contact of contacts"
               [value]="contact.id.toString()"

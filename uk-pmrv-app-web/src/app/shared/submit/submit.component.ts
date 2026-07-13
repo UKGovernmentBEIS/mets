@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, output, TemplateRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { map } from 'rxjs';
@@ -22,7 +22,7 @@ export class SubmitComponent {
   @Input() returnUrlConfig: { url: string; text: string };
   @Input() competentAuthority: RequestInfoDTO['competentAuthority'];
 
-  @Output() readonly submitClicked = new EventEmitter<void>();
+  readonly submitClicked = output<void>();
 
   constructor(readonly route: ActivatedRoute) {}
 

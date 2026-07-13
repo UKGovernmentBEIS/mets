@@ -83,7 +83,9 @@ public enum PmrvNotificationTemplateName {
     NER_COMPLETED("NER completed"),
     NER_WITHDRAWN("NER withdrawn"),
 
-    RECALLED_BY_OPERATOR("Recalled by Operator")
+    RECALLED_BY_OPERATOR("Recalled by Operator"),
+
+    NEW_UNASSIGNED_TASK_RECEIVED("New unassigned task received")
     ;
 
 

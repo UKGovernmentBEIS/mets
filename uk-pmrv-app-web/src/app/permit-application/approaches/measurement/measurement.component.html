@@ -58,11 +58,8 @@
               {{ row?.biomassFraction?.tier | appliedTier }}
             </ng-container>
             <ng-container *ngSwitchCase="'status'">
-              <govuk-tag
-                [color]="'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async | tagColor"
-                class="app-task-list__tag">
-                {{ 'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
-              </govuk-tag>
+              <app-task-status-tag
+                [status]="'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async"></app-task-status-tag>
             </ng-container>
           </ng-container>
         </ng-template>

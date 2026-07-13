@@ -1,21 +1,19 @@
 <button
-  [attr.aria-controls]="identifier"
-  [attr.aria-label]="menuButtonAriaLabel"
+  [attr.aria-controls]="identifier()"
+  [attr.aria-label]="menuButtonAriaLabel()"
   [attr.aria-expanded]="isNavigationOpen"
   [class.govuk-header__menu-button--open]="isNavigationOpen"
   class="govuk-header__menu-button govuk-js-header-toggle"
   type="button"
-  (click)="isNavigationOpen = !isNavigationOpen"
->
+  (click)="isNavigationOpen = !isNavigationOpen">
   Menu
 </button>
 <nav>
   <ul
-    [attr.aria-label]="ariaLabel"
-    [id]="identifier"
+    [attr.aria-label]="ariaLabel()"
+    [id]="identifier()"
     [class.govuk-header__navigation--open]="isNavigationOpen"
-    class="govuk-header__navigation"
-  >
+    class="govuk-header__navigation">
     <ng-content />
   </ul>
 </nav>

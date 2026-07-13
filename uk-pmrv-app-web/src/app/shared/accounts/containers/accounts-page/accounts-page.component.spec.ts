@@ -54,7 +54,7 @@ describe('AccountsComponent', () => {
     }
 
     get accountStatuses() {
-      return this.queryAll<HTMLSpanElement>('.status-tag');
+      return this.queryAll<HTMLElement>('strong.govuk-tag');
     }
   }
 

@@ -49,7 +49,7 @@ describe('FallbackComponent', () => {
     }
 
     get staticSections(): HTMLAnchorElement[] {
-      return Array.from(this.queryAll<HTMLAnchorElement>('ul > li > span.app-task-list__task-name > a'));
+      return Array.from(this.queryAll<HTMLAnchorElement>('ul > li span.app-task-list__task-name > a'));
     }
   }
 

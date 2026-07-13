@@ -2,7 +2,10 @@ package uk.gov.pmrv.api.workflow.request.core.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AuthorizationRulesQueryService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskDefaultAssignmentService;
+import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskUnassignedService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
@@ -19,6 +22,8 @@ public class RequestTaskCreateService {
 
     private final RequestService requestService;
     private final RequestTaskDefaultAssignmentService requestTaskDefaultAssignmentService;
+    private final AuthorizationRulesQueryService authorizationRulesQueryService;
+    private final RequestTaskUnassignedService requestTaskUnassignedService;
     private final List<InitializeRequestTaskHandler> initializeRequestTaskHandlers;
 
 
@@ -56,14 +61,22 @@ public class RequestTaskCreateService {
         
         request.addRequestTask(requestTask);
 
-        assignToUserOrAssignToDefaultUser(requestTask, userToAssignTask);
+        String requestTaskRoleType = authorizationRulesQueryService
+                .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name())
+                .orElse(null);
+
+        assignToUserOrAssignToDefaultUser(requestTaskRoleType, requestTask, userToAssignTask);
+
+        if (requestTask.getAssignee() == null) {
+            requestTaskUnassignedService.unassignedTaskToNotify(requestTaskRoleType, requestTask);
+        }
     }
 
-    private void assignToUserOrAssignToDefaultUser(RequestTask requestTask, String userToAssignTask) {
+    private void assignToUserOrAssignToDefaultUser(String requestTaskRoleType, RequestTask requestTask, String userToAssignTask) {
         if(userToAssignTask != null) {
             requestTask.setAssignee(userToAssignTask);
         } else {
-            requestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
+            requestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTaskRoleType, requestTask);
         }
     }
 

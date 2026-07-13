@@ -21,6 +21,7 @@ import uk.gov.pmrv.api.reporting.domain.dto.EmissionsCalculationDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.EmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationParamsDTO;
+import uk.gov.pmrv.api.reporting.domain.dto.MeasurementN2OEmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.PfcEmissionsCalculationDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.PfcEmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.calculation.EmissionsCalculationService;
@@ -68,7 +69,7 @@ public class ReportingController {
     }
 
     @PostMapping(path = "/calculation/pfc/calculate-emissions")
-    @Operation(summary = "Calculates emissions using AER calculation approach")
+    @Operation(summary = "Calculates emissions using AER PFC calculation approach")
     @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PfcEmissionsCalculationDTO.class))})
     @ApiResponse(responseCode = "400", description = REPORTING_CALCULATE_EMISSIONS_BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
@@ -81,7 +82,7 @@ public class ReportingController {
     }
 
     @PostMapping(path = "/measurement/co2/calculate-emissions")
-    @Operation(description = "Calculates emissions using AER calculation approach")
+    @Operation(description = "Calculates emissions using AER measurement CO2 approach")
     @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType =
         MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MeasurementEmissionsCalculationDTO.class))})
     @ApiResponse(responseCode = "400", description = REPORTING_CALCULATE_EMISSIONS_BAD_REQUEST, content =
@@ -100,7 +101,7 @@ public class ReportingController {
     }
 
     @PostMapping(path = "/measurement/n2o/calculate-emissions")
-    @Operation(description = "Calculates emissions using AER calculation approach")
+    @Operation(description = "Calculates emissions using AER measurement N2O approach")
     @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType =
         MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MeasurementEmissionsCalculationDTO.class))})
     @ApiResponse(responseCode = "400", description = REPORTING_CALCULATE_EMISSIONS_BAD_REQUEST, content =
@@ -114,7 +115,7 @@ public class ReportingController {
     public ResponseEntity<MeasurementEmissionsCalculationDTO> calculateMeasurementN2OEmissions(
         @RequestBody @Valid @Parameter(description = "The parameters needed to calculate the emissions", required =
             true)
-        MeasurementEmissionsCalculationParamsDTO emissionsCalculationParams) {
+        MeasurementN2OEmissionsCalculationParamsDTO emissionsCalculationParams) {
         return new ResponseEntity<>(measurementN2OEmissionsCalculationService.calculateEmissions(emissionsCalculationParams), HttpStatus.OK);
     }
 }

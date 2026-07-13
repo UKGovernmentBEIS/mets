@@ -77,7 +77,7 @@ describe('SubmitComponent', () => {
       ).toEqual('Provide withholding of allowances details');
 
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'not started',
+        'Not started',
       );
     });
   });
@@ -120,7 +120,7 @@ describe('SubmitComponent', () => {
       ).toEqual('Provide withholding of allowances details');
 
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'completed',
+        'Completed',
       );
     });
   });
@@ -144,7 +144,7 @@ describe('SubmitComponent', () => {
       ).toEqual('Provide withholding of allowances details');
 
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'in progress',
+        'In progress',
       );
     });
   });

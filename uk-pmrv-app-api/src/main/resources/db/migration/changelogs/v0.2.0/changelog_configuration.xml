@@ -194,4 +194,20 @@
             delete from configuration where key = 'ui.features.nerEnabled';
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_add_configuration_sub_installation_types.cbam.transition.toggle" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('sub_installation_types.cbam.transition.toggle', false, 'BOOLEAN');
+        </sql>
+        <rollback>
+            delete from configuration where key = 'sub_installation_types.cbam.transition.toggle';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_add_configuration_ui.features.reportingImprovementsEnabled" author="mitzelose@unisystems.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('ui.features.reportingImprovementsEnabled', false, 'BOOLEAN');
+        </sql>
+        <rollback>
+            delete from configuration where key = 'ui.features.reportingImprovementsEnabled';
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

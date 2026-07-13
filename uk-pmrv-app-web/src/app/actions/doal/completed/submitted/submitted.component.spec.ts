@@ -49,7 +49,7 @@ describe('SubmittedComponent', () => {
     expect(page.heading).toEqual('Activity level determination approved with corrections');
     expect(page.tasksContents.map((el) => el.textContent.trim())).toEqual([
       'Enter details',
-      'Provide the date application was submitted to UK authorities',
+      'Provide the date application was submitted to the Authority',
       'Provide UK ETS Authority response',
     ]);
   });

@@ -3,13 +3,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { changeInputValue } from '../../../../../../src/testing';
-import { ErrorMessageComponent } from '../../error-message/error-message.component';
+import { changeInputValue } from '../../../testing';
 import { FormErrorDirective } from './form-error.directive';
 
 describe('FormErrorDirective', () => {
   @Component({
-    standalone: false,
+    imports: [ReactiveFormsModule, FormErrorDirective],
     template: `
       <div>
         <div class="govuk-form-group">
@@ -17,7 +16,9 @@ describe('FormErrorDirective', () => {
         </div>
         <input type="text" [formControl]="simpleControl" govukFormError id="simple" />
         <select [formControl]="selectControl" govukFormError id="select">
-          <option *ngFor="let option of options" [ngValue]="option.value">{{ option.text }}</option>
+          @for (option of options; track option) {
+            <option [ngValue]="option.value">{{ option.text }}</option>
+          }
         </select>
         <textarea [formControl]="textareaControl" govukFormError id="textarea"></textarea>
         <form [formGroup]="formGroup">
@@ -50,8 +51,7 @@ describe('FormErrorDirective', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [FormErrorDirective, TestComponent, ErrorMessageComponent],
+      imports: [ReactiveFormsModule, TestComponent],
     }).createComponent(TestComponent);
 
     fixture.detectChanges();

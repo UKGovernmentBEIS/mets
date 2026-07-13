@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, output } from '@angular/core';
 
 import { first, of, switchMap } from 'rxjs';
 
@@ -37,7 +37,7 @@ export class ArchiveComponent {
   @Input() warningText: string;
   @Input() buttonText = 'Archive now and return to dashboard';
 
-  @Output() readonly submitted = new EventEmitter<void>();
+  readonly submitted = output<void>();
 
   constructor(
     readonly pendingRequestService: PendingRequestService,

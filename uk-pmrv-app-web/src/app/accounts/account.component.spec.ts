@@ -35,7 +35,7 @@ describe('AccountComponent', () => {
     }
 
     get status() {
-      return this.heading.querySelector<HTMLSpanElement>('span.status');
+      return this.heading.querySelector<HTMLElement>('strong.govuk-tag');
     }
 
     get tabs() {

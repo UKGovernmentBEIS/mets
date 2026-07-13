@@ -1,30 +1,32 @@
 // source: https://components.publishing.service.gov.uk/component-guide/attachment
-@import 'govuk-frontend/govuk/base';
+@use 'govuk-frontend/dist/govuk/base' as govuk;
 
 $thumbnail-width: 99px;
 $thumbnail-height: 140px;
 $thumbnail-border-width: 5px;
-$thumbnail-background: govuk-colour('white');
+$thumbnail-background: govuk.govuk-colour('white');
 $thumbnail-border-colour: rgba(11, 12, 12, 0.1);
 $thumbnail-shadow-colour: rgba(11, 12, 12, 0.4);
 $thumbnail-shadow-width: 0 2px 2px;
-$thumbnail-icon-border-colour: govuk-colour('mid-grey', $legacy: 'grey-3');
+$thumbnail-icon-border-colour: govuk.govuk-colour('black', $variant: 'tint-80');
 
 .gem-c-attachment {
-  @include govuk-font(19);
-  @include govuk-clearfix;
   position: relative;
+  @include govuk.govuk-font(19);
+  @include govuk.govuk-clearfix;
 
   .govuk-details__summary {
-    @include govuk-font($size: 14);
+    font-size: 14px;
+    font-size: 0.875rem;
+    line-height: 1.4;
   }
 }
 
 .gem-c-attachment__thumbnail {
   position: relative;
   width: auto;
-  margin-right: govuk-spacing(5);
-  margin-bottom: govuk-spacing(3);
+  margin-right: govuk.govuk-spacing(5);
+  margin-bottom: govuk.govuk-spacing(3);
   padding: $thumbnail-border-width;
   float: left;
 }
@@ -43,7 +45,7 @@ $thumbnail-icon-border-colour: govuk-colour('mid-grey', $legacy: 'grey-3');
 }
 
 .gem-c-attachment__details {
-  padding-left: $thumbnail-width + $thumbnail-border-width * 2 + govuk-spacing(5);
+  padding-left: $thumbnail-width + $thumbnail-border-width * 2 + govuk.govuk-spacing(5);
 
   .gem-c-details {
     word-break: break-word;
@@ -52,8 +54,8 @@ $thumbnail-icon-border-colour: govuk-colour('mid-grey', $legacy: 'grey-3');
 }
 
 .gem-c-attachment__title {
-  @include govuk-font($size: 27);
-  margin: 0 0 govuk-spacing(3);
+  margin: 0 0 govuk.govuk-spacing(3);
+  @include govuk.govuk-font($size: 27);
 }
 
 .gem-c-attachment__link {
@@ -61,8 +63,10 @@ $thumbnail-icon-border-colour: govuk-colour('mid-grey', $legacy: 'grey-3');
 }
 
 .gem-c-attachment__metadata {
-  @include govuk-font($size: 14);
-  margin: 0 0 govuk-spacing(3);
+  margin: 0 0 govuk.govuk-spacing(3);
+  font-size: 14px;
+  font-size: 0.875rem;
+  line-height: 1.4;
 
   &:last-of-type {
     margin-bottom: 0;

@@ -92,7 +92,7 @@ describe('MethodsComponent', () => {
     jest.spyOn(reportingService, 'calculatePfcEmissions').mockReturnValue(
       of({
         globalWarmingPotentialCF4: '1',
-        globalWarmingPotentialC2F: '1',
+        globalWarmingPotentialC2F6: '1',
         amountOfCF4: '1',
         totalCF4Emissions: '1',
         amountOfC2F6: '1',
@@ -187,6 +187,8 @@ describe('MethodsComponent', () => {
                     amountOfC2F6: '1',
                     amountOfCF4: '1',
                     calculationCorrect: null,
+                    globalWarmingPotentialCF4: '1',
+                    globalWarmingPotentialC2F6: '1',
                     pfcSourceStreamEmissionCalculationMethodData: {
                       anodeEffectsPerCellDay: '3',
                       averageDurationOfAnodeEffectsInMinutes: '1',

@@ -1,4 +1,4 @@
-@use 'govuk-frontend/govuk/base' as govuk;
+﻿@use 'base' as govuk;
 
 .error {
   border-left: govuk.govuk-spacing(1) solid govuk.$govuk-error-colour;

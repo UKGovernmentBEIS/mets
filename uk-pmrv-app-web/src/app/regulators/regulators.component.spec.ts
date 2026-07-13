@@ -225,17 +225,17 @@ describe('RegulatorsComponent', () => {
     fixture.detectChanges();
 
     expect(page.headers.length).toEqual(2);
-    expect(page.headers[0].textContent).toEqual('Name');
-    expect(page.headers[1].textContent).toEqual('Job title');
+    expect(page.headers[0].textContent).toEqual(' Name ');
+    expect(page.headers[1].textContent).toEqual(' Job title ');
 
     testData.regulators.editable = true;
     activatedRouteStub.setResolveMap(testData);
     fixture.detectChanges();
 
     expect(page.headers.length).toEqual(4);
-    expect(page.headers[0].textContent).toEqual('Name');
-    expect(page.headers[1].textContent).toEqual('Job title');
-    expect(page.headers[2].textContent).toEqual('Account status');
+    expect(page.headers[0].textContent).toEqual(' Name ');
+    expect(page.headers[1].textContent).toEqual(' Job title ');
+    expect(page.headers[2].textContent).toEqual(' Account status ');
   });
 
   it('should post only changed values on save', () => {

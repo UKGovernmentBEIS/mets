@@ -3,17 +3,15 @@
   formControlName="totalEmissionsType"
   govuk-radio
   [isInline]="false"
-  legendSize="medium"
->
+  legendSize="medium">
   <govuk-radio-option value="FULL_SCOPE_FLIGHTS" label="from full-scope flights">
     <ng-container govukConditionalContent>
       <div
         formControlName="fullScopeTotalEmissions"
         govuk-text-input
-        inputType="big-number"
+        inputType="number"
         label="Enter your annual emissions from full-scope flights"
-        suffix="tonnes CO2"
-      ></div>
+        suffix="tonnes CO2"></div>
     </ng-container>
   </govuk-radio-option>
   <govuk-radio-option value="AVIATION_ACTIVITY" label="from aviation activity">
@@ -21,10 +19,9 @@
       <div
         formControlName="aviationActivityTotalEmissions"
         govuk-text-input
-        inputType="big-number"
+        inputType="number"
         label="Enter your annual emissions from aviation activity"
-        suffix="tonnes CO2"
-      ></div>
+        suffix="tonnes CO2"></div>
     </ng-container>
   </govuk-radio-option>
 </div>

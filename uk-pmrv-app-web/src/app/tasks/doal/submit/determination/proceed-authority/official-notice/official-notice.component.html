@@ -2,13 +2,12 @@
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
-    caption="Proceed to UK ETS authority"
+    caption="Proceed to UK ETS Authority"
     heading="Will you send a preliminary allocation letter?"
     submitText="Save and continue"
-    [hideSubmit]="(editable$ | async) === false"
-  >
+    [hideSubmit]="(editable$ | async) === false">
     <div formControlName="needsOfficialNotice" govuk-radio>
-      <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
       <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
     </div>
   </app-wizard-step>

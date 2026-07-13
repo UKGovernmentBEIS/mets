@@ -35,8 +35,8 @@ describe('FileUploadListComponent', () => {
       return this.query<HTMLDivElement>('.govuk-heading-m');
     }
 
-    get hidden() {
-      return this.query<HTMLDivElement>('.moj-hidden');
+    get fileList() {
+      return this.query<HTMLDivElement>('.moj-multi-file__uploaded-files');
     }
 
     get rows() {
@@ -80,7 +80,7 @@ describe('FileUploadListComponent', () => {
   });
 
   it('should hide the element when there are no items', () => {
-    expect(page.hidden).toBeTruthy();
+    expect(page.fileList.hidden).toBe(true);
   });
 
   it('should list the files and their status', () => {
@@ -92,12 +92,12 @@ describe('FileUploadListComponent', () => {
     ];
     fixture.detectChanges();
 
-    expect(page.hidden).toBeFalsy();
+    expect(page.fileList.hidden).toBe(false);
     expect(page.rows).toHaveLength(4);
     expect(page.files.map((row) => row.textContent.trim())).toEqual([
       'Uploaded file',
       'Test file has been uploaded',
-      'Test file 2 30%',
+      'Test file 230%',
       'Could not upload',
     ]);
     expect(page.deleteButtons).toHaveLength(4);

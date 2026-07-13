@@ -33,7 +33,7 @@ public class RequestCreateActionCAResourceTypeHandler<T extends RequestCreateAct
                 .filter(requestCreateValidator -> requestCreateValidator.getType().equals(requestCreateActionType))
                 .findFirst()
                 .map(requestCreateBycaValidator -> requestCreateBycaValidator.validateAction(ca, payload))
-                .orElse(RequestCreateValidationResult.builder().valid(true).isAvailable(true).build());
+                .orElse(RequestCreateValidationResult.builder().valid(true).available(true).build());
 
         if (!validationResult.isValid() || !validationResult.isAvailable()) {
             throw new BusinessException(ErrorCode.REQUEST_CREATE_ACTION_NOT_ALLOWED, validationResult);

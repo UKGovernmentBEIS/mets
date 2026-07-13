@@ -2,6 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.doal.handler;
 
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.pmrv.api.allowance.domain.enums.ChangeType;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
@@ -13,7 +14,9 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.PreviewDocumentAbstractHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.service.notification.InstallationPreviewOfficialNoticeService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalAuthorityResponseRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalProceedToAuthorityDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.ArticleReasonGroupType;
 
 import java.util.List;
 import java.util.Map;
@@ -61,10 +64,20 @@ public class DoalAcceptedOfficialLetterPreviewHandler extends PreviewDocumentAbs
     }
 
     private Map<String, Object> constructParams(DoalAuthorityResponseRequestTaskPayload taskPayload, DoalRequestPayload requestPayload) {
+
+        DoalProceedToAuthorityDetermination determination = (DoalProceedToAuthorityDetermination) requestPayload.getDoal().getDetermination();
+        boolean hasNERAndYear0Option = determination.getArticleReasonGroupType() == ArticleReasonGroupType.ARTICLE_5_REASONS &&
+                requestPayload.getDoal().getActivityLevelChangeInformation()
+                .getActivityLevels()
+                .stream()
+                .anyMatch(activityLevel ->
+                        activityLevel.getChangeType() ==
+                                ChangeType.NER_ALLOCATION_FOR_YEAR_0_BASED_ON_ACTIVITY_LEVEL_AL_IN_YEAR_0);
         return Map.of(
                 "reportingYear", requestPayload.getReportingYear(),
                 "doal", requestPayload.getDoal(),
-                "authorityResponse", taskPayload.getDoalAuthority().getAuthorityResponse()
+                "authorityResponse", taskPayload.getDoalAuthority().getAuthorityResponse(),
+                "nerAndYear0", hasNERAndYear0Option
         );
     }
 }

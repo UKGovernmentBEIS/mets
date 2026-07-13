@@ -20,6 +20,6 @@ export class GroupedSummaryListDirective implements OnInit {
   }
 
   ngOnInit(): void {
-    this.summaryList.hasBorders = false;
+    this.summaryList.hasBorders.set(false);
   }
 }

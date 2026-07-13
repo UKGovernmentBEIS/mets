@@ -62,7 +62,7 @@ describe('ReviewGroupDecisionComponent', () => {
       return this.query<HTMLDivElement>('.govuk-error-summary');
     }
     get errorSummaryErrorList() {
-      return Array.from(this.errorSummary.querySelectorAll('a')).map((anchor) => anchor.textContent.trim());
+      return Array.from(this.errorSummary.querySelectorAll('li')).map((item) => item.textContent.trim());
     }
     get submitFormButton() {
       return this.queryAll<HTMLButtonElement>('button').slice(-1).pop();
@@ -429,7 +429,7 @@ describe('ReviewGroupDecisionComponent', () => {
       fixture.detectChanges();
 
       expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummary.textContent.trim()).toEqual('There is a problem All sections must be completed');
+      expect(page.errorSummaryErrorList).toEqual(['All sections must be completed']);
     });
   });
 });

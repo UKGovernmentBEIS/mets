@@ -59,13 +59,40 @@ class LegalEntityValidatorTest {
     }
 
     @Test
-    void isValid_invalid_ref_number_greater_than_max_allowed_length() {
-        int invalid_ref_number_length = 16;
-        String aLargeRefNum = new String(new char[invalid_ref_number_length]).replace('\0', 'a');
+    void isValid_invalid_ref_number_too_long() {
+        String aLargeRefNum = new String(new char[16]).replace('\0', 'a');
         LegalEntityDTO legalEntityDTO = buildLegalEntityDTO(aLargeRefNum, null, null);
-        mockConstraintViolationActions("{legalEntity.referenceNumber.typeMismatch}", "referenceNumber");
+        mockConstraintViolationActions("{legalEntity.referenceNumber.invalidFormat}", "referenceNumber");
         assertFalse(legalEntityValidator.isValid(legalEntityDTO, constraintValidatorContext));
-        verify(constraintValidatorContext, times(1)).buildConstraintViolationWithTemplate("{legalEntity.referenceNumber.typeMismatch}");
+        verify(constraintValidatorContext, times(1)).buildConstraintViolationWithTemplate("{legalEntity.referenceNumber.invalidFormat}");
+        verify(constraintViolationBuilder, times(1)).addPropertyNode("referenceNumber");
+    }
+
+    @Test
+    void isValid_invalid_ref_number_too_short() {
+        LegalEntityDTO legalEntityDTO = buildLegalEntityDTO("AB1234", null, null);
+        mockConstraintViolationActions("{legalEntity.referenceNumber.invalidFormat}", "referenceNumber");
+        assertFalse(legalEntityValidator.isValid(legalEntityDTO, constraintValidatorContext));
+        verify(constraintValidatorContext, times(1)).buildConstraintViolationWithTemplate("{legalEntity.referenceNumber.invalidFormat}");
+        verify(constraintViolationBuilder, times(1)).addPropertyNode("referenceNumber");
+    }
+
+    @Test
+    void isValid_invalid_ref_number_special_characters() {
+        LegalEntityDTO legalEntityDTO = buildLegalEntityDTO("AB-12345", null, null);
+        mockConstraintViolationActions("{legalEntity.referenceNumber.invalidFormat}", "referenceNumber");
+        assertFalse(legalEntityValidator.isValid(legalEntityDTO, constraintValidatorContext));
+        verify(constraintValidatorContext, times(1)).buildConstraintViolationWithTemplate("{legalEntity.referenceNumber.invalidFormat}");
+        verify(constraintViolationBuilder, times(1)).addPropertyNode("referenceNumber");
+    }
+
+    @Test
+    void isValid_invalid_ref_number_non_digit_in_middle() {
+        // AAAAAAAA is 8 alphanumeric chars but positions 3-7 must be digits
+        LegalEntityDTO legalEntityDTO = buildLegalEntityDTO("AAAAAAAA", null, null);
+        mockConstraintViolationActions("{legalEntity.referenceNumber.invalidFormat}", "referenceNumber");
+        assertFalse(legalEntityValidator.isValid(legalEntityDTO, constraintValidatorContext));
+        verify(constraintValidatorContext, times(1)).buildConstraintViolationWithTemplate("{legalEntity.referenceNumber.invalidFormat}");
         verify(constraintViolationBuilder, times(1)).addPropertyNode("referenceNumber");
     }
 

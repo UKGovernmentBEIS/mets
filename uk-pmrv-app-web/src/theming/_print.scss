@@ -1,0 +1,17 @@
+@media print {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    height: 100vh;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+  }
+
+  a[href]:after {
+    content: none !important;
+  }
+}

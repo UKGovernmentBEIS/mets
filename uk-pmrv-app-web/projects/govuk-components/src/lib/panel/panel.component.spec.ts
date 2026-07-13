@@ -10,7 +10,7 @@ describe('PanelComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
+    imports: [PanelComponent],
     template: `
       <govuk-panel [title]="title" />
     `,
@@ -21,7 +21,7 @@ describe('PanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PanelComponent, TestComponent],
+      imports: [TestComponent],
     }).compileComponents();
   });
 

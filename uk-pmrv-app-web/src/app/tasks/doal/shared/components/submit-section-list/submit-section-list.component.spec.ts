@@ -82,11 +82,11 @@ describe('SubmitSectionListComponent', () => {
     it('should display sections as not started', () => {
       expect(page.sections.length).toEqual(5);
       expect(page.sectionStatuses.map((st) => st.textContent.trim())).toEqual([
-        'not started',
-        'not started',
-        'not started',
-        'not started',
-        'cannot start yet',
+        'Not started',
+        'Not started',
+        'Not started',
+        'Not started',
+        'Cannot start yet',
       ]);
     });
   });
@@ -106,11 +106,11 @@ describe('SubmitSectionListComponent', () => {
 
     it('should display sections as completed', () => {
       expect(page.sectionStatuses.map((st) => st.textContent.trim())).toEqual([
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
       ]);
     });
   });
@@ -139,11 +139,11 @@ describe('SubmitSectionListComponent', () => {
 
     it('should display all sections as in progress', () => {
       expect(page.sectionStatuses.map((st) => st.textContent.trim())).toEqual([
-        'in progress',
-        'in progress',
-        'in progress',
-        'in progress',
-        'in progress',
+        'In progress',
+        'In progress',
+        'In progress',
+        'In progress',
+        'In progress',
       ]);
     });
 
@@ -184,11 +184,11 @@ describe('SubmitSectionListComponent', () => {
 
     it('should display sections as in progress and determination as cannot start yet', () => {
       expect(page.sectionStatuses.map((st) => st.textContent.trim())).toEqual([
-        'in progress',
-        'in progress',
-        'in progress',
-        'in progress',
-        'cannot start yet',
+        'In progress',
+        'In progress',
+        'In progress',
+        'In progress',
+        'Cannot start yet',
       ]);
     });
 
@@ -229,11 +229,11 @@ describe('SubmitSectionListComponent', () => {
 
     it('should display sections as completed and determination as not started', () => {
       expect(page.sectionStatuses.map((st) => st.textContent.trim())).toEqual([
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'not started',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Not started',
       ]);
     });
 

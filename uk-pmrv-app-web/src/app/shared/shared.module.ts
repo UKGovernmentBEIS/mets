@@ -156,6 +156,7 @@ import { RecommendedImprovementsGroupComponent } from './components/review-group
 import { VerifyEmissionsReductionClaimGroupComponent } from './components/review-groups/verify-emissions-reduction-claim-group/verify-emissions-reduction-claim-group.component';
 import { SourceStreamsSummaryTableComponent } from './components/source-streams-summary-table/source-streams-summary-table.component';
 import { SummaryDownloadFilesComponent } from './components/summary-download-files/summary-download-files.component';
+import { TaskStatusTagComponent } from './components/task-status-tag/task-status-tag.component';
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { TimelineItemComponent } from './components/timeline/timeline-item.component';
 import { TransferInstallationSummaryTemplateComponent } from './components/transfer-installation-summary-template/transfer-installation-summary-template.component';
@@ -176,7 +177,6 @@ import { FileUploadListComponent } from './file-upload-list/file-upload-list.com
 import { GroupedSummaryListDirective } from './grouped-summary-list/grouped-summary-list.directive';
 import { HighlightDiffComponent } from './highlight-diff/highlight-diff.component';
 import { HoldingCompanyFormComponent } from './holding-company-form';
-import { IdentityBarComponent } from './identity-bar/identity-bar.component';
 import { IncorporateHeaderComponent } from './incorporate-header/incorporate-header.component';
 import { ConvertLinksDirective } from './markdown/convert-links.directive';
 import { RouterLinkComponent } from './markdown/router-link.component';
@@ -311,7 +311,6 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     HighlightDiffComponent,
     HoldingCompanyFormComponent,
     HsetiWorkFlowIdPipe,
-    IdentityBarComponent,
     VerifyEmissionsReductionClaimGroupComponent,
     IncorporateHeaderComponent,
     InformationSourcesSummaryTemplateComponent,
@@ -391,6 +390,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     TaskHeaderInfoComponent,
     TaskItemComponent,
     TaskItemListComponent,
+    TaskStatusTagComponent,
     TaskListComponent,
     TaskSectionComponent,
     TextEllipsisPipe,
@@ -512,7 +512,6 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     HsetiWorkFlowIdPipe,
     HoldingCompanyFormComponent,
     VerifyEmissionsReductionClaimGroupComponent,
-    IdentityBarComponent,
     IncorporateHeaderComponent,
     InformationSourcesSummaryTemplateComponent,
     InherentCo2GroupComponent,
@@ -591,6 +590,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     TaskHeaderInfoComponent,
     TaskItemComponent,
     TaskItemListComponent,
+    TaskStatusTagComponent,
     TaskListComponent,
     TaskSectionComponent,
     TextEllipsisPipe,

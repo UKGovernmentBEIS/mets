@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, Observable, startWith, switchMap } from 'rxjs';
+import { combineLatest, first, map, switchMap } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
@@ -26,14 +26,13 @@ export class DirectlyAttributableEmissionsFAComponent extends ProductBenchmarkCo
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));
 
-  heatBenchmark = ['HEAT_BENCHMARK_CL', 'HEAT_BENCHMARK_NON_CL', 'DISTRICT_HEATING_NON_CL'];
-
-  readonly isFileUploaded$: Observable<boolean> = this.form.get('supportingFiles')?.valueChanges?.pipe(
-    startWith(this.form.get('supportingFiles')?.value),
-    map((value) => value?.length > 0),
-  );
-
-  heatEmissions = ['HEAT_BENCHMARK_CL', 'HEAT_BENCHMARK_NON_CL', 'DISTRICT_HEATING_NON_CL'];
+  heatEmissions = [
+    'HEAT_BENCHMARK_CL',
+    'HEAT_BENCHMARK_NON_CL',
+    'DISTRICT_HEATING_NON_CL',
+    'HEAT_BENCHMARK_CL_CBAM',
+    'HEAT_BENCHMARK_CL_NON_CBAM',
+  ];
 
   constructor(
     @Inject(PERMIT_TASK_FORM) readonly form: UntypedFormGroup,

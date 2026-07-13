@@ -16,8 +16,8 @@
             <div
               govuk-checkboxes
               formControlName="relatedNotifications"
-              legend="Select any notifications related to this issue (optional)"
-              legendSize="normal">
+              label="Select any notifications related to this issue (optional)"
+              labelSize="normal">
               <govuk-checkbox
                 *ngFor="let userToNotify of usersToNotify"
                 [value]="userToNotify"

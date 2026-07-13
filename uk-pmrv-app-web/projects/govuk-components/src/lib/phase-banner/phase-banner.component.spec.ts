@@ -8,7 +8,7 @@ describe('PhaseBannerComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
+    imports: [PhaseBannerComponent],
     template: `
       <govuk-phase-banner [phase]="phase">Test content</govuk-phase-banner>
     `,
@@ -19,7 +19,7 @@ describe('PhaseBannerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PhaseBannerComponent, TestComponent],
+      imports: [PhaseBannerComponent, TestComponent],
     }).compileComponents();
   });
 

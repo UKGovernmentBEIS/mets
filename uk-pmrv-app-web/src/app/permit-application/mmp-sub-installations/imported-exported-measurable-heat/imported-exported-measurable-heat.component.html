@@ -18,8 +18,8 @@
 
       <div
         govuk-checkboxes
-        legend="Is any measurable heat imported to or exported from this sub-installation?"
-        legendSize="medium"
+        label="Is any measurable heat imported to or exported from this sub-installation?"
+        labelSize="medium"
         hint="Select all that apply."
         formControlName="fuelBurnCalculationTypes">
         <govuk-checkbox value="MEASURABLE_HEAT_IMPORTED" label="Measurable heat imported"></govuk-checkbox>
@@ -46,7 +46,7 @@
             [formGroupName]="i"
             govukFieldset
             id="dataSource-def-{{ i }}">
-            <legend govukLegend>Data source {{ i + 1 }}</legend>
+            <legend govukLegend legendSize="medium">Data source {{ i + 1 }}</legend>
 
             <button
               (click)="dataSourcesFormArray.removeAt(i)"

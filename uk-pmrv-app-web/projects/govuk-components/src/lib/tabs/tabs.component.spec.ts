@@ -1,8 +1,8 @@
+import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, Router } from '@angular/router';
 
 import { delay, of } from 'rxjs';
 
@@ -16,12 +16,14 @@ describe('TabsComponent', () => {
   let router: Router;
 
   @Component({
-    standalone: false,
+    imports: [TabsComponent, TestComponent, TabDirective, AsyncPipe],
     template: `
       <govuk-tabs>
-        <ng-template govukTab *ngFor="let tab of tabs$ | async" [id]="tab.id" [label]="tab.label">
-          {{ tab.body }}
-        </ng-template>
+        @for (tab of tabs$ | async; track tab) {
+          <ng-template govukTab [id]="tab.id" [label]="tab.label">
+            {{ tab.body }}
+          </ng-template>
+        }
         <ng-template govukTab id="paragraph2" label="Another paragraph">
           <p>This is another paragraph</p>
         </ng-template>
@@ -41,8 +43,8 @@ describe('TabsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TabsComponent, TestComponent, TabDirective],
-      imports: [RouterTestingModule],
+      imports: [TabsComponent, TestComponent, TabDirective],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 

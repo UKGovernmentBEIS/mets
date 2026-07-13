@@ -14,13 +14,13 @@ The legend element must be the first element of the fieldset, followed by an opt
 
 `govukLegend`:
 
-- `size` - Adjusts the legend size. Defaults to medium.
+- `legendSize` - Adjusts the legend size. Defaults to medium.
 
 ### Example
 
 ```html
 <fieldset govukFieldset id="field">
-  <legend govukLegend size="heading">
+  <legend govukLegend legendSize="heading">
     <h1>Title</h1>
   </legend>
   <div>
@@ -32,8 +32,11 @@ The legend element must be the first element of the fieldset, followed by an opt
 
 ```html
 <fieldset govukFieldset>
-  <legend govukLegend size="large">Object <span class="govuk-visually-hidden">help</span></legend>
-  <span govukFieldsetHint>Your name is useful in our survey.</span>
+  <legend govukLegend legendSize="large">
+    Object
+    <span class="govuk-visually-hidden">help</span>
+  </legend>
+  <div govukFieldsetHint>Your name is useful in our survey.</div>
   <div>
     <label>Some field</label>
     <input />

@@ -7,6 +7,8 @@ The radio component supports conditional content for options. We can achieve tha
 each `govuk-radio-option`, marked with the `govukConditionalContent` directive.
 Child controls are automatically disabled when the content is hidden.
 
+Attribute `govukRadioAdditionalContent` can be used to project additional content that is positioned after the hint and before the error messages.
+
 ### Inputs
 
 - `legend` - A heading as a title.
@@ -35,12 +37,13 @@ Child controls are automatically disabled when the content is hidden.
 
 ```html
 <div govuk-radio [formControl]="exampleControl">
-  <govuk-radio-option label="Example 1" [value]="1">
-    <ng-container govukConditionalContent>Example conditional content for option 1</ng-container>
-  </govuk-radio-option>
-  <govuk-radio-option label="Example 2" [value]="2"></govuk-radio-option>
-  <govuk-radio-option label="Example 3" [value]="3">
-    <ng-container govukConditionalContent>Example conditional content for option 3</ng-container>
-  </govuk-radio-option>
+  <ng-container govukRadioAdditionalContent>
+    <govuk-details summary="Something is going on!">
+      <div>Something something</div>
+      <strong>Something else</strong>
+    </govuk-details>
+  </ng-container>
+  <govuk-radio-option label="Example 1" [value]="1" />
+  <govuk-radio-option label="Example 2" [value]="2" />
 </div>
 ```

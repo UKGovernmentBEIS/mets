@@ -18,7 +18,7 @@ describe('TransferredCO2Component', () => {
 
   class Page extends BasePage<TransferredCO2Component> {
     get staticSections(): HTMLAnchorElement[] {
-      return Array.from(this.queryAll<HTMLAnchorElement>('ul > li > span.app-task-list__task-name > a'));
+      return Array.from(this.queryAll<HTMLAnchorElement>('ul > li span.app-task-list__task-name > a'));
     }
   }
 

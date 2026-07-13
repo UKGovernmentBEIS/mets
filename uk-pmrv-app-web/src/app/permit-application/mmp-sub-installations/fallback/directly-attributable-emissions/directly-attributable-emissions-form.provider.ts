@@ -30,9 +30,13 @@ export const directlyAttributableEmissionsAddFormFactory = {
       {
         attribution: [
           (fallbackApproach?.directlyAttributableEmissions as DirectlyAttributableEmissionsFA)?.attribution ?? null,
-          ['HEAT_BENCHMARK_CL', 'HEAT_BENCHMARK_NON_CL', 'DISTRICT_HEATING_NON_CL'].includes(
-            fallbackApproach?.subInstallationType,
-          )
+          [
+            'HEAT_BENCHMARK_CL',
+            'HEAT_BENCHMARK_NON_CL',
+            'DISTRICT_HEATING_NON_CL',
+            'HEAT_BENCHMARK_CL_CBAM',
+            'HEAT_BENCHMARK_CL_NON_CBAM',
+          ].includes(fallbackApproach?.subInstallationType)
             ? [GovukValidators.maxLength(15000, 'Enter up to 15000 characters')]
             : [
                 GovukValidators.required('Explain how directly attributable emissions are attributed'),

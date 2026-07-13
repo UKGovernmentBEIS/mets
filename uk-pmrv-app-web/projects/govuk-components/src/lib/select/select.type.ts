@@ -1,4 +1,4 @@
-export type GovukTextWidthClass =
+export type GovukSelectWidthClass =
   | 'govuk-!-width-full'
   | 'govuk-!-width-three-quarters'
   | 'govuk-!-width-two-thirds'

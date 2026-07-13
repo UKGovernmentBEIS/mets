@@ -29,6 +29,7 @@ export class AlrActivityLevelsComponent {
   private readonly requestMetadata = this.alrService.requestMetadata as Signal<ALRRequestMetaData>;
   private readonly isEditable = this.alrService.isEditable;
   private readonly payload = this.alrService.payload as Signal<ALRApplicationRegulatorReviewSubmitRequestTaskPayload>;
+  year = this.alrService.year;
 
   vm: Signal<ViewModel> = computed(() => {
     const isEditable = this.isEditable();

@@ -31,9 +31,7 @@ describe('ChangesComponent', () => {
     }
 
     get errorSummaryListContents(): string[] {
-      return Array.from(this.errorSummary.querySelectorAll<HTMLAnchorElement>('a')).map((anchor) =>
-        anchor.textContent.trim(),
-      );
+      return Array.from(this.errorSummary.querySelectorAll('li')).map((item) => item.textContent.trim());
     }
 
     get removeButtons(): HTMLButtonElement[] {

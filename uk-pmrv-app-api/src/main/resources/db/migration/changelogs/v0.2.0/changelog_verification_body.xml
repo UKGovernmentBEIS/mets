@@ -63,4 +63,16 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="0_2_1_add_third_party_data_provider_column_in_verification_body_table" author="P44065">
+        <addColumn tableName="verification_body">
+            <column name="third_party_data_provider_id" type="bigint" />
+        </addColumn>
+        <rollback>
+            <sql>
+                alter table verification_body
+                drop column if exists third_party_data_provider_id;
+            </sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

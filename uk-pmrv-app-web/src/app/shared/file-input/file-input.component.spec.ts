@@ -106,7 +106,7 @@ describe('FileInputComponent', () => {
     fixture.detectChanges();
 
     expect(control.touched).toBeTruthy();
-    expect(page.fileText.textContent).toEqual('Big file must be smaller than 1MB');
+    expect(page.fileText.textContent.trim()).toEqual('Big file must be smaller than 1MB');
     expect(control.invalid).toBeTruthy();
     expect(control.errors).toEqual({ 'maxFileSize-0': 'Big file must be smaller than 1MB' });
   });
@@ -120,12 +120,12 @@ describe('FileInputComponent', () => {
     page.file = new File(['test content'], 'New file');
     uploadSubject.next({ type: HttpEventType.UploadProgress, loaded: 5, total: 15 });
     fixture.detectChanges();
-    expect(page.fileText.textContent.trim()).toEqual('New file 33%');
+    expect(page.fileText.textContent.trim()).toEqual('New file33%');
 
     uploadSubject.next({ type: HttpEventType.UploadProgress, loaded: 10, total: 15 });
     fixture.detectChanges();
 
-    expect(page.fileText.textContent).toEqual('New file 67%');
+    expect(page.fileText.textContent.trim()).toEqual('New file67%');
 
     uploadSubject.next(new HttpResponse({ status: HttpStatuses.Ok, body: { uuid: 'abcd' } }));
     fixture.detectChanges();

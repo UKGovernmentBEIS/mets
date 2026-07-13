@@ -1,53 +1,56 @@
-import { DOCUMENT, KeyValue } from '@angular/common';
+import { AsyncPipe, KeyValuePipe } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  DOCUMENT,
   ElementRef,
-  Inject,
-  Input,
+  inject,
+  input,
   OnChanges,
-  QueryList,
-  ViewChild,
-  ViewChildren,
+  viewChild,
+  viewChildren,
 } from '@angular/core';
 import { AbstractControl, FormControlStatus, NgForm, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
+import { RouterLink } from '@angular/router';
 
 import { map, Observable, startWith, tap } from 'rxjs';
 
 import { FormService } from '../form/form.service';
-import { NestedMessageValidationErrors } from './nested-message-validation-errors';
+import { FlatSummaryError, NestedMessageValidationErrors } from './nested-message-validation-errors';
 
 @Component({
   selector: 'govuk-error-summary',
-  standalone: false,
+  imports: [RouterLink, KeyValuePipe, AsyncPipe],
   templateUrl: './error-summary.component.html',
+  styleUrl: './error-summary.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorSummaryComponent implements OnChanges, AfterViewInit {
-  @Input() form: UntypedFormGroup | NgForm;
+  private readonly document = inject<Document>(DOCUMENT);
+  private readonly formService = inject(FormService);
+  private readonly title = inject(Title);
 
-  @ViewChildren('anchor', { read: ElementRef }) inputs: QueryList<ElementRef<HTMLAnchorElement>>;
-  @ViewChild('container', { read: ElementRef }) container: ElementRef<HTMLDivElement>;
+  readonly form = input<UntypedFormGroup | NgForm>();
 
-  errorList$: Observable<NestedMessageValidationErrors>;
+  readonly inputs = viewChildren('anchor', { read: ElementRef });
+  readonly container = viewChild('container', { read: ElementRef });
 
-  private formControl: UntypedFormGroup;
+  errorList$: Observable<FlatSummaryError[]>;
 
-  constructor(
-    @Inject(DOCUMENT) private readonly document,
-    private readonly formService: FormService,
-    private readonly title: Title,
-  ) {}
+  private formGroup: UntypedFormGroup;
 
   ngOnChanges(): void {
-    this.formControl = this.form instanceof UntypedFormGroup ? this.form : this.form.control;
+    const form = this.form();
+    this.formGroup = form instanceof UntypedFormGroup ? form : form.control;
 
-    const statusChanges: Observable<FormControlStatus> = this.form.statusChanges;
+    const statusChanges: Observable<FormControlStatus> = this.form().statusChanges;
     this.errorList$ = statusChanges.pipe(
-      startWith(this.form.status),
-      map((status) => status === 'INVALID' && this.getAbstractControlErrors(this.formControl)),
+      startWith(this.form().status),
+      map((status) => status === 'INVALID' && this.getAbstractControlErrors(this.formGroup)),
+      map((errors) => this.flattenErrors(errors).sort(this.sortByPosition)),
+      map((errors) => (errors.length ? errors : null)),
       tap((errors) => {
         const currentTitle = this.title.getTitle();
         const prefix = 'Error: ';
@@ -62,11 +65,12 @@ export class ErrorSummaryComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.container?.nativeElement?.scrollIntoView) {
-      this.container.nativeElement.scrollIntoView();
+    const container = this.container();
+    if (container?.nativeElement?.scrollIntoView) {
+      container.nativeElement.scrollIntoView();
     }
-    if (this.container?.nativeElement?.focus) {
-      this.container.nativeElement.focus();
+    if (container?.nativeElement?.focus) {
+      container.nativeElement.focus();
     }
   }
 
@@ -107,18 +111,24 @@ export class ErrorSummaryComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  sortByPosition = (
-    a: KeyValue<string, NestedMessageValidationErrors>,
-    b: KeyValue<string, NestedMessageValidationErrors>,
-  ) => {
-    const combinedSelector = [a, b]
-      .map(({ value }) => this.findFirstLeafSelector(value) ?? '')
+  private flattenErrors(errors: NestedMessageValidationErrors, flattenedErrors = []): FlatSummaryError[] {
+    if (errors.self) {
+      flattenedErrors.push({ path: errors.path, self: errors.self });
+    }
+    if (errors.controls) {
+      Object.values(errors.controls).forEach((value) => this.flattenErrors(value, flattenedErrors));
+    }
+    return flattenedErrors;
+  }
+
+  private sortByPosition = (a: FlatSummaryError, b: FlatSummaryError) => {
+    const combinedSelector = [a.path, b.path]
       .filter((selector) => !!selector)
       .map((selector) => `#${this.sanitizeSelector(selector)}`)
       .join(', ');
     const elements: HTMLElement[] = Array.from(this.document.querySelectorAll(combinedSelector));
-    const aIndex = elements.findIndex((element) => element.id === a.key);
-    const bIndex = elements.findIndex((element) => element.id === b.key);
+    const aIndex = elements.findIndex((element) => element.id === a.path);
+    const bIndex = elements.findIndex((element) => element.id === b.path);
 
     return aIndex === -1 ? 1 : bIndex === -1 ? -1 : aIndex - bIndex;
   };
@@ -145,13 +155,5 @@ export class ErrorSummaryComponent implements OnChanges, AfterViewInit {
 
   private sanitizeSelector(selector: string): string {
     return selector.replace(/\./g, '\\.');
-  }
-
-  private findFirstLeafSelector(error: NestedMessageValidationErrors): string {
-    return error.controls
-      ? Object.values(error.controls)
-          .map((control) => control.path || this.findFirstLeafSelector(control))
-          .find((path) => path)
-      : error.path;
   }
 }

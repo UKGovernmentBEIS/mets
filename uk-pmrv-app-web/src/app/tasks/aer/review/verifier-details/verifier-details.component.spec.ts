@@ -30,7 +30,7 @@ describe('VerifierDetailsComponent', () => {
       return this.query<HTMLHeadingElement>('h1').textContent.trim();
     }
     get sections(): HTMLUListElement[] {
-      return Array.from(this.queryAll<HTMLUListElement>('.app-task-list__item > .app-task-list__task-name'));
+      return Array.from(this.queryAll<HTMLUListElement>('.app-task-list__item .app-task-list__task-name'));
     }
     get decisionSummaryListValues() {
       return this.queryAll<HTMLDivElement>('app-verification-review-group-decision .govuk-summary-list__row')

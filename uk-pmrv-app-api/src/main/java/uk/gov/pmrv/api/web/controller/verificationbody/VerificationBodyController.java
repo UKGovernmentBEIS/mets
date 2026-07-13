@@ -32,6 +32,7 @@ import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyUpdateStatusD
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyDeletionService;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyQueryService;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyUpdateService;
+import uk.gov.pmrv.api.verificationbody.service.VerificationBodyViewService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
 import uk.gov.pmrv.api.web.orchestrator.verificationbody.dto.VerificationBodyCreationDTO;
@@ -50,6 +51,7 @@ public class VerificationBodyController {
 
     private final VerificationBodyAndUserOrchestrator verificationBodyAndUserOrchestrator;
     private final VerificationBodyQueryService verificationBodyQueryService;
+    private final VerificationBodyViewService verificationBodyViewService;
     private final VerificationBodyUpdateService verificationBodyUpdateService;
     private final VerificationBodyDeletionService verificationBodyDeletionService;
 
@@ -66,7 +68,7 @@ public class VerificationBodyController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @AuthorizedRole(roleType = REGULATOR)
     public ResponseEntity<VerificationBodyInfoResponseDTO> getVerificationBodies(@Parameter(hidden = true) AppUser appUser) {
-        return new ResponseEntity<>(verificationBodyQueryService.getVerificationBodies(appUser),
+        return new ResponseEntity<>(verificationBodyViewService.getVerificationBodies(appUser),
                 HttpStatus.OK);
     }
 
@@ -80,7 +82,7 @@ public class VerificationBodyController {
     public ResponseEntity<VerificationBodyDTO> getVerificationBodyById(
             @Parameter(description = "The verification body id") @PathVariable("id") Long verificationBodyId) {
         return new ResponseEntity<>(
-                verificationBodyQueryService.getVerificationBodyById(verificationBodyId),
+                verificationBodyQueryService.getVerificationBodyDTOById(verificationBodyId),
                 HttpStatus.OK);
     }
 

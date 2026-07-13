@@ -28,7 +28,13 @@ export const fuelInputRelevantEmissionFactorAddFormFactory = {
       ?.find((product) => product.subInstallationNo === route.snapshot.paramMap.get('subInstallationNo'));
 
     const faFactor: FuelInputAndRelevantEmissionFactorFA = fallbackApproach?.fuelInputAndRelevantEmissionFactor;
-    const validHeatTypes = new Set(['HEAT_BENCHMARK_CL', 'HEAT_BENCHMARK_NON_CL', 'DISTRICT_HEATING_NON_CL']);
+    const validHeatTypes = new Set([
+      'HEAT_BENCHMARK_CL',
+      'HEAT_BENCHMARK_NON_CL',
+      'DISTRICT_HEATING_NON_CL',
+      'HEAT_BENCHMARK_CL_CBAM',
+      'HEAT_BENCHMARK_CL_NON_CBAM',
+    ]);
     const isHeatFA = validHeatTypes.has(fallbackApproach?.subInstallationType);
     const heatFAExists = (faFactor as FuelInputAndRelevantEmissionFactorHeatFA)?.exists;
     const isHeatFAExists = heatFAExists === true;

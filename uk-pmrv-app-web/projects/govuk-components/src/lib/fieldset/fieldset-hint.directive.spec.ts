@@ -9,14 +9,14 @@ describe('FieldsetHintDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
-    template: '<span govukFieldsetHint>This is a hint</span>',
+    imports: [FieldsetHintDirective],
+    template: '<div govukFieldsetHint>This is a hint</div>',
   })
   class TestComponent {}
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FieldsetHintDirective, TestComponent],
+      imports: [FieldsetHintDirective, TestComponent],
     }).compileComponents();
   });
 

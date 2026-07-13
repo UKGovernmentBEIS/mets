@@ -15,7 +15,6 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -31,9 +30,6 @@ class RequestTaskDefaultAssignmentServiceTest {
     private RequestTaskDefaultAssignmentService requestTaskDefaultAssignmentService;
 
     @Mock
-    private AuthorizationRulesQueryService authorizationRulesQueryService;
-
-    @Mock
     private OperatorRequestTaskDefaultAssignmentService operatorRequestTaskDefaultAssignmentService;
 
     @Mock
@@ -41,7 +37,7 @@ class RequestTaskDefaultAssignmentServiceTest {
 
     @BeforeEach
     void setup() {
-        requestTaskDefaultAssignmentService = new RequestTaskDefaultAssignmentService(authorizationRulesQueryService,
+        requestTaskDefaultAssignmentService = new RequestTaskDefaultAssignmentService(
             List.of(operatorRequestTaskDefaultAssignmentService, regulatorRequestTaskDefaultAssignmentService));
     }
 
@@ -49,12 +45,9 @@ class RequestTaskDefaultAssignmentServiceTest {
     void assignDefaultAssigneeToTask_operator() {
         RequestTask requestTask = RequestTask.builder().type(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE).build();
 
-        when(authorizationRulesQueryService
-            .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-            .thenReturn(Optional.of(RoleTypeConstants.OPERATOR));
         when(operatorRequestTaskDefaultAssignmentService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
 
-        requestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
+        requestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(RoleTypeConstants.OPERATOR, requestTask);
 
         verify(operatorRequestTaskDefaultAssignmentService, times(1)).assignDefaultAssigneeToTask(requestTask);
         verify(regulatorRequestTaskDefaultAssignmentService, never()).assignDefaultAssigneeToTask(any());
@@ -64,13 +57,10 @@ class RequestTaskDefaultAssignmentServiceTest {
     void assignDefaultAssigneeToTask_regulator() {
         RequestTask requestTask = RequestTask.builder().type(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW).build();
 
-        when(authorizationRulesQueryService
-            .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-            .thenReturn(Optional.of(RoleTypeConstants.REGULATOR));
         when(operatorRequestTaskDefaultAssignmentService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
         when(regulatorRequestTaskDefaultAssignmentService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
 
-        requestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
+        requestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(RoleTypeConstants.REGULATOR, requestTask);
 
         verify(regulatorRequestTaskDefaultAssignmentService, times(1)).assignDefaultAssigneeToTask(requestTask);
         verify(operatorRequestTaskDefaultAssignmentService, never()).assignDefaultAssigneeToTask(any());
@@ -80,13 +70,10 @@ class RequestTaskDefaultAssignmentServiceTest {
     void assignDefaultAssigneeToTask_no_rule_for_role() {
         RequestTask requestTask = RequestTask.builder().type(RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW).build();
 
-        when(authorizationRulesQueryService
-            .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-            .thenReturn(Optional.empty());
         when(operatorRequestTaskDefaultAssignmentService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
         when(regulatorRequestTaskDefaultAssignmentService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
 
-        requestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
+        requestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(null, requestTask);
 
         verify(operatorRequestTaskDefaultAssignmentService, times(1)).getRoleType();
         verify(regulatorRequestTaskDefaultAssignmentService, times(1)).getRoleType();

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.integration.model.metscontacts.MetsContactsEvent;
 import uk.gov.pmrv.api.account.domain.Account;
+import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.integration.registry.accountcontacts.common.AccountContactRegistryIntegrationUtilityService;
 import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
 
@@ -32,6 +33,13 @@ public class InstallationAccountContactNotifyRegistryService {
             return;
         }
 
+        if(InstallationAccountStatus.TRANSFERRED.equals(account.getStatus())) {
+            log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.INSTALLATION_SERVICE_KEY, account.getId(),
+                    NotifyRegistryUtils.ACCOUNT_CONTACT_INTEGRATION_POINT_KEY, "Unable to publish account contact " +
+                            "event to registry. The account is in Transferred status");
+            return;
+        }
+
         MetsContactsEvent metsContactsEvent = utilityService.buildMetsContactsEvent(account);
 
         registryProducer.produce(metsContactsEvent);
@@ -40,7 +48,5 @@ public class InstallationAccountContactNotifyRegistryService {
                 NotifyRegistryUtils.ACCOUNT_CONTACT_INTEGRATION_POINT_KEY, "Account contact event published to registry");
 
     }
-
-
 
 }

@@ -1,22 +1,28 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 
 import { RequestActionReportService } from '@shared/services/request-action-report.service';
-import { mockClass } from '@testing';
+import { ActivatedRouteStub, mockClass } from '@testing';
 
 import { OperatorSubmittedComponent } from './operator-submitted.component';
 
 describe('OperatorSubmittedComponent', () => {
   let component: OperatorSubmittedComponent;
   let fixture: ComponentFixture<OperatorSubmittedComponent>;
+  let route: ActivatedRouteStub;
 
   const requestActionReportService = mockClass(RequestActionReportService);
 
   beforeEach(async () => {
+    route = new ActivatedRouteStub({ 'request-id': 1 });
     await TestBed.configureTestingModule({
       declarations: [OperatorSubmittedComponent],
-      imports: [HttpClientTestingModule],
-      providers: [{ provide: RequestActionReportService, useValue: requestActionReportService }],
+      providers: [
+        provideHttpClient(),
+        { provide: RequestActionReportService, useValue: requestActionReportService },
+        { provide: ActivatedRoute, useValue: route },
+      ],
     }).compileComponents();
   });
 

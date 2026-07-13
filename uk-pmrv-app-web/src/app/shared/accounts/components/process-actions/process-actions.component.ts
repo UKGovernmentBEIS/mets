@@ -172,7 +172,7 @@ export class ProcessActionsComponent implements OnInit {
       ],
     },
     {
-      title: 'Start a determination of activity level change',
+      title: 'Start a determination of activity level',
       properties: [
         {
           button: 'Start determination of activity level',

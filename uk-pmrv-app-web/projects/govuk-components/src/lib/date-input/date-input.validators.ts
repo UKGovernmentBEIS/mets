@@ -47,9 +47,9 @@ export class DateInputValidators {
     return !year || !month || !day ? null : new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
   }
 
-  static combinedRulesValidator = (fg: UntypedFormGroup, isRequired = false) => {
-    return (fg: UntypedFormGroup) => {
-      return this.getCombinedValidationResults(fg, isRequired);
+  static combinedRulesValidator = (fg: UntypedFormGroup, isRequired = false): ValidatorFn => {
+    return (control: AbstractControl) => {
+      return this.getCombinedValidationResults(control as UntypedFormGroup, isRequired);
     };
   };
 

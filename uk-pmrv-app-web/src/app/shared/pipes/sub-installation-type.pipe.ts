@@ -53,8 +53,16 @@ export class SubInstallationTypePipe implements PipeTransform {
         return 'Hot metal';
       case 'HYDROGEN':
         return 'Hydrogen';
+      case 'HYDROGEN_CBAM':
+        return 'Hydrogen CBAM covered';
+      case 'HYDROGEN_NON_CBAM':
+        return 'Hydrogen non-CBAM covered';
       case 'IRON_CASTING':
         return 'Iron casting';
+      case 'IRON_CASTING_CBAM':
+        return 'Iron casting CBAM covered';
+      case 'IRON_CASTING_NON_CBAM':
+        return 'Iron casting non-CBAM covered';
       case 'LIME':
         return 'Lime';
       case 'LONG_FIBRE_KRAFT_PULP':
@@ -115,16 +123,28 @@ export class SubInstallationTypePipe implements PipeTransform {
         return 'White cement clinker';
       case 'HEAT_BENCHMARK_CL':
         return 'Heat benchmark exposed to carbon leakage';
+      case 'HEAT_BENCHMARK_CL_CBAM':
+        return 'Heat benchmark exposed to carbon leakage CBAM covered';
+      case 'HEAT_BENCHMARK_CL_NON_CBAM':
+        return 'Heat benchmark exposed to carbon leakage non-CBAM covered';
       case 'HEAT_BENCHMARK_NON_CL':
         return 'Heat benchmark not exposed to carbon leakage';
       case 'DISTRICT_HEATING_NON_CL':
         return 'District Heating';
       case 'FUEL_BENCHMARK_CL':
         return 'Fuel benchmark exposed to carbon leakage';
+      case 'FUEL_BENCHMARK_CL_CBAM':
+        return 'Fuel benchmark exposed to carbon leakage CBAM covered';
+      case 'FUEL_BENCHMARK_CL_NON_CBAM':
+        return 'Fuel benchmark exposed to carbon leakage non-CBAM covered';
       case 'FUEL_BENCHMARK_NON_CL':
         return 'Fuel benchmark not exposed to carbon leakage';
       case 'PROCESS_EMISSIONS_CL':
         return 'Process emissions exposed to carbon leakage';
+      case 'PROCESS_EMISSIONS_CL_CBAM':
+        return 'Process emissions exposed to carbon leakage CBAM covered';
+      case 'PROCESS_EMISSIONS_CL_NON_CBAM':
+        return 'Process emissions exposed to carbon leakage non-CBAM covered';
       case 'PROCESS_EMISSIONS_NON_CL':
         return 'Process emissions not exposed to carbon leakage';
       default:

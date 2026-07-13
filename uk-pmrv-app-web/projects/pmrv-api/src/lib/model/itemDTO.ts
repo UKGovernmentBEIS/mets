@@ -177,7 +177,6 @@ export interface ItemDTO {
     | 'NER_MAKE_PAYMENT'
     | 'NER_TRACK_PAYMENT'
     | 'NER_CONFIRM_PAYMENT'
-    | 'NER_AUTHORITY_RESPONSE'
     | 'DOAL_APPLICATION_SUBMIT'
     | 'DOAL_APPLICATION_PEER_REVIEW'
     | 'DOAL_WAIT_FOR_PEER_REVIEW'
@@ -409,5 +408,6 @@ export interface ItemDTO {
   competentAuthority?: 'ENGLAND' | 'NORTHERN_IRELAND' | 'OPRED' | 'SCOTLAND' | 'WALES';
   leName?: string;
   permitReferenceId?: string;
+  _new?: boolean;
   isNew?: boolean;
 }

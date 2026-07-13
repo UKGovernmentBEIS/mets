@@ -68,8 +68,8 @@ describe('OtherPermitsSummaryComponent', () => {
       expect(
         page.permits.map((permit) => Array.from(permit.querySelectorAll('dd')).map((dd) => dd.textContent)),
       ).toEqual([
-        ['Environmental Protection Regulations', '1234', 'FWW', 'GovUK'],
-        ['Seaside Regulations', '1253', 'Peacegreen', 'GovUK'],
+        [' Environmental Protection Regulations ', ' 1234 ', ' FWW ', ' GovUK '],
+        [' Seaside Regulations ', ' 1253 ', ' Peacegreen ', ' GovUK '],
       ]);
     });
 
@@ -93,7 +93,7 @@ describe('OtherPermitsSummaryComponent', () => {
       expect(page.permits).toHaveLength(1);
       expect(
         page.permits.map((permit) => Array.from(permit.querySelectorAll('dd')).map((dd) => dd.textContent)),
-      ).toEqual([['No']]);
+      ).toEqual([[' No ']]);
     });
   });
 });

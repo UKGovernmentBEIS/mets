@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/prefer-host-metadata-property */
 import {
   ChangeDetectorRef,
   ComponentRef,
@@ -6,45 +5,37 @@ import {
   DoCheck,
   ElementRef,
   EmbeddedViewRef,
-  HostBinding,
-  Input,
+  inject,
+  input,
   OnDestroy,
   OnInit,
-  Optional,
   Renderer2,
-  Self,
   ViewContainerRef,
 } from '@angular/core';
 import { ControlContainer, FormGroupDirective, NgControl, NgForm } from '@angular/forms';
 
 import { BehaviorSubject, combineLatest, startWith, Subject, takeUntil, tap } from 'rxjs';
 
-import { ErrorMessageComponent } from '../../error-message/error-message.component';
+import { ErrorMessageComponent } from '../../error-message';
 
-@Directive({
-  selector: '[govukFormError]',
-  standalone: false,
-})
+@Directive({ selector: '[govukFormError]', host: { '[attr.id]': 'identifier' } })
 export class FormErrorDirective implements OnDestroy, OnInit, DoCheck {
-  @Input() id: string;
+  private readonly formControl = inject(NgControl, { self: true });
+  private readonly elementRef = inject(ElementRef);
+  private readonly viewContainer = inject(ViewContainerRef);
+  private readonly renderer = inject(Renderer2);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly container = inject(ControlContainer, { optional: true });
+
+  readonly id = input<string>();
 
   private readonly destroy$ = new Subject<void>();
   private touch$ = new BehaviorSubject(false);
   private errorComponent: ComponentRef<ErrorMessageComponent>;
   private isSubmitted = false;
 
-  constructor(
-    @Self() private readonly formControl: NgControl,
-    private readonly elementRef: ElementRef,
-    private readonly viewContainer: ViewContainerRef,
-    private readonly renderer: Renderer2,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-    @Optional() private readonly container: ControlContainer,
-  ) {}
-
-  @HostBinding('attr.id')
   get identifier(): string {
-    return this.id;
+    return this.id();
   }
 
   private get nativeElement(): HTMLElement {
@@ -82,7 +73,7 @@ export class FormErrorDirective implements OnDestroy, OnInit, DoCheck {
 
   private attachErrorComponent() {
     this.errorComponent = this.viewContainer.createComponent(ErrorMessageComponent);
-    this.errorComponent.instance.identifier = this.id;
+    this.errorComponent.instance.identifier.set(this.id());
 
     const htmlElement: HTMLElement = (this.errorComponent.hostView as EmbeddedViewRef<ErrorMessageComponent>)
       .rootNodes[0];
@@ -108,8 +99,7 @@ export class FormErrorDirective implements OnDestroy, OnInit, DoCheck {
           this.attachErrorComponent();
         }
 
-        this.errorComponent.instance.errors = this.formControl.errors;
-        this.errorComponent.changeDetectorRef.markForCheck();
+        this.errorComponent.setInput('errors', this.formControl.errors);
       }
 
       this.renderer.addClass(this.nativeElement, this.getErrorClass());

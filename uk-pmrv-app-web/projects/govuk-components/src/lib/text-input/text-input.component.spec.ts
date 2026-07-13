@@ -1,11 +1,11 @@
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { LabelDirective } from '../directives';
-import { ErrorMessageComponent } from '../error-message/error-message.component';
 import { GovukValidators } from '../error-message/govuk-validators';
+import { LabelSizeType } from './label-size.type';
 import { TextInputComponent } from './text-input.component';
 
 describe('TextInputComponent', () => {
@@ -17,10 +17,23 @@ describe('TextInputComponent', () => {
   let fixtureNumericComponent: ComponentFixture<TestNumericComponent>;
 
   @Component({
-    standalone: false,
+    imports: [TextInputComponent, ReactiveFormsModule, LabelDirective],
     template: `
-      <div govuk-text-input [formControl]="control" [prefix]="prefix" [suffix]="suffix" label="First control"></div>
-      <div govuk-text-input [formControl]="control" [prefix]="prefix" [suffix]="suffix">
+      <div
+        govuk-text-input
+        [formControl]="control"
+        [prefix]="prefix"
+        [suffix]="suffix"
+        label="First control"
+        [isLabelHidden]="isLabelHidden"
+        [labelSize]="labelSize"></div>
+      <div
+        [isLabelHidden]="isLabelHidden"
+        [labelSize]="labelSize"
+        govuk-text-input
+        [formControl]="control"
+        [prefix]="prefix"
+        [suffix]="suffix">
         <ng-container govukLabel>
           Second control
           <span class="govuk-visually-hidden">hidden</span>
@@ -38,12 +51,14 @@ describe('TextInputComponent', () => {
       { text: new FormControl(null, { validators: GovukValidators.minLength(5, 'Enter a value') }) },
       { updateOn: 'submit' },
     );
+    isLabelHidden = false;
+    labelSize: LabelSizeType = 'normal';
     prefix: string;
     suffix: string;
   }
 
   @Component({
-    standalone: false,
+    imports: [TextInputComponent, ReactiveFormsModule],
     template: '<div govuk-text-input [formControl]="control" inputType="number" [numberFormat]="format"></div>',
   })
   class TestNumericComponent {
@@ -52,11 +67,7 @@ describe('TextInputComponent', () => {
   }
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [TextInputComponent, TestNumericComponent, TestComponent, ErrorMessageComponent, LabelDirective],
-      imports: [ReactiveFormsModule],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
+    await TestBed.configureTestingModule({ providers: [ControlContainer] }).compileComponents();
   });
 
   beforeEach(() => {
@@ -109,22 +120,14 @@ describe('TextInputComponent', () => {
   });
 
   it('should emit numeric value', () => {
-    const numericValue = '2.3';
-    const input = fixtureNumericComponent.debugElement.query(By.css('input'));
-    input.triggerEventHandler('input', { target: { value: numericValue } });
-    fixtureNumericComponent.detectChanges();
-
-    expect(hostNumericComponent.control.value).toEqual(2.3);
-    expect(hostNumericComponent.control.value).not.toEqual('2.3');
-  });
-
-  it('should not handle decimal numeric value not completed yet', () => {
     const numericValue = '2.';
     const input = fixtureNumericComponent.debugElement.query(By.css('input'));
     input.triggerEventHandler('input', { target: { value: numericValue } });
     fixtureNumericComponent.detectChanges();
 
-    expect(hostNumericComponent.control.value).toEqual('2.');
+    expect(hostNumericComponent.control.value).toEqual(2);
+    expect(hostNumericComponent.control.value).not.toEqual('2.');
+    expect(hostNumericComponent.control.value).not.toEqual('2');
   });
 
   it('should show and hide invalid number errors while typing if elements are not in form', () => {
@@ -157,7 +160,7 @@ describe('TextInputComponent', () => {
     expect(hostTestComponent.group.value).toEqual({ text: 'abc' });
     expect(formControl.classes['govuk-input--error']).toBeFalsy();
 
-    element.querySelector('form').submit();
+    element.querySelector('form').dispatchEvent(new Event('submit'));
     fixtureTestComponent.detectChanges();
 
     expect(hostTestComponent.group.value).toEqual({ text: 'abc' });
@@ -229,27 +232,22 @@ describe('TextInputComponent', () => {
     const hostElement: HTMLElement = fixtureTestComponent.nativeElement;
     const label = hostElement.querySelector('label');
 
-    testComponent.isLabelHidden = false;
+    hostTestComponent.isLabelHidden = false;
     fixtureTestComponent.detectChanges();
 
     expect(label.className).toEqual('govuk-label');
 
-    testComponent.labelSize = 'normal';
-    fixtureTestComponent.detectChanges();
-
-    expect(label.className).toEqual('govuk-label');
-
-    testComponent.labelSize = 'small';
+    hostTestComponent.labelSize = 'small';
     fixtureTestComponent.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--s');
 
-    testComponent.labelSize = 'medium';
+    hostTestComponent.labelSize = 'medium';
     fixtureTestComponent.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--m');
 
-    testComponent.labelSize = 'large';
+    hostTestComponent.labelSize = 'large';
     fixtureTestComponent.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--l');

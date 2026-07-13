@@ -79,19 +79,19 @@ describe('N2oComponent', () => {
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent?.trim(),
+          el.querySelector('.app-task-list__tag').textContent?.trim(),
         ]),
       ).toEqual([
-        ['Add an emission point category', 'cannot start yet'],
-        ['Approach description', 'not started'],
-        ['Emission determination procedure', 'not started'],
-        ['Determination of reference period', 'not started'],
-        ['Operational management', 'not started'],
-        ['Determination of nitrous oxide emissions', 'not started'],
-        ['Determination of nitrous oxide concentration', 'not started'],
-        ['Determination of the quantity of product produced', 'not started'],
-        ['Quantity of materials', 'not started'],
-        ['Calculation of gas flow', 'not started'],
+        ['Add an emission point category', 'Cannot start yet'],
+        ['Approach description', 'Not started'],
+        ['Emission determination procedure', 'Not started'],
+        ['Determination of reference period', 'Not started'],
+        ['Operational management', 'Not started'],
+        ['Determination of nitrous oxide emissions', 'Not started'],
+        ['Determination of nitrous oxide concentration', 'Not started'],
+        ['Determination of the quantity of product produced', 'Not started'],
+        ['Quantity of materials', 'Not started'],
+        ['Calculation of gas flow', 'Not started'],
       ]);
     });
   });
@@ -151,26 +151,26 @@ describe('N2oComponent', () => {
       expect(page.tables.length).toEqual(2);
       expect(page.rows).toEqual([
         ['Measurement of nitrous oxide (N2O)', '0t', '0t', '0t', '47t'],
-        ['The big Ref Emission point 1: Major', '23.5 t (50%)', 'completed'],
-        ['UNDEFINED: Major', '23.5 t (50%)', 'needs review'],
+        ['The big Ref Emission point 1: Major', '23.5 t (50%)', 'Completed'],
+        ['UNDEFINED: Major', '23.5 t (50%)', 'Needs review'],
       ]);
 
       expect(page.tasks).toBeTruthy();
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent?.trim(),
+          el.querySelector('.app-task-list__tag').textContent?.trim(),
         ]),
       ).toEqual([
-        ['Approach description', 'not started'],
-        ['Emission determination procedure', 'not started'],
-        ['Determination of reference period', 'not started'],
-        ['Operational management', 'not started'],
-        ['Determination of nitrous oxide emissions', 'not started'],
-        ['Determination of nitrous oxide concentration', 'not started'],
-        ['Determination of the quantity of product produced', 'not started'],
-        ['Quantity of materials', 'not started'],
-        ['Calculation of gas flow', 'not started'],
+        ['Approach description', 'Not started'],
+        ['Emission determination procedure', 'Not started'],
+        ['Determination of reference period', 'Not started'],
+        ['Operational management', 'Not started'],
+        ['Determination of nitrous oxide emissions', 'Not started'],
+        ['Determination of nitrous oxide concentration', 'Not started'],
+        ['Determination of the quantity of product produced', 'Not started'],
+        ['Quantity of materials', 'Not started'],
+        ['Calculation of gas flow', 'Not started'],
       ]);
     });
   });

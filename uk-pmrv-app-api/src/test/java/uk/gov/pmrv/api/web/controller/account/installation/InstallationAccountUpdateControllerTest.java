@@ -249,7 +249,7 @@ class InstallationAccountUpdateControllerTest {
         final var legalEntityDTO = LegalEntityDTO.builder()
             .name("TEST_LE")
             .type(LegalEntityType.LIMITED_COMPANY)
-            .referenceNumber("TEST_LE_REG_NO")
+            .referenceNumber("AB123456")
             .address(
                 AddressDTO.builder()
                     .city("TEST_LE_CITY")

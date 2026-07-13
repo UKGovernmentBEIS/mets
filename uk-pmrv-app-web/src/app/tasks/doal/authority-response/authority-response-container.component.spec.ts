@@ -76,12 +76,12 @@ describe('AuthorityResponseContainerComponent', () => {
     });
 
     it('should display header', () => {
-      expect(page.heading).toEqual('Provide UK ETS Authority response for activity Level Change');
+      expect(page.heading).toEqual('Provide UK ETS Authority response for activity level');
     });
 
     it('should display sections as not started', () => {
       expect(page.sections.length).toEqual(2);
-      expect(page.sectionStatuses.map((st) => st.textContent.trim())).toEqual(['not started', 'not started']);
+      expect(page.sectionStatuses.map((st) => st.textContent.trim())).toEqual(['Not started', 'Not started']);
     });
   });
 
@@ -99,7 +99,7 @@ describe('AuthorityResponseContainerComponent', () => {
     beforeEach(createComponent);
 
     it('should display sections as completed', () => {
-      expect(page.sectionStatuses.map((st) => st.textContent.trim())).toEqual(['completed', 'completed']);
+      expect(page.sectionStatuses.map((st) => st.textContent.trim())).toEqual(['Completed', 'Completed']);
     });
   });
 
@@ -130,7 +130,7 @@ describe('AuthorityResponseContainerComponent', () => {
     beforeEach(createComponent);
 
     it('should display sections as in progress', () => {
-      expect(page.sectionStatuses.map((st) => st.textContent.trim())).toEqual(['in progress', 'in progress']);
+      expect(page.sectionStatuses.map((st) => st.textContent.trim())).toEqual(['In progress', 'In progress']);
     });
   });
 });

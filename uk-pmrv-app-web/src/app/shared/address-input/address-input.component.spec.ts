@@ -23,7 +23,7 @@ describe('AddressInputComponent', () => {
     template: `
       <form [formGroup]="form">
         <fieldset govukFieldset>
-          <legend govukLegend>What is your address?</legend>
+          <legend govukLegend legendSize="medium">What is your address?</legend>
           <app-address-input formGroupName="address"></app-address-input>
         </fieldset>
       </form>
@@ -72,10 +72,10 @@ describe('AddressInputComponent', () => {
     const inputs = fixture.debugElement.queryAll(By.directive(TextInputComponent));
     const getLabel = (element: HTMLElement) => element.querySelector('label');
     expect(inputs.map((input) => getLabel(input.nativeElement).textContent)).toEqual([
-      'Address line 1',
-      'Address line 2 (optional)',
-      'Town or city',
-      'Postcode',
+      ' Address line 1 ',
+      ' Address line 2 (optional) ',
+      ' Town or city ',
+      ' Postcode ',
     ]);
 
     const select: HTMLElement = fixture.debugElement.query(By.directive(SelectComponent)).nativeElement;

@@ -1,13 +1,14 @@
+import { AsyncPipe } from '@angular/common';
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
   Component,
-  ContentChildren,
-  Inject,
-  Input,
+  contentChildren,
+  inject,
+  input,
   OnInit,
-  QueryList,
 } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 import { combineLatest, map, Observable, startWith, switchMap, take } from 'rxjs';
 
@@ -16,44 +17,33 @@ import { AccordionItemComponent } from './accordion-item/accordion-item.componen
 
 @Component({
   selector: 'govuk-accordion',
-  standalone: false,
-  template: `
-    <div class="govuk-accordion" [id]="id">
-      <div class="govuk-accordion__controls">
-        <button
-          type="button"
-          class="govuk-accordion__open-all"
-          [attr.aria-expanded]="areExpanded$ | async"
-          (click)="toggleAllSections()">
-          {{ (areExpanded$ | async) ? 'Close all' : 'Open all' }}
-          <span class="govuk-visually-hidden">sections</span>
-        </button>
-      </div>
-      <ng-content select="govuk-accordion-item" />
-    </div>
-  `,
+  imports: [AsyncPipe],
+  templateUrl: './accordion.component.html',
   providers: [accordionFactory],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionComponent implements OnInit, AfterContentInit {
-  @Input() id: string;
-  @Input() openIndexes: number[];
-  @Input() cacheDisabled: boolean;
-  @ContentChildren(AccordionItemComponent) accordionItems: QueryList<AccordionItemComponent>;
+  private accordion = inject<Accordion>(ACCORDION);
+
+  readonly id = input<string>('accordion');
+  readonly openIndexes = input<number[]>([]);
+  readonly cacheDisabled = input<boolean>(true);
+
+  readonly accordionItems = contentChildren(AccordionItemComponent);
+
+  readonly accordionItems$ = toObservable(this.accordionItems);
 
   areExpanded$: Observable<boolean>;
 
-  constructor(@Inject(ACCORDION) private accordion: Accordion) {}
-
   ngOnInit(): void {
-    this.accordion.id = this.id;
-    this.accordion.openIndexes = this.openIndexes;
-    this.accordion.cacheDisabled = this.cacheDisabled;
+    this.accordion.id = this.id();
+    this.accordion.openIndexes = this.openIndexes();
+    this.accordion.cacheDisabled = this.cacheDisabled();
   }
 
   ngAfterContentInit(): void {
-    this.areExpanded$ = this.accordionItems.changes.pipe(
-      startWith(this.accordionItems),
+    this.areExpanded$ = this.accordionItems$.pipe(
+      startWith(this.accordionItems()),
       switchMap((items: AccordionItemComponent[]) => combineLatest(items.map((item) => item.isExpanded$))),
       map((areExpanded) => areExpanded.every((isExpanded) => isExpanded)),
     );
@@ -62,5 +52,5 @@ export class AccordionComponent implements OnInit, AfterContentInit {
   toggleAllSections: () => void = () =>
     this.areExpanded$
       .pipe(take(1))
-      .subscribe((areExpanded) => this.accordionItems.forEach((item) => item.isExpanded.next(!areExpanded)));
+      .subscribe((areExpanded) => this.accordionItems().forEach((item) => item.isExpanded.next(!areExpanded)));
 }

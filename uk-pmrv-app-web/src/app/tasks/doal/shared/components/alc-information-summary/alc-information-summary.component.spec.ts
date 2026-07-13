@@ -70,7 +70,7 @@ describe('AlcInformationSummaryComponent', () => {
   });
 
   it('should display all HTMLElements', () => {
-    expect(page.heading1.textContent.trim()).toEqual('Provide information about this activity level change');
+    expect(page.heading1.textContent.trim()).toEqual('Provide information about this activity level');
     expect(page.appDoalAlcInformationTemplate).toBeTruthy();
     expect(page.appReturnTaskLink).toBeTruthy();
   });

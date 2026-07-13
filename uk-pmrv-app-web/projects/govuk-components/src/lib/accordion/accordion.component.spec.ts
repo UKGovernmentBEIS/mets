@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -12,7 +13,7 @@ describe('AccordionComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
+    imports: [AccordionComponent, AccordionItemComponent, AsyncPipe],
     template: `
       <govuk-accordion [id]="id">
         <govuk-accordion-item header="One">
@@ -21,10 +22,12 @@ describe('AccordionComponent', () => {
         <govuk-accordion-item header="Two">
           <a href="#">View</a>
         </govuk-accordion-item>
-        <govuk-accordion-item *ngFor="let item of items$ | async" [header]="item.header">
-          <div govukAccordionItemSummary>{{ item.summary }}</div>
-          {{ item.content }}
-        </govuk-accordion-item>
+        @for (item of items$ | async; track item) {
+          <govuk-accordion-item [header]="item.header">
+            <div govukAccordionItemSummary>{{ item.summary }}</div>
+            {{ item.content }}
+          </govuk-accordion-item>
+        }
       </govuk-accordion>
     `,
   })
@@ -40,7 +43,7 @@ describe('AccordionComponent', () => {
     fixture.debugElement.query(By.directive(AccordionComponent)).nativeElement;
 
   const getToggleAllButton: () => HTMLButtonElement = () =>
-    getAccordionElement().querySelector('button.govuk-accordion__open-all');
+    getAccordionElement().querySelector('button.govuk-accordion__show-all');
 
   const getAccordionItems: () => NodeListOf<Element> = () =>
     getAccordionElement().querySelectorAll('.govuk-accordion__section');
@@ -49,21 +52,21 @@ describe('AccordionComponent', () => {
     getToggleAllButton().click();
     fixture.detectChanges();
 
-    expect(getToggleAllButton().textContent).toContain('Close all');
+    expect(getToggleAllButton().textContent).toContain('Hide all sections');
     getAccordionItems().forEach((item) => expect(item.classList).toContain('govuk-accordion__section--expanded'));
     expect(getToggleAllButton().getAttribute('aria-expanded')).toEqual('true');
 
     getToggleAllButton().click();
     fixture.detectChanges();
 
-    expect(getToggleAllButton().textContent).toContain('Open all');
+    expect(getToggleAllButton().textContent).toContain('Show all sections');
     getAccordionItems().forEach((item) => expect(item.classList).not.toContain('govuk-accordion__section--expanded'));
     expect(getToggleAllButton().getAttribute('aria-expanded')).toEqual('false');
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AccordionComponent, AccordionItemComponent, TestComponent],
+      imports: [AccordionComponent, AccordionItemComponent, TestComponent],
     }).compileComponents();
   });
 

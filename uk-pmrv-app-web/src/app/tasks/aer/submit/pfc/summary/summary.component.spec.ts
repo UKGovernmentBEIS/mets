@@ -74,7 +74,7 @@ describe('SummaryComponent', () => {
       ['Global warming potential', '7390 tonnes CO2 / tonnes CF4'],
       ['Total CF4 emissions', '1507.56'],
       ['Amount of C2F6', '27.744'],
-      ['Global warming potential', '12,000 tonnes CO2/ tonnes C2F6'],
+      ['Global warming potential', '12000 tonnes CO2 / tonnes C2F6'],
       ['Total CF4 emissions', '338476.8'],
       ['Reportable emissions', '11332812 tonnes CO2e'],
       ['Are the calculated emissions correct?', 'Yes'],

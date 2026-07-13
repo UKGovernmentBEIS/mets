@@ -5,7 +5,7 @@
     heading="Changes in activity level - new item"
     submitText="Save and continue"
     [hideSubmit]="(editable$ | async) === false">
-    <app-activity-level-template-form></app-activity-level-template-form>
+    <app-activity-level-template-form [isDoal]="true"></app-activity-level-template-form>
   </app-wizard-step>
 
   <a govukLink routerLink="..">Return to: Information about this activity level change</a>

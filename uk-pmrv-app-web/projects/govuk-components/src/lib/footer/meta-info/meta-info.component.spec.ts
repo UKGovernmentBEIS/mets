@@ -8,7 +8,7 @@ describe('MetaInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MetaInfoComponent],
+      imports: [MetaInfoComponent],
     }).compileComponents();
   });
 

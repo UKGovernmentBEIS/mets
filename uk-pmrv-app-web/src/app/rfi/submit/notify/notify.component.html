@@ -3,8 +3,7 @@
   [formGroup]="form"
   heading="Select who you want to notify about this request"
   submitText="Continue"
-  [showBackLink]="true"
->
+  [showBackLink]="true">
   <div class="govuk-label">
     The task will be assigned to the primary contact and each selected person will receive an official notice containing
     the information about this request.
@@ -20,12 +19,11 @@
 
   <ng-container *ngIf="otherOperatorUsersInfo$ | async as usersInfo">
     <ng-container *ngIf="objectKeys(usersInfo).length > 0; else noUsers">
-      <div govuk-checkboxes formControlName="users" legend="Select the users you want to notify" legendSize="medium">
+      <div govuk-checkboxes formControlName="users" label="Select the users you want to notify" labelSize="medium">
         <govuk-checkbox
           *ngFor="let userInfo of usersInfo | keyvalue"
           [value]="userInfo.key"
-          [label]="userInfo.key | userInfoResolver: usersInfo"
-        ></govuk-checkbox>
+          [label]="userInfo.key | userInfoResolver: usersInfo"></govuk-checkbox>
       </div>
     </ng-container>
     <ng-template #noUsers>

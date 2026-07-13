@@ -335,7 +335,7 @@ export class AerUkEtsStoreDelegate implements RequestTaskStoreDelegate {
     const payloadAfterSideEffects = this.sideEffectsHandler.applySideEffects(aerTask);
 
     const payloadToUpdate = produce(payloadAfterSideEffects, (draft) => {
-      if (draft.sendEmailNotification) {
+      if (draft.sendEmailNotification !== null && draft.sendEmailNotification !== undefined) {
         delete draft.sendEmailNotification;
       }
       if (draft.isVerifierAerTaskContentUpdate) {

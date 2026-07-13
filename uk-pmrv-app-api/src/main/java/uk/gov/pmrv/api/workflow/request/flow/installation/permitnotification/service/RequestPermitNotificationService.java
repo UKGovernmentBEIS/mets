@@ -12,9 +12,11 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.OtherFactor;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationContainer;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationType;
@@ -75,6 +77,17 @@ public class RequestPermitNotificationService {
         PermitNotificationRequestPayload requestPayload = (PermitNotificationRequestPayload) request.getPayload();
         requestPayload.setPermitNotification(taskPayload.getPermitNotification());
         requestPayload.setPermitNotificationAttachments(taskPayload.getPermitNotificationAttachments());
+
+        // Update request metadata with notification type
+        PermitNotificationRequestMetadata requestMetadata = (PermitNotificationRequestMetadata) request.getMetadata();
+        requestMetadata.setPermitNotificationType(
+            taskPayload.getPermitNotification() instanceof OtherFactor ? null : taskPayload.getPermitNotification().getType()
+        );
+        requestMetadata.setOtherFactorReportingType(
+            taskPayload.getPermitNotification() instanceof OtherFactor otherFactor
+                ? otherFactor.getReportingType()
+                : null
+        );
 
         // Add action
         PermitNotificationApplicationSubmittedRequestActionPayload applicationSubmittedActionPayload = permitNotificationMapper.toApplicationSubmittedRequestActionPayload(taskPayload);

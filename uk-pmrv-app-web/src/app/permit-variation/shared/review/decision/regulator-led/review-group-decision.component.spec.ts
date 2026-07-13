@@ -50,7 +50,7 @@ describe('ReviewGroupDecisionComponent', () => {
       return this.query<HTMLDivElement>('.govuk-error-summary');
     }
     get errorSummaryErrorList() {
-      return Array.from(this.errorSummary.querySelectorAll('a')).map((anchor) => anchor.textContent.trim());
+      return Array.from(this.errorSummary.querySelectorAll('li')).map((item) => item.textContent.trim());
     }
     get submitFormButton() {
       return this.queryAll<HTMLButtonElement>('button[type="submit"]').slice(-1).pop();

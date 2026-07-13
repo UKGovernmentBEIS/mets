@@ -112,7 +112,7 @@ describe('QuestionsComponent', () => {
     fixture.detectChanges();
 
     expect(page.errorSummary).toBeTruthy();
-    expect(page.errors.map((error) => error.textContent.trim())).toEqual(['Enter a date', 'Enter a question']);
+    expect(page.errors.map((error) => error.textContent.trim())).toEqual(['Enter a question', 'Enter a date']);
   });
 
   it('should add another question', () => {

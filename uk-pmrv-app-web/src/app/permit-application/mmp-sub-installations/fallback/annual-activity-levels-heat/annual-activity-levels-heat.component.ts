@@ -32,7 +32,12 @@ export class AnnualActivityLevelsHeatComponent extends ProductBenchmarkComponent
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));
 
-  processEmissions = ['PROCESS_EMISSIONS_CL', 'PROCESS_EMISSIONS_NON_CL'] as any;
+  processEmissions = [
+    'PROCESS_EMISSIONS_CL',
+    'PROCESS_EMISSIONS_CL_CBAM',
+    'PROCESS_EMISSIONS_CL_NON_CBAM',
+    'PROCESS_EMISSIONS_NON_CL',
+  ] as any;
 
   quantificationTypes: MeasurableHeatFlow['quantification'][] = [
     'LEGAL_METROLOGICAL_CONTROL_READING',

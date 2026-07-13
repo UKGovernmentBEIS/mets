@@ -5,7 +5,7 @@
       [formGroupName]="i"
       govukFieldset
       id="question-{{ i }}">
-      <legend govukLegend>Question</legend>
+      <legend govukLegend legendSize="medium">Question</legend>
       <button
         (click)="questions.removeAt(i)"
         *ngIf="questions.length > 1"

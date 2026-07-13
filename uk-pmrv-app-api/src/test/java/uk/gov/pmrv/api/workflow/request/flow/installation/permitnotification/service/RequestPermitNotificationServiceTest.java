@@ -29,15 +29,19 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPaylo
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.NonSignificantChange;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.NonSignificantChangeRelatedChangeType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.OtherFactor;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotification;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationContainer;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.ReportingType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.TemporarySuspension;
 
 @ExtendWith(MockitoExtension.class)
@@ -127,9 +131,12 @@ class RequestPermitNotificationServiceTest {
 
         PermitNotificationRequestPayload requestPayload = PermitNotificationRequestPayload.builder()
             .payloadType(RequestPayloadType.PERMIT_NOTIFICATION_REQUEST_PAYLOAD).build();
-        Request request =
-            Request.builder().id("1").payload(requestPayload).type(RequestType.PERMIT_NOTIFICATION).build();
+        PermitNotificationRequestMetadata requestMetadata = PermitNotificationRequestMetadata.builder()
+            .type(RequestMetadataType.PERMIT_NOTIFICATION).build();
+        Request request = Request.builder().id("1").payload(requestPayload).metadata(requestMetadata)
+            .type(RequestType.PERMIT_NOTIFICATION).build();
         PermitNotification permitNotification = NonSignificantChange.builder()
+            .type(PermitNotificationType.NON_SIGNIFICANT_CHANGE)
             .relatedChanges(Arrays.asList(
                     NonSignificantChangeRelatedChangeType.MONITORING_METHODOLOGY_PLAN,
                     NonSignificantChangeRelatedChangeType.MONITORING_PLAN
@@ -158,6 +165,54 @@ class RequestPermitNotificationServiceTest {
         service.applySubmitPayload(requestTask, authUser);
 
         // Verify
+        assertThat(requestMetadata.getPermitNotificationType()).isEqualTo(PermitNotificationType.NON_SIGNIFICANT_CHANGE);
+        assertThat(requestMetadata.getOtherFactorReportingType()).isNull();
+        verify(permitNotificationSubmitValidatorService, times(1))
+            .validatePermitNotification(
+                PermitNotificationContainer.builder().permitNotification(taskPayload.getPermitNotification()).build());
+        verify(requestService, times(1))
+            .addActionToRequest(request, actionPayload, RequestActionType.PERMIT_NOTIFICATION_APPLICATION_SUBMITTED,
+                "user");
+    }
+
+    @Test
+    void applySubmitPayload_otherFactor() {
+        AppUser authUser = AppUser.builder().userId("user").build();
+
+        PermitNotificationRequestPayload requestPayload = PermitNotificationRequestPayload.builder()
+            .payloadType(RequestPayloadType.PERMIT_NOTIFICATION_REQUEST_PAYLOAD).build();
+        PermitNotificationRequestMetadata requestMetadata = PermitNotificationRequestMetadata.builder()
+            .type(RequestMetadataType.PERMIT_NOTIFICATION).build();
+        Request request = Request.builder().id("1").payload(requestPayload).metadata(requestMetadata)
+            .type(RequestType.PERMIT_NOTIFICATION).build();
+        PermitNotification permitNotification = OtherFactor.builder()
+            .type(PermitNotificationType.OTHER_FACTOR)
+            .reportingType(ReportingType.RENOUNCE_FREE_ALLOCATIONS)
+            .description("description")
+            .build();
+
+        PermitNotificationApplicationSubmitRequestTaskPayload taskPayload =
+            PermitNotificationApplicationSubmitRequestTaskPayload.builder()
+                .payloadType(RequestTaskPayloadType.PERMIT_NOTIFICATION_APPLICATION_SUBMIT_PAYLOAD)
+                .permitNotification(permitNotification)
+                .sectionsCompleted(Map.of("SECTION_1", true))
+                .build();
+        RequestTask requestTask = RequestTask.builder().id(1L)
+            .payload(taskPayload)
+            .type(RequestTaskType.PERMIT_NOTIFICATION_APPLICATION_SUBMIT)
+            .request(request)
+            .build();
+        RequestActionPayload actionPayload = PermitNotificationApplicationSubmittedRequestActionPayload.builder()
+            .payloadType(RequestActionPayloadType.PERMIT_NOTIFICATION_APPLICATION_SUBMITTED_PAYLOAD)
+            .permitNotification(permitNotification)
+            .build();
+
+        // Invoke
+        service.applySubmitPayload(requestTask, authUser);
+
+        // Verify
+        assertThat(requestMetadata.getPermitNotificationType()).isNull();
+        assertThat(requestMetadata.getOtherFactorReportingType()).isEqualTo(ReportingType.RENOUNCE_FREE_ALLOCATIONS);
         verify(permitNotificationSubmitValidatorService, times(1))
             .validatePermitNotification(
                 PermitNotificationContainer.builder().permitNotification(taskPayload.getPermitNotification()).build());

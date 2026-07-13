@@ -8,7 +8,7 @@ describe('WarningTextComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
+    imports: [WarningTextComponent],
     template: `
       <govuk-warning-text [assistiveText]="text">Test warning</govuk-warning-text>
     `,
@@ -19,7 +19,7 @@ describe('WarningTextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [WarningTextComponent, TestComponent],
+      imports: [TestComponent],
     }).compileComponents();
   });
 
@@ -35,7 +35,7 @@ describe('WarningTextComponent', () => {
 
   it('should contain a hidden warn text', () => {
     const element: HTMLElement = fixture.nativeElement;
-    expect(element.querySelector<HTMLSpanElement>('.govuk-warning-text__assistive').textContent).toEqual('Warn');
+    expect(element.querySelector<HTMLSpanElement>('.govuk-visually-hidden').textContent).toEqual('Warn');
   });
 
   it('should contain a text', () => {

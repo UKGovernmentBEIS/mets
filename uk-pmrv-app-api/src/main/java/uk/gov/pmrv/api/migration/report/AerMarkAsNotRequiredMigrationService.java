@@ -8,6 +8,8 @@ import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
 import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.pmrv.api.reporting.domain.ReportableEmissionsSaveParams;
+import uk.gov.pmrv.api.reporting.service.ReportableEmissionsService;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -17,6 +19,7 @@ import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationMarkNotRequiredRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerMarkNotRequiredDetails;
+import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.mapper.AerMapper;
 
 import java.util.ArrayList;
@@ -33,6 +36,7 @@ public class AerMarkAsNotRequiredMigrationService {
     private final RequestRepository requestRepository;
     private final WorkflowService workflowService;
     private final RequestService requestService;
+    private final ReportableEmissionsService reportableEmissionsService;
     private static final AerMapper aerMapper = Mappers.getMapper(AerMapper.class);
 
     @WriteOperation
@@ -83,6 +87,20 @@ public class AerMarkAsNotRequiredMigrationService {
                 RequestActionType.AER_APPLICATION_NOT_REQUIRED,
                 userId
             );
+
+            AerRequestMetadata requestMetadata = (AerRequestMetadata) request.getMetadata();
+            requestMetadata.setEmissions(null);
+
+            reportableEmissionsService.saveReportableEmissions(ReportableEmissionsSaveParams.builder()
+                .accountId(request.getAccountId())
+                .year(requestMetadata.getYear())
+                .reportableEmissions(null)
+                .isFromDre(false)
+                .isFromRegulator(true)
+                .isFromAerMarkedAsNotRequired(true)
+                .requestId(request.getId())
+                .build());
+
             workflowService.deleteProcessInstance(request.getProcessInstanceId(), DELETE_REASON);
             results.add("SUCCESS! Marked as not required AER with request ID '" + request.getId() + "'");
             log.info("Successfully marked AER with requestId '{}' as not required for accountId: '{}', year: '{}', by user with id:'{}' (METS-627)",

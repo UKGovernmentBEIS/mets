@@ -73,7 +73,7 @@ public class RequestCreateActionAccountResourceTypeHandler<T extends RequestCrea
                     .map(requestCreateByAccountValidator -> requestCreateByAccountValidator.validateAction(accountId))
                     .orElse(requestCreateByRequestValidatorOpt
                             .map(requestCreateByRequestValidator -> requestCreateByRequestValidator.validateAction(accountId, payload))
-                            .orElse(RequestCreateValidationResult.builder().valid(true).isAvailable(true).build())
+                            .orElse(RequestCreateValidationResult.builder().valid(true).available(true).build())
                     );
 
             if(!validationResult.isValid() || !validationResult.isAvailable()) {

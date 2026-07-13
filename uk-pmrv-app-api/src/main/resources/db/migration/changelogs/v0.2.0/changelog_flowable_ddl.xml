@@ -4,6 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
 
     <changeSet id="0_1_0_flowable_ddl" author="P35066">
+    	<validCheckSum>ANY</validCheckSum>
         <sql>
             SET search_path TO sch_flowable;
         </sql>
@@ -24,6 +25,25 @@
 	            SET search_path TO public;
 	        </sql>
         </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_flowable_ddl_upgrade_from_7.1.0.2_to_7.2.0" author="P35066">
+	    <preConditions onFail="MARK_RAN">
+	        <sqlCheck expectedResult="7.1.0.2">
+	            SELECT value_ FROM sch_flowable.act_ge_property WHERE name_ = 'schema.version';
+	        </sqlCheck>
+	    </preConditions>
+        <sql>
+            SET search_path TO sch_flowable;
+        </sql>
+        <sqlFile encoding="utf8" splitStatements="true" stripComments="true" path="org/flowable/db/upgrade/flowable.postgres.upgradestep.7102.to.7200.engine.sql" />
+        <sqlFile encoding="utf8" splitStatements="true" stripComments="true" path="org/flowable/db/upgrade/flowable.postgres.upgradestep.7102.to.7200.history.sql" />
+        <sqlFile encoding="utf8" splitStatements="true" stripComments="true" path="org/flowable/db/upgrade/flowable.postgres.upgradestep.7201.to.7202.engine.sql" />
+        <sqlFile encoding="utf8" splitStatements="true" stripComments="true" path="org/flowable/common/db/upgrade/flowable.all.upgradestep.7201.to.7202.common.sql" />
+        <sql>
+            SET search_path TO public;
+        </sql>
+        <rollback />
     </changeSet>
     
 </databaseChangeLog>

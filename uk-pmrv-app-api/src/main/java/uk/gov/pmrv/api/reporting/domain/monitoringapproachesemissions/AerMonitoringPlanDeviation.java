@@ -2,6 +2,7 @@ package uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.netz.api.common.validation.SpELExpression;
 
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 @Data
 @SuperBuilder
 @AllArgsConstructor
+@NoArgsConstructor
 @SpELExpression(expression = "{T(java.lang.Boolean).TRUE.equals(#existChangesNotCoveredInApprovedVariations) == (#details != null)}", message = "aer.monitoringplandeviations.details.missing")
 public class AerMonitoringPlanDeviation {
 

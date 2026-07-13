@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.2.0/changelog_emissions_not_required.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_0_REMOVE_ZERO_YEARLY_EMISSIONS_FOR_NOT_REQUIRED_AERS" author="vasileios.vitzilaios@keyes.eu">
+        <comment>METS-2566: Remove 0 yearly emissions from rpt_reportable_emissions for NOT_REQUIRED AERs where there is no DRE</comment>
+        <sql>
+            DELETE FROM rpt_reportable_emissions rre
+            WHERE COALESCE(rre.is_from_dre, false) = false
+              AND rre.emissions = 0
+              AND EXISTS (
+                  SELECT 1 FROM request r
+                  WHERE r.type = 'AER'
+                    AND r.status = 'NOT_REQUIRED'
+                    AND r.account_id = rre.account_id
+                    AND CAST(r.metadata->>'year' AS INTEGER) = rre.year
+              );
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_2_0_REMOVE_ZERO_EMISSIONS_FROM_AER_REQUEST_METADATA_FOR_NOT_REQUIRED_AERS" author="vasileios.vitzilaios@keyes.eu">
+        <comment>METS-2566: Remove emissions field from request metadata for NOT_REQUIRED AERs so they show as null instead of 0</comment>
+        <sql>
+            UPDATE request
+            SET metadata = metadata - 'emissions'
+            WHERE type = 'AER'
+              AND status = 'NOT_REQUIRED'
+              AND (metadata->>'emissions')::NUMERIC = 0;
+        </sql>
+        <rollback/>
+    </changeSet>
+
+</databaseChangeLog>

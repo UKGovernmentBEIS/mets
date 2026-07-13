@@ -109,6 +109,9 @@ public class VerificationBody {
     @CreatedDate
     private LocalDateTime createdDate;
 
+    @Column(name = "third_party_data_provider_id")
+    private Long thirdPartyDataProviderId;
+
     @OneToMany(mappedBy = "verificationBody", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<VerificationBodyEmissionScheme> emissionSchemes = new HashSet<>();

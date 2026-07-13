@@ -42,7 +42,7 @@ public class HSETICreateValidator extends RequestCreateAccountRelatedValidator {
         final InstallationAccountDTO accountDTOById = installationAccountQueryService.getAccountDTOById(accountId);
 
         if (!EmitterType.HSE.equals(accountDTOById.getEmitterType())) {
-            return RequestCreateValidationResult.builder().isAvailable(false).build();
+            return RequestCreateValidationResult.builder().available(false).build();
         }
 
         List<Request> requestList = requestRepository.findByAccountIdAndTypeAndStatus(accountId, RequestType.HSE_TI, RequestStatus.IN_PROGRESS);

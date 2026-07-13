@@ -32,6 +32,30 @@ export class CookiesService {
     return true;
   }
 
+  rejectAllCookies(cookiesExpirationTime: number) {
+    if (!this.cookiesEnabled()) {
+      return;
+    }
+    const d = new Date();
+    d.setTime(d.getTime() + Number(cookiesExpirationTime) * 24 * 60 * 60 * 1000);
+    this.setCookie(this.PREFERENCES_SET_COOKIE, 'true', {
+      // secure: true,
+      expires: d,
+    });
+    this.setCookie(
+      this.COOKIES_POLICY,
+      JSON.stringify({
+        essential: true,
+        usage: false,
+      }),
+      {
+        // secure: true,
+        expires: d,
+      },
+    );
+    this.accepted$.next(true);
+  }
+
   accepted() {
     return !!this.getCookie(this.PREFERENCES_SET_COOKIE);
   }

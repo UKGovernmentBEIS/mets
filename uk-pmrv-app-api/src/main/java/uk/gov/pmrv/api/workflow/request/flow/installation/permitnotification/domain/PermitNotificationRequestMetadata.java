@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +23,10 @@ public class PermitNotificationRequestMetadata extends RequestMetadata implement
 
     @Builder.Default
     private List<LocalDateTime> rfiResponseDates = new ArrayList<>();
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private PermitNotificationType permitNotificationType;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ReportingType otherFactorReportingType;
 }

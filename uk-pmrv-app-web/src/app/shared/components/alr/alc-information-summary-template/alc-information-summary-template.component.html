@@ -35,7 +35,8 @@
   [data]="$any(data)?.historicalActivityLevels ?? []"
   [historical]="true"
   [editable]="false"
-  heading="History of activity level changes"></app-activity-level-list-template>
+  heading="History of activity level changes"
+  [year]="year"></app-activity-level-list-template>
 
 <dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0">
   <div govukSummaryListRow>
@@ -49,7 +50,8 @@
 <app-activity-level-list-template
   [data]="data?.activityLevels ?? []"
   [historical]="false"
-  [editable]="false"></app-activity-level-list-template>
+  [editable]="false"
+  [year]="year"></app-activity-level-list-template>
 
 <dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0">
   <div govukSummaryListRow>

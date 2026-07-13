@@ -10,7 +10,7 @@ import { DoalActionService } from '../../../core/doal-action.service';
   standalone: false,
   template: `
     <app-doal-action-task
-      header="Provide the date application was submitted to UK authorities"
+      header="Provide the date application was submitted to the Authority"
       [actionType]="actionType$ | async">
       <app-doal-date-submitted-summary-template
         [dateSubmittedToAuthority]="dateSubmittedToAuthority$ | async"

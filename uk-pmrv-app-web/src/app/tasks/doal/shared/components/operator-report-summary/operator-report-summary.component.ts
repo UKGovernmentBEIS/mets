@@ -9,7 +9,7 @@ import { DoalService } from '@tasks/doal/core/doal.service';
   standalone: false,
   template: `
     <app-doal-task [breadcrumb]="true">
-      <app-page-heading>Upload operator activity level report</app-page-heading>
+      <app-page-heading>Upload operator report</app-page-heading>
       <app-operator-report-summary-template
         [operatorActivityLevelReport]="operatorActivityLevelReport$ | async"
         [document]="documentFile$ | async"></app-operator-report-summary-template>

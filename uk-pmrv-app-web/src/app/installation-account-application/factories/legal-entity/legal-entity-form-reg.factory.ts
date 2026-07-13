@@ -59,7 +59,10 @@ const selectGroupControls: GroupBuilderConfig<LegalEntitySelect> = {
 
 const infoControls: GroupBuilderConfig<LegalEntityDetails> = {
   type: [null, GovukValidators.required('Select the operator type')],
-  referenceNumber: [null, GovukValidators.maxLength(15, 'Company registration number must be 15 characters or less')],
+  referenceNumber: [
+    null,
+    GovukValidators.pattern('[a-zA-Z0-9]{2}[0-9]{5}[a-zA-Z0-9]', 'Enter a registration number in the correct format'),
+  ],
   noReferenceNumberReason: [
     null,
     GovukValidators.maxLength(500, 'Your explanation should not be more than 500 characters'),

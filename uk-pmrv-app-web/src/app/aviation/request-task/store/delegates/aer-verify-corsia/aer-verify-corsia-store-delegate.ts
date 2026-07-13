@@ -91,7 +91,7 @@ export class AerVerifyCorsiaStoreDelegate implements RequestTaskStoreDelegate {
       delete draft.verificationReport.verificationBodyDetails;
       delete draft.verificationReport.verificationBodyId;
 
-      if (draft.sendEmailNotification) {
+      if (draft.sendEmailNotification !== null && draft.sendEmailNotification !== undefined) {
         delete draft.sendEmailNotification;
       }
     });

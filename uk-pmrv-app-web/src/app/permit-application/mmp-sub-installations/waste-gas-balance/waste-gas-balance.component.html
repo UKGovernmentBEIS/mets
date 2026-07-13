@@ -17,8 +17,8 @@
 
       <div
         govuk-checkboxes
-        legend="Are there any waste gas activities at this sub-installation?"
-        legendSize="medium"
+        label="Are there any waste gas activities at this sub-installation?"
+        labelSize="medium"
         hint="Select all that apply."
         formControlName="wasteGasActivities">
         <govuk-checkbox value="WASTE_GAS_PRODUCED" label="Waste gas produced"></govuk-checkbox>
@@ -56,7 +56,7 @@
           [formGroupName]="i"
           govukFieldset
           id="dataSource-def-{{ i }}">
-          <legend govukLegend>Data source {{ i + 1 }}</legend>
+          <legend govukLegend legendSize="medium">Data source {{ i + 1 }}</legend>
           <button
             (click)="dataSourcesFormArray.removeAt(i)"
             *ngIf="dataSourcesFormArray.length > 1"

@@ -156,16 +156,16 @@ describe('LegalEntityDetailsComponent', () => {
     expect(navigateSpy).toHaveBeenCalled();
   });
 
-  it('should submit only if referenceNumber has valid length', () => {
+  it('should submit only if referenceNumber has valid format', () => {
     component.form.patchValue(value);
     const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
 
-    changeInputValue(fixture, '#referenceNumber', 'aReferenceNumberWithLengthMoreThan15Chars');
+    changeInputValue(fixture, '#referenceNumber', 'AAAAAAAA');
     buttonClick(fixture);
 
     expect(navigateSpy).not.toHaveBeenCalled();
 
-    changeInputValue(fixture, '#referenceNumber', 'validLengthRN');
+    changeInputValue(fixture, '#referenceNumber', 'AB123456');
     buttonClick(fixture);
 
     expect(navigateSpy).toHaveBeenCalled();

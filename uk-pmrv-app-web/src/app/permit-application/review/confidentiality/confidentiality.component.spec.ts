@@ -90,8 +90,8 @@ describe('ConfidentialityComponent', () => {
     expect(
       page.reviewSections.map((section) => [
         section.querySelector('a').textContent.trim(),
-        section.querySelector('govuk-tag').textContent.trim(),
+        section.querySelector('.app-task-list__tag').textContent.trim(),
       ]),
-    ).toEqual([['Commercially confidential sections', 'not started']]);
+    ).toEqual([['Commercially confidential sections', 'Not started']]);
   });
 });

@@ -70,9 +70,7 @@ describe('InPersonVisitComponent', () => {
     }
 
     get errorSummaryListContents(): string[] {
-      return Array.from(this.errorSummary.querySelectorAll<HTMLAnchorElement>('a')).map((anchor) =>
-        anchor.textContent.trim(),
-      );
+      return Array.from(this.errorSummary.querySelectorAll('li')).map((item) => item.textContent.trim());
     }
 
     get removeButtons(): HTMLButtonElement[] {
@@ -137,7 +135,7 @@ describe('InPersonVisitComponent', () => {
       fixture.detectChanges();
 
       expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummaryListContents).toEqual([noTeamMembersDescription, noDate]);
+      expect(page.errorSummaryListContents).toEqual([noDate, noTeamMembersDescription]);
       expect(page.errorSummaryListContents.length).toEqual(2);
     });
 

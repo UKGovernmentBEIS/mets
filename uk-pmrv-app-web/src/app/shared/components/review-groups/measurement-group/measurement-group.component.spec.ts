@@ -112,7 +112,7 @@ describe('MeasurementGroupComponent', () => {
       ),
     ).toEqual([
       [],
-      ['Quis perferendis fug', 'the reference Anthracite', 'emission source 2 reference', '0', '0', 'completed'],
+      ['Quis perferendis fug', 'the reference Anthracite', 'emission source 2 reference', '0', '0', 'Completed'],
       ['Total emissions', '', '', '0 tCO2e', '0 tCO2e', ''],
     ]);
   });

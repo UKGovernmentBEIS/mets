@@ -1,10 +1,10 @@
 package uk.gov.pmrv.api.mireport.system.common.userreportentry;
 
 import jakarta.persistence.EntityManager;
+import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.authorization.core.domain.Authority;
-import uk.gov.netz.api.authorization.core.repository.AuthorityRepository;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
@@ -27,16 +27,15 @@ public abstract class UserReportEntryGeneratorHandler {
 
     protected final UserAuthService userAuthService;
     protected final UserReportEntryRepository userReportEntryRepository;
-    protected final AuthorityRepository authorityRepository;
 
     protected List<UserReportEntry> generate(EntityManager entityManager, AccountType accountType) {
         List<UserReportEntry> userReportEntries = userReportEntryRepository.findUserReportEntries(entityManager, accountType);
 
-        List<Authority> regulatorAuthorities = authorityRepository.findByCompetentAuthorityIsNotNull();
+        List<Authority> regulatorAuthorities = userReportEntryRepository.findByCompetentAuthorityIsNotNull(entityManager);
         if (!regulatorAuthorities.isEmpty()) {
             userReportEntries.addAll(authoritiesToUserReportEntries(regulatorAuthorities));
         }
-        List<Authority> verifierAuthorities = authorityRepository.findByCodeIn(List.of(VERIFIER_ADMIN_ROLE_CODE, VERIFIER_USER_ROLE_CODE));
+        List<Authority> verifierAuthorities = userReportEntryRepository.findByCodeIn(entityManager, List.of(VERIFIER_ADMIN_ROLE_CODE, VERIFIER_USER_ROLE_CODE));
         if (!verifierAuthorities.isEmpty()) {
             userReportEntries.addAll(authoritiesToUserReportEntries(verifierAuthorities));
         }
@@ -94,7 +93,7 @@ public abstract class UserReportEntryGeneratorHandler {
     protected String formatLastLoginDate(String lastLoginDate) {
         return Optional.ofNullable(lastLoginDate)
                 .map(date -> LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME)
-                .format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss")))
+                .format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss", Locale.ROOT)))
                 .orElse(null);
     }
 

@@ -1,9 +1,7 @@
 <app-base-task-container-component
-  header="Provide UK ETS Authority response for activity Level Change"
+  header="Provide UK ETS Authority response for activity level"
   [customContentTemplate]="customContentTemplate"
-  expectedTaskType="DOAL_AUTHORITY_RESPONSE"
->
-</app-base-task-container-component>
+  expectedTaskType="DOAL_AUTHORITY_RESPONSE"></app-base-task-container-component>
 
 <ng-template #customContentTemplate>
   <div class="govuk-button-group">
@@ -12,8 +10,7 @@
       (click)="notifyOperator()"
       govukButton
       title="Notify Operator for decision"
-      type="button"
-    >
+      type="button">
       Notify Operator
     </button>
   </div>
@@ -24,15 +21,13 @@
         <li
           app-task-item
           [link]="(canViewSectionDetails$('dateSubmittedToAuthority') | async) ? './date-submitted/summary' : null"
-          linkText="Provide the date application was submitted to UK authorities"
-          [status]="getSectionStatus$('dateSubmittedToAuthority') | async"
-        ></li>
+          linkText="Provide the date application was submitted to the Authority"
+          [status]="getSectionStatus$('dateSubmittedToAuthority') | async"></li>
         <li
           app-task-item
           [link]="(canViewSectionDetails$('authorityResponse') | async) ? './response/summary' : null"
           linkText="Provide UK ETS Authority response"
-          [status]="getSectionStatus$('authorityResponse') | async"
-        ></li>
+          [status]="getSectionStatus$('authorityResponse') | async"></li>
       </ul>
     </li>
   </ol>

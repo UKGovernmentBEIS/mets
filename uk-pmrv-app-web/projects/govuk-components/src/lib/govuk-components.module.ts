@@ -29,6 +29,7 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
 import { FooterComponent, FooterNavListComponent, MetaInfoComponent } from './footer';
 import { FormBuilderService } from './form/form-builder.service';
 import { HeaderActionsListComponent, HeaderComponent, HeaderNavListComponent } from './header';
+import { HeaderLegacyComponent, NavListLegacyComponent } from './header-legacy';
 import { NotificationBannerComponent } from './notification-banner/notification-banner.component';
 import { PanelComponent } from './panel/panel.component';
 import { PhaseBannerComponent } from './phase-banner/phase-banner.component';
@@ -50,8 +51,11 @@ import { TextareaComponent } from './textarea/textarea.component';
 import { WarningTextComponent } from './warning-text/warning-text.component';
 
 @NgModule({
-  imports: [CommonModule, InlineSVGModule.forRoot(), ReactiveFormsModule, RouterModule],
-  declarations: [
+  imports: [
+    CommonModule,
+    InlineSVGModule.forRoot(),
+    ReactiveFormsModule,
+    RouterModule,
     AccordionComponent,
     AccordionItemComponent,
     AccordionItemSummaryDirective,
@@ -101,6 +105,8 @@ import { WarningTextComponent } from './warning-text/warning-text.component';
     TextareaComponent,
     TextInputComponent,
     WarningTextComponent,
+    HeaderLegacyComponent,
+    NavListLegacyComponent,
   ],
   providers: [
     { provide: UntypedFormBuilder, useClass: FormBuilderService },
@@ -157,6 +163,8 @@ import { WarningTextComponent } from './warning-text/warning-text.component';
     TextareaComponent,
     TextInputComponent,
     WarningTextComponent,
+    HeaderLegacyComponent,
+    NavListLegacyComponent,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

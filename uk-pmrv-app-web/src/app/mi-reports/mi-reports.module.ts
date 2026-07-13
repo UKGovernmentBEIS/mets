@@ -6,8 +6,8 @@ import { SharedModule } from '@shared/shared.module';
 
 import { AccountsRegulatorsSiteContactsComponent } from './accounts-regulators-site-contacts/accounts-regulators-site-contacts.component';
 import { AccountsUsersContactsComponent } from './accounts-users-contacts/accounts-users-contacts.component';
+import { AddCustomReportComponent } from './add-custom-report/add-custom-report.component';
 import { CompletedWorkComponent } from './completed-work/completed-work.component';
-import { CustomReportComponent } from './custom/custom.component';
 import { MiReportsComponent } from './mi-reports.component';
 import { MiReportsRoutingModule } from './mi-reports-routing.module';
 import { AuthorityStatusPipe } from './pipes/authority-status.pipe';
@@ -16,21 +16,23 @@ import { VerificationBodyStatusPipe } from './pipes/verification-body-status.pip
 import { RegulatorOutstandingRequestTasksComponent } from './regulator-outstanding-request-tasks/regulator-outstanding-request-tasks.component';
 import { UsersForServiceAuthorityComponent } from './users-for-service-authority/users-for-service-authority.component';
 import { VerificationBodiesUsersComponent } from './verification-bodies-users/verification-bodies-users.component';
+import { ViewCustomReportComponent } from './view-custom-report/view-custom-report.component';
 
 @NgModule({
   imports: [CommonModule, MiReportsRoutingModule, RouterModule, SharedModule],
   declarations: [
     AccountsRegulatorsSiteContactsComponent,
     AccountsUsersContactsComponent,
+    AddCustomReportComponent,
     AuthorityStatusPipe,
     CompletedWorkComponent,
-    CustomReportComponent,
     MiReportsComponent,
     RegulatorOutstandingRequestTasksComponent,
     UsersForServiceAuthorityComponent,
     UserRoleAllTypesPipe,
     VerificationBodiesUsersComponent,
     VerificationBodyStatusPipe,
+    ViewCustomReportComponent,
   ],
 })
 export class MiReportsModule {}

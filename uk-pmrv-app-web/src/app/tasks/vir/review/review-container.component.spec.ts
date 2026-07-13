@@ -62,6 +62,6 @@ describe('ReviewContainerComponent', () => {
     expect(page.heading1.textContent.trim()).toEqual('Review 2022 verifier improvement report');
     expect(page.operatorText.textContent.trim()).toEqual('Assigned to: Regulator1 England');
     expect(page.verificationDataGroupReview).toBeTruthy();
-    expect(page.taskListContent).toEqual(['Create summary completed', 'Send to the operator not started']);
+    expect(page.taskListContent).toEqual(['Create summary Completed', 'Send to the operator Not started']);
   });
 });

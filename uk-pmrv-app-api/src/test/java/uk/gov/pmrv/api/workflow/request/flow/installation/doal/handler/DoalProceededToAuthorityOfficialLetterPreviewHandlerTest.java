@@ -22,6 +22,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.common.service.notific
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.ActivityLevelChangeInformation;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.Doal;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalProceedToAuthorityDetermination;
 
 import java.time.Year;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ class DoalProceededToAuthorityOfficialLetterPreviewHandlerTest {
         final Long taskId = 2L;
         final DecisionNotification decisionNotification = DecisionNotification.builder().build();
         final Request request = Request.builder().build();
+        final DoalProceedToAuthorityDetermination determination = DoalProceedToAuthorityDetermination.builder().build();
         final ActivityLevel activityLevel1 = ActivityLevel.builder()
                 .subInstallationName(SubInstallationName.COATED_CARBON_BOARD)
                 .year(Year.of(2023))
@@ -93,6 +95,7 @@ class DoalProceededToAuthorityOfficialLetterPreviewHandlerTest {
                                         .activityLevels(activityLevels)
                                         .preliminaryAllocations(preliminaryAllocations)
                                         .build())
+                                .determination(determination)
                                 .build())
                         .build())
                 .build();
@@ -103,7 +106,8 @@ class DoalProceededToAuthorityOfficialLetterPreviewHandlerTest {
         final Map<String, Object> params = Map.of(
                 "activityLevels", activityLevels,
                 "allocations",preliminaryAllocations,
-                "allocationsPerYear", Map.of(Year.of(2023), 300)
+                "allocationsPerYear", Map.of(Year.of(2023), 300),
+                "determination", determination
         );
 
         when(requestTaskService.findTaskById(taskId)).thenReturn(requestTask);

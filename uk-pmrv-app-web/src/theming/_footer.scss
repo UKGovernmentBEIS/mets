@@ -1,0 +1,18 @@
+/**
+ * Patches old implementation of footer with new GDS v6
+ * Safe to delete when migration to GDS v6 is complete
+ */
+
+@use 'govuk-frontend/dist/govuk/index' as govuk;
+
+.govuk-footer {
+  background: govuk.govuk-colour('black', $variant: 'tint-95');
+  @include govuk.govuk-font($size: 16);
+}
+
+.govuk-footer__link {
+  &:link,
+  &:visited {
+    color: govuk.govuk-colour('black');
+  }
+}

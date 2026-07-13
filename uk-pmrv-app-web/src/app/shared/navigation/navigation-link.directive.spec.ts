@@ -56,14 +56,14 @@ describe('NavigationLinkDirective', () => {
   it('should add navigation link class', () => {
     const testElement: HTMLElement = fixture.componentInstance.firstLink.nativeElement;
     expect(testElement.classList).toContain('govuk-link');
-    expect(testElement.classList).toContain('hmcts-primary-navigation__link');
+    expect(testElement.classList).toContain('govuk-service-navigation__link');
   });
 
   it('should add anchor inside li element', () => {
     const testElement: HTMLElement = fixture.componentInstance.firstLink.nativeElement;
     const parentElement: HTMLElement = testElement.parentElement;
     expect(parentElement.tagName).toEqual('LI');
-    expect(parentElement.classList).toContain('hmcts-primary-navigation__item');
+    expect(parentElement.classList).toContain('govuk-service-navigation__item');
   });
 
   it('should apply the aria-current attribute to active anchor element', () => {
@@ -85,5 +85,25 @@ describe('NavigationLinkDirective', () => {
     expect(fixture.componentInstance.firstLink.nativeElement.getAttributeNames()).not.toContain('aria-current');
     expect(fixture.componentInstance.secondLink.nativeElement.getAttributeNames()).toContain('aria-current');
     expect(fixture.componentInstance.secondLink.nativeElement.getAttribute('aria-current')).toEqual('page');
+  });
+
+  it('should toggle govuk-service-navigation__item--active on the parent li', () => {
+    const firstLi = fixture.componentInstance.firstLink.nativeElement.parentElement;
+    const secondLi = fixture.componentInstance.secondLink.nativeElement.parentElement;
+
+    expect(firstLi.classList).not.toContain('govuk-service-navigation__item--active');
+    expect(secondLi.classList).not.toContain('govuk-service-navigation__item--active');
+
+    hostComponent.firstLink.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(firstLi.classList).toContain('govuk-service-navigation__item--active');
+    expect(secondLi.classList).not.toContain('govuk-service-navigation__item--active');
+
+    hostComponent.secondLink.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(firstLi.classList).not.toContain('govuk-service-navigation__item--active');
+    expect(secondLi.classList).toContain('govuk-service-navigation__item--active');
   });
 });

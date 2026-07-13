@@ -84,7 +84,7 @@ describe('SubmitContainerComponent', () => {
     const status = page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim();
 
     expect(link).toEqual('Permanent cessation details');
-    expect(status).toEqual('not started');
+    expect(status).toEqual('Not started');
   });
 
   it('should display return of permanent cessation wait for peer review content', () => {

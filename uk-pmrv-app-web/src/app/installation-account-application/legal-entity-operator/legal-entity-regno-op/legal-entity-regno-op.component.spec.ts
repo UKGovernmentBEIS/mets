@@ -114,14 +114,21 @@ describe('CompetentAuthorityGuidanceComponent', () => {
     expect(page.errorSummary).toBeTruthy();
     expect(page.errorSummaryList).toEqual(['Enter your company registration number']);
 
-    page.referenceNumber = '123';
+    page.referenceNumber = 'AAAAAAAA';
+    page.submitButton.click();
+    fixture.detectChanges();
+
+    expect(page.errorSummary).toBeTruthy();
+    expect(page.errorSummaryList).toEqual(['Enter a registration number in the correct format']);
+
+    page.referenceNumber = '12345678';
     page.submitButton.click();
     fixture.detectChanges();
 
     expect(page.errorSummary).toBeFalsy();
 
     expect(companyInformationService.getCompanyProfileByRegistrationNumber).toHaveBeenCalledTimes(1);
-    expect(companyInformationService.getCompanyProfileByRegistrationNumber).toHaveBeenCalledWith('123');
+    expect(companyInformationService.getCompanyProfileByRegistrationNumber).toHaveBeenCalledWith('12345678');
 
     expect(navigateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith(['../details'], { relativeTo: route });

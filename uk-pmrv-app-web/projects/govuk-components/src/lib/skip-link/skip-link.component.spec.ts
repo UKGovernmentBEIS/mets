@@ -1,8 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, Router, RouterOutlet } from '@angular/router';
 
 import { SkipLinkComponent } from './skip-link.component';
 
@@ -11,11 +10,11 @@ describe('SkipLinkComponent', () => {
   let fixture: ComponentFixture<HostComponent>;
   let router: Router;
 
-  @Component({ standalone: false, template: '' })
+  @Component({ template: '' })
   class RoutedComponent {}
 
   @Component({
-    standalone: false,
+    imports: [SkipLinkComponent, HostComponent, RoutedComponent, RouterOutlet],
     template: `
       <govuk-skip-link />
       <router-outlet />
@@ -25,8 +24,8 @@ describe('SkipLinkComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([{ path: 'test', component: RoutedComponent }])],
-      declarations: [SkipLinkComponent, HostComponent, RoutedComponent],
+      imports: [SkipLinkComponent, HostComponent, RoutedComponent],
+      providers: [provideRouter([{ path: 'test', component: RoutedComponent }])],
     }).compileComponents();
   });
 

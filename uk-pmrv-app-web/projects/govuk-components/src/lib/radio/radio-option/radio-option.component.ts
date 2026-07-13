@@ -2,11 +2,12 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ContentChild,
+  contentChild,
+  effect,
   forwardRef,
-  Input,
+  input,
   TemplateRef,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -14,7 +15,7 @@ import { ConditionalContentDirective } from '../../directives';
 
 @Component({
   selector: 'govuk-radio-option',
-  standalone: false,
+  imports: [],
   templateUrl: './radio-option.component.html',
   providers: [
     {
@@ -26,23 +27,15 @@ import { ConditionalContentDirective } from '../../directives';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadioOptionComponent<T> implements ControlValueAccessor {
-  private _disable?: boolean;
+  readonly value = input<T>();
+  readonly label = input<string>();
+  readonly hint = input<string>();
+  readonly divider = input<boolean>();
+  readonly disable = input<boolean>();
 
-  @Input() value: T;
-  @Input() label: string;
-  @Input() hint?: string;
-  @Input() divider?: boolean;
-
-  @Input() set disable(value: boolean) {
-    this._disable = value;
-    this.isDisabled = value;
-    this.setConditionalDisabledState();
-    this.changeDetectorRef.markForCheck();
-  }
-
-  @ContentChild(ConditionalContentDirective, { static: true }) readonly conditional: ConditionalContentDirective;
-  @ViewChild('conditionalTemplate', { static: true }) conditionalTemplate: TemplateRef<any>;
-  @ViewChild('optionTemplate', { static: true }) optionTemplate: TemplateRef<any>;
+  readonly conditional = contentChild(ConditionalContentDirective);
+  readonly conditionalTemplate = viewChild<TemplateRef<any>>('conditionalTemplate');
+  readonly optionTemplate = viewChild<TemplateRef<any>>('optionTemplate');
   isChecked: boolean;
   index: number;
   isDisabled: boolean;
@@ -50,11 +43,13 @@ export class RadioOptionComponent<T> implements ControlValueAccessor {
   onBlur: () => any;
   groupIdentifier: string;
 
-  constructor(readonly changeDetectorRef: ChangeDetectorRef) {}
-
-  get disable(): boolean {
-    return this._disable;
+  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {
+    effect(() => {
+      const value = this.disable();
+      this.isDisabled = value;
+    });
   }
+
   get identifier(): string {
     return `${this.groupIdentifier}-option${this.index}`;
   }
@@ -68,22 +63,22 @@ export class RadioOptionComponent<T> implements ControlValueAccessor {
   }
 
   writeValue(newValue: T): void {
-    this.isChecked = newValue === this.value;
+    this.isChecked = newValue === this.value();
     this.setConditionalDisabledState();
     this.changeDetectorRef.detectChanges();
   }
 
   setDisabledState(isDisabled: boolean) {
-    this.isDisabled = isDisabled || this.disable;
+    this.isDisabled = isDisabled || this.disable();
     this.setConditionalDisabledState();
     this.changeDetectorRef.markForCheck();
   }
 
   private setConditionalDisabledState() {
     if (this.isChecked && !this.isDisabled) {
-      this.conditional?.enableControls();
+      this.conditional()?.enableControls();
     } else {
-      this.conditional?.disableControls();
+      this.conditional()?.disableControls();
     }
   }
 }

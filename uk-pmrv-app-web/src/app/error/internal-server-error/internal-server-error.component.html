@@ -3,7 +3,9 @@
 
   <p class="govuk-body">
     We're experiencing temporary difficulties in syncing data. Please try again later or contact the
-    <a [routerLink]="['/contact-us']" govukLink class="govuk-!-font-weight-bold">UK ETS reporting helpdesk</a>
+    <a href="/contact-us" rel="noreferrer noopener" target="_blank" govukLink class="govuk-!-font-weight-bold">
+      UK ETS reporting helpdesk
+    </a>
     for assistance.
   </p>
 } @else if (errorCode === genericServiceErrorCode.INTREGACCOUNTCREATEUKETS1000) {
@@ -12,7 +14,9 @@
   <p class="govuk-body">Try again later.</p>
   <p class="govuk-body">
     Contact
-    <a [routerLink]="['/contact-us']" govukLink class="govuk-!-font-weight-bold">UK ETS reporting helpdesk</a>
+    <a href="/contact-us" rel="noreferrer noopener" target="_blank" govukLink class="govuk-!-font-weight-bold">
+      UK ETS reporting helpdesk
+    </a>
     for assistance.
   </p>
 } @else if (errorCode === genericServiceErrorCode.INTREGACCOUNTCREATEUKETS1001) {
@@ -20,7 +24,9 @@
   <p class="govuk-body">This account is already associated with a UK ETS Registry ID</p>
   <p class="govuk-body">
     Contact
-    <a [routerLink]="['/contact-us']" govukLink class="govuk-!-font-weight-bold">UK ETS reporting helpdesk</a>
+    <a href="/contact-us" rel="noreferrer noopener" target="_blank" govukLink class="govuk-!-font-weight-bold">
+      UK ETS reporting helpdesk
+    </a>
     for assistance.
   </p>
 } @else {
@@ -29,7 +35,7 @@
   <p class="govuk-body">Try again later.</p>
 
   <p class="govuk-body">
-    <a [routerLink]="['/contact-us']" govukLink class="govuk-!-font-weight-bold">
+    <a href="/contact-us" rel="noreferrer noopener" target="_blank" govukLink class="govuk-!-font-weight-bold">
       Contact the UK ETS reporting helpdesk
     </a>
     if you have any questions.

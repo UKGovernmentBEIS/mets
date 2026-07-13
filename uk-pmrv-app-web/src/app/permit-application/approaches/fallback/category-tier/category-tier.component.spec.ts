@@ -100,7 +100,7 @@ describe('CategoryTierComponent', () => {
       expect(page.heading.textContent.trim()).toEqual('13123124 White Spirit & SBP: Major  Delete');
       expect(page.tasks.map((el) => el.querySelector('a').textContent.trim())).toEqual(['Source stream category']);
 
-      expect(page.tasks.map((el) => el.querySelector('govuk-tag').textContent.trim())).toEqual(['completed']);
+      expect(page.tasks.map((el) => el.querySelector('.app-task-list__tag').textContent.trim())).toEqual(['Completed']);
     });
   });
 
@@ -128,9 +128,9 @@ describe('CategoryTierComponent', () => {
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent.trim(),
+          el.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
-      ).toEqual([['Source stream category', 'completed']]);
+      ).toEqual([['Source stream category', 'Completed']]);
     });
   });
 
@@ -172,7 +172,7 @@ describe('CategoryTierComponent', () => {
 
     it('should display the tasks with status', () => {
       expect(page.heading.textContent.trim()).toEqual('UNDEFINED: Major  Delete');
-      expect(page.tasks.map((el) => el.textContent.trim())).toEqual(['Source stream category needs review']);
+      expect(page.tasks.map((el) => el.textContent.trim())).toEqual(['Source stream category Needs review']);
     });
   });
 
@@ -199,7 +199,7 @@ describe('CategoryTierComponent', () => {
 
     it('should display the tasks with status', () => {
       expect(page.heading.textContent.trim()).toEqual('13123124 White Spirit & SBP: Major  Delete');
-      expect(page.tasks.map((el) => el.textContent.trim())).toEqual(['Source stream category needs review']);
+      expect(page.tasks.map((el) => el.textContent.trim())).toEqual(['Source stream category Needs review']);
     });
   });
 });

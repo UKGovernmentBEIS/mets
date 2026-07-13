@@ -4,7 +4,7 @@ import { GovukTableColumn } from 'govuk-components';
 
 import { PreliminaryAllocation } from 'pmrv-api';
 
-import { subInstallationNameLabelsMap } from '../activity-level-label.map';
+import { newSubInstallationNameLabelsMap } from '../activity-level-label.map';
 
 @Component({
   selector: 'app-doal-preliminary-allocation-list-template',
@@ -20,7 +20,7 @@ export class PreliminaryAllocationListTemplateComponent implements OnInit {
 
   dataSorted: PreliminaryAllocation[];
 
-  subInstallationNameLabelsMap = subInstallationNameLabelsMap;
+  subInstallationNameLabelsMap = newSubInstallationNameLabelsMap;
 
   ngOnInit(): void {
     this.dataSorted = this.data.sort((a, b) =>
@@ -30,7 +30,7 @@ export class PreliminaryAllocationListTemplateComponent implements OnInit {
     this.columns = [
       { field: 'year', header: 'Year' },
       { field: 'subInstallationName', header: 'Sub-installation' },
-      { field: 'allowances', header: 'Allocation', alignRight: true },
+      { field: 'allowances', header: 'Allocation', isNumeric: true },
     ];
 
     if (this.editable) {

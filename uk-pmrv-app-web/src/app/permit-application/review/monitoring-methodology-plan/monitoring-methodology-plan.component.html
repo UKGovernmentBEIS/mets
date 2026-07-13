@@ -66,11 +66,10 @@
                     {{ row.subInstallationType | carbonLeakage }}
                   </ng-container>
                   <ng-container *ngSwitchCase="'status'">
-                    <govuk-tag
-                      [color]="'MMP_SUB_INSTALLATION_Product_Benchmark' | taskStatus: index | async | tagColor"
-                      class="app-task-list__tag">
-                      {{ 'MMP_SUB_INSTALLATION_Product_Benchmark' | taskStatus: index | async | i18nSelect: statusMap }}
-                    </govuk-tag>
+                    <app-task-status-tag
+                      [status]="
+                        'MMP_SUB_INSTALLATION_Product_Benchmark' | taskStatus: index | async
+                      "></app-task-status-tag>
                   </ng-container>
                 </ng-container>
               </ng-template>
@@ -98,11 +97,10 @@
                     {{ row.subInstallationType | carbonLeakage }}
                   </ng-container>
                   <ng-container *ngSwitchCase="'status'">
-                    <govuk-tag
-                      [color]="'MMP_SUB_INSTALLATION_Fallback_Approach' | taskStatus: index | async | tagColor"
-                      class="app-task-list__tag">
-                      {{ 'MMP_SUB_INSTALLATION_Fallback_Approach' | taskStatus: index | async | i18nSelect: statusMap }}
-                    </govuk-tag>
+                    <app-task-status-tag
+                      [status]="
+                        'MMP_SUB_INSTALLATION_Fallback_Approach' | taskStatus: index | async
+                      "></app-task-status-tag>
                   </ng-container>
                 </ng-container>
               </ng-template>

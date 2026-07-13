@@ -26,7 +26,7 @@ describe('FallbackComponent', () => {
     getSubTaskStatus(value) {
       return Array.from(this.subTasks)
         .find((li) => li.querySelector<HTMLSpanElement>('span').textContent.trim() === value)
-        .querySelector<HTMLElement>('govuk-tag strong')
+        .querySelector<HTMLElement>('.app-task-list__tag')
         .textContent.trim();
     }
     get rows() {
@@ -77,8 +77,8 @@ describe('FallbackComponent', () => {
       'Approach description and justification',
       'Annual uncertainty analysis',
     ]);
-    expect(page.getSubTaskStatus('Add a source stream category')).toEqual('cannot start yet');
-    expect(page.getSubTaskStatus('Approach description and justification')).toEqual('not started');
-    expect(page.getSubTaskStatus('Annual uncertainty analysis')).toEqual('not started');
+    expect(page.getSubTaskStatus('Add a source stream category')).toEqual('Cannot start yet');
+    expect(page.getSubTaskStatus('Approach description and justification')).toEqual('Not started');
+    expect(page.getSubTaskStatus('Annual uncertainty analysis')).toEqual('Not started');
   });
 });

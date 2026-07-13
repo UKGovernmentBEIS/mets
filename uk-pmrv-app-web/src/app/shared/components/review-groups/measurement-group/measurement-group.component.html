@@ -6,18 +6,17 @@
           <a
             [routerLink]="['./', index, 'summary']"
             govukLink
-            attr.data-print-text="{{ row?.emissionPointDescription }}"
-          >
+            attr.data-print-text="{{ row?.emissionPointDescription }}">
             <ng-container *ngIf="row?.emissionPointDescription; else noEmissionPoint">
               {{ row.emissionPointDescription }}
               <ng-container *ngIf="row?.parameterMonitoringTierDiffReason?.type === 'DATA_GAP'">
                 - Data gap
               </ng-container>
             </ng-container>
-            <ng-template #noEmissionPoint> Undefined </ng-template>
+            <ng-template #noEmissionPoint>Undefined</ng-template>
           </a>
         </ng-container>
-        <ng-template #totals> Total emissions </ng-template>
+        <ng-template #totals>Total emissions</ng-template>
       </ng-container>
 
       <ng-container *ngSwitchCase="'sourceStreams'">
@@ -47,9 +46,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="'status'">
-        <govuk-tag *ngIf="row.status && !isReview" [color]="row.status | tagColor" class="app-task-list__tag">
-          {{ row.status | i18nSelect: statusMap }}
-        </govuk-tag>
+        <app-task-status-tag *ngIf="row.status && !isReview" [status]="row.status"></app-task-status-tag>
       </ng-container>
     </ng-container>
   </ng-template>

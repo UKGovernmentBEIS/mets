@@ -16,7 +16,7 @@
     label="Date of cessation"
     hint="Must be today or in the past"
     [isRequired]="true"
-    errorMessage="Enter the date of cessation"></div>
+    emptyMessage="Enter the date of cessation"></div>
 
   <div
     govuk-radio
@@ -33,7 +33,7 @@
       govuk-date-input
       label="Expected date to resume regulated activities"
       hint="Must be today or in the future"
-      errorMessage="Enter the date that activities are expected to resume"
+      emptyMessage="Enter the date that activities are expected to resume"
       [isRequired]="true"></div>
 
     <ng-container formGroupName="technicalCapabilityDetails">

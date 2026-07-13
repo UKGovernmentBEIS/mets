@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.reporting.domain.AerContainer;
 import uk.gov.pmrv.api.reporting.domain.AerViolation;
 import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationDTO;
-import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationParamsDTO;
+import uk.gov.pmrv.api.reporting.domain.dto.MeasurementN2OEmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.MeasurementEmissionPointEmission;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.co2.MeasurementOfCO2Emissions;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.n2o.MeasurementN2OEmissionPointEmission;
@@ -28,9 +28,10 @@ public class MeasurementN2OEmissionsValidator implements AerMeasurementN2OEmissi
     @Override
     public List<AerViolation> validate(MeasurementEmissionPointEmission measurementEmissionPointEmission,
                                        AerContainer aerContainer) {
-        MeasurementEmissionsCalculationParamsDTO measurementN2OEmissionsCalculationParamsDTO =
+        MeasurementN2OEmissionsCalculationParamsDTO measurementN2OEmissionsCalculationParamsDTO =
             EMISSION_CALCULATION_PARAMS_MAPPER.toMeasurementN2OEmissionsCalculationParamsDTO(
                 (MeasurementN2OEmissionPointEmission) measurementEmissionPointEmission);
+        measurementN2OEmissionsCalculationParamsDTO.setReportingYear(aerContainer.getReportingYear());
 
         MeasurementEmissionsCalculationDTO calculatedEmissions =
             measurementN2OEmissionsCalculationService.calculateEmissions(

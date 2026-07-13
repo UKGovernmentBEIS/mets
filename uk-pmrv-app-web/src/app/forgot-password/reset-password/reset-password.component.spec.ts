@@ -8,13 +8,12 @@ import { of, throwError } from 'rxjs';
 
 import { PageNotFoundComponent } from '@error/page-not-found/page-not-found.component';
 import { SharedModule } from '@shared/shared.module';
-import { BasePage, mockClass, MockType } from '@testing';
+import { BasePage, MockType } from '@testing';
 
 import { GovukComponentsModule } from 'govuk-components';
 
 import { ForgotPasswordService } from 'pmrv-api';
 
-import { PasswordService } from '../../shared-user/password/password.service';
 import { SharedUserModule } from '../../shared-user/shared-user.module';
 import { ResetPasswordStore } from '../store/reset-password.store';
 import { ResetPasswordComponent } from './reset-password.component';
@@ -24,7 +23,6 @@ describe('ResetPasswordComponent', () => {
   let fixture: ComponentFixture<ResetPasswordComponent>;
   let page: Page;
   let router: Router;
-  let passwordService: jest.Mocked<PasswordService>;
 
   let resetPasswordStore: ResetPasswordStore;
 
@@ -55,8 +53,6 @@ describe('ResetPasswordComponent', () => {
   };
 
   beforeEach(async () => {
-    passwordService = mockClass(PasswordService);
-
     await TestBed.configureTestingModule({
       imports: [
         GovukComponentsModule,
@@ -70,11 +66,7 @@ describe('ResetPasswordComponent', () => {
         SharedUserModule,
       ],
       declarations: [ResetPasswordComponent],
-      providers: [
-        ResetPasswordStore,
-        { provide: ForgotPasswordService, useValue: forgotPasswordService },
-        { provide: PasswordService, useValue: passwordService },
-      ],
+      providers: [ResetPasswordStore, { provide: ForgotPasswordService, useValue: forgotPasswordService }],
     }).compileComponents();
   });
 
@@ -83,7 +75,6 @@ describe('ResetPasswordComponent', () => {
     fixture = TestBed.createComponent(ResetPasswordComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
-    passwordService.blacklisted.mockReturnValue(of(null));
     resetPasswordStore = TestBed.inject(ResetPasswordStore);
 
     resetPasswordStore.setState({
@@ -120,6 +111,7 @@ describe('ResetPasswordComponent', () => {
     fixture.detectChanges();
     expect(navigateSpy).not.toHaveBeenCalled();
 
+    fixture.componentInstance.form.controls['password'].clearAsyncValidators();
     page.passwordValue = 'ThisIsAStrongP@ssw0rd';
     page.repeatedPasswordValue = 'ThisIsAStrongP@ssw0rd';
 

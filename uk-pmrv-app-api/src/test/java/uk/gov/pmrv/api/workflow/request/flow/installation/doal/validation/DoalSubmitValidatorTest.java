@@ -37,6 +37,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.eq;
@@ -348,5 +349,89 @@ class DoalSubmitValidatorTest {
 
         assertEquals(0, violations.size());
         doalSubmitValidator.validate(payload);
+    }
+
+    @Test
+    void validate_whenArticle5ReasonsAndArticleReasonItemsExist_thenViolation() {
+        final DoalProceedToAuthorityDetermination determination =
+                DoalProceedToAuthorityDetermination.builder()
+                        .type(DoalDeterminationType.PROCEED_TO_AUTHORITY)
+                        .articleReasonGroupType(ArticleReasonGroupType.ARTICLE_5_REASONS)
+                        .articleReasonItems(Set.of(
+                                ArticleReasonItemType.ALLOCATION_ADJUSTMENT_UNDER_ARTICLE_5
+                        ))
+                        .reason("test")
+                        .hasWithholdingOfAllowances(false)
+                        .needsOfficialNotice(false)
+                        .build();
+
+        Set<ConstraintViolation<DoalProceedToAuthorityDetermination>> violations =
+                validator.validate(determination);
+
+        assertTrue(
+                violations.stream()
+                        .anyMatch(v -> "{doal.determination.articleReasonItems}"
+                                .equals(v.getMessage()))
+        );
+    }
+
+    @Test
+    void validate_whenArticle34HReasonsAndArticleReasonItemsEmpty_thenViolation() {
+        final DoalProceedToAuthorityDetermination determination =
+                DoalProceedToAuthorityDetermination.builder()
+                        .type(DoalDeterminationType.PROCEED_TO_AUTHORITY)
+                        .articleReasonGroupType(ArticleReasonGroupType.ARTICLE_34H_REASONS)
+                        .articleReasonItems(Collections.emptySet())
+                        .reason("test")
+                        .hasWithholdingOfAllowances(false)
+                        .needsOfficialNotice(false)
+                        .build();
+
+        Set<ConstraintViolation<DoalProceedToAuthorityDetermination>> violations =
+                validator.validate(determination);
+
+        assertTrue(
+                violations.stream()
+                        .anyMatch(v -> "{doal.determination.articleReasonItems}"
+                                .equals(v.getMessage()))
+        );
+    }
+
+    @Test
+    void validate_whenArticle5ReasonsAndArticleReasonItemsEmpty_thenNoViolation() {
+        final DoalProceedToAuthorityDetermination determination =
+                DoalProceedToAuthorityDetermination.builder()
+                        .type(DoalDeterminationType.PROCEED_TO_AUTHORITY)
+                        .articleReasonGroupType(ArticleReasonGroupType.ARTICLE_5_REASONS)
+                        .articleReasonItems(Collections.emptySet())
+                        .reason("test")
+                        .hasWithholdingOfAllowances(false)
+                        .needsOfficialNotice(false)
+                        .build();
+
+        Set<ConstraintViolation<DoalProceedToAuthorityDetermination>> violations =
+                validator.validate(determination);
+
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    void validate_whenArticle6AReasonsAndArticleReasonItemsExist_thenNoViolation() {
+        final DoalProceedToAuthorityDetermination determination =
+                DoalProceedToAuthorityDetermination.builder()
+                        .type(DoalDeterminationType.PROCEED_TO_AUTHORITY)
+                        .articleReasonGroupType(ArticleReasonGroupType.ARTICLE_6A_REASONS)
+                        .articleReasonItems(Set.of(
+                                ArticleReasonItemType.TEMPORARY_CESSATION
+                        ))
+                        .reason("test")
+                        .hasWithholdingOfAllowances(false)
+                        .needsOfficialNotice(false)
+                        .build();
+
+        Set<ConstraintViolation<DoalProceedToAuthorityDetermination>> violations =
+                validator.validate(determination);
+
+        assertEquals(0, violations.size());
     }
 }

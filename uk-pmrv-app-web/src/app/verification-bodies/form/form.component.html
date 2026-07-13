@@ -16,7 +16,7 @@
   <app-address-input formGroupName="address"></app-address-input>
 </ng-container>
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-<div formControlName="types" govuk-checkboxes legend="Type of verification body" legendSize="medium">
+<div formControlName="types" govuk-checkboxes label="Type of verification body" labelSize="medium">
   <govuk-checkbox *ngFor="let option of typeOptions" [label]="option | verificationBodyType" [value]="option">
     <ng-container govukConditionalContent>
       <div

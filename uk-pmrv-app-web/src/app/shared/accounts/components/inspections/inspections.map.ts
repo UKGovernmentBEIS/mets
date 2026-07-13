@@ -15,12 +15,12 @@ export const inspectionsStatusesMap: Record<string, Partial<Record<RequestDetail
   INSTALLATION: {
     CANCELLED: 'Cancelled',
     COMPLETED: 'Completed',
-    IN_PROGRESS: 'In Progress',
+    IN_PROGRESS: 'In progress',
   },
 };
 
 export const inspectionsStatusesTagMap: Partial<Record<RequestDetailsDTO['requestStatus'], string>> = {
-  CANCELLED: 'CANCELLED',
-  COMPLETED: 'COMPLETED',
-  IN_PROGRESS: 'IN PROGRESS',
+  CANCELLED: 'Cancelled',
+  COMPLETED: 'Completed',
+  IN_PROGRESS: 'In progress',
 };

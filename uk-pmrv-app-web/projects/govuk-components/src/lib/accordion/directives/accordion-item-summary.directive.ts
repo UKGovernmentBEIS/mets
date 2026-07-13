@@ -2,6 +2,8 @@ import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[govukAccordionItemSummary]',
-  standalone: false,
+  host: { '[class]': 'elementClass' },
 })
-export class AccordionItemSummaryDirective {}
+export class AccordionItemSummaryDirective {
+  elementClass = 'govuk-accordion__section-summary-focus';
+}

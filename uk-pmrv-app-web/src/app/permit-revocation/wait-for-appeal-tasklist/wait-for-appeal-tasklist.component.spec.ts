@@ -109,7 +109,7 @@ describe('Wait For Appeal Component', () => {
       'Reason for withdrawing the revocation',
     ]);
 
-    expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual(['not started']);
+    expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual(['Not started']);
   });
 
   it('should display timeline actions', () => {

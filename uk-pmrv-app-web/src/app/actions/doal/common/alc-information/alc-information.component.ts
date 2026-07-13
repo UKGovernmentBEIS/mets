@@ -12,7 +12,7 @@ import { DoalActionService } from '../../core/doal-action.service';
   standalone: false,
   template: `
     <app-doal-action-task
-      header="Provide information about this activity level change"
+      header="Provide information about this activity level"
       [actionType]="requestActionType$ | async">
       <app-doal-alc-information-template
         [data]="activityLevelChangeInformation$ | async"

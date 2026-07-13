@@ -11,11 +11,11 @@ describe('FieldsetDirective', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
+    imports: [FieldsetDirective, FieldsetHintDirective],
     template: `
       <fieldset govukFieldset>
         <legend>Legend</legend>
-        <span govukFieldsetHint>Hint</span>
+        <div govukFieldsetHint>Hint</div>
       </fieldset>
       <fieldset govukFieldset>
         <legend>Legend</legend>
@@ -26,7 +26,7 @@ describe('FieldsetDirective', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FieldsetDirective, FieldsetHintDirective, TestComponent],
+      imports: [FieldsetDirective, FieldsetHintDirective, TestComponent],
     }).compileComponents();
   });
 
@@ -45,7 +45,7 @@ describe('FieldsetDirective', () => {
     const fieldset = element.querySelector('fieldset');
     expect(fieldset.id).toEqual('fieldset');
     expect(fieldset.getAttribute('aria-describedby')).toEqual('fieldset-hint');
-    expect(element.querySelector('span').id).toEqual('fieldset-hint');
+    expect(element.querySelector('div').id).toEqual('fieldset-hint');
   });
 
   it('should set the fieldset class', () => {

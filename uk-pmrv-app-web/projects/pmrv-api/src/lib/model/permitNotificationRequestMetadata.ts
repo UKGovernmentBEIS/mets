@@ -13,4 +13,16 @@ import { RequestMetadata } from './requestMetadata';
 
 export interface PermitNotificationRequestMetadata extends RequestMetadata {
   rfiResponseDates?: Array<string>;
+  permitNotificationType?:
+    | 'TEMPORARY_FACTOR'
+    | 'TEMPORARY_CHANGE'
+    | 'TEMPORARY_SUSPENSION'
+    | 'CESSATION'
+    | 'NON_SIGNIFICANT_CHANGE'
+    | 'OTHER_FACTOR';
+  otherFactorReportingType?:
+    | 'EXCEEDED_THRESHOLD_STATED_GHGE_PERMIT'
+    | 'EXCEEDED_THRESHOLD_STATED_HSE_PERMIT'
+    | 'RENOUNCE_FREE_ALLOCATIONS'
+    | 'OTHER_ISSUE';
 }

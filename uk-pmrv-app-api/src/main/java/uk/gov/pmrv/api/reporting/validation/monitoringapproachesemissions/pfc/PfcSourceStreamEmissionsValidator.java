@@ -15,6 +15,8 @@ import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.pfc.PfcSou
 import uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.pfc.PfcEmissionsCalculationService;
 import uk.gov.pmrv.api.reporting.transform.EmissionCalculationParamsMapper;
 
+import java.time.Year;
+
 @Service
 @RequiredArgsConstructor
 public class PfcSourceStreamEmissionsValidator implements AerCalculationOfPfcSourceStreamEmissionValidator {
@@ -27,8 +29,11 @@ public class PfcSourceStreamEmissionsValidator implements AerCalculationOfPfcSou
     @Override
     public List<AerViolation> validate(PfcSourceStreamEmission pfcSourceStreamEmission,
         AerContainer aerContainer) {
+        Year reportingYear = aerContainer.getReportingYear();
+
         PfcEmissionsCalculationParamsDTO pfcEmissionsCalculationParamsDTO = EMISSION_CALCULATION_PARAMS_MAPPER.toPfcEmissionsCalculationParamsDTO(
             pfcSourceStreamEmission);
+        pfcEmissionsCalculationParamsDTO.setReportingYear(reportingYear);
 
         PfcEmissionsCalculationDTO calculatedEmissions = pfcEmissionsCalculationService.calculateEmissions(pfcEmissionsCalculationParamsDTO);
 

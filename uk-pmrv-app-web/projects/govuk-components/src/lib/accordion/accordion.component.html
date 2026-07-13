@@ -1,0 +1,17 @@
+<div class="govuk-accordion" [id]="id()">
+  <div class="govuk-accordion__controls">
+    <button
+      type="button"
+      class="govuk-accordion__show-all"
+      [attr.aria-expanded]="areExpanded$ | async"
+      (click)="toggleAllSections()">
+      <span
+        class="govuk-accordion-nav__chevron"
+        [class.govuk-accordion-nav__chevron--down]="(areExpanded$ | async) === false"></span>
+      <span class="govuk-accordion__show-all-text">
+        {{ (areExpanded$ | async) ? 'Hide all sections' : 'Show all sections' }}
+      </span>
+    </button>
+  </div>
+  <ng-content select="govuk-accordion-item" />
+</div>

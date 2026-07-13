@@ -84,7 +84,7 @@ describe('SubmitContainerComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Provide details for return of allowances');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'not started',
+        'Not started',
       );
     });
   });
@@ -108,7 +108,7 @@ describe('SubmitContainerComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Provide details for return of allowances');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'in progress',
+        'In progress',
       );
     });
   });
@@ -132,7 +132,7 @@ describe('SubmitContainerComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Provide details for return of allowances');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'completed',
+        'Completed',
       );
     });
   });
@@ -168,7 +168,7 @@ describe('SubmitContainerComponent', () => {
     it('should display section as needs review', () => {
       expect(page.sections.length).toEqual(1);
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'needs review',
+        'Needs review',
       );
     });
   });

@@ -3,6 +3,7 @@ package uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayload;
@@ -11,6 +12,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayload;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @AllArgsConstructor
+@NoArgsConstructor
 public class ReissueRequestPayload extends RequestPayload {
 	
 	private Integer consolidationNumber;

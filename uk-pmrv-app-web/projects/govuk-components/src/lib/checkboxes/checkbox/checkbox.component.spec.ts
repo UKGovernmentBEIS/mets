@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { GovukComponentsModule } from '../../govuk-components.module';
+import { ConditionalContentDirective } from '../../directives';
+import { TextInputComponent } from '../../text-input';
+import { CheckboxesComponent } from '../checkboxes.component';
+import { CheckboxComponent } from './checkbox.component';
 
 describe('CheckboxComponent', () => {
   let hostComponent: TestComponent;
@@ -11,7 +14,13 @@ describe('CheckboxComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
+    imports: [
+      CheckboxesComponent,
+      ReactiveFormsModule,
+      CheckboxComponent,
+      TextInputComponent,
+      ConditionalContentDirective,
+    ],
     template: `
       <div govuk-checkboxes [formControl]="control">
         <govuk-checkbox [value]="1" label="First" />
@@ -32,8 +41,7 @@ describe('CheckboxComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, GovukComponentsModule],
-      declarations: [TestComponent],
+      providers: [ControlContainer],
     }).compileComponents();
   });
 
@@ -50,7 +58,7 @@ describe('CheckboxComponent', () => {
 
   it('should display custom labels', () => {
     expect(Array.from(element.querySelectorAll('.govuk-checkboxes__label')).map((label) => label.textContent)).toEqual([
-      'First',
+      ' First ',
       'Second',
     ]);
   });

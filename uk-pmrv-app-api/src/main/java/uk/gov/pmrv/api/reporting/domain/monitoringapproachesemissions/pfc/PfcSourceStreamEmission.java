@@ -73,6 +73,12 @@ public class PfcSourceStreamEmission {
     private PfcManuallyProvidedEmissions providedEmissions;
 
     @NotNull
+    private BigDecimal globalWarmingPotentialCF4;
+
+    @NotNull
+    private BigDecimal globalWarmingPotentialC2F6;
+
+    @NotNull
     @Digits(integer = Integer.MAX_VALUE, fraction = 5)
     private BigDecimal amountOfCF4;
 

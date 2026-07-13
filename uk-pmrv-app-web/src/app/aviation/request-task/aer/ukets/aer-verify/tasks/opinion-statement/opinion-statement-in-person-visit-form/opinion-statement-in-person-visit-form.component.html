@@ -8,7 +8,7 @@
   <!-- VisitDates -->
   <div formArrayName="visitDates" class="govuk-!-width-two-thirds">
     <fieldset govukFieldset *ngFor="let _ of visitDatesCtrl.controls; index as i" [formGroupName]="i">
-      <legend govukLegend>Site visit</legend>
+      <legend govukLegend legendSize="medium">Site visit</legend>
       <button
         (click)="removeVisitDatesCtrl(i)"
         *ngIf="visitDatesCtrl.length > 1"

@@ -4,8 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { ConditionalContentDirective } from '../directives';
-import { ErrorMessageComponent } from '../error-message/error-message.component';
-import { GovukValidators } from '../error-message/govuk-validators';
+import { ErrorMessageComponent, GovukValidators } from '../error-message';
 import { FieldsetDirective, FieldsetHintDirective, LegendDirective } from '../fieldset';
 import { CheckboxComponent } from './checkbox/checkbox.component';
 import { CheckboxesComponent } from './checkboxes.component';
@@ -17,10 +16,10 @@ describe('CheckboxesComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
+    imports: [ReactiveFormsModule, CheckboxesComponent, CheckboxComponent, ConditionalContentDirective],
     template: `
       <form [formGroup]="form">
-        <div govuk-checkboxes formControlName="checkboxes" legend="Some options" hint="Choose an option">
+        <div govuk-checkboxes formControlName="checkboxes" label="Some options" hint="Choose an option">
           <govuk-checkbox label="First" [value]="0" />
           <govuk-checkbox label="Second" [value]="1" />
           <govuk-checkbox label="Third" [value]="2">
@@ -50,8 +49,8 @@ describe('CheckboxesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [
+      imports: [
+        ReactiveFormsModule,
         CheckboxComponent,
         CheckboxesComponent,
         ConditionalContentDirective,
@@ -118,19 +117,19 @@ describe('CheckboxesComponent', () => {
     getAllCheckboxes()[0].triggerEventHandler('blur', {});
     fixture.detectChanges();
 
-    expect(component.options.get(0).isTouched).toBeTruthy();
+    expect(component.options().at(0).isTouched).toBeTruthy();
     expect(component.control.touched).toBeFalsy();
 
     getAllCheckboxes()[1].triggerEventHandler('blur', {});
     fixture.detectChanges();
 
-    expect(component.options.get(1).isTouched).toBeTruthy();
+    expect(component.options().at(1).isTouched).toBeTruthy();
     expect(component.control.touched).toBeFalsy();
 
     getAllCheckboxes()[2].triggerEventHandler('blur', {});
     fixture.detectChanges();
 
-    expect(component.options.get(2).isTouched).toBeTruthy();
+    expect(component.options().at(2).isTouched).toBeTruthy();
     expect(component.control.touched).toBeTruthy();
   });
 
@@ -164,14 +163,14 @@ describe('CheckboxesComponent', () => {
     hostComponent.form.get('checkboxes').setValidators(GovukValidators.builder('Error', () => ({ required: true })));
     hostComponent.form.get('checkboxes').updateValueAndValidity();
     const element: HTMLElement = fixture.nativeElement;
-    element.querySelector('form').submit();
+    element.querySelector('form').dispatchEvent(new Event('submit'));
     fixture.detectChanges();
 
     expect(findErrorMessage()).toBeTruthy();
   });
 
   it('should display a simple legend', () => {
-    expect(element.querySelector('legend').textContent).toEqual('Some options');
+    expect(element.querySelector('legend').textContent).toEqual(' Some options ');
   });
 
   it('should display a simple hint', () => {

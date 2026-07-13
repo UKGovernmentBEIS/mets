@@ -11,13 +11,13 @@ describe('LegendDirective', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: false,
+    imports: [FieldsetDirective, LegendDirective],
     template: `
       <fieldset govukFieldset>
         <legend govukLegend>Legend</legend>
       </fieldset>
       <fieldset govukFieldset>
-        <legend govukLegend size="heading">
+        <legend govukLegend legendSize="heading">
           <h1>Legend</h1>
         </legend>
       </fieldset>
@@ -27,7 +27,7 @@ describe('LegendDirective', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FieldsetDirective, LegendDirective, TestComponent],
+      imports: [FieldsetDirective, LegendDirective, TestComponent],
     }).compileComponents();
   });
 
@@ -44,7 +44,6 @@ describe('LegendDirective', () => {
 
   it('should have the fieldset class', () => {
     expect(element.querySelector('legend').classList.contains('govuk-fieldset__legend')).toBeTruthy();
-    expect(element.querySelector('legend').classList.contains('govuk-fieldset__legend--m')).toBeTruthy();
   });
 
   it('should assign the heading class to headings on heading size', () => {

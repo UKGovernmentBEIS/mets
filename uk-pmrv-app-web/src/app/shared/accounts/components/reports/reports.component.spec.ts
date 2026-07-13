@@ -124,9 +124,9 @@ describe('ReportsComponent', () => {
         '2020  emissions report',
       ]);
       expect(page.reportsStatusNames.map((tag) => tag.textContent.trim())).toEqual([
-        'COMPLETED',
-        'IN PROGRESS',
-        'COMPLETED',
+        'Completed',
+        'In progress',
+        'Completed',
       ]);
     });
   });
@@ -168,7 +168,7 @@ describe('ReportsComponent', () => {
         '2020  emissions report',
       ]);
 
-      expect(page.reportsStatusNames.map((tag) => tag.textContent.trim())).toEqual(['COMPLETED', 'COMPLETED']);
+      expect(page.reportsStatusNames.map((tag) => tag.textContent.trim())).toEqual(['Completed', 'Completed']);
     });
   });
 

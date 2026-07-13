@@ -63,6 +63,10 @@ export class AlrActionService {
     return toSignal(this.requestActionType$);
   }
 
+  get year(): number {
+    return +this.requestAction()?.requestId?.split('-')?.[1];
+  }
+
   getOperatorDownloadUrlAlrFile(alrFile: string): AttachedFile {
     const url = this.getBaseFileDownloadUrl();
     const attachments: { [key: string]: string } = (

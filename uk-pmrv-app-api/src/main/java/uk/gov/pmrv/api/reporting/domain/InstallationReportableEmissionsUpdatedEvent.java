@@ -1,6 +1,7 @@
 package uk.gov.pmrv.api.reporting.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.common.reporting.domain.ReportableEmissionsUpdatedEvent;
@@ -8,6 +9,7 @@ import uk.gov.pmrv.api.common.reporting.domain.ReportableEmissionsUpdatedEvent;
 @SuperBuilder
 @Getter
 @Setter
+@NoArgsConstructor
 public class InstallationReportableEmissionsUpdatedEvent extends ReportableEmissionsUpdatedEvent {
 
     private String requestId;

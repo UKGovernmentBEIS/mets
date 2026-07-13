@@ -291,7 +291,7 @@ export class EmpUkEtsStoreDelegate extends EmpStoreDelegate {
       delete draft.empAttachments;
       delete draft.serviceContactDetails;
 
-      if (draft.sendEmailNotification) {
+      if (draft.sendEmailNotification !== null && draft.sendEmailNotification !== undefined) {
         delete draft.sendEmailNotification;
       }
 

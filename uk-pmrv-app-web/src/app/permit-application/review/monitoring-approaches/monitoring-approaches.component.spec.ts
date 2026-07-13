@@ -88,9 +88,9 @@ describe('MonitoringApproachesComponent', () => {
       expect(
         page.reviewSections.map((section) => [
           section.querySelector('a')?.textContent.trim() ?? section.querySelector('strong').textContent.trim(),
-          section.querySelector('govuk-tag').textContent.trim(),
+          section.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
-      ).toEqual([['Define monitoring approaches', 'cannot start yet']]);
+      ).toEqual([['Define monitoring approaches', 'Cannot start yet']]);
     });
   });
 
@@ -121,9 +121,9 @@ describe('MonitoringApproachesComponent', () => {
       expect(
         page.reviewSections.map((section) => [
           section.querySelector('a')?.textContent.trim() ?? section.querySelector('strong').textContent.trim(),
-          section.querySelector('govuk-tag').textContent.trim(),
+          section.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
-      ).toEqual([['Define monitoring approaches', 'cannot start yet']]);
+      ).toEqual([['Define monitoring approaches', 'Cannot start yet']]);
     });
   });
 });

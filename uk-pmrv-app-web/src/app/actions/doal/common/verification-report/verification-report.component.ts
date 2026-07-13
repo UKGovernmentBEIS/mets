@@ -11,9 +11,7 @@ import { DoalActionService } from '../../core/doal-action.service';
   selector: 'app-doal-verification-report',
   standalone: false,
   template: `
-    <app-doal-action-task
-      header="Upload verification report of the activity level report"
-      [actionType]="requestActionType$ | async">
+    <app-doal-action-task header="Upload verification report" [actionType]="requestActionType$ | async">
       <app-verification-report-summary-template
         [verificationActivityLevelReport]="verificationActivityLevelReport$ | async"
         [editable]="false"

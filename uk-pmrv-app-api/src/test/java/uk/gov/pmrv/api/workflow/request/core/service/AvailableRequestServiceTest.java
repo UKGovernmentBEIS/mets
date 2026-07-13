@@ -152,7 +152,7 @@ class AvailableRequestServiceTest {
         final AppUser user = AppUser.builder().userId("user").build();
         final long accountId = 1L;
         final AccountType accountType = AccountType.INSTALLATION;
-        final RequestCreateValidationResult result = RequestCreateValidationResult.builder().isAvailable(false).build();
+        final RequestCreateValidationResult result = RequestCreateValidationResult.builder().available(false).build();
         final HashSet<String> actionTypes = new HashSet<>();
         actionTypes.add(RequestCreateActionType.AER.name());
         actionTypes.add(RequestCreateActionType.PERMIT_SURRENDER.name());

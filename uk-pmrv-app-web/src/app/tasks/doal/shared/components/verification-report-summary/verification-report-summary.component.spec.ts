@@ -57,7 +57,7 @@ describe('VerificationReportSummaryComponent', () => {
   });
 
   it('should display all HTMLElements', () => {
-    expect(page.heading1.textContent.trim()).toEqual('Upload verification report of the activity level report');
+    expect(page.heading1.textContent.trim()).toEqual('Upload verification report');
     expect(page.appVerificationReportSummaryTemplate).toBeTruthy();
     expect(page.appReturnTaskLink).toBeTruthy();
   });

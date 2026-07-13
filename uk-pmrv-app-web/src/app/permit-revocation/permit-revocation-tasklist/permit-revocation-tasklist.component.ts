@@ -7,6 +7,10 @@ import { combineLatest, filter, map, Observable, of, switchMap, takeUntil, withL
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { notInNeedsForReview } from '@permit-revocation/core/section-status';
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
+import {
+  getPermitRevocationPreviewDocumentsInfo,
+  permitRevocationDocumentPreviewRequestTaskActionTypesMap,
+} from '@permit-revocation/utils/preview-documents-permit-revocation.util';
 import { BackLinkService } from '@shared/back-link/back-link.service';
 import { hasRequestTaskAllowedActions } from '@shared/components/related-actions/request-task-allowed-actions.map';
 
@@ -45,6 +49,24 @@ export class PermitRevocationTasklistComponent implements OnInit {
 
   taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
   isTask$ = this.store.pipe(map((state) => state.isRequestTask));
+
+  previewDocuments$ = this.store.pipe(
+    map((state) =>
+      getPermitRevocationPreviewDocumentsInfo(
+        permitRevocationDocumentPreviewRequestTaskActionTypesMap(state.requestTaskType),
+      ),
+    ),
+  );
+
+  decision$ = this.store.pipe(
+    map((state) => {
+      return {
+        operators: [],
+        externalContacts: [],
+        signatory: state.assignee.assigneeUserId,
+      };
+    }),
+  );
 
   readonly relatedTasks$ = this.store.pipe(
     switchMap((state) =>

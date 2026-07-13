@@ -37,6 +37,7 @@
 	<include file="changelog_non_compliance.xml" relativeToChangelogFile="true" />
     <include file="changelog_account_file_attachment.xml" relativeToChangelogFile="true"/>
     <include file="changelog_reporting_2025.xml" relativeToChangelogFile="true" />
+    <include file="changelog_emissions_not_required.xml" relativeToChangelogFile="true" />
 	<include file="changelog_account_aviation_data_migration.xml" relativeToChangelogFile="true" />
 	<include file="changelog_baseline_data_report.xml" relativeToChangelogFile="true" />
 	<include file="changelog_withholding_of_allowances_data_migration.xml" relativeToChangelogFile="true" />
@@ -44,8 +45,9 @@
     <include file="changelog_flowable_create_schema.xml" relativeToChangelogFile="true" />
     <include file="changelog_flowable_ddl.xml" relativeToChangelogFile="true" />
     <include file="changelog_migrate_from_camunda_to_flowable.xml" relativeToChangelogFile="true" />
-	<include file="changelog_verification_body.xml" relativeToChangelogFile="true" />
-	<include file="changelog_request_task_wait_for_review_permit_emp_migration.xml" relativeToChangelogFile="true" />
-
+    <include file="changelog_verification_body.xml" relativeToChangelogFile="true" />
+    <include file="changelog_request_task_wait_for_review_permit_emp_migration.xml" relativeToChangelogFile="true" />
+	<include file="changelog_custom_mi_reports_categories.xml" relativeToChangelogFile="true" />
+	<include file="changelog_permit_notification_metadata_migration.xml" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

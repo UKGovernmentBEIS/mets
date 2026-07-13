@@ -135,7 +135,7 @@ describe('PermitRevocationTaskListComponent', () => {
 
     expect(page.sectionAnchorNames.map((section) => section.textContent)).toEqual(['Reason for revocation']);
 
-    expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual(['not started']);
+    expect(page.sectionStatuses.map((section) => section.textContent.trim())).toEqual(['Not started']);
   });
 
   it('should display notify operator of decision action button', () => {

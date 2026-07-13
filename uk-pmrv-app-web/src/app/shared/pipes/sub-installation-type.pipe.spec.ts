@@ -31,7 +31,11 @@ describe('SubInstallationTypePipe', () => {
     expect(pipe.transform('GREY_CEMENT_CLINKER')).toEqual('Grey cement clinker');
     expect(pipe.transform('HOT_METAL')).toEqual('Hot metal');
     expect(pipe.transform('HYDROGEN')).toEqual('Hydrogen');
+    expect(pipe.transform('HYDROGEN_CBAM')).toEqual('Hydrogen CBAM covered');
+    expect(pipe.transform('HYDROGEN_NON_CBAM')).toEqual('Hydrogen non-CBAM covered');
     expect(pipe.transform('IRON_CASTING')).toEqual('Iron casting');
+    expect(pipe.transform('IRON_CASTING_CBAM')).toEqual('Iron casting CBAM covered');
+    expect(pipe.transform('IRON_CASTING_NON_CBAM')).toEqual('Iron casting non-CBAM covered');
     expect(pipe.transform('LIME')).toEqual('Lime');
     expect(pipe.transform('LONG_FIBRE_KRAFT_PULP')).toEqual('Long fibre kraft pulp');
     expect(pipe.transform('MINERAL_WOOL')).toEqual('Mineral wool');
@@ -64,11 +68,25 @@ describe('SubInstallationTypePipe', () => {
     expect(pipe.transform('VINYL_CHLORIDE_MONOMER')).toEqual('Vinyl chloride monomer');
     expect(pipe.transform('WHITE_CEMENT_CLINKER')).toEqual('White cement clinker');
     expect(pipe.transform('HEAT_BENCHMARK_CL')).toEqual('Heat benchmark exposed to carbon leakage');
+    expect(pipe.transform('HEAT_BENCHMARK_CL_CBAM')).toEqual('Heat benchmark exposed to carbon leakage CBAM covered');
+    expect(pipe.transform('HEAT_BENCHMARK_CL_NON_CBAM')).toEqual(
+      'Heat benchmark exposed to carbon leakage non-CBAM covered',
+    );
     expect(pipe.transform('HEAT_BENCHMARK_NON_CL')).toEqual('Heat benchmark not exposed to carbon leakage');
     expect(pipe.transform('DISTRICT_HEATING_NON_CL')).toEqual('District Heating');
     expect(pipe.transform('FUEL_BENCHMARK_CL')).toEqual('Fuel benchmark exposed to carbon leakage');
+    expect(pipe.transform('FUEL_BENCHMARK_CL_CBAM')).toEqual('Fuel benchmark exposed to carbon leakage CBAM covered');
+    expect(pipe.transform('FUEL_BENCHMARK_CL_NON_CBAM')).toEqual(
+      'Fuel benchmark exposed to carbon leakage non-CBAM covered',
+    );
     expect(pipe.transform('FUEL_BENCHMARK_NON_CL')).toEqual('Fuel benchmark not exposed to carbon leakage');
     expect(pipe.transform('PROCESS_EMISSIONS_CL')).toEqual('Process emissions exposed to carbon leakage');
+    expect(pipe.transform('PROCESS_EMISSIONS_CL_CBAM')).toEqual(
+      'Process emissions exposed to carbon leakage CBAM covered',
+    );
+    expect(pipe.transform('PROCESS_EMISSIONS_CL_NON_CBAM')).toEqual(
+      'Process emissions exposed to carbon leakage non-CBAM covered',
+    );
     expect(pipe.transform('PROCESS_EMISSIONS_NON_CL')).toEqual('Process emissions not exposed to carbon leakage');
   });
 

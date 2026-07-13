@@ -306,7 +306,7 @@ export class ItemNamePipe implements PipeTransform {
       case 'DOAL_APPLICATION_SUBMIT':
         return 'Determination of activity level';
       case 'DOAL_AUTHORITY_RESPONSE':
-        return 'Provide UK ETS Authority response for activity Level Change';
+        return 'Provide UK ETS Authority response for activity level';
       case 'DOAL_WAIT_FOR_PEER_REVIEW':
         return 'Activity level determination sent to peer reviewer';
       case 'DOAL_APPLICATION_PEER_REVIEW':

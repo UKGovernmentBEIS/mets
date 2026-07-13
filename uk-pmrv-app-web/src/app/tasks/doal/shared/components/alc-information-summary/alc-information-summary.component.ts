@@ -11,7 +11,7 @@ import { ActivityLevelChangeInformation } from 'pmrv-api';
   standalone: false,
   template: `
     <app-doal-task [breadcrumb]="true">
-      <app-page-heading>Provide information about this activity level change</app-page-heading>
+      <app-page-heading>Provide information about this activity level</app-page-heading>
       <app-doal-alc-information-template
         *ngIf="activityLevelChangeInformation$ | async as alc"
         [data]="alc"></app-doal-alc-information-template>

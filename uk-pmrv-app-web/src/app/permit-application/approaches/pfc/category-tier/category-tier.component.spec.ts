@@ -111,10 +111,10 @@ describe('CategoryTierComponent', () => {
         'Emission factor',
       ]);
 
-      expect(page.tasks.map((el) => el.querySelector('govuk-tag').textContent.trim())).toEqual([
-        'completed',
-        'not started',
-        'not started',
+      expect(page.tasks.map((el) => el.querySelector('.app-task-list__tag').textContent.trim())).toEqual([
+        'Completed',
+        'Not started',
+        'Not started',
       ]);
 
       expect(page.summaryDefinitions).toEqual([
@@ -155,12 +155,12 @@ describe('CategoryTierComponent', () => {
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent.trim(),
+          el.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
       ).toEqual([
-        ['Source stream category', 'completed'],
-        ['Activity data', 'not started'],
-        ['Emission factor', 'not started'],
+        ['Source stream category', 'Completed'],
+        ['Activity data', 'Not started'],
+        ['Emission factor', 'Not started'],
       ]);
     });
   });
@@ -206,9 +206,9 @@ describe('CategoryTierComponent', () => {
     it('should display the tasks with status', () => {
       expect(page.heading.textContent.trim()).toEqual('UNDEFINED: Major  Delete');
       expect(page.tasks.map((el) => el.textContent.trim())).toEqual([
-        'Source stream category needs review',
-        'Activity data not started',
-        'Emission factor not started',
+        'Source stream category Needs review',
+        'Activity data Not started',
+        'Emission factor Not started',
       ]);
     });
   });
@@ -238,9 +238,9 @@ describe('CategoryTierComponent', () => {
     it('should display the tasks with status', () => {
       expect(page.heading.textContent.trim()).toEqual('13123124 White Spirit & SBP: Major  Delete');
       expect(page.tasks.map((el) => el.textContent.trim())).toEqual([
-        'Source stream category needs review',
-        'Activity data not started',
-        'Emission factor not started',
+        'Source stream category Needs review',
+        'Activity data Not started',
+        'Emission factor Not started',
       ]);
     });
   });

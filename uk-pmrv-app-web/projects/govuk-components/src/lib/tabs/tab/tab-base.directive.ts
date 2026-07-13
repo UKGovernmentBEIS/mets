@@ -1,18 +1,16 @@
-import { ChangeDetectorRef, Directive, Input, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Directive, inject, input, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
 @Directive()
 export abstract class TabBaseDirective implements OnChanges {
-  @Input() id: string;
-  @Input() label: string;
+  public readonly cdRef: ChangeDetectorRef = inject(ChangeDetectorRef);
+  public readonly templateRef: TemplateRef<void> = inject(TemplateRef);
+
+  readonly id = input<string>();
+  readonly label = input<string>();
 
   isSelected = new BehaviorSubject<boolean>(false);
-
-  constructor(
-    public cdRef: ChangeDetectorRef,
-    public templateRef: TemplateRef<void>,
-  ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ngOnChanges(changes: SimpleChanges): void {

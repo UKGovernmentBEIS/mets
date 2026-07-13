@@ -86,6 +86,6 @@ describe('ReviewComponent', () => {
 
   it('should render the review content', () => {
     expect(page.heading).toEqual('Review notification of a change');
-    expect(page.sections.map((el) => el.textContent.trim())).toEqual(['Details of the Change accepted']);
+    expect(page.sections.map((el) => el.textContent.trim())).toEqual(['Details of the Change Accepted']);
   });
 });

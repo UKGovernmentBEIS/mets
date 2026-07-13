@@ -111,9 +111,9 @@ describe('ReviewSectionsContainerComponent', () => {
 
     it('should display about variation section', () => {
       expect(hostElement.querySelector('ul li[linktext="About the variation"]')).toBeTruthy();
-      expect(hostElement.querySelector('ul li[linktext="About the variation"] govuk-tag').textContent.trim()).toEqual(
-        'undecided',
-      );
+      expect(
+        hostElement.querySelector('ul li[linktext="About the variation"] .app-task-list__tag').textContent.trim(),
+      ).toEqual('Undecided');
     });
 
     it('should display section status', () => {
@@ -124,9 +124,9 @@ describe('ReviewSectionsContainerComponent', () => {
       expect(hostElement.querySelector('ul li[linktext="Overall decision"] span').textContent.trim()).toEqual(
         'Overall decision',
       );
-      expect(hostElement.querySelector('ul li[linktext="Overall decision"] govuk-tag').textContent.trim()).toEqual(
-        'undecided',
-      );
+      expect(
+        hostElement.querySelector('ul li[linktext="Overall decision"] .app-task-list__tag').textContent.trim(),
+      ).toEqual('Undecided');
     });
 
     it('should not display action buttons', () => {
@@ -170,18 +170,18 @@ describe('ReviewSectionsContainerComponent', () => {
     });
 
     it('should display about variation section', () => {
-      expect(hostElement.querySelector('ul li[linktext="About the variation"] govuk-tag').textContent.trim()).toEqual(
-        'accepted',
-      );
+      expect(
+        hostElement.querySelector('ul li[linktext="About the variation"] .app-task-list__tag').textContent.trim(),
+      ).toEqual('Accepted');
     });
 
     it('should display overall decision', () => {
       expect(hostElement.querySelector('ul li[linktext="Overall decision"] span').textContent.trim()).toEqual(
         'Overall decision',
       );
-      expect(hostElement.querySelector('ul li[linktext="Overall decision"] govuk-tag').textContent.trim()).toEqual(
-        'approved',
-      );
+      expect(
+        hostElement.querySelector('ul li[linktext="Overall decision"] .app-task-list__tag').textContent.trim(),
+      ).toEqual('Approved');
     });
 
     it('should display related action buttons', () => {
@@ -237,9 +237,9 @@ describe('ReviewSectionsContainerComponent', () => {
 
     it('should display about variation section', () => {
       expect(hostElement.querySelector('ul li[linktext="About the variation"]')).toBeTruthy();
-      expect(hostElement.querySelector('ul li[linktext="About the variation"] govuk-tag').textContent.trim()).toEqual(
-        'not started',
-      );
+      expect(
+        hostElement.querySelector('ul li[linktext="About the variation"] .app-task-list__tag').textContent.trim(),
+      ).toEqual('Not started');
     });
 
     it('should display section status', () => {
@@ -250,9 +250,9 @@ describe('ReviewSectionsContainerComponent', () => {
       expect(hostElement.querySelector('ul li[linktext="Overall decision"] span').textContent.trim()).toEqual(
         'Overall decision',
       );
-      expect(hostElement.querySelector('ul li[linktext="Overall decision"] govuk-tag').textContent.trim()).toEqual(
-        'cannot start yet',
-      );
+      expect(
+        hostElement.querySelector('ul li[linktext="Overall decision"] .app-task-list__tag').textContent.trim(),
+      ).toEqual('Cannot start yet');
     });
 
     it('should not display action buttons', () => {
@@ -308,9 +308,9 @@ describe('ReviewSectionsContainerComponent', () => {
 
     it('should display about variation section', () => {
       expect(hostElement.querySelector('ul li[linktext="About the variation"]')).toBeTruthy();
-      expect(hostElement.querySelector('ul li[linktext="About the variation"] govuk-tag').textContent.trim()).toEqual(
-        'completed',
-      );
+      expect(
+        hostElement.querySelector('ul li[linktext="About the variation"] .app-task-list__tag').textContent.trim(),
+      ).toEqual('Completed');
     });
 
     it('should display section status', () => {
@@ -321,9 +321,9 @@ describe('ReviewSectionsContainerComponent', () => {
       expect(hostElement.querySelector('ul li[linktext="Overall decision"] span').textContent.trim()).toEqual(
         'Overall decision',
       );
-      expect(hostElement.querySelector('ul li[linktext="Overall decision"] govuk-tag').textContent.trim()).toEqual(
-        'approved',
-      );
+      expect(
+        hostElement.querySelector('ul li[linktext="Overall decision"] .app-task-list__tag').textContent.trim(),
+      ).toEqual('Approved');
     });
 
     it('should display related action buttons', () => {

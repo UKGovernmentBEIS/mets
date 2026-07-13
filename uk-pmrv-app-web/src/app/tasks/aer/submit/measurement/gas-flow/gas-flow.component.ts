@@ -7,6 +7,7 @@ import { combineLatest, first, map, switchMap, withLatestFrom } from 'rxjs';
 import {
   AerApplicationSubmitRequestTaskPayload,
   MeasurementEmissionsCalculationParamsDTO,
+  MeasurementN2OEmissionsCalculationParamsDTO,
   ReportingService,
 } from 'pmrv-api';
 
@@ -48,7 +49,7 @@ export class GasFlowComponent {
           const measurement = monitoringApproachEmissions[this.taskKey] as any;
           const emissionPointEmission = measurement.emissionPointEmissions?.[index];
 
-          const parameters: MeasurementEmissionsCalculationParamsDTO = {
+          const baseParams: MeasurementEmissionsCalculationParamsDTO = {
             annualHourlyAverageGHGConcentration: emissionPointEmission.annualHourlyAverageGHGConcentration,
             annualHourlyAverageFlueGasFlow: this.form.get('annualHourlyAverageFlueGasFlow').value,
             biomassPercentage: emissionPointEmission.biomassPercentages.biomassPercentage,
@@ -56,9 +57,14 @@ export class GasFlowComponent {
             operationalHours: emissionPointEmission.operationalHours,
           };
 
-          return this.taskKey === 'MEASUREMENT_CO2'
-            ? this.reportingService.calculateMeasurementCO2Emissions(parameters)
-            : this.reportingService.calculateMeasurementN2OEmissions(parameters);
+          if (this.taskKey === 'MEASUREMENT_CO2') {
+            return this.reportingService.calculateMeasurementCO2Emissions(baseParams);
+          }
+          const n2oParams: MeasurementN2OEmissionsCalculationParamsDTO = {
+            ...baseParams,
+            reportingYear: payload.reportingYear,
+          };
+          return this.reportingService.calculateMeasurementN2OEmissions(n2oParams);
         }),
         withLatestFrom(this.payload$, this.index$),
         switchMap(([totals, payload, index]) =>

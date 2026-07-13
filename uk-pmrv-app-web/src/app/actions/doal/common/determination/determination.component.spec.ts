@@ -52,7 +52,7 @@ describe('DeterminationComponent', () => {
     expect(page.heading).toEqual('Provide determination of activity level');
     expect(page.summaryListValues).toHaveLength(7);
     expect(page.summaryListValues).toEqual([
-      ['Decision', 'Proceed to UK ETS authority'],
+      ['Decision', 'Proceed to UK ETS Authority'],
       [
         'Reason for determination',
         'Article 6a of the Activity Level Changes Regulation (allocation adjustment under Article 5)',

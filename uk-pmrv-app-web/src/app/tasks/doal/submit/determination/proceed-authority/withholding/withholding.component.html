@@ -2,11 +2,10 @@
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
-    caption="Proceed to UK ETS authority"
+    caption="Proceed to UK ETS Authority"
     heading="Has a withholding of allowances notice been issued?"
     submitText="Save and continue"
-    [hideSubmit]="(editable$ | async) === false"
-  >
+    [hideSubmit]="(editable$ | async) === false">
     <div formControlName="hasWithholdingOfAllowances" govuk-radio>
       <govuk-radio-option [value]="true" label="Yes">
         <ng-container govukConditionalContent>
@@ -15,8 +14,7 @@
               formControlName="noticeIssuedDate"
               label="When was the notice issued?"
               hint="This date cannot be in the future"
-              govuk-date-input
-            ></div>
+              govuk-date-input></div>
 
             <h2 class="govuk-heading-m">Comments on the withholding of allowances notice</h2>
             <div govuk-textarea formControlName="withholdingOfAllowancesComment" [maxLength]="10000"></div>

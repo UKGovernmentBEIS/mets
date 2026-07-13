@@ -12,9 +12,8 @@ import { CookiesService } from './cookies.service';
       cookiesExpirationTime="1"
       [areBrowserCookiesEnabled]="cookiesEnabled"
       [cookiesAccepted]="cookiesAccepted$ | async"
-      (cookiesAcceptedEmitter)="acceptCookies($event)">
-      <govuk-cookies-pop-up />
-    </govuk-cookies-pop-up>
+      (cookiesRejectedEmitter)="rejectCookies($event)"
+      (cookiesAcceptedEmitter)="acceptCookies($event)" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -26,5 +25,9 @@ export class CookiesContainerComponent {
   acceptCookies(expired: string) {
     this.cookiesService.acceptAllCookies(+expired);
     toggleAnalytics(true);
+  }
+
+  rejectCookies(expired: string) {
+    this.cookiesService.rejectAllCookies(+expired);
   }
 }

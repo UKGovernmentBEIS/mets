@@ -1,0 +1,93 @@
+/**
+Helper classes that were not covered through govuk-components
+ */
+@use 'govuk-frontend/dist/govuk/index' as govuk;
+
+main {
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.pre-line,
+.pre-wrap {
+  white-space: pre-line;
+}
+
+.overflow-wrap {
+  overflow-wrap: break-word;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.row-flex {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -(govuk.govuk-spacing(3));
+  margin-right: -(govuk.govuk-spacing(3));
+}
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+
+  @include govuk.govuk-media-query($from: tablet) {
+    flex-direction: row;
+    gap: govuk.govuk-spacing(1);
+  }
+}
+
+.align-items-end {
+  align-items: flex-end;
+}
+
+.col-flex-three-quarters {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: govuk.govuk-grid-width('three-quarters');
+  padding: 0 govuk.govuk-spacing(3);
+}
+
+.col-flex-one-quarter {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: govuk.govuk-grid-width('one-quarter');
+  padding: 0 govuk.govuk-spacing(3) 0 0;
+}
+
+a[role='button'] {
+  @extend %govuk-link;
+  color: govuk.$govuk-link-visited-colour;
+  cursor: pointer;
+}
+
+.highlight-error {
+  color: govuk.$govuk-error-colour;
+  font-weight: bold;
+}
+
+.control-row {
+  display: flex;
+  gap: govuk.govuk-spacing(3);
+}
+
+.justify-content-end {
+  justify-content: flex-end;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.nowrap {
+  white-space: nowrap;
+}

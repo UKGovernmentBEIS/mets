@@ -76,7 +76,8 @@ public enum RoleTaskPermissions {
                     RequestTaskType.PERMIT_NOTIFICATION_RFI_RESPONSE_SUBMIT,
                     RequestTaskType.PERMIT_NOTIFICATION_FOLLOW_UP,
                     RequestTaskType.PERMIT_NOTIFICATION_FOLLOW_UP_WAIT_FOR_REVIEW,
-                    RequestTaskType.NER_APPLICATION_AMENDS_SUBMIT
+                    RequestTaskType.NER_APPLICATION_AMENDS_SUBMIT,
+                    RequestTaskType.NER_AMEND_WAIT_FOR_VERIFICATION
             )
     ),
     VERIFIER_INSTALLATION(
@@ -85,7 +86,8 @@ public enum RoleTaskPermissions {
             Set.of(
                     RequestTaskType.AER_APPLICATION_VERIFICATION_SUBMIT,
                     RequestTaskType.AER_AMEND_APPLICATION_VERIFICATION_SUBMIT,
-                    RequestTaskType.NER_APPLICATION_VERIFICATION_SUBMIT
+                    RequestTaskType.NER_APPLICATION_VERIFICATION_SUBMIT,
+                    RequestTaskType.NER_AMEND_APPLICATION_VERIFICATION_SUBMIT
             )
     ),
 

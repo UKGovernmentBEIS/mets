@@ -69,8 +69,8 @@ describe('FollowUpComponent', () => {
   it('should render follow up tasklist content', () => {
     expect(page.heading).toEqual('Follow up response to a notification');
     expect(page.sections.map((el) => el.textContent.trim())).toEqual([
-      'Follow up response not started',
-      'Submit cannot start yet',
+      'Follow up response Not started',
+      'Submit Cannot start yet',
     ]);
   });
 });

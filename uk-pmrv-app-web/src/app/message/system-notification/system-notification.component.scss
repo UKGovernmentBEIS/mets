@@ -1,7 +1,7 @@
-@use 'govuk-frontend/govuk/base' as govuk;
+﻿@use 'govuk-frontend/dist/govuk/base' as govuk;
 
 .info {
-  background-color: govuk.$govuk-canvas-background-colour;
+  background-color: govuk.govuk-colour('black', $variant: 'tint-95');
   padding: govuk.govuk-spacing(3) govuk.govuk-spacing(3) 1px;
 }
 

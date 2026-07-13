@@ -4,7 +4,12 @@ import { GovukTableColumn } from 'govuk-components';
 
 import { ActivityLevel, ALRActivityLevel, HistoricalActivityLevel } from 'pmrv-api';
 
-import { changeTypeLabelsMap, subInstallationNameLabelsMap } from '../doal/activity-level-label.map';
+import {
+  alrChangeTypeLabelsMap,
+  alrChangeTypeLabelsMap2027,
+  doalChangeTypeLabelsMap,
+  newSubInstallationNameLabelsMap,
+} from '../doal/activity-level-label.map';
 
 type ActivityLevelType = ActivityLevel & HistoricalActivityLevel & ALRActivityLevel;
 
@@ -19,15 +24,23 @@ export class ActivityLevelListTemplateComponent implements OnInit {
   @Input() heading: string;
   @Input() historical: boolean;
   @Input() editable: boolean;
+  @Input() isDoal: boolean;
+  @Input() year: number;
 
   columns: GovukTableColumn[] = [];
 
   dataSorted: ActivityLevelType[];
 
-  subInstallationNameLabelsMap = subInstallationNameLabelsMap;
-  changeTypeLabelsMap = changeTypeLabelsMap;
+  subInstallationNameLabelsMap = newSubInstallationNameLabelsMap;
+  changeTypeLabelsMap;
 
   ngOnInit(): void {
+    this.changeTypeLabelsMap = this.isDoal
+      ? doalChangeTypeLabelsMap
+      : this.year >= 2027
+        ? { ...alrChangeTypeLabelsMap2027, NEW_SUB_INSTALLATION: 'New sub-installation' }
+        : { ...alrChangeTypeLabelsMap, NEW_SUB_INSTALLATION: 'New sub-installation' };
+
     const commonColumns = [
       { field: 'year', header: 'Year', widthClass: 'app-column-width-5-per' },
       { field: 'subInstallationName', header: 'Sub-installation' },

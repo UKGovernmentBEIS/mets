@@ -44,23 +44,15 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "./node_modules/govuk-frontend/govuk/assets",
-                "output": "assets/"
-              },
-              {
-                "glob": "**/*",
-                "input": "./node_modules/@hmcts/frontend/assets",
-                "output": "hmcts-assets/"
+                "input": "./node_modules/govuk-frontend/dist/govuk/assets",
+                "output": "/assets/"
               }
             ],
             "styles": ["src/styles.scss", "node_modules/dialog-polyfill/dialog-polyfill.css"],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/sass/include"],
-              "sass": {
-                "silenceDeprecations": ["mixed-decls", "import"]
-              }
+              "includePaths": ["node_modules/govuk-frontend/dist/govuk/"]
             },
-            "scripts": ["node_modules/govuk-frontend/govuk/all.js"],
+            "scripts": [],
             "allowedCommonJsDependencies": [
               "keycloak-js",
               "clean-deep",
@@ -70,7 +62,9 @@
               "js-sha256",
               "moment",
               "lodash",
-              "google-libphonenumber"
+              "google-libphonenumber",
+              "encoding-japanese",
+              "papaparse"
             ]
           },
           "configurations": {
@@ -139,6 +133,13 @@
       "root": "projects/govuk-components",
       "sourceRoot": "projects/govuk-components/src",
       "prefix": "govuk",
+      "schematics": {
+        "@schematics/angular:component": {
+          "inlineStyle": true,
+          "inlineTemplate": true,
+          "changeDetection": "OnPush"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
@@ -157,7 +158,10 @@
         },
         "test": {
           "builder": "@angular-builders/jest:run",
-          "options": {}
+          "options": {
+            "tsConfig": "projects/govuk-components/tsconfig.spec.json",
+            "polyfills": ["zone.js", "zone.js/testing"]
+          }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
@@ -198,6 +202,33 @@
     }
   },
   "cli": {
+    "schematicCollections": ["@angular-eslint/schematics"],
     "analytics": false
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
+    }
   }
 }

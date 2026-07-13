@@ -1,49 +1,68 @@
-import { Component, HostBinding, Input, Optional, Self } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 
+import { ErrorMessageComponent } from '../error-message/error-message.component';
 import { FormService } from '../form/form.service';
+import { LabelSizeType } from '../text-input/label-size.type';
 
 /*
   eslint-disable
   @typescript-eslint/no-unused-vars,
-  @angular-eslint/prefer-on-push-component-change-detection,
-  @typescript-eslint/no-empty-function,
   @angular-eslint/component-selector,
-  @angular-eslint/prefer-host-metadata-property
+  @angular-eslint/prefer-on-push-component-change-detection,
 */
 @Component({
   selector: 'div[govukFileUpload],govuk-file-upload',
-  standalone: false,
+  imports: [ErrorMessageComponent],
   templateUrl: './file-upload.component.html',
+  host: {
+    '[class.govuk-!-display-block]': 'govukDisplayBlock',
+    '[class.govuk-form-group]': 'govukFormGroupClass',
+    '[class.govuk-form-group--error]': 'govukFormGroupErrorClass',
+  },
 })
 export class FileUploadComponent implements ControlValueAccessor {
-  @Input()
-  set label(label: string) {
-    this.isLabelHidden = false;
-    this.currentLabel = label;
-  }
+  ngControl = inject(NgControl, { self: true, optional: true })!;
+  private formService = inject(FormService);
 
-  @Input() accepted: string;
-  @Input() isMultiple: boolean;
-  @HostBinding('class.govuk-!-display-block') readonly govukDisplayBlock = true;
-  @HostBinding('class.govuk-form-group') readonly govukFormGroupClass = true;
+  readonly label = input<string>();
+  readonly isLabelHidden = input(false);
+  readonly labelSize = input<LabelSizeType>('normal');
+  readonly accepted = input<string>();
+  readonly isMultiple = input<boolean>();
 
-  @HostBinding('class.govuk-form-group--error') get govukFormGroupErrorClass(): boolean {
+  readonly govukDisplayBlock = true;
+  readonly govukFormGroupClass = true;
+
+  get govukFormGroupErrorClass(): boolean {
     return this.control?.invalid && this.control?.touched;
   }
 
-  isLabelHidden = true;
-  currentLabel = 'Legend';
+  readonly currentLabelSize = computed(() => {
+    switch (this.labelSize()) {
+      case 'small':
+        return 'govuk-label govuk-label--s';
+      case 'medium':
+        return 'govuk-label govuk-label--m';
+      case 'large':
+        return 'govuk-label govuk-label--l';
+      default:
+        return 'govuk-label';
+    }
+  });
 
-  constructor(
-    @Self() @Optional() public ngControl: NgControl,
-    private formService: FormService,
-  ) {
+  constructor() {
+    const ngControl = this.ngControl;
+
     ngControl.valueAccessor = this;
   }
 
   get control(): UntypedFormControl {
     return this.ngControl.control as UntypedFormControl;
+  }
+
+  get isTouched(): boolean {
+    return this.control.touched;
   }
 
   get identifier(): string {

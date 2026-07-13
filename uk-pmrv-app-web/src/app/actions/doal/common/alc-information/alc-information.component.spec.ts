@@ -54,7 +54,7 @@ describe('AlcInformationComponent', () => {
   });
 
   it('should show summary details', () => {
-    expect(page.heading).toEqual('Provide information about this activity level change');
+    expect(page.heading).toEqual('Provide information about this activity level');
     expect(page.summaryListValues).toHaveLength(5);
     expect(page.summaryListValues).toEqual([
       ['Were conservative estimates made to determine the activity level?', 'Yes'],

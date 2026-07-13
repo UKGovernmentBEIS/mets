@@ -1,0 +1,62 @@
+@if (serviceName()) {
+  <section class="govuk-service-navigation" [attr.aria-label]="ariaLabel()">
+    <ng-container *ngTemplateOutlet="innerContent" />
+  </section>
+} @else {
+  <div class="govuk-service-navigation">
+    <ng-container *ngTemplateOutlet="innerContent" />
+  </div>
+}
+
+<ng-template #innerContent>
+  <div class="govuk-width-container">
+    <div class="govuk-service-navigation__container">
+      @if (serviceName()) {
+        <span class="govuk-service-navigation__service-name">
+          @if (serviceUrl()) {
+            <a [routerLink]="serviceUrl()" class="govuk-service-navigation__link">{{ serviceName() }}</a>
+          } @else {
+            <span class="govuk-service-navigation__text">{{ serviceName() }}</span>
+          }
+        </span>
+      }
+
+      @if (navigationItems(); as navigationItems) {
+        <nav class="govuk-service-navigation__wrapper" [attr.aria-label]="menuButtonText()">
+          @if (collapseNavigationOnMobile() || navigationItems.length > 1) {
+            <button
+              type="button"
+              class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle"
+              [attr.aria-controls]="navigationId()"
+              [attr.aria-label]="menuButtonLabel()"
+              [hidden]="isDesktop()"
+              [attr.aria-hidden]="isDesktop()"
+              [attr.aria-expanded]="isMenuOpen()"
+              (click)="toggleMenu()">
+              {{ menuButtonText() }}
+            </button>
+          }
+
+          <ul class="govuk-service-navigation__list" [id]="navigationId()" [hidden]="!isMenuOpen()">
+            @for (navigationItem of navigationItems; track $index) {
+              <li class="govuk-service-navigation__item" routerLinkActive="govuk-service-navigation__item--active">
+                <a
+                  class="govuk-service-navigation__link"
+                  [routerLink]="navigationItem.href"
+                  routerLinkActive
+                  #rla="routerLinkActive"
+                  ariaCurrentWhenActive="page">
+                  @if (rla.isActive) {
+                    <strong class="govuk-service-navigation__active-fallback">{{ navigationItem.text }}</strong>
+                  } @else {
+                    {{ navigationItem.text }}
+                  }
+                </a>
+              </li>
+            }
+          </ul>
+        </nav>
+      }
+    </div>
+  </div>
+</ng-template>

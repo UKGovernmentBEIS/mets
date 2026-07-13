@@ -1,50 +1,114 @@
-<table class="govuk-table">
-  <caption *ngIf="caption" class="govuk-table__caption">
-    {{
-      caption
-    }}
-  </caption>
+<table class="govuk-table" [attr.aria-label]="description() ?? null">
+  @if (caption()) {
+    <caption class="govuk-table__caption">
+      {{ caption() }}
+    </caption>
+  }
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th
-        *ngFor="let column of columns"
-        [attr.aria-sort]="!column.isSortable ? null : sortedField === column.field ? sortingDirection : 'none'"
-        [class.govuk-table__header]="true"
-        [class]="column.widthClass"
-        [style.text-align]="column.alignRight ? 'right' : null"
-        scope="col"
-      >
-        <ng-container *ngIf="!column.isSortable; else sortableColumnHeader">{{ column.header }}</ng-container>
-        <ng-template #sortableColumnHeader>
-          <button (click)="sortBy(column.field)" type="button">{{ column.header }}</button>
-        </ng-template>
-      </th>
+      @for (column of columns(); track $index) {
+        <th
+          [attr.aria-sort]="!column.isSortable ? null : sortedField === column.field ? sortingDirection : 'none'"
+          [class.govuk-table__header]="true"
+          [class.govuk-table__header--numeric]="column?.isNumeric"
+          [class]="column.widthClass"
+          scope="col">
+          @if (!column.isSortable) {
+            @if (column.hiddenHeader) {
+              <span class="govuk-visually-hidden">{{ column.header }}</span>
+            } @else {
+              {{ column.header }}
+            }
+          } @else {
+            <button (click)="sortBy(column.field)" type="button">
+              {{ column.header }}
+              <ng-container
+                *ngTemplateOutlet="
+                  sortedField === column.field
+                    ? sortingDirection === 'ascending'
+                      ? sortAscending
+                      : sortDescending
+                    : sortNone
+                " />
+            </button>
+          }
+        </th>
+      }
     </tr>
   </thead>
   <tbody class="govuk-table__body">
-    <tr *ngFor="let row of data; let i = index" class="govuk-table__row">
-      <ng-container *ngFor="let column of columns">
-        <th *ngIf="column.isHeader; else td" class="govuk-table__header" scope="row">
-          <ng-container *ngTemplateOutlet="cell" />
-        </th>
-        <ng-template #td>
+    @for (row of data(); track i; let i = $index) {
+      <tr class="govuk-table__row {{ rowCssClasses() ? [rowCssClasses()(row)].flat().join(' ') : '' }}">
+        @for (column of columns(); track column.field) {
+          @if (column.isHeader) {
+            <th class="govuk-table__header" scope="row">
+              <ng-container *ngTemplateOutlet="cell" />
+            </th>
+          } @else {
+            <td [class.govuk-table__cell--numeric]="column?.isNumeric" class="govuk-table__cell">
+              <ng-container *ngTemplateOutlet="cell" />
+            </td>
+          }
+          <ng-template #cell>
+            @if (template()) {
+              <ng-container *ngTemplateOutlet="template(); context: { column: column, row: row, index: i }" />
+            } @else {
+              {{ row[column.field] }}
+            }
+          </ng-template>
+        }
+      </tr>
+    } @empty {
+      @if (emptyTableText()) {
+        <tr class="govuk-table__row">
           <td
-            [class.govuk-table__cell--numeric]="column.alignRight ? true : getTypeof(row[column.field]) === 'number'"
-            class="govuk-table__cell"
-          >
-            <ng-container *ngTemplateOutlet="cell" />
-          </td>
-        </ng-template>
-        <ng-template #cell>
-          <ng-container *ngIf="template; else plainCell">
-            <ng-container *ngTemplateOutlet="template; context: { column: column, row: row, index: i }" />
-          </ng-container>
-          <ng-template #plainCell>{{ row[column.field] }}</ng-template>
-        </ng-template>
-      </ng-container>
-    </tr>
+            class="govuk-table__cell govuk-table__cell--empty--no-bottom-border"
+            [attr.colspan]="columns().length"
+            [innerHTML]="emptyTableText() | safeHtml"></td>
+        </tr>
+      }
+    }
   </tbody>
 </table>
-<div *ngIf="sortedColumn" aria-atomic="true" aria-live="polite" class="govuk-visually-hidden" role="status">
-  Sort by {{ sortedColumn }} ({{ sortingDirection }})
-</div>
+@if (sortedColumn) {
+  <div aria-atomic="true" aria-live="polite" class="govuk-visually-hidden" role="status">
+    Sort by {{ sortedColumn }} ({{ sortingDirection }})
+  </div>
+}
+<ng-template #sortAscending>
+  <svg
+    width="22"
+    height="22"
+    focusable="false"
+    aria-hidden="true"
+    role="img"
+    viewBox="0 0 22 22"
+    xmlns="http://www.w3.org/2000/svg">
+    <path d="M6.5625 15.5L11 6.63125L15.4375 15.5H6.5625Z" fill="currentColor" />
+  </svg>
+</ng-template>
+<ng-template #sortDescending>
+  <svg
+    width="22"
+    height="22"
+    focusable="false"
+    aria-hidden="true"
+    role="img"
+    viewBox="0 0 22 22"
+    xmlns="http://www.w3.org/2000/svg">
+    <path d="M15.4375 7L11 15.8687L6.5625 7L15.4375 7Z" fill="currentColor" />
+  </svg>
+</ng-template>
+<ng-template #sortNone>
+  <svg
+    width="22"
+    height="22"
+    focusable="false"
+    aria-hidden="true"
+    role="img"
+    viewBox="0 0 22 22"
+    xmlns="http://www.w3.org/2000/svg">
+    <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor" />
+    <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor" />
+  </svg>
+</ng-template>

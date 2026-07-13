@@ -1,7 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -13,7 +12,12 @@ import { PermitIssuanceStore } from '@permit-issuance/store/permit-issuance.stor
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, asyncData, BasePage, mockClass } from '@testing';
 
-import { DigitizedPlan, RequestTaskAttachmentsHandlingService, TasksService } from 'pmrv-api';
+import {
+  DigitizedPlan,
+  RequestTaskAttachmentsHandlingService,
+  SubInstallationTypesService,
+  TasksService,
+} from 'pmrv-api';
 
 import { mockDigitizedPlanDetails } from '../testing/mock';
 import { SubInstallationDetailsComponent } from './sub-installation-details.component';
@@ -25,6 +29,7 @@ describe('SubInstallationDetailsComponent', () => {
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let fixture: ComponentFixture<SubInstallationDetailsComponent>;
+  let subInstallationTypesService: Partial<jest.Mocked<SubInstallationTypesService>>;
 
   const attachmentService = mockClass(RequestTaskAttachmentsHandlingService);
   const route = new ActivatedRouteStub({}, {}, { permitTask: 'monitoringMethodologyPlans' });
@@ -72,10 +77,28 @@ describe('SubInstallationDetailsComponent', () => {
   };
 
   beforeEach(async () => {
+    subInstallationTypesService = {
+      getSubInstallationTypesDetails: jest.fn().mockReturnValue(
+        of([
+          {
+            subInstallationType: 'AMMONIA',
+            valid: true,
+            coveredByUKCBAM: true,
+          },
+          {
+            subInstallationType: 'HEAT_BENCHMARK_CL',
+            valid: true,
+            coveredByUKCBAM: true,
+          },
+        ]),
+      ),
+    };
+
     await TestBed.configureTestingModule({
       declarations: [SubInstallationDetailsComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [SharedModule, SharedPermitModule],
       providers: [
+        provideRouter([]),
         { provide: ActivatedRoute, useValue: route },
         { provide: TasksService, useValue: tasksService },
         {
@@ -83,6 +106,7 @@ describe('SubInstallationDetailsComponent', () => {
           useExisting: PermitIssuanceStore,
         },
         { provide: RequestTaskAttachmentsHandlingService, useValue: attachmentService },
+        { provide: SubInstallationTypesService, useValue: subInstallationTypesService },
       ],
     }).compileComponents();
   });

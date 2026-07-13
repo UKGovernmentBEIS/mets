@@ -20,16 +20,16 @@ const commonChildren = [
   {
     path: 'operator-report',
     data: {
-      pageTitle: 'Upload operator activity level report',
-      breadcrumb: 'Upload operator activity level report',
+      pageTitle: 'Upload operator report',
+      breadcrumb: 'Upload operator report',
     },
     component: OperatorReportComponent,
   },
   {
     path: 'verification-report',
     data: {
-      pageTitle: 'Upload verification report of the activity level report',
-      breadcrumb: 'Upload verification report of the activity level report',
+      pageTitle: 'Upload verification report',
+      breadcrumb: 'Upload verification report',
     },
     component: VerificationReportComponent,
   },
@@ -44,8 +44,8 @@ const commonChildren = [
   {
     path: 'alc-information',
     data: {
-      pageTitle: 'Provide information about this activity level change',
-      breadcrumb: 'Provide information about this activity level change',
+      pageTitle: 'Provide information about this activity level',
+      breadcrumb: 'Provide information about this activity level',
     },
     component: AlcInformationComponent,
   },
@@ -130,8 +130,8 @@ const routes: Route[] = [
               {
                 path: 'date-submitted',
                 data: {
-                  pageTitle: 'Provide the date application was submitted to UK authorities',
-                  breadcrumb: 'Provide the date application was submitted to UK authorities',
+                  pageTitle: 'Provide the date application was submitted to the Authority',
+                  breadcrumb: 'Provide the date application was submitted to the Authority',
                 },
                 component: DateSubmittedComponent,
               },

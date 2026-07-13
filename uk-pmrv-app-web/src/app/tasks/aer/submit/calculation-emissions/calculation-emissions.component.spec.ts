@@ -115,7 +115,7 @@ describe('CalculationEmissionsComponent', () => {
       expect(page.tables.length).toEqual(1);
       expect(page.rows.length).toEqual(2);
       expect(page.rows).toEqual([
-        ['the reference Anthracite', 'emission source 1 reference', '-18', '0', 'completed'],
+        ['the reference Anthracite', 'emission source 1 reference', '-18', '0', 'Completed'],
         ['Total emissions', '', '-18 tCO2e', '0 tCO2e', ''],
       ]);
     });

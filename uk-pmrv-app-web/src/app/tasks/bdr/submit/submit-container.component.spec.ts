@@ -50,7 +50,7 @@ describe('SubmitContainerComponent', () => {
     }
 
     get sections(): HTMLUListElement[] {
-      return Array.from(this.queryAll<HTMLUListElement>('.app-task-list__item > .app-task-list__task-name'));
+      return Array.from(this.queryAll<HTMLUListElement>('.app-task-list__item .app-task-list__task-name'));
     }
 
     get warningText(): string {

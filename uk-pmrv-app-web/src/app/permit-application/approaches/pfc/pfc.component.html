@@ -34,11 +34,8 @@
             }})
           </ng-container>
           <ng-container *ngSwitchCase="'status'">
-            <govuk-tag
-              [color]="'CALCULATION_PFC_Category_Tier' | taskStatus: index | async | tagColor"
-              class="app-task-list__tag">
-              {{ 'CALCULATION_PFC_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
-            </govuk-tag>
+            <app-task-status-tag
+              [status]="'CALCULATION_PFC_Category_Tier' | taskStatus: index | async"></app-task-status-tag>
           </ng-container>
         </ng-container>
       </ng-template>

@@ -30,12 +30,16 @@
           [formGroupName]="i"
           govukFieldset
           id="question-{{ i }}">
-          <legend govukLegend>Question {{ i + 1 }}</legend>
+          <legend govukLegend legendSize="medium">Question {{ i + 1 }}</legend>
           <p class="govuk-body pre-wrap">{{ question }}</p>
 
           <div *ngIf="store.isEditable$ | async">
-            <legend govukLegend>Your response</legend>
-            <div formControlName="response" govuk-textarea [maxLength]="10000" label=""></div>
+            <div
+              formControlName="response"
+              govuk-textarea
+              [maxLength]="10000"
+              label="Your response"
+              labelSize="medium"></div>
           </div>
         </fieldset>
       </div>

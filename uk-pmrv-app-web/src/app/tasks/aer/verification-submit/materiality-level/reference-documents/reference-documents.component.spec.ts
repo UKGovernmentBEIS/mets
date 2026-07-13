@@ -48,7 +48,7 @@ describe('ReferenceDocumentsComponent', () => {
       return this.query<HTMLDivElement>('.govuk-error-summary');
     }
     get errorSummaryList() {
-      return Array.from(this.errorSummary.querySelectorAll('a')).map((anchor) => anchor.textContent.trim());
+      return Array.from(this.errorSummary.querySelectorAll('li')).map((item) => item.textContent.trim());
     }
     get submitButton() {
       return this.query<HTMLButtonElement>('button[type="submit"]');

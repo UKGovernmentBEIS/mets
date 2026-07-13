@@ -1,7 +1,6 @@
 import { Location, ViewportScroller } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
-import { Router, Scroll } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, Router, Scroll } from '@angular/router';
 
 import { ScrollService } from './scroll.service';
 
@@ -13,7 +12,7 @@ describe('FormService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      providers: [provideRouter([])],
     });
     service = TestBed.inject(ScrollService);
     router = TestBed.inject(Router);

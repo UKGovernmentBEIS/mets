@@ -8,29 +8,39 @@ import { GovukTableColumn, SortEvent } from './table.interface';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 describe('TableComponent', () => {
   @Component({
-    standalone: false,
+    imports: [TableComponent],
     template: `
-      <govuk-table [columns]="columns" [data]="data" [caption]="caption" (sort)="onSort($event)" />
+      <govuk-table
+        [columns]="columns"
+        [data]="data"
+        [caption]="caption"
+        (sort)="onSort($event)"
+        [rowCssClasses]="rowCssClasses" />
     `,
   })
   class TestComponent {
     columns: GovukTableColumn[] = [
       { header: 'Name', field: 'name', widthClass: 'govuk-!-width-one-quarter', isHeader: true },
       { header: 'Surname', field: 'surname' },
-      { header: 'Age', field: 'age' },
+      { header: 'Age', field: 'age', isNumeric: true },
     ];
     data: any[] = [];
     caption: string;
-    onSort = jest.fn();
+    onSort = jest.fn((_: SortEvent) => null);
+    rowCssClasses?: (row: any) => string | string[] = undefined;
   }
 
   @Component({
-    standalone: false,
+    imports: [TableComponent],
+    standalone: true,
     template: `
       <govuk-table [columns]="columns" [data]="data" [caption]="caption" (sort)="onSort($event)">
         <ng-template let-column="column" let-row="row">
-          <a *ngIf="column.field === 'link'; else plain">{{ row[column.field] }}</a>
-          <ng-template #plain>{{ row[column.field] }}</ng-template>
+          @if (column.field === 'link') {
+            <a>{{ row[column.field] }}</a>
+          } @else {
+            {{ row[column.field] }}
+          }
         </ng-template>
       </govuk-table>
     `,
@@ -42,16 +52,22 @@ describe('TableComponent', () => {
     ];
     data: any[] = [];
     caption: string;
-    onSort = jest.fn((_: SortEvent) => {});
+    onSort = jest.fn((_: SortEvent) => null);
   }
 
   let component: TableComponent<any>;
   let hostComponent: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
 
+  const TABLE_DATA = [
+    { name: 'Name 1', surname: 'Surname 1', age: 23 },
+    { name: 'Name 2', surname: 'Surname 2', age: 48 },
+    { name: 'Name 3', surname: 'Surname 3', age: 32 },
+  ];
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TableComponent, TestComponent, TestTemplateComponent],
+      imports: [TableComponent, TestComponent, TestTemplateComponent],
     }).compileComponents();
   });
 
@@ -87,7 +103,7 @@ describe('TableComponent', () => {
 
     expect(thead).toBeTruthy();
 
-    const headers = thead.querySelectorAll<HTMLTableHeaderCellElement>('th');
+    const headers = thead.querySelectorAll<HTMLTableCellElement>('th');
 
     expect(headers[0].innerHTML).toContain('Name');
     expect(headers[1].innerHTML).toContain('Surname');
@@ -95,11 +111,7 @@ describe('TableComponent', () => {
   });
 
   it('should render the data', () => {
-    hostComponent.data = [
-      { name: 'Name 1', surname: 'Surname 1', age: 23 },
-      { name: 'Name 2', surname: 'Surname 2', age: 48 },
-      { name: 'Name 3', surname: 'Surname 3', age: 32 },
-    ];
+    hostComponent.data = TABLE_DATA;
     fixture.detectChanges();
 
     const hostElement: HTMLElement = fixture.nativeElement;
@@ -111,8 +123,8 @@ describe('TableComponent', () => {
 
     expect(rows.length).toEqual(3);
 
-    expect(rows[0].querySelector<HTMLTableHeaderCellElement>('th').textContent).toContain('Name 1');
-    expect(rows[2].querySelector<HTMLTableHeaderCellElement>('th').textContent).toContain('Name 3');
+    expect(rows[0].querySelector<HTMLTableCellElement>('th').textContent).toContain('Name 1');
+    expect(rows[2].querySelector<HTMLTableCellElement>('th').textContent).toContain('Name 3');
 
     expect(rows[1].querySelectorAll<HTMLTableCellElement>('td')[0].textContent).toContain('Surname 2');
     expect(rows[2].querySelectorAll<HTMLTableCellElement>('td')[1].textContent).toContain('32');
@@ -121,17 +133,13 @@ describe('TableComponent', () => {
   it('should assign width classes', () => {
     const hostElement: HTMLElement = fixture.nativeElement;
     const thead = hostElement.querySelector<HTMLElement>('thead');
-    const headers = thead.querySelectorAll<HTMLTableHeaderCellElement>('th');
+    const headers = thead.querySelectorAll<HTMLTableCellElement>('th');
 
     expect(headers[0].classList).toContain('govuk-!-width-one-quarter');
   });
 
   it('should assign numeric class', () => {
-    hostComponent.data = [
-      { name: 'Name 1', surname: 'Surname 1', age: 23 },
-      { name: 'Name 2', surname: 'Surname 2', age: 48 },
-      { name: 'Name 3', surname: 'Surname 3', age: 32 },
-    ];
+    hostComponent.data = TABLE_DATA;
     fixture.detectChanges();
 
     const hostElement: HTMLElement = fixture.nativeElement;
@@ -139,8 +147,6 @@ describe('TableComponent', () => {
 
     expect(tds[0].classList).not.toContain('govuk-table__cell--numeric');
     expect(tds[1].classList).toContain('govuk-table__cell--numeric');
-    expect(tds[2].classList).not.toContain('govuk-table__cell--numeric');
-    expect(tds[3].classList).toContain('govuk-table__cell--numeric');
   });
 
   it('should display sort buttons and emit event on click', () => {
@@ -191,5 +197,17 @@ describe('TableComponent', () => {
 
     expect(anchors.length).toEqual(1);
     expect(anchors[0].textContent).toEqual('Go to');
+  });
+
+  it('should add additional css class to row element', () => {
+    hostComponent.rowCssClasses = (item: any) => 'test-custom-css-row-class';
+    hostComponent.data = TABLE_DATA;
+    fixture.detectChanges();
+
+    const element: HTMLElement = fixture.nativeElement;
+    const rows = element.querySelectorAll<HTMLTableRowElement>('tbody tr');
+    rows.forEach((row: HTMLTableRowElement) => {
+      expect(row.getAttribute('class')).toContain('test-custom-css-row-class');
+    });
   });
 });

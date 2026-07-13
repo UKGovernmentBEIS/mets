@@ -6,13 +6,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { SharedModule } from '@shared/shared.module';
-import { BasePage, mockClass, MockType } from '@testing';
+import { BasePage, MockType } from '@testing';
 
 import { GovukComponentsModule } from 'govuk-components';
 
 import { OperatorUsersRegistrationService } from 'pmrv-api';
 
-import { PasswordService } from '../../shared-user/password/password.service';
 import { SharedUserModule } from '../../shared-user/shared-user.module';
 import { UserRegistrationStore } from '../store/user-registration.store';
 import { ChoosePasswordComponent } from './choose-password.component';
@@ -21,7 +20,6 @@ describe('ChoosePasswordComponent', () => {
   let component: ChoosePasswordComponent;
   let fixture: ComponentFixture<ChoosePasswordComponent>;
   let page: Page;
-  let passwordService: jest.Mocked<PasswordService>;
 
   class Page extends BasePage<ChoosePasswordComponent> {
     get emailValue() {
@@ -54,15 +52,12 @@ describe('ChoosePasswordComponent', () => {
   };
 
   beforeEach(async () => {
-    passwordService = mockClass(PasswordService);
-
     await TestBed.configureTestingModule({
       imports: [GovukComponentsModule, SharedModule, RouterTestingModule, ReactiveFormsModule, SharedUserModule],
       declarations: [ChoosePasswordComponent],
       providers: [
         UserRegistrationStore,
         { provide: OperatorUsersRegistrationService, useValue: operatorUsersRegistrationService },
-        { provide: PasswordService, useValue: passwordService },
       ],
     }).compileComponents();
   });
@@ -71,6 +66,7 @@ describe('ChoosePasswordComponent', () => {
     fixture = TestBed.createComponent(ChoosePasswordComponent);
     component = fixture.debugElement.componentInstance;
     page = new Page(fixture);
+    component.form.controls['password'].clearAsyncValidators();
     fixture.detectChanges();
   });
 
@@ -81,7 +77,6 @@ describe('ChoosePasswordComponent', () => {
   it('should fill form from store', inject(
     [UserRegistrationStore],
     fakeAsync((store: UserRegistrationStore) => {
-      passwordService.blacklisted.mockReturnValue(of(null));
       store.setState({ password: 'password', email: 'test@pmrv.uk' });
 
       tick();
@@ -95,7 +90,6 @@ describe('ChoosePasswordComponent', () => {
 
   it('should submit only if form valid', inject([Router], (router: Router) => {
     const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
-    passwordService.blacklisted.mockReturnValue(of(null));
 
     page.passwordValue = '';
     page.repeatedPasswordValue = '';
@@ -121,8 +115,6 @@ describe('ChoosePasswordComponent', () => {
       const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
       const token = 'thisisatoken';
       const password = 'ThisIsAStrongP@ssw0rd';
-
-      passwordService.blacklisted.mockReturnValue(of(null));
 
       store.setState({
         invitationStatus: 'ALREADY_REGISTERED_SET_PASSWORD_ONLY',

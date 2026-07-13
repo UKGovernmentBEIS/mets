@@ -104,7 +104,7 @@ describe('ReviewComponent', () => {
       'Determination',
     ]);
 
-    expect(page.reviewSectionStatuses.map((section) => section.textContent.trim())).toEqual(['accepted', 'granted']);
+    expect(page.reviewSectionStatuses.map((section) => section.textContent.trim())).toEqual(['Accepted', 'Granted']);
   });
 
   it('should display statuses when decided rejected', () => {
@@ -120,7 +120,7 @@ describe('ReviewComponent', () => {
       } as any,
     });
     createComponent();
-    expect(page.reviewSectionStatuses.map((section) => section.textContent.trim())).toEqual(['rejected', 'rejected']);
+    expect(page.reviewSectionStatuses.map((section) => section.textContent.trim())).toEqual(['Rejected', 'Rejected']);
   });
 
   it('should display timeline items', () => {

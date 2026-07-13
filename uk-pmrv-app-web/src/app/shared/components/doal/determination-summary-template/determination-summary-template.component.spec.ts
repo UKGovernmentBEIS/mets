@@ -60,7 +60,7 @@ describe('DeterminationSummaryTemplateComponent', () => {
       reason: 'Official notice',
     };
     fixture.detectChanges();
-    expect(page.pageContents).toEqual(['Decision', 'Proceed to UK ETS authority', 'Change']);
+    expect(page.pageContents).toEqual(['Decision', 'Proceed to UK ETS Authority', 'Change']);
     expect(page.appDoalDeterminationCloseSummaryTemplate).toBeFalsy();
     expect(page.appDoalDeterminationProceedAuthoritySummaryTemplate).toBeTruthy();
   });

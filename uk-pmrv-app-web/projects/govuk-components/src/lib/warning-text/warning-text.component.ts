@@ -1,11 +1,13 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+
+import { GovukSpacingUnit } from '../types';
 
 @Component({
   selector: 'govuk-warning-text',
-  standalone: false,
   templateUrl: './warning-text.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WarningTextComponent {
-  @Input() assistiveText = 'Warning';
+  readonly assistiveText = input('Warning');
+  readonly bottomSpacing = input<GovukSpacingUnit>(6);
 }

@@ -1,0 +1,50 @@
+$needs-review-background-color: #fbeedf;
+
+.row-container {
+  display: flex;
+  align-items: flex-end;
+}
+
+.app-column-width-15-per {
+  width: 15%;
+}
+
+.app-column-width-20-per {
+  width: 20%;
+}
+
+.app-column-width-25-per {
+  width: 25%;
+}
+
+.app-column-width-30-per {
+  width: 30%;
+}
+
+.no-bottom-border table tbody tr:last-of-type td {
+  border-bottom: none;
+}
+
+.govuk-table {
+  select {
+    min-width: auto;
+  }
+
+  .govuk-summary-list__actions-list {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: end;
+  }
+
+  .govuk-summary-list__actions-list-item {
+    position: relative;
+
+    .govuk-visually-hidden {
+      left: 0;
+    }
+  }
+}
+
+.needs-review {
+  background: $needs-review-background-color;
+}

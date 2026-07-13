@@ -20,6 +20,7 @@ import { EmissionsCalculationDTO } from '../model/emissionsCalculationDTO';
 import { EmissionsCalculationParamsDTO } from '../model/emissionsCalculationParamsDTO';
 import { MeasurementEmissionsCalculationDTO } from '../model/measurementEmissionsCalculationDTO';
 import { MeasurementEmissionsCalculationParamsDTO } from '../model/measurementEmissionsCalculationParamsDTO';
+import { MeasurementN2OEmissionsCalculationParamsDTO } from '../model/measurementN2OEmissionsCalculationParamsDTO';
 import { PfcEmissionsCalculationDTO } from '../model/pfcEmissionsCalculationDTO';
 import { PfcEmissionsCalculationParamsDTO } from '../model/pfcEmissionsCalculationParamsDTO';
 import { BASE_PATH } from '../variables';
@@ -169,7 +170,7 @@ export class ReportingService {
   }
 
   /**
-   * Calculates emissions using AER calculation approach
+   * Calculates emissions using AER measurement CO2 approach
    * @param measurementEmissionsCalculationParamsDTO
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
@@ -251,41 +252,44 @@ export class ReportingService {
   }
 
   /**
-   * Calculates emissions using AER calculation approach
-   * @param measurementEmissionsCalculationParamsDTO
+   * Calculates emissions using AER measurement N2O approach
+   * @param measurementN2OEmissionsCalculationParamsDTO
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public calculateMeasurementN2OEmissions(
-    measurementEmissionsCalculationParamsDTO: MeasurementEmissionsCalculationParamsDTO,
+    measurementN2OEmissionsCalculationParamsDTO: MeasurementN2OEmissionsCalculationParamsDTO,
   ): Observable<MeasurementEmissionsCalculationDTO>;
   public calculateMeasurementN2OEmissions(
-    measurementEmissionsCalculationParamsDTO: MeasurementEmissionsCalculationParamsDTO,
+    measurementN2OEmissionsCalculationParamsDTO: MeasurementN2OEmissionsCalculationParamsDTO,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpResponse<MeasurementEmissionsCalculationDTO>>;
   public calculateMeasurementN2OEmissions(
-    measurementEmissionsCalculationParamsDTO: MeasurementEmissionsCalculationParamsDTO,
+    measurementN2OEmissionsCalculationParamsDTO: MeasurementN2OEmissionsCalculationParamsDTO,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpEvent<MeasurementEmissionsCalculationDTO>>;
   public calculateMeasurementN2OEmissions(
-    measurementEmissionsCalculationParamsDTO: MeasurementEmissionsCalculationParamsDTO,
+    measurementN2OEmissionsCalculationParamsDTO: MeasurementN2OEmissionsCalculationParamsDTO,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<MeasurementEmissionsCalculationDTO>;
   public calculateMeasurementN2OEmissions(
-    measurementEmissionsCalculationParamsDTO: MeasurementEmissionsCalculationParamsDTO,
+    measurementN2OEmissionsCalculationParamsDTO: MeasurementN2OEmissionsCalculationParamsDTO,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<any> {
-    if (measurementEmissionsCalculationParamsDTO === null || measurementEmissionsCalculationParamsDTO === undefined) {
+    if (
+      measurementN2OEmissionsCalculationParamsDTO === null ||
+      measurementN2OEmissionsCalculationParamsDTO === undefined
+    ) {
       throw new Error(
-        'Required parameter measurementEmissionsCalculationParamsDTO was null or undefined when calling calculateMeasurementN2OEmissions.',
+        'Required parameter measurementN2OEmissionsCalculationParamsDTO was null or undefined when calling calculateMeasurementN2OEmissions.',
       );
     }
 
@@ -321,7 +325,7 @@ export class ReportingService {
 
     return this.httpClient.post<MeasurementEmissionsCalculationDTO>(
       `${this.configuration.basePath}/v1.0/reporting/measurement/n2o/calculate-emissions`,
-      measurementEmissionsCalculationParamsDTO,
+      measurementN2OEmissionsCalculationParamsDTO,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
@@ -333,7 +337,7 @@ export class ReportingService {
   }
 
   /**
-   * Calculates emissions using AER calculation approach
+   * Calculates emissions using AER PFC calculation approach
    * @param pfcEmissionsCalculationParamsDTO
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.

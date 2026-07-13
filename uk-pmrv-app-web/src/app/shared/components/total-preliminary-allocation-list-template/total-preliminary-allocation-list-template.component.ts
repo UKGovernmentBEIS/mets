@@ -35,7 +35,7 @@ export class TotalPreliminaryAllocationListTemplateComponent implements OnInit {
 
   columns: GovukTableColumn[] = [
     { field: 'year', header: 'Year' },
-    { field: 'allowances', header: 'Approved allocation', alignRight: true },
+    { field: 'allowances', header: 'Approved allocation', isNumeric: true },
   ];
   totalAllocations: { year: number; allowances: number }[] = [];
 

@@ -5,3 +5,5 @@ export interface NestedMessageValidationErrors {
   controls: Record<string, NestedMessageValidationErrors>;
   path: string;
 }
+
+export type FlatSummaryError = Omit<NestedMessageValidationErrors, 'controls'>;

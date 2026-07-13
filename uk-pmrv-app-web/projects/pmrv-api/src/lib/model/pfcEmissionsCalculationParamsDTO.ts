@@ -16,6 +16,7 @@ import { SlopeSourceStreamEmissionCalculationMethodData } from './slopeSourceStr
  * The parameters needed to calculate the emissions
  */
 export interface PfcEmissionsCalculationParamsDTO {
+  reportingYear: number;
   calculationMethod: 'SLOPE' | 'OVERVOLTAGE';
   totalPrimaryAluminium: string;
   pfcSourceStreamEmissionCalculationMethodData:

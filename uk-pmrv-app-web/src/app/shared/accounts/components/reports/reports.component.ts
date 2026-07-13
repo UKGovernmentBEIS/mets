@@ -37,7 +37,7 @@ import { reportsStatusesMap, reportsStatusesTagMap, reportsTypesMap, reportsType
   standalone: false,
   templateUrl: './reports.component.html',
   styles: `
-    span.search-results-list_item_status {
+    div.search-results-list_item_status govuk-tag {
       float: right;
     }
   `,

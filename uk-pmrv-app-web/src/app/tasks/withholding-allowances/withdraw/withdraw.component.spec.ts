@@ -77,7 +77,7 @@ describe('WithdrawComponent', () => {
       ).toEqual('Provide reason for withdrawal details');
 
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'not started',
+        'Not started',
       );
     });
   });
@@ -119,7 +119,7 @@ describe('WithdrawComponent', () => {
       ).toEqual('Provide reason for withdrawal details');
 
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'completed',
+        'Completed',
       );
     });
   });

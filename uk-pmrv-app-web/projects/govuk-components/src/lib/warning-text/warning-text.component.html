@@ -1,7 +1,7 @@
-<div class="govuk-warning-text">
-  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+<div class="govuk-warning-text govuk-!-margin-bottom-{{ bottomSpacing() }}">
+  <span aria-hidden="true" class="govuk-warning-text__icon">!</span>
   <strong class="govuk-warning-text__text">
-    <span class="govuk-warning-text__assistive">{{ assistiveText }}</span>
+    <span class="govuk-visually-hidden">{{ assistiveText() }}</span>
     <ng-content />
   </strong>
 </div>

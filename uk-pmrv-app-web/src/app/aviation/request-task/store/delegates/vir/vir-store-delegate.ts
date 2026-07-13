@@ -191,7 +191,7 @@ export class VirStoreDelegate implements RequestTaskStoreDelegate {
       }
       draft.virSectionsCompleted[referenceCode] = status === 'complete';
 
-      if (draft.sendEmailNotification) {
+      if (draft.sendEmailNotification !== null && draft.sendEmailNotification !== undefined) {
         delete draft.sendEmailNotification;
       }
     });

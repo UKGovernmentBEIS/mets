@@ -79,12 +79,12 @@ describe('CalculationComponent', () => {
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent?.trim(),
+          el.querySelector('.app-task-list__tag').textContent?.trim(),
         ]),
       ).toEqual([
-        ['Add a source stream category', 'cannot start yet'],
-        ['Approach description', 'not started'],
-        ['Sampling plan', 'not started'],
+        ['Add a source stream category', 'Cannot start yet'],
+        ['Approach description', 'Not started'],
+        ['Sampling plan', 'Not started'],
       ]);
     });
   });
@@ -135,18 +135,18 @@ describe('CalculationComponent', () => {
       expect(page.tables.length).toEqual(2);
       expect(page.rows).toEqual([
         ['Calculation of CO2', '0t', '0t', '0t', '23.5t'],
-        ['13123124 White Spirit & SBP: Major', '23.5 t (100%)', 'in progress'],
+        ['13123124 White Spirit & SBP: Major', '23.5 t (100%)', 'In progress'],
       ]);
 
       expect(page.tasks).toBeTruthy();
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent?.trim(),
+          el.querySelector('.app-task-list__tag').textContent?.trim(),
         ]),
       ).toEqual([
-        ['Approach description', 'not started'],
-        ['Sampling plan', 'not started'],
+        ['Approach description', 'Not started'],
+        ['Sampling plan', 'Not started'],
       ]);
     });
   });

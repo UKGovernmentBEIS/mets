@@ -214,7 +214,7 @@ export class AerVerifyUkEtsStoreDelegate implements RequestTaskStoreDelegate {
 
       draft.verificationSectionsCompleted[taskKey] = status === 'complete' ? [true] : [false];
 
-      if (draft.sendEmailNotification) {
+      if (draft.sendEmailNotification !== null && draft.sendEmailNotification !== undefined) {
         delete draft.sendEmailNotification;
       }
     });

@@ -117,14 +117,14 @@ describe('DetailsComponent', () => {
       expect(
         page.reviewSections.map((section) => [
           section.querySelector('a')?.textContent.trim() ?? section.querySelector('span').textContent.trim(),
-          section.querySelector('govuk-tag').textContent.trim(),
+          section.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
       ).toEqual([
-        ['Installation and operator details', 'completed'],
-        ['Environmental permits and licenses', 'completed'],
-        ['Description of the installation', 'completed'],
-        ['Regulated activity', 'completed'],
-        ['Estimated annual CO2e', 'completed'],
+        ['Installation and operator details', 'Completed'],
+        ['Environmental permits and licenses', 'Completed'],
+        ['Description of the installation', 'Completed'],
+        ['Regulated activity', 'Completed'],
+        ['Estimated annual CO2e', 'Completed'],
       ]);
     });
   });
@@ -156,14 +156,14 @@ describe('DetailsComponent', () => {
       expect(
         page.reviewSections.map((section) => [
           section.querySelector('a')?.textContent.trim() ?? section.querySelector('span').textContent.trim(),
-          section.querySelector('govuk-tag').textContent.trim(),
+          section.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
       ).toEqual([
-        ['Installation and operator details', 'completed'],
-        ['Environmental permits and licenses', 'completed'],
-        ['Description of the installation', 'completed'],
-        ['Regulated activity', 'completed'],
-        ['Estimated annual CO2e', 'completed'],
+        ['Installation and operator details', 'Completed'],
+        ['Environmental permits and licenses', 'Completed'],
+        ['Description of the installation', 'Completed'],
+        ['Regulated activity', 'Completed'],
+        ['Estimated annual CO2e', 'Completed'],
       ]);
     });
   });

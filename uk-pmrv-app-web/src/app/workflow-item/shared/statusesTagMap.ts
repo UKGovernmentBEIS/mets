@@ -1,15 +1,15 @@
 import { RequestDetailsDTO } from 'pmrv-api';
 
 export const statusesTagMap: Record<RequestDetailsDTO['requestStatus'], string> = {
-  IN_PROGRESS: 'IN PROGRESS',
-  COMPLETED: 'COMPLETED',
-  CANCELLED: 'CANCELLED',
-  WITHDRAWN: 'WITHDRAWN',
-  DEEMED_WITHDRAWN: 'DEEMED WITHDRAWN',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
-  CLOSED: 'CLOSED',
-  MIGRATED: 'MIGRATED',
-  EXEMPT: 'EXEMPT',
-  NOT_REQUIRED: 'NOT REQUIRED',
+  IN_PROGRESS: 'In progress',
+  COMPLETED: 'Completed',
+  CANCELLED: 'Cancelled',
+  WITHDRAWN: 'Withdrawn',
+  DEEMED_WITHDRAWN: 'Deemed withdrawn',
+  APPROVED: 'Approved',
+  REJECTED: 'Rejected',
+  CLOSED: 'Closed',
+  MIGRATED: 'Migrated',
+  EXEMPT: 'Exempt',
+  NOT_REQUIRED: 'Not required',
 };

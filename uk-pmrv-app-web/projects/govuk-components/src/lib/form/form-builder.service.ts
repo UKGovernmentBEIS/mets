@@ -3,7 +3,7 @@ import { AbstractControlOptions, UntypedFormBuilder, UntypedFormGroup } from '@a
 
 @Injectable()
 export class FormBuilderService extends UntypedFormBuilder {
-  group(controlsConfig: { [p: string]: any }, options?: AbstractControlOptions | null): UntypedFormGroup {
+  override group(controlsConfig: { [p: string]: any }, options?: AbstractControlOptions | null): UntypedFormGroup {
     return super.group(controlsConfig, { updateOn: 'submit', ...options });
   }
 }

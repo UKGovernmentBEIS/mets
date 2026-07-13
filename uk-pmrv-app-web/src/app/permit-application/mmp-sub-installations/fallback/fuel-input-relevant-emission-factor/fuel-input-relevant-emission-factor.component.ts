@@ -35,11 +35,22 @@ export class FuelInputRelevantEmissionFactorFAComponent extends ProductBenchmark
 
   productBenchmarkType = toSignal(this.productBenchmarkType$);
   isHeatProductBenchmarkType = computed(() => {
-    const validHeatTypes = new Set(['HEAT_BENCHMARK_CL', 'HEAT_BENCHMARK_NON_CL', 'DISTRICT_HEATING_NON_CL']);
+    const validHeatTypes = new Set([
+      'HEAT_BENCHMARK_CL',
+      'HEAT_BENCHMARK_NON_CL',
+      'DISTRICT_HEATING_NON_CL',
+      'HEAT_BENCHMARK_CL_CBAM',
+      'HEAT_BENCHMARK_CL_NON_CBAM',
+    ]);
     return validHeatTypes.has(this.productBenchmarkType());
   });
 
-  fuelBenchmark = ['FUEL_BENCHMARK_CL', 'FUEL_BENCHMARK_NON_CL'];
+  fuelBenchmark = [
+    'FUEL_BENCHMARK_CL',
+    'FUEL_BENCHMARK_NON_CL',
+    'FUEL_BENCHMARK_CL_CBAM',
+    'FUEL_BENCHMARK_CL_NON_CBAM',
+  ];
 
   readonly isFileUploaded$: Observable<boolean> = this.form.get('supportingFiles')?.valueChanges?.pipe(
     startWith(this.form.get('supportingFiles')?.value),

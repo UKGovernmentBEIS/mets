@@ -4,26 +4,24 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'app-navigation',
   standalone: false,
   template: `
-    <div class="hmcts-primary-navigation">
-      <div class="hmcts-primary-navigation__container">
-        <div class="hmcts-primary-navigation__nav">
-          <nav class="hmcts-primary-navigation" [attr.aria-label]="ariaLabel">
-            <ul class="hmcts-primary-navigation__list">
-              <ng-content></ng-content>
-            </ul>
-          </nav>
-        </div>
+    <section class="govuk-service-navigation">
+      <div class="govuk-service-navigation__container">
+        <nav class="govuk-service-navigation__wrapper" [attr.aria-label]="ariaLabel">
+          <ul class="govuk-service-navigation__list">
+            <ng-content></ng-content>
+          </ul>
+        </nav>
       </div>
-    </div>
+    </section>
   `,
   styles: `
-    .hmcts-primary-navigation {
+    .govuk-service-navigation {
       width: 100%;
       margin: 0;
       float: left;
     }
 
-    .hmcts-primary-navigation__container {
+    .govuk-service-navigation__container {
       margin: 0;
     }
   `,

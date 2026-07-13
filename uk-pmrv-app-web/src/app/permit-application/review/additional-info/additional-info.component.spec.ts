@@ -87,11 +87,11 @@ describe('AdditionalInfoComponent', () => {
     expect(
       page.reviewSections.map((section) => [
         section.querySelector('a')?.textContent.trim() ?? section.querySelector('strong').textContent.trim(),
-        section.querySelector('govuk-tag').textContent.trim(),
+        section.querySelector('.app-task-list__tag').textContent.trim(),
       ]),
     ).toEqual([
-      ['Additional documents and information', 'not started'],
-      ['Abbreviations, acronyms and terminology', 'not started'],
+      ['Additional documents and information', 'Not started'],
+      ['Abbreviations, acronyms and terminology', 'Not started'],
     ]);
   });
 });

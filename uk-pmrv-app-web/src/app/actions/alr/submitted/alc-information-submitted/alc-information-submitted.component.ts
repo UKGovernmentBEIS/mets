@@ -19,7 +19,8 @@ interface ViewModel {
       <app-action-task header="Information about this activity level change" [breadcrumb]="true">
         <app-alr-alc-information-summary-template
           [data]="vm.alc"
-          [editable]="false"></app-alr-alc-information-summary-template>
+          [editable]="false"
+          [year]="year"></app-alr-alc-information-summary-template>
       </app-action-task>
     </ng-container>
   `,
@@ -27,6 +28,7 @@ interface ViewModel {
 })
 export class AlrAlcInformationSubmittedComponent {
   payload = this.alrActionService.payload as Signal<ALRApplicationProceededToAuthorityRequestActionPayload>;
+  year = this.alrActionService.year;
 
   vm: Signal<ViewModel> = computed(() => ({ alc: this.payload().regulatorReviewOutcome }));
 

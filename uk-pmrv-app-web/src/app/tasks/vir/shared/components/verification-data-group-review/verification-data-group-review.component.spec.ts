@@ -15,7 +15,7 @@ describe('VerificationDataGroupReviewComponent', () => {
 
   class Page extends BasePage<VerificationDataGroupReviewComponent> {
     get pageContents() {
-      return this.queryAll<HTMLDListElement>('h2, ul a, ul strong').map((item) => item.textContent.trim());
+      return this.queryAll<HTMLDListElement>('h2, ul a, ul .app-task-list__tag').map((item) => item.textContent.trim());
     }
 
     get operatorResponseDataItem() {
@@ -50,13 +50,13 @@ describe('VerificationDataGroupReviewComponent', () => {
     expect(page.pageContents).toEqual([
       'B1: an uncorrected error in the monitoring plan',
       'Respond to operator',
-      'in progress',
+      'In progress',
       'D1: recommended improvement',
       'Respond to operator',
-      'completed',
+      'Completed',
       'E1: an unresolved breach from a previous year',
       'Respond to operator',
-      'not started',
+      'Not started',
     ]);
     expect(page.operatorResponseDataItem).toHaveLength(3);
   });

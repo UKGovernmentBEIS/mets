@@ -35,7 +35,7 @@ describe('CommentsResponseContainerComponent', () => {
       return Array.from(
         this.query<HTMLDivElement>(
           '.govuk-grid-column-two-thirds:nth-child(1) .govuk-grid-row:nth-child(2)',
-        ).querySelectorAll('h2, ul a, ul strong, ul span, dt, dd:nth-child(2)'),
+        ).querySelectorAll('h2, ul a, ul .app-task-list__tag, ul span, dt, dd:nth-child(2)'),
       ).map((item) => item.textContent.trim());
     }
   }
@@ -70,23 +70,23 @@ describe('CommentsResponseContainerComponent', () => {
       'A1: an uncorrected error that remained before the verification report was issued',
       'Respond to the Regulator',
       'Respond to the Regulator',
-      'not started',
+      'Not started',
       "Regulator's response",
       'Test operator actions A1',
       'A1: submit',
       'Send to the regulator',
       'Send to the regulator',
-      'cannot start yet',
+      'Cannot start yet',
       'B1: an uncorrected error in the monitoring plan',
       'Respond to the Regulator',
       'Respond to the Regulator',
-      'in progress',
+      'In progress',
       "Regulator's response",
       'Test operator actions B1',
       'B1: submit',
       'Send to the regulator',
       'Send to the regulator',
-      'cannot start yet',
+      'Cannot start yet',
     ]);
   });
 });

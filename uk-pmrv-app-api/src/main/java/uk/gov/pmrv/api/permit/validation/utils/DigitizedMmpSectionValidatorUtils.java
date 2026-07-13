@@ -27,7 +27,9 @@ public class DigitizedMmpSectionValidatorUtils {
     public static final String ERR0R_INVALID_MEASURABLE_HEAT =
             "At least one sub installation has invalid measurable heat input.";
     public static final String DIGITIZED_MMP_FLAG_CONFIG_KEY = "ui.features.digitized-mmp";
+    public static final String CBAM_TRANSITION_CONFIG_KEY = "sub_installation_types.cbam.transition.toggle";
     public static final String ERROR_INVALID_FUEL_INPUT_FLOWS_DATASOURCES = "Invalid fuel input flows datasources";
     public static final String ERROR_INVALID_MEASURABLE_HEAT_FLOWS_DATASOURCES = "Invalid measurable heat flows datasources";
     public static final String ERROR_INVALID_WASTE_GAS_FLOWS_DATASOURCES = "Invalid waste gas flows data sources";
+    public static final String ERROR_INVALID_CBAM_SUBINSTALLATION = "At least one invalid cbam transition related subinstallation";
 }

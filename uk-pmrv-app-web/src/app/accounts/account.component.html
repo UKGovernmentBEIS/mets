@@ -1,57 +1,61 @@
-<ng-container *ngIf="accountDetails$ | async as account">
+@if (accountDetails$ | async; as account) {
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <govuk-notification-banner *ngIf="account.emitterType === 'WASTE' && (userRoleType$ | async) === 'OPERATOR'">
-        <p class="govuk-body" id="waste-monitoring-notice">
-          The METS service supports the UK ETS and refers to the legislation for and requirements of the scheme. During
-          the voluntary MRV-only period, waste operators may use METS but legislative references, certain terminology
-          and certain data requests are not relevant to them. Contact your regulator for further information on how to
-          participate.
-        </p>
-      </govuk-notification-banner>
+      @if (account.emitterType === 'WASTE' && (userRoleType$ | async) === 'OPERATOR') {
+        <govuk-notification-banner>
+          <p class="govuk-body" id="waste-monitoring-notice">
+            The METS service supports the UK ETS and refers to the legislation for and requirements of the scheme.
+            During the voluntary MRV-only period, waste operators may use METS but legislative references, certain
+            terminology and certain data requests are not relevant to them. Contact your regulator for further
+            information on how to participate.
+          </p>
+        </govuk-notification-banner>
+      }
     </div>
     <div class="govuk-grid-column-three-quarters">
       <app-page-heading size="xl">
         {{ account.name }}
-        <span class="status govuk-tag govuk-tag--grey">
-          <strong>{{ account.status | accountStatus }}</strong>
-        </span>
+        <govuk-tag class="status" color="grey">
+          {{ account.status | accountStatus }}
+        </govuk-tag>
       </app-page-heading>
     </div>
-    <ng-container *ngIf="(userRoleType$ | async) !== 'VERIFIER'">
+    @if ((userRoleType$ | async) !== 'VERIFIER') {
       <div class="govuk-grid-column-one-quarter">
         <button govukButton type="button" routerLink="process-actions" class="start-new-process">
           Start a new task
         </button>
       </div>
-    </ng-container>
+    }
   </div>
-</ng-container>
+}
 <govuk-tabs (selectedTab)="selectedTab($event)">
   <ng-template govukTab id="details" label="Details">
     <app-account-details [currentTab]="currentTab$ | async"></app-account-details>
   </ng-template>
-  <ng-template govukTab id="notes" label="Notes" *ngIf="(userRoleType$ | async) === 'REGULATOR'">
-    <app-account-notes [currentTab]="currentTab$ | async"></app-account-notes>
-  </ng-template>
+  @if ((userRoleType$ | async) === 'REGULATOR') {
+    <ng-template govukTab id="notes" label="Notes">
+      <app-account-notes [currentTab]="currentTab$ | async"></app-account-notes>
+    </ng-template>
+  }
   <ng-template govukTab id="workflows" label="Permit history">
     <app-workflows [currentTab]="currentTab$ | async"></app-workflows>
   </ng-template>
   <ng-template govukTab id="reports" label="Reports">
-    <ng-container *ngIf="(currentTab$ | async) === 'reports'">
+    @if ((currentTab$ | async) === 'reports') {
       <app-reports></app-reports>
-    </ng-container>
+    }
   </ng-template>
-  <ng-template
-    *ngIf="(userRoleType$ | async) !== 'VERIFIER' && (inspectionsWfAccountsTabEnabled$ | async) === true"
-    govukTab
-    id="inspections"
-    label="Inspections">
-    <ng-container *ngIf="(currentTab$ | async) === 'inspections'">
-      <app-inspections></app-inspections>
-    </ng-container>
-  </ng-template>
-  <ng-template *ngIf="(userRoleType$ | async) !== 'VERIFIER'" govukTab id="users" label="Users and contacts">
-    <app-operators [currentTab$]="currentTab$"></app-operators>
-  </ng-template>
+  @if ((userRoleType$ | async) !== 'VERIFIER' && (inspectionsWfAccountsTabEnabled$ | async) === true) {
+    <ng-template govukTab id="inspections" label="Inspections">
+      @if ((currentTab$ | async) === 'inspections') {
+        <app-inspections></app-inspections>
+      }
+    </ng-template>
+  }
+  @if ((userRoleType$ | async) !== 'VERIFIER') {
+    <ng-template govukTab id="users" label="Users and contacts">
+      <app-operators [currentTab$]="currentTab$"></app-operators>
+    </ng-template>
+  }
 </govuk-tabs>

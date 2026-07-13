@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, signal } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -21,6 +21,7 @@ import { InstallationAccountApplicationStore } from '../../store/installation-ac
 export class LegalEntityRegnoOpComponent {
   form: UntypedFormGroup;
   isSummaryDisplayed$ = new BehaviorSubject<boolean>(false);
+  isEntityRegisteredInitialValue = signal(false);
 
   constructor(
     @Inject(LEGAL_ENTITY_FORM_OP) readonly legalEntityForm: UntypedFormGroup,
@@ -31,6 +32,21 @@ export class LegalEntityRegnoOpComponent {
     private readonly countryService: CountryService,
   ) {
     this.form = this.legalEntityForm.get('referenceNumberGroup') as UntypedFormGroup;
+    this.isEntityRegisteredInitialValue.set(this.form.get('isEntityRegistered').value);
+  }
+
+  resetDetailsGroupValues() {
+    this.legalEntityForm.get('detailsGroup')?.patchValue({
+      type: null,
+      address: { line1: null, line2: null, countryCode: null, city: null, postcode: null, country: null },
+      name: null,
+      belongsToHoldingCompany: null,
+      holdingCompanyGroup: {
+        name: null,
+        registrationNumber: null,
+        address: { city: null, line1: null, line2: null, postcode: null },
+      },
+    });
   }
 
   onSubmit(): void {
@@ -64,6 +80,9 @@ export class LegalEntityRegnoOpComponent {
             }),
             tap(({ companyProfile, countryCode }) => {
               const address = { ...companyProfile.address, country: countryCode };
+
+              this.resetDetailsGroupValues();
+
               this.legalEntityForm.get('detailsGroup')?.patchValue({
                 address,
                 name: companyProfile.name,
@@ -74,6 +93,10 @@ export class LegalEntityRegnoOpComponent {
             this.router.navigate(['../details'], { relativeTo: this.route });
           });
       } else {
+        if (this.isEntityRegisteredInitialValue()) {
+          this.resetDetailsGroupValues();
+        }
+
         this.router.navigate(['../details'], { relativeTo: this.route });
       }
     } else {

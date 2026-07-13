@@ -651,7 +651,7 @@ Wait for review</flowable:element-name>
         <design:stencilid><![CDATA[CallActivity]]></design:stencilid>
       </extensionElements>
     </callActivity>
-    <serviceTask id="Activity_0rct82x" name="Mark Payment as completed" flowable:delegateExpression="#{paymentMarkCompletedHandler}">
+    <serviceTask id="Activity_0rct82x" name="Mark Payment as completed" flowable:delegateExpression="#{paymentMarkCompletedHandlerFlowable}">
       <extensionElements>
         <design:stencilid><![CDATA[ServiceTask]]></design:stencilid>
         <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>

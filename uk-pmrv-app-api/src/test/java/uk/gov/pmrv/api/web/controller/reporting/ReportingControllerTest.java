@@ -1,6 +1,7 @@
 package uk.gov.pmrv.api.web.controller.reporting;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +32,7 @@ import uk.gov.pmrv.api.reporting.domain.dto.EmissionsCalculationDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.EmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationParamsDTO;
+import uk.gov.pmrv.api.reporting.domain.dto.MeasurementN2OEmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.PfcEmissionsCalculationDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.PfcEmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.pfc.SlopeSourceStreamEmissionCalculationMethodData;
@@ -42,6 +44,7 @@ import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 
 import java.math.BigDecimal;
+import java.time.Year;
 import java.util.Collections;
 
 import static org.mockito.Mockito.doThrow;
@@ -83,7 +86,7 @@ class ReportingControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver =
             new AuthorizationAspectUserResolver(pmrvSecurityComponent);
         AuthorizedRoleAspect
@@ -101,6 +104,7 @@ class ReportingControllerTest {
             .build();
 
         objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
     }
 
     @Test
@@ -175,8 +179,9 @@ class ReportingControllerTest {
     	setupAppUser();
         BigDecimal reportableEmissions = BigDecimal.valueOf(10001.105);
         BigDecimal sustainableBiomassEmissions = BigDecimal.valueOf(923.09);
-        MeasurementEmissionsCalculationParamsDTO measurementN2OEmissionsCalculationParamsDTO =
-            MeasurementEmissionsCalculationParamsDTO.builder()
+        MeasurementN2OEmissionsCalculationParamsDTO measurementN2OEmissionsCalculationParamsDTO =
+            MeasurementN2OEmissionsCalculationParamsDTO.builder()
+                .reportingYear(Year.of(2025))
                 .annualHourlyAverageGHGConcentration(BigDecimal.ONE)
                 .biomassPercentage(BigDecimal.ONE)
                 .operationalHours(BigDecimal.ONE)
@@ -213,6 +218,7 @@ class ReportingControllerTest {
     void calculatePfcEmissions() throws Exception {
     	setupAppUser();
         PfcEmissionsCalculationParamsDTO pfcEmissionsCalculationParamsDTO = PfcEmissionsCalculationParamsDTO.builder()
+            .reportingYear(Year.of(2025))
             .calculationMethod(PFCCalculationMethod.SLOPE)
             .totalPrimaryAluminium(BigDecimal.ONE)
             .pfcSourceStreamEmissionCalculationMethodData(SlopeSourceStreamEmissionCalculationMethodData.builder()
@@ -226,6 +232,8 @@ class ReportingControllerTest {
             .build();
 
         PfcEmissionsCalculationDTO pfcEmissionsCalculationDTO = PfcEmissionsCalculationDTO.builder()
+            .globalWarmingPotentialCF4(GlobalWarmingPotential.PFC_CF4.getValue())
+            .globalWarmingPotentialC2F6(GlobalWarmingPotential.PFC_C2F6.getValue())
             .reportableEmissions(BigDecimal.ONE)
             .amountOfCF4(BigDecimal.ONE)
             .totalC2F6Emissions(BigDecimal.ONE)
@@ -303,8 +311,9 @@ class ReportingControllerTest {
     @Test
     void calculateMeasurementN2OEmissions_Forbidden() throws Exception {
         AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
-        MeasurementEmissionsCalculationParamsDTO measurementN2OEmissionsCalculationParamsDTO =
-            MeasurementEmissionsCalculationParamsDTO.builder()
+        MeasurementN2OEmissionsCalculationParamsDTO measurementN2OEmissionsCalculationParamsDTO =
+            MeasurementN2OEmissionsCalculationParamsDTO.builder()
+                .reportingYear(Year.of(2025))
                 .annualHourlyAverageGHGConcentration(BigDecimal.ONE)
                 .biomassPercentage(BigDecimal.ONE)
                 .operationalHours(BigDecimal.ONE)
@@ -330,6 +339,7 @@ class ReportingControllerTest {
     void calculatePfcEmissions_Forbidden() throws Exception {
         AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         PfcEmissionsCalculationParamsDTO pfcEmissionsCalculationParamsDTO = PfcEmissionsCalculationParamsDTO.builder()
+            .reportingYear(Year.of(2025))
             .calculationMethod(PFCCalculationMethod.SLOPE)
             .totalPrimaryAluminium(BigDecimal.ONE)
             .pfcSourceStreamEmissionCalculationMethodData(SlopeSourceStreamEmissionCalculationMethodData.builder()

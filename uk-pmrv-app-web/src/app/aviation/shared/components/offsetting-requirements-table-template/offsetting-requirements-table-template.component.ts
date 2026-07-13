@@ -27,7 +27,7 @@ export class ThreeYearOffsettingRequirementsTableTemplateComponent {
 
   columns: GovukTableColumn<AviationAerCorsia3YearPeriodOffsettingTableData>[] = [
     { field: 'schemeYear', header: 'Scheme year', isHeader: true },
-    { field: 'calculatedAnnualOffsetting', header: 'Calculated Annual Offsetting (tCO2)', alignRight: true },
-    { field: 'cefEmissionsReductions', header: 'CEF Emissions Reductions (tCO2)', alignRight: true },
+    { field: 'calculatedAnnualOffsetting', header: 'Calculated Annual Offsetting (tCO2)', isNumeric: true },
+    { field: 'cefEmissionsReductions', header: 'CEF Emissions Reductions (tCO2)', isNumeric: true },
   ];
 }

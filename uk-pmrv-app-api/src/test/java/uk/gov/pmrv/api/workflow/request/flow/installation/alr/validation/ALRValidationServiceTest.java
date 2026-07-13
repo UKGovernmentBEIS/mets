@@ -213,6 +213,24 @@ public class ALRValidationServiceTest {
     }
 
     @Test
+    void validateRegulatorSubmitTaskPayload_invalidArticleReasons_article5_shouldThrow() {
+        // Given
+        ALRApplicationRegulatorReviewSubmitRequestTaskPayload payload = buildPayload(
+                DoalDeterminationType.PROCEED_TO_AUTHORITY,
+                ArticleReasonGroupType.ARTICLE_5_REASONS,
+                Set.of(),
+                false
+        );
+
+
+        // When / Then
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> alrValidationService.validateRegulatorSubmitTaskPayload(payload));
+
+        assertEquals(MetsErrorCode.INVALID_ALR_ARTICLE_REASONS, ex.getErrorCode());
+    }
+
+    @Test
     void validateRegulatorSubmitTaskPayload_invalidAllocations_shouldThrow() {
         // Given
         ALRApplicationRegulatorReviewSubmitRequestTaskPayload payload = buildPayload(

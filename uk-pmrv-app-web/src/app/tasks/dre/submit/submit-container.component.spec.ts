@@ -79,7 +79,7 @@ describe('SubmitContainerComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Reportable emissions');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'not started',
+        'Not started',
       );
     });
   });
@@ -103,7 +103,7 @@ describe('SubmitContainerComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Reportable emissions');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'in progress',
+        'In progress',
       );
     });
   });
@@ -127,7 +127,7 @@ describe('SubmitContainerComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Reportable emissions');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'completed',
+        'Completed',
       );
     });
   });
@@ -173,7 +173,7 @@ describe('SubmitContainerComponent', () => {
         page.sections[0].querySelector<HTMLAnchorElement>('.app-task-list__task-name a').textContent.trim(),
       ).toEqual('Reportable emissions');
       expect(page.sections[0].querySelector<HTMLElement>('.app-task-list__tag').textContent.trim()).toEqual(
-        'needs review',
+        'Needs review',
       );
     });
   });

@@ -13,8 +13,8 @@ import { DoalDetermination } from './doalDetermination';
 import { WithholdingAllowancesNotice } from './withholdingAllowancesNotice';
 
 export interface DoalProceedToAuthorityDetermination extends DoalDetermination {
-  articleReasonGroupType: 'ARTICLE_6A_REASONS' | 'ARTICLE_34H_REASONS';
-  articleReasonItems: Array<
+  articleReasonGroupType: 'ARTICLE_6A_REASONS' | 'ARTICLE_34H_REASONS' | 'ARTICLE_5_REASONS';
+  articleReasonItems?: Array<
     | 'ALLOCATION_ADJUSTMENT_UNDER_ARTICLE_5'
     | 'SETTING_ALLOCATION_UNDER_ARTICLE_3A'
     | 'SETTING_HAL_AND_ALLOCATION_UNDER_ARTICLE_3A'

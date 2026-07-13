@@ -67,7 +67,7 @@ describe('SectionsComponent', () => {
 
     it('should display sections', () => {
       expect(
-        Array.from(hostElement.querySelectorAll('li[app-task-item] > span')).map((section) =>
+        Array.from(hostElement.querySelectorAll('li[app-task-item] .app-task-list__task-name')).map((section) =>
           section.textContent.trim(),
         ),
       ).toEqual([
@@ -111,47 +111,47 @@ describe('SectionsComponent', () => {
       ]);
 
       expect(
-        Array.from(hostElement.querySelectorAll('li[app-task-item] > govuk-tag')).map((section) =>
+        Array.from(hostElement.querySelectorAll('li[app-task-item] .app-task-list__tag')).map((section) =>
           section.textContent.trim(),
         ),
       ).toEqual([
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
-        'completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
+        'Completed',
       ]);
     });
   });
@@ -192,9 +192,9 @@ describe('SectionsComponent', () => {
 
       expect(
         hostElement
-          .querySelector('li[app-task-item][linktext="Amends needed for installation details"] govuk-tag')
+          .querySelector('li[app-task-item][linktext="Amends needed for installation details"] .app-task-list__tag')
           .textContent.trim(),
-      ).toEqual('not started');
+      ).toEqual('Not started');
     });
   });
 
@@ -238,9 +238,9 @@ describe('SectionsComponent', () => {
 
       expect(
         hostElement
-          .querySelector('li[app-task-item][linktext="Amends needed for installation details"] govuk-tag')
+          .querySelector('li[app-task-item][linktext="Amends needed for installation details"] .app-task-list__tag')
           .textContent.trim(),
-      ).toEqual('completed');
+      ).toEqual('Completed');
     });
   });
 });

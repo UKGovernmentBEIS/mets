@@ -8,13 +8,15 @@
       [data]="$any(vm.historicalActivityLevels)"
       [historical]="true"
       [editable]="false"
-      heading="History of activity level changes"></app-activity-level-list-template>
+      heading="History of activity level changes"
+      [year]="year"></app-activity-level-list-template>
 
     <app-activity-level-list-template
       [data]="$any(vm.activityLevels)"
       [historical]="false"
       [editable]="vm.isEditable"
-      heading="New activity level changes"></app-activity-level-list-template>
+      heading="New activity level changes"
+      [year]="year"></app-activity-level-list-template>
 
     <div class="govuk-button-group">
       @if (vm.activityLevels?.length > 0) {

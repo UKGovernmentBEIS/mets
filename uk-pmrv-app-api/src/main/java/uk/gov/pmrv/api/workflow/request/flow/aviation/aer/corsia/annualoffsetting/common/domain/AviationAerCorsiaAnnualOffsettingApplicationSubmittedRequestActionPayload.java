@@ -6,6 +6,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Collections;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,4 +42,13 @@ public class AviationAerCorsiaAnnualOffsettingApplicationSubmittedRequestActionP
     @NotNull
     private FileInfoDTO officialNotice;
 
+    @Override
+    public Map<UUID, String> getFileDocuments() {
+        return Optional.ofNullable(officialNotice)
+                .filter(doc -> doc.getUuid() != null && doc.getName() != null)
+                .map(doc -> Map.of(
+                        UUID.fromString(doc.getUuid()),
+                        doc.getName()))
+                .orElse(Collections.emptyMap());
+    }
 }

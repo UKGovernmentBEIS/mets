@@ -28,7 +28,7 @@ describe('MeasurementComponent', () => {
     getApproachDetailsSubTaskStatus(value) {
       return Array.from(this.approachDetailsSubTasks)
         .find((li) => li.querySelector<HTMLSpanElement>('span').textContent.trim() === value)
-        .querySelector<HTMLElement>('govuk-tag strong')
+        .querySelector<HTMLElement>('.app-task-list__tag')
         .textContent.trim();
     }
     get rows() {
@@ -83,11 +83,11 @@ describe('MeasurementComponent', () => {
       'Biomass emissions',
       'Corroborating calculations',
     ]);
-    expect(page.getApproachDetailsSubTaskStatus('Approach description')).toEqual('not started');
-    expect(page.getApproachDetailsSubTaskStatus('Determination of emissions by measurement')).toEqual('not started');
-    expect(page.getApproachDetailsSubTaskStatus('Determination of reference period')).toEqual('not started');
-    expect(page.getApproachDetailsSubTaskStatus('Calculation of gas flow')).toEqual('not started');
-    expect(page.getApproachDetailsSubTaskStatus('Biomass emissions')).toEqual('not started');
-    expect(page.getApproachDetailsSubTaskStatus('Corroborating calculations')).toEqual('not started');
+    expect(page.getApproachDetailsSubTaskStatus('Approach description')).toEqual('Not started');
+    expect(page.getApproachDetailsSubTaskStatus('Determination of emissions by measurement')).toEqual('Not started');
+    expect(page.getApproachDetailsSubTaskStatus('Determination of reference period')).toEqual('Not started');
+    expect(page.getApproachDetailsSubTaskStatus('Calculation of gas flow')).toEqual('Not started');
+    expect(page.getApproachDetailsSubTaskStatus('Biomass emissions')).toEqual('Not started');
+    expect(page.getApproachDetailsSubTaskStatus('Corroborating calculations')).toEqual('Not started');
   });
 });

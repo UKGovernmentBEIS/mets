@@ -56,11 +56,15 @@ describe('TaskItemComponent', () => {
       expect(item.querySelector('a').textContent.trim()).toEqual(tasks[index].linkText);
       expect(item.querySelector('a').href).toContain(tasks[index].link);
     });
-    expect(items[0].querySelector('strong').classList.contains('govuk-tag--grey')).toBeTruthy();
-    expect(items[1].querySelector('strong').classList.contains('govuk-tag--grey')).toBeTruthy();
-    expect(items[2].querySelector('strong').classList.contains('govuk-tag--blue')).toBeTruthy();
+    expect(items[0].querySelector('strong').classList.contains('govuk-tag--blue')).toBeTruthy();
+    expect(items[1].querySelector('strong')).toBeNull();
+    expect(
+      items[1].querySelector('div.app-task-list__tag').classList.contains('govuk-task-list__status--cannot-start-yet'),
+    ).toBeTruthy();
+    expect(items[2].querySelector('strong').classList.contains('govuk-tag--teal')).toBeTruthy();
     expect(items[3].querySelector('strong').classList.contains('govuk-tag--red')).toBeTruthy();
-    expect(items[4].querySelector('strong').classList.contains('govuk-tag')).toBeTruthy();
+    expect(items[4].querySelector('strong')).toBeNull();
+    expect(items[4].querySelector('div.app-task-list__tag').textContent.trim()).toEqual('Completed');
     expect(customTmpl.textContent.trim()).toContain('tmpl');
   });
 });

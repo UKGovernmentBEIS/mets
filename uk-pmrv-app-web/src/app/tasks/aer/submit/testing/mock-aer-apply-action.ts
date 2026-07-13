@@ -61,6 +61,7 @@ export const mockAerApplyPayload: AerApplicationSubmitRequestTaskPayload = {
     '11111111-1111-4111-a111-111111111111': 'testfile1.pdf',
   },
   payloadType: 'AER_APPLICATION_SUBMIT_PAYLOAD',
+  reportingYear: 2025,
   installationOperatorDetails: mockOnshore,
   permitType: 'GHGE',
   monitoringPlanVersions: [],
@@ -311,6 +312,8 @@ export const mockAerApplyPayload: AerApplicationSubmitRequestTaskPayload = {
             id: '12345678-74c4-4da8-b59c-368f82d955fb',
             amountOfCF4: '0.204',
             amountOfC2F6: '27.744',
+            globalWarmingPotentialCF4: '7390',
+            globalWarmingPotentialC2F6: '12000',
             sourceStream: '324',
             durationRange: {
               fullYearCovered: true,

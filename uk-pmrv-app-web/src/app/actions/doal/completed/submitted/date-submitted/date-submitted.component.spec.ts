@@ -49,10 +49,10 @@ describe('DateSubmittedComponent', () => {
   });
 
   it('should show summary details', () => {
-    expect(page.heading).toEqual('Provide the date application was submitted to UK authorities');
+    expect(page.heading).toEqual('Provide the date application was submitted to the Authority');
     expect(page.summaryListValues).toHaveLength(1);
     expect(page.summaryListValues).toEqual([
-      ['When was the relevant information submitted to the authority?', '12 Mar 2023'],
+      ['When was the relevant information submitted to the Authority?', '12 Mar 2023'],
     ]);
   });
 });

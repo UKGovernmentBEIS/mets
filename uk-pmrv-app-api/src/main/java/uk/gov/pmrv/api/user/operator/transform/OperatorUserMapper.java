@@ -8,14 +8,11 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.util.ObjectUtils;
 import uk.gov.netz.api.common.config.MapperConfig;
-import uk.gov.pmrv.api.common.DateTimeFormat;
 import uk.gov.pmrv.api.user.core.domain.dto.PhoneNumberDTO;
 import uk.gov.pmrv.api.user.core.domain.enumeration.KeycloakUserAttributes;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserInvitationDTO;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +37,7 @@ public interface OperatorUserMapper {
             return null;
         }
 
-        return LocalDateTime.parse(values.get(0), DateTimeFormatter.ISO_DATE_TIME).format(DateTimeFormat.DEFAULT_DATE_TIME.getFormatter());
+        return values.get(0);
     }
 
     @AfterMapping

@@ -1,12 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.common.handler.emp;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +8,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
@@ -24,6 +17,18 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.common.service.emp.EmpPreviewDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.common.service.EmpIssuanceUkEtsPreviewEmpDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EmpPreviewHandlerTest {
@@ -98,16 +103,38 @@ class EmpPreviewHandlerTest {
         assertIterableEquals(List.of(
                 RequestTaskType.EMP_ISSUANCE_UKETS_APPLICATION_REVIEW,
                 RequestTaskType.EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW,
+                RequestTaskType.EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT,
+                RequestTaskType.EMP_ISSUANCE_UKETS_WAIT_FOR_REVIEW,
+                RequestTaskType.EMP_ISSUANCE_UKETS_WAIT_FOR_AMENDS,
+                RequestTaskType.EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMIT,
+                RequestTaskType.EMP_ISSUANCE_UKETS_WAIT_FOR_PEER_REVIEW,
                 RequestTaskType.EMP_VARIATION_UKETS_APPLICATION_REVIEW,
                 RequestTaskType.EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT,
                 RequestTaskType.EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_PEER_REVIEW,
+                RequestTaskType.EMP_VARIATION_UKETS_APPLICATION_PEER_REVIEW,
+                RequestTaskType.EMP_VARIATION_UKETS_REGULATOR_LED_WAIT_FOR_PEER_REVIEW,
+                RequestTaskType.EMP_VARIATION_UKETS_APPLICATION_SUBMIT,
+                RequestTaskType.EMP_VARIATION_UKETS_WAIT_FOR_REVIEW,
+                RequestTaskType.EMP_VARIATION_UKETS_WAIT_FOR_AMENDS,
+                RequestTaskType.EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMIT,
+                RequestTaskType.EMP_VARIATION_UKETS_WAIT_FOR_PEER_REVIEW,
                 RequestTaskType.EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW,
                 RequestTaskType.EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEW,
+                RequestTaskType.EMP_ISSUANCE_CORSIA_APPLICATION_SUBMIT,
+                RequestTaskType.EMP_ISSUANCE_CORSIA_WAIT_FOR_REVIEW,
+                RequestTaskType.EMP_ISSUANCE_CORSIA_WAIT_FOR_AMENDS,
+                RequestTaskType.EMP_ISSUANCE_CORSIA_APPLICATION_AMENDS_SUBMIT,
+                RequestTaskType.EMP_ISSUANCE_CORSIA_WAIT_FOR_PEER_REVIEW,
                 RequestTaskType.EMP_VARIATION_CORSIA_APPLICATION_REVIEW,
                 RequestTaskType.EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT,
                 RequestTaskType.EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_PEER_REVIEW,
-                RequestTaskType.EMP_VARIATION_UKETS_APPLICATION_PEER_REVIEW,
-                RequestTaskType.EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEW
+                RequestTaskType.EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEW,
+                RequestTaskType.EMP_VARIATION_CORSIA_REGULATOR_LED_WAIT_FOR_PEER_REVIEW,
+                RequestTaskType.EMP_VARIATION_CORSIA_APPLICATION_SUBMIT,
+                RequestTaskType.EMP_VARIATION_CORSIA_WAIT_FOR_REVIEW,
+                RequestTaskType.EMP_VARIATION_CORSIA_WAIT_FOR_AMENDS,
+                RequestTaskType.EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMIT,
+                RequestTaskType.EMP_VARIATION_CORSIA_WAIT_FOR_PEER_REVIEW
         ),handler.getTaskTypes());
     }
 }

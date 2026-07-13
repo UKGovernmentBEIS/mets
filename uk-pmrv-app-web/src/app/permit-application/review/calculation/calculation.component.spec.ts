@@ -100,12 +100,12 @@ describe('CalculationComponent', () => {
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent?.trim(),
+          el.querySelector('.app-task-list__tag').textContent?.trim(),
         ]),
       ).toEqual([
-        ['Add a source stream category', 'cannot start yet'],
-        ['Approach description', 'not started'],
-        ['Sampling plan', 'not started'],
+        ['Add a source stream category', 'Cannot start yet'],
+        ['Approach description', 'Not started'],
+        ['Sampling plan', 'Not started'],
       ]);
     });
   });
@@ -213,7 +213,7 @@ describe('CalculationComponent', () => {
           'Not used',
           'Not used',
           'Not used',
-          'in progress',
+          'In progress',
         ],
       ]);
 
@@ -221,11 +221,11 @@ describe('CalculationComponent', () => {
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent?.trim(),
+          el.querySelector('.app-task-list__tag').textContent?.trim(),
         ]),
       ).toEqual([
-        ['Approach description', 'completed'],
-        ['Sampling plan', 'completed'],
+        ['Approach description', 'Completed'],
+        ['Sampling plan', 'Completed'],
       ]);
     });
   });

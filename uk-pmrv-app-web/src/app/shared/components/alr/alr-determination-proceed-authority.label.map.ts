@@ -1,8 +1,7 @@
 import { DoalProceedToAuthorityDetermination } from 'pmrv-api';
 
-export const alrArticleReasonGroupTypeLabelsMap: Record<
-  DoalProceedToAuthorityDetermination['articleReasonGroupType'],
-  string
+export const alrArticleReasonGroupTypeLabelsMap: Partial<
+  Record<DoalProceedToAuthorityDetermination['articleReasonGroupType'], string>
 > = {
   ARTICLE_6A_REASONS: 'Article 6a reasons',
   ARTICLE_34H_REASONS: 'Article 34H reasons',

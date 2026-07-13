@@ -25,7 +25,7 @@
               'govuk-form-group--error':
                 form?.errors?.atLeastOneRequired && this.wizardStepComponent?.isSummaryDisplayedSubject | async,
             }">
-            <legend govukLegend>Item {{ i + 1 }}</legend>
+            <legend govukLegend legendSize="medium">Item {{ i + 1 }}</legend>
             <div
               *ngIf="form?.errors?.atLeastOneRequired && this.wizardStepComponent?.isSummaryDisplayedSubject | async"
               [ngClass]="{

@@ -5,6 +5,7 @@ import uk.gov.pmrv.api.allowance.domain.ActivityLevel;
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateGenerationContextActionType;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateWorkflowParamsProvider;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalProceedToAuthorityDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.utils.DoalTotalAllocationsUtils;
 
@@ -32,10 +33,13 @@ public class DoalProceededToAuthorityDocumentTemplateWorkflowParamsProvider impl
                 .getPreliminaryAllocations();
         Map<Year, Integer> totalAllocationsPerYear = DoalTotalAllocationsUtils.generateTotalAllocationsPerYear(preliminaryAllocations);
 
+        DoalProceedToAuthorityDetermination determination = (DoalProceedToAuthorityDetermination) payload.getDoal().getDetermination();
+
         return Map.of(
                 "activityLevels", activityLevels,
                 "allocations", preliminaryAllocations,
-                "allocationsPerYear", totalAllocationsPerYear
+                "allocationsPerYear", totalAllocationsPerYear,
+                "determination", determination
         );
     }
 }

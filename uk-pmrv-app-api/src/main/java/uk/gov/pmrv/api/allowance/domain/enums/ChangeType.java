@@ -14,8 +14,9 @@ public enum ChangeType {
     NER_ALLOCATION_FOR_YEAR_0_BASED_ON_ACTIVITY_LEVEL_AL_IN_YEAR_0("NER: Allocation for year 0 based on Activity Level (AL) in year 0"),
     NER_ALLOCATION_FOR_YEAR_0_PLUS_1_BASED_ON_ACTIVITY_LEVEL_AL_IN_YEAR_0_PLUS_1("NER: Allocation for year 0+1 based on Activity Level (AL) in year 0+1"),
     NER_ALLOCATION_FOR_YEAR_0_PLUS_2_BASED_ON_THE_HISTORICAL_ACTIVITY_LEVEL_HAL("NER: Allocation for year 0+2 based on the Historical Activity Level (HAL)"),
-    REGULATOR_REJECTS_ADJUSTMENT("Regulator rejects adjustment"),
+    REGULATOR_REJECTS_ADJUSTMENT("Authority rejects adjustment"),
     NO_CHANGE("No change"),
+    NEW_SUB_INSTALLATION("New sub-installation"),
     OTHER("Other");
 
     private final String description;

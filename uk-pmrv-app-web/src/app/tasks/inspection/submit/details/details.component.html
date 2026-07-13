@@ -15,7 +15,7 @@
         [isRequired]="true"></div>
     }
 
-    <legend govukLegend *ngIf="'Names of the officers who carried out the' as v">
+    <legend govukLegend legendSize="medium" *ngIf="'Names of the officers who carried out the' as v">
       @if (isOnsiteInspection$ | async) {
         {{ v }} on-site inspection
       } @else {
@@ -45,7 +45,7 @@
         govukFieldset
         id="extraOfficers-{{ i }}"
         class="extra-officer-fieldset">
-        <legend govukLegend class="govuk-label">
+        <legend govukLegend legendSize="medium" class="govuk-label">
           @if ((isOnsiteInspection$ | async) === true) {
             Officer name {{ i + 2 }} (Optional)
           } @else {

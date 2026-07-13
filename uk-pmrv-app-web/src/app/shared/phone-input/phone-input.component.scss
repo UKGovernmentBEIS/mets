@@ -1,0 +1,18 @@
+@use 'govuk-frontend/dist/govuk/base' as govuk;
+
+// The govuk grid cannot guarantee a gutter here: .govuk-select has a
+// min-width of 11.5em, wider than a one-quarter column in narrow
+// containers, so it overflows into the adjacent column. Flex with an
+// explicit gap keeps the fields apart at any container width.
+.phone-input {
+  @include govuk.govuk-media-query($from: tablet) {
+    display: flex;
+    column-gap: govuk.govuk-spacing(4);
+  }
+}
+
+.phone-input__number {
+  @include govuk.govuk-media-query($from: tablet) {
+    flex: 1;
+  }
+}

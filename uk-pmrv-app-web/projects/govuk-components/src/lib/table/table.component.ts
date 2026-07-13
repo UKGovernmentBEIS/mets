@@ -1,49 +1,48 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ContentChild,
-  EventEmitter,
-  Input,
-  Output,
+  contentChild,
+  inject,
+  input,
+  model,
+  output,
   TemplateRef,
 } from '@angular/core';
 
+import { SafeHtmlPipe } from '../pipes';
 import { GovukTableColumn, SortEvent } from './table.interface';
 
 @Component({
   selector: 'govuk-table',
-  standalone: false,
+  imports: [NgTemplateOutlet, SafeHtmlPipe],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableComponent<T> {
-  @Input() columns: GovukTableColumn<T>[];
-  @Input() data: Pick<T, GovukTableColumn<T>['field']>[];
-  @Input() caption: string;
-  @Output() readonly sort = new EventEmitter<SortEvent>();
-  @ContentChild(TemplateRef) template?: TemplateRef<{
-    column: GovukTableColumn<T>;
-    row: Pick<T, GovukTableColumn<T>['field']>;
-    index: number;
-  }>;
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
+  readonly columns = input<GovukTableColumn<T>[]>();
+  readonly data = model<Pick<T, GovukTableColumn<T>['field']>[]>();
+  readonly caption = input<string>();
+  readonly description = input<string>();
+  readonly emptyTableText = input<string>();
+  readonly rowCssClasses = input<(rowItem: T) => string | string[]>();
+
+  readonly sort = output<SortEvent>();
+  readonly template = contentChild(TemplateRef);
 
   sortedField: GovukTableColumn<T>['field'];
   sortedColumn: GovukTableColumn<T>['header'];
   sortingDirection: 'ascending' | 'descending';
 
-  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
-
-  getTypeof(value): string {
-    return typeof value;
-  }
-
   sortBy(columnField: GovukTableColumn<T>['field']): void {
     this.sortingDirection =
       this.sortedField === columnField && this.sortingDirection === 'ascending' ? 'descending' : 'ascending';
     this.sortedField = columnField;
-    this.sortedColumn = this.columns.find((column) => column.field === columnField).header;
+    this.sortedColumn = this.columns().find((column) => column.field === columnField).header;
 
     this.changeDetectorRef.markForCheck();
 

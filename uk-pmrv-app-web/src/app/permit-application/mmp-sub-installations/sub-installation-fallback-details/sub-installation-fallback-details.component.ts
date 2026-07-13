@@ -11,6 +11,8 @@ import { ProductBenchmarkComponent } from '@permit-application/shared/product-be
 import { PermitApplicationState } from '@permit-application/store/permit-application.state';
 import { PermitApplicationStore } from '@permit-application/store/permit-application.store';
 
+import { SubInstallationTypesService } from 'pmrv-api';
+
 import { isFallbackApproach } from '../mmp-sub-installations-status';
 import { fallbackApproachAddFormFactory } from './fallback-approach-details-form.provider';
 
@@ -25,22 +27,65 @@ export class SubInstallationFallbackDetailsComponent extends ProductBenchmarkCom
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));
 
-  fallbackApproachFallbackTypes$ = this.store.getTask('monitoringMethodologyPlans').pipe(
-    map((monitoringMethodologyPlans) => {
-      return monitoringMethodologyPlans?.digitizedPlan?.subInstallations
-        ?.filter(
-          (subInstallation) =>
-            isFallbackApproach(subInstallation.subInstallationType) &&
-            this.form.value?.subInstallationType !== subInstallation.subInstallationType,
-        )
-        .map((fallbackApproach) => fallbackApproach.subInstallationType);
+  vm$: Observable<any> = combineLatest([
+    this.store.getTask('monitoringMethodologyPlans'),
+    this.subInstallationTypesService.getSubInstallationTypesDetails(),
+  ]).pipe(
+    map(([monitoringMethodologyPlans, subInstallationDetails]) => {
+      return {
+        heatBenchmark: [
+          'HEAT_BENCHMARK_CL',
+          'HEAT_BENCHMARK_CL_CBAM',
+          'HEAT_BENCHMARK_CL_NON_CBAM',
+          'HEAT_BENCHMARK_NON_CL',
+        ].filter((heat) =>
+          subInstallationDetails.some((item) => item['subInstallationType'] === heat && item['valid']),
+        ) as any[],
+        fuelBenchmark: [
+          'FUEL_BENCHMARK_CL',
+          'FUEL_BENCHMARK_CL_CBAM',
+          'FUEL_BENCHMARK_CL_NON_CBAM',
+          'FUEL_BENCHMARK_NON_CL',
+        ].filter((fuel) =>
+          subInstallationDetails.some((item) => item['subInstallationType'] === fuel && item['valid']),
+        ) as any[],
+        processEmissions: [
+          'PROCESS_EMISSIONS_CL',
+          'PROCESS_EMISSIONS_CL_CBAM',
+          'PROCESS_EMISSIONS_CL_NON_CBAM',
+          'PROCESS_EMISSIONS_NON_CL',
+        ].filter((proccess) =>
+          subInstallationDetails.some((item) => item['subInstallationType'] === proccess && item['valid']),
+        ) as any[],
+        fallbackApproachFallbackTypes: monitoringMethodologyPlans?.digitizedPlan?.subInstallations
+          ?.filter(
+            (subInstallation) =>
+              isFallbackApproach(subInstallation.subInstallationType) &&
+              subInstallationDetails.some(
+                (item) => item['subInstallationType'] === subInstallation.subInstallationType && item['valid'],
+              ) &&
+              this.form.value?.subInstallationType !== subInstallation.subInstallationType,
+          )
+          .map((fallbackApproach) => fallbackApproach.subInstallationType),
+      };
     }),
   );
   subInstallationNo: string;
 
-  heatBenchmark = ['HEAT_BENCHMARK_CL', 'HEAT_BENCHMARK_NON_CL'] as any;
-  fuelBenchmark = ['FUEL_BENCHMARK_CL', 'FUEL_BENCHMARK_NON_CL'] as any;
-  processEmissions = ['PROCESS_EMISSIONS_CL', 'PROCESS_EMISSIONS_NON_CL'] as any;
+  fallbackLabels = {
+    HEAT_BENCHMARK_CL: 'Exposed',
+    HEAT_BENCHMARK_NON_CL: 'Not exposed',
+    HEAT_BENCHMARK_CL_CBAM: 'Exposed (covered by UK CBAM)',
+    HEAT_BENCHMARK_CL_NON_CBAM: 'Exposed (not covered by UK CBAM)',
+    FUEL_BENCHMARK_CL: 'Exposed',
+    FUEL_BENCHMARK_NON_CL: 'Not exposed',
+    FUEL_BENCHMARK_CL_CBAM: 'Exposed (covered by UK CBAM)',
+    FUEL_BENCHMARK_CL_NON_CBAM: 'Exposed (not covered by UK CBAM)',
+    PROCESS_EMISSIONS_CL: 'Exposed',
+    PROCESS_EMISSIONS_NON_CL: 'Not exposed',
+    PROCESS_EMISSIONS_CL_CBAM: '(Exposed, covered by UK CBAM)',
+    PROCESS_EMISSIONS_CL_NON_CBAM: '(Exposed, not covered by UK CBAM)',
+  };
 
   readonly isFileUploaded$: Observable<boolean> = this.form.get('supportingFiles').valueChanges.pipe(
     startWith(this.form.get('supportingFiles').value),
@@ -53,6 +98,7 @@ export class SubInstallationFallbackDetailsComponent extends ProductBenchmarkCom
     readonly route: ActivatedRoute,
     readonly pendingRequest: PendingRequestService,
     readonly store: PermitApplicationStore<PermitApplicationState>,
+    readonly subInstallationTypesService: SubInstallationTypesService,
   ) {
     super(store, router, route);
   }
@@ -173,6 +219,8 @@ export class SubInstallationFallbackDetailsComponent extends ProductBenchmarkCom
         let nextStep = '../';
         switch (productBenchmarkType) {
           case 'HEAT_BENCHMARK_CL':
+          case 'HEAT_BENCHMARK_CL_CBAM':
+          case 'HEAT_BENCHMARK_CL_NON_CBAM':
           case 'HEAT_BENCHMARK_NON_CL':
           case 'DISTRICT_HEATING_NON_CL':
             nextStep = isEditing
@@ -180,12 +228,16 @@ export class SubInstallationFallbackDetailsComponent extends ProductBenchmarkCom
               : `../fallback/${this.subInstallationNo}/annual-activity-levels-heat`;
             break;
           case 'FUEL_BENCHMARK_CL':
+          case 'FUEL_BENCHMARK_CL_CBAM':
+          case 'FUEL_BENCHMARK_CL_NON_CBAM':
           case 'FUEL_BENCHMARK_NON_CL':
             nextStep = isEditing
               ? 'annual-activity-levels-fuel'
               : `../fallback/${this.subInstallationNo}/annual-activity-levels-fuel`;
             break;
           case 'PROCESS_EMISSIONS_CL':
+          case 'PROCESS_EMISSIONS_CL_CBAM':
+          case 'PROCESS_EMISSIONS_CL_NON_CBAM':
           case 'PROCESS_EMISSIONS_NON_CL':
             nextStep = isEditing
               ? 'annual-activity-levels-process'

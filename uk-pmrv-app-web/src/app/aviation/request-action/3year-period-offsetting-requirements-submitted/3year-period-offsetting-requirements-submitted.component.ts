@@ -3,9 +3,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 import { map } from 'rxjs';
 
+import { ActionSharedModule } from '@actions/shared/action-shared-module';
 import { ThreeYearOffsettingRequirementsTableTemplateComponent } from '@aviation/shared/components/offsetting-requirements-table-template/offsetting-requirements-table-template.component';
 import { AviationAerCorsia3YearPeriodOffsettingTableData } from '@aviation/shared/types';
 import { getTableData } from '@aviation/shared/utils/3year-period-offsetting-shared.util';
+import { UserInfoResolverPipe } from '@shared/pipes/user-info-resolver.pipe';
 import { SharedModule } from '@shared/shared.module';
 
 import {
@@ -25,7 +27,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-three-year-period-offsetting-requirements-submitted',
-  imports: [SharedModule, ThreeYearOffsettingRequirementsTableTemplateComponent],
+  imports: [SharedModule, ThreeYearOffsettingRequirementsTableTemplateComponent, ActionSharedModule],
   template: `
     <ng-container *ngIf="vm() as vm">
       <app-request-action-heading [headerText]="vm.pageHeader" [timelineCreationDate]="vm.creationDate">
@@ -41,9 +43,14 @@ interface ViewModel {
             </dd>
           </div>
         </dl>
+        <app-action-recipients-template
+          header="Recipients"
+          officialNoticeText="Official notice"
+          [isAviation]="true"></app-action-recipients-template>
       </app-request-action-heading>
     </ng-container>
   `,
+  providers: [UserInfoResolverPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThreeYearPeriodOffsettingRequirementsSubmittedComponent {

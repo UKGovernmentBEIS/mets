@@ -10,7 +10,10 @@
         Amount of CF4:
         {{ (sourceStreamEmission$ | async)?.amountOfCF4 | bigNumber }} tonnes
       </p>
-      <p class="govuk-body">Global warming potential: 7390 tonnes CO2 / tonnes CF4</p>
+      <p class="govuk-body">
+        Global warming potential: {{ (sourceStreamEmission$ | async)?.globalWarmingPotentialCF4 | bigNumber }} tonnes
+        CO2 / tonnes CF4
+      </p>
       <p class="govuk-body">
         Total CF4 emissions:
         {{ (sourceStreamEmission$ | async)?.totalCF4Emissions | bigNumber }} tonnes CO2e
@@ -23,7 +26,10 @@
         Amount of C2F6:
         {{ (sourceStreamEmission$ | async)?.amountOfC2F6 | bigNumber }} tonnes
       </p>
-      <p class="govuk-body">Global warming potential: 12200 tonnes CO2 / tonnes C2F6</p>
+      <p class="govuk-body">
+        Global warming potential: {{ (sourceStreamEmission$ | async)?.globalWarmingPotentialC2F6 | bigNumber }} tonnes
+        CO2 / tonnes C2F6
+      </p>
       <p class="govuk-body">
         Total C2F6 emissions:
         {{ (sourceStreamEmission$ | async)?.totalC2F6Emissions | bigNumber }} tonnes CO2e

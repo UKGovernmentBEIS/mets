@@ -112,17 +112,17 @@ describe('CategoryTierComponent', () => {
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent.trim(),
+          el.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
       ).toEqual([
-        ['Source stream category', 'completed'],
-        ['Activity data', 'not started'],
-        ['Net calorific value', 'not started'],
-        ['Emission factor', 'not started'],
-        ['Oxidation factor', 'not started'],
-        ['Carbon content', 'not started'],
-        ['Conversion factor', 'not started'],
-        ['Biomass fraction', 'not started'],
+        ['Source stream category', 'Completed'],
+        ['Activity data', 'Not started'],
+        ['Net calorific value', 'Not started'],
+        ['Emission factor', 'Not started'],
+        ['Oxidation factor', 'Not started'],
+        ['Carbon content', 'Not started'],
+        ['Conversion factor', 'Not started'],
+        ['Biomass fraction', 'Not started'],
       ]);
 
       expect(page.summaryDefinitions).toEqual([
@@ -168,17 +168,17 @@ describe('CategoryTierComponent', () => {
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent.trim(),
+          el.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
       ).toEqual([
-        ['Source stream category', 'completed'],
-        ['Activity data', 'not started'],
-        ['Net calorific value', 'not started'],
-        ['Emission factor', 'not started'],
-        ['Oxidation factor', 'not started'],
-        ['Carbon content', 'not started'],
-        ['Conversion factor', 'not started'],
-        ['Biomass fraction', 'not started'],
+        ['Source stream category', 'Completed'],
+        ['Activity data', 'Not started'],
+        ['Net calorific value', 'Not started'],
+        ['Emission factor', 'Not started'],
+        ['Oxidation factor', 'Not started'],
+        ['Carbon content', 'Not started'],
+        ['Conversion factor', 'Not started'],
+        ['Biomass fraction', 'Not started'],
       ]);
     });
   });
@@ -228,17 +228,17 @@ describe('CategoryTierComponent', () => {
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent.trim(),
+          el.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
       ).toEqual([
-        ['Source stream category', 'needs review'],
-        ['Activity data', 'cannot start yet'],
-        ['Net calorific value', 'not started'],
-        ['Emission factor', 'not started'],
-        ['Oxidation factor', 'not started'],
-        ['Carbon content', 'not started'],
-        ['Conversion factor', 'not started'],
-        ['Biomass fraction', 'not started'],
+        ['Source stream category', 'Needs review'],
+        ['Activity data', 'Cannot start yet'],
+        ['Net calorific value', 'Not started'],
+        ['Emission factor', 'Not started'],
+        ['Oxidation factor', 'Not started'],
+        ['Carbon content', 'Not started'],
+        ['Conversion factor', 'Not started'],
+        ['Biomass fraction', 'Not started'],
       ]);
     });
   });
@@ -273,17 +273,17 @@ describe('CategoryTierComponent', () => {
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent.trim(),
+          el.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
       ).toEqual([
-        ['Source stream category', 'needs review'],
-        ['Activity data', 'cannot start yet'],
-        ['Net calorific value', 'not started'],
-        ['Emission factor', 'not started'],
-        ['Oxidation factor', 'not started'],
-        ['Carbon content', 'not started'],
-        ['Conversion factor', 'not started'],
-        ['Biomass fraction', 'not started'],
+        ['Source stream category', 'Needs review'],
+        ['Activity data', 'Cannot start yet'],
+        ['Net calorific value', 'Not started'],
+        ['Emission factor', 'Not started'],
+        ['Oxidation factor', 'Not started'],
+        ['Carbon content', 'Not started'],
+        ['Conversion factor', 'Not started'],
+        ['Biomass fraction', 'Not started'],
       ]);
     });
   });

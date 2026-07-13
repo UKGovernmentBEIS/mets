@@ -1,3 +1,7 @@
+::ng-deep .govuk-checkboxes__hint {
+  white-space: pre-line;
+}
+
 .inline-rm-btn {
   display: flex;
   justify-content: space-between;

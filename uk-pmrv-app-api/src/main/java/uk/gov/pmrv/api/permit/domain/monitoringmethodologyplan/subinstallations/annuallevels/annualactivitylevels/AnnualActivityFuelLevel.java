@@ -29,7 +29,7 @@ public class AnnualActivityFuelLevel extends AnnualActivityLevel {
     @Override
     @JsonIgnore
     public List<SubInstallationType> getSupportedSubInstallationTypes() {
-        return new ArrayList<>(List.of(SubInstallationType.FUEL_BENCHMARK_CL,SubInstallationType.FUEL_BENCHMARK_NON_CL));
+        return new ArrayList<>(List.of(SubInstallationType.FUEL_BENCHMARK_CL,SubInstallationType.FUEL_BENCHMARK_NON_CL, SubInstallationType.FUEL_BENCHMARK_CL_CBAM, SubInstallationType.FUEL_BENCHMARK_CL_NON_CBAM));
     }
 
 }

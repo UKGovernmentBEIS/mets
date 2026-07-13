@@ -1230,6 +1230,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/users/validate-password:
+    post:
+      tags:
+        - Validate Password
+      summary: Check if password matches the password policy rules
+      operationId: validatePassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordValidationRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordValidationResponseDTO'
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nFORM1001 | Form validation failed"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /v1.0/users/security-setup/2fa/request-change:
     post:
       tags:
@@ -1806,13 +1837,13 @@ paths:
     post:
       tags:
         - Reporting
-      description: Calculates emissions using AER calculation approach
+      description: Calculates emissions using AER measurement N2O approach
       operationId: calculateMeasurementN2OEmissions
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MeasurementEmissionsCalculationParamsDTO'
+              $ref: '#/components/schemas/MeasurementN2OEmissionsCalculationParamsDTO'
         required: true
       responses:
         '200':
@@ -1843,7 +1874,7 @@ paths:
     post:
       tags:
         - Reporting
-      description: Calculates emissions using AER calculation approach
+      description: Calculates emissions using AER measurement CO2 approach
       operationId: calculateMeasurementCO2Emissions
       requestBody:
         content:
@@ -1880,7 +1911,7 @@ paths:
     post:
       tags:
         - Reporting
-      summary: Calculates emissions using AER calculation approach
+      summary: Calculates emissions using AER PFC calculation approach
       operationId: calculatePfcEmissions
       requestBody:
         content:
@@ -1986,12 +2017,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  format: decimal
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  format: decimal
   /v1.0/regulator-users:
     post:
       tags:
@@ -2642,6 +2685,39 @@ paths:
                 $ref: '#/components/schemas/MiReportUserDefinedResult'
         '400':
           description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/mireports/user-defined/create:
+    post:
+      tags:
+        - Mi Reports User defined
+      summary: Creates a user defined custom mi report
+      operationId: createCustomReport
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MiReportUserDefinedDTO'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -3892,12 +3968,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/AviationReportableEmissionsDTO'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/AviationReportableEmissionsDTO'
   /v1.0/aviation-reporting-data/airports:
     post:
       tags:
@@ -4910,7 +4996,6 @@ paths:
                     - NER_MAKE_PAYMENT
                     - NER_TRACK_PAYMENT
                     - NER_CONFIRM_PAYMENT
-                    - NER_AUTHORITY_RESPONSE
                     - DOAL_APPLICATION_SUBMIT
                     - DOAL_APPLICATION_PEER_REVIEW
                     - DOAL_WAIT_FOR_PEER_REVIEW
@@ -6017,7 +6102,6 @@ paths:
               - NER_MAKE_PAYMENT
               - NER_TRACK_PAYMENT
               - NER_CONFIRM_PAYMENT
-              - NER_AUTHORITY_RESPONSE
               - DOAL_APPLICATION_SUBMIT
               - DOAL_APPLICATION_PEER_REVIEW
               - DOAL_WAIT_FOR_PEER_REVIEW
@@ -6322,6 +6406,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/sub-installation-types/details:
+    get:
+      tags:
+        - SubInstallationTypes
+      summary: Retrieves the list of sub installation types with details.
+      operationId: getSubInstallationTypesDetails
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubInstallationTypeDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /v1.0/source-stream-categories:
     get:
       tags:
@@ -6482,18 +6593,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
   /v1.0/requests/available-workflows/permit/{accountId}:
     get:
       tags:
@@ -6523,18 +6649,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/RequestCreateValidationResult'
   /v1.0/request-notes/{requestId}/files:
     get:
       tags:
@@ -7201,6 +7342,224 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/mireports/user-defined:
+    get:
+      tags:
+        - Mi Reports User defined
+      summary: Retrieves the report that matches the provided id
+      operationId: getReport
+      parameters:
+        - name: id
+          in: query
+          description: The unique identifier of the report
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MiReportUserDefinedDTO'
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/mireports/user-defined/reports:
+    get:
+      tags:
+        - Mi Reports User defined
+      summary: Retrieves all enabled user defined mi reports
+      operationId: getReports
+      parameters:
+        - name: page
+          in: query
+          description: The page number starting from zero
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          description: The page size
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+        - name: categoryId
+          in: query
+          description: Optional category id to filter by
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: term
+          in: query
+          description: Optional report search term
+          required: false
+          schema:
+            maxLength: 256
+            minLength: 3
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MiReportUserDefinedResults'
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/mireports/user-defined/categories:
+    get:
+      tags:
+        - Mi Reports User defined
+      summary: Retrieves all enabled user defined mi report categories
+      operationId: getCategories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MiReportUserDefinedCategoryDTO'
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/mireports/user-defined/reports:
+    get:
+      tags:
+        - Mi Reports User defined
+      summary: Retrieves all enabled user defined mi reports
+      operationId: getReports
+      parameters:
+        - name: page
+          in: query
+          description: The page number starting from zero
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          description: The page size
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MiReportUserDefinedResults'
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/mireports/user-defined/categories:
+    get:
+      tags:
+        - Mi Reports User defined
+      summary: Retrieves all enabled user defined mi report categories
+      operationId: getCategories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MiReportUserDefinedCategoryDTO'
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -9366,6 +9725,37 @@ components:
             - ACTIVE
             - PENDING
             - DISABLED
+    PasswordValidationRequestDTO:
+      required:
+        - password
+      type: object
+      properties:
+        password:
+          type: string
+      description: The password validation request
+    PasswordValidationErrorDTO:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+            - INVALID_MIN_LENGTH
+            - INVALID_MAX_LENGTH
+            - BLACKLISTED_PATTERN
+            - PWNED
+            - PWNED_SERVICE_UNAVAILABLE
+            - OTHER
+        message:
+          type: string
+    PasswordValidationResponseDTO:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/PasswordValidationErrorDTO'
     OneTimePasswordDTO:
       required:
         - password
@@ -9540,13 +9930,21 @@ components:
             - FACING_BRICKS
             - FLOAT_GLASS
             - FUEL_CL
+            - FUEL_CL_CBAM
+            - FUEL_CL_NON_CBAM
             - FUEL_NON_CL
             - GREY_CEMENT_CLINKER
             - HEAT_CL
+            - HEAT_CL_CBAM
+            - HEAT_CL_NON_CBAM
             - HEAT_NON_CL
             - HOT_METAL
             - HYDROGEN
+            - HYDROGEN_CBAM
+            - HYDROGEN_NON_CBAM
             - IRON_CASTING
+            - IRON_CASTING_CBAM
+            - IRON_CASTING_NON_CBAM
             - LIME
             - LONG_FIBRE_KRAFT_PULP
             - MINERAL_WOOL
@@ -9558,6 +9956,8 @@ components:
             - PLASTERBOARD
             - PRE_BAKE_ANODE
             - PROCESS_EMISSIONS_CL
+            - PROCESS_EMISSIONS_CL_CBAM
+            - PROCESS_EMISSIONS_CL_NON_CBAM
             - PROCESS_EMISSIONS_NON_CL
             - RECOVERED_PAPER_PULP
             - REFINERY_PRODUCTS
@@ -9592,6 +9992,7 @@ components:
               NER_ALLOCATION_FOR_YEAR_0_PLUS_2_BASED_ON_THE_HISTORICAL_ACTIVITY_LEVEL_HAL
             - REGULATOR_REJECTS_ADJUSTMENT
             - NO_CHANGE
+            - NEW_SUB_INSTALLATION
             - OTHER
         otherChangeTypeName:
           maxLength: 255
@@ -9977,13 +10378,21 @@ components:
             - FACING_BRICKS
             - FLOAT_GLASS
             - FUEL_CL
+            - FUEL_CL_CBAM
+            - FUEL_CL_NON_CBAM
             - FUEL_NON_CL
             - GREY_CEMENT_CLINKER
             - HEAT_CL
+            - HEAT_CL_CBAM
+            - HEAT_CL_NON_CBAM
             - HEAT_NON_CL
             - HOT_METAL
             - HYDROGEN
+            - HYDROGEN_CBAM
+            - HYDROGEN_NON_CBAM
             - IRON_CASTING
+            - IRON_CASTING_CBAM
+            - IRON_CASTING_NON_CBAM
             - LIME
             - LONG_FIBRE_KRAFT_PULP
             - MINERAL_WOOL
@@ -9995,6 +10404,8 @@ components:
             - PLASTERBOARD
             - PRE_BAKE_ANODE
             - PROCESS_EMISSIONS_CL
+            - PROCESS_EMISSIONS_CL_CBAM
+            - PROCESS_EMISSIONS_CL_NON_CBAM
             - PROCESS_EMISSIONS_NON_CL
             - RECOVERED_PAPER_PULP
             - REFINERY_PRODUCTS
@@ -10291,13 +10702,21 @@ components:
             - FACING_BRICKS
             - FLOAT_GLASS
             - FUEL_CL
+            - FUEL_CL_CBAM
+            - FUEL_CL_NON_CBAM
             - FUEL_NON_CL
             - GREY_CEMENT_CLINKER
             - HEAT_CL
+            - HEAT_CL_CBAM
+            - HEAT_CL_NON_CBAM
             - HEAT_NON_CL
             - HOT_METAL
             - HYDROGEN
+            - HYDROGEN_CBAM
+            - HYDROGEN_NON_CBAM
             - IRON_CASTING
+            - IRON_CASTING_CBAM
+            - IRON_CASTING_NON_CBAM
             - LIME
             - LONG_FIBRE_KRAFT_PULP
             - MINERAL_WOOL
@@ -10309,6 +10728,8 @@ components:
             - PLASTERBOARD
             - PRE_BAKE_ANODE
             - PROCESS_EMISSIONS_CL
+            - PROCESS_EMISSIONS_CL_CBAM
+            - PROCESS_EMISSIONS_CL_NON_CBAM
             - PROCESS_EMISSIONS_NON_CL
             - RECOVERED_PAPER_PULP
             - REFINERY_PRODUCTS
@@ -10343,6 +10764,7 @@ components:
               NER_ALLOCATION_FOR_YEAR_0_PLUS_2_BASED_ON_THE_HISTORICAL_ACTIVITY_LEVEL_HAL
             - REGULATOR_REJECTS_ADJUSTMENT
             - NO_CHANGE
+            - NEW_SUB_INSTALLATION
             - OTHER
         otherChangeTypeName:
           maxLength: 255
@@ -15821,7 +16243,6 @@ components:
     DoalProceedToAuthorityDetermination:
       required:
         - articleReasonGroupType
-        - articleReasonItems
         - hasWithholdingOfAllowances
         - needsOfficialNotice
         - reason
@@ -15836,6 +16257,7 @@ components:
               enum:
                 - ARTICLE_6A_REASONS
                 - ARTICLE_34H_REASONS
+                - ARTICLE_5_REASONS
             articleReasonItems:
               uniqueItems: true
               type: array
@@ -18509,13 +18931,21 @@ components:
             - FACING_BRICKS
             - FLOAT_GLASS
             - FUEL_CL
+            - FUEL_CL_CBAM
+            - FUEL_CL_NON_CBAM
             - FUEL_NON_CL
             - GREY_CEMENT_CLINKER
             - HEAT_CL
+            - HEAT_CL_CBAM
+            - HEAT_CL_NON_CBAM
             - HEAT_NON_CL
             - HOT_METAL
             - HYDROGEN
+            - HYDROGEN_CBAM
+            - HYDROGEN_NON_CBAM
             - IRON_CASTING
+            - IRON_CASTING_CBAM
+            - IRON_CASTING_NON_CBAM
             - LIME
             - LONG_FIBRE_KRAFT_PULP
             - MINERAL_WOOL
@@ -18527,6 +18957,8 @@ components:
             - PLASTERBOARD
             - PRE_BAKE_ANODE
             - PROCESS_EMISSIONS_CL
+            - PROCESS_EMISSIONS_CL_CBAM
+            - PROCESS_EMISSIONS_CL_NON_CBAM
             - PROCESS_EMISSIONS_NON_CL
             - RECOVERED_PAPER_PULP
             - REFINERY_PRODUCTS
@@ -18561,6 +18993,7 @@ components:
               NER_ALLOCATION_FOR_YEAR_0_PLUS_2_BASED_ON_THE_HISTORICAL_ACTIVITY_LEVEL_HAL
             - REGULATOR_REJECTS_ADJUSTMENT
             - NO_CHANGE
+            - NEW_SUB_INSTALLATION
             - OTHER
         otherChangeTypeName:
           maxLength: 255
@@ -20476,7 +20909,11 @@ components:
               - GREY_CEMENT_CLINKER
               - HOT_METAL
               - HYDROGEN
+              - HYDROGEN_CBAM
+              - HYDROGEN_NON_CBAM
               - IRON_CASTING
+              - IRON_CASTING_CBAM
+              - IRON_CASTING_NON_CBAM
               - LIME
               - LONG_FIBRE_KRAFT_PULP
               - MINERAL_WOOL
@@ -20507,11 +20944,17 @@ components:
               - VINYL_CHLORIDE_MONOMER
               - WHITE_CEMENT_CLINKER
               - HEAT_BENCHMARK_CL
+              - HEAT_BENCHMARK_CL_CBAM
+              - HEAT_BENCHMARK_CL_NON_CBAM
               - HEAT_BENCHMARK_NON_CL
               - DISTRICT_HEATING_NON_CL
               - FUEL_BENCHMARK_CL
+              - FUEL_BENCHMARK_CL_CBAM
+              - FUEL_BENCHMARK_CL_NON_CBAM
               - FUEL_BENCHMARK_NON_CL
               - PROCESS_EMISSIONS_CL
+              - PROCESS_EMISSIONS_CL_CBAM
+              - PROCESS_EMISSIONS_CL_NON_CBAM
               - PROCESS_EMISSIONS_NON_CL
     MethodologiesToCloseDataGaps:
       required:
@@ -24137,6 +24580,8 @@ components:
         - calculationCorrect
         - durationRange
         - emissionSources
+        - globalWarmingPotentialC2F6
+        - globalWarmingPotentialCF4
         - parameterMonitoringTier
         - pfcSourceStreamEmissionCalculationMethodData
         - reportableEmissions
@@ -24176,6 +24621,12 @@ components:
           type: boolean
         providedEmissions:
           $ref: '#/components/schemas/PfcManuallyProvidedEmissions'
+        globalWarmingPotentialCF4:
+          type: string
+          format: decimal
+        globalWarmingPotentialC2F6:
+          type: string
+          format: decimal
         amountOfCF4:
           type: string
           format: decimal
@@ -24328,13 +24779,21 @@ components:
             - FACING_BRICKS
             - FLOAT_GLASS
             - FUEL_CL
+            - FUEL_CL_CBAM
+            - FUEL_CL_NON_CBAM
             - FUEL_NON_CL
             - GREY_CEMENT_CLINKER
             - HEAT_CL
+            - HEAT_CL_CBAM
+            - HEAT_CL_NON_CBAM
             - HEAT_NON_CL
             - HOT_METAL
             - HYDROGEN
+            - HYDROGEN_CBAM
+            - HYDROGEN_NON_CBAM
             - IRON_CASTING
+            - IRON_CASTING_CBAM
+            - IRON_CASTING_NON_CBAM
             - LIME
             - LONG_FIBRE_KRAFT_PULP
             - MINERAL_WOOL
@@ -24346,6 +24805,8 @@ components:
             - PLASTERBOARD
             - PRE_BAKE_ANODE
             - PROCESS_EMISSIONS_CL
+            - PROCESS_EMISSIONS_CL_CBAM
+            - PROCESS_EMISSIONS_CL_NON_CBAM
             - PROCESS_EMISSIONS_NON_CL
             - RECOVERED_PAPER_PULP
             - REFINERY_PRODUCTS
@@ -24991,18 +25452,12 @@ components:
             - NER_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD
             - NER_SAVE_APPLICATION_REVIEW_PAYLOAD
             - NER_SAVE_REGULATOR_REVIEW_GROUP_DECISION_PAYLOAD
-            - NER_SAVE_REVIEW_DETERMINATION_PAYLOAD
             - NER_APPLICATION_AMENDS_SAVE_PAYLOAD
             - NER_REGULATOR_REVIEW_RETURN_FOR_AMENDS_PAYLOAD
             - NER_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER_PAYLOAD
             - NER_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD
             - NER_REQUEST_PEER_REVIEW_PAYLOAD
             - NER_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD
-            - NER_SAVE_APPLICATION_AMEND_PAYLOAD
-            - NER_SUBMIT_APPLICATION_AMEND_PAYLOAD
-            - NER_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD
-            - NER_SAVE_AUTHORITY_RESPONSE_PAYLOAD
-            - NER_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD
             - DOAL_SAVE_APPLICATION_PAYLOAD
             - DOAL_SUBMIT_APPLICATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD
             - DOAL_REQUEST_PEER_REVIEW_PAYLOAD
@@ -25337,17 +25792,10 @@ components:
             - NER_APPLICATION_AMENDS_SAVE
             - NER_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
             - NER_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER
-            - NER_NOTIFY_OPERATOR_FOR_DECISION
             - NER_COMPLETE_REVIEW
             - NER_WITHDRAW_APPLICATION
             - NER_REQUEST_PEER_REVIEW
-            - NER_SAVE_REVIEW_DETERMINATION
             - NER_SUBMIT_PEER_REVIEW_DECISION
-            - NER_SAVE_APPLICATION_AMEND
-            - NER_SUBMIT_APPLICATION_AMEND
-            - NER_SAVE_AUTHORITY_RESPONSE
-            - NER_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT
-            - NER_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
             - DOAL_SAVE_APPLICATION
             - DOAL_UPLOAD_ATTACHMENT
             - DOAL_PROCEED_TO_AUTHORITY_AND_NOTIFY_OPERATOR_FOR_DECISION
@@ -26534,7 +26982,11 @@ components:
             - GREY_CEMENT_CLINKER
             - HOT_METAL
             - HYDROGEN
+            - HYDROGEN_CBAM
+            - HYDROGEN_NON_CBAM
             - IRON_CASTING
+            - IRON_CASTING_CBAM
+            - IRON_CASTING_NON_CBAM
             - LIME
             - LONG_FIBRE_KRAFT_PULP
             - MINERAL_WOOL
@@ -26565,11 +27017,17 @@ components:
             - VINYL_CHLORIDE_MONOMER
             - WHITE_CEMENT_CLINKER
             - HEAT_BENCHMARK_CL
+            - HEAT_BENCHMARK_CL_CBAM
+            - HEAT_BENCHMARK_CL_NON_CBAM
             - HEAT_BENCHMARK_NON_CL
             - DISTRICT_HEATING_NON_CL
             - FUEL_BENCHMARK_CL
+            - FUEL_BENCHMARK_CL_CBAM
+            - FUEL_BENCHMARK_CL_NON_CBAM
             - FUEL_BENCHMARK_NON_CL
             - PROCESS_EMISSIONS_CL
+            - PROCESS_EMISSIONS_CL_CBAM
+            - PROCESS_EMISSIONS_CL_NON_CBAM
             - PROCESS_EMISSIONS_NON_CL
         description:
           maxLength: 10000
@@ -27745,17 +28203,10 @@ components:
             - NER_APPLICATION_AMENDS_SAVE
             - NER_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
             - NER_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER
-            - NER_NOTIFY_OPERATOR_FOR_DECISION
             - NER_COMPLETE_REVIEW
             - NER_WITHDRAW_APPLICATION
             - NER_REQUEST_PEER_REVIEW
-            - NER_SAVE_REVIEW_DETERMINATION
             - NER_SUBMIT_PEER_REVIEW_DECISION
-            - NER_SAVE_APPLICATION_AMEND
-            - NER_SUBMIT_APPLICATION_AMEND
-            - NER_SAVE_AUTHORITY_RESPONSE
-            - NER_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT
-            - NER_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
             - DOAL_SAVE_APPLICATION
             - DOAL_UPLOAD_ATTACHMENT
             - DOAL_PROCEED_TO_AUTHORITY_AND_NOTIFY_OPERATOR_FOR_DECISION
@@ -28876,6 +29327,22 @@ components:
               items:
                 type: string
                 format: date-time
+            permitNotificationType:
+              type: string
+              enum:
+                - TEMPORARY_FACTOR
+                - TEMPORARY_CHANGE
+                - TEMPORARY_SUSPENSION
+                - CESSATION
+                - NON_SIGNIFICANT_CHANGE
+                - OTHER_FACTOR
+            otherFactorReportingType:
+              type: string
+              enum:
+                - EXCEEDED_THRESHOLD_STATED_GHGE_PERMIT
+                - EXCEEDED_THRESHOLD_STATED_HSE_PERMIT
+                - RENOUNCE_FREE_ALLOCATIONS
+                - OTHER_ISSUE
     PermitReissueAccountReport:
       type: object
       properties:
@@ -29232,6 +29699,50 @@ components:
         requestId:
           type: string
       description: The request note request
+    MeasurementN2OEmissionsCalculationParamsDTO:
+      required:
+        - annualHourlyAverageFlueGasFlow
+        - annualHourlyAverageGHGConcentration
+        - operationalHours
+        - reportingYear
+      type: object
+      properties:
+        operationalHours:
+          type: string
+          format: decimal
+        annualHourlyAverageFlueGasFlow:
+          type: string
+          format: decimal
+        containsBiomass:
+          type: boolean
+        biomassPercentage:
+          type: string
+          format: decimal
+        annualHourlyAverageGHGConcentration:
+          type: string
+          format: decimal
+        reportingYear:
+          type: integer
+          format: int16
+      description: The parameters needed to calculate the emissions
+    MeasurementEmissionsCalculationDTO:
+      type: object
+      properties:
+        reportableEmissions:
+          type: string
+          format: decimal
+        sustainableBiomassEmissions:
+          type: string
+          format: decimal
+        globalWarmingPotential:
+          type: string
+          format: decimal
+        annualGasFlow:
+          type: string
+          format: decimal
+        annualFossilAmountOfGreenhouseGas:
+          type: string
+          format: decimal
     MeasurementEmissionsCalculationParamsDTO:
       required:
         - annualHourlyAverageFlueGasFlow
@@ -29254,31 +29765,17 @@ components:
           type: string
           format: decimal
       description: The parameters needed to calculate the emissions
-    MeasurementEmissionsCalculationDTO:
-      type: object
-      properties:
-        reportableEmissions:
-          type: string
-          format: decimal
-        sustainableBiomassEmissions:
-          type: string
-          format: decimal
-        globalWarmingPotential:
-          type: string
-          format: decimal
-        annualGasFlow:
-          type: string
-          format: decimal
-        annualFossilAmountOfGreenhouseGas:
-          type: string
-          format: decimal
     PfcEmissionsCalculationParamsDTO:
       required:
         - calculationMethod
         - pfcSourceStreamEmissionCalculationMethodData
+        - reportingYear
         - totalPrimaryAluminium
       type: object
       properties:
+        reportingYear:
+          type: integer
+          format: int16
         calculationMethod:
           type: string
           enum:
@@ -29667,6 +30164,42 @@ components:
             type: object
             additionalProperties:
               type: object
+    MiReportUserDefinedCategoryDTO:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    MiReportUserDefinedDTO:
+      required:
+        - queryDefinition
+        - reportName
+      type: object
+      properties:
+        reportName:
+          maxLength: 255
+          minLength: 0
+          type: string
+        description:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        queryDefinition:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        categories:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MiReportUserDefinedCategoryDTO'
+        lastUpdatedOn:
+          type: string
+          format: date-time
     AerMarkNotRequiredDetails:
       required:
         - reason
@@ -30622,7 +31155,6 @@ components:
             - NER_MAKE_PAYMENT
             - NER_TRACK_PAYMENT
             - NER_CONFIRM_PAYMENT
-            - NER_AUTHORITY_RESPONSE
             - DOAL_APPLICATION_SUBMIT
             - DOAL_APPLICATION_PEER_REVIEW
             - DOAL_WAIT_FOR_PEER_REVIEW
@@ -30871,6 +31403,8 @@ components:
           type: string
         permitReferenceId:
           type: string
+        new:
+          type: boolean
         isNew:
           type: boolean
     ItemDTOResponse:
@@ -35825,7 +36359,6 @@ components:
             - NER_MAKE_PAYMENT
             - NER_TRACK_PAYMENT
             - NER_CONFIRM_PAYMENT
-            - NER_AUTHORITY_RESPONSE
             - DOAL_APPLICATION_SUBMIT
             - DOAL_APPLICATION_PEER_REVIEW
             - DOAL_WAIT_FOR_PEER_REVIEW
@@ -36431,17 +36964,10 @@ components:
               - NER_APPLICATION_AMENDS_SAVE
               - NER_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
               - NER_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER
-              - NER_NOTIFY_OPERATOR_FOR_DECISION
               - NER_COMPLETE_REVIEW
               - NER_WITHDRAW_APPLICATION
               - NER_REQUEST_PEER_REVIEW
-              - NER_SAVE_REVIEW_DETERMINATION
               - NER_SUBMIT_PEER_REVIEW_DECISION
-              - NER_SAVE_APPLICATION_AMEND
-              - NER_SUBMIT_APPLICATION_AMEND
-              - NER_SAVE_AUTHORITY_RESPONSE
-              - NER_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT
-              - NER_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
               - DOAL_SAVE_APPLICATION
               - DOAL_UPLOAD_ATTACHMENT
               - DOAL_PROCEED_TO_AUTHORITY_AND_NOTIFY_OPERATOR_FOR_DECISION
@@ -36839,7 +37365,6 @@ components:
             - NER_WAIT_FOR_PEER_REVIEW_PAYLOAD
             - NER_APPLICATION_AMENDS_SUBMIT_PAYLOAD
             - NER_WAIT_FOR_AMENDS_PAYLOAD
-            - NER_AUTHORITY_RESPONSE_PAYLOAD
             - DOAL_APPLICATION_SUBMIT_PAYLOAD
             - DOAL_APPLICATION_PEER_REVIEW_PAYLOAD
             - DOAL_WAIT_FOR_PEER_REVIEW_PAYLOAD
@@ -37661,6 +38186,85 @@ components:
           type: string
         lastName:
           type: string
+    SubInstallationTypeDetails:
+      type: object
+      properties:
+        subInstallationType:
+          type: string
+          enum:
+            - PRIMARY_ALUMINIUM
+            - ADIPIC_ACID
+            - AMMONIA
+            - AROMATICS
+            - BOTTLES_AND_JARS_OF_COLOURED_GLASS
+            - BOTTLES_AND_JARS_OF_COLOURLESS_GLASS
+            - CARBON_BLACK
+            - COATED_CARTON_BOARD
+            - COATED_FINE_PAPER
+            - COKE
+            - CONTINUOUS_FILAMENT_GLASS_FIBRE_PRODUCTS
+            - DOLIME
+            - DRIED_SECONDARY_GYPSUM
+            - EAF_CARBON_STEEL
+            - EAF_HIGH_ALLOY_STEEL
+            - E_PVC
+            - ETHYLENE_OXIDE_ETHYLENE_GLYCOLS
+            - FACING_BRICKS
+            - FLOAT_GLASS
+            - GREY_CEMENT_CLINKER
+            - HOT_METAL
+            - HYDROGEN
+            - HYDROGEN_CBAM
+            - HYDROGEN_NON_CBAM
+            - IRON_CASTING
+            - IRON_CASTING_CBAM
+            - IRON_CASTING_NON_CBAM
+            - LIME
+            - LONG_FIBRE_KRAFT_PULP
+            - MINERAL_WOOL
+            - NEWSPRINT
+            - NITRIC_ACID
+            - PAVERS
+            - PHENOL_ACETONE
+            - PLASTER
+            - PLASTERBOARD
+            - PRE_BAKE_ANODE
+            - RECOVERED_PAPER_PULP
+            - REFINERY_PRODUCTS
+            - ROOF_TILES
+            - SHORT_FIBRE_KRAFT_PULP
+            - SINTERED_DOLIME
+            - SINTERED_ORE
+            - SODA_ASH
+            - SPRAY_DRIED_POWDER
+            - S_PVC
+            - STEAM_CRACKING
+            - STYRENE
+            - SULPHITE_PULP_THERMO_MECHANICAL_AND_MECHANICAL_PULP
+            - SYNTHESIS_GAS
+            - TESTLINER_AND_FLUTING
+            - TISSUE
+            - UNCOATED_CARTON_BOARD
+            - UNCOATED_FINE_PAPER
+            - VINYL_CHLORIDE_MONOMER
+            - WHITE_CEMENT_CLINKER
+            - HEAT_BENCHMARK_CL
+            - HEAT_BENCHMARK_CL_CBAM
+            - HEAT_BENCHMARK_CL_NON_CBAM
+            - HEAT_BENCHMARK_NON_CL
+            - DISTRICT_HEATING_NON_CL
+            - FUEL_BENCHMARK_CL
+            - FUEL_BENCHMARK_CL_CBAM
+            - FUEL_BENCHMARK_CL_NON_CBAM
+            - FUEL_BENCHMARK_NON_CL
+            - PROCESS_EMISSIONS_CL
+            - PROCESS_EMISSIONS_CL_CBAM
+            - PROCESS_EMISSIONS_CL_NON_CBAM
+            - PROCESS_EMISSIONS_NON_CL
+        valid:
+          type: boolean
+        coveredByUKCBAM:
+          type: boolean
     SourceStreamTypeCategory:
       type: object
       properties:
@@ -43351,9 +43955,7 @@ components:
             - NER_APPLICATION_SUBMITTED_PAYLOAD
             - NER_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD
             - NER_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD
-            - NER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
             - NER_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD
-            - NER_APPLICATION_AMENDS_SUBMITTED_PAYLOAD
             - NER_APPLICATION_COMPLETED_PAYLOAD
             - NER_APPLICATION_DEEM_WITHDRAWN_PAYLOAD
             - NER_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
@@ -43639,7 +44241,6 @@ components:
           NON_COMPLIANCE_PEER_REVIEW_REQUESTED_PAYLOAD: >-
             #/components/schemas/NonCompliancePeerReviewRequestedRequestActionPayload
           NER_APPLICATION_SUBMITTED_PAYLOAD: '#/components/schemas/NERApplicationSubmittedRequestActionPayload'
-          NER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
           NER_APPLICATION_VERIFICATION_SUBMITTED_PAYLOADD: >-
             #/components/schemas/NERApplicationVerificationSubmittedRequestActionPayload
           NER_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD: >-
@@ -44406,6 +45007,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TemplateInfoDTO'
+    MiReportUserDefinedInfoDTO:
+      required:
+        - reportName
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        reportName:
+          maxLength: 255
+          minLength: 0
+          type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/MiReportUserDefinedCategoryDTO'
+        description:
+          maxLength: 10000
+          minLength: 0
+          type: string
+    MiReportUserDefinedResults:
+      type: object
+      properties:
+        queries:
+          type: array
+          items:
+            $ref: '#/components/schemas/MiReportUserDefinedInfoDTO'
+        total:
+          type: integer
+          format: int64
     LegalEntityInfoDTO:
       required:
         - id
@@ -44515,6 +45146,9 @@ components:
         registryId:
           type: integer
           format: int32
+        verificationBodyId:
+          type: integer
+          format: int64
         status:
           type: string
           enum:
@@ -44736,6 +45370,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CaExternalContactDTO'
+        editable:
+          type: boolean
         isEditable:
           type: boolean
     AviationAccountSearchResults:
@@ -44904,6 +45540,9 @@ components:
         registryId:
           type: integer
           format: int32
+        verificationBodyId:
+          type: integer
+          format: int64
         status:
           type: string
           enum:

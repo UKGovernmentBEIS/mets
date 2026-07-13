@@ -127,7 +127,7 @@ describe('MeasurementComponent', () => {
       expect(page.tables.length).toEqual(1);
       expect(page.rows.length).toEqual(2);
       expect(page.rows).toEqual([
-        ['EP1', 'the reference Anthracite', 'emission source 1 reference', '-37.026', '0', 'completed'],
+        ['EP1', 'the reference Anthracite', 'emission source 1 reference', '-37.026', '0', 'Completed'],
         ['Total emissions', '', '', '-37.026 tCO2e', '0 tCO2e', ''],
       ]);
     });

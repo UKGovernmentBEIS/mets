@@ -50,12 +50,12 @@ describe('FuelsComponent', () => {
     }
     get listAndStatuses() {
       return this.queryAll('li')
-        .map((row) => [row.querySelector('a'), row.querySelector('strong')])
+        .map((row) => [row.querySelector('a'), row.querySelector('.app-task-list__tag')])
         .map((pair) => pair.map((element) => element.textContent.trim()));
     }
     get content() {
       return this.queryAll('li')
-        .map((row) => [row.querySelector('a'), row.querySelector('strong')])
+        .map((row) => [row.querySelector('a'), row.querySelector('.app-task-list__tag')])
         .map((pair) => pair.map((element) => element.textContent.trim()));
     }
     get sourceStreams() {
@@ -133,24 +133,24 @@ describe('FuelsComponent', () => {
 
   it('should display the list with correct statuses', () => {
     expect(page.listAndStatuses).toEqual([
-      ['Source streams (fuels and materials)', 'in progress'],
-      ['Emission sources', 'in progress'],
-      ['Emission points', 'in progress'],
-      ['Emission summaries', 'in progress'],
-      ['Measurement devices', 'in progress'],
-      ['Site diagram', 'completed'],
+      ['Source streams (fuels and materials)', 'In progress'],
+      ['Emission sources', 'In progress'],
+      ['Emission points', 'In progress'],
+      ['Emission summaries', 'In progress'],
+      ['Measurement devices', 'In progress'],
+      ['Site diagram', 'Completed'],
     ]);
 
     completeTasks();
     fixture.detectChanges();
 
     expect(page.listAndStatuses).toEqual([
-      ['Source streams (fuels and materials)', 'completed'],
-      ['Emission sources', 'completed'],
-      ['Emission points', 'completed'],
-      ['Emission summaries', 'needs review'],
-      ['Measurement devices', 'completed'],
-      ['Site diagram', 'completed'],
+      ['Source streams (fuels and materials)', 'Completed'],
+      ['Emission sources', 'Completed'],
+      ['Emission points', 'Completed'],
+      ['Emission summaries', 'Needs review'],
+      ['Measurement devices', 'Completed'],
+      ['Site diagram', 'Completed'],
     ]);
   });
 
@@ -230,12 +230,12 @@ describe('FuelsComponent', () => {
     fixture.detectChanges();
 
     expect(page.listAndStatuses).toEqual([
-      ['Source streams (fuels and materials)', 'completed'],
-      ['Emission sources', 'completed'],
-      ['Emission points', 'completed'],
-      ['Emission summaries', 'completed'],
-      ['Measurement devices', 'completed'],
-      ['Site diagram', 'completed'],
+      ['Source streams (fuels and materials)', 'Completed'],
+      ['Emission sources', 'Completed'],
+      ['Emission points', 'Completed'],
+      ['Emission summaries', 'Completed'],
+      ['Measurement devices', 'Completed'],
+      ['Site diagram', 'Completed'],
     ]);
     expect(page.emissionSummaries).toEqual([
       ['13123124 White Spirit & SBP', 'S1 Boiler', 'The big Ref Emission point 1', 'Combustion'],

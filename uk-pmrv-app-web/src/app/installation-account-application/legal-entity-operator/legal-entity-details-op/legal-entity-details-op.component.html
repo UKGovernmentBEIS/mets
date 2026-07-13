@@ -27,7 +27,7 @@
     label="Operator name"></div>
 
   <fieldset govukFieldset>
-    <legend govukLegend>Organisation address</legend>
+    <legend govukLegend legendSize="medium">Organisation address</legend>
     <p class="govuk-body">This should be the address registered with Companies House</p>
     <app-address-input formGroupName="address"></app-address-input>
   </fieldset>
@@ -41,7 +41,7 @@
     <govuk-radio-option label="Yes" [value]="true">
       <ng-container govukConditionalContent>
         <fieldset govukFieldset>
-          <legend govukLegend>Enter the holding company details</legend>
+          <legend govukLegend legendSize="medium">Enter the holding company details</legend>
           <app-holding-company-form formGroupName="holdingCompanyGroup"></app-holding-company-form>
         </fieldset>
       </ng-container>

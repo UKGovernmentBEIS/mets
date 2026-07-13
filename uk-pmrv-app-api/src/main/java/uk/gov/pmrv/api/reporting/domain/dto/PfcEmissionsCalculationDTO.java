@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
-import uk.gov.pmrv.api.reporting.domain.GlobalWarmingPotential;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -16,8 +15,8 @@ import java.util.Objects;
 @Builder
 public class PfcEmissionsCalculationDTO {
 
-    private final BigDecimal globalWarmingPotentialCF4 = GlobalWarmingPotential.PFC_CF4.getValue();
-    private final BigDecimal globalWarmingPotentialC2F6 = GlobalWarmingPotential.PFC_C2F6.getValue();
+    private BigDecimal globalWarmingPotentialCF4;
+    private BigDecimal globalWarmingPotentialC2F6;
     private BigDecimal amountOfCF4;
     private BigDecimal totalCF4Emissions;
     private BigDecimal amountOfC2F6;

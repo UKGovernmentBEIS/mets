@@ -78,7 +78,7 @@ export class DreStoreDelegate implements RequestTaskStoreDelegate {
 
       delete draft.dreAttachments;
 
-      if (draft.sendEmailNotification) {
+      if (draft.sendEmailNotification !== null && draft.sendEmailNotification !== undefined) {
         delete draft.sendEmailNotification;
       }
     });

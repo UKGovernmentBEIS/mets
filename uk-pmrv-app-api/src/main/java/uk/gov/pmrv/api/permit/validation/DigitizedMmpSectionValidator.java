@@ -207,6 +207,24 @@ public class DigitizedMmpSectionValidator implements PermitContextValidator, Per
         EnergyFlows energyFlows = digitizedPlan.getEnergyFlows();
         validateEnergyFlows(energyFlows, violationErrors);
 
+        Optional<ConfigurationDTO> cbamTransitionToggleConfiguration = configurationService
+                .getConfigurationByKey(CBAM_TRANSITION_CONFIG_KEY);
+
+        boolean cbamTransitionToggle = cbamTransitionToggleConfiguration
+                .map(ConfigurationDTO::getValue)
+                .filter(Boolean.class::isInstance)
+                .map(Boolean.class::cast)
+                .orElse(false);
+
+        boolean hasInvalidCbamTransitionSubInstallations =
+        subInstallations.stream()
+                    .map(SubInstallation::getSubInstallationType)
+                    .anyMatch(subInstallationType -> isInvalidCbamTransitionSubInstallation(subInstallationType, cbamTransitionToggle));
+
+        if(hasInvalidCbamTransitionSubInstallations) {
+            violationErrors.add(ERROR_INVALID_CBAM_SUBINSTALLATION);
+        }
+
         if (!ObjectUtils.isEmpty(violationErrors)) {
             return PermitValidationResult.invalidPermit(
                     List.of(new PermitViolation(PermitViolation.PermitViolationMessage.INVALID_DIGITIZED_MMP_SUB_INSTALLATION, String.join(", ", violationErrors)))
@@ -288,9 +306,9 @@ public class DigitizedMmpSectionValidator implements PermitContextValidator, Per
                     if (!(directlyAttributableEmissions instanceof DirectlyAttributableEmissionsFA directlyAttributableEmissionsFA)) {
                         throw new IllegalArgumentException("DirectlyAttributableEmissions is not of type DirectlyAttributableEmissionsFA");
                     }
-                    if ((SubInstallationType.FUEL_BENCHMARK_CL.equals(subInstallationType) || SubInstallationType.FUEL_BENCHMARK_NON_CL.equals(subInstallationType))
+                    if ((SubInstallationType.FUEL_BENCHMARK_CL.equals(subInstallationType) || SubInstallationType.FUEL_BENCHMARK_NON_CL.equals(subInstallationType) || SubInstallationType.FUEL_BENCHMARK_CL_CBAM.equals(subInstallationType) || SubInstallationType.FUEL_BENCHMARK_CL_NON_CBAM.equals(subInstallationType))
                             && directlyAttributableEmissions.getAttribution() == null) {
-                        throw new IllegalArgumentException("Attribution with subInstallationType FUEL_BENCHMARK_CL or FUEL_BENCHMARK_NON_CL, must not be null");
+                        throw new IllegalArgumentException("Attribution with subInstallationType FUEL_BENCHMARK_CL, FUEL_BENCHMARK_NON_CL, FUEL_BENCHMARK_CL_CBAM or FUEL_BENCHMARK_CL_NON_CBAM must not be null");
                     }
                     yield DirectlyAttributableEmissionsFA.getSupportedSubInstallationTypes().contains(subInstallationType);
                 }
@@ -356,7 +374,9 @@ public class DigitizedMmpSectionValidator implements PermitContextValidator, Per
         if (ObjectUtils.isEmpty(measurableHeat)) {
             return SubInstallationCategory.PRODUCT_BENCHMARK.equals(subInstallation.getSubInstallationType().getCategory()) ||
                     subInstallation.getSubInstallationType().equals(SubInstallationType.PROCESS_EMISSIONS_CL) ||
-                    subInstallation.getSubInstallationType().equals(SubInstallationType.PROCESS_EMISSIONS_NON_CL);
+                    subInstallation.getSubInstallationType().equals(SubInstallationType.PROCESS_EMISSIONS_NON_CL) ||
+                    subInstallation.getSubInstallationType().equals(SubInstallationType.PROCESS_EMISSIONS_CL_CBAM) ||
+                    subInstallation.getSubInstallationType().equals(SubInstallationType.PROCESS_EMISSIONS_CL_NON_CBAM);
         }
 
         SubInstallationType subInstallationType = subInstallation.getSubInstallationType();
@@ -570,6 +590,10 @@ public class DigitizedMmpSectionValidator implements PermitContextValidator, Per
                 subInstallation.getSubInstallationType().getCategory().equals(SubInstallationCategory.PRODUCT_BENCHMARK))) {
             violationErrors.add(ERROR_OPRED_SUBINSTALLATION);
         }
+    }
+
+    private boolean isInvalidCbamTransitionSubInstallation(SubInstallationType subInstallationType, boolean cbamTransitionToggle) {
+        return !subInstallationType.getValidityPeriod().isValid(cbamTransitionToggle);
     }
 }
 

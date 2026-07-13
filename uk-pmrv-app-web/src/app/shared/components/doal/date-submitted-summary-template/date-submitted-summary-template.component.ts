@@ -8,7 +8,7 @@ import { DateSubmittedToAuthority } from 'pmrv-api';
   template: `
     <dl govuk-summary-list>
       <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>When was the relevant information submitted to the authority?</dt>
+        <dt govukSummaryListRowKey>When was the relevant information submitted to the Authority?</dt>
         <dd govukSummaryListRowValue>{{ dateSubmittedToAuthority.date | govukDate }}</dd>
         <dd govukSummaryListRowActions *ngIf="editable">
           <a govukLink routerLink=".." [state]="{ changing: true }">Change</a>

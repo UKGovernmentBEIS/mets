@@ -25,7 +25,8 @@ import { allocationFormProvider } from './allocation-form.provider';
         [isEditable]="editable$ | async"
         [isEditing]="createMode === false"
         submitText="Continue"
-        [isAlr]="true"></app-preliminary-allocation-details-template>
+        [isAlr]="true"
+        [year]="year"></app-preliminary-allocation-details-template>
     </app-alr-task-common>
   `,
   providers: [allocationFormProvider],
@@ -35,6 +36,7 @@ export class AlrAllocationComponent {
   editable$: Observable<boolean> = this.alrService.isEditable$;
   index = this.route.snapshot.paramMap.get('index');
   createMode = this.index === null;
+  year = this.alrService.year;
 
   constructor(
     @Inject(ALR_TASK_FORM) readonly form: UntypedFormGroup,

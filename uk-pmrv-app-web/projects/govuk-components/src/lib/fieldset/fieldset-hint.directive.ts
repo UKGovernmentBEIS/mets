@@ -1,10 +1,6 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
-@Directive({
-  selector: 'span[govukFieldsetHint]',
-  standalone: false,
-})
+@Directive({ selector: 'div[govukFieldsetHint]', host: { '[class.govuk-hint]': 'hintClass' } })
 export class FieldsetHintDirective {
-  // eslint-disable-next-line @angular-eslint/prefer-host-metadata-property
-  @HostBinding('class.govuk-hint') readonly hintClass = true;
+  readonly hintClass = true;
 }

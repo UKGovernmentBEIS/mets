@@ -78,7 +78,7 @@ export class DoeStoreDelegate implements RequestTaskStoreDelegate {
 
       delete draft.doeAttachments;
 
-      if (draft.sendEmailNotification) {
+      if (draft.sendEmailNotification !== null && draft.sendEmailNotification !== undefined) {
         delete draft.sendEmailNotification;
       }
     });

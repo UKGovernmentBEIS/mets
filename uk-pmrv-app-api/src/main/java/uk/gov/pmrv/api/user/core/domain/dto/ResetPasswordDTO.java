@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.user.core.domain.dto.validation.Password;
 
 @Builder
 @Data
@@ -22,7 +21,6 @@ public class ResetPasswordDTO {
     String otp;
 	
 	@NotBlank(message = "{userAccount.password.notEmpty}")
-	@Password(message = "{userAccount.password.typeMismatch}")
     private String password;
 
 }

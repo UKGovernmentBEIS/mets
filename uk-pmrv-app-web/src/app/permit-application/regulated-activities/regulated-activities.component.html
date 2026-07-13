@@ -14,9 +14,9 @@
       <div
         *ngFor="let group of activityGroups | keyvalue: originalOrder"
         [formControlName]="group.key"
-        [legend]="group.key | i18nSelect: activityGroupMap"
+        [label]="group.key | i18nSelect: activityGroupMap"
         govuk-checkboxes
-        legendSize="medium">
+        labelSize="medium">
         <ng-container *ngFor="let activity of group.value">
           <govuk-checkbox [hint]="activity | i18nSelect: activityHintMap" [value]="activity">
             <ng-container govukLabel>

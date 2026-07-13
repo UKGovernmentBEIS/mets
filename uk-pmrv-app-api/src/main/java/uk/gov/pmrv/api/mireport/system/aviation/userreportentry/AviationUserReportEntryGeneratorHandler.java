@@ -2,7 +2,6 @@ package uk.gov.pmrv.api.mireport.system.aviation.userreportentry;
 
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
-import uk.gov.netz.api.authorization.core.repository.AuthorityRepository;
 import uk.gov.netz.api.mireport.system.EmptyMiReportSystemParams;
 import uk.gov.netz.api.mireport.system.MiReportSystemResult;
 import uk.gov.pmrv.api.mireport.system.common.PmrvMiReportResultTypes;
@@ -19,8 +18,8 @@ import java.util.List;
 public class AviationUserReportEntryGeneratorHandler extends UserReportEntryGeneratorHandler
     implements AviationMiReportGeneratorHandler<EmptyMiReportSystemParams> {
 
-    public AviationUserReportEntryGeneratorHandler(UserAuthService userAuthService, UserReportEntryRepository userReportEntryRepository, AuthorityRepository authorityRepository) {
-        super(userAuthService, userReportEntryRepository, authorityRepository);
+    public AviationUserReportEntryGeneratorHandler(UserAuthService userAuthService, UserReportEntryRepository userReportEntryRepository) {
+        super(userAuthService, userReportEntryRepository);
     }
 
     @Override

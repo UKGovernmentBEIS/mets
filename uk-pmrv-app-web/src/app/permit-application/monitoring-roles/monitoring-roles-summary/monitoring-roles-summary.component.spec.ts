@@ -65,8 +65,8 @@ describe('MonitoringRolesSummaryComponent', () => {
 
   it('should list the roles', () => {
     expect(page.roles.map((permit) => Array.from(permit.querySelectorAll('dd')).map((dd) => dd.textContent))).toEqual([
-      ['Test job', 'Testing'],
-      ['Check job', 'Checking'],
+      [' Test job ', ' Testing '],
+      [' Check job ', ' Checking '],
     ]);
   });
 

@@ -1,46 +1,53 @@
 <label
-  [class.govuk-visually-hidden]="isLabelHidden"
   [for]="identifier"
   [id]="`l.${identifier}`"
-  [class]="currentLabelSize">
-  {{ currentLabel }}
+  [class]="currentLabelSize()"
+  [class.govuk-visually-hidden]="!templateLabel() && isLabelHidden()">
+  @if (!templateLabel()) {
+    {{ label() }}
+  } @else {
+    <ng-content select="[govukLabel]" />
+  }
 </label>
-<div *ngIf="hint" [id]="`${identifier}-hint`" class="govuk-hint" [innerHTML]="hint"></div>
-<govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="identifier" />
+@if (hint()) {
+  <div [id]="`${identifier}-hint`" class="govuk-hint" [innerHTML]="hint() | safeHtml"></div>
+}
+@if (shouldDisplayErrors) {
+  <govuk-error-message [errors]="control.errors" [identifier]="identifier" />
+}
 <textarea
   #textArea
   (blur)="handleBlur(getInputValue($event))"
-  [attr.aria-describedby]="hint ? `${identifier}-hint` : null"
+  [attr.aria-describedby]="hint() ? `${identifier}-hint` : null"
   [formControl]="control"
   [id]="identifier"
   [name]="identifier"
-  [rows]="rows"
+  [rows]="rows()"
   class="govuk-textarea govuk-!-margin-bottom-1"
   [class.govuk-textarea--error]="
-    shouldDisplayErrors || (maxLength !== undefined && exceedsMaxLength(textArea.value?.length))
+    shouldDisplayErrors || (maxLength() !== undefined && exceedsMaxLength(textArea.value?.length))
   "></textarea>
 
-<span
-  *ngIf="maxLength"
-  [class.govuk-error-message]="exceedsMaxLength(textArea.value?.length)"
-  [class.govuk-hint]="!exceedsMaxLength(textArea.value?.length)"
-  [id]="`${identifier}-info`"
-  aria-live="polite"
-  class="govuk-character-count__message">
-  <ng-template [ngIf]="exceedsMaxLength(textArea.value?.length)">
-    <ng-container *ngIf="textArea.value?.length - maxLength > 1">
-      You have {{ textArea.value?.length - maxLength }} characters too many
-    </ng-container>
-    <ng-container *ngIf="textArea.value?.length - maxLength <= 1">
-      You have {{ textArea.value?.length - maxLength }} character too many
-    </ng-container>
-  </ng-template>
-  <ng-template [ngIf]="approachesMaxLength(textArea.value?.length)">
-    <ng-container *ngIf="maxLength - textArea.value?.length === 1">
-      You have {{ maxLength - textArea.value?.length }} character remaining
-    </ng-container>
-    <ng-container *ngIf="maxLength - textArea.value?.length !== 1">
-      You have {{ maxLength - textArea.value?.length }} characters remaining
-    </ng-container>
-  </ng-template>
-</span>
+@if (maxLength() && (exceedsMaxLength(textArea.value?.length) || approachesMaxLength(textArea.value?.length))) {
+  <span
+    [class.govuk-error-message]="exceedsMaxLength(textArea.value?.length)"
+    [class.govuk-hint]="!exceedsMaxLength(textArea.value?.length)"
+    [id]="`${identifier}-info`"
+    aria-live="polite"
+    class="govuk-character-count__message">
+    @if (exceedsMaxLength(textArea.value?.length)) {
+      @if (textArea.value?.length - maxLength() > 1) {
+        You have {{ textArea.value?.length - maxLength() }} characters too many
+      } @else {
+        You have {{ textArea.value?.length - maxLength() }} character too many
+      }
+    }
+    @if (approachesMaxLength(textArea.value?.length)) {
+      @if (maxLength() - textArea.value?.length === 1) {
+        You have {{ maxLength() - textArea.value?.length }} character remaining
+      } @else {
+        You have {{ maxLength() - textArea.value?.length }} characters remaining
+      }
+    }
+  </span>
+}

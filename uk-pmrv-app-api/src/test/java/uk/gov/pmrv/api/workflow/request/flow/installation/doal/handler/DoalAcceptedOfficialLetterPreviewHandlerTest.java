@@ -21,12 +21,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.service.notification.InstallationPreviewOfficialNoticeService;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.ActivityLevelChangeInformation;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.Doal;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalAuthority;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalAuthorityResponseRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalGrantAuthorityResponse;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.*;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalAuthorityResponseType;
 
 import java.time.Year;
@@ -97,6 +92,7 @@ class DoalAcceptedOfficialLetterPreviewHandlerTest {
                         .activityLevels(activityLevels)
                         .preliminaryAllocations(preliminaryAllocations)
                         .build())
+                .determination(DoalProceedToAuthorityDetermination.builder().build())
                 .build();
         final Request request = Request.builder()
                 .type(RequestType.DOAL)
@@ -125,7 +121,8 @@ class DoalAcceptedOfficialLetterPreviewHandlerTest {
         final Map<String, Object> params = Map.of(
                 "reportingYear", Year.of(2023),
                 "doal",doal,
-                "authorityResponse", authorityResponse
+                "authorityResponse", authorityResponse,
+                "nerAndYear0", false
         );
 
         when(requestTaskService.findTaskById(taskId)).thenReturn(requestTask);

@@ -8,19 +8,26 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AuthorizationRulesQueryService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskDefaultAssignmentService;
+import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskUnassignedService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 
 @ExtendWith(MockitoExtension.class)
 class RequestTaskCreateServiceTest {
@@ -39,6 +46,12 @@ class RequestTaskCreateServiceTest {
     private RequestTaskDefaultAssignmentService requestTaskDefaultAssignmentService;
 
     @Mock
+    private RequestTaskUnassignedService requestTaskUnassignedService;
+
+    @Mock
+    private AuthorizationRulesQueryService authorizationRulesQueryService;
+
+    @Mock
     private TestInitializeRequestTaskHandler initializeRequestTaskHandler;
 
     @Spy
@@ -54,6 +67,11 @@ class RequestTaskCreateServiceTest {
         final RequestTaskType type = RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW;
         String userToAssignTask = "assignee";
         Request request = createRequest();
+
+        when(authorizationRulesQueryService
+                .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, type.name()))
+                .thenReturn(Optional.of(RoleTypeConstants.OPERATOR));
+
         RequestTaskPayload requestTaskPayload = Mockito.mock(RequestTaskPayload.class);
         
         when(requestService.findRequestById(REQUEST_ID)).thenReturn(request);
@@ -65,7 +83,7 @@ class RequestTaskCreateServiceTest {
 
         //verify
         verify(requestService, times(1)).findRequestById(REQUEST_ID);
-        verify(requestTaskDefaultAssignmentService, never()).assignDefaultAssigneeToTask(Mockito.any());
+        verify(requestTaskDefaultAssignmentService, never()).assignDefaultAssigneeToTask(eq(RoleTypeConstants.OPERATOR), any());
     }
     
     @Test
@@ -74,6 +92,10 @@ class RequestTaskCreateServiceTest {
         Request request = createRequest();
         RequestTask requestTask = createRequestTask(request, PROCESS_TASK_ID, type.name());
 
+        when(authorizationRulesQueryService
+                .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, type.name()))
+                .thenReturn(Optional.of(RoleTypeConstants.OPERATOR));
+
         when(requestService.findRequestById(REQUEST_ID)).thenReturn(request);
 
         //invoke
@@ -81,7 +103,9 @@ class RequestTaskCreateServiceTest {
 
         //verify
         verify(requestService, times(1)).findRequestById(REQUEST_ID);
-        verify(requestTaskDefaultAssignmentService, times(1)).assignDefaultAssigneeToTask(requestTask);
+        verify(requestTaskDefaultAssignmentService, times(1)).assignDefaultAssigneeToTask(RoleTypeConstants.OPERATOR, requestTask);
+        verify(requestTaskUnassignedService, times(1))
+                .unassignedTaskToNotify(eq(RoleTypeConstants.OPERATOR), eq(requestTask));
     }
     
     @Test
@@ -90,6 +114,10 @@ class RequestTaskCreateServiceTest {
         Request request = createRequest();
         RequestTask requestTask = createRequestTask(request, PROCESS_TASK_ID, type.name());
 
+        when(authorizationRulesQueryService
+                .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, type.name()))
+                .thenReturn(Optional.of(RoleTypeConstants.OPERATOR));
+
         when(requestService.findRequestById(REQUEST_ID)).thenReturn(request);
 
         //invoke
@@ -97,7 +125,9 @@ class RequestTaskCreateServiceTest {
 
         //verify
         verify(requestService, times(1)).findRequestById(REQUEST_ID);
-        verify(requestTaskDefaultAssignmentService, times(1)).assignDefaultAssigneeToTask(requestTask);
+        verify(requestTaskDefaultAssignmentService, times(1)).assignDefaultAssigneeToTask(RoleTypeConstants.OPERATOR, requestTask);
+        verify(requestTaskUnassignedService, times(1))
+                .unassignedTaskToNotify(eq(RoleTypeConstants.OPERATOR), eq(requestTask));
     }
 
     private Request createRequest() {

@@ -17,7 +17,7 @@ import { canComplete, canNotifyOperator, canSendPeerReview } from './submit-acti
 export class SubmitContainerComponent {
   header$ = this.doalService.requestMetadata$.pipe(
     first(),
-    map((metadata) => `${metadata?.year} Determination of activity level change`),
+    map((metadata) => `${metadata?.year} Determination of activity level`),
   );
 
   allowNotifyOperator$ = this.doalService.requestTaskItem$.pipe(

@@ -37,6 +37,7 @@ import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyDeletionService;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyQueryService;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyUpdateService;
+import uk.gov.pmrv.api.verificationbody.service.VerificationBodyViewService;
 import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.orchestrator.verificationbody.service.VerificationBodyAndUserOrchestrator;
@@ -69,7 +70,10 @@ class VerificationBodyControllerTest {
     private VerificationBodyQueryService verificationBodyQueryService;
     
     @Mock
-    private VerificationBodyUpdateService verificationBodyUpdateService;
+    private VerificationBodyUpdateService verificationBodyUpdateService; 
+    
+    @Mock
+    private VerificationBodyViewService verificationBodyViewService;
 
     @Mock
     private VerificationBodyDeletionService verificationBodyDeletionService;
@@ -122,7 +126,7 @@ class VerificationBodyControllerTest {
                 .build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-        when(verificationBodyQueryService.getVerificationBodies(user)).thenReturn(verificationBodyInfoResponse);
+        when(verificationBodyViewService.getVerificationBodies(user)).thenReturn(verificationBodyInfoResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -148,7 +152,7 @@ class VerificationBodyControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
-        verify(verificationBodyQueryService, never()).getVerificationBodies(any());
+        verify(verificationBodyViewService, never()).getVerificationBodies(any());
     }
     
     @Test
@@ -157,7 +161,7 @@ class VerificationBodyControllerTest {
         Long verificationBodyId = 1L;
         VerificationBodyDTO verificationBodyDTO = VerificationBodyDTO.builder().id(verificationBodyId).name("name").build();
         
-        when(verificationBodyQueryService.getVerificationBodyById(verificationBodyId))
+        when(verificationBodyQueryService.getVerificationBodyDTOById(verificationBodyId))
             .thenReturn(verificationBodyDTO);
         
         mockMvc.perform(

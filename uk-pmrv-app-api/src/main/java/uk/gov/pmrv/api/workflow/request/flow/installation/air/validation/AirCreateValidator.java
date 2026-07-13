@@ -39,7 +39,7 @@ public class AirCreateValidator extends RequestCreateAccountRelatedValidator {
         if (!result.isValid() && !result.getApplicableAccountStatuses().isEmpty()) {
             return AirRequestCreateValidationResult.builder()
                 .valid(false)
-                .isAvailable(true) // this might not really be true (e.g. for SURRENDER account of HSE type), but the account status check takes priority
+                .available(true) // this might not really be true (e.g. for SURRENDER account of HSE type), but the account status check takes priority
                 .reportedAccountStatus(result.getReportedAccountStatus())
                 .applicableAccountStatuses(result.getApplicableAccountStatuses())
                 .build();
@@ -47,7 +47,7 @@ public class AirCreateValidator extends RequestCreateAccountRelatedValidator {
         
         final PermitContainer permitContainer = permitQueryService.getPermitContainerByAccountId(accountId);
         if (permitContainer.getPermitType() == PermitType.HSE) {
-            return AirRequestCreateValidationResult.builder().isAvailable(false).build();
+            return AirRequestCreateValidationResult.builder().available(false).build();
         }
         
         final Permit permit = permitContainer.getPermit();

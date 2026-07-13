@@ -8,7 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.reporting.domain.AerContainer;
 import uk.gov.pmrv.api.reporting.domain.AerViolation;
 import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationDTO;
-import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationParamsDTO;
+import uk.gov.pmrv.api.reporting.domain.dto.MeasurementN2OEmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.common.BiomassPercentages;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.MeasurementEmissionPointEmission;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.n2o.MeasurementN2OEmissionPointEmission;
@@ -57,7 +57,7 @@ public class MeasurementN2OEmissionsValidatorTest {
                 .annualFossilAmountOfGreenhouseGas(BigDecimal.ONE)
                 .build();
 
-        when(measurementCO2EmissionsCalculationService.calculateEmissions(any(MeasurementEmissionsCalculationParamsDTO.class)))
+        when(measurementCO2EmissionsCalculationService.calculateEmissions(any(MeasurementN2OEmissionsCalculationParamsDTO.class)))
             .thenReturn(measurementEmissionsCalculationDTO);
 
         List<AerViolation> aerViolations = validator.validate(measurementEmissionPointEmission,
@@ -94,7 +94,7 @@ public class MeasurementN2OEmissionsValidatorTest {
                 .annualFossilAmountOfGreenhouseGas(BigDecimal.ONE)
                 .build();
 
-        when(measurementCO2EmissionsCalculationService.calculateEmissions(any(MeasurementEmissionsCalculationParamsDTO.class)))
+        when(measurementCO2EmissionsCalculationService.calculateEmissions(any(MeasurementN2OEmissionsCalculationParamsDTO.class)))
             .thenReturn(measurementEmissionsCalculationDTO);
 
         List<AerViolation> aerViolations = validator.validate(measurementEmissionPointEmission,

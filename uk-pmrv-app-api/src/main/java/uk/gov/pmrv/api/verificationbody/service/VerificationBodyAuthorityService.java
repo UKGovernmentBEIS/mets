@@ -1,18 +1,22 @@
 package uk.gov.pmrv.api.verificationbody.service;
 
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.authorization.rules.services.authorityinfo.providers.VerificationBodyAuthorityInfoProvider;
 
+import java.util.Optional;
+
 @Service
+@RequiredArgsConstructor
 public class VerificationBodyAuthorityService implements VerificationBodyAuthorityInfoProvider {
 
-    /**
-     * Dummy implementation required by the authorization library.
-     * Third-party data provider is not applicable in this context.
-     */
+    private final VerificationBodyQueryService verificationBodyQueryService;
+
     @Override
+    @Transactional(readOnly = true)
     public Optional<Long> getThirdPartyDataProviderId(Long verificationBodyId) {
-        return Optional.empty();
+        return Optional.ofNullable(
+            verificationBodyQueryService.getVerificationBodyById(verificationBodyId).getThirdPartyDataProviderId());
     }
 }

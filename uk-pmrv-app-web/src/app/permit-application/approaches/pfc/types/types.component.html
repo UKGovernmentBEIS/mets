@@ -5,16 +5,14 @@
     [caption]="'CALCULATION_PFC' | monitoringApproachDescription"
     heading="Cell and anode types"
     submitText="Confirm and complete"
-    [hideSubmit]="(store.isEditable$ | async) === false"
-  >
+    [hideSubmit]="(store.isEditable$ | async) === false">
     <div formArrayName="cellAndAnodeTypes">
       <fieldset
         *ngFor="let cellAnodeType of cellAndAnodeTypesFormArray.controls; index as i"
         [formGroupName]="i"
         govukFieldset
-        id="cell-anode-type-{{ i }}"
-      >
-        <legend govukLegend>Cell and anode type {{ i + 1 }}</legend>
+        id="cell-anode-type-{{ i }}">
+        <legend govukLegend legendSize="medium">Cell and anode type {{ i + 1 }}</legend>
         <button
           (click)="cellAndAnodeTypesFormArray.removeAt(i)"
           *ngIf="cellAndAnodeTypesFormArray.length > 1"
@@ -22,8 +20,7 @@
           appAddAnother
           govukSecondaryButton
           type="button"
-          #removeButton
-        >
+          #removeButton>
           Remove
         </button>
         <div formControlName="cellType" govuk-text-input label="Cell type"></div>
@@ -36,6 +33,5 @@
 
   <app-approach-return-link
     [parentTitle]="'CALCULATION_PFC' | monitoringApproachDescription"
-    reviewGroupUrl="pfc"
-  ></app-approach-return-link>
+    reviewGroupUrl="pfc"></app-approach-return-link>
 </app-permit-task>

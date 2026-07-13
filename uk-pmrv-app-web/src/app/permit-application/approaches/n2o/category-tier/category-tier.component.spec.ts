@@ -113,10 +113,10 @@ describe('CategoryTierComponent', () => {
         'Applied standard',
       ]);
 
-      expect(page.tasks.map((el) => el.querySelector('govuk-tag').textContent.trim())).toEqual([
-        'completed',
-        'cannot start yet',
-        'not started',
+      expect(page.tasks.map((el) => el.querySelector('.app-task-list__tag').textContent.trim())).toEqual([
+        'Completed',
+        'Cannot start yet',
+        'Not started',
       ]);
 
       expect(page.summaryDefinitions).toEqual([
@@ -157,12 +157,12 @@ describe('CategoryTierComponent', () => {
       expect(
         page.tasks.map((el) => [
           el.querySelector('a').textContent.trim(),
-          el.querySelector('govuk-tag').textContent.trim(),
+          el.querySelector('.app-task-list__tag').textContent.trim(),
         ]),
       ).toEqual([
-        ['Emission point category', 'completed'],
-        ['Measured emissions', 'cannot start yet'],
-        ['Applied standard', 'completed'],
+        ['Emission point category', 'Completed'],
+        ['Measured emissions', 'Cannot start yet'],
+        ['Applied standard', 'Completed'],
       ]);
     });
   });
@@ -210,9 +210,9 @@ describe('CategoryTierComponent', () => {
     it('should display the tasks with status', () => {
       expect(page.heading.textContent.trim()).toEqual('UNDEFINED: Major  Delete');
       expect(page.tasks.map((el) => el.textContent.trim())).toEqual([
-        'Emission point category needs review',
-        'Measured emissions cannot start yet',
-        'Applied standard cannot start yet',
+        'Emission point category Needs review',
+        'Measured emissions Cannot start yet',
+        'Applied standard Cannot start yet',
       ]);
     });
   });
@@ -243,9 +243,9 @@ describe('CategoryTierComponent', () => {
     it('should display the tasks with status', () => {
       expect(page.heading.textContent.trim()).toEqual('The big Ref Emission point 1: Major  Delete');
       expect(page.tasks.map((el) => el.textContent.trim())).toEqual([
-        'Emission point category needs review',
-        'Measured emissions cannot start yet',
-        'Applied standard cannot start yet',
+        'Emission point category Needs review',
+        'Measured emissions Cannot start yet',
+        'Applied standard Cannot start yet',
       ]);
     });
   });

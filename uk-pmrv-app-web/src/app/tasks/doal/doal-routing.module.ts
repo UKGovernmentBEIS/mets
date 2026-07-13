@@ -68,16 +68,16 @@ const sharedPeerReviewRoutes: Routes = [
   {
     path: 'operator-report/summary',
     data: {
-      pageTitle: 'Upload operator activity level report - Summary',
-      breadcrumb: 'Upload operator activity level report',
+      pageTitle: 'Upload operator report - Summary',
+      breadcrumb: 'Upload operator report',
     },
     component: OperatorReportSummaryComponent,
   },
   {
     path: 'verification-report/summary',
     data: {
-      pageTitle: 'Upload verification report of the activity level report - Summary',
-      breadcrumb: 'Upload verification report of the activity level report',
+      pageTitle: 'Upload verification report - Summary',
+      breadcrumb: 'Upload verification report',
     },
     component: VerificationReportSummaryComponent,
   },
@@ -136,8 +136,8 @@ const routes: Routes = [
           {
             path: '',
             data: {
-              pageTitle: 'Upload operator activity level report',
-              breadcrumb: 'Upload operator activity level report',
+              pageTitle: 'Upload operator report',
+              breadcrumb: 'Upload operator report',
             },
             component: OperatorReportComponent,
             canDeactivate: [PendingRequestGuard],
@@ -145,8 +145,8 @@ const routes: Routes = [
           {
             path: 'summary',
             data: {
-              pageTitle: 'Upload operator activity level report - Summary',
-              breadcrumb: 'Upload operator activity level report',
+              pageTitle: 'Upload operator report - Summary',
+              breadcrumb: 'Upload operator level report',
             },
             component: OperatorReportSubmitSummaryComponent,
             canActivate: [SummaryGuard],
@@ -161,8 +161,8 @@ const routes: Routes = [
           {
             path: '',
             data: {
-              pageTitle: 'Upload verification report of the activity level report',
-              breadcrumb: 'Upload verification report of the activity level report',
+              pageTitle: 'Upload verification report',
+              breadcrumb: 'Upload verification report',
             },
             component: VerificationReportComponent,
             canDeactivate: [PendingRequestGuard],
@@ -170,8 +170,8 @@ const routes: Routes = [
           {
             path: 'summary',
             data: {
-              pageTitle: 'Upload verification report of the activity level report - Summary',
-              breadcrumb: 'Upload verification report of the activity level report',
+              pageTitle: 'Upload verification report - Summary',
+              breadcrumb: 'Upload verification report',
             },
             component: VerificationReportSubmitSummaryComponent,
             canActivate: [SummaryGuard],
@@ -478,7 +478,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        data: { pageTitle: 'Provide UK ETS authority response for activity Level Change' },
+        data: { pageTitle: 'Provide UK ETS Authority response for activity level' },
         component: AuthorityResponseContainerComponent,
       },
       {
@@ -493,16 +493,16 @@ const routes: Routes = [
           {
             path: '',
             data: {
-              pageTitle: 'Provide the date application was submitted to the authority',
-              breadcrumb: 'Provide the date application was submitted to the authority',
+              pageTitle: 'Provide the date application was submitted to the Authority',
+              breadcrumb: 'Provide the date application was submitted to the Authority',
             },
             component: DateSubmittedComponent,
           },
           {
             path: 'summary',
             data: {
-              pageTitle: 'Provide the date application was submitted to the authority - Summary',
-              breadcrumb: 'Provide the date application was submitted to the authority',
+              pageTitle: 'Provide the date application was submitted to the Authority - Summary',
+              breadcrumb: 'Provide the date application was submitted to the Authority',
             },
             component: DateSubmittedSummaryComponent,
             canActivate: [AuthoritySummaryGuard],
@@ -528,8 +528,8 @@ const routes: Routes = [
               {
                 path: '',
                 data: {
-                  pageTitle: 'Provide authority approved allocation for each sub-installation',
-                  breadcrumb: 'Provide authority approved allocation for each sub-installation',
+                  pageTitle: 'Provide Authority approved allocation for each sub-installation',
+                  breadcrumb: 'Provide Authority approved allocation for each sub-installation',
                   backlink: '..',
                 },
                 component: AuthorityResponsePreliminaryAllocationsComponent,
@@ -562,7 +562,7 @@ const routes: Routes = [
                     path: 'delete',
                     data: {
                       pageTitle: 'Allocation - Delete',
-                      breadcrumb: 'Provide authority approved allocation for each sub-installation',
+                      breadcrumb: 'Provide Authority approved allocation for each sub-installation',
                     },
                     component: AuthorityResponseDeleteComponent,
                     canActivate: [AuthorityResponsePreliminaryAllocationGuard],

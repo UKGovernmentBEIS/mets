@@ -15,6 +15,7 @@
     "strictPropertyInitialization": false,
     "strictNullChecks": false,
     "paths": {
+      "@netz/govuk-components": ["./dist/govuk-components"],
       "govuk-components": ["projects/govuk-components/src/public-api.ts"],
       "pmrv-api": ["projects/pmrv-api/src/lib/index.ts"],
       "@core/*": ["src/app/core/*"],

@@ -19,7 +19,7 @@ import { InstallationAccountDTO, InstallationAccountPermitDTO } from 'pmrv-api';
   standalone: false,
   templateUrl: './account.component.html',
   styles: `
-    span.status {
+    govuk-tag.status {
       margin-left: 30px;
     }
     button.start-new-process {

@@ -1,9 +1,30 @@
 <ng-container *ngIf="vm$ | async as vm">
   <h2 class="govuk-heading-l">{{ vm.header }}</h2>
 
-  <p class="govuk-caption-m">{{ vm.creationDate | govukDate: 'datetime' }}</p>
-  <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible" />
+  <div class="govuk-caption-m">
+    <strong>Date of timeline event:</strong>
+    {{ vm?.creationDate | govukDate: 'datetime' }}
+  </div>
+  @if (vm?.submittedToVerifierDate) {
+    <div class="govuk-caption-m">
+      <strong>Date operator submitted report to verifier:</strong>
+      {{ vm?.submittedToVerifierDate | govukDate: 'datetime' }}
+    </div>
+  }
+  @if (vm.verifierSubmittedDate) {
+    <div class="govuk-caption-m">
+      <strong>Date verifier submitted opinion on report:</strong>
+      {{ vm.verifierSubmittedDate | govukDate: 'datetime' }}
+    </div>
+  }
+  @if (vm.submittedToRegulatorDate) {
+    <div class="govuk-caption-m">
+      <strong>Date operator submitted report to regulator:</strong>
+      {{ vm.submittedToRegulatorDate | govukDate: 'datetime' }}
+    </div>
+  }
 
+  <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible" />
   <ng-container *ngFor="let section of vm.sections; let i = index">
     <h2 class="govuk-heading-l">{{ i + 1 }}. {{ section.title }}</h2>
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />

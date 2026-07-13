@@ -1,10 +1,16 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { combineLatest, map, Observable } from 'rxjs';
+import { combineLatest, map, Observable, shareReplay, switchMap, take } from 'rxjs';
 
 import { RequestActionReportService } from '@shared/services/request-action-report.service';
 
-import { AerApplicationVerificationSubmittedRequestActionPayload, RequestActionDTO } from 'pmrv-api';
+import {
+  AerApplicationVerificationSubmittedRequestActionPayload,
+  RequestActionDTO,
+  RequestActionInfoDTO,
+  RequestActionsService,
+} from 'pmrv-api';
 
 import { CommonActionsStore } from '../../../../store/common-actions.store';
 import { AerService } from '../../../core/aer.service';
@@ -48,16 +54,68 @@ export class OperatorToVerifierComponent implements AfterViewInit {
     }),
   );
 
+  readonly actions$ = this.requestAction$.pipe(
+    switchMap((requestAction) =>
+      combineLatest([
+        this.requestActionsService.getRequestActionsByRequestId(requestAction?.requestId),
+        this.requestAction$,
+      ]).pipe(
+        map(([res, requestAction]) => this.sortTimeline(res.filter((timeline) => timeline.id <= requestAction.id))),
+      ),
+    ),
+  );
+
+  readonly submittedToVerifierDate$ = this.actions$.pipe(
+    map(
+      (actions) =>
+        actions.filter(
+          (action) =>
+            action.type === 'AER_APPLICATION_SENT_TO_VERIFIER' ||
+            action.type === 'AER_APPLICATION_AMENDS_SENT_TO_VERIFIER',
+        )?.[0]?.creationDate,
+    ),
+  );
+
+  readonly verifierSubmittedDate$ = this.actions$.pipe(
+    map(
+      (actions) =>
+        actions.filter((action) => action.type === 'AER_APPLICATION_VERIFICATION_SUBMITTED')?.[0]?.creationDate,
+    ),
+  );
+
+  readonly submittedToRegulatorDate$ = this.actions$.pipe(
+    map(
+      (actions) =>
+        actions.filter(
+          (action) => action.type === 'AER_APPLICATION_SUBMITTED' || action.type === 'AER_APPLICATION_AMENDS_SUBMITTED',
+        )?.[0]?.creationDate,
+    ),
+  );
+
+  private sortTimeline(res: RequestActionInfoDTO[]): RequestActionInfoDTO[] {
+    return res.slice().sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+  }
+
+  vm$ = combineLatest({
+    payload: this.payload$,
+    submittedToVerifierDate: this.submittedToVerifierDate$,
+    verifierSubmittedDate: this.verifierSubmittedDate$,
+    submittedToRegulatorDate: this.submittedToRegulatorDate$,
+  }).pipe(shareReplay({ bufferSize: 1, refCount: true }));
+
   constructor(
     private readonly aerService: AerService,
     private readonly commonActionsStore: CommonActionsStore,
+    private requestActionsService: RequestActionsService,
     private requestActionReportService: RequestActionReportService,
+    protected readonly route: ActivatedRoute,
   ) {}
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      //give some time to angular to render the data
-      this.requestActionReportService.print();
-    }, 500);
+    this.vm$.pipe(take(1)).subscribe(() => {
+      setTimeout(() => {
+        this.requestActionReportService.print();
+      });
+    });
   }
 }

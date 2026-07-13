@@ -2,9 +2,13 @@
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Reason for determination</dt>
     <dd govukSummaryListRowValue>
-      <p *ngFor="let reasonItem of determination.articleReasonItems">
-        {{ reasonItem | i18nSelect: articleReasonItemsLabelsMap }}
-      </p>
+      @if (determination.articleReasonGroupType === 'ARTICLE_5_REASONS') {
+        <p class="govuk-body">Article 5 of the FAR (NER applications)</p>
+      } @else {
+        <p *ngFor="let reasonItem of determination.articleReasonItems">
+          {{ reasonItem | i18nSelect: articleReasonItemsLabelsMap }}
+        </p>
+      }
     </dd>
     <dd govukSummaryListRowActions *ngIf="editable">
       <a govukLink [routerLink]="['..', 'reason']" [state]="{ changing: true }">Change</a>

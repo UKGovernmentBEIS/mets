@@ -72,7 +72,7 @@ describe('AppComponent', () => {
     }
 
     get navList() {
-      return this.query<HTMLDivElement>('.hmcts-primary-navigation');
+      return this.query<HTMLElement>('govuk-header-nav-list-legacy');
     }
 
     get breadcrumbs() {

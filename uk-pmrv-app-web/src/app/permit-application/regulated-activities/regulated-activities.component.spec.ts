@@ -228,7 +228,7 @@ describe('RegulatedActivitiesComponent', () => {
       fixture.detectChanges();
 
       expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummary.querySelectorAll('a')[0].textContent.trim()).toEqual(
+      expect(page.errorSummary.querySelectorAll('li')[0].textContent.trim()).toEqual(
         'Select all the regulated activities carried out the installation',
       );
 

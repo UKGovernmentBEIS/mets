@@ -46,8 +46,8 @@ describe('MultiSelectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [TestComponent, MultiSelectItemComponent, MultiSelectComponent, ErrorMessageComponent],
+      imports: [ReactiveFormsModule, ErrorMessageComponent],
+      declarations: [TestComponent, MultiSelectItemComponent, MultiSelectComponent],
     }).compileComponents();
   });
 

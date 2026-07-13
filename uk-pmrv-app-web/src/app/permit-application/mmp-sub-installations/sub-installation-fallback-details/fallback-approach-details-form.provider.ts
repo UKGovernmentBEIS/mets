@@ -30,10 +30,16 @@ export const fallbackApproachAddFormFactory = {
     const selectType = (type) => {
       const types = {
         HEAT_BENCHMARK_CL: 'HEAT_BENCHMARK',
+        HEAT_BENCHMARK_CL_CBAM: 'HEAT_BENCHMARK',
+        HEAT_BENCHMARK_CL_NON_CBAM: 'HEAT_BENCHMARK',
         HEAT_BENCHMARK_NON_CL: 'HEAT_BENCHMARK',
         FUEL_BENCHMARK_CL: 'FUEL_BENCHMARK',
+        FUEL_BENCHMARK_CL_CBAM: 'FUEL_BENCHMARK',
+        FUEL_BENCHMARK_CL_NON_CBAM: 'FUEL_BENCHMARK',
         FUEL_BENCHMARK_NON_CL: 'FUEL_BENCHMARK',
         PROCESS_EMISSIONS_CL: 'PROCESS_EMISSIONS',
+        PROCESS_EMISSIONS_CL_CBAM: 'PROCESS_EMISSIONS',
+        PROCESS_EMISSIONS_CL_NON_CBAM: 'PROCESS_EMISSIONS',
         PROCESS_EMISSIONS_NON_CL: 'PROCESS_EMISSIONS',
         DISTRICT_HEATING_NON_CL: 'DISTRICT_HEATING_NON_CL',
       };
@@ -46,15 +52,15 @@ export const fallbackApproachAddFormFactory = {
           parentOption: [selectType(fallbackApproach?.subInstallationType)],
           HEAT_BENCHMARK: fb.group({
             selectedValue: [fallbackApproach?.subInstallationType ?? null, { updateOn: 'change' }],
-            subOptions: fb.array([fb.control(null), fb.control(null)]),
+            subOptions: fb.array([fb.control(null), fb.control(null), fb.control(null)]),
           }),
           FUEL_BENCHMARK: fb.group({
             selectedValue: [fallbackApproach?.subInstallationType ?? null, { updateOn: 'change' }],
-            subOptions: fb.array([fb.control(null), fb.control(null)]),
+            subOptions: fb.array([fb.control(null), fb.control(null), fb.control(null)]),
           }),
           PROCESS_EMISSIONS: fb.group({
             selectedValue: [fallbackApproach?.subInstallationType ?? null, { updateOn: 'change' }],
-            subOptions: fb.array([fb.control(null), fb.control(null)]),
+            subOptions: fb.array([fb.control(null), fb.control(null), fb.control(null)]),
           }),
         },
         {

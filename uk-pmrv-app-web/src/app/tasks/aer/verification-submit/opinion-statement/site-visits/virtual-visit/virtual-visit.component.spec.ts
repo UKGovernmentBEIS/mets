@@ -79,9 +79,7 @@ describe('VirtualVisitComponent', () => {
     }
 
     get errorSummaryListContents(): string[] {
-      return Array.from(this.errorSummary.querySelectorAll<HTMLAnchorElement>('a')).map((anchor) =>
-        anchor.textContent.trim(),
-      );
+      return Array.from(this.errorSummary.querySelectorAll('li')).map((item) => item.textContent.trim());
     }
 
     get removeButtons(): HTMLButtonElement[] {
@@ -146,7 +144,7 @@ describe('VirtualVisitComponent', () => {
       fixture.detectChanges();
 
       expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummaryListContents).toEqual([noTeamMembersDescription, noVirtualVisitReason, noDate]);
+      expect(page.errorSummaryListContents).toEqual([noDate, noTeamMembersDescription, noVirtualVisitReason]);
     });
 
     it('should display error on future and duplicate dates', () => {

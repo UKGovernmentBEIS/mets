@@ -1,10 +1,9 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: 'dt[govukSummaryListRowKey]',
-  standalone: false,
+  host: { '[class]': 'className' },
 })
 export class SummaryListRowKeyDirective {
-  // eslint-disable-next-line @angular-eslint/prefer-host-metadata-property
-  @HostBinding('class') className = 'govuk-summary-list__key';
+  className = 'govuk-summary-list__key';
 }

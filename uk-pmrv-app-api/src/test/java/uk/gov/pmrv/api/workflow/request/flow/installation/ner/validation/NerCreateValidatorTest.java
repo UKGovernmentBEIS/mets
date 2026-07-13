@@ -160,7 +160,7 @@ class NerCreateValidatorTest {
                 validator.getMutuallyExclusiveRequests()))
                 .thenReturn(RequestCreateValidationResult.builder()
                         .valid(true)
-                        .isAvailable(true)
+                        .available(true)
                         .build());
 
         final RequestCreateValidationResult result = validator.validateAction(accountId);

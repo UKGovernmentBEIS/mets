@@ -1,4 +1,4 @@
-<app-dre-task [breadcrumb]="true">
+﻿<app-dre-task [breadcrumb]="true">
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
@@ -9,7 +9,7 @@
 
     <ng-container formGroupName="calculationOfCO2" *ngIf="$any((monitoringApproaches$ | async)['CALCULATION_CO2'])">
       <fieldset govukFieldset formGroupName="combustionEmissions">
-        <legend size="medium" govukLegend>Calculation of combustion emissions</legend>
+        <legend legendSize="medium" govukLegend>Calculation of combustion emissions</legend>
         <div
           formControlName="reportableEmissions"
           govuk-text-input
@@ -24,7 +24,7 @@
           widthClass="govuk-!-width-one-third"></div>
       </fieldset>
       <fieldset govukFieldset formGroupName="processEmissions">
-        <legend size="medium" govukLegend>Calculation of process emissions</legend>
+        <legend legendSize="medium" govukLegend>Calculation of process emissions</legend>
         <div
           formControlName="reportableEmissions"
           govuk-text-input
@@ -39,7 +39,7 @@
           widthClass="govuk-!-width-one-third"></div>
       </fieldset>
       <fieldset govukFieldset formGroupName="massBalanceEmissions">
-        <legend size="medium" govukLegend>Calculation of mass balance emissions</legend>
+        <legend legendSize="medium" govukLegend>Calculation of mass balance emissions</legend>
         <div
           formControlName="reportableEmissions"
           govuk-text-input
@@ -55,7 +55,7 @@
       </fieldset>
       <ng-container *ngIf="$any((monitoringApproaches$ | async)['CALCULATION_CO2'])?.calculateTransferredCO2 === true">
         <fieldset govukFieldset formGroupName="transferredCO2Emissions">
-          <legend size="medium" govukLegend>Calculation of transferred CO2 emissions</legend>
+          <legend legendSize="medium" govukLegend>Calculation of transferred CO2 emissions</legend>
           <div
             formControlName="reportableEmissions"
             govuk-text-input
@@ -74,7 +74,7 @@
 
     <ng-container formGroupName="measurementOfCO2" *ngIf="$any((monitoringApproaches$ | async)['MEASUREMENT_CO2'])">
       <fieldset govukFieldset formGroupName="emissions">
-        <legend size="medium" govukLegend>Measurement of CO2 emissions</legend>
+        <legend legendSize="medium" govukLegend>Measurement of CO2 emissions</legend>
         <div
           formControlName="reportableEmissions"
           govuk-text-input
@@ -90,7 +90,7 @@
       </fieldset>
       <ng-container *ngIf="$any((monitoringApproaches$ | async)['MEASUREMENT_CO2'])?.measureTransferredCO2 === true">
         <fieldset govukFieldset formGroupName="transferredCO2Emissions">
-          <legend size="medium" govukLegend>Measurement of transferred CO2 emissions</legend>
+          <legend legendSize="medium" govukLegend>Measurement of transferred CO2 emissions</legend>
           <div
             formControlName="reportableEmissions"
             govuk-text-input
@@ -109,7 +109,7 @@
 
     <ng-container formGroupName="measurementOfN2O" *ngIf="$any((monitoringApproaches$ | async)['MEASUREMENT_N2O'])">
       <fieldset govukFieldset formGroupName="emissions">
-        <legend size="medium" govukLegend>Measurement of N2O emissions</legend>
+        <legend legendSize="medium" govukLegend>Measurement of N2O emissions</legend>
         <div
           formControlName="reportableEmissions"
           govuk-text-input
@@ -125,7 +125,7 @@
       </fieldset>
       <ng-container *ngIf="$any((monitoringApproaches$ | async)['MEASUREMENT_N2O'])?.measureTransferredN2O === true">
         <fieldset govukFieldset formGroupName="transferredN2OEmissions">
-          <legend size="medium" govukLegend>Measurement of transferred N2O emissions</legend>
+          <legend legendSize="medium" govukLegend>Measurement of transferred N2O emissions</legend>
           <div
             formControlName="reportableEmissions"
             govuk-text-input
@@ -144,7 +144,7 @@
 
     <ng-container formGroupName="calculationOfPFC" *ngIf="$any((monitoringApproaches$ | async)['CALCULATION_PFC'])">
       <fieldset govukFieldset formGroupName="totalEmissions">
-        <legend size="medium" govukLegend>Calculation of PFC emissions</legend>
+        <legend legendSize="medium" govukLegend>Calculation of PFC emissions</legend>
         <div
           formControlName="reportableEmissions"
           govuk-text-input
@@ -156,7 +156,7 @@
 
     <ng-container formGroupName="inherentOfCO2" *ngIf="$any((monitoringApproaches$ | async)['INHERENT_CO2'])">
       <fieldset govukFieldset formGroupName="totalEmissions">
-        <legend size="medium" govukLegend>Inherent CO2 emissions</legend>
+        <legend legendSize="medium" govukLegend>Inherent CO2 emissions</legend>
         <div
           formControlName="reportableEmissions"
           govuk-text-input
@@ -168,7 +168,7 @@
 
     <ng-container formGroupName="fallback" *ngIf="$any((monitoringApproaches$ | async)['FALLBACK'])">
       <fieldset govukFieldset formGroupName="emissions">
-        <legend size="medium" govukLegend>Fall-back emissions</legend>
+        <legend legendSize="medium" govukLegend>Fall-back emissions</legend>
         <div
           formControlName="reportableEmissions"
           govuk-text-input

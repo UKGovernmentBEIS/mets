@@ -1,38 +1,49 @@
-import { Component, Input, Optional, Self } from '@angular/core';
-import { ControlContainer, ControlValueAccessor, NgControl } from '@angular/forms';
+import { Component, computed, contentChild, input, model } from '@angular/core';
+import { ControlValueAccessor, ReactiveFormsModule } from '@angular/forms';
 
-import { FormService } from '../form/form.service';
+import { FormErrorDirective } from '../directives/form-error/form-error.directive';
+import { LabelDirective } from '../directives/label/label.directive';
+import { ErrorMessageComponent } from '../error-message';
 import { FormInput } from '../form/form-input';
+import { LabelSizeType } from '../text-input/label-size.type';
 import { GovukSelectOption } from './select.interface';
-import { GovukTextWidthClass } from './select.type';
+import { GovukSelectWidthClass } from './select.type';
 
 /*
   eslint-disable
   @angular-eslint/prefer-on-push-component-change-detection,
-  @typescript-eslint/no-empty-function
+  @angular-eslint/component-selector
 */
 @Component({
   selector: 'div[govuk-select]',
-  standalone: false,
+  imports: [ReactiveFormsModule, FormErrorDirective, ErrorMessageComponent],
   templateUrl: './select.component.html',
 })
 export class SelectComponent extends FormInput implements ControlValueAccessor {
-  @Input() options: GovukSelectOption[];
-  @Input() widthClass: GovukTextWidthClass;
-  @Input() isLabelHidden = true;
-  currentLabel = 'Select';
+  readonly label = input<string>();
+  readonly labelSize = input<LabelSizeType>('normal');
+  readonly isLabelHidden = input(false);
+  readonly hint = input<string>();
+  readonly widthClass = input<GovukSelectWidthClass>();
+  readonly options = model<GovukSelectOption[]>();
 
-  constructor(
-    @Self() @Optional() ngControl: NgControl,
-    formService: FormService,
-    @Optional() container: ControlContainer,
-  ) {
-    super(ngControl, formService, container);
-  }
+  readonly templateLabel = contentChild(LabelDirective);
 
-  @Input() set label(label: string) {
-    this.currentLabel = label;
-    this.isLabelHidden = false;
+  readonly currentLabelSize = computed(() => {
+    switch (this.labelSize()) {
+      case 'small':
+        return 'govuk-label govuk-label--s';
+      case 'medium':
+        return 'govuk-label govuk-label--m';
+      case 'large':
+        return 'govuk-label govuk-label--l';
+      default:
+        return 'govuk-label';
+    }
+  });
+
+  constructor() {
+    super();
   }
 
   writeValue(): void {}

@@ -90,7 +90,7 @@ describe('LandingPageComponent', () => {
     setUser(null, null);
 
     expect(page.pageHeadingContent).toEqual(
-      'You need to create a sign in or contact your regulator or administrator to create a sign in for you.',
+      'You need to create a sign in or  contact your regulator or administrator  to create a sign in for you.',
     );
   });
 

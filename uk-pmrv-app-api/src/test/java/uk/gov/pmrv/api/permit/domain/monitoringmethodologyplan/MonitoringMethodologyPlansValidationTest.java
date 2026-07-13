@@ -105,6 +105,7 @@ import uk.gov.pmrv.api.permit.validation.datasourceValidation.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -124,6 +125,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static uk.gov.pmrv.api.permit.validation.utils.DigitizedMmpSectionValidatorUtils.CBAM_TRANSITION_CONFIG_KEY;
 
 @ExtendWith(MockitoExtension.class)
 public class MonitoringMethodologyPlansValidationTest {
@@ -2298,6 +2300,318 @@ public class MonitoringMethodologyPlansValidationTest {
         assertFalse(validationResult.isValid());
         assertTrue(((String) validationResult.getPermitViolations().get(0).getData()[0])
                 .contains("Missing AMMONIA from sub installations of digital plan"));
+    }
+
+    @Test
+    public void test_existingNotValidLegacyCbamTransitionSubInstallation_WhenCbamTransitionToggleTrue() {
+
+        String emitterId = "emitter_id";
+        FuelInputAndRelevantEmissionFactorPB fuelInputAndRelevantEmissionFactor =
+                FuelInputAndRelevantEmissionFactorPB.builder()
+                        .fuelInputAndRelevantEmissionFactorType(FuelInputAndRelevantEmissionFactorType.PRODUCT_BENCHMARK)
+                        .exist(false)
+                        .build();
+
+        when(configurationService.getConfigurationByKey(DIGITIZED_MMP_FLAG_CONFIG_KEY))
+                .thenReturn(DIGITIZED_CONFIG_RESULT);
+        when(configurationService.getConfigurationByKey(CBAM_TRANSITION_CONFIG_KEY))
+                .thenReturn(Optional.of(ConfigurationDTO.builder().value(true).build()));
+        when(accountRepository.findCompetentAuthorityByEmitterId(emitterId))
+                .thenReturn(CompetentAuthorityEnum.SCOTLAND);
+
+        PermitContainer permitContainer = PermitContainer.builder()
+                .installationOperatorDetails(InstallationOperatorDetails.builder()
+                        .emitterId(emitterId)
+                        .build())
+                .permit(Permit.builder()
+                        .monitoringMethodologyPlans(MonitoringMethodologyPlans.builder()
+                                .exist(true)
+                                .digitizedPlan(DigitizedPlan.builder()
+                                        .subInstallations(List.of(
+                                                SubInstallation.builder()
+                                                        .subInstallationType(SubInstallationType.IRON_CASTING)
+                                                        .subInstallationNo("not blank value")
+                                                        .directlyAttributableEmissions(DirectlyAttributableEmissionsPB.builder()
+                                                                .directlyAttributableEmissionsType(DirectlyAttributableEmissionsType.PRODUCT_BENCHMARK)
+                                                                .build())
+                                                        .importedExportedMeasurableHeat(ImportedExportedMeasurableHeat.builder()
+                                                                .fuelBurnCalculationTypes(Set.of(ImportedExportedMeasurableHeatType.NO_MEASURABLE_HEAT))
+                                                                .build())
+                                                        .fuelAndElectricityExchangeability(FuelAndElectricityExchangeability.builder().build())
+                                                        .annualLevel(getGenericAnnualLevel(AnnualLevelType.PRODUCTION))
+                                                        .fuelInputAndRelevantEmissionFactor(fuelInputAndRelevantEmissionFactor)
+                                                        .build()
+                                        ))
+                                        .methodTask(MethodTask.builder()
+                                                .physicalPartsAndUnitsAnswer(false)
+                                                .build())
+                                        .build())
+                                .build())
+                        .build())
+                .build();
+
+        when(dataSourceValidatorFactory.getValidator(FuelInputAndRelevantEmissionFactorPB.class))
+                .thenReturn(fuelInputAndRelevantEmissionFactorPBDatasourceValidator);
+        when(fuelInputAndRelevantEmissionFactorPBDatasourceValidator.validateDataSources(
+                (FuelInputAndRelevantEmissionFactorPB) permitContainer.getPermit()
+                        .getMonitoringMethodologyPlans()
+                        .getDigitizedPlan()
+                        .getSubInstallations()
+                        .getFirst()
+                        .getFuelInputAndRelevantEmissionFactor()))
+                .thenReturn(true);
+
+        when(dataSourceValidatorFactory.getValidator(DirectlyAttributableEmissionsPB.class))
+                .thenReturn(directlyAttributableEmissionsPBDataSourceValidator);
+        when(directlyAttributableEmissionsPBDataSourceValidator.validateDataSources(
+                (DirectlyAttributableEmissionsPB) permitContainer.getPermit()
+                        .getMonitoringMethodologyPlans()
+                        .getDigitizedPlan()
+                        .getSubInstallations()
+                        .getFirst()
+                        .getDirectlyAttributableEmissions()))
+                .thenReturn(true);
+
+        PermitValidationResult validationResult = digitizedMmpSectionValidator.validate(permitContainer);
+
+        assertFalse(validationResult.isValid());
+        assertTrue(((String) validationResult.getPermitViolations().get(0).getData()[0])
+                .contains("At least one invalid cbam transition related subinstallation"));
+    }
+
+    @Test
+    public void test_existingNotValidCbamSubInstallation_WhenCbamTransitionToggleFalse() {
+
+        String emitterId = "emitter_id";
+        FuelInputAndRelevantEmissionFactorPB fuelInputAndRelevantEmissionFactor =
+                FuelInputAndRelevantEmissionFactorPB.builder()
+                        .fuelInputAndRelevantEmissionFactorType(FuelInputAndRelevantEmissionFactorType.PRODUCT_BENCHMARK)
+                        .exist(false)
+                        .build();
+
+        when(configurationService.getConfigurationByKey(DIGITIZED_MMP_FLAG_CONFIG_KEY))
+                .thenReturn(DIGITIZED_CONFIG_RESULT);
+        when(configurationService.getConfigurationByKey(CBAM_TRANSITION_CONFIG_KEY))
+                .thenReturn(Optional.of(ConfigurationDTO.builder().value(false).build()));
+        when(accountRepository.findCompetentAuthorityByEmitterId(emitterId))
+                .thenReturn(CompetentAuthorityEnum.SCOTLAND);
+
+        PermitContainer permitContainer = PermitContainer.builder()
+                .installationOperatorDetails(InstallationOperatorDetails.builder()
+                        .emitterId(emitterId)
+                        .build())
+                .permit(Permit.builder()
+                        .monitoringMethodologyPlans(MonitoringMethodologyPlans.builder()
+                                .exist(true)
+                                .digitizedPlan(DigitizedPlan.builder()
+                                        .subInstallations(List.of(
+                                                SubInstallation.builder()
+                                                        .subInstallationType(SubInstallationType.IRON_CASTING_CBAM)
+                                                        .subInstallationNo("not blank value")
+                                                        .directlyAttributableEmissions(DirectlyAttributableEmissionsPB.builder()
+                                                                .directlyAttributableEmissionsType(DirectlyAttributableEmissionsType.PRODUCT_BENCHMARK)
+                                                                .build())
+                                                        .importedExportedMeasurableHeat(ImportedExportedMeasurableHeat.builder()
+                                                                .fuelBurnCalculationTypes(Set.of(ImportedExportedMeasurableHeatType.NO_MEASURABLE_HEAT))
+                                                                .build())
+                                                        .fuelAndElectricityExchangeability(FuelAndElectricityExchangeability.builder().build())
+                                                        .annualLevel(getGenericAnnualLevel(AnnualLevelType.PRODUCTION))
+                                                        .fuelInputAndRelevantEmissionFactor(fuelInputAndRelevantEmissionFactor)
+                                                        .build()
+                                        ))
+                                        .methodTask(MethodTask.builder()
+                                                .physicalPartsAndUnitsAnswer(false)
+                                                .build())
+                                        .build())
+                                .build())
+                        .build())
+                .build();
+
+        when(dataSourceValidatorFactory.getValidator(FuelInputAndRelevantEmissionFactorPB.class))
+                .thenReturn(fuelInputAndRelevantEmissionFactorPBDatasourceValidator);
+        when(fuelInputAndRelevantEmissionFactorPBDatasourceValidator.validateDataSources(
+                (FuelInputAndRelevantEmissionFactorPB) permitContainer.getPermit()
+                        .getMonitoringMethodologyPlans()
+                        .getDigitizedPlan()
+                        .getSubInstallations()
+                        .getFirst()
+                        .getFuelInputAndRelevantEmissionFactor()))
+                .thenReturn(true);
+
+        when(dataSourceValidatorFactory.getValidator(DirectlyAttributableEmissionsPB.class))
+                .thenReturn(directlyAttributableEmissionsPBDataSourceValidator);
+        when(directlyAttributableEmissionsPBDataSourceValidator.validateDataSources(
+                (DirectlyAttributableEmissionsPB) permitContainer.getPermit()
+                        .getMonitoringMethodologyPlans()
+                        .getDigitizedPlan()
+                        .getSubInstallations()
+                        .getFirst()
+                        .getDirectlyAttributableEmissions()))
+                .thenReturn(true);
+
+        PermitValidationResult validationResult = digitizedMmpSectionValidator.validate(permitContainer);
+
+        boolean expectedValid = !LocalDate.now().isBefore(java.time.LocalDate.of(2027, 1, 1));
+        assertEquals(expectedValid, validationResult.isValid());
+        if (!expectedValid) {
+            assertTrue(((String) validationResult.getPermitViolations().get(0).getData()[0])
+                    .contains("At least one invalid cbam transition related subinstallation"));
+        }
+    }
+
+    @Test
+    public void test_existingValidLegacyCbamTransitionSubInstallation_WhenCbamTransitionToggleFalse() {
+
+        String emitterId = "emitter_id";
+        FuelInputAndRelevantEmissionFactorPB fuelInputAndRelevantEmissionFactor =
+                FuelInputAndRelevantEmissionFactorPB.builder()
+                        .fuelInputAndRelevantEmissionFactorType(FuelInputAndRelevantEmissionFactorType.PRODUCT_BENCHMARK)
+                        .exist(false)
+                        .build();
+
+        when(configurationService.getConfigurationByKey(DIGITIZED_MMP_FLAG_CONFIG_KEY))
+                .thenReturn(DIGITIZED_CONFIG_RESULT);
+        when(configurationService.getConfigurationByKey(CBAM_TRANSITION_CONFIG_KEY))
+                .thenReturn(Optional.of(ConfigurationDTO.builder().value(false).build()));
+        when(accountRepository.findCompetentAuthorityByEmitterId(emitterId))
+                .thenReturn(CompetentAuthorityEnum.SCOTLAND);
+
+        PermitContainer permitContainer = PermitContainer.builder()
+                .installationOperatorDetails(InstallationOperatorDetails.builder()
+                        .emitterId(emitterId)
+                        .build())
+                .permit(Permit.builder()
+                        .monitoringMethodologyPlans(MonitoringMethodologyPlans.builder()
+                                .exist(true)
+                                .digitizedPlan(DigitizedPlan.builder()
+                                        .subInstallations(List.of(
+                                                SubInstallation.builder()
+                                                        .subInstallationType(SubInstallationType.IRON_CASTING)
+                                                        .subInstallationNo("not blank value")
+                                                        .directlyAttributableEmissions(DirectlyAttributableEmissionsPB.builder()
+                                                                .directlyAttributableEmissionsType(DirectlyAttributableEmissionsType.PRODUCT_BENCHMARK)
+                                                                .build())
+                                                        .importedExportedMeasurableHeat(ImportedExportedMeasurableHeat.builder()
+                                                                .fuelBurnCalculationTypes(Set.of(ImportedExportedMeasurableHeatType.NO_MEASURABLE_HEAT))
+                                                                .build())
+                                                        .fuelAndElectricityExchangeability(FuelAndElectricityExchangeability.builder().build())
+                                                        .annualLevel(getGenericAnnualLevel(AnnualLevelType.PRODUCTION))
+                                                        .fuelInputAndRelevantEmissionFactor(fuelInputAndRelevantEmissionFactor)
+                                                        .build()
+                                        ))
+                                        .methodTask(MethodTask.builder()
+                                                .physicalPartsAndUnitsAnswer(false)
+                                                .build())
+                                        .build())
+                                .build())
+                        .build())
+                .build();
+
+        when(dataSourceValidatorFactory.getValidator(FuelInputAndRelevantEmissionFactorPB.class))
+                .thenReturn(fuelInputAndRelevantEmissionFactorPBDatasourceValidator);
+        when(fuelInputAndRelevantEmissionFactorPBDatasourceValidator.validateDataSources(
+                (FuelInputAndRelevantEmissionFactorPB) permitContainer.getPermit()
+                        .getMonitoringMethodologyPlans()
+                        .getDigitizedPlan()
+                        .getSubInstallations()
+                        .getFirst()
+                        .getFuelInputAndRelevantEmissionFactor()))
+                .thenReturn(true);
+
+        when(dataSourceValidatorFactory.getValidator(DirectlyAttributableEmissionsPB.class))
+                .thenReturn(directlyAttributableEmissionsPBDataSourceValidator);
+        when(directlyAttributableEmissionsPBDataSourceValidator.validateDataSources(
+                (DirectlyAttributableEmissionsPB) permitContainer.getPermit()
+                        .getMonitoringMethodologyPlans()
+                        .getDigitizedPlan()
+                        .getSubInstallations()
+                        .getFirst()
+                        .getDirectlyAttributableEmissions()))
+                .thenReturn(true);
+
+        PermitValidationResult validationResult = digitizedMmpSectionValidator.validate(permitContainer);
+
+        boolean expectedValid = !LocalDate.now().isAfter(java.time.LocalDate.of(2026, 12, 31));
+        assertEquals(expectedValid, validationResult.isValid());
+        if (!expectedValid) {
+            assertTrue(((String) validationResult.getPermitViolations().get(0).getData()[0])
+                    .contains("At least one invalid cbam transition related subinstallation"));
+        }
+    }
+
+    @Test
+    public void test_existingValidCbamSubInstallation_WhenCbamTransitionToggleTrue() {
+
+        String emitterId = "emitter_id";
+        FuelInputAndRelevantEmissionFactorPB fuelInputAndRelevantEmissionFactor =
+                FuelInputAndRelevantEmissionFactorPB.builder()
+                        .fuelInputAndRelevantEmissionFactorType(FuelInputAndRelevantEmissionFactorType.PRODUCT_BENCHMARK)
+                        .exist(false)
+                        .build();
+
+        when(configurationService.getConfigurationByKey(DIGITIZED_MMP_FLAG_CONFIG_KEY))
+                .thenReturn(DIGITIZED_CONFIG_RESULT);
+        when(configurationService.getConfigurationByKey(CBAM_TRANSITION_CONFIG_KEY))
+                .thenReturn(Optional.of(ConfigurationDTO.builder().value(true).build()));
+        when(accountRepository.findCompetentAuthorityByEmitterId(emitterId))
+                .thenReturn(CompetentAuthorityEnum.SCOTLAND);
+
+        PermitContainer permitContainer = PermitContainer.builder()
+                .installationOperatorDetails(InstallationOperatorDetails.builder()
+                        .emitterId(emitterId)
+                        .build())
+                .permit(Permit.builder()
+                        .monitoringMethodologyPlans(MonitoringMethodologyPlans.builder()
+                                .exist(true)
+                                .digitizedPlan(DigitizedPlan.builder()
+                                        .subInstallations(List.of(
+                                                SubInstallation.builder()
+                                                        .subInstallationType(SubInstallationType.IRON_CASTING_CBAM)
+                                                        .subInstallationNo("not blank value")
+                                                        .directlyAttributableEmissions(DirectlyAttributableEmissionsPB.builder()
+                                                                .directlyAttributableEmissionsType(DirectlyAttributableEmissionsType.PRODUCT_BENCHMARK)
+                                                                .build())
+                                                        .importedExportedMeasurableHeat(ImportedExportedMeasurableHeat.builder()
+                                                                .fuelBurnCalculationTypes(Set.of(ImportedExportedMeasurableHeatType.NO_MEASURABLE_HEAT))
+                                                                .build())
+                                                        .fuelAndElectricityExchangeability(FuelAndElectricityExchangeability.builder().build())
+                                                        .annualLevel(getGenericAnnualLevel(AnnualLevelType.PRODUCTION))
+                                                        .fuelInputAndRelevantEmissionFactor(fuelInputAndRelevantEmissionFactor)
+                                                        .build()
+                                        ))
+                                        .methodTask(MethodTask.builder()
+                                                .physicalPartsAndUnitsAnswer(false)
+                                                .build())
+                                        .build())
+                                .build())
+                        .build())
+                .build();
+
+        when(dataSourceValidatorFactory.getValidator(FuelInputAndRelevantEmissionFactorPB.class))
+                .thenReturn(fuelInputAndRelevantEmissionFactorPBDatasourceValidator);
+        when(fuelInputAndRelevantEmissionFactorPBDatasourceValidator.validateDataSources(
+                (FuelInputAndRelevantEmissionFactorPB) permitContainer.getPermit()
+                        .getMonitoringMethodologyPlans()
+                        .getDigitizedPlan()
+                        .getSubInstallations()
+                        .getFirst()
+                        .getFuelInputAndRelevantEmissionFactor()))
+                .thenReturn(true);
+
+        when(dataSourceValidatorFactory.getValidator(DirectlyAttributableEmissionsPB.class))
+                .thenReturn(directlyAttributableEmissionsPBDataSourceValidator);
+        when(directlyAttributableEmissionsPBDataSourceValidator.validateDataSources(
+                (DirectlyAttributableEmissionsPB) permitContainer.getPermit()
+                        .getMonitoringMethodologyPlans()
+                        .getDigitizedPlan()
+                        .getSubInstallations()
+                        .getFirst()
+                        .getDirectlyAttributableEmissions()))
+                .thenReturn(true);
+
+        PermitValidationResult validationResult = digitizedMmpSectionValidator.validate(permitContainer);
+
+        assertTrue(validationResult.isValid());
     }
 
     private Set<String> messages(Set<ConstraintViolation<Object>> constraintViolations) {

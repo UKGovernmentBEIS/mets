@@ -1,36 +1,33 @@
-/* eslint-disable @angular-eslint/prefer-host-metadata-property */
-import { AfterContentInit, Directive, ElementRef, HostBinding, Input } from '@angular/core';
+import { AfterContentInit, Directive, ElementRef, inject, input } from '@angular/core';
 
 import { FieldsetDirective } from './fieldset.directive';
 import { LegendSizeType } from './legend-size.type';
 
 @Directive({
   selector: 'legend[govukLegend],ng-template[govukLegend]',
-  standalone: false,
+  host: { '[class]': 'sizeClass', '[attr.id]': 'identifier' },
 })
 export class LegendDirective implements AfterContentInit {
-  @Input() size: LegendSizeType;
+  private readonly fieldset = inject(FieldsetDirective);
+  private readonly elementRef = inject(ElementRef);
 
-  constructor(
-    private readonly fieldset: FieldsetDirective,
-    private readonly elementRef: ElementRef,
-  ) {}
+  readonly legendSize = input<LegendSizeType>();
 
-  @HostBinding('class') get sizeClass() {
-    switch (this.size) {
+  get sizeClass() {
+    switch (this.legendSize()) {
       case 'heading':
       case 'large':
         return 'govuk-fieldset__legend govuk-fieldset__legend--l';
-      case 'normal':
-        return 'govuk-fieldset__legend';
+      case 'medium':
+        return 'govuk-fieldset__legend govuk-fieldset__legend--m';
       case 'small':
         return 'govuk-fieldset__legend govuk-fieldset__legend--s';
       default:
-        return 'govuk-fieldset__legend govuk-fieldset__legend--m';
+        return 'govuk-fieldset__legend';
     }
   }
 
-  @HostBinding('attr.id') get identifier() {
+  get identifier() {
     return `l.${this.fieldset.identifier}`;
   }
 
@@ -41,7 +38,7 @@ export class LegendDirective implements AfterContentInit {
   ngAfterContentInit(): void {
     const heading = this.nativeElement.querySelector('h1');
 
-    if (heading && this.size === 'heading') {
+    if (heading && this.legendSize() === 'heading') {
       heading.classList.add('govuk-fieldset__heading');
     }
   }

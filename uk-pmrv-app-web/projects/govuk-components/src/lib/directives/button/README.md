@@ -16,6 +16,8 @@ An `<a>` element should be used whenever the user will navigate to another view.
 - `govukWarnButton`: [Warning button](https://design-system.service.gov.uk/components/button/#warning-buttons)
   styling. Used for actions with serious destructive consequences that cannot be easily undone by a user.
   Applicable on both `<a>` and `<button>` elements.
+- `govukInverseButton`: [Inverse button](https://design-system.service.gov.uk/components/button/#buttons-on-dark-backgrounds) styling. Used for buttons
+  on dark backgrounds. Applicable on both `<a>` and `<button>` elements.
 
 The following is an example of valid `<button>` and `<a>` elements:
 
@@ -23,9 +25,11 @@ The following is an example of valid `<button>` and `<a>` elements:
 <button type="button" govukButton>Default button</button>
 <button type="button" govukSecondaryButton>Secondary button</button>
 <button type="button" govukWarnButton>Warn button</button>
+<button type="button" govukInverseButton>Inverse button</button>
 
 <a href="#" govukButton>Default button link</a>
 <a href="#" govukWarnButton>Warn button link</a>
+<a href="#" govukInverseButton>Inverse button link</a>
 ```
 
 ### Debounce click

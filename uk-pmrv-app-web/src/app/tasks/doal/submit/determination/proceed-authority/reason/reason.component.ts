@@ -50,8 +50,13 @@ export class ReasonComponent implements OnInit {
     this.form
       .get('articleReasonGroupType')
       .valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (value === 'ARTICLE_6A_REASONS') {
+      .subscribe((value: DoalProceedToAuthorityDetermination['articleReasonGroupType']) => {
+        if (value === 'ARTICLE_5_REASONS') {
+          this.form.get('article6aReasons').setValue(null);
+          this.form.get('article6aReasons').disable();
+          this.form.get('article34HReasonItems').setValue(null);
+          this.form.get('article34HReasonItems').disable();
+        } else if (value === 'ARTICLE_6A_REASONS') {
           this.form.get('article6aReasons').setValue(null);
           this.form.get('article6aReasons').enable();
         } else {

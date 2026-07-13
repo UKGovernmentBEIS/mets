@@ -74,7 +74,7 @@ class DoalCreateValidatorTest {
         RequestCreateValidationResult result = validator.validateAction(accountId);
 
         // Verify
-        assertThat(result).isEqualTo(RequestCreateValidationResult.builder().isAvailable(false).build());
+        assertThat(result).isEqualTo(RequestCreateValidationResult.builder().available(false).build());
         verify(installationAccountQueryService, times(1))
                 .getAccountDTOById(accountId);
         verifyNoInteractions(requestCreateValidatorService);

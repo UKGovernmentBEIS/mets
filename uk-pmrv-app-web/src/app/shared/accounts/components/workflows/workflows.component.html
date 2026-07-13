@@ -34,18 +34,17 @@
                 <a [routerLink]="['workflows', workflow.id]" govukLink>
                   {{ workflow.id | hsetiWorkflowId }} {{ workflowName(workflow.requestType) }}
                 </a>
-                @if (['AER', 'NER'].includes(workflow.requestType)) {
+                @if (['AER', 'NER', 'PERMIT_NOTIFICATION'].includes(workflow.requestType)) {
                   <div>
                     {{ workflow.requestMetadata | reportingSubheading }}
                   </div>
                 }
                 <div>Created: {{ workflow.creationDate | govukDate }}</div>
               </div>
-              <div class="govuk-grid-column-one-quarter">
-                <span
-                  class="search-results-list_item_status govuk-tag govuk-tag--{{ workflow.requestStatus | tagColor }}">
-                  <strong>{{ workflow.requestStatus | i18nSelect: workflowStatusesTagMap }}</strong>
-                </span>
+              <div class="govuk-grid-column-one-quarter search-results-list_item_status">
+                <govuk-tag [color]="workflow.requestStatus | tagColor">
+                  {{ workflow.requestStatus | i18nSelect: workflowStatusesTagMap }}
+                </govuk-tag>
               </div>
             </div>
           </li>

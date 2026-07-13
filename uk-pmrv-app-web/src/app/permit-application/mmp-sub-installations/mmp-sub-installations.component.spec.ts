@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, RouterLink } from '@angular/router';
 
+import { of } from 'rxjs';
+
 import { SharedPermitModule } from '@permit-application/shared/shared-permit.module';
 import { PermitApplicationState } from '@permit-application/store/permit-application.state';
 import { PermitApplicationStore } from '@permit-application/store/permit-application.store';
@@ -9,6 +11,8 @@ import { PermitIssuanceStore } from '@permit-issuance/store/permit-issuance.stor
 import { SharedModule } from '@shared/shared.module';
 import { BasePage } from '@testing';
 
+import { SubInstallationTypesService } from 'pmrv-api';
+
 import { MmpSubInstallationsComponent } from './mmp-sub-installations.component';
 
 describe('MmpSubInstallationsComponent', () => {
@@ -16,6 +20,7 @@ describe('MmpSubInstallationsComponent', () => {
   let store: PermitApplicationStore<PermitApplicationState>;
   let component: MmpSubInstallationsComponent;
   let fixture: ComponentFixture<MmpSubInstallationsComponent>;
+  let subInstallationTypesService: Partial<jest.Mocked<SubInstallationTypesService>>;
 
   class Page extends BasePage<MmpSubInstallationsComponent> {
     get tables() {
@@ -37,11 +42,29 @@ describe('MmpSubInstallationsComponent', () => {
   };
 
   beforeEach(async () => {
+    subInstallationTypesService = {
+      getSubInstallationTypesDetails: jest.fn().mockReturnValue(
+        of([
+          {
+            subInstallationType: 'PRIMARY_ALUMINIUM',
+            valid: true,
+            coveredByUKCBAM: true,
+          },
+          {
+            subInstallationType: 'HEAT_BENCHMARK_CL',
+            valid: true,
+            coveredByUKCBAM: true,
+          },
+        ]),
+      ),
+    };
+
     await TestBed.configureTestingModule({
       declarations: [MmpSubInstallationsComponent],
       imports: [SharedModule, SharedPermitModule, RouterLink],
       providers: [
         provideRouter([]),
+        { provide: SubInstallationTypesService, useValue: subInstallationTypesService },
         {
           provide: PermitApplicationStore,
           useExisting: PermitIssuanceStore,
@@ -117,7 +140,7 @@ describe('MmpSubInstallationsComponent', () => {
     it('should display the table', () => {
       expect(page.tables.length).toEqual(1);
       expect(page.rows).toEqual([
-        ['[Primary] Aluminium', 'Exposed', 'Remove  [Primary] Aluminium sub-installation', 'in progress'],
+        ['[Primary] Aluminium', 'Exposed', 'Remove  [Primary] Aluminium sub-installation', 'In progress'],
       ]);
     });
   });
@@ -162,7 +185,7 @@ describe('MmpSubInstallationsComponent', () => {
           'Heat benchmark exposed to carbon leakage',
           'Exposed',
           'Remove  heat benchmark exposed to carbon leakage sub-installation',
-          'in progress',
+          'In progress',
         ],
       ]);
     });

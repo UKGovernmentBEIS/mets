@@ -85,7 +85,7 @@ describe('SummaryComponent', () => {
   it('should show summary details', () => {
     expect(page.summaryListValues).toHaveLength(1);
     expect(page.summaryListValues).toEqual([
-      ['When was the relevant information submitted to the authority?', '12 Mar 2023'],
+      ['When was the relevant information submitted to the Authority?', '12 Mar 2023'],
     ]);
   });
 

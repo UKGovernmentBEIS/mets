@@ -35,7 +35,7 @@ describe('WorkflowItemsListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterLink],
+      imports: [RouterLink, TableComponent],
       declarations: [
         TestParentComponent,
         WorkflowItemsListComponent,
@@ -44,7 +44,6 @@ describe('WorkflowItemsListComponent', () => {
         ItemTypePipe,
         UserFullNamePipe,
         DaysRemainingPipe,
-        TableComponent,
       ],
       providers: [provideRouter([])],
     }).compileComponents();

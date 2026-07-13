@@ -1,5 +1,5 @@
 The footer components are designed to add footer content to a full screen app.
-To setup a govuk footer we use three components: `<govuk-footer>` which acts as
+To set up a govuk footer we use three components: `<govuk-footer>` which acts as
 a structural container for our content including the styling and icons from the
 GOV.UK design standards and navigation, `<govuk-footer-nav-list>` which represents
 the secondary navigation of the application, and `<govuk-footer-meta-info>` which
@@ -7,7 +7,7 @@ can include links to meta information about a site, like cookies and contact det
 
 ### Specifying the footer, navigation and meta information
 
-Both the navigation and the meta information should be placed inside of the `<govuk-footer>` tag.
+Both the navigation and the meta information should be placed inside `<govuk-footer>` tag.
 
 The navigation should be wrapped in a `<govuk-footer-nav-list>`. The `title` property can be used
 to add title to the navigation section of the footer. The `twoColumnList` property can be used to
@@ -26,10 +26,10 @@ The following is an example of a valid footer container:
 ```html
 <govuk-footer>
   <govuk-footer-nav-list title="Single column list" [columns]="1">
-    <a govukLink="footer" href="#1"> Navigation item 1 </a>
+    <a govukLink="footer" href="#1">Navigation item 1</a>
   </govuk-footer-nav-list>
   <govuk-footer-meta-info>
-    <a govukLink="meta" href="#3"> Item 1 </a>
+    <a govukLink="meta" href="#3">Item 1</a>
   </govuk-footer-meta-info>
 </govuk-footer>
 ```

@@ -54,7 +54,7 @@ describe('SiteContactsComponent', () => {
     }
 
     get currentPage() {
-      return this.query<HTMLLIElement>('.hmcts-pagination__item--active');
+      return this.query<HTMLLIElement>('.govuk-pagination__item--current');
     }
 
     get saveButton() {

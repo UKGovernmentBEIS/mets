@@ -28,7 +28,10 @@ export const legalEntityFormOpFactory = {
           null,
           [
             GovukValidators.required('Enter your company registration number'),
-            GovukValidators.maxLength(15, 'Company registration number must be 15 characters or less'),
+            GovukValidators.pattern(
+              '[a-zA-Z0-9]{2}[0-9]{5}[a-zA-Z0-9]',
+              'Enter a registration number in the correct format',
+            ),
           ],
         ],
         noReferenceNumberReason: [

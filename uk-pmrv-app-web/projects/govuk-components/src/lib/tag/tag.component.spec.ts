@@ -2,24 +2,25 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TagComponent } from './tag.component';
+import { TagColor } from './tag-color.type';
 
 describe('TagComponent', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: false,
+    imports: [TagComponent],
     template: `
       <govuk-tag [color]="color" />
     `,
   })
   class TestComponent {
-    color = 'green';
+    color = 'green' as TagColor;
   }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TagComponent, TestComponent],
+      imports: [TagComponent, TestComponent],
     }).compileComponents();
   });
 

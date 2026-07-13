@@ -18,7 +18,7 @@
             [disabled]="(store.isEditable$ | async) === false"
             govukFieldset
             id="other-permit-{{ i }}">
-            <legend govukLegend>Environmental permit or licence {{ i + 1 }}</legend>
+            <legend govukLegend legendSize="medium">Environmental permit or licence {{ i + 1 }}</legend>
             <button
               (click)="permits.removeAt(i)"
               *ngIf="permits.length > 1"

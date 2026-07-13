@@ -24,7 +24,7 @@ public class RequestCreateValidationResult {
     // used for flows that can be allowed conditionally, in contrast to RequestCreateActionType.includedToAvailableWorkflows 
     @JsonIgnore
     @Builder.Default
-    private boolean isAvailable = true;
+    private boolean available = true;
     
     @JsonProperty("accountStatus")
     @JsonInclude(JsonInclude.Include.NON_NULL)

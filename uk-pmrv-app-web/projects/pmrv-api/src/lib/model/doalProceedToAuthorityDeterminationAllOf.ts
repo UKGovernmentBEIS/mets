@@ -12,7 +12,7 @@
 import { WithholdingAllowancesNotice } from './withholdingAllowancesNotice';
 
 export interface DoalProceedToAuthorityDeterminationAllOf {
-  articleReasonGroupType?: 'ARTICLE_6A_REASONS' | 'ARTICLE_34H_REASONS';
+  articleReasonGroupType?: 'ARTICLE_6A_REASONS' | 'ARTICLE_34H_REASONS' | 'ARTICLE_5_REASONS';
   articleReasonItems?: Array<
     | 'ALLOCATION_ADJUSTMENT_UNDER_ARTICLE_5'
     | 'SETTING_ALLOCATION_UNDER_ARTICLE_3A'
