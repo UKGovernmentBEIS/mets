@@ -88,7 +88,7 @@
   @let standardData = standardCurrentPageData$ | async;
 
   <ul app-task-item-list>
-    @for (data of standardData; track data.id) {
+    @for (data of standardData; track data.miReportType) {
       <li
         app-task-item
         [link]="miReportTypeLinkMap[data.miReportType]"

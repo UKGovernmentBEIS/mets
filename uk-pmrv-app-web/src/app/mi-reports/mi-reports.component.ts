@@ -70,9 +70,9 @@ export class MiReportsComponent {
     this.customCurrentPage$.next(1);
   }
 
-  standardCurrentPageData$ = this.standardReportsData$.pipe(
-    map((reportsData) =>
-      reportsData
+  standardCurrentPageData$ = combineLatest([this.standardReportsData$, this.reportingImprovementsEnabled$]).pipe(
+    map(([reportsData, reportingImprovementsEnabled]) =>
+      (reportingImprovementsEnabled ? reportsData : [...reportsData, { miReportType: 'CUSTOM' }])
         .map((data) => ({ ...data, link: miReportTypeLinkMap[data.miReportType] }))
         .sort((a, b) => a.miReportType.localeCompare(b.miReportType)),
     ),

@@ -9,6 +9,7 @@ import { AccountsUsersContactsComponent } from './accounts-users-contacts/accoun
 import { AddCustomReportComponent } from './add-custom-report/add-custom-report.component';
 import { CompletedWorkComponent } from './completed-work/completed-work.component';
 import { MiReportsListGuard } from './core/mi-reports-list.guard';
+import { CustomReportComponent } from './custom/custom.component';
 import { MiReportsComponent } from './mi-reports.component';
 import { RegulatorOutstandingRequestTasksComponent } from './regulator-outstanding-request-tasks/regulator-outstanding-request-tasks.component';
 import { UsersForServiceAuthorityComponent } from './users-for-service-authority/users-for-service-authority.component';
@@ -67,6 +68,11 @@ const routes: Routes = [
     path: 'verification-bodies-users',
     data: { breadcrumb: 'List of Verification bodies and Users', backlink: '../' },
     component: VerificationBodiesUsersComponent,
+  },
+  {
+    path: 'custom',
+    data: { breadcrumb: 'Custom SQL report' },
+    component: CustomReportComponent,
   },
 ];
 

@@ -8,6 +8,7 @@ import { AccountsRegulatorsSiteContactsComponent } from './accounts-regulators-s
 import { AccountsUsersContactsComponent } from './accounts-users-contacts/accounts-users-contacts.component';
 import { AddCustomReportComponent } from './add-custom-report/add-custom-report.component';
 import { CompletedWorkComponent } from './completed-work/completed-work.component';
+import { CustomReportComponent } from './custom/custom.component';
 import { MiReportsComponent } from './mi-reports.component';
 import { MiReportsRoutingModule } from './mi-reports-routing.module';
 import { AuthorityStatusPipe } from './pipes/authority-status.pipe';
@@ -26,6 +27,7 @@ import { ViewCustomReportComponent } from './view-custom-report/view-custom-repo
     AddCustomReportComponent,
     AuthorityStatusPipe,
     CompletedWorkComponent,
+    CustomReportComponent,
     MiReportsComponent,
     RegulatorOutstandingRequestTasksComponent,
     UsersForServiceAuthorityComponent,

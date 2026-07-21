@@ -8,22 +8,24 @@ import { ExtendedMiReportResult } from './mi-interfaces';
 
 export const pageSize = 20;
 
-export const miReportTypeDescriptionMap: Record<MiReportSystemSearchResult['miReportType'], string> = {
+export const miReportTypeDescriptionMap: Record<MiReportSystemSearchResult['miReportType'] | 'CUSTOM', string> = {
   LIST_OF_ACCOUNTS_USERS_CONTACTS: 'List of Accounts, Users and Contacts',
   COMPLETED_WORK: 'Completed work',
   REGULATOR_OUTSTANDING_REQUEST_TASKS: 'Regulator outstanding request tasks',
   LIST_OF_USER_REPORT_ENTRIES: 'List of users',
   LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS: 'List of Accounts, Assigned Regulators and Site Contacts',
   LIST_OF_VERIFICATION_BODY_USERS: 'List of Verification bodies and Users',
+  CUSTOM: 'Custom sql report',
 };
 
-export const miReportTypeLinkMap: Partial<Record<MiReportSystemResult['reportType'], string>> = {
+export const miReportTypeLinkMap: Partial<Record<MiReportSystemResult['reportType'] | 'CUSTOM', string>> = {
   LIST_OF_ACCOUNTS_USERS_CONTACTS: './accounts-users-contacts',
   COMPLETED_WORK: './completed-work',
   REGULATOR_OUTSTANDING_REQUEST_TASKS: './regulator-outstanding-request-tasks',
   LIST_OF_USER_REPORT_ENTRIES: './user-report-entries',
   LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS: './accounts-regulators-sites-contacts',
   LIST_OF_VERIFICATION_BODY_USERS: './verification-bodies-users',
+  CUSTOM: './custom',
 };
 
 export const createTablePage = (currentPage: number, pageSize: number, data: any[]): any[] => {

@@ -114,6 +114,7 @@ describe('MiReportsComponent', () => {
   it('should create list for standard reports with expected content', () => {
     const list = page.standardList;
     expect(list.length).toEqual(3);
+    expect(list.map((c) => c.textContent)).not.toContain(miReportTypeDescriptionMap.CUSTOM);
     const reportDescriptions = list.map((c) => c.textContent);
     const expectedDescriptions = standardReports
       .map((r) => miReportTypeDescriptionMap[r.miReportType])
@@ -149,6 +150,23 @@ describe('MiReportsComponent', () => {
     expect(page.addCustomReportButton).toBeFalsy();
     expect(page.cells).toEqual([]);
     expect(page.tabs.map((tab) => tab.textContent.trim())).toEqual(['Standard reports']);
+  });
+
+  it('should append the custom sql report to the standard reports list when reportingImprovementsEnabled is off', () => {
+    configService.isFeatureEnabled.mockReturnValue(of(false));
+
+    fixture = TestBed.createComponent(MiReportsComponent);
+    component = fixture.componentInstance;
+    page = new Page(fixture);
+    fixture.detectChanges();
+
+    const list = page.standardList;
+    expect(list.length).toEqual(4);
+    expect(list.map((c) => c.textContent)).toContain(miReportTypeDescriptionMap.CUSTOM);
+
+    let currentData: Array<{ miReportType?: string; link?: string }>;
+    component.standardCurrentPageData$.subscribe((data) => (currentData = data));
+    expect(currentData.find((data) => data.miReportType === 'CUSTOM').link).toEqual('./custom');
   });
 
   it('should populate the category filter with an "All" option plus the enabled categories', () => {

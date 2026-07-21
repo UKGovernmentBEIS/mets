@@ -8,9 +8,9 @@ import { LoggedInGuard } from '@core/guards/logged-in.guard';
 import { NonAuthGuard } from '@core/guards/non-auth.guard';
 import { PendingRequestGuard } from '@core/guards/pending-request.guard';
 import { TermsAndConditionsGuard } from '@core/guards/terms-and-conditions.guard';
+import { externalRedirectGuard } from '@shared/guards/external-redirect.guard';
 
 import { AccessibilityComponent } from './accessibility/accessibility.component';
-import { ContactUsComponent } from './contact-us/contact-us.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { InstallationAccountApplicationGuard } from './installation-account-application/installation-account-application.guard';
 import { LandingPageComponent } from './landing-page/landing-page.component';
@@ -50,8 +50,15 @@ const routes: Routes = [
       },
       {
         path: 'contact-us',
-        data: { pageTitle: 'Contact us', breadcrumb: true },
-        component: ContactUsComponent,
+        data: { externalUrl: '/contact-us' },
+        canActivate: [externalRedirectGuard],
+        children: [],
+      },
+      {
+        path: 'privacy-notice',
+        data: { externalUrl: '/privacy-notice' },
+        canActivate: [externalRedirectGuard],
+        children: [],
       },
       {
         path: 'legislation',

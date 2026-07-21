@@ -25,7 +25,6 @@ import { environment } from '../environments/environment';
 import { AccessibilityComponent } from './accessibility/accessibility.component';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ContactUsComponent } from './contact-us/contact-us.component';
 import { CookiesContainerComponent } from './cookies/cookies-container.component';
 import { HttpErrorInterceptor } from './core/interceptors/http-error.interceptor';
 import { PendingRequestInterceptor } from './core/interceptors/pending-request.interceptor';
@@ -61,7 +60,6 @@ const keycloakEventSignal = createKeycloakSignal(keycloakInstance);
   declarations: [
     AccessibilityComponent,
     AppComponent,
-    ContactUsComponent,
     CookiesContainerComponent,
     FeedbackComponent,
     LandingPageComponent,
