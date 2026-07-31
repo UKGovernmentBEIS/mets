@@ -26446,4 +26446,82 @@
             </sql>
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_create_au_service_rule_revert_getDocumentPreview_emp_issuance_operator" author="dridakisc@unisystems.gr">
+        <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name = 'getDocumentPreview'
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type in ('EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT','EMP_ISSUANCE_UKETS_WAIT_FOR_REVIEW',
+                'EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMIT','EMP_ISSUANCE_CORSIA_APPLICATION_SUBMIT','EMP_ISSUANCE_CORSIA_WAIT_FOR_REVIEW',
+                'EMP_ISSUANCE_CORSIA_APPLICATION_AMENDS_SUBMIT')
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_service_rule(service_id, rule_id)
+                select s.id, r.id
+                from au_service s
+                cross join au_rule r
+                where s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type in ('EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT','EMP_ISSUANCE_UKETS_WAIT_FOR_REVIEW'
+                ,'EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMIT','EMP_ISSUANCE_CORSIA_APPLICATION_SUBMIT','EMP_ISSUANCE_CORSIA_WAIT_FOR_REVIEW'
+                ,'EMP_ISSUANCE_CORSIA_APPLICATION_AMENDS_SUBMIT')
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_create_au_service_rule_revert_getDocumentPreview_emp_variation_operator" author="dridakisc@unisystems.gr">
+        <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name = 'getDocumentPreview'
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type in (
+                'EMP_VARIATION_CORSIA_APPLICATION_SUBMIT',
+                'EMP_VARIATION_CORSIA_WAIT_FOR_REVIEW',
+                'EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMIT',
+                'EMP_VARIATION_UKETS_APPLICATION_SUBMIT',
+                'EMP_VARIATION_UKETS_WAIT_FOR_REVIEW',
+                'EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMIT'
+                )
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_service_rule(service_id, rule_id)
+                select s.id, r.id
+                from au_service s
+                cross join au_rule r
+                where s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type in (
+                'EMP_VARIATION_CORSIA_APPLICATION_SUBMIT',
+                'EMP_VARIATION_CORSIA_WAIT_FOR_REVIEW',
+                'EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMIT',
+                'EMP_VARIATION_UKETS_APPLICATION_SUBMIT',
+                'EMP_VARIATION_UKETS_WAIT_FOR_REVIEW',
+                'EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMIT'
+                )
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>
