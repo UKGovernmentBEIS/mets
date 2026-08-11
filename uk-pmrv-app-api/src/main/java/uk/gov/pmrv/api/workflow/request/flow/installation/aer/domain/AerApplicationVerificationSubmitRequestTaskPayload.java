@@ -23,6 +23,8 @@ import java.util.stream.Stream;
 public class AerApplicationVerificationSubmitRequestTaskPayload extends AerApplicationRequestTaskPayload {
     private AerVerificationReport verificationReport;
 
+    private Long verificationBodyId;
+
     @Builder.Default
     private Map<UUID, String> verificationAttachments = new HashMap<>();
 

@@ -5,8 +5,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
-import uk.gov.netz.api.kafka.producer.KafkaCorrelationHeaderProducerInterceptor;
-import uk.gov.netz.api.kafka.producer.KafkaCorrelationParentHeaderProducerInterceptor;
 import uk.gov.netz.api.kafka.producer.NetzKafkaProducerFactory;
 import uk.gov.netz.integration.model.account.AccountOpeningEvent;
 import uk.gov.pmrv.api.integration.registry.common.InstallationProducerConfigProperties;
@@ -21,9 +19,7 @@ public class InstallationAccountCreatedSendToRegistryProducerConfig {
     private final InstallationProducerConfigProperties installationProducerConfigProperties;
 
     @Bean
-    KafkaTemplate<String, AccountOpeningEvent> installationAccountCreatedKafkaTemplate(
-            KafkaCorrelationHeaderProducerInterceptor<String, AccountOpeningEvent> correlationHeaderInterceptor,
-            KafkaCorrelationParentHeaderProducerInterceptor<String, AccountOpeningEvent> correlationParentHeaderInterceptor) {
+    KafkaTemplate<String, AccountOpeningEvent> installationAccountCreatedKafkaTemplate() {
         return netzKafkaProducerFactory.createKafkaTemplate(installationProducerConfigProperties);
     }
 

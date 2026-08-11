@@ -25,7 +25,6 @@ import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeMethodType;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 
-import java.math.BigDecimal;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -64,7 +63,6 @@ public class PaymentFeeMethod {
     @ElementCollection
     @MapKeyColumn(name="type")
     @MapKeyEnumerated(EnumType.STRING)
-    @Column(name="amount")
     @CollectionTable(name = "request_payment_fee", joinColumns = @JoinColumn(name = "fee_method_id"))
-    private Map<FeeType, BigDecimal> fees = new EnumMap<>(FeeType.class);
+    private Map<FeeType, PaymentFee> fees = new EnumMap<>(FeeType.class);
 }

@@ -13,20 +13,22 @@ import { BreadcrumbItem } from './breadcrumbs.interface';
   selector: 'app-breadcrumbs',
   standalone: false,
   template: `
-    <govuk-breadcrumbs *ngIf="breadcrumbs$ | async as breadcrumbs">
-      <ng-container *ngFor="let breadcrumb of breadcrumbs; index as i">
-        <a
-          *ngIf="breadcrumb.link; else bareText"
-          govukLink="breadcrumb"
-          [routerLink]="breadcrumb.link"
-          [queryParams]="breadcrumb.queryParams">
-          {{ breadcrumb.text }}
-        </a>
-        <ng-template #bareText>
-          <li class="govuk-breadcrumbs__list-item" govukLink="breadcrumb">{{ breadcrumb.text }}</li>
-        </ng-template>
-      </ng-container>
-    </govuk-breadcrumbs>
+    <ng-container *ngIf="breadcrumbs$ | async as breadcrumbs">
+      <govuk-breadcrumbs *ngIf="breadcrumbs.length">
+        <ng-container *ngFor="let breadcrumb of breadcrumbs; index as i">
+          <a
+            *ngIf="breadcrumb.link; else bareText"
+            govukLink="breadcrumb"
+            [routerLink]="breadcrumb.link"
+            [queryParams]="breadcrumb.queryParams">
+            {{ breadcrumb.text }}
+          </a>
+          <ng-template #bareText>
+            <li class="govuk-breadcrumbs__list-item" govukLink="breadcrumb">{{ breadcrumb.text }}</li>
+          </ng-template>
+        </ng-container>
+      </govuk-breadcrumbs>
+    </ng-container>
   `,
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,7 +48,7 @@ export class BreadcrumbsComponent {
         const root = router.routerState.snapshot.root;
         const activeRoute = getActiveRoute(router, true);
 
-        if (activeRoute.routeConfig.data?.breadCrumb !== false) {
+        if (!activeRoute.routeConfig?.data?.hideBreadcrumb) {
           const breadcrumbs: BreadcrumbItem[] = [];
           this.addBreadcrumb(root, [], breadcrumbs);
           this.breadcrumbs$.next(breadcrumbs);

@@ -17,6 +17,8 @@ study [Angular Decimal Pipe](https://angular.io/api/common/DecimalPipe).
 - `numberFormat` - Only applicable when `number` is given to the `inputType` field. Provide a format for the numbers to appear in while not
   focused. Eg. `1.0-0`
 - `spellCheck` - Exposing the native input element `spellcheck` property.
+- `maxLength` - Exposing the native input element `maxlength` property, preventing input beyond the given length. Prefer pairing it with a
+  `GovukValidators.maxLength` validator, since `maxlength` silently truncates pasted text.
 - `prefix` - A text to be displayed before the field.
 - `suffix` - A text to be displayed after the field.
 - `widthClass` - A class to be used for the input. Accepts the following Gov.UK standards:
@@ -42,8 +44,7 @@ study [Angular Decimal Pipe](https://angular.io/api/common/DecimalPipe).
     label="exampleLabel"
     labelSize="normal"
     formControlName="exampleFormControlName"
-    hint="exampleHint"
-  ></div>
+    hint="exampleHint"></div>
 </form>
 ```
 
@@ -54,12 +55,14 @@ study [Angular Decimal Pipe](https://angular.io/api/common/DecimalPipe).
   labelSize="normal"
   [formControl]="exampleFormControl"
   widthClass="govuk-!-width-three-quarters"
-  hint="exampleHint"
-></div>
+  hint="exampleHint"></div>
 ```
 
 ```html
 <div govuk-text-input [formControl]="exampleFormControl">
-  <ng-container govukLabel>Object <span class="govuk-visually-hidden">help</span></ng-container>
+  <ng-container govukLabel>
+    Object
+    <span class="govuk-visually-hidden">help</span>
+  </ng-container>
 </div>
 ```

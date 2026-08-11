@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Directive, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Directive, inject, input, OnDestroy, OnInit } from '@angular/core';
 import {
   ControlContainer,
   ControlValueAccessor,
@@ -30,6 +30,7 @@ export abstract class FormInput implements ControlValueAccessor, OnInit, OnDestr
   readonly govukFormGroupClass = true;
   protected readonly destroy$ = new Subject<void>();
   private isSubmitted = false;
+  readonly idSuffix = input<string>('');
 
   protected constructor() {
     this.ngControl.valueAccessor = this;
@@ -40,7 +41,8 @@ export abstract class FormInput implements ControlValueAccessor, OnInit, OnDestr
   }
 
   get identifier(): string {
-    return this.formService.getControlIdentifier(this.ngControl);
+    const base = this.formService.getControlIdentifier(this.ngControl);
+    return this.idSuffix() ? `${base}-${this.idSuffix()}` : base;
   }
 
   get control(): UntypedFormControl {

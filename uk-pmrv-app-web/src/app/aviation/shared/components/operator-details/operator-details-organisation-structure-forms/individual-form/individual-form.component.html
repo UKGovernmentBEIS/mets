@@ -1,7 +1,11 @@
-<h3 class="govuk-heading-s">Full name</h3>
-<div formControlName="fullName" govuk-text-input widthClass="govuk-!-width-two-thirds"></div>
+<div
+  formControlName="fullName"
+  govuk-text-input
+  widthClass="govuk-!-width-two-thirds"
+  labelSize="small"
+  label="Full name"></div>
 
 <fieldset govukFieldset formGroupName="organisationLocation" class="govuk-!-margin-top-6 govuk-!-margin-bottom-6">
   <legend class="govuk-heading-s">Contact address</legend>
-  <app-location-state-form></app-location-state-form>
+  <app-location-state-form idSuffix="individual"></app-location-state-form>
 </fieldset>

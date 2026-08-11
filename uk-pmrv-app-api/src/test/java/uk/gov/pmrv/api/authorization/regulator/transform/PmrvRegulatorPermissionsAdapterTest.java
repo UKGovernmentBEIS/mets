@@ -13,16 +13,16 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.netz.api.authorization.core.domain.Permission.PERM_VB_MANAGE;
+import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel.EXECUTE;
+import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel.VIEW_ONLY;
 import static uk.gov.netz.api.authorization.core.domain.Permission.PERM_ACCOUNT_USERS_EDIT;
 import static uk.gov.netz.api.authorization.core.domain.Permission.PERM_CA_USERS_EDIT;
 import static uk.gov.netz.api.authorization.core.domain.Permission.PERM_TASK_ASSIGNMENT;
-import static uk.gov.netz.api.authorization.core.domain.Permission.PERM_VB_MANAGE;
 import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionGroup.ADD_OPERATOR_ADMIN;
 import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionGroup.ASSIGN_REASSIGN_TASKS;
 import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionGroup.MANAGE_USERS_AND_CONTACTS;
 import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionGroup.MANAGE_VERIFICATION_BODIES;
-import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel.EXECUTE;
-import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel.VIEW_ONLY;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW_EXECUTE_TASK;
@@ -57,6 +57,7 @@ import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermis
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.REVIEW_VIR;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_PERMIT_REVOCATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_REVIEW_PERMIT_VARIATION;
+
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
@@ -217,6 +218,7 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_BDRS2, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_BDRS2_REVIEW, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_BDRS2, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.MI_REPORTS_MANAGE_CUSTOM, RegulatorPermissionLevel.NONE);
 
         assertThat(pmrvRegulatorPermissionsAdapter.getPermissionGroupLevelsFromPermissions(permissions))
                 .containsExactlyInAnyOrderEntriesOf(expectedPermissionGroupLevels);
@@ -301,6 +303,8 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_BDRS2, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_BDRS2_REVIEW, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_BDRS2, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.MI_REPORTS_MANAGE_CUSTOM, RegulatorPermissionLevel.NONE);
+
 
         assertThat(pmrvRegulatorPermissionsAdapter.getPermissionGroupLevelsFromPermissions(permissions))
                 .containsExactlyInAnyOrderEntriesOf(expectedPermissionGroupLevels);
@@ -403,6 +407,8 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_BDRS2, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_BDRS2_REVIEW, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_BDRS2, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.MI_REPORTS_MANAGE_CUSTOM, RegulatorPermissionLevel.NONE);
+
 
         assertThat(pmrvRegulatorPermissionsAdapter.getPermissionGroupLevelsFromPermissions(permissions))
                 .containsExactlyInAnyOrderEntriesOf(expectedPermissionGroupLevels);
@@ -481,6 +487,7 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_BDRS2_REVIEW, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_BDRS2, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_BDRS2, List.of(RegulatorPermissionLevel.NONE, EXECUTE));
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.MI_REPORTS_MANAGE_CUSTOM, List.of(RegulatorPermissionLevel.NONE, EXECUTE));
 
         Map<String, List<RegulatorPermissionLevel>> actualPermissionGroupLevels =
                 pmrvRegulatorPermissionsAdapter.getPermissionGroupLevels();

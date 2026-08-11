@@ -4,24 +4,22 @@
       ? [
           {
             text: 'Fuels and equipment inventory',
-            link: ['fuels']
-          }
+            link: ['fuels'],
+          },
         ]
       : [
           {
             text: 'Measurement devices or methods',
-            link: ['measurement-devices']
-          }
+            link: ['measurement-devices'],
+          },
         ]
-  "
->
+  ">
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
     [heading]="(isEditing$ | async) ? 'Edit measurement device or method' : 'Add a measurement device or method'"
     caption="Fuels and equipment inventory"
-    submitText="Save and continue"
-  >
+    submitText="Save and continue">
     <p class="govuk-body">
       Add a measurement device or method used at the installation to measure the use of fuels or materials, or the
       amount of carbon that is released.
@@ -36,18 +34,17 @@
       govuk-text-input
       hint="For example, 'M1 Meter south boiler 1'"
       label="Reference"
-    ></div>
+      autoComplete="off"></div>
     <app-select-other
       formControlName="type"
       widthClass="govuk-!-width-full"
       label="Type of measurement device or method"
-      hint="Select the type of measuring instrument. If your measuring instrument is not listed, select 'Other' and enter a name for the instrument."
-    >
+      hint="Select the type of measuring instrument. If your measuring instrument is not listed, select 'Other' and enter a name for the instrument.">
       <option *ngFor="let option of typeOptions" [value]="option">
         {{ option | measurementDevicesType }}
       </option>
       <div govukConditionalContent>
-        <div formControlName="otherTypeName" govuk-text-input label="Provide a short name"></div>
+        <div formControlName="otherTypeName" govuk-text-input label="Provide a short name" autoComplete="off"></div>
       </div>
     </app-select-other>
 
@@ -59,7 +56,7 @@
           hint="For example 1-100"
           label="Measurement range"
           widthClass="govuk-!-width-two-thirds"
-        ></div>
+          autoComplete="off"></div>
       </div>
       <div class="govuk-grid-column-two-thirds">
         <div
@@ -68,7 +65,7 @@
           hint="For example, litres"
           label="Metering range units"
           widthClass="govuk-!-width-two-thirds"
-        ></div>
+          autoComplete="off"></div>
       </div>
     </div>
 
@@ -77,8 +74,7 @@
       govuk-radio
       hint="Enter the specified uncertainty, including the range this uncertainty is related to, as given in the manufacturer's specification.
             If an uncertainty is specified for 2 different ranges, add a second device with the same details for other range."
-      legend="Does this device or method have a specified uncertainty?"
-    >
+      legend="Does this device or method have a specified uncertainty?">
       <govuk-radio-option [value]="true" label="Yes">
         <ng-container govukConditionalContent>
           <div
@@ -89,7 +85,7 @@
             prefix="&#177;"
             suffix="%"
             widthClass="govuk-!-width-one-third"
-          ></div>
+            autoComplete="off"></div>
         </ng-container>
       </govuk-radio-option>
       <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
@@ -99,7 +95,7 @@
       govuk-text-input
       hint="Enter where the meter is found in the installation and how it is identified in the process flow chart, for example 'Inside admin boiler house on control panel’ or ‘North terminal'."
       label="Location"
-    ></div>
+      autoComplete="off"></div>
   </app-wizard-step>
   <a govukLink routerLink="..">Return to: Measurement devices or methods</a>
 </app-permit-task>

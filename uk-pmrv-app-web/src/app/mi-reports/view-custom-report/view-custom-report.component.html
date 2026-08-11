@@ -2,22 +2,61 @@
   <govuk-error-summary [form]="form"></govuk-error-summary>
 }
 
+@if (notification) {
+  <govuk-notification-banner type="success">
+    <h1 class="govuk-notification-banner__heading">{{ notification }}</h1>
+  </govuk-notification-banner>
+}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
-    <app-page-heading size="xl">{{ report.reportName }}</app-page-heading>
+    <app-page-heading size="xl" class="overflow-wrap-anywhere">{{ report.reportName }}</app-page-heading>
+
+    @let isFavourite = (isFavourite$ | async) === true;
+    <p class="govuk-body favourite-toggle">
+      <svg
+        class="favourite-toggle-star"
+        xmlns="http://www.w3.org/2000/svg"
+        [attr.viewBox]="isFavourite ? '0 0 24 24' : '0 -960 960 960'"
+        width="22"
+        height="22"
+        aria-hidden="true"
+        focusable="false">
+        <path
+          [attr.d]="
+            isFavourite
+              ? 'M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'
+              : 'm323-245 157-94 157 95-42-178 138-120-182-16-71-168-71 167-182 16 138 120-42 178Zm-90 125 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-355Z'
+          "
+          fill="#ffdd00" />
+      </svg>
+      <a
+        govukLink
+        href="#"
+        role="button"
+        [attr.aria-pressed]="isFavourite"
+        class="toggle-favourite"
+        (click)="$event.preventDefault(); onToggleFavourite(isFavourite)">
+        {{ isFavourite ? 'Remove from your favourites' : 'Add to your favourites' }}
+      </a>
+    </p>
   </div>
 
-  <div class="govuk-grid-column-one-quarter">
-    <div class="govuk-button-group">
-      <a govukSecondaryButton routerLink="#" class="edit-report">Edit report</a>
-      <a govukSecondaryButton routerLink="#" class="delete-report">Delete report</a>
+  @if (canManageCustomReports$ | async) {
+    <div class="govuk-grid-column-one-quarter">
+      <div class="govuk-button-group">
+        <a govukSecondaryButton [routerLink]="['../../edit-custom-report', reportId]" class="edit-report">
+          Edit report
+        </a>
+        <a govukSecondaryButton routerLink="delete" class="delete-report">Delete report</a>
+      </div>
     </div>
-  </div>
+  }
 </div>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <dl govuk-summary-list>
+    <dl govuk-summary-list [hasBottomMargin]="false">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Categories</dt>
         <dd govukSummaryListRowValue>
@@ -30,13 +69,17 @@
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Description</dt>
-        <dd govukSummaryListRowValue>{{ report.description }}</dd>
+        <dd govukSummaryListRowValue class="overflow-wrap-anywhere">{{ report.description }}</dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Last updated</dt>
         <dd govukSummaryListRowValue>{{ report.lastUpdatedOn | govukDate }}</dd>
       </div>
     </dl>
+
+    <p class="govuk-body">
+      <a govukLink routerLink="history" class="view-report-history">View report history</a>
+    </p>
 
     <div class="govuk-inset-text">
       You can modify the query below before running it. Changes made here will not be saved to the report unless you are
@@ -57,6 +100,10 @@
         [isLabelHidden]="true"
         rows="14"
         [maxLength]="10000"></div>
+
+      <button appPendingButton type="button" govukSecondaryButton (click)="onPreview()">Preview results</button>
+
+      <app-custom-report-preview [preview]="previewResult$ | async"></app-custom-report-preview>
 
       <div class="govuk-button-group">
         <button appPendingButton type="submit" govukButton>Export to excel</button>

@@ -1,9 +1,10 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { UntypedFormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, EMPTY, first, switchMap } from 'rxjs';
+import { BehaviorSubject, combineLatest, EMPTY, first, from, switchMap } from 'rxjs';
 
 import { AuthService } from '@core/services/auth.service';
 import { catchBadRequest, ErrorCodes } from '@error/business-errors';
@@ -25,6 +26,7 @@ export class SubmitOtpComponent implements OnInit {
   isSummaryDisplayed$ = new BehaviorSubject<boolean>(false);
   email$ = this.store.select('email');
   isPasswordReset = false;
+  loginUrl = toSignal(from(this.authService.getLoginUrl({ redirectUri: this.authService.baseRedirectUri })));
 
   form = this.fb.group({
     otp: [
@@ -80,9 +82,5 @@ export class SubmitOtpComponent implements OnInit {
         this.isPasswordReset = true;
         this.backLinkService.hide();
       });
-  }
-
-  onSignInAgain(): void {
-    this.authService.login({ redirectUri: this.authService.baseRedirectUri });
   }
 }

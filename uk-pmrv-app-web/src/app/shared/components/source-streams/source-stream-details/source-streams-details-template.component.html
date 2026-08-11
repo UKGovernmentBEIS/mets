@@ -3,20 +3,22 @@
   [formGroup]="form"
   [heading]="isEditing ? 'Edit source stream' : 'Add a source stream'"
   caption="Fuels and equipment inventory"
-  submitText="Save and continue"
->
+  submitText="Save and continue">
   <p class="govuk-body">Add all the source streams (fuels or raw materials) that relate to a regulated activity</p>
-  <govuk-details summary="What is a source stream"
-    >A source stream is the fuels and materials which are the source of greenhouse gas emissions at the
-    installation.</govuk-details
-  >
-  <div formControlName="reference" govuk-text-input hint="For example, ‘F1’" label="Reference"></div>
+  <govuk-details summary="What is a source stream">
+    A source stream is the fuels and materials which are the source of greenhouse gas emissions at the installation.
+  </govuk-details>
+  <div formControlName="reference" govuk-text-input hint="For example, ‘F1’" label="Reference" autoComplete="off"></div>
   <app-select-other formControlName="description" label="Description">
     <option *ngFor="let option of descriptionOptions" [value]="option">
       {{ option | sourceStreamDescription }}
     </option>
     <div govukConditionalContent>
-      <div formControlName="otherDescriptionName" govuk-text-input label="Provide a short name"></div>
+      <div
+        formControlName="otherDescriptionName"
+        govuk-text-input
+        label="Provide a short name"
+        autoComplete="off"></div>
     </div>
   </app-select-other>
 
@@ -25,7 +27,7 @@
       {{ option.label }}
     </option>
     <div govukConditionalContent>
-      <div formControlName="otherTypeName" govuk-text-input label="Provide a short name"></div>
+      <div formControlName="otherTypeName" govuk-text-input label="Provide a short name" autoComplete="off"></div>
     </div>
   </app-select-other>
 </app-wizard-step>

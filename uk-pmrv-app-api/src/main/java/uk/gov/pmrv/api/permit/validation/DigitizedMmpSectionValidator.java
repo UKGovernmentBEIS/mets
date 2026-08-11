@@ -21,6 +21,7 @@ import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.methodtasks.Metho
 import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.SubInstallation;
 import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.SubInstallationCategory;
 import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.SubInstallationType;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.SubInstallationValidityPeriod;
 import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.annuallevels.AnnualLevel;
 import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.annuallevels.annualactivitylevels.AnnualActivityFuelLevel;
 import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.annuallevels.annualactivitylevels.AnnualActivityHeatLevel;
@@ -51,6 +52,7 @@ import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.
 import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.wastegasbalance.WasteGasBalanceEnergyFlowDataSourceDetails;
 import uk.gov.pmrv.api.permit.validation.datasourceValidation.DataSourceValidatorFactory;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -108,6 +110,17 @@ public class DigitizedMmpSectionValidator implements PermitContextValidator, Per
         DigitizedPlan digitizedPlan = mmp.getDigitizedPlan();
         List<String> violationErrors = new ArrayList<>();
 
+        Optional<ConfigurationDTO> cbamTransitionToggleConfiguration = configurationService
+                .getConfigurationByKey(CBAM_TRANSITION_CONFIG_KEY);
+
+        boolean cbamTransitionToggle = cbamTransitionToggleConfiguration
+                .map(ConfigurationDTO::getValue)
+                .filter(Boolean.class::isInstance)
+                .map(Boolean.class::cast)
+                .orElse(false);
+
+        boolean cbamTransition = SubInstallationValidityPeriod.FROM_01_2027.isValid(cbamTransitionToggle);
+
         List<SubInstallation> subInstallations = digitizedPlan.getSubInstallations();
         if(subInstallations.isEmpty()) {
             violationErrors.add(ERROR_NO_SUB_INSTALLATIONS);
@@ -117,8 +130,14 @@ public class DigitizedMmpSectionValidator implements PermitContextValidator, Per
             validateOpredInstallation(subInstallations,violationErrors);
         }
 
-        if(!validateSubInstallationTypeAndSize(subInstallations)) {
-            violationErrors.add(ERROR_INVALID_SUB_INSTALLATION_SIZE);
+        if(!validateSubInstallationTypeAndSize(subInstallations, cbamTransition)) {
+            if (cbamTransition) {
+                violationErrors.add(ERROR_INVALID_SUB_INSTALLATION_SIZE_CBAM_TRANSITION);
+            }
+            else {
+                violationErrors.add(ERROR_INVALID_SUB_INSTALLATION_SIZE);
+            }
+
         }
 
         Set<SubInstallationType> typeSet = new HashSet<>();
@@ -206,15 +225,6 @@ public class DigitizedMmpSectionValidator implements PermitContextValidator, Per
 
         EnergyFlows energyFlows = digitizedPlan.getEnergyFlows();
         validateEnergyFlows(energyFlows, violationErrors);
-
-        Optional<ConfigurationDTO> cbamTransitionToggleConfiguration = configurationService
-                .getConfigurationByKey(CBAM_TRANSITION_CONFIG_KEY);
-
-        boolean cbamTransitionToggle = cbamTransitionToggleConfiguration
-                .map(ConfigurationDTO::getValue)
-                .filter(Boolean.class::isInstance)
-                .map(Boolean.class::cast)
-                .orElse(false);
 
         boolean hasInvalidCbamTransitionSubInstallations =
         subInstallations.stream()
@@ -576,13 +586,16 @@ public class DigitizedMmpSectionValidator implements PermitContextValidator, Per
         return dataSourceValidatorFactory.getValidator(ImportedExportedMeasurableHeat.class).validateDataSources(importedExportedMeasurableHeat);
     }
 
-    public boolean validateSubInstallationTypeAndSize(List<SubInstallation> subInstallations) {
+    public boolean validateSubInstallationTypeAndSize(List<SubInstallation> subInstallations, boolean cbamTransition) {
         long productBenchmarkCount = subInstallations.stream().filter(subInstallation ->
                 subInstallation.getSubInstallationType().getCategory().equals(SubInstallationCategory.PRODUCT_BENCHMARK)).count();
         long fallbackApproachCount = subInstallations.stream().filter(subInstallation ->
                 subInstallation.getSubInstallationType().getCategory().equals(SubInstallationCategory.FALLBACK_APPROACH)).count();
 
-        return productBenchmarkCount<=10 && fallbackApproachCount<=7;
+        if (cbamTransition) {
+            return productBenchmarkCount<=10 && fallbackApproachCount<=10;
+        }
+        else return productBenchmarkCount<=10 && fallbackApproachCount<=7;
     }
 
     private void validateOpredInstallation(List<SubInstallation> subInstallations, List<String> violationErrors) {

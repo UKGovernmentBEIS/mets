@@ -24,6 +24,7 @@ describe('TextInputComponent', () => {
         [formControl]="control"
         [prefix]="prefix"
         [suffix]="suffix"
+        [maxLength]="maxLength"
         label="First control"
         [isLabelHidden]="isLabelHidden"
         [labelSize]="labelSize"></div>
@@ -55,6 +56,7 @@ describe('TextInputComponent', () => {
     labelSize: LabelSizeType = 'normal';
     prefix: string;
     suffix: string;
+    maxLength: number;
   }
 
   @Component({
@@ -84,6 +86,17 @@ describe('TextInputComponent', () => {
   it('should create', () => {
     expect(testComponent).toBeTruthy();
     expect(numericComponent).toBeTruthy();
+  });
+
+  it('should set the native maxlength attribute only when maxLength is provided', () => {
+    const input = fixtureTestComponent.debugElement.query(By.css('input')).nativeElement as HTMLInputElement;
+
+    expect(input.getAttribute('maxlength')).toBeNull();
+
+    hostTestComponent.maxLength = 255;
+    fixtureTestComponent.detectChanges();
+
+    expect(input.getAttribute('maxlength')).toBe('255');
   });
 
   it('should disable the input', () => {

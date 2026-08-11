@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, Input, Renderer2 } from '@angular/core';
 import { ControlContainer, FormGroupDirective } from '@angular/forms';
 
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
@@ -9,14 +9,16 @@ import { ControlContainer, FormGroupDirective } from '@angular/forms';
   styleUrl: './password.component.scss',
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
 })
-export class PasswordComponent {
+export class PasswordComponent implements AfterViewInit {
   @Input() passwordLabel = 'Create a password to activate your account';
   @Input() confirmPasswordLabel = 'Re-enter your password';
   showLabel: 'Show' | 'Hide' = 'Show';
   passwordInputType: 'password' | 'text' = 'password';
   passwordStrength: number;
 
-  constructor(readonly formGroupDirective: FormGroupDirective) {}
+  readonly formGroupDirective = inject(FormGroupDirective);
+  private readonly renderer = inject(Renderer2);
+  private readonly elementRef = inject(ElementRef);
 
   togglePassword() {
     if (this.showLabel === 'Show') {
@@ -25,6 +27,13 @@ export class PasswordComponent {
     } else {
       this.showLabel = 'Show';
       this.passwordInputType = 'password';
+    }
+  }
+
+  ngAfterViewInit(): void {
+    const progressbarEl = this.elementRef.nativeElement.querySelector('[role="progressbar"]');
+    if (progressbarEl) {
+      this.renderer.setAttribute(progressbarEl, 'aria-labelledby', 'strength-hint');
     }
   }
 }

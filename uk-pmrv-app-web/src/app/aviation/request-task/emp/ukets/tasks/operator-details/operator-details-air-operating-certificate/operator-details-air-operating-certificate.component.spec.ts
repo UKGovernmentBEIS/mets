@@ -86,7 +86,7 @@ describe('OperatorDetailsAirOperatingCertificateComponent', () => {
     await user.click(screen.getByRole('button', { name: /Continue/ }));
     fixture.detectChanges();
 
-    expect(screen.getByRole('alert')).toBeVisible();
+    expect(screen.getByRole('alert', { name: /There is a problem/ })).toBeVisible();
     expect(
       screen.getAllByText(/Select if you have an Air Operating Certificate or equivalent certification/),
     ).toHaveLength(2);
@@ -95,7 +95,7 @@ describe('OperatorDetailsAirOperatingCertificateComponent', () => {
     await user.click(screen.getByRole('button', { name: /Continue/ }));
     fixture.detectChanges();
 
-    expect(screen.getByRole('alert')).toBeVisible();
+    expect(screen.getByRole('alert', { name: /There is a problem/ })).toBeVisible();
     expect(screen.getAllByText(/Enter a certificate number/)).toHaveLength(2);
     expect(screen.getAllByText(/Select an issuing authority/)).toHaveLength(2);
   }, 50000);

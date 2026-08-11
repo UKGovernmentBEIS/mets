@@ -25,6 +25,13 @@ $needs-review-background-color: #fbeedf;
   border-bottom: none;
 }
 
+// columns keep their set widths (instead of stretching to the longest cell)
+// and long unbroken strings wrap within them
+.app-table-wrap-anywhere table {
+  table-layout: fixed;
+  overflow-wrap: anywhere;
+}
+
 .govuk-table {
   select {
     min-width: auto;

@@ -1,4 +1,24 @@
 <dl govuk-summary-list [hasBorders]="true">
+  @if (payload?.transferrer) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Transferer</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <span>{{ payload?.transferrer?.name }} {{ payload?.transferrer?.id }}</span>
+      </dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+  }
+
+  @if (payload?.receiver) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Receiver</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <span>{{ payload?.receiver?.name }} {{ payload?.receiver?.id }}</span>
+      </dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+  }
+
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Reason for the transfer</dt>
     <dd govukSummaryListRowValue class="pre-wrap">

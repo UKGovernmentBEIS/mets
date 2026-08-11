@@ -3,8 +3,7 @@
   <govuk-table
     *ngIf="aviationAerAircraftDataDetails?.length"
     [columns]="columns"
-    [data]="aviationAerAircraftDataDetails"
-  >
+    [data]="aviationAerAircraftDataDetails">
     <ng-template let-column="column" let-index="index" let-row="row">
       <div [ngSwitch]="column.field" class="cell-container">
         <ng-container *ngSwitchCase="'aircraftTypeDesignator'">
@@ -23,7 +22,7 @@
           </span>
         </ng-container>
         <ng-container *ngSwitchCase="'ownerOrLessor'">
-          <span data-testid="ownerOrLessor">
+          <span data-testid="ownerOrLessor" class="overflow-wrap">
             {{ row.ownerOrLessor }}
           </span>
         </ng-container>

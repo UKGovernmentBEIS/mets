@@ -1,0 +1,9 @@
+.favourite-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.favourite-toggle-star {
+  flex-shrink: 0;
+}

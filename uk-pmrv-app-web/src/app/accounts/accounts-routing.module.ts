@@ -49,6 +49,7 @@ const routes: Routes = [
   {
     path: '',
     component: AccountsPageComponent,
+    data: { pageTitle: 'Accounts' },
   },
   {
     path: ':accountId',

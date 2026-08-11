@@ -549,6 +549,119 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/mireports/user-defined:
+    get:
+      tags:
+        - Mi Reports User defined
+      summary: Retrieves the report that matches the provided id
+      operationId: getReport
+      parameters:
+        - name: id
+          in: query
+          description: The unique identifier of the report
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MiReportUserDefinedDTO'
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - Mi Reports User defined
+      summary: Updates the report that matches the provided id
+      operationId: updateCustomReport
+      parameters:
+        - name: id
+          in: query
+          description: The unique identifier of the report
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MiReportUserDefinedUpdateDTO'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Mi Reports User defined
+      summary: Deletes the report that matches the provided id
+      operationId: deleteCustomReport
+      parameters:
+        - name: id
+          in: query
+          description: The unique identifier of the report
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /v1.0/installation/accounts/{id}/free-allocation-status:
     put:
       tags:
@@ -2664,6 +2777,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/mireports/user-defined/preview:
+    post:
+      tags:
+        - Mi Reports User defined
+      summary: Previews custom mi report user defined
+      operationId: previewCustomReport
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomMiReportQuery'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MiReportUserDefinedResult'
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /v1.0/mireports/user-defined/generate-custom:
     post:
       tags:
@@ -2695,12 +2845,95 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /v1.0/mireports/user-defined/create:
+  /v1.0/mireports/user-defined/favourites:
+    post:
+      tags:
+        - Mi Reports User defined
+      summary: >-
+        Adds the mi report that corresponds to the provided id to the user's
+        favourites
+      operationId: createFavourite
+      parameters:
+        - name: miReportId
+          in: query
+          description: The id of the user defined mi report
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Mi Reports User defined
+      summary: >-
+        Removes the mi report that corresponds to the provided id from the
+        user's favourites
+      operationId: deleteFavourite
+      parameters:
+        - name: miReportId
+          in: query
+          description: The id of the user defined mi report
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/mireports/user-defined/create/{accountType}:
     post:
       tags:
         - Mi Reports User defined
       summary: Creates a user defined custom mi report
       operationId: createCustomReport
+      parameters:
+        - name: accountType
+          in: path
+          description: The account type
+          required: true
+          schema:
+            type: string
+            enum:
+              - INSTALLATION
+              - AVIATION
       requestBody:
         content:
           application/json:
@@ -4746,6 +4979,84 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/{accountType}/settings:
+    get:
+      tags:
+        - Settings
+      summary: Retrieves the settings sections accessible to the current regulator user
+      operationId: getAccessibleSections
+      parameters:
+        - name: accountType
+          in: path
+          description: The account type
+          required: true
+          schema:
+            type: string
+            enum:
+              - INSTALLATION
+              - AVIATION
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  enum:
+                    - FEES
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/{accountType}/settings/fees:
+    get:
+      tags:
+        - Settings
+      summary: >-
+        Retrieves the changeable fee rows on the Settings Fees page for the
+        current regulator's CA
+      operationId: getFees
+      parameters:
+        - name: accountType
+          in: path
+          description: The account type
+          required: true
+          schema:
+            type: string
+            enum:
+              - INSTALLATION
+              - AVIATION
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeeRowDTO'
         '403':
           description: Forbidden
           content:
@@ -7352,52 +7663,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /v1.0/mireports/user-defined:
-    get:
-      tags:
-        - Mi Reports User defined
-      summary: Retrieves the report that matches the provided id
-      operationId: getReport
-      parameters:
-        - name: id
-          in: query
-          description: The unique identifier of the report
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MiReportUserDefinedDTO'
-        '400':
-          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /v1.0/mireports/user-defined/reports:
+  /v1.0/mireports/user-defined/reports/{accountType}:
     get:
       tags:
         - Mi Reports User defined
       summary: Retrieves all enabled user defined mi reports
       operationId: getReports
       parameters:
+        - name: accountType
+          in: path
+          description: The account type
+          required: true
+          schema:
+            type: string
+            enum:
+              - INSTALLATION
+              - AVIATION
         - name: page
           in: query
           description: The page number starting from zero
@@ -7429,6 +7710,12 @@ paths:
             maxLength: 256
             minLength: 3
             type: string
+        - name: favourites
+          in: query
+          description: Optional filter to fetch the user's favourites
+          required: false
+          schema:
+            type: boolean
       responses:
         '200':
           description: OK
@@ -7454,27 +7741,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /v1.0/mireports/user-defined/categories:
+  /v1.0/mireports/user-defined/manage:
     get:
       tags:
         - Mi Reports User defined
-      summary: Retrieves all enabled user defined mi report categories
-      operationId: getCategories
+      summary: >-
+        Check if the regulator can manage (create/update/delete) custom mi
+        reports
+      operationId: hasManageCustomReportsAccess
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MiReportUserDefinedCategoryDTO'
-        '400':
-          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                type: boolean
         '403':
           description: Forbidden
           content:
@@ -7487,13 +7768,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /v1.0/mireports/user-defined/reports:
+  /v1.0/mireports/user-defined/history/{miReportId}:
     get:
       tags:
         - Mi Reports User defined
-      summary: Retrieves all enabled user defined mi reports
-      operationId: getReports
+      summary: Retrieves the history of a user defined mi report
+      operationId: getHistory
       parameters:
+        - name: miReportId
+          in: path
+          description: The id of the report to fetch the history for
+          required: true
+          schema:
+            type: integer
+            format: int64
         - name: page
           in: query
           description: The page number starting from zero
@@ -7516,11 +7804,9 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MiReportUserDefinedResults'
+                $ref: '#/components/schemas/MiReportUserDefinedHistoryResults'
         '400':
-          description: "Bad Request\t\n Error Code | Description \t\nMIREPORT1000 | Invalid MI Report type"
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -9548,6 +9834,57 @@ components:
           minLength: 0
           type: string
       description: The data to update the notification template
+    MiReportUserDefinedCategoryDTO:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    MiReportUserDefinedDTO:
+      required:
+        - queryDefinition
+        - reportName
+      type: object
+      properties:
+        reportName:
+          maxLength: 255
+          minLength: 0
+          type: string
+        description:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        queryDefinition:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        categories:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MiReportUserDefinedCategoryDTO'
+        lastUpdatedOn:
+          type: string
+          format: date-time
+        favourite:
+          type: boolean
+    MiReportUserDefinedUpdateDTO:
+      required:
+        - reasonForChange
+        - userDefinedDTO
+      type: object
+      properties:
+        userDefinedDTO:
+          $ref: '#/components/schemas/MiReportUserDefinedDTO'
+        reasonForChange:
+          maxLength: 10000
+          minLength: 0
+          type: string
+      description: The user defined query information container
     AccountUpdateFaStatusDTO:
       required:
         - faStatus
@@ -16013,7 +16350,7 @@ components:
         installationDescription:
           $ref: '#/components/schemas/DigitizedMmpInstallationDescription'
         subInstallations:
-          maxItems: 17
+          maxItems: 20
           minItems: 0
           type: array
           items:
@@ -24005,6 +24342,10 @@ components:
               maxLength: 9
               minLength: 9
               type: string
+            transferrer:
+              $ref: '#/components/schemas/PermitTransferOperatorInfo'
+            receiver:
+              $ref: '#/components/schemas/PermitTransferOperatorInfo'
             sectionCompleted:
               type: boolean
     PermitTransferBDetailsConfirmationReviewDecision:
@@ -24097,6 +24438,10 @@ components:
           maxLength: 9
           minLength: 9
           type: string
+        transferrer:
+          $ref: '#/components/schemas/PermitTransferOperatorInfo'
+        receiver:
+          $ref: '#/components/schemas/PermitTransferOperatorInfo'
     PermitTransferDetailsConfirmation:
       required:
         - detailsAccepted
@@ -24121,6 +24466,13 @@ components:
         transferRejectedReason:
           maxLength: 10000
           minLength: 0
+          type: string
+    PermitTransferOperatorInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
           type: string
     PermitVariationApplicationSaveApplicationAmendRequestTaskActionPayload:
       required:
@@ -30164,42 +30516,6 @@ components:
             type: object
             additionalProperties:
               type: object
-    MiReportUserDefinedCategoryDTO:
-      required:
-        - id
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-    MiReportUserDefinedDTO:
-      required:
-        - queryDefinition
-        - reportName
-      type: object
-      properties:
-        reportName:
-          maxLength: 255
-          minLength: 0
-          type: string
-        description:
-          maxLength: 10000
-          minLength: 0
-          type: string
-        queryDefinition:
-          maxLength: 10000
-          minLength: 0
-          type: string
-        categories:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/MiReportUserDefinedCategoryDTO'
-        lastUpdatedOn:
-          type: string
-          format: date-time
     AerMarkNotRequiredDetails:
       required:
         - reason
@@ -30945,6 +31261,73 @@ components:
         totalItems:
           type: integer
           format: int64
+    FeeRowDTO:
+      type: object
+      properties:
+        requestType:
+          type: string
+          enum:
+            - INSTALLATION_ACCOUNT_OPENING
+            - SYSTEM_MESSAGE_NOTIFICATION
+            - PERMIT_ISSUANCE
+            - PERMIT_SURRENDER
+            - PERMIT_REVOCATION
+            - PERMIT_TRANSFER_A
+            - PERMIT_TRANSFER_B
+            - PERMIT_VARIATION
+            - PERMIT_NOTIFICATION
+            - PERMIT_BATCH_REISSUE
+            - PERMIT_REISSUE
+            - NON_COMPLIANCE
+            - DOAL
+            - AER
+            - VIR
+            - AIR
+            - DRE
+            - WITHHOLDING_OF_ALLOWANCES
+            - RETURN_OF_ALLOWANCES
+            - INSTALLATION_ONSITE_INSPECTION
+            - INSTALLATION_AUDIT
+            - HSE_TI
+            - BDR
+            - BDRS2
+            - PERMANENT_CESSATION
+            - ALR
+            - WASTE_QDR
+            - NER
+            - AVIATION_ACCOUNT_CLOSURE
+            - AVIATION_NON_COMPLIANCE
+            - EMP_BATCH_REISSUE
+            - EMP_REISSUE
+            - AVIATION_VIR
+            - EMP_ISSUANCE_UKETS
+            - EMP_VARIATION_UKETS
+            - AVIATION_AER_UKETS
+            - AVIATION_DRE_UKETS
+            - EMP_ISSUANCE_CORSIA
+            - EMP_VARIATION_CORSIA
+            - AVIATION_AER_CORSIA
+            - AVIATION_DOE_CORSIA
+            - AVIATION_AER_CORSIA_ANNUAL_OFFSETTING
+            - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING
+        feeType:
+          type: string
+          enum:
+            - FIXED
+            - WASTE
+            - HSE
+            - CAT_A
+            - CAT_B
+            - CAT_C
+        amount:
+          type: string
+          format: decimal
+        scheduledAmount:
+          type: string
+          format: decimal
+        scheduledDate:
+          type: string
+          format: date
     TemplateInfoDTO:
       type: object
       properties:
@@ -31934,6 +32317,9 @@ components:
               type: boolean
             verificationReport:
               $ref: '#/components/schemas/AerVerificationReport'
+            verificationBodyId:
+              type: integer
+              format: int64
             verificationAttachments:
               type: object
               additionalProperties:
@@ -32053,6 +32439,9 @@ components:
               type: boolean
             verificationReport:
               $ref: '#/components/schemas/AerVerificationReport'
+            verificationBodyId:
+              type: integer
+              format: int64
             verificationAttachments:
               type: object
               additionalProperties:
@@ -35659,6 +36048,10 @@ components:
               maxLength: 9
               minLength: 9
               type: string
+            transferrer:
+              $ref: '#/components/schemas/PermitTransferOperatorInfo'
+            receiver:
+              $ref: '#/components/schemas/PermitTransferOperatorInfo'
             sectionCompleted:
               type: boolean
             transferAttachments:
@@ -42605,6 +42998,10 @@ components:
               maxLength: 9
               minLength: 9
               type: string
+            transferrer:
+              $ref: '#/components/schemas/PermitTransferOperatorInfo'
+            receiver:
+              $ref: '#/components/schemas/PermitTransferOperatorInfo'
             transferAttachments:
               type: object
               additionalProperties:
@@ -45034,6 +45431,39 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MiReportUserDefinedInfoDTO'
+        total:
+          type: integer
+          format: int64
+    MiReportUserDefinedHistoryDTO:
+      type: object
+      properties:
+        submissionDate:
+          type: string
+          format: date-time
+        submittedBy:
+          type: string
+        reasonForChange:
+          type: string
+        reportName:
+          type: string
+        categories:
+          type: string
+        description:
+          type: string
+        queryDefinition:
+          type: string
+        changeType:
+          type: string
+          enum:
+            - CREATE
+            - UPDATE
+    MiReportUserDefinedHistoryResults:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MiReportUserDefinedHistoryDTO'
         total:
           type: integer
           format: int64

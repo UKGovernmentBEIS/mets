@@ -1,4 +1,7 @@
 <fieldset govukFieldset>
+  <legend govukLegend>
+    <span class="govuk-visually-hidden">{{ label }}</span>
+  </legend>
   <div govukFieldsetHint>{{ hint }}</div>
   <govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors"></govuk-error-message>
   <div [formGroup]="formGroup" class="phone-input">

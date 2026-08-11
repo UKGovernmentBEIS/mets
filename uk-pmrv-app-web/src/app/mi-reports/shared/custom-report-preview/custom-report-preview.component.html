@@ -1,0 +1,14 @@
+@if (preview) {
+  <div class="govuk-grid-row govuk-!-margin-bottom-8">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-m govuk-!-margin-top-4 govuk-!-margin-bottom-6">Preview of the first 10 results</h2>
+      @if (preview.columns.length > 0) {
+        <div class="overflow-auto overflow-auto-table">
+          <govuk-table [columns]="preview.columns" [data]="preview.rows"></govuk-table>
+        </div>
+      } @else {
+        <p class="govuk-body">The query returned no results.</p>
+      }
+    </div>
+  </div>
+}

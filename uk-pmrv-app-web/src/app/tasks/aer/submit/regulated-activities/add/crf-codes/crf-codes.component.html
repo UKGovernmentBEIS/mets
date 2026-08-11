@@ -11,19 +11,19 @@
     </div>
 
     <div class="govuk-grid-row">
-      <div formControlName="hasWasteCrf" govuk-checkboxes>
+      <div formControlName="hasWasteCrf" govuk-checkboxes [isLabelHidden]="true" label="Waste">
         <govuk-checkbox
           [value]="true"
           label="Waste"
           hint="Including incineration and combustion of waste, and other energy recovery from waste."></govuk-checkbox>
       </div>
-      <div formControlName="hasEnergyCrf" govuk-checkboxes>
+      <div formControlName="hasEnergyCrf" govuk-checkboxes [isLabelHidden]="true" label="Energy">
         <govuk-checkbox
           [value]="true"
           label="Energy"
           hint="Total emission of all greenhouse gases from stationary and mobile energy activities."></govuk-checkbox>
       </div>
-      <div formControlName="hasIndustrialCrf" govuk-checkboxes>
+      <div formControlName="hasIndustrialCrf" govuk-checkboxes [isLabelHidden]="true" label="Industrial processes">
         <govuk-checkbox
           [value]="true"
           label="Industrial processes"

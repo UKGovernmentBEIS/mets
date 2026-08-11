@@ -38,7 +38,7 @@
       }
       @if (permissions.showRegulators) {
         <a [routerLink]="[(domainUrlPrefix$ | async) + '/verification-bodies']" govukLink="header">
-          Verification body accounts
+          Verification bodies
         </a>
       }
       @if (permissions.showRegulators) {
@@ -57,6 +57,9 @@
       }
       @if (permissions.hasAccessBulkDownload) {
         <a [routerLink]="[(domainUrlPrefix$ | async) + '/bulk-downloads']" govukLink="header">Bulk downloads</a>
+      }
+      @if (permissions.showRegulators && (isSettingsEnabled$ | async)) {
+        <a [routerLink]="[(domainUrlPrefix$ | async) + '/settings']" govukLink="header">Settings</a>
       }
     </govuk-header-nav-list-legacy>
   }

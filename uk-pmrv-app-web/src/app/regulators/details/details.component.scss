@@ -1,0 +1,5 @@
+@use 'govuk-frontend/dist/govuk/base' as govuk;
+
+.permissions-table ::ng-deep .govuk-table__caption {
+  margin-bottom: govuk.govuk-spacing(3);
+}

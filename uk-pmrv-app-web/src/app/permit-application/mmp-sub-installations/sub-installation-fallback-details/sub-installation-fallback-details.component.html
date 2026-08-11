@@ -16,12 +16,22 @@
             govuk-radio
             legend="Choose a sub-installation fallback type"
             legendSize="medium"
-            hint="For heat benchmark, fuel benchmark, and process emissions, you can have up to two sub-installations: one
+            [hint]="
+              vm.isCbamEnabled
+                ? `For heat benchmark, fuel benchmark and process emissions, you can have up to 3 sub-installations:
+              <ul>
+                <li>1 exposed to carbon leakage risk that is covered by UK CBAM</li>
+                <li>1 exposed to carbon leakage risk that is not covered by UK CBAM</li>
+                <li>1 that is not exposed to carbon leakage risk</li>
+              </ul>
+        For measurable heat, you can have an additional sub-installation for the delivery of district heating that is
+        not exposed to carbon leakage.`
+                : 'For heat benchmark, fuel benchmark, and process emissions, you can have up to two sub-installations: one
           exposed to significant carbon leakage risk and one not exposed.<br><br> For measurable heat, you can have an additional sub-installation for the delivery of district heating that is
-        not exposed to carbon leakage."
+        not exposed to carbon leakage.'
+            "
             formControlName="parentOption"
             [ngClass]="{ 'govuk-form-group--error': isInvalid('subInstallationType') }">
-            <ng-container govukLegend>Hello</ng-container>
             <govuk-radio-option value="HEAT_BENCHMARK" label="Heat benchmark">
               <ng-container govukConditionalContent>
                 <div formGroupName="HEAT_BENCHMARK">

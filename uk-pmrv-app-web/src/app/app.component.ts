@@ -53,6 +53,7 @@ export class AppComponent implements OnInit {
   currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));
   domainUrlPrefix$ = this.currentDomain$.pipe(map((domain) => (domain === 'AVIATION' ? '/aviation' : '')));
   isGatewayServiceEnabled$ = this.configStore.pipe(selectIsFeatureEnabled('serviceGatewayEnabled'));
+  isSettingsEnabled$ = this.configStore.pipe(selectIsFeatureEnabled('settings'));
   showCookiesBanner$ = this.cookiesService.accepted$.pipe(
     map((cookiesAccepted) => !cookiesAccepted && gtagIsAvailable()),
   );

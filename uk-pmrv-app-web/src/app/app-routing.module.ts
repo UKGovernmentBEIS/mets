@@ -16,6 +16,7 @@ import { InstallationAccountApplicationGuard } from './installation-account-appl
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LandingPageGuard } from './landing-page/landing-page.guard';
 import { LegislationComponent } from './legislation/legislation.component';
+import { hasAccessibleSettings } from './settings/core/settings-permission.guard';
 import { RoleTypeGuard } from './shared/guards/role-type.guard';
 import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
 import { TimedOutComponent } from './timeout/timed-out/timed-out.component';
@@ -234,6 +235,13 @@ const routes: Routes = [
             data: { breadcrumb: 'MI Reports' },
             canActivate: [InstallationAuthGuard],
             loadChildren: () => import('./mi-reports/mi-reports.module').then((m) => m.MiReportsModule),
+          },
+          {
+            path: 'settings',
+            data: { breadcrumb: 'Settings' },
+            canActivate: [InstallationAuthGuard],
+            canMatch: [isFeatureEnabled('settings'), hasAccessibleSettings('INSTALLATION')],
+            loadChildren: () => import('./settings/settings.routes').then((m) => m.SETTINGS_ROUTES),
           },
           {
             path: 'workflows',

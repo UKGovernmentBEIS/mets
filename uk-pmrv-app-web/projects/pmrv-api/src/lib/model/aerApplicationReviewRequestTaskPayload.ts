@@ -31,6 +31,7 @@ export interface AerApplicationReviewRequestTaskPayload extends RequestTaskPaylo
   sm3UnitEnabled?: boolean;
   isVerifierAerTaskContentUpdate?: boolean;
   verificationReport?: AerVerificationReport;
+  verificationBodyId?: number;
   verificationAttachments?: { [key: string]: string };
   verifiedAer?: Aer;
   reviewSectionsCompleted?: { [key: string]: boolean };

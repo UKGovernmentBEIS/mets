@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import uk.gov.netz.api.authorization.core.domain.AppAuthority;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
 import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
@@ -36,13 +37,21 @@ import uk.gov.netz.api.mireport.userdefined.MiReportUserDefinedGeneratorDelegato
 import uk.gov.netz.api.mireport.userdefined.MiReportUserDefinedResult;
 import uk.gov.netz.api.mireport.userdefined.MiReportUserDefinedResults;
 import uk.gov.netz.api.mireport.userdefined.MiReportUserDefinedService;
+import uk.gov.netz.api.mireport.userdefined.MiReportUserDefinedUpdateDTO;
 import uk.gov.netz.api.mireport.userdefined.category.MiReportUserDefinedCategoryDTO;
 import uk.gov.netz.api.mireport.userdefined.category.MiReportUserDefinedCategoryService;
 import uk.gov.netz.api.mireport.userdefined.custom.CustomMiReportQuery;
 import uk.gov.netz.api.mireport.userdefined.custom.ValidSqlQueryValidator;
+import uk.gov.netz.api.mireport.userdefined.favourite.MiReportUserDefinedFavouriteService;
+import uk.gov.netz.api.mireport.userdefined.history.MiReportUserDefinedHistoryResults;
+import uk.gov.netz.api.mireport.userdefined.history.MiReportUserDefinedHistoryService;
 import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.netz.api.security.AuthorizedRoleAspect;
+import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.pmrv.api.mireport.userdefined.PmrvMiReportUserDefinedService;
 import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 
@@ -57,6 +66,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -85,6 +95,18 @@ class MiReportUserDefinedControllerTest {
     @Mock
     private MiReportUserDefinedGeneratorDelegator miReportUserDefinedGeneratorDelegator;
 
+    @Mock
+    private PmrvMiReportUserDefinedService pmrvMiReportUserDefinedService;
+
+    @Mock
+    private MiReportUserDefinedHistoryService miReportUserDefinedHistoryService;
+
+    @Mock
+    private MiReportUserDefinedFavouriteService miReportUserDefinedFavouriteService;
+
+    @Mock
+    private AppUserAuthorizationService appUserAuthorizationService;
+
     private ObjectMapper objectMapper;
 
     @BeforeEach
@@ -98,15 +120,18 @@ class MiReportUserDefinedControllerTest {
         mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);
 
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(appSecurityComponent);
+        AuthorizedAspect authorizedAspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect
                 authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
+        aspectJProxyFactory.addAspect(authorizedAspect);
         aspectJProxyFactory.addAspect(authorizedRoleAspect);
         DefaultAopProxyFactory proxyFactory = new DefaultAopProxyFactory();
         AopProxy aopProxy = proxyFactory.createAopProxy(aspectJProxyFactory);
         controller = (MiReportUserDefinedController) aopProxy.getProxy();
 
         FormattingConversionService conversionService = new FormattingConversionService();
+        conversionService.addConverter(new StringToAccountTypeEnumConverter());
 
         LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
         validator.setConstraintValidatorFactory(new ConstraintValidatorFactory() {
@@ -178,14 +203,14 @@ class MiReportUserDefinedControllerTest {
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/create")
+        mockMvc.perform(MockMvcRequestBuilders.post(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/create/" + AccountType.INSTALLATION)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(miReportUserDefinedDTO)))
                 .andExpect(status().isNoContent());
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(miReportUserDefinedService, times(1))
-                .create(appUser.getUserId(), appUser.getCompetentAuthority(), miReportUserDefinedDTO);
+        verify(pmrvMiReportUserDefinedService, times(1))
+                .create(appUser, AccountType.INSTALLATION, miReportUserDefinedDTO);
     }
 
     @Test
@@ -199,15 +224,15 @@ class MiReportUserDefinedControllerTest {
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(roleAuthorizationService)
-                .evaluate(appUser, new String[]{RoleTypeConstants.REGULATOR});
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "createCustomReport");
 
-        mockMvc.perform(MockMvcRequestBuilders.post(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/create")
+        mockMvc.perform(MockMvcRequestBuilders.post(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/create/" + AccountType.INSTALLATION)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(miReportUserDefinedDTO)))
                 .andExpect(status().isForbidden());
 
-        verifyNoInteractions(miReportUserDefinedService);
+        verifyNoInteractions(pmrvMiReportUserDefinedService);
     }
 
     @Test
@@ -267,17 +292,17 @@ class MiReportUserDefinedControllerTest {
         MiReportUserDefinedResults results = org.mockito.Mockito.mock(MiReportUserDefinedResults.class);
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(miReportUserDefinedService.findAllByCA(appUser.getCompetentAuthority(), page, pageSize,null,null)).thenReturn(results);
+        when(pmrvMiReportUserDefinedService.findAllByCA(appUser, AccountType.INSTALLATION, page, pageSize,null,null, false)).thenReturn(results);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/reports")
+        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/reports/" + AccountType.INSTALLATION)
                         .param("page", String.valueOf(page))
                         .param("size", String.valueOf(pageSize))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(miReportUserDefinedService, times(1))
-                .findAllByCA(appUser.getCompetentAuthority(), page, pageSize,null,null);
+        verify(pmrvMiReportUserDefinedService, times(1))
+                .findAllByCA(appUser, AccountType.INSTALLATION, page, pageSize,null,null, false);
     }
 
     @Test
@@ -288,19 +313,20 @@ class MiReportUserDefinedControllerTest {
         MiReportUserDefinedResults results = org.mockito.Mockito.mock(MiReportUserDefinedResults.class);
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(miReportUserDefinedService.findAllByCA(appUser.getCompetentAuthority(), page, pageSize,1L,"test")).thenReturn(results);
+        when(pmrvMiReportUserDefinedService.findAllByCA(appUser, AccountType.INSTALLATION, page, pageSize,1L,"test", true)).thenReturn(results);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/reports")
+        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/reports/" + AccountType.INSTALLATION)
                         .param("page", String.valueOf(page))
                         .param("size", String.valueOf(pageSize))
                         .param("categoryId", "1")
                         .param("term", "test")
+                        .param("favourites", "true")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(miReportUserDefinedService, times(1))
-                .findAllByCA(appUser.getCompetentAuthority(), page, pageSize,1L,"test");
+        verify(pmrvMiReportUserDefinedService, times(1))
+                .findAllByCA(appUser, AccountType.INSTALLATION, page, pageSize,1L,"test", true);
     }
 
     @Test
@@ -312,13 +338,13 @@ class MiReportUserDefinedControllerTest {
                 .when(roleAuthorizationService)
                 .evaluate(appUser, new String[]{RoleTypeConstants.REGULATOR});
 
-        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/reports")
+        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/reports/" + AccountType.INSTALLATION)
                         .param("page", "0")
                         .param("size", "5")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
-        verifyNoInteractions(miReportUserDefinedService);
+        verifyNoInteractions(pmrvMiReportUserDefinedService);
     }
 
     @Test
@@ -327,12 +353,12 @@ class MiReportUserDefinedControllerTest {
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/reports")
+        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/reports/" + AccountType.INSTALLATION)
                         .param("size", "5")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
 
-        verifyNoInteractions(miReportUserDefinedService);
+        verifyNoInteractions(pmrvMiReportUserDefinedService);
     }
 
     @Test
@@ -346,7 +372,7 @@ class MiReportUserDefinedControllerTest {
                 .build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(miReportUserDefinedService.findById(id)).thenReturn(dto);
+        when(miReportUserDefinedService.findById(appUser, id)).thenReturn(dto);
 
         mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH)
                         .param("id", String.valueOf(id))
@@ -355,7 +381,7 @@ class MiReportUserDefinedControllerTest {
                 .andExpect(jsonPath("$.reportName").value("My report"));
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(miReportUserDefinedService, times(1)).findById(id);
+        verify(miReportUserDefinedService, times(1)).findById(appUser, id);
     }
 
     @Test
@@ -406,8 +432,8 @@ class MiReportUserDefinedControllerTest {
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(roleAuthorizationService)
-                .evaluate(appUser, new String[]{RoleTypeConstants.REGULATOR});
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "deleteCustomReport");
 
         mockMvc.perform(MockMvcRequestBuilders.delete(MI_REPORT_QUERY_BASE_CONTROLLER_PATH)
                         .param("id", "1")
@@ -425,6 +451,301 @@ class MiReportUserDefinedControllerTest {
                 .andExpect(status().isBadRequest());
 
         verifyNoInteractions(miReportUserDefinedService);
+    }
+
+    @Test
+    void updateReport() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+        Long id = 1L;
+        MiReportUserDefinedUpdateDTO miReportUserDefinedDTO = MiReportUserDefinedUpdateDTO.builder()
+                .userDefinedDTO(MiReportUserDefinedDTO.builder()
+                        .reportName("My updated report")
+                        .categories(new HashSet<>())
+                        .queryDefinition("select * from account")
+                        .build())
+                .reasonForChange("Updating report")
+                .build();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+
+        mockMvc.perform(MockMvcRequestBuilders.put(MI_REPORT_QUERY_BASE_CONTROLLER_PATH)
+                        .param("id", String.valueOf(id))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(miReportUserDefinedDTO)))
+                .andExpect(status().isNoContent());
+
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(miReportUserDefinedService, times(1))
+                .update(id, appUser, miReportUserDefinedDTO);
+    }
+
+    @Test
+    void updateReport_forbidden() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+        MiReportUserDefinedUpdateDTO miReportUserDefinedDTO = MiReportUserDefinedUpdateDTO.builder()
+                .userDefinedDTO(MiReportUserDefinedDTO.builder()
+                        .reportName("My updated report")
+                        .categories(new HashSet<>())
+                        .queryDefinition("test")
+                        .build())
+                .reasonForChange("Updating report")
+                .build();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "updateCustomReport");
+
+        mockMvc.perform(MockMvcRequestBuilders.put(MI_REPORT_QUERY_BASE_CONTROLLER_PATH)
+                        .param("id", "1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(miReportUserDefinedDTO)))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(miReportUserDefinedService);
+    }
+
+    @Test
+    void updateReport_missing_id_param() throws Exception {
+        MiReportUserDefinedUpdateDTO miReportUserDefinedDTO = MiReportUserDefinedUpdateDTO.builder()
+                .userDefinedDTO(MiReportUserDefinedDTO.builder()
+                        .reportName("My updated report")
+                        .categories(new HashSet<>())
+                        .queryDefinition("test")
+                        .build())
+                .reasonForChange("Updating report")
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders.put(MI_REPORT_QUERY_BASE_CONTROLLER_PATH)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(miReportUserDefinedDTO)))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(miReportUserDefinedService);
+    }
+
+    @Test
+    void getHistory() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+        Long miReportId = 1L;
+        int page = 0;
+        int pageSize = 5;
+        MiReportUserDefinedHistoryResults results = org.mockito.Mockito.mock(MiReportUserDefinedHistoryResults.class);
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(miReportUserDefinedHistoryService.findByMiReportUserDefinedId(miReportId, page, pageSize)).thenReturn(results);
+
+        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/history/" + miReportId)
+                        .param("page", String.valueOf(page))
+                        .param("size", String.valueOf(pageSize))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(miReportUserDefinedHistoryService, times(1)).findByMiReportUserDefinedId(miReportId, page, pageSize);
+    }
+
+    @Test
+    void getHistory_forbidden() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
+                .when(roleAuthorizationService)
+                .evaluate(appUser, new String[]{RoleTypeConstants.REGULATOR});
+
+        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/history/1")
+                        .param("page", "0")
+                        .param("size", "5")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(miReportUserDefinedHistoryService);
+    }
+
+    @Test
+    void getHistory_missing_page_param() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+
+        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/history/1")
+                        .param("size", "5")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(miReportUserDefinedHistoryService);
+    }
+
+    @Test
+    void getHistory_missing_size_param() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+
+        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/history/1")
+                        .param("page", "0")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(miReportUserDefinedHistoryService);
+    }
+
+    @Test
+    void createFavourite() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+        Long miReportId = 1L;
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+
+        mockMvc.perform(MockMvcRequestBuilders.post(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/favourites")
+                        .param("miReportId", String.valueOf(miReportId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(miReportUserDefinedFavouriteService, times(1)).addFavourite(appUser, miReportId);
+    }
+
+    @Test
+    void createFavourite_forbidden() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
+                .when(roleAuthorizationService)
+                .evaluate(appUser, new String[]{RoleTypeConstants.REGULATOR});
+
+        mockMvc.perform(MockMvcRequestBuilders.post(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/favourites")
+                        .param("miReportId", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(miReportUserDefinedFavouriteService);
+    }
+
+    @Test
+    void createFavourite_missing_miReportId_param() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/favourites")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(miReportUserDefinedFavouriteService);
+    }
+
+    @Test
+    void deleteFavourite() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+        Long miReportId = 1L;
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/favourites")
+                        .param("miReportId", String.valueOf(miReportId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(miReportUserDefinedFavouriteService, times(1)).removeFavourite(appUser, miReportId);
+    }
+
+    @Test
+    void deleteFavourite_forbidden() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
+                .when(roleAuthorizationService)
+                .evaluate(appUser, new String[]{RoleTypeConstants.REGULATOR});
+
+        mockMvc.perform(MockMvcRequestBuilders.delete(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/favourites")
+                        .param("miReportId", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(miReportUserDefinedFavouriteService);
+    }
+
+    @Test
+    void deleteFavourite_missing_miReportId_param() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/favourites")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(miReportUserDefinedFavouriteService);
+    }
+
+    @Test
+    void previewCustomReport() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+        CustomMiReportQuery query = CustomMiReportQuery.builder().sqlQuery("sql").build();
+
+        MiReportUserDefinedResult result = MiReportUserDefinedResult.builder()
+                .columnNames(List.of("col1"))
+                .results(List.of(Map.of("entry1", "val1")))
+                .build();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(miReportUserDefinedService.previewCustomReport(CompetentAuthorityEnum.ENGLAND, query)).thenReturn(result);
+
+        mockMvc.perform(MockMvcRequestBuilders.post(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/preview")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(query)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.columnNames[0]").value("col1"));
+
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(miReportUserDefinedService, times(1)).previewCustomReport(appUser.getCompetentAuthority(), query);
+    }
+
+    @Test
+    void previewCustomReport_forbidden() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+        CustomMiReportQuery query = CustomMiReportQuery.builder().sqlQuery("sql").build();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
+                .when(roleAuthorizationService)
+                .evaluate(appUser, new String[]{RoleTypeConstants.REGULATOR});
+
+        mockMvc.perform(MockMvcRequestBuilders.post(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/preview")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(query)))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(miReportUserDefinedService);
+    }
+
+    @Test
+    void hasManageCustomReportsAccess() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(pmrvMiReportUserDefinedService.canManageCustomReports(appUser)).thenReturn(true);
+
+        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/manage")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(pmrvMiReportUserDefinedService, times(1)).canManageCustomReports(appUser);
+    }
+
+    @Test
+    void hasManageCustomReportsAccess_forbidden() throws Exception {
+        AppUser appUser = buildMockAuthenticatedUser();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
+                .when(roleAuthorizationService)
+                .evaluate(appUser, new String[]{RoleTypeConstants.REGULATOR});
+
+        mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/manage")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(pmrvMiReportUserDefinedService);
     }
 
 

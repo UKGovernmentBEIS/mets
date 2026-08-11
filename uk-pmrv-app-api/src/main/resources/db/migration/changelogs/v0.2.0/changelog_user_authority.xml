@@ -2644,4 +2644,22 @@
             and permission = 'PERM_NER_APPLICATION_AMENDS_SUBMIT_EXECUTE_TASK';
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_mi_reports_manage_custom_reports_user_authorities" author="mitzelose@unisystems.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_MI_REPORTS_MANAGE_CUSTOM_REPORTS_EXECUTE_TASK'
+            from au_role
+            where code in ('ca_super_user', 'pmrv_super_user');
+
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_MI_REPORTS_MANAGE_CUSTOM_REPORTS_EXECUTE_TASK';
+
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

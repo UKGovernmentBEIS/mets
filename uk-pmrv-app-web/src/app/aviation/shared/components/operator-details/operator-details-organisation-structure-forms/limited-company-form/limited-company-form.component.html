@@ -1,6 +1,9 @@
-<h3 class="govuk-heading-s">Company registration number</h3>
-
-<div formControlName="registrationNumber" govuk-text-input widthClass="govuk-!-width-two-thirds"></div>
+<div
+  formControlName="registrationNumber"
+  govuk-text-input
+  widthClass="govuk-!-width-two-thirds"
+  labelSize="small"
+  label="Company registration number"></div>
 
 <fieldset govukFieldset formGroupName="organisationLocation" class="govuk-!-margin-bottom-6">
   <legend class="govuk-heading-s">
@@ -8,7 +11,7 @@
     <p class="govuk-body govuk-!-margin-bottom-0">This is the address provided when registering the company.</p>
   </legend>
 
-  <app-location-state-form></app-location-state-form>
+  <app-location-state-form idSuffix="limitedCompany"></app-location-state-form>
 </fieldset>
 
 <app-multiple-file-input
@@ -16,17 +19,18 @@
   label="Upload proof of registered address"
   listTitle="Files added"
   formControlName="evidenceFiles"
-  hint="For example, a screenshot from your company register"
-></app-multiple-file-input>
+  hint="For example, a screenshot from your company register"></app-multiple-file-input>
 
-<h3 class="govuk-heading-s">Do you want to provide a different contact address?</h3>
-
-<div formControlName="differentContactLocationExist" govuk-radio>
+<div
+  formControlName="differentContactLocationExist"
+  govuk-radio
+  legendSize="small"
+  legend="Do you want to provide a different contact address?">
   <govuk-radio-option [value]="true" label="Yes">
     <div govukConditionalContent>
       <fieldset govukFieldset formGroupName="differentContactLocation" class="govuk-!-margin-bottom-6">
         <legend class="govuk-heading-s">Contact address</legend>
-        <app-location-state-form></app-location-state-form>
+        <app-location-state-form idSuffix="differentContactLocation"></app-location-state-form>
       </fieldset>
     </div>
   </govuk-radio-option>

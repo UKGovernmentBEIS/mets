@@ -461,7 +461,7 @@ public class MonitoringMethodologyPlansValidationTest {
             subInstallations.add(SubInstallation.builder().subInstallationType(SubInstallationType.FUEL_BENCHMARK_CL).build());
         }
 
-        assertTrue(digitizedMmpSectionValidator.validateSubInstallationTypeAndSize(subInstallations));
+        assertTrue(digitizedMmpSectionValidator.validateSubInstallationTypeAndSize(subInstallations, false));
     }
 
     @Test
@@ -474,7 +474,33 @@ public class MonitoringMethodologyPlansValidationTest {
             subInstallations.add(SubInstallation.builder().subInstallationType(SubInstallationType.FUEL_BENCHMARK_CL).build());
         }
 
-        assertFalse(digitizedMmpSectionValidator.validateSubInstallationTypeAndSize(subInstallations));
+        assertFalse(digitizedMmpSectionValidator.validateSubInstallationTypeAndSize(subInstallations, false));
+    }
+
+    @Test
+    public void validationSuccessSubInstallationTypeAndSizeCBAMTransition() {
+        List<SubInstallation> subInstallations = new ArrayList<>();
+        for (int i=1 ; i<11 ; i++) {
+            subInstallations.add(SubInstallation.builder().subInstallationType(SubInstallationType.HYDROGEN).build());
+        }
+        for (int i=1 ; i<11 ; i++) {
+            subInstallations.add(SubInstallation.builder().subInstallationType(SubInstallationType.FUEL_BENCHMARK_CL).build());
+        }
+
+        assertTrue(digitizedMmpSectionValidator.validateSubInstallationTypeAndSize(subInstallations, true));
+    }
+
+    @Test
+    public void validationFailSubInstallationTypeAndSizeCBAMTransition() {
+        List<SubInstallation> subInstallations = new ArrayList<>();
+        for (int i=1 ; i<12 ; i++) {
+            subInstallations.add(SubInstallation.builder().subInstallationType(SubInstallationType.HYDROGEN).build());
+        }
+        for (int i=1 ; i<9 ; i++) {
+            subInstallations.add(SubInstallation.builder().subInstallationType(SubInstallationType.FUEL_BENCHMARK_CL).build());
+        }
+
+        assertFalse(digitizedMmpSectionValidator.validateSubInstallationTypeAndSize(subInstallations, true));
     }
 
     @Test

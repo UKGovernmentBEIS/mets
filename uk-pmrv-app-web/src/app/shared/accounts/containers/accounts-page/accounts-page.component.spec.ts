@@ -67,8 +67,8 @@ describe('AccountsComponent', () => {
 
   const createModule = async () => {
     await TestBed.configureTestingModule({
-      declarations: [AccountsPageComponent, AccountsListComponent, AccountStatusPipe, PageHeadingComponent],
-      imports: [ReactiveFormsModule, RouterTestingModule, GovukComponentsModule],
+      declarations: [AccountsPageComponent, AccountsListComponent, AccountStatusPipe],
+      imports: [ReactiveFormsModule, RouterTestingModule, GovukComponentsModule, PageHeadingComponent],
       providers: [
         AccountsStore,
         { provide: InstallationAccountsService, useValue: installationAccountsService },
@@ -193,8 +193,8 @@ describe('AccountsComponent', () => {
     });
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        declarations: [AccountsPageComponent, AccountsListComponent, AccountStatusPipe, PageHeadingComponent],
-        imports: [RouterTestingModule, ReactiveFormsModule, GovukComponentsModule],
+        declarations: [AccountsPageComponent, AccountsListComponent, AccountStatusPipe],
+        imports: [RouterTestingModule, ReactiveFormsModule, GovukComponentsModule, PageHeadingComponent],
         providers: [
           AccountsStore,
           { provide: InstallationAccountsService, useValue: installationAccountsService },

@@ -72,6 +72,8 @@ describe('SummaryComponent', () => {
 
   it('should display the editable payment summary', () => {
     expect(page.summaryListValues).toEqual([
+      ['Transferer', 'operator1 EM0001', ''],
+      ['Receiver', 'operator2 EM0002', ''],
       ['Reason for the transfer', 'Reason of transfer', 'Change'],
       ['Files added', 'None', 'Change'],
       ['Actual or estimated date of transfer', govukDatePipe.transform(mockTransferPayload.transferDate), 'Change'],
@@ -86,6 +88,8 @@ describe('SummaryComponent', () => {
     await runOnPushChangeDetection(fixture);
 
     expect(page.summaryListValues).toEqual([
+      ['Transferer', 'operator1 EM0001', ''],
+      ['Receiver', 'operator2 EM0002', ''],
       ['Reason for the transfer', 'Reason of transfer', ''],
       ['Files added', 'None', ''],
       ['Actual or estimated date of transfer', govukDatePipe.transform(mockTransferPayload.transferDate), ''],

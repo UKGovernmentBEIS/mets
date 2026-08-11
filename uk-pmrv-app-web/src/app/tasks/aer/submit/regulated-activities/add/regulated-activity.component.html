@@ -4,30 +4,32 @@
     [formGroup]="form"
     heading="Select a regulated activity used at the installation"
     submitText="Continue"
-    [hideSubmit]="(aerService.isEditable$ | async) === false"
-  >
+    [hideSubmit]="(aerService.isEditable$ | async) === false">
     <p class="govuk-body">Guidance explaining this text.</p>
     <div formControlName="activityCategory" govuk-radio legendSize="medium">
+      <ng-container govukLegend>
+        <span class="govuk-visually-hidden">Select a regulated activity used at the installation</span>
+      </ng-container>
+
       <ng-container *ngFor="let group of activityGroups | keyvalue: originalOrder">
         <ng-container *ngIf="group.value.length === 1">
           <govuk-radio-option
             [label]="group.value[0] | regulatedActivityType"
             [hint]="group.value[0] | i18nSelect: activityHintMap"
-            [value]="group.value[0]"
-          >
-          </govuk-radio-option>
+            [value]="group.value[0]"></govuk-radio-option>
         </ng-container>
         <ng-container *ngIf="group.value.length > 1">
           <govuk-radio-option [label]="group.key | i18nSelect: activityGroupMap" [value]="group.key">
             <ng-container govukConditionalContent>
               <div formControlName="activity" govuk-radio legendSize="medium">
+                <ng-container govukLegend>
+                  <span class="govuk-visually-hidden">{{ group.key | i18nSelect: activityGroupMap }}</span>
+                </ng-container>
                 <ng-container *ngFor="let child of group.value">
                   <govuk-radio-option
                     [value]="child"
                     label="{{ child | regulatedActivityType }} ({{ child | gas }})"
-                    [hint]="child | i18nSelect: activityHintMap"
-                  >
-                  </govuk-radio-option>
+                    [hint]="child | i18nSelect: activityHintMap"></govuk-radio-option>
                 </ng-container>
               </div>
             </ng-container>

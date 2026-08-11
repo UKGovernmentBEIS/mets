@@ -93,4 +93,8 @@ export class AuthService {
   loadIsLoggedIn(): Observable<boolean> {
     return of(!!this.keycloak.authenticated).pipe(tap((isLoggedIn) => this.authStore.setIsLoggedIn(isLoggedIn)));
   }
+
+  getLoginUrl(options?: KeycloakLoginOptions): Promise<string> {
+    return this.keycloak.createLoginUrl(options);
+  }
 }

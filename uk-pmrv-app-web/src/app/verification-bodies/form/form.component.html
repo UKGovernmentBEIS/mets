@@ -20,7 +20,7 @@
   <govuk-checkbox *ngFor="let option of typeOptions" [label]="option | verificationBodyType" [value]="option">
     <ng-container govukConditionalContent>
       <div
-        [attr.autoComplete]="'accreditation-ref-num-' + option"
+        autoComplete="off"
         [formControlName]="'accreditationRefNum_' + option"
         govuk-text-input
         label="Accreditation reference number"></div>

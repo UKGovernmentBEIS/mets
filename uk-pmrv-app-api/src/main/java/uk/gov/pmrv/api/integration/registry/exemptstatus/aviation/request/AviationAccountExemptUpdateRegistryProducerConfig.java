@@ -5,8 +5,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
-import uk.gov.netz.api.kafka.producer.KafkaCorrelationHeaderProducerInterceptor;
-import uk.gov.netz.api.kafka.producer.KafkaCorrelationParentHeaderProducerInterceptor;
 import uk.gov.netz.api.kafka.producer.NetzKafkaProducerFactory;
 import uk.gov.netz.integration.model.exemption.AccountExemptionUpdateEvent;
 import uk.gov.pmrv.api.integration.registry.common.AviationProducerConfigProperties;
@@ -20,9 +18,7 @@ public class AviationAccountExemptUpdateRegistryProducerConfig {
     private final AviationProducerConfigProperties aviationProducerConfigProperties;
 
     @Bean
-    KafkaTemplate<String, AccountExemptionUpdateEvent> aviationAccountExemptUpdateKafkaTemplate(
-            KafkaCorrelationHeaderProducerInterceptor<String, AccountExemptionUpdateEvent> correlationHeaderInterceptor,
-            KafkaCorrelationParentHeaderProducerInterceptor<String, AccountExemptionUpdateEvent> correlationParentHeaderInterceptor) {
+    KafkaTemplate<String, AccountExemptionUpdateEvent> aviationAccountExemptUpdateKafkaTemplate() {
         return netzKafkaProducerFactory.createKafkaTemplate(aviationProducerConfigProperties);
     }
 

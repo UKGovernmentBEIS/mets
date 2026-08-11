@@ -19,8 +19,8 @@ describe('PaymentNotCompletedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [PaymentNotCompletedComponent, PageHeadingComponent],
+      imports: [RouterTestingModule, PageHeadingComponent],
+      declarations: [PaymentNotCompletedComponent],
     }).compileComponents();
   });
 

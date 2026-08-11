@@ -40,11 +40,9 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPay
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationAmendsSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationRequestVerificationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationVerificationSubmitRequestTaskPayload;
@@ -524,11 +522,6 @@ class RequestAerSubmitServiceTest {
         final List<MonitoringPlanVersion> monitoringPlanVersions = getMonitoringPlanVersions();
         final PermitOriginatedData permitOriginatedData = getPermitOriginatedData();
 
-        final AerApplicationRequestVerificationRequestTaskActionPayload taskActionPayload =
-                AerApplicationRequestVerificationRequestTaskActionPayload.builder()
-                        .payloadType(RequestTaskActionPayloadType.AER_REQUEST_VERIFICATION_PAYLOAD)
-                        .verificationSectionsCompleted(Map.of())
-                        .build();
 
         Request request = Request.builder()
                 .accountId(accountId)
@@ -581,7 +574,7 @@ class RequestAerSubmitServiceTest {
                 .thenReturn(installationOperatorDetails);
 
         // Invoke
-        service.sendToVerifier(taskActionPayload, requestTask, appUser);
+        service.sendToVerifier(requestTask, appUser);
 
         // Verify
         verify(aerValidatorService, times(1))
@@ -602,11 +595,6 @@ class RequestAerSubmitServiceTest {
         final List<MonitoringPlanVersion> monitoringPlanVersions = getMonitoringPlanVersions();
         final PermitOriginatedData permitOriginatedData = getPermitOriginatedData();
 
-        final AerApplicationRequestVerificationRequestTaskActionPayload taskActionPayload =
-                AerApplicationRequestVerificationRequestTaskActionPayload.builder()
-                        .payloadType(RequestTaskActionPayloadType.AER_REQUEST_AMENDS_VERIFICATION_PAYLOAD)
-                        .verificationSectionsCompleted(Map.of())
-                        .build();
 
         Request request = Request.builder()
                 .accountId(accountId)
@@ -673,7 +661,7 @@ class RequestAerSubmitServiceTest {
                 .thenReturn(installationOperatorDetails);
 
         // Invoke
-        service.sendAmendsToVerifier(taskActionPayload, requestTask, appUser);
+        service.sendAmendsToVerifier(requestTask, appUser);
 
         // Verify
         verify(aerValidatorService, times(1))
@@ -684,6 +672,187 @@ class RequestAerSubmitServiceTest {
                 actionPayload, RequestActionType.AER_APPLICATION_AMENDS_SENT_TO_VERIFIER, appUser.getUserId());
 
         assertThat(request.getPayload()).isEqualTo(savedRequest.getPayload());
+    }
+
+    @Test
+    void sendAmendsToVerifier_sameVerificationBody_preservesVerificationSectionsCompleted() {
+        final long accountId = 1L;
+        final long verificationBodyId = 5L;
+        final AppUser appUser = AppUser.builder().userId("userId").build();
+        final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
+        final List<MonitoringPlanVersion> monitoringPlanVersions = getMonitoringPlanVersions();
+        final PermitOriginatedData permitOriginatedData = getPermitOriginatedData();
+
+        final Map<String, List<Boolean>> existingVerifierSections = Map.of("verifierDetails", List.of(true));
+
+
+        final AerVerificationReport existingVerificationReport = AerVerificationReport.builder()
+                .verificationBodyId(verificationBodyId)
+                .build();
+
+        Request request = Request.builder()
+                .accountId(accountId)
+                .verificationBodyId(verificationBodyId)
+                .payload(AerRequestPayload.builder()
+                        .payloadType(RequestPayloadType.AER_REQUEST_PAYLOAD)
+                        .verificationSectionsCompleted(existingVerifierSections)
+                        .verificationReport(existingVerificationReport)
+                        .aer(Aer.builder()
+                                .monitoringApproachEmissions(MonitoringApproachEmissions.builder()
+                                        .monitoringApproachEmissions(Map.of(MonitoringApproachType.MEASUREMENT_CO2, MeasurementOfCO2Emissions.builder().build()))
+                                        .build())
+                                .build())
+                        .build())
+                .build();
+
+        AerApplicationAmendsSubmitRequestTaskPayload taskPayload =
+                AerApplicationAmendsSubmitRequestTaskPayload.builder()
+                        .payloadType(RequestTaskPayloadType.AER_APPLICATION_AMENDS_SUBMIT_PAYLOAD)
+                        .installationOperatorDetails(installationOperatorDetails)
+                        .aer(Aer.builder()
+                                .monitoringApproachEmissions(MonitoringApproachEmissions.builder()
+                                        .monitoringApproachEmissions(Map.of(MonitoringApproachType.MEASUREMENT_CO2, MeasurementOfCO2Emissions.builder().build()))
+                                        .build())
+                                .abbreviations(Abbreviations.builder().exist(false).build()).build())
+                        .permitType(PermitType.GHGE)
+                        .permitOriginatedData(permitOriginatedData)
+                        .monitoringPlanVersions(monitoringPlanVersions)
+                        .reviewSectionsCompleted(Map.of("section", true))
+                        .aerSectionsCompleted(Map.of("section", List.of(true)))
+                        .verificationPerformed(false)
+                        .build();
+        RequestTask requestTask = RequestTask.builder()
+                .request(request)
+                .payload(taskPayload)
+                .build();
+
+        when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(request.getAccountId()))
+                .thenReturn(installationOperatorDetails);
+
+        // Invoke
+        service.sendAmendsToVerifier(requestTask, appUser);
+
+        // Verifier sections should be preserved since verification body has not changed
+        assertThat(((AerRequestPayload) request.getPayload()).getVerificationSectionsCompleted())
+                .isEqualTo(existingVerifierSections);
+    }
+
+    @Test
+    void sendToVerifier_changedVerificationBody_clearsVerificationSectionsCompleted() {
+        final long accountId = 1L;
+        final long previousVerificationBodyId = 5L;
+        final long newVerificationBodyId = 6L;
+        final AppUser appUser = AppUser.builder().userId("userId").build();
+        final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
+        final List<MonitoringPlanVersion> monitoringPlanVersions = getMonitoringPlanVersions();
+        final PermitOriginatedData permitOriginatedData = getPermitOriginatedData();
+
+        final AerVerificationReport previousVerificationReport = AerVerificationReport.builder()
+                .verificationBodyId(previousVerificationBodyId)
+                .build();
+
+        final UUID attachmentId = UUID.randomUUID();
+
+        Request request = Request.builder()
+                .accountId(accountId)
+                .verificationBodyId(newVerificationBodyId)
+                .payload(AerRequestPayload.builder()
+                        .payloadType(RequestPayloadType.AER_REQUEST_PAYLOAD)
+                        .verificationSectionsCompleted(Map.of("verifierDetails", List.of(true)))
+                        .verificationReport(previousVerificationReport)
+                        .verificationAttachments(Map.of(attachmentId, "attachment.pdf"))
+                        .build())
+                .build();
+
+        AerApplicationSubmitRequestTaskPayload taskPayload = AerApplicationSubmitRequestTaskPayload.builder()
+                .payloadType(RequestTaskPayloadType.AER_APPLICATION_SUBMIT_PAYLOAD)
+                .installationOperatorDetails(installationOperatorDetails)
+                .aer(Aer.builder().abbreviations(Abbreviations.builder().exist(false).build()).build())
+                .permitType(PermitType.GHGE)
+                .permitOriginatedData(permitOriginatedData)
+                .monitoringPlanVersions(monitoringPlanVersions)
+                .verificationPerformed(false)
+                .build();
+
+        RequestTask requestTask = RequestTask.builder()
+                .request(request)
+                .payload(taskPayload)
+                .build();
+
+        when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(accountId))
+                .thenReturn(installationOperatorDetails);
+
+        service.sendToVerifier(requestTask, appUser);
+
+        final AerRequestPayload resultPayload = (AerRequestPayload) request.getPayload();
+        assertThat(resultPayload.getVerificationSectionsCompleted()).isEmpty();
+        assertThat(resultPayload.getVerificationReport()).isNull();
+        assertThat(resultPayload.getVerificationAttachments()).isEmpty();
+    }
+
+    @Test
+    void sendAmendsToVerifier_changedVerificationBody_clearsVerificationSectionsCompleted() {
+        final long accountId = 1L;
+        final long previousVerificationBodyId = 5L;
+        final long newVerificationBodyId = 6L;
+        final AppUser appUser = AppUser.builder().userId("userId").build();
+        final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
+        final List<MonitoringPlanVersion> monitoringPlanVersions = getMonitoringPlanVersions();
+        final PermitOriginatedData permitOriginatedData = getPermitOriginatedData();
+
+        final AerVerificationReport previousVerificationReport = AerVerificationReport.builder()
+                .verificationBodyId(previousVerificationBodyId)
+                .build();
+
+        final UUID attachmentId = UUID.randomUUID();
+
+        Request request = Request.builder()
+                .accountId(accountId)
+                .verificationBodyId(newVerificationBodyId)
+                .payload(AerRequestPayload.builder()
+                        .payloadType(RequestPayloadType.AER_REQUEST_PAYLOAD)
+                        .verificationSectionsCompleted(Map.of("verifierDetails", List.of(true)))
+                        .verificationReport(previousVerificationReport)
+                        .verificationAttachments(Map.of(attachmentId, "attachment.pdf"))
+                        .aer(Aer.builder()
+                                .monitoringApproachEmissions(MonitoringApproachEmissions.builder()
+                                        .monitoringApproachEmissions(Map.of(MonitoringApproachType.MEASUREMENT_CO2, MeasurementOfCO2Emissions.builder().build()))
+                                        .build())
+                                .build())
+                        .build())
+                .build();
+
+        AerApplicationAmendsSubmitRequestTaskPayload taskPayload =
+                AerApplicationAmendsSubmitRequestTaskPayload.builder()
+                        .payloadType(RequestTaskPayloadType.AER_APPLICATION_AMENDS_SUBMIT_PAYLOAD)
+                        .installationOperatorDetails(installationOperatorDetails)
+                        .aer(Aer.builder()
+                                .monitoringApproachEmissions(MonitoringApproachEmissions.builder()
+                                        .monitoringApproachEmissions(Map.of(MonitoringApproachType.MEASUREMENT_CO2, MeasurementOfCO2Emissions.builder().build()))
+                                        .build())
+                                .abbreviations(Abbreviations.builder().exist(false).build()).build())
+                        .permitType(PermitType.GHGE)
+                        .permitOriginatedData(permitOriginatedData)
+                        .monitoringPlanVersions(monitoringPlanVersions)
+                        .reviewSectionsCompleted(Map.of("section", true))
+                        .aerSectionsCompleted(Map.of("section", List.of(true)))
+                        .verificationPerformed(false)
+                        .build();
+
+        RequestTask requestTask = RequestTask.builder()
+                .request(request)
+                .payload(taskPayload)
+                .build();
+
+        when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(accountId))
+                .thenReturn(installationOperatorDetails);
+
+        service.sendAmendsToVerifier(requestTask, appUser);
+
+        final AerRequestPayload resultPayload = (AerRequestPayload) request.getPayload();
+        assertThat(resultPayload.getVerificationSectionsCompleted()).isEmpty();
+        assertThat(resultPayload.getVerificationReport()).isNull();
+        assertThat(resultPayload.getVerificationAttachments()).isEmpty();
     }
 
     @Test

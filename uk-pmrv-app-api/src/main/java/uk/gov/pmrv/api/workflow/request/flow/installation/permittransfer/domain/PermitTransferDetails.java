@@ -41,4 +41,8 @@ public class PermitTransferDetails {
     @NotNull
     @Size(min = 9, max = 9)
     private String transferCode;
+
+    private PermitTransferOperatorInfo transferrer;
+
+    private PermitTransferOperatorInfo receiver;
 }

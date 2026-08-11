@@ -7,6 +7,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.configuration.domain.ConfigurationDTO;
+import uk.gov.netz.api.configuration.service.ConfigurationService;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
@@ -85,7 +87,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
+import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -102,6 +104,9 @@ class DocumentTemplatePermitParamsProviderTest {
 
     @Mock
     private RequestQueryService requestQueryService;
+
+    @Mock
+    private ConfigurationService configurationService;
 
     @Test
     void constructTemplateParams() throws IOException {
@@ -515,6 +520,7 @@ class DocumentTemplatePermitParamsProviderTest {
 
         when(commonParamsProvider.constructCommonTemplateParams(request, signatory)).thenReturn(commonTemplateParams);
         when(requestQueryService.findRequestsByAccountIdAndType(accountId, RequestType.PERMIT_REISSUE)).thenReturn(List.of(pr1, pr2, pr3));
+        when(configurationService.getConfigurationByKey("sub_installation_types.cbam.transition.toggle")).thenReturn(Optional.of(ConfigurationDTO.builder().key("sub_installation_types.cbam.transition.toggle").value(true).build()));
 
         //invoke
         TemplateParams result = provider.constructTemplateParams(sourceParams);
@@ -528,7 +534,8 @@ class DocumentTemplatePermitParamsProviderTest {
                 "referenceSources", referenceSources,
                 "analysisMethods", analysisMethods,
                 "transfers", List.of(transfer),
-                "documentIsDraft",false
+                "documentIsDraft",false,
+                "cbamTransition", true
                 )
             )
         );

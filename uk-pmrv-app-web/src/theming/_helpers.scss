@@ -19,6 +19,13 @@ main {
   overflow-wrap: break-word;
 }
 
+// unlike break-word, `anywhere` affects min-content sizing, so long unbroken
+// strings can wrap inside table columns and other shrinkable containers;
+// overflow-wrap is inherited, so the class also covers child component content
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+
 .float-left {
   float: left;
 }

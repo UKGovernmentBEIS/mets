@@ -19,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.netz.api.authorization.AuthorityConstants.VERIFIER_ADMIN_ROLE_CODE;
@@ -109,6 +108,60 @@ class UserReportEntryGeneratorHandlerTest {
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getUserAccountId()).isEqualTo("user1");
         assertThat(result.get(0).getFullName()).isNull();
+    }
+
+    @Test
+    void consolidateByUserId_mergesRolesStatusesAndContactTypes() {
+        UserReportEntry entry1 = UserReportEntry.builder()
+                .userAccountId("user1")
+                .fullName("John Doe")
+                .email("john@example.com")
+                .role("operator")
+                .userAccountStatus("ACTIVE")
+                .contactTypes(List.of("PRIMARY"))
+                .build();
+        UserReportEntry entry2 = UserReportEntry.builder()
+                .userAccountId("user1")
+                .fullName("John Doe")
+                .email("john@example.com")
+                .role("operator_admin")
+                .userAccountStatus("DISABLED")
+                .contactTypes(List.of("SECONDARY", "PRIMARY"))
+                .build();
+        UserReportEntry entry3 = UserReportEntry.builder()
+                .userAccountId("user2")
+                .role("regulator")
+                .userAccountStatus("ACTIVE")
+                .contactTypes(List.of())
+                .build();
+
+        List<UserReportEntry> result = handler.consolidateByUserId(List.of(entry1, entry2, entry3));
+
+        assertThat(result).hasSize(2);
+
+        UserReportEntry consolidated = result.get(0);
+        assertThat(consolidated.getUserAccountId()).isEqualTo("user1");
+        assertThat(consolidated.getRole()).isEqualTo("operator, operator_admin");
+        assertThat(consolidated.getUserAccountStatus()).isEqualTo("ACTIVE, DISABLED");
+        assertThat(consolidated.getContactTypes()).containsExactly("PRIMARY", "SECONDARY");
+
+        assertThat(result.get(1).getUserAccountId()).isEqualTo("user2");
+    }
+
+    @Test
+    void consolidateByUserId_nullRoleAndStatus_clearedToNull() {
+        UserReportEntry entry1 = UserReportEntry.builder()
+                .userAccountId("user1")
+                .role(null)
+                .userAccountStatus(null)
+                .contactTypes(List.of())
+                .build();
+
+        List<UserReportEntry> result = handler.consolidateByUserId(List.of(entry1));
+
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getRole()).isNull();
+        assertThat(result.get(0).getUserAccountStatus()).isNull();
     }
 
     @Test

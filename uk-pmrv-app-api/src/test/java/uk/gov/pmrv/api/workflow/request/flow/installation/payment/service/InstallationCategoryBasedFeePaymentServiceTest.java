@@ -15,6 +15,7 @@ import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.permit.domain.estimatedannualemissions.EstimatedAnnualEmissions;
+import uk.gov.pmrv.api.workflow.payment.domain.PaymentFee;
 import uk.gov.pmrv.api.workflow.payment.domain.PaymentFeeMethod;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeMethodType;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeType;
@@ -67,9 +68,9 @@ class InstallationCategoryBasedFeePaymentServiceTest {
             .payload(requestPayload)
             .build();
         BigDecimal amount = BigDecimal.valueOf(2555.05);
-        Map<FeeType, BigDecimal> fees = new EnumMap<>(FeeType.class);
-        fees.put(CAT_A, amount);
-        fees.put(CAT_B, BigDecimal.TEN);
+        Map<FeeType, PaymentFee> fees = new EnumMap<>(FeeType.class);
+        fees.put(CAT_A, PaymentFee.builder().amount(amount).build());
+        fees.put(CAT_B, PaymentFee.builder().amount(BigDecimal.TEN).build());
         PaymentFeeMethod paymentFeeMethod = PaymentFeeMethod.builder()
             .competentAuthority(competentAuthority)
             .requestType(requestType)

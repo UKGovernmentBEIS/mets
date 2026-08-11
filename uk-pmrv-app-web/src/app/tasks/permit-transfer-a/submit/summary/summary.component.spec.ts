@@ -64,6 +64,8 @@ describe('SummaryComponent', () => {
     tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
 
     expect(page.summaryListValues).toEqual([
+      ['Transferer', 'operator1 EM0001', ''],
+      ['Receiver', 'operator2 EM0002', ''],
       ['Reason for the transfer', 'Reason of transfer', 'Change'],
       ['Files added', 'None', 'Change'],
       ['Actual or estimated date of transfer', govukDatePipe.transform(mockTransferPayload.transferDate), 'Change'],

@@ -76,6 +76,8 @@ describe('SubmittedComponent', () => {
     const govukDatePipe = new GovukDatePipe();
 
     expect(page.summaryListValues).toEqual([
+      ['Transferer', 'operator1 EM0001'],
+      ['Receiver', 'operator2 EM0002'],
       ['Reason for the transfer', 'Reason of transfer'],
       ['Files added', 'None'],
       ['Actual or estimated date of transfer', govukDatePipe.transform(mockTransferPayload.transferDate)],

@@ -64,6 +64,7 @@ describe('SubmitOtpComponent', () => {
     }).compileComponents();
 
     router = TestBed.inject(Router);
+    authService.getLoginUrl.mockResolvedValue('https://keycloak.example/login');
     fixture = TestBed.createComponent(SubmitOtpComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
@@ -144,19 +145,16 @@ describe('SubmitOtpComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith(['error', '404']);
   });
 
-  it('should go to login after clicking link', () => {
-    jest.spyOn(fixture.componentInstance, 'onSignInAgain');
+  it('should have a login link with the correct href', async () => {
     forgotPasswordService.resetPassword.mockReturnValueOnce(of({}));
 
     page.passwordValue = '123456';
     page.submitButton.click();
     fixture.detectChanges();
+    await fixture.whenStable();
     expect(page.errorSummary).toBeFalsy();
 
-    page.link.click();
     fixture.detectChanges();
-
-    expect(component.onSignInAgain).toHaveBeenCalledTimes(1);
-    expect(authService.login).toHaveBeenCalledTimes(1);
+    expect(page.link.href).toBe('https://keycloak.example/login');
   });
 });

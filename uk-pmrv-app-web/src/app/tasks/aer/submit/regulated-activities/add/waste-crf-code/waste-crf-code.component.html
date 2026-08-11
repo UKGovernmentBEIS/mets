@@ -7,9 +7,16 @@
     submitText="Continue"
     [hideSubmit]="(aerService.isEditable$ | async) === false">
     <div formControlName="wasteCrfCategory" govuk-radio>
+      <ng-container govukLegend>
+        <span class="govuk-visually-hidden">Select a waste CRF code for this regulated activity</span>
+      </ng-container>
       <govuk-radio-option [label]="'_5_A' | i18nSelect: activityItemNameMap" value="_5_A">
         <ng-container govukConditionalContent>
           <div formControlName="wasteCrf" govuk-radio>
+            <ng-container govukLegend>
+              <span class="govuk-visually-hidden">{{ '_5_A' | i18nSelect: activityItemNameMap }}</span>
+            </ng-container>
+
             <govuk-radio-option
               value="_5_A_1_A_SOLID_WASTE_DISPOSAL_TO_LAND"
               [label]="'_5_A_1_A' | i18nSelect: activityItemNameMap"></govuk-radio-option>
@@ -19,6 +26,9 @@
       <govuk-radio-option [label]="'_5_B' | i18nSelect: activityItemNameMap" value="_5_B">
         <ng-container govukConditionalContent>
           <div formControlName="wasteCrf" govuk-radio>
+            <ng-container govukLegend>
+              <span class="govuk-visually-hidden">{{ '_5_B' | i18nSelect: activityItemNameMap }}</span>
+            </ng-container>
             <govuk-radio-option
               value="_5_B_1_A_MUNICIPAL_SOLID_WASTE_COMPOSTING"
               [label]="'_5_B_1_A' | i18nSelect: activityItemNameMap"></govuk-radio-option>
@@ -31,6 +41,9 @@
       <govuk-radio-option [label]="'_5_C' | i18nSelect: activityItemNameMap" value="_5_C">
         <ng-container govukConditionalContent>
           <div formControlName="wasteCrf" govuk-radio>
+            <ng-container govukLegend>
+              <span class="govuk-visually-hidden">{{ '_5_C' | i18nSelect: activityItemNameMap }}</span>
+            </ng-container>
             <govuk-radio-option
               value="_5_C_1_1_B_INCINERATION_SEWAGE_SLUDGE"
               [label]="'_5_C_1_1_B' | i18nSelect: activityItemNameMap"></govuk-radio-option>
@@ -52,6 +65,9 @@
       <govuk-radio-option [label]="'_5_D' | i18nSelect: activityItemNameMap" value="_5_D">
         <ng-container govukConditionalContent>
           <div formControlName="wasteCrf" govuk-radio>
+            <ng-container govukLegend>
+              <span class="govuk-visually-hidden">{{ '_5_D' | i18nSelect: activityItemNameMap }}</span>
+            </ng-container>
             <govuk-radio-option
               value="_5_D_1_DOMESTIC"
               [label]="'_5_D_1' | i18nSelect: activityItemNameMap"></govuk-radio-option>

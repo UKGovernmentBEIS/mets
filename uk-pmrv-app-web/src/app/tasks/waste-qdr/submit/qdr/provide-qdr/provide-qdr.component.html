@@ -24,6 +24,11 @@
         </ul>
 
         <div formControlName="reportProvided" govuk-radio>
+          <ng-container govukLegend>
+            <span class="govuk-visually-hidden">
+              Will you provide a quarterly data report for {{ metadata.quarter | quarterName }} {{ metadata.year }}?
+            </span>
+          </ng-container>
           <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
           <govuk-radio-option [value]="false" label="No">
             <ng-container govukConditionalContent>

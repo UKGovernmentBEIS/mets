@@ -5,6 +5,7 @@
     [files]="uploadedFiles$ | async"
     [isDisabled]="isDisabled"
     [headerSize]="headerSize"></app-file-upload-list>
+  <div aria-live="assertive" class="govuk-visually-hidden" role="alert">{{ uploadErrorText$ | async }}</div>
 
   <label [for]="id" class="govuk-label" id="{{ 'l.' + id }}" [ngClass]="headerSize ? 'govuk-label--' + headerSize : ''">
     {{ label }}

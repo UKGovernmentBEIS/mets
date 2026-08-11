@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterModule, Routes } from '@angular/router';
 
 import { isFeatureEnabled } from '@core/config/feature.guard';
 import { PendingRequestGuard } from '@core/guards/pending-request.guard';
@@ -9,9 +9,13 @@ import { AccountsUsersContactsComponent } from './accounts-users-contacts/accoun
 import { AddCustomReportComponent } from './add-custom-report/add-custom-report.component';
 import { CompletedWorkComponent } from './completed-work/completed-work.component';
 import { MiReportsListGuard } from './core/mi-reports-list.guard';
+import { canManageCustomReports } from './core/mi-reports-permission.guard';
 import { CustomReportComponent } from './custom/custom.component';
+import { DeleteCustomReportComponent } from './delete-custom-report/delete-custom-report.component';
+import { EditCustomReportComponent } from './edit-custom-report/edit-custom-report.component';
 import { MiReportsComponent } from './mi-reports.component';
 import { RegulatorOutstandingRequestTasksComponent } from './regulator-outstanding-request-tasks/regulator-outstanding-request-tasks.component';
+import { ReportHistoryComponent } from './report-history/report-history.component';
 import { UsersForServiceAuthorityComponent } from './users-for-service-authority/users-for-service-authority.component';
 import { VerificationBodiesUsersComponent } from './verification-bodies-users/verification-bodies-users.component';
 import { ViewCustomReportComponent } from './view-custom-report/view-custom-report.component';
@@ -26,18 +30,42 @@ const routes: Routes = [
   },
   {
     path: 'add-custom-report',
-    data: { breadcrumb: 'Add a custom report', backlink: '../' },
-    canMatch: [isFeatureEnabled('reportingImprovementsEnabled')],
+    data: { hideBreadcrumb: true, backlink: '../' },
+    canMatch: [isFeatureEnabled('reportingImprovementsEnabled'), canManageCustomReports()],
     canDeactivate: [PendingRequestGuard],
     component: AddCustomReportComponent,
   },
   {
+    path: 'edit-custom-report/:id',
+    data: { hideBreadcrumb: true, backlink: ({ backlinkUrl }: { backlinkUrl: string }) => backlinkUrl },
+    canMatch: [isFeatureEnabled('reportingImprovementsEnabled'), canManageCustomReports()],
+    canDeactivate: [PendingRequestGuard],
+    resolve: {
+      report: viewCustomReportResolver,
+      backlinkUrl: (route: ActivatedRouteSnapshot) => `../../view-custom-report/${route.paramMap.get('id')}`,
+    },
+    component: EditCustomReportComponent,
+  },
+  {
     path: 'view-custom-report/:id',
-    data: { breadcrumb: 'View custom report', backlink: '../../' },
+    data: { breadcrumb: 'View custom report' },
     canMatch: [isFeatureEnabled('reportingImprovementsEnabled')],
     canDeactivate: [PendingRequestGuard],
     resolve: { report: viewCustomReportResolver },
     component: ViewCustomReportComponent,
+  },
+  {
+    path: 'view-custom-report/:id/history',
+    data: { breadcrumb: 'Report history' },
+    canMatch: [isFeatureEnabled('reportingImprovementsEnabled')],
+    component: ReportHistoryComponent,
+  },
+  {
+    path: 'view-custom-report/:id/delete',
+    data: { breadCrumb: false, backlink: '../' },
+    canMatch: [isFeatureEnabled('reportingImprovementsEnabled'), canManageCustomReports()],
+    canDeactivate: [PendingRequestGuard],
+    component: DeleteCustomReportComponent,
   },
   {
     path: 'accounts-users-contacts',

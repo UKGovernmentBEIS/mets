@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PermitTransferOperatorInfo } from './permitTransferOperatorInfo';
 
 export interface PermitTransferAApplicationSubmittedRequestActionPayloadAllOf {
   reason?: string;
@@ -18,5 +19,7 @@ export interface PermitTransferAApplicationSubmittedRequestActionPayloadAllOf {
   aerLiable?: 'TRANSFERER' | 'RECEIVER';
   alrLiable?: 'TRANSFERER' | 'RECEIVER';
   transferCode?: string;
+  transferrer?: PermitTransferOperatorInfo;
+  receiver?: PermitTransferOperatorInfo;
   transferAttachments?: { [key: string]: string };
 }

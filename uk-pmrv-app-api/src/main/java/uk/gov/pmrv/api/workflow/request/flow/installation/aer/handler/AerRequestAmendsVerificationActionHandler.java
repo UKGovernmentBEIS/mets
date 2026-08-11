@@ -32,7 +32,7 @@ public class AerRequestAmendsVerificationActionHandler implements RequestTaskAct
                         AppUser appUser,
                         AerApplicationRequestVerificationRequestTaskActionPayload payload) {
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
-        requestAerSubmitService.sendAmendsToVerifier(payload, requestTask, appUser);
+        requestAerSubmitService.sendAmendsToVerifier(requestTask, appUser);
 
         // Complete task
         workflowService.completeTask(requestTask.getProcessTaskId(),

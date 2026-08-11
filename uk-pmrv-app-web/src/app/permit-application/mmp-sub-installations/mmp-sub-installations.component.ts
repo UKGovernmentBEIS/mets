@@ -27,6 +27,8 @@ export class MmpSubInstallationsComponent implements PendingRequest {
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));
   competentAuthority: RequestInfoDTO['competentAuthority'] = this.store.getState().competentAuthority;
   isEditable$ = this.store.pipe(map((state) => state.isEditable));
+  isTask = toSignal(this.store.pipe(map((state) => state.isRequestTask)));
+  creationDate = toSignal(this.store.pipe(map((state) => state.requestActionCreationDate)));
 
   getSubInstallationTypesDetails$ = this.subInstallationTypesService
     .getSubInstallationTypesDetails()
@@ -76,11 +78,14 @@ export class MmpSubInstallationsComponent implements PendingRequest {
     }),
   );
 
-  private readonly subInstallationTypesDetails = toSignal(this.getSubInstallationTypesDetails$);
+  readonly subInstallationTypesDetails = toSignal(this.getSubInstallationTypesDetails$);
 
-  columns: Signal<GovukTableColumn<any>[]> = computed(() => {
+  cbamEnabled: Signal<boolean> = computed(() => {
     const subDetails = this.subInstallationTypesDetails();
-    const cbamToggle = subDetails.find(
+    const isTask = this.isTask();
+    const creationDate = this.creationDate();
+
+    const cbamToggle = subDetails.some(
       (item) =>
         (item.subInstallationType == 'HYDROGEN_CBAM' && item.valid) ||
         (item.subInstallationType == 'HYDROGEN_NON_CBAM' && item.valid) ||
@@ -94,17 +99,22 @@ export class MmpSubInstallationsComponent implements PendingRequest {
         (item.subInstallationType == 'PROCESS_EMISSIONS_CL_NON_CBAM' && item.valid),
     );
 
-    return cbamToggle
+    return isTask ? !!cbamToggle : new Date(creationDate) > new Date('2027-01-01T00:00:00.000Z');
+  });
+
+  columns: Signal<GovukTableColumn<any>[]> = computed(() => {
+    const cbam = this.cbamEnabled();
+    return cbam
       ? [
           { field: 'type', header: 'Sub-installation type', widthClass: 'govuk-!-width-one-quarter' },
-          { field: 'carbon', header: 'Carbon leakage', widthClass: 'govuk-!-width--one-quarter' },
-          { field: 'coveredByUKCBAM', header: 'Covered by UK CBAM', widthClass: 'govuk-!-width--one-quarter' },
+          { field: 'carbon', header: 'Carbon leakage', widthClass: 'govuk-!-width-one-quarter' },
+          { field: 'coveredByUKCBAM', header: 'Covered by UK CBAM', widthClass: 'govuk-!-width-one-quarter' },
           { field: 'action', header: '', widthClass: 'govuk-input--width-10' },
           { field: 'status', header: '' },
         ]
       : [
           { field: 'type', header: 'Sub-installation type', widthClass: 'govuk-!-width-one-quarter' },
-          { field: 'carbon', header: 'Carbon leakage', widthClass: 'govuk-!-width--one-quarter' },
+          { field: 'carbon', header: 'Carbon leakage', widthClass: 'govuk-!-width-one-quarter' },
           { field: 'action', header: '', widthClass: 'govuk-!-width-one-quarter' },
           { field: 'status', header: '', widthClass: 'govuk-!-width-one-quarter' },
         ];

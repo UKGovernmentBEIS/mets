@@ -1,0 +1,78 @@
+@if (isErrorSummaryDisplayed$ | async) {
+  <govuk-error-summary [form]="form"></govuk-error-summary>
+}
+
+<app-page-heading size="l" [caption]="report.reportName" class="overflow-wrap-anywhere">Edit report</app-page-heading>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div
+        formControlName="reportName"
+        govuk-text-input
+        label="Report name"
+        labelSize="small"
+        [maxLength]="255"
+        hint="Use a clear, specific name - for example 'Active installations by permit type and region'"></div>
+
+      <div
+        formControlName="categories"
+        app-multi-select
+        label="Categories"
+        hint="Choose the category that best describes this report">
+        @for (category of (categoryOptions$ | async) ?? []; track category.value) {
+          <div [itemValue]="category.value.toString()" [label]="category.text" app-multi-select-item></div>
+        }
+      </div>
+
+      <div
+        formControlName="description"
+        govuk-textarea
+        label="Description"
+        labelSize="small"
+        rows="4"
+        [maxLength]="2000"
+        hint="Explain what the report returns, which fields are included, and when a regulator might use it"></div>
+
+      <div
+        formControlName="queryDefinition"
+        govuk-textarea
+        label="SQL Query"
+        labelSize="small"
+        rows="10"
+        [maxLength]="10000"
+        hint="Enter a valid read-only SELECT query. INSERT, UPDATE, DELETE and DROP statements are not permitted"></div>
+
+      <button appPendingButton type="button" govukSecondaryButton (click)="onPreview()">Preview results</button>
+    </div>
+
+    <div class="govuk-grid-column-one-third">
+      <h2 class="govuk-heading-s">Guidance</h2>
+      <ul class="govuk-list">
+        <!-- TODO: replace placeholder hrefs with real guidance URLs -->
+        <li><a govukLink href="#">SQL query guidelines for METS</a></li>
+        <li><a govukLink href="#">Category definitions</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <app-custom-report-preview [preview]="previewResult$ | async"></app-custom-report-preview>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div
+        formControlName="reasonForChange"
+        govuk-textarea
+        label="Reason for change"
+        labelSize="small"
+        rows="4"
+        [maxLength]="2000"
+        hint="Explain why you are changing this report"></div>
+
+      <div class="govuk-button-group">
+        <button appPendingButton type="submit" govukButton>Save report</button>
+        <a govukLink class="cancel-edit" [routerLink]="['../../view-custom-report', reportId]">Cancel</a>
+      </div>
+    </div>
+  </div>
+</form>

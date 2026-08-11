@@ -1,17 +1,18 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-page-heading',
-  standalone: false,
   template: `
-    <span [class]="'govuk-caption-' + size" *ngIf="caption">{{ caption }}</span>
-    <h1 [class]="'govuk-heading-' + size">
+    @if (caption()) {
+      <span [class]="'govuk-caption-' + size()">{{ caption() }}</span>
+    }
+    <h1 [class]="'govuk-heading-' + size()">
       <ng-content></ng-content>
     </h1>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageHeadingComponent {
-  @Input() caption: string;
-  @Input() size: 'l' | 'xl' = 'l';
+  readonly caption = input<string>();
+  readonly size = input<'l' | 'xl'>('l');
 }

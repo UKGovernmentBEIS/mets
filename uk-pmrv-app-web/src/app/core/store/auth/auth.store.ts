@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Signal } from '@angular/core';
 
-import { AuthState, initialState } from '@core/store/auth/auth.state';
+import { AccountType, AuthState, initialState } from '@core/store/auth/auth.state';
 import { KeycloakProfile } from 'keycloak-js';
 
 import { UserDTO, UserTermsVersionDTO } from 'pmrv-api';
@@ -10,6 +10,9 @@ import { UserState } from './auth.state';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore extends Store<AuthState> {
+  readonly currentDomain: Signal<AccountType> = this.selectSignal('currentDomain');
+  readonly user: Signal<UserDTO> = this.selectSignal('user');
+
   constructor() {
     super(initialState);
   }

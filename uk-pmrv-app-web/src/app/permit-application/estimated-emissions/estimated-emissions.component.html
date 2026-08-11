@@ -30,6 +30,7 @@
       label="What is the installation’s estimated annual CO2e?"
       suffix="tonnes CO2e"
       widthClass="govuk-input--width-10"
+      autoComplete="off"
       class="govuk-!-margin-top-6"></div>
     <ng-container *ngIf="(store | async)?.permitType === 'GHGE' || (store | async)?.permitType === 'WASTE'">
       <div govukInsetText *ngIf="category$ | async as category">

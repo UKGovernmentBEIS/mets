@@ -49,7 +49,7 @@
         <div class="govuk-summary-list">
           <ng-container *ngIf="productBenchmarks?.length > 0">
             <h2 class="govuk-heading-m">Sub-installations with product benchmarks</h2>
-            <govuk-table [columns]="columns" [data]="productBenchmarks">
+            <govuk-table [columns]="columns()" [data]="productBenchmarks ?? []">
               <ng-template let-column="column" let-row="row" let-index="index">
                 <ng-container [ngSwitch]="column.field">
                   <ng-container *ngSwitchCase="'type'">
@@ -65,6 +65,9 @@
                   <ng-container *ngSwitchCase="'carbon'">
                     {{ row.subInstallationType | carbonLeakage }}
                   </ng-container>
+                  <ng-container *ngSwitchCase="'coveredByUKCBAM'">
+                    {{ row.coveredByUKCBAM ? 'Yes' : 'No' }}
+                  </ng-container>
                   <ng-container *ngSwitchCase="'status'">
                     <app-task-status-tag
                       [status]="
@@ -78,7 +81,7 @@
 
           <ng-container *ngIf="fallbackApproaches?.length > 0">
             <h2 class="govuk-heading-m">Sub-installations with fallback approaches</h2>
-            <govuk-table [columns]="columns" [data]="fallbackApproaches">
+            <govuk-table [columns]="columns()" [data]="fallbackApproaches">
               <ng-template let-column="column" let-row="row" let-index="index">
                 <ng-container [ngSwitch]="column.field">
                   <ng-container *ngSwitchCase="'type'">
@@ -95,6 +98,9 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'carbon'">
                     {{ row.subInstallationType | carbonLeakage }}
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'coveredByUKCBAM'">
+                    {{ row.coveredByUKCBAM ? 'Yes' : 'No' }}
                   </ng-container>
                   <ng-container *ngSwitchCase="'status'">
                     <app-task-status-tag
@@ -166,8 +172,8 @@
         contentTpl;
         context: {
           $implicit: true,
-          productBenchmarks: originalProductBenchmarks$ | async,
-          fallbackApproaches: originalFallbackApproaches$ | async,
+          productBenchmarks: originalProductBenchmarks(),
+          fallbackApproaches: originalFallbackApproaches(),
         }
       "></ng-container>
     <ng-container
@@ -176,8 +182,8 @@
         contentTpl;
         context: {
           $implicit: false,
-          productBenchmarks: productBenchmarks$ | async,
-          fallbackApproaches: fallbackApproaches$ | async,
+          productBenchmarks: productBenchmarks(),
+          fallbackApproaches: fallbackApproaches(),
         }
       "></ng-container>
   </app-highlight-diff>
@@ -186,8 +192,8 @@
     [ngTemplateOutlet]="contentTpl"
     [ngTemplateOutletContext]="{
       $implicit: false,
-      productBenchmarks: productBenchmarks$ | async,
-      fallbackApproaches: fallbackApproaches$ | async,
+      productBenchmarks: productBenchmarks(),
+      fallbackApproaches: fallbackApproaches(),
     }"></ng-container>
 
   <app-review-group-decision-container

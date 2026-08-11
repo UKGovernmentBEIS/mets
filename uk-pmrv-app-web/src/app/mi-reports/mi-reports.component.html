@@ -1,8 +1,9 @@
 @let reportingImprovementsEnabled = reportingImprovementsEnabled$ | async;
+@let canManageCustomReports = canManageCustomReports$ | async;
 
 @if (notification) {
   <govuk-notification-banner type="success">
-    <h1 class="govuk-notification-banner__heading">Report saved</h1>
+    <h1 class="govuk-notification-banner__heading">{{ notification }}</h1>
   </govuk-notification-banner>
 }
 
@@ -11,7 +12,7 @@
     <app-page-heading size="xl">MI Reports</app-page-heading>
   </div>
 
-  @if (reportingImprovementsEnabled) {
+  @if (reportingImprovementsEnabled && canManageCustomReports) {
     <div class="govuk-grid-column-one-quarter">
       <button govukButton type="button" routerLink="./add-custom-report" class="add-custom-report">
         Add a custom report
@@ -34,8 +35,43 @@
 <ng-template #customTemplate>
   @let customData = (customCurrentPageData$ | async) || [];
   @let selectedCategory = selectedCategory$ | async;
+  @let showFavouritesOnly = showFavouritesOnly$ | async;
 
-  <div class="govuk-grid-row govuk-!-margin-bottom-4">
+  <div class="govuk-grid-row govuk-!-margin-bottom-4 custom-reports-filters">
+    <div class="govuk-grid-column-one-third">
+      <label for="searchTerm" class="govuk-label">Search by report name or description</label>
+      <div class="gem-c-search__item-wrapper">
+        <div class="js-search-input-wrapper">
+          <input
+            id="searchTerm"
+            type="search"
+            class="govuk-input"
+            maxlength="256"
+            [ngModel]="searchTerm$ | async"
+            (ngModelChange)="onSearchTermChange($event)" />
+        </div>
+        <button
+          govukButton
+          class="gem-c-search__submit"
+          type="button"
+          enterkeyhint="search"
+          focusable="false"
+          aria-label="Search">
+          <svg
+            class="gem-c-search__icon"
+            width="27"
+            height="27"
+            viewBox="0 0 27 27"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            focusable="false">
+            <circle cx="12.0161" cy="11.0161" r="8.51613" stroke="currentColor" stroke-width="3"></circle>
+            <line x1="17.8668" y1="17.3587" x2="26.4475" y2="25.9393" stroke="currentColor" stroke-width="3"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
     <div class="govuk-grid-column-one-third">
       <label for="filterByCategory" class="govuk-label">Filter by category</label>
       <select
@@ -49,10 +85,23 @@
         }
       </select>
     </div>
+    <div class="govuk-grid-column-one-third">
+      <div class="govuk-checkboxes govuk-checkboxes--small">
+        <div class="govuk-checkboxes__item">
+          <input
+            id="showFavouritesOnly"
+            type="checkbox"
+            class="govuk-checkboxes__input"
+            [ngModel]="showFavouritesOnly"
+            (ngModelChange)="onShowFavouritesOnlyChange($event)" />
+          <label for="showFavouritesOnly" class="govuk-label govuk-checkboxes__label">Show only my favourites</label>
+        </div>
+      </div>
+    </div>
   </div>
 
   @if (customData.length > 0) {
-    <govuk-table [columns]="customTableColumns" [data]="customData">
+    <govuk-table class="app-table-wrap-anywhere" [columns]="customTableColumns" [data]="customData">
       <ng-template let-column="column" let-row="row">
         <ng-container [ngSwitch]="column.field">
           <ng-container *ngSwitchCase="'reportName'">
@@ -69,10 +118,10 @@
     </govuk-table>
 
     <app-pagination
-      (currentPageChange)="customCurrentPage$.next($event)"
-      [count]="customTotalPages$ | async"
+      (currentPageChange)="onPageChange($event)"
+      [count]="total$ | async"
       [pageSize]="pageSize"></app-pagination>
-  } @else if (selectedCategory) {
+  } @else if (selectedCategory || showFavouritesOnly || (searchTerm$ | async)) {
     <p class="govuk-body">There are no matching reports.</p>
     <p class="govuk-body">Improve your results by:</p>
     <ul class="govuk-list govuk-list--bullet">

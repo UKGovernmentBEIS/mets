@@ -21,6 +21,7 @@ import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermission
 import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel.EXECUTE;
 import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel.NONE;
 import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel.VIEW_ONLY;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_MI_REPORTS_MANAGE_CUSTOM_REPORTS_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AER_APPLICATION_MARK_NOT_REQUIRED_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AER_APPLICATION_REVIEW_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AER_APPLICATION_REVIEW_VIEW_TASK;
@@ -149,25 +150,33 @@ import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_HSE_
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_ALR_APPLICATION_MARK_NOT_REQUIRED_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_WASTE_QDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK;
+
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.AVIATION_ACCOUNT_CLOSURE;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.AVIATION_AER_3YEAR_PERIOD_OFFSETTING;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.AVIATION_AER_ANNUAL_OFFSETTING;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_ALR;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_BDRS2;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_AER;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_ALR;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.MI_REPORTS_MANAGE_CUSTOM;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_ALR;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_AER_ANNUAL_OFFSETTING;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_DOE_CORSIA;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_DRE;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_NON_COMPLIANCE;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_BDR;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_BDRS2;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_DOAL;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_DRE;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_EMP_APPLICATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_EMP_VARIATION;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_HSE_TI;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_INSTALLATION_AUDIT;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_INSTALLATION_ONSITE_INSPECTION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_NER;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_NON_COMPLIANCE;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_PERMANENT_CESSATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_PERMIT_APPLICATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_PERMIT_NOTIFICATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_PERMIT_REVOCATION;
@@ -188,33 +197,27 @@ import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermis
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.REVIEW_PERMIT_SURRENDER;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.REVIEW_PERMIT_TRANSFER;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.REVIEW_VIR;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_ALR_REVIEW;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_AVIATION_DOE_CORSIA;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_AVIATION_DRE;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_AVIATION_NON_COMPLIANCE;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_BDRS2_REVIEW;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_BDR_REVIEW;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_DOAL;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_DRE;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_EMP_BATCH_REISSUE;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_HSE_TI_REVIEW;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_INSTALLATION_AUDIT;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_INSTALLATION_ONSITE_INSPECTION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_NON_COMPLIANCE;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_PERMANENT_CESSATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_PERMIT_BATCH_REISSUE;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_PERMIT_REVOCATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_RETURN_OF_ALLOWANCES;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_REVIEW_EMP_VARIATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_REVIEW_PERMIT_VARIATION;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_WITHHOLDING_OF_ALLOWANCES;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_BDR;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_HSE_TI;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_PERMANENT_CESSATION;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_PERMANENT_CESSATION;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_BDR_REVIEW;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_BDRS2_REVIEW;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_BDRS2;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.BULK_DOWNLOAD_BDRS2;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_ALR_REVIEW;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_ALR;
-import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_HSE_TI_REVIEW;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_WASTE_QDR_REVIEW;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_WITHHOLDING_OF_ALLOWANCES;
 
 @Component
 public class PmrvRegulatorPermissionsAdapter extends AbstarctRegulatorPermissionsAdapter implements InitializingBean {
@@ -907,6 +910,14 @@ public class PmrvRegulatorPermissionsAdapter extends AbstarctRegulatorPermission
 				new RegulatorPermissionGroupLevel(SUBMIT_EMP_BATCH_REISSUE, EXECUTE),
 				List.of(PERM_EMP_BATCH_REISSUE_SUBMIT_VIEW_TASK,
 						PERM_EMP_BATCH_REISSUE_SUBMIT_EXECUTE_TASK));
+
+        // MI REPORTS CUSTOM REPORTS
+        permissionGroupLevelsConfig.put(
+                new RegulatorPermissionGroupLevel(MI_REPORTS_MANAGE_CUSTOM, NONE),
+                List.of());
+        permissionGroupLevelsConfig.put(
+                new RegulatorPermissionGroupLevel(MI_REPORTS_MANAGE_CUSTOM, EXECUTE),
+                List.of(PERM_MI_REPORTS_MANAGE_CUSTOM_REPORTS_EXECUTE_TASK));
 
     }
 

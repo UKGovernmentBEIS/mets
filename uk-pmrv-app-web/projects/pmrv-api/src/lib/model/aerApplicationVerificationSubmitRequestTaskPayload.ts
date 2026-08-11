@@ -30,5 +30,6 @@ export interface AerApplicationVerificationSubmitRequestTaskPayload extends Requ
   sm3UnitEnabled?: boolean;
   isVerifierAerTaskContentUpdate?: boolean;
   verificationReport?: AerVerificationReport;
+  verificationBodyId?: number;
   verificationAttachments?: { [key: string]: string };
 }

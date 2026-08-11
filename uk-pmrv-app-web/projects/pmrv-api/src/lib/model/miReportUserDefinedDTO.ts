@@ -17,4 +17,5 @@ export interface MiReportUserDefinedDTO {
   queryDefinition: string;
   categories?: Array<MiReportUserDefinedCategoryDTO>;
   lastUpdatedOn?: string;
+  favourite?: boolean;
 }

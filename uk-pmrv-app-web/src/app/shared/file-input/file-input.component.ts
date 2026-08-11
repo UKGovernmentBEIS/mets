@@ -11,7 +11,18 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, FormGroupDirective, NgControl, NgForm, UntypedFormControl } from '@angular/forms';
 
-import { BehaviorSubject, combineLatest, filter, map, merge, Observable, startWith, tap, withLatestFrom } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  filter,
+  map,
+  merge,
+  Observable,
+  startWith,
+  tap,
+  withLatestFrom,
+} from 'rxjs';
 
 import { FormService } from 'govuk-components';
 
@@ -42,6 +53,7 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
   @Input() fileNameTransformer!: (file: File | null) => File | null;
 
   uploadedFiles$: Observable<FileUploadEvent[]>;
+  uploadErrorText$: Observable<string>;
   isDisabled: boolean;
   onFileBlur: () => any;
 
@@ -76,14 +88,20 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit(): void {
+    const errors$ = this.control.statusChanges.pipe(
+      map(() => this.control.errors),
+      startWith(this.control.errors),
+    );
+
+    this.uploadErrorText$ = errors$.pipe(
+      map((errors) => (errors ? Object.values(errors).join('. ') : '')),
+      distinctUntilChanged(),
+    );
+
     this.uploadedFiles$ = merge(
-      combineLatest([
-        this.value$.pipe(map((value) => (value ? { ...value, progress: null } : null))),
-        this.control.statusChanges.pipe(
-          map(() => this.control.errors),
-          startWith(this.control.errors),
-        ),
-      ]).pipe(map(([value, errors]) => (value ? { ...value, errors } : null))),
+      combineLatest([this.value$.pipe(map((value) => (value ? { ...value, progress: null } : null))), errors$]).pipe(
+        map(([value, errors]) => (value ? { ...value, errors } : null)),
+      ),
       this.fileUploadService.uploadProgress$.pipe(
         withLatestFrom(this.value$),
         filter(([fileEvent, value]) => fileEvent.file === value?.file),

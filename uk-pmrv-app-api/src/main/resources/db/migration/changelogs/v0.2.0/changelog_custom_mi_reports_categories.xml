@@ -23,4 +23,20 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_2_0_create_mi_report_user_defined_account_type" author="mitzelose@unisystens.gr">
+        <createTable tableName="mi_report_user_defined_account_type">
+            <column name="mi_report_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"
+                             foreignKeyName="fk_mrud_account_type_report"
+                             references="mi_report_user_defined(id)" deleteCascade="true"/>
+            </column>
+            <column name="account_type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="mi_report_user_defined_account_type"/>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

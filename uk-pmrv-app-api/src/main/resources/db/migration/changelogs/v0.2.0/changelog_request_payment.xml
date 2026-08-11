@@ -321,4 +321,33 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_2_0_add_changeable_column_to_request_payment_fee" author="vasileios.vitzilaios@keyes.eu">
+        <addColumn tableName="request_payment_fee">
+            <column name="changeable" type="boolean" defaultValueBoolean="true" remarks="Whether this fee entry is changeable from external requests and visible on the Settings Fees page">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <sql>
+            UPDATE request_payment_fee SET changeable = false WHERE amount = 0;
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE request_payment_fee SET changeable = true WHERE amount = 0;
+            </sql>
+            <dropColumn tableName="request_payment_fee" columnName="changeable"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_add_scheduled_columns_to_request_payment_fee" author="vasileios.vitzilaios@keyes.eu">
+        <addColumn tableName="request_payment_fee">
+            <column name="scheduled_amount" type="numeric(19,2)" remarks="Fee amount scheduled to take effect on the scheduled date"/>
+            <column name="scheduled_date" type="date" remarks="Date on which the scheduled fee amount will take effect"/>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="request_payment_fee" columnName="scheduled_amount"/>
+            <dropColumn tableName="request_payment_fee" columnName="scheduled_date"/>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

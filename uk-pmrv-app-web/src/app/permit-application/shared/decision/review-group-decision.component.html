@@ -5,6 +5,9 @@
     <h2 class="govuk-heading-m">What is your decision on the information submitted?</h2>
 
     <div formControlName="decision" govuk-radio>
+      <ng-container govukLegend>
+        <span class="govuk-visually-hidden">What is your decision on the information submitted?</span>
+      </ng-container>
       <govuk-radio-option value="ACCEPTED" label="Accepted"></govuk-radio-option>
 
       <govuk-radio-option value="REJECTED" label="Rejected"></govuk-radio-option>
@@ -34,7 +37,7 @@
                 #removeButton>
                 Remove
               </button>
-              <div govuk-textarea [maxLength]="10000" formControlName="reason"></div>
+              <div govuk-textarea [maxLength]="10000" formControlName="reason" class="govuk-!-margin-bottom-6"></div>
 
               <app-multiple-file-input
                 [baseDownloadUrl]="getDownloadUrl()"

@@ -14,6 +14,7 @@ import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/fo
 import {
   BehaviorSubject,
   combineLatest,
+  distinctUntilChanged,
   filter,
   map,
   Observable,
@@ -55,6 +56,7 @@ export class MultipleFileInputComponent implements ControlValueAccessor, OnInit 
   @ViewChild('input') fileInput: ElementRef<HTMLInputElement>;
 
   uploadStatusText$ = new Subject<string>();
+  uploadErrorText$: Observable<string>;
   uploadedFiles$: Observable<FileUploadEvent[]>;
   isFocused = false;
   isDraggedOver = false;
@@ -80,15 +82,21 @@ export class MultipleFileInputComponent implements ControlValueAccessor, OnInit 
   }
 
   ngOnInit(): void {
+    const errors$ = this.control.statusChanges.pipe(
+      startWith(this.control.status),
+      filter((status) => status !== 'PENDING'),
+      map(() => this.control.errors),
+      startWith(this.control.errors),
+    );
+
+    this.uploadErrorText$ = errors$.pipe(
+      map((errors) => (errors ? Object.values(errors).join('. ') : '')),
+      distinctUntilChanged(),
+    );
+
     this.uploadedFiles$ = combineLatest([
       this.value$,
-      this.control.statusChanges.pipe(
-        startWith(this.control.status),
-        //as we now have async validators we should update errors on final statuses (VALID, INVALID)
-        filter((status) => status !== 'PENDING'),
-        map(() => this.control.errors),
-        startWith(this.control.errors),
-      ),
+      errors$,
       this.fileUploadService.uploadProgress$.pipe(
         withLatestFrom(this.value$),
         filter(([uploadEvent, value]) => value?.some(({ file }) => file === uploadEvent.file)),

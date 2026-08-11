@@ -38,7 +38,7 @@ public class DigitizedPlan {
 
     @Builder.Default
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @Size(max = 17)
+    @Size(max = 20)
     private List<@Valid @NotNull SubInstallation> subInstallations = new ArrayList<>();
 
     @Valid

@@ -43,6 +43,7 @@ import { saveNotFoundRegulatorError } from '../errors/business-error';
   selector: 'app-details',
   standalone: false,
   templateUrl: './details.component.html',
+  styleUrl: './details.component.scss',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -196,6 +197,7 @@ export class DetailsComponent implements OnInit {
       SUBMIT_BDRS2_REVIEW: ['NONE'],
       PEER_REVIEW_BDRS2: ['NONE'],
       BULK_DOWNLOAD_BDRS2: ['NONE'],
+      MI_REPORTS_MANAGE_CUSTOM: ['NONE'],
     }),
   });
 
@@ -538,6 +540,11 @@ export class DetailsComponent implements OnInit {
       type: 'BDR stage 2',
     },
     { permission: 'BULK_DOWNLOAD_BDRS2', task: 'Download', type: 'BDR stage 2 bulk download' },
+    {
+      permission: 'MI_REPORTS_MANAGE_CUSTOM',
+      task: 'Manage custom reports',
+      type: 'MI reports',
+    },
   ];
 
   private readonly configFeatures$ = this.configStore.asObservable().pipe(map((state) => state.features));

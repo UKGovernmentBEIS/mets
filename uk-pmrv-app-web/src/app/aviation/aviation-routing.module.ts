@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { isFeatureEnabled } from '@core/config/feature.guard';
 import { AviationAuthGuard } from '@core/guards/aviation-auth.guard';
 import { DashboardPageComponent } from '@shared/dashboard';
 
+import { hasAccessibleSettings } from '../settings/core/settings-permission.guard';
 import { RoleTypeGuard } from '../shared/guards/role-type.guard';
 
 const routes: Routes = [
@@ -42,6 +44,12 @@ const routes: Routes = [
     path: 'templates',
     data: { breadcrumb: 'Templates' },
     loadChildren: () => import('../templates/templates.module').then((m) => m.TemplatesModule),
+  },
+  {
+    path: 'settings',
+    data: { breadcrumb: 'Settings' },
+    canMatch: [isFeatureEnabled('settings'), hasAccessibleSettings('AVIATION')],
+    loadChildren: () => import('../settings/settings.routes').then((m) => m.SETTINGS_ROUTES),
   },
   {
     path: 'user',

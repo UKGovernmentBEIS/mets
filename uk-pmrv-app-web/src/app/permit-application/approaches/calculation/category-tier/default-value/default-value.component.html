@@ -2,26 +2,23 @@
   *ngIf="
     ('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async]
       .sourceStreamCategory as sourceStreamCategory
-  "
->
+  ">
   <app-permit-task
     *ngIf="sourceStreamCategory.sourceStream | findSourceStream | async as sourceStream"
     [breadcrumb]="[
       {
         text: 'CALCULATION_CO2' | monitoringApproachDescription,
-        link: ['calculation']
+        link: ['calculation'],
       },
       {
         text: sourceStream | tierSourceStreamName: sourceStreamCategory,
-        link: ['calculation', 'category-tier', index$ | async]
-      }
-    ]"
-  >
+        link: ['calculation', 'category-tier', index$ | async],
+      },
+    ]">
     <ng-container
       *ngIf="
         ('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async] as tier
-      "
-    >
+      ">
       <app-wizard-step
         [showBackLink]="true"
         (formSubmit)="onContinue()"
@@ -29,8 +26,7 @@
         caption="{{ 'CALCULATION_CO2' | monitoringApproachDescription }}, {{ tier | sourceStreamCategoryName | async }}"
         heading="Are you applying a default value for the {{ statusKey | subtaskName | lowercase }}?"
         submitText="Continue"
-        [hideSubmit]="(store.isEditable$ | async) === false"
-      >
+        [hideSubmit]="(store.isEditable$ | async) === false">
         <div class="govuk-hint">
           If you are using a default value for your calculation factor, select 'Yes' and provide the source of that
           value.
@@ -39,8 +35,11 @@
           If you are using sampling and analysis to determine your calculation factor, select 'No'.
         </div>
         <div formControlName="defaultValueApplied" govuk-radio legendSize="medium">
-          <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
-          <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+          <span govukLegend class="govuk-visually-hidden">
+            Are you applying a default value for the {{ statusKey | subtaskName | lowercase }}?
+          </span>
+          <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+          <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
         </div>
       </app-wizard-step>
       <a govukLink routerLink="../..">Return to: {{ tier | sourceStreamCategoryName | async }}</a>

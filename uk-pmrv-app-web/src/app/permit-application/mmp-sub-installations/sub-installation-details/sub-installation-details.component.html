@@ -12,10 +12,21 @@
       submitText="Continue">
       <div class="govuk-!-width-two-thirds">
         <h2 class="govuk-heading-m">Choose a product benchmark</h2>
-        <p class="govuk-caption-m">
-          Only one sub-installation can be chosen for each type of product. Similar products which are covered by the
-          same product benchmark in Annex I of the Free Allocation Regulation (FAR) are aggregated.
-        </p>
+
+        @if (cbamEnabled$ | async) {
+          <p class="govuk-caption-m">
+            Each product benchmark can only have one sub-installation, unless there is a UK CBAM split.
+          </p>
+          <p class="govuk-caption-m">
+            Similar products which are covered by the same product benchmark in Annex I of the Free Allocation
+            Regulation (FAR) are aggregated.
+          </p>
+        } @else {
+          <p class="govuk-caption-m">
+            Only one sub-installation can be chosen for each type of product. Similar products which are covered by the
+            same product benchmark in Annex I of the Free Allocation Regulation (FAR) are aggregated.
+          </p>
+        }
         <div
           formControlName="subInstallationType"
           govuk-select

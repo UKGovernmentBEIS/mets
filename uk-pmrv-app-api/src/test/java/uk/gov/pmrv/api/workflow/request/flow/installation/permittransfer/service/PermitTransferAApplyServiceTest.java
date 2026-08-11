@@ -1,11 +1,13 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
+import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -27,6 +31,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferASaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.TransferParty;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferOperatorInfo;
 
 @ExtendWith(MockitoExtension.class)
 class PermitTransferAApplyServiceTest {
@@ -40,6 +45,9 @@ class PermitTransferAApplyServiceTest {
     @Mock
     private RequestService requestService;
 
+    @Mock
+    private InstallationAccountQueryService installationAccountQueryService;
+
     @Test
     void applySaveAction() {
 
@@ -49,12 +57,14 @@ class PermitTransferAApplyServiceTest {
             .payloadType(RequestTaskPayloadType.PERMIT_TRANSFER_A_APPLICATION_SUBMIT_PAYLOAD)
             .build();
 
-        final RequestTask requestTask = RequestTask.builder().payload(taskPayload).build();
+        final RequestTask requestTask = RequestTask.builder().request(Request.builder().accountId(1L).build()).payload(taskPayload).build();
 
         final String reason = "the reason";
         final UUID document = UUID.randomUUID();
         final LocalDate transferDate = LocalDate.of(2022, 1, 1);
         final String transferCode = "the transfer code";
+        final PermitTransferOperatorInfo receiver = PermitTransferOperatorInfo.builder().id("1").name("receiver").build();
+        final PermitTransferOperatorInfo transferrer = PermitTransferOperatorInfo.builder().id("2").name("transferrer").build();
         final PermitTransferASaveApplicationRequestTaskActionPayload taskActionPayload =
             PermitTransferASaveApplicationRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.PERMIT_TRANSFER_A_SAVE_APPLICATION_PAYLOAD)
@@ -65,9 +75,14 @@ class PermitTransferAApplyServiceTest {
                     .payer(TransferParty.TRANSFERER)
                     .aerLiable(TransferParty.RECEIVER)
                     .transferCode(transferCode)
+                    .receiver(receiver)
+                    .transferrer(transferrer)
                     .build())
                 .sectionCompleted(true)
                 .build();
+
+        when(installationAccountQueryService.getByActiveTransferCode(transferCode)).thenReturn(Optional.of(InstallationAccountDTO.builder().emitterId("1").name("receiver").build()));
+        when(installationAccountQueryService.getAccountDTOById(1L)).thenReturn(InstallationAccountDTO.builder().emitterId("2").name("transferrer").build());
 
         service.applySaveAction(requestTask, taskActionPayload);
 
@@ -77,6 +92,8 @@ class PermitTransferAApplyServiceTest {
         assertThat(taskPayload.getPermitTransferDetails().getPayer()).isEqualTo(TransferParty.TRANSFERER);
         assertThat(taskPayload.getPermitTransferDetails().getAerLiable()).isEqualTo(TransferParty.RECEIVER);
         assertThat(taskPayload.getPermitTransferDetails().getTransferCode()).isEqualTo(transferCode);
+        assertThat(taskPayload.getPermitTransferDetails().getReceiver()).isEqualTo(receiver);
+        assertThat(taskPayload.getPermitTransferDetails().getTransferrer()).isEqualTo(transferrer);
         assertThat(taskPayload.getSectionCompleted()).isTrue();
     }
 

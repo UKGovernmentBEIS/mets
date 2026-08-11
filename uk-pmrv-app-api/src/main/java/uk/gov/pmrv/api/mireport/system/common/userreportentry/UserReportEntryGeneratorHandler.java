@@ -10,11 +10,14 @@ import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Collections;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -42,7 +45,7 @@ public abstract class UserReportEntryGeneratorHandler {
 
         Map<String, UserReportInfoDTO> userReportInfoDTOMap = getUserReportInfoByUserIds(userReportEntries);
 
-        return userReportEntries.stream()
+        List<UserReportEntry> enriched = userReportEntries.stream()
                 .map(userReportEntry -> {
                     Optional.ofNullable(userReportEntry.getUserAccountId())
                             .map(userReportInfoDTOMap::get)
@@ -50,6 +53,8 @@ public abstract class UserReportEntryGeneratorHandler {
                                     appendUserDetails(userReportEntry, userReportInfoDTO));
                     return userReportEntry;
                 }).toList();
+
+        return consolidateByUserId(enriched);
     }
 
     protected List<UserReportEntry> authoritiesToUserReportEntries(List<Authority> authorities) {
@@ -95,6 +100,62 @@ public abstract class UserReportEntryGeneratorHandler {
                 .map(date -> LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME)
                 .format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss", Locale.ROOT)))
                 .orElse(null);
+    }
+
+    protected List<UserReportEntry> consolidateByUserId(List<UserReportEntry> entries) {
+        Map<String, UserReportEntry> consolidated = new LinkedHashMap<>();
+        for (UserReportEntry entry : entries) {
+            consolidated.merge(entry.getUserAccountId(), toInitialEntry(entry), this::mergeEntries);
+        }
+        consolidated.values().forEach(this::normalizeBlankStrings);
+        return new ArrayList<>(consolidated.values());
+    }
+
+    private UserReportEntry toInitialEntry(UserReportEntry entry) {
+        return UserReportEntry.builder()
+                .userAccountId(entry.getUserAccountId())
+                .fullName(entry.getFullName())
+                .email(entry.getEmail())
+                .telephone(entry.getTelephone())
+                .mobile(entry.getMobile())
+                .lastLogin(entry.getLastLogin())
+                .role(Objects.toString(entry.getRole(), ""))
+                .userAccountStatus(Objects.toString(entry.getUserAccountStatus(), ""))
+                .contactTypes(new ArrayList<>(Optional.ofNullable(entry.getContactTypes()).orElse(Collections.emptyList())))
+                .build();
+    }
+
+    private UserReportEntry mergeEntries(UserReportEntry existing, UserReportEntry incoming) {
+        existing.setRole(mergeCsv(existing.getRole(), incoming.getRole()));
+        existing.setUserAccountStatus(mergeCsv(existing.getUserAccountStatus(), incoming.getUserAccountStatus()));
+        existing.setContactTypes(mergeContactTypes(existing.getContactTypes(), incoming.getContactTypes()));
+        return existing;
+    }
+
+    private String mergeCsv(String existing, String incoming) {
+        if (incoming == null || incoming.isBlank()) return existing;
+        TreeSet<String> parts = splitCsv(existing);
+        parts.add(incoming.trim());
+        return String.join(", ", parts);
+    }
+
+    private List<String> mergeContactTypes(List<String> existing, List<String> incoming) {
+        if (incoming == null) return existing;
+        TreeSet<String> types = new TreeSet<>(Optional.ofNullable(existing).orElse(Collections.emptyList()));
+        types.addAll(incoming);
+        return new ArrayList<>(types);
+    }
+
+    private void normalizeBlankStrings(UserReportEntry entry) {
+        if (entry.getRole().isBlank()) entry.setRole(null);
+        if (entry.getUserAccountStatus().isBlank()) entry.setUserAccountStatus(null);
+    }
+
+    private TreeSet<String> splitCsv(String value) {
+        if (value == null || value.isBlank()) return new TreeSet<>();
+        return java.util.Arrays.stream(value.split(",\\s*"))
+                .filter(s -> !s.isBlank())
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
     protected UsersMiReportResult buildResult(List<UserReportEntry> payload, String reportType) {

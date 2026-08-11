@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.configuration.domain.ConfigurationDTO;
+import uk.gov.netz.api.configuration.service.ConfigurationService;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
@@ -23,6 +25,7 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.Calcula
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.Transfer;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementOfCO2MonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.MeasurementOfN2OMonitoringApproach;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.SubInstallationValidityPeriod;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStream;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
@@ -34,6 +37,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.P
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestInfo;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestMetadata;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +57,8 @@ public class DocumentTemplatePermitParamsProvider {
     private final RequestQueryService requestQueryService;
     private final Comparator<PermitVariationRequestInfo> comparator = Comparator.comparing(PermitVariationRequestInfo::getEndDate, Comparator.nullsLast(LocalDateTime::compareTo))
         .thenComparing(PermitVariationRequestInfo::getSubmissionDate, Comparator.nullsLast(LocalDateTime::compareTo));
+    private final ConfigurationService configurationService;
+    private static final String CBAM_TRANSITION_TOGGLE = "sub_installation_types.cbam.transition.toggle";
 
     public TemplateParams constructTemplateParams(final DocumentTemplatePermitParamsSourceData sourceData) {
         final Request request = sourceData.getRequest();
@@ -102,6 +108,17 @@ public class DocumentTemplatePermitParamsProvider {
 
         List<Transfer> transfers = extractTransfers(permitContainer.getPermit());
 
+        Optional<ConfigurationDTO> cbamTransitionToggleConfiguration = configurationService
+                .getConfigurationByKey(CBAM_TRANSITION_TOGGLE);
+
+        boolean cbamTransitionToggle = cbamTransitionToggleConfiguration
+                .map(ConfigurationDTO::getValue)
+                .filter(Boolean.class::isInstance)
+                .map(Boolean.class::cast)
+                .orElse(false);
+
+        boolean cbamTransition = SubInstallationValidityPeriod.FROM_01_2027.isValid(cbamTransitionToggle);
+
         return templateParams.withParams(Map.of(
                 "permitContainer", permitContainer,
                 "issuanceMetadata", issuanceMetadata,
@@ -110,7 +127,8 @@ public class DocumentTemplatePermitParamsProvider {
                 "referenceSources", referenceSources,
                 "analysisMethods", analysisMethods,
                 "transfers", transfers,
-                "documentIsDraft",signatory==null
+                "documentIsDraft",signatory==null,
+                "cbamTransition", cbamTransition
             )
         );
     }

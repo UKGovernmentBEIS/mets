@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PendingRequestGuard } from '@core/guards/pending-request.guard';
+import { TaskGuard } from '@tasks/task.guard';
 
 import { WizardStepGuard } from './core/guards/wizard-step.guard';
 import { codeBacklinkResolver } from './core/permit-transfer-a-task-statuses';
@@ -78,7 +79,7 @@ const routes: Routes = [
         path: 'summary',
         data: { pageTitle: 'Check your answers', breadcrumb: 'Details' },
         component: SummaryComponent,
-        canActivate: [WizardStepGuard],
+        canActivate: [WizardStepGuard, TaskGuard],
         canDeactivate: [PendingRequestGuard],
       },
       {

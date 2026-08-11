@@ -81,7 +81,7 @@ describe('OperatorDetailsOrganisationStructureComponent', () => {
     await user.click(screen.getByRole('button', { name: /Continue/ }));
     fixture.detectChanges();
 
-    expect(screen.getByRole('alert')).toBeVisible();
+    expect(screen.getByRole('alert', { name: /There is a problem/ })).toBeVisible();
     expect(screen.getAllByText(/Select the option which shows the legal status of your organisation/)).toHaveLength(2);
 
     await user.click(screen.getByRole('radio', { name: /Limited company/ }));

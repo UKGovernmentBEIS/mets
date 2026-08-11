@@ -11,9 +11,18 @@ import { ProductBenchmarkComponent } from '@permit-application/shared/product-be
 import { PermitApplicationState } from '@permit-application/store/permit-application.state';
 import { PermitApplicationStore } from '@permit-application/store/permit-application.store';
 
-import { SubInstallationTypesService } from 'pmrv-api';
+import { AnnualActivityFuelLevel, AnnualActivityHeatLevel, SubInstallationTypesService } from 'pmrv-api';
 
-import { isFallbackApproach } from '../mmp-sub-installations-status';
+import {
+  annualFuelEmissionsTypes,
+  annualHeatEmissionsTypes,
+  annualProcessEmissionsTypes,
+  directlyAttributableEmissionsTypes,
+  fuelInputRelevantEmissionsTypes,
+  isFallbackApproach,
+  measurableHeatExportedEmissionsTypes,
+  measurableHeatProducedImportedEmissionsTypes,
+} from '../mmp-sub-installations-status';
 import { fallbackApproachAddFormFactory } from './fallback-approach-details-form.provider';
 
 @Component({
@@ -33,6 +42,19 @@ export class SubInstallationFallbackDetailsComponent extends ProductBenchmarkCom
   ]).pipe(
     map(([monitoringMethodologyPlans, subInstallationDetails]) => {
       return {
+        isCbamEnabled: subInstallationDetails.some(
+          (item) =>
+            (item.subInstallationType == 'HYDROGEN_CBAM' && item.valid) ||
+            (item.subInstallationType == 'HYDROGEN_NON_CBAM' && item.valid) ||
+            (item.subInstallationType == 'IRON_CASTING_CBAM' && item.valid) ||
+            (item.subInstallationType == 'IRON_CASTING_NON_CBAM' && item.valid) ||
+            (item.subInstallationType == 'FUEL_BENCHMARK_CL_CBAM' && item.valid) ||
+            (item.subInstallationType == 'FUEL_BENCHMARK_CL_NON_CBAM' && item.valid) ||
+            (item.subInstallationType == 'HEAT_BENCHMARK_CL_CBAM' && item.valid) ||
+            (item.subInstallationType == 'HEAT_BENCHMARK_CL_NON_CBAM' && item.valid) ||
+            (item.subInstallationType == 'PROCESS_EMISSIONS_CL_CBAM' && item.valid) ||
+            (item.subInstallationType == 'PROCESS_EMISSIONS_CL_NON_CBAM' && item.valid),
+        ),
         heatBenchmark: [
           'HEAT_BENCHMARK_CL',
           'HEAT_BENCHMARK_CL_CBAM',
@@ -153,10 +175,40 @@ export class SubInstallationFallbackDetailsComponent extends ProductBenchmarkCom
                           item.subInstallationNo === paramMap.get('subInstallationNo') &&
                           item?.subInstallationType !== this.form.value?.subInstallationType
                         ) {
-                          delete item?.annualLevel;
-                          delete item?.directlyAttributableEmissions;
-                          delete item?.fuelInputAndRelevantEmissionFactor;
-                          delete item?.measurableHeat;
+                          if (item?.annualLevel) {
+                            if (!annualFuelEmissionsTypes.includes(this.form.value?.subInstallationType)) {
+                              delete (item?.annualLevel as AnnualActivityFuelLevel)?.fuelDataSources;
+                            }
+                            if (!annualHeatEmissionsTypes.includes(this.form.value?.subInstallationType)) {
+                              delete (item?.annualLevel as AnnualActivityHeatLevel)?.measurableHeatFlowList;
+                            }
+
+                            if (annualFuelEmissionsTypes.includes(this.form.value?.subInstallationType)) {
+                              item.annualLevel.annualLevelType = 'ACTIVITY_FUEL';
+                            }
+                            if (annualHeatEmissionsTypes.includes(this.form.value?.subInstallationType)) {
+                              item.annualLevel.annualLevelType = 'ACTIVITY_HEAT';
+                            }
+                            if (annualProcessEmissionsTypes.includes(this.form.value?.subInstallationType)) {
+                              item.annualLevel.annualLevelType = 'ACTIVITY_PROCESS';
+                            }
+                          }
+
+                          if (!directlyAttributableEmissionsTypes.includes(this.form.value?.subInstallationType)) {
+                            delete item?.directlyAttributableEmissions;
+                          }
+                          if (!fuelInputRelevantEmissionsTypes.includes(this.form.value?.subInstallationType)) {
+                            delete item?.fuelInputAndRelevantEmissionFactor;
+                          }
+                          if (
+                            !measurableHeatProducedImportedEmissionsTypes.includes(this.form.value?.subInstallationType)
+                          ) {
+                            delete item?.measurableHeat?.measurableHeatProduced;
+                            delete item?.measurableHeat?.measurableHeatImported;
+                          }
+                          if (!measurableHeatExportedEmissionsTypes.includes(this.form.value?.subInstallationType)) {
+                            delete item?.measurableHeat?.measurableHeatExported;
+                          }
                         }
 
                         return item.subInstallationNo === paramMap.get('subInstallationNo')

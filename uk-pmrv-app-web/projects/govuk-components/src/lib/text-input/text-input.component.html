@@ -39,6 +39,7 @@
     (input)="onChange(getInputValue($event))"
     (keydown)="onKeyDown($event)"
     [attr.inputmode]="inputMode()"
+    [attr.maxlength]="maxLength() ?? null"
     [autocomplete]="autoComplete()"
     [class.govuk-input--error]="shouldDisplayErrors"
     [disabled]="disabled"

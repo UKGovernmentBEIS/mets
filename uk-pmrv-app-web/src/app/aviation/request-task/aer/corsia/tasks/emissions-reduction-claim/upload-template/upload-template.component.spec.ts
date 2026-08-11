@@ -119,7 +119,7 @@ describe('UploadTemplateComponent', () => {
     await user.click(screen.getByRole('button', { name: /Continue/ }));
     fixture.detectChanges();
 
-    expect(screen.getByRole('alert')).toBeVisible();
+    expect(screen.getByRole('alert', { name: /There is a problem/ })).toBeVisible();
     expect(screen.getAllByText(/Enter the total emissions reduction claimed/)).toHaveLength(3);
   });
 

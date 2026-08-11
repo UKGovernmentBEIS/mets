@@ -3,7 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload } from 'pmrv-api';
+import { of } from 'rxjs';
+
+import { PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload, SubInstallationTypesService } from 'pmrv-api';
 
 import { ActivatedRouteStub, BasePage } from '../../../../testing';
 import { PermitIssuanceStore } from '../../../permit-issuance/store/permit-issuance.store';
@@ -27,6 +29,7 @@ describe('MonitoringMethodologyPlanComponent', () => {
       groupKey: 'MONITORING_METHODOLOGY_PLAN',
     },
   );
+  let subInstallationTypesService: Partial<jest.Mocked<SubInstallationTypesService>>;
 
   @Component({
     selector: 'app-review-group-decision-container',
@@ -64,6 +67,23 @@ describe('MonitoringMethodologyPlanComponent', () => {
   };
 
   beforeEach(async () => {
+    subInstallationTypesService = {
+      getSubInstallationTypesDetails: jest.fn().mockReturnValue(
+        of([
+          {
+            subInstallationType: 'AROMATICS',
+            valid: true,
+            coveredByUKCBAM: true,
+          },
+          {
+            subInstallationType: 'HEAT_BENCHMARK_CL',
+            valid: true,
+            coveredByUKCBAM: true,
+          },
+        ]),
+      ),
+    };
+
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, SharedModule, SharedPermitModule, ReviewModule],
       providers: [
@@ -72,6 +92,7 @@ describe('MonitoringMethodologyPlanComponent', () => {
           provide: PermitApplicationStore,
           useExisting: PermitIssuanceStore,
         },
+        { provide: SubInstallationTypesService, useValue: subInstallationTypesService },
       ],
       declarations: [MonitoringMethodologyPlanComponent, MockDecisionComponent],
     }).compileComponents();

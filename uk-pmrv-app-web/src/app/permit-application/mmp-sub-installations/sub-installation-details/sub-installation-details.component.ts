@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, Observable, startWith, switchMap } from 'rxjs';
+import { combineLatest, first, map, Observable, shareReplay, startWith, switchMap } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
@@ -27,9 +27,31 @@ export class SubInstallationDetailsComponent extends ProductBenchmarkComponent i
   isEditing$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('subInstallationNo') != null));
   permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));
 
+  getSubInstallationTypesDetails$ = this.subInstallationTypesService
+    .getSubInstallationTypesDetails()
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
+
+  cbamEnabled$ = this.getSubInstallationTypesDetails$.pipe(
+    map((subInstallationDetails) =>
+      subInstallationDetails.some(
+        (item) =>
+          (item.subInstallationType == 'HYDROGEN_CBAM' && item.valid) ||
+          (item.subInstallationType == 'HYDROGEN_NON_CBAM' && item.valid) ||
+          (item.subInstallationType == 'IRON_CASTING_CBAM' && item.valid) ||
+          (item.subInstallationType == 'IRON_CASTING_NON_CBAM' && item.valid) ||
+          (item.subInstallationType == 'FUEL_BENCHMARK_CL_CBAM' && item.valid) ||
+          (item.subInstallationType == 'FUEL_BENCHMARK_CL_NON_CBAM' && item.valid) ||
+          (item.subInstallationType == 'HEAT_BENCHMARK_CL_CBAM' && item.valid) ||
+          (item.subInstallationType == 'HEAT_BENCHMARK_CL_NON_CBAM' && item.valid) ||
+          (item.subInstallationType == 'PROCESS_EMISSIONS_CL_CBAM' && item.valid) ||
+          (item.subInstallationType == 'PROCESS_EMISSIONS_CL_NON_CBAM' && item.valid),
+      ),
+    ),
+  );
+
   productBenchmarkTypes$ = combineLatest([
     this.store.getTask('monitoringMethodologyPlans'),
-    this.subInstallationTypesService.getSubInstallationTypesDetails(),
+    this.getSubInstallationTypesDetails$,
   ]).pipe(
     map(([monitoringMethodologyPlans, subInstallationDetails]) => {
       let usedTypes = monitoringMethodologyPlans?.digitizedPlan?.subInstallations

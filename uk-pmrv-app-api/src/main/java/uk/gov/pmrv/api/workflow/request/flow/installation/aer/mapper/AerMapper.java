@@ -71,6 +71,7 @@ public interface AerMapper {
     @Mapping(target = "payloadType", expression = "java(uk.gov.pmrv.api.workflow.request.core.domain.enumeration" +
         ".RequestTaskPayloadType.AER_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD)")
     @Mapping(target = "verificationReport", source = "verificationReport")
+    @Mapping(target = "verificationBodyId", source = "verificationReport.verificationBodyId")
     @Mapping(target = "aerSectionsCompleted", ignore = true)
     AerApplicationVerificationSubmitRequestTaskPayload toAerApplicationVerificationRequestTaskPayload(
         AerRequestPayload requestPayload,

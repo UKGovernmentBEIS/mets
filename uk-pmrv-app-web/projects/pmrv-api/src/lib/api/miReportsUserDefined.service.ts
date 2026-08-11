@@ -19,8 +19,10 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { CustomMiReportQuery } from '../model/customMiReportQuery';
 import { MiReportUserDefinedCategoryDTO } from '../model/miReportUserDefinedCategoryDTO';
 import { MiReportUserDefinedDTO } from '../model/miReportUserDefinedDTO';
+import { MiReportUserDefinedHistoryResults } from '../model/miReportUserDefinedHistoryResults';
 import { MiReportUserDefinedResult } from '../model/miReportUserDefinedResult';
 import { MiReportUserDefinedResults } from '../model/miReportUserDefinedResults';
+import { MiReportUserDefinedUpdateDTO } from '../model/miReportUserDefinedUpdateDTO';
 import { BASE_PATH } from '../variables';
 
 @Injectable({
@@ -87,35 +89,46 @@ export class MiReportsUserDefinedService {
 
   /**
    * Creates a user defined custom mi report
+   * @param accountType The account type
    * @param miReportUserDefinedDTO
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public createCustomReport(miReportUserDefinedDTO: MiReportUserDefinedDTO): Observable<any>;
   public createCustomReport(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    miReportUserDefinedDTO: MiReportUserDefinedDTO,
+  ): Observable<any>;
+  public createCustomReport(
+    accountType: 'INSTALLATION' | 'AVIATION',
     miReportUserDefinedDTO: MiReportUserDefinedDTO,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpResponse<any>>;
   public createCustomReport(
+    accountType: 'INSTALLATION' | 'AVIATION',
     miReportUserDefinedDTO: MiReportUserDefinedDTO,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpEvent<any>>;
   public createCustomReport(
+    accountType: 'INSTALLATION' | 'AVIATION',
     miReportUserDefinedDTO: MiReportUserDefinedDTO,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<any>;
   public createCustomReport(
+    accountType: 'INSTALLATION' | 'AVIATION',
     miReportUserDefinedDTO: MiReportUserDefinedDTO,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<any> {
+    if (accountType === null || accountType === undefined) {
+      throw new Error('Required parameter accountType was null or undefined when calling createCustomReport.');
+    }
     if (miReportUserDefinedDTO === null || miReportUserDefinedDTO === undefined) {
       throw new Error(
         'Required parameter miReportUserDefinedDTO was null or undefined when calling createCustomReport.',
@@ -153,7 +166,7 @@ export class MiReportsUserDefinedService {
     }
 
     return this.httpClient.post<any>(
-      `${this.configuration.basePath}/v1.0/mireports/user-defined/create`,
+      `${this.configuration.basePath}/v1.0/mireports/user-defined/create/${encodeURIComponent(String(accountType))}`,
       miReportUserDefinedDTO,
       {
         responseType: <any>responseType_,
@@ -163,6 +176,225 @@ export class MiReportsUserDefinedService {
         reportProgress: reportProgress,
       },
     );
+  }
+
+  /**
+   * Adds the mi report that corresponds to the provided id to the user\&#39;s favourites
+   * @param miReportId The id of the user defined mi report
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public createFavourite(miReportId: number): Observable<any>;
+  public createFavourite(
+    miReportId: number,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<any>>;
+  public createFavourite(
+    miReportId: number,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<any>>;
+  public createFavourite(
+    miReportId: number,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any>;
+  public createFavourite(
+    miReportId: number,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (miReportId === null || miReportId === undefined) {
+      throw new Error('Required parameter miReportId was null or undefined when calling createFavourite.');
+    }
+
+    let queryParameters = new HttpParams({ encoder: this.encoder });
+    if (miReportId !== undefined && miReportId !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>miReportId, 'miReportId');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.post<any>(`${this.configuration.basePath}/v1.0/mireports/user-defined/favourites`, null, {
+      params: queryParameters,
+      responseType: <any>responseType_,
+      withCredentials: this.configuration.withCredentials,
+      headers: headers,
+      observe: observe,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
+   * Deletes the report that matches the provided id
+   * @param id The unique identifier of the report
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public deleteCustomReport(id: number): Observable<any>;
+  public deleteCustomReport(
+    id: number,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<any>>;
+  public deleteCustomReport(
+    id: number,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<any>>;
+  public deleteCustomReport(
+    id: number,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any>;
+  public deleteCustomReport(
+    id: number,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling deleteCustomReport.');
+    }
+
+    let queryParameters = new HttpParams({ encoder: this.encoder });
+    if (id !== undefined && id !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>id, 'id');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.delete<any>(`${this.configuration.basePath}/v1.0/mireports/user-defined`, {
+      params: queryParameters,
+      responseType: <any>responseType_,
+      withCredentials: this.configuration.withCredentials,
+      headers: headers,
+      observe: observe,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
+   * Removes the mi report that corresponds to the provided id from the user\&#39;s favourites
+   * @param miReportId The id of the user defined mi report
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public deleteFavourite(miReportId: number): Observable<any>;
+  public deleteFavourite(
+    miReportId: number,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<any>>;
+  public deleteFavourite(
+    miReportId: number,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<any>>;
+  public deleteFavourite(
+    miReportId: number,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any>;
+  public deleteFavourite(
+    miReportId: number,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (miReportId === null || miReportId === undefined) {
+      throw new Error('Required parameter miReportId was null or undefined when calling deleteFavourite.');
+    }
+
+    let queryParameters = new HttpParams({ encoder: this.encoder });
+    if (miReportId !== undefined && miReportId !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>miReportId, 'miReportId');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.delete<any>(`${this.configuration.basePath}/v1.0/mireports/user-defined/favourites`, {
+      params: queryParameters,
+      responseType: <any>responseType_,
+      withCredentials: this.configuration.withCredentials,
+      headers: headers,
+      observe: observe,
+      reportProgress: reportProgress,
+    });
   }
 
   /**
@@ -307,6 +539,101 @@ export class MiReportsUserDefinedService {
   }
 
   /**
+   * Retrieves the history of a user defined mi report
+   * @param miReportId The id of the report to fetch the history for
+   * @param page The page number starting from zero
+   * @param size The page size
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getHistory(miReportId: number, page: number, size: number): Observable<MiReportUserDefinedHistoryResults>;
+  public getHistory(
+    miReportId: number,
+    page: number,
+    size: number,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<MiReportUserDefinedHistoryResults>>;
+  public getHistory(
+    miReportId: number,
+    page: number,
+    size: number,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<MiReportUserDefinedHistoryResults>>;
+  public getHistory(
+    miReportId: number,
+    page: number,
+    size: number,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<MiReportUserDefinedHistoryResults>;
+  public getHistory(
+    miReportId: number,
+    page: number,
+    size: number,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (miReportId === null || miReportId === undefined) {
+      throw new Error('Required parameter miReportId was null or undefined when calling getHistory.');
+    }
+    if (page === null || page === undefined) {
+      throw new Error('Required parameter page was null or undefined when calling getHistory.');
+    }
+    if (size === null || size === undefined) {
+      throw new Error('Required parameter size was null or undefined when calling getHistory.');
+    }
+
+    let queryParameters = new HttpParams({ encoder: this.encoder });
+    if (page !== undefined && page !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>page, 'page');
+    }
+    if (size !== undefined && size !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>size, 'size');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.get<MiReportUserDefinedHistoryResults>(
+      `${this.configuration.basePath}/v1.0/mireports/user-defined/history/${encodeURIComponent(String(miReportId))}`,
+      {
+        params: queryParameters,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
    * Retrieves the report that matches the provided id
    * @param id The unique identifier of the report
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -381,55 +708,70 @@ export class MiReportsUserDefinedService {
 
   /**
    * Retrieves all enabled user defined mi reports
+   * @param accountType The account type
    * @param page The page number starting from zero
    * @param size The page size
    * @param categoryId Optional category id to filter by
    * @param term Optional report search term
+   * @param favourites Optional filter to fetch the user\&#39;s favourites
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getReports(
+    accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
     categoryId?: number,
     term?: string,
+    favourites?: boolean,
   ): Observable<MiReportUserDefinedResults>;
   public getReports(
+    accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
     categoryId: number,
     term: string,
+    favourites: boolean,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpResponse<MiReportUserDefinedResults>>;
   public getReports(
+    accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
     categoryId: number,
     term: string,
+    favourites: boolean,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpEvent<MiReportUserDefinedResults>>;
   public getReports(
+    accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
     categoryId: number,
     term: string,
+    favourites: boolean,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<MiReportUserDefinedResults>;
   public getReports(
+    accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
     categoryId?: number,
     term?: string,
+    favourites?: boolean,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<any> {
+    if (accountType === null || accountType === undefined) {
+      throw new Error('Required parameter accountType was null or undefined when calling getReports.');
+    }
     if (page === null || page === undefined) {
       throw new Error('Required parameter page was null or undefined when calling getReports.');
     }
@@ -449,6 +791,9 @@ export class MiReportsUserDefinedService {
     }
     if (term !== undefined && term !== null) {
       queryParameters = this.addToHttpParams(queryParameters, <any>term, 'term');
+    }
+    if (favourites !== undefined && favourites !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>favourites, 'favourites');
     }
 
     let headers = this.defaultHeaders;
@@ -475,7 +820,237 @@ export class MiReportsUserDefinedService {
     }
 
     return this.httpClient.get<MiReportUserDefinedResults>(
-      `${this.configuration.basePath}/v1.0/mireports/user-defined/reports`,
+      `${this.configuration.basePath}/v1.0/mireports/user-defined/reports/${encodeURIComponent(String(accountType))}`,
+      {
+        params: queryParameters,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Check if the regulator can manage (create/update/delete) custom mi reports
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public hasManageCustomReportsAccess(): Observable<boolean>;
+  public hasManageCustomReportsAccess(
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<boolean>>;
+  public hasManageCustomReportsAccess(
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<boolean>>;
+  public hasManageCustomReportsAccess(
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<boolean>;
+  public hasManageCustomReportsAccess(
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.get<boolean>(`${this.configuration.basePath}/v1.0/mireports/user-defined/manage`, {
+      responseType: <any>responseType_,
+      withCredentials: this.configuration.withCredentials,
+      headers: headers,
+      observe: observe,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
+   * Previews custom mi report user defined
+   * @param customMiReportQuery
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public previewCustomReport(customMiReportQuery: CustomMiReportQuery): Observable<MiReportUserDefinedResult>;
+  public previewCustomReport(
+    customMiReportQuery: CustomMiReportQuery,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<MiReportUserDefinedResult>>;
+  public previewCustomReport(
+    customMiReportQuery: CustomMiReportQuery,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<MiReportUserDefinedResult>>;
+  public previewCustomReport(
+    customMiReportQuery: CustomMiReportQuery,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<MiReportUserDefinedResult>;
+  public previewCustomReport(
+    customMiReportQuery: CustomMiReportQuery,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (customMiReportQuery === null || customMiReportQuery === undefined) {
+      throw new Error('Required parameter customMiReportQuery was null or undefined when calling previewCustomReport.');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      headers = headers.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.post<MiReportUserDefinedResult>(
+      `${this.configuration.basePath}/v1.0/mireports/user-defined/preview`,
+      customMiReportQuery,
+      {
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Updates the report that matches the provided id
+   * @param id The unique identifier of the report
+   * @param miReportUserDefinedUpdateDTO
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public updateCustomReport(id: number, miReportUserDefinedUpdateDTO: MiReportUserDefinedUpdateDTO): Observable<any>;
+  public updateCustomReport(
+    id: number,
+    miReportUserDefinedUpdateDTO: MiReportUserDefinedUpdateDTO,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<any>>;
+  public updateCustomReport(
+    id: number,
+    miReportUserDefinedUpdateDTO: MiReportUserDefinedUpdateDTO,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<any>>;
+  public updateCustomReport(
+    id: number,
+    miReportUserDefinedUpdateDTO: MiReportUserDefinedUpdateDTO,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any>;
+  public updateCustomReport(
+    id: number,
+    miReportUserDefinedUpdateDTO: MiReportUserDefinedUpdateDTO,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling updateCustomReport.');
+    }
+    if (miReportUserDefinedUpdateDTO === null || miReportUserDefinedUpdateDTO === undefined) {
+      throw new Error(
+        'Required parameter miReportUserDefinedUpdateDTO was null or undefined when calling updateCustomReport.',
+      );
+    }
+
+    let queryParameters = new HttpParams({ encoder: this.encoder });
+    if (id !== undefined && id !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>id, 'id');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      headers = headers.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.put<any>(
+      `${this.configuration.basePath}/v1.0/mireports/user-defined`,
+      miReportUserDefinedUpdateDTO,
       {
         params: queryParameters,
         responseType: <any>responseType_,

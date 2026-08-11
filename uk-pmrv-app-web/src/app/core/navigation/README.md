@@ -50,14 +50,24 @@ const route = {
 };
 ```
 
-- `boolean`: When `true` the route's breadcrumb will be the same as the `pageTitle` property from the route's data or the route's `title` property (whichever is non-null in that order). When `false`
-  the breadcrumbs **will not show at all** on the page e.g.
+- `boolean`: When `true` the route's breadcrumb will be the same as the `pageTitle` property from the route's data or the route's `title` property (whichever is non-null in that order) e.g.
 
 ```typescript
 const route = {
   path: 'heroes',
   component: HeroesListComponent,
   data: { pageTitle: 'Heroes', breadcrumb: true },
+};
+```
+
+To hide the breadcrumbs **entirely** on a page (including the crumbs contributed by parent routes), set the
+`hideBreadcrumb` flag on the route's data instead:
+
+```typescript
+const route = {
+  path: 'heroes',
+  component: HeroesListComponent,
+  data: { hideBreadcrumb: true },
 };
 ```
 

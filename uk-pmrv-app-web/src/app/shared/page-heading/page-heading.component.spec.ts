@@ -21,7 +21,8 @@ describe('PageHeadingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PageHeadingComponent, TestComponent],
+      declarations: [TestComponent],
+      imports: [PageHeadingComponent],
     }).compileComponents();
   });
 

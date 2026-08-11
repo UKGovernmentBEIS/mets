@@ -8,7 +8,7 @@
 
   <div class="moj-multi-file-upload__upload">
     <div class="govuk-form-group">
-      <span [class]="'govuk-label govuk-label--' + headerSize" id="{{ 'l.' + id }}">{{ label }}</span>
+      <label [class]="'govuk-label govuk-label--' + headerSize" id="{{ 'l.' + id }}" [for]="id">{{ label }}</label>
 
       <div class="govuk-hint">
         <ng-container *ngTemplateOutlet="customHintTemplate ? customHintTemplate : defaultHintTemplate"></ng-container>
@@ -49,6 +49,7 @@
           {{ dropzoneButtonText }}
         </label>
         <div aria-live="polite" class="govuk-visually-hidden" role="status">{{ uploadStatusText$ | async }}</div>
+        <div aria-live="assertive" class="govuk-visually-hidden" role="alert">{{ uploadErrorText$ | async }}</div>
       </div>
     </div>
   </div>

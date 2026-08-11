@@ -1,0 +1,63 @@
+<app-page-heading size="xl">Report history</app-page-heading>
+
+@if (history$ | async; as history) {
+  @for (event of history.events; track event.submissionDate) {
+    <h2 class="govuk-heading-m">{{ event.submissionDate | govukDate: 'datetime' }}</h2>
+
+    <dl govuk-summary-list>
+      @if (event.changeType === 'UPDATE') {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Reason for change</dt>
+          <dd govukSummaryListRowValue class="pre-wrap overflow-wrap-anywhere">{{ event.reasonForChange }}</dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Changed by</dt>
+          <dd govukSummaryListRowValue>{{ event.submittedBy }}</dd>
+        </div>
+      } @else {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Submitted by</dt>
+          <dd govukSummaryListRowValue>{{ event.submittedBy }}</dd>
+        </div>
+      }
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Report name</dt>
+        <dd govukSummaryListRowValue class="overflow-wrap-anywhere">{{ event.reportName }}</dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Categories</dt>
+        <dd govukSummaryListRowValue>
+          <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+            @for (category of event.categories; track category) {
+              <li>{{ category }}</li>
+            }
+          </ul>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Description</dt>
+        <dd govukSummaryListRowValue class="overflow-wrap-anywhere">{{ event.description }}</dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>SQL Query</dt>
+        <dd govukSummaryListRowValue>
+          <govuk-details summary="Show SQL code" [bottomSpacing]="0">
+            <div class="pre-wrap overflow-wrap-anywhere">{{ event.queryDefinition }}</div>
+          </govuk-details>
+        </dd>
+      </div>
+    </dl>
+  } @empty {
+    <p class="govuk-body">There is no history available.</p>
+  }
+
+  @if (history.total > 0) {
+    <app-pagination
+      (currentPageChange)="currentPage$.next($event)"
+      [count]="history.total"
+      [pageSize]="pageSize"></app-pagination>
+  }
+}
+
+<a govukLink routerLink="../../..">Return to: MI Reports</a>

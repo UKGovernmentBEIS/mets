@@ -22,7 +22,8 @@ describe('ErrorPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ErrorPageComponent, PageHeadingComponent, TestComponent],
+      imports: [PageHeadingComponent],
+      declarations: [ErrorPageComponent, TestComponent],
     }).compileComponents();
   });
 

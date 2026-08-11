@@ -40,8 +40,8 @@ describe('WizardStepComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, GovukComponentsModule, RouterTestingModule],
-      declarations: [WizardStepComponent, TestComponent, PageHeadingComponent],
+      imports: [ReactiveFormsModule, GovukComponentsModule, RouterTestingModule, PageHeadingComponent],
+      declarations: [WizardStepComponent, TestComponent],
     }).compileComponents();
   });
 

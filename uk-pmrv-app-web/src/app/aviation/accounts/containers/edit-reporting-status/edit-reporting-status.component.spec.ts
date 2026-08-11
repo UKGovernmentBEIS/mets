@@ -25,8 +25,8 @@ describe('EditReportingStatusComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, RouterLinkWithHref, SelectComponent, TextareaComponent],
-      declarations: [EditReportingStatusComponent, PageHeadingComponent, WizardStepComponent],
+      imports: [ReactiveFormsModule, RouterLinkWithHref, SelectComponent, TextareaComponent, PageHeadingComponent],
+      declarations: [EditReportingStatusComponent, WizardStepComponent],
       providers: [
         AviationAccountsStore,
         { provide: AviationAccountsService, useValue: mockClass(AviationAccountsService) },

@@ -52,6 +52,7 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
   readonly numberFormat = input<string>();
   readonly prefix = input<string>();
   readonly suffix = input<string>();
+  readonly maxLength = input<number>();
 
   readonly templateLabel = contentChild(LabelDirective);
   readonly input = viewChild<ElementRef<HTMLInputElement>>('input');

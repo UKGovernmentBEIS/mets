@@ -16,6 +16,8 @@ export const mockTransferPayload: PermitTransferAApplicationRequestTaskPayload =
   sectionCompleted: undefined,
   transferAttachments: { '9d9cb990-7cd1-490b-82d0-b0f416e059e1': 'install.txt' },
   payloadType: 'PERMIT_TRANSFER_A_APPLICATION_SUBMIT_PAYLOAD',
+  transferrer: { id: 'EM0001', name: 'operator1' },
+  receiver: { id: 'EM0002', name: 'operator2' },
 };
 
 export const mockState = {

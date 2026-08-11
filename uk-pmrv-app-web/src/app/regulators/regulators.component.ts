@@ -38,7 +38,7 @@ export class RegulatorsComponent implements OnInit {
     { field: 'name', header: 'Name', isSortable: true },
     { field: 'jobTitle', header: 'Job title' },
     { field: 'authorityStatus', header: 'Account status' },
-    { field: 'deleteBtn', header: undefined },
+    { field: 'deleteBtn', header: 'Actions', hiddenHeader: true },
   ];
   nonEditableCols: GovukTableColumn[] = this.editableCols.slice(0, 2);
   regulatorsForm = this.fb.group({ regulatorsArray: this.fb.array([]) });

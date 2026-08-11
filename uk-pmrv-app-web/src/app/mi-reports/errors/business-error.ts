@@ -8,6 +8,14 @@ const addCustomReportBusinessLink: Pick<BusinessError, 'link' | 'linkText'> = {
 export const buildCustomReportError = (message: string) =>
   new BusinessError(message).withLink(addCustomReportBusinessLink);
 
+const editCustomReportBusinessLink = (id: number): Pick<BusinessError, 'link' | 'linkText'> => ({
+  linkText: 'Return to edit the report',
+  link: ['/mi-reports/edit-custom-report', id],
+});
+
+export const buildEditCustomReportError = (message: string, id: number) =>
+  new BusinessError(message).withLink(editCustomReportBusinessLink(id));
+
 const viewCustomReportBusinessLink = (id: number): Pick<BusinessError, 'link' | 'linkText'> => ({
   linkText: 'Return to the report',
   link: ['/mi-reports/view-custom-report', id],

@@ -13,7 +13,6 @@ import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
 import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.integration.common.KafkaCorrelationContext;
 import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
 import uk.gov.pmrv.api.integration.registry.common.RegistryResponseErrorCode;
 import uk.gov.pmrv.api.integration.registry.setoperator.common.NotifyErrorDTO;
@@ -34,17 +33,16 @@ public class InstallationSetOperatorIdResponseHandler {
     private final InstallationSetOperatorIdSendToRegistryProducer registryProducer;
     private final OperatorIdErrorNotifierService operatorIdErrorNotifierService;
     private final AccountQueryService accountQueryService;
-    private final KafkaCorrelationContext kafkaCorrelationContext;
 
 
-    public void handleResponse(OperatorUpdateEvent event) {
+    public void handleResponse(OperatorUpdateEvent event, String correlationId, String parentCorrelationId) {
         try {
             OperatorUpdateEventOutcome eventOutcome = operatorIdEventOutcomeService.getInstallationOperatorIdEventOutcome(event);
-            registryProducer.produce(eventOutcome);
+            registryProducer.produce(eventOutcome, correlationId, parentCorrelationId);
             if (IntegrationEventOutcome.ERROR.equals(eventOutcome.getOutcome())) {
                 NotifyErrorDTO notifyErrorDTO = NotifyErrorDTO.builder()
                         .outcome(eventOutcome)
-                        .correlationId(kafkaCorrelationContext.get())
+                        .correlationId(correlationId)
                         .event(event)
                         .service(NotifyRegistryUtils.INSTALLATION_SERVICE_KEY)
                         .build();
@@ -57,14 +55,15 @@ public class InstallationSetOperatorIdResponseHandler {
         catch(Exception ex) {
             NotifyErrorDTO notifyErrorDTO = NotifyErrorDTO.builder()
                     .outcome(operatorIdEventOutcomeService.getInternalErrorEventOutcome(event))
-                    .correlationId(kafkaCorrelationContext.get())
+                    .correlationId(correlationId)
                     .event(event)
                     .service(NotifyRegistryUtils.INSTALLATION_SERVICE_KEY)
                     .build();
             setAuthorityAndName(event, notifyErrorDTO);
             registryProducer.produce(OperatorUpdateEventOutcome.builder().event(event)
                     .errors(List.of(IntegrationEventErrorDetails.builder().error(IntegrationEventError.ERROR_0200)
-                    .errorMessage(RegistryResponseErrorCode.ERROR_0200.getDescription()).build())).build());
+                    .errorMessage(RegistryResponseErrorCode.ERROR_0200.getDescription()).build())).build(),
+                    correlationId, parentCorrelationId);
             log.error(REQUEST_LOG_FORMAT, NotifyRegistryUtils.INSTALLATION_SERVICE_KEY, event.getEmitterId(),
                     NotifyRegistryUtils.OPERATOR_ID_INTEGRATION_POINT_KEY, String.format("Unable to set the operator id " +
                             "from registry [%s] with error : %s",event,ex.getMessage()));

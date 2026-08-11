@@ -31,7 +31,7 @@ public class UserReportEntryRepository {
                         "auth.status as \"userAccountStatus\", " +
                         "COALESCE(string_agg(DISTINCT account_contact.contact_type, ','), '') as \"contactTypes\" " +
                         "from account acc " +
-                        "left join au_authority auth on acc.id = auth.account_id " +
+                        "inner join au_authority auth on acc.id = auth.account_id " +
                         "left join account_contact on acc.id = account_contact.account_id and auth.user_id = account_contact.user_id " +
                          accountLine +
                         "where acc.type = :accountType " +

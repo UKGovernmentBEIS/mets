@@ -9,6 +9,8 @@ public class DigitizedMmpSectionValidatorUtils {
             "Sub installation types do not appear uniquely.";
     public static final String ERROR_INVALID_SUB_INSTALLATION_SIZE= "The number of sub installations is invalid. " +
             "At most 10 sub installations of the product benchmark type and 7 of the fallback approach type must exist.";
+    public static final String ERROR_INVALID_SUB_INSTALLATION_SIZE_CBAM_TRANSITION= "The number of sub installations is invalid. " +
+            "At most 10 sub installations of the product benchmark type and 10 of the fallback approach type must exist.";
     public static final String ERROR_FUEL_ELECTRICITY_EXCHANGEABILITY =
             "At least one sub installation supports Fuel and Electricity Exchangeability and does not have it " +
                     "or at least one sub installation does not support Fuel and Electricity Exchangeability and does have it.";

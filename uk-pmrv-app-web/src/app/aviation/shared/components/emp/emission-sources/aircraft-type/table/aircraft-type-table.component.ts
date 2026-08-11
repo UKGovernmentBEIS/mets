@@ -62,8 +62,9 @@ export class AircraftTypeTableComponent implements OnInit {
         field: 'fuelConsumptionMeasuringMethod',
       },
       {
-        header: '',
+        header: 'Actions',
         field: 'actions',
+        hiddenHeader: true,
       },
     ];
     if (this.location.path().includes('summary')) {

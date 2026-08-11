@@ -35,10 +35,10 @@
       (Scotland) Regulations 2004 ("the Regulations").
     </p>
   </div>
-  <app-boolean-radio-group
-    controlName="exist"
-    legend="Is any of the information in your application commercially confidential?"
-    [isEditable]="isEditable">
+  <app-boolean-radio-group controlName="exist" [isEditable]="isEditable">
+    <h2 govukLegend class="govuk-fieldset__heading">
+      Is any of the information in your application commercially confidential?
+    </h2>
     <div govukConditionalContent>
       <h2 class="govuk-heading-m">List the sections that are commercially confidential</h2>
       <p class="govuk-body">

@@ -346,3 +346,64 @@ export const exchangeabilityTypes = [
   'STYRENE',
   'SYNTHESIS_GAS',
 ];
+
+export const directlyAttributableEmissionsTypes = [
+  'FUEL_BENCHMARK_CL',
+  'FUEL_BENCHMARK_CL_CBAM',
+  'FUEL_BENCHMARK_CL_NON_CBAM',
+  'FUEL_BENCHMARK_NON_CL',
+  'DISTRICT_HEATING_NON_CL',
+  'HEAT_BENCHMARK_CL',
+  'HEAT_BENCHMARK_CL_CBAM',
+  'HEAT_BENCHMARK_CL_NON_CBAM',
+  'HEAT_BENCHMARK_NON_CL',
+];
+
+export const fuelInputRelevantEmissionsTypes = [
+  'FUEL_BENCHMARK_CL',
+  'FUEL_BENCHMARK_CL_CBAM',
+  'FUEL_BENCHMARK_CL_NON_CBAM',
+  'FUEL_BENCHMARK_NON_CL',
+  'DISTRICT_HEATING_NON_CL',
+  'HEAT_BENCHMARK_CL',
+  'HEAT_BENCHMARK_CL_CBAM',
+  'HEAT_BENCHMARK_CL_NON_CBAM',
+  'HEAT_BENCHMARK_NON_CL',
+];
+
+export const measurableHeatProducedImportedEmissionsTypes = [
+  'DISTRICT_HEATING_NON_CL',
+  'HEAT_BENCHMARK_CL',
+  'HEAT_BENCHMARK_CL_CBAM',
+  'HEAT_BENCHMARK_CL_NON_CBAM',
+  'HEAT_BENCHMARK_NON_CL',
+];
+
+export const measurableHeatExportedEmissionsTypes = [
+  'FUEL_BENCHMARK_CL',
+  'FUEL_BENCHMARK_CL_CBAM',
+  'FUEL_BENCHMARK_CL_NON_CBAM',
+  'FUEL_BENCHMARK_NON_CL',
+];
+
+export const annualHeatEmissionsTypes = [
+  'DISTRICT_HEATING_NON_CL',
+  'HEAT_BENCHMARK_CL',
+  'HEAT_BENCHMARK_CL_CBAM',
+  'HEAT_BENCHMARK_CL_NON_CBAM',
+  'HEAT_BENCHMARK_NON_CL',
+];
+
+export const annualFuelEmissionsTypes = [
+  'FUEL_BENCHMARK_CL',
+  'FUEL_BENCHMARK_CL_CBAM',
+  'FUEL_BENCHMARK_CL_NON_CBAM',
+  'FUEL_BENCHMARK_NON_CL',
+];
+
+export const annualProcessEmissionsTypes = [
+  'PROCESS_EMISSIONS_CL',
+  'PROCESS_EMISSIONS_CL_CBAM',
+  'PROCESS_EMISSIONS_CL_NON_CBAM',
+  'PROCESS_EMISSIONS_NON_CL',
+];

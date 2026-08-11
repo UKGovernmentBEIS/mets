@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -47,7 +46,7 @@ class AerRequestAmendsVerificationActionHandlerTest {
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.AER_REQUEST_AMENDS_VERIFICATION;
         AppUser appUser = new AppUser();
         AerApplicationRequestVerificationRequestTaskActionPayload payload =
-                new AerApplicationRequestVerificationRequestTaskActionPayload();
+                new AerApplicationRequestVerificationRequestTaskActionPayload(); // required by RequestTaskActionHandler interface
         RequestTask requestTask = RequestTask.builder()
                 .processTaskId(requestTaskId.toString())
                 .request(Request.builder().id(requestId).build())
@@ -56,15 +55,14 @@ class AerRequestAmendsVerificationActionHandlerTest {
 
         actionHandler.process(requestTaskId, requestTaskActionType, appUser, payload);
 
-        verify(requestAerSubmitService).sendAmendsToVerifier(eq(payload), eq(requestTask), eq(appUser));
+        verify(requestAerSubmitService).sendAmendsToVerifier(requestTask, appUser);
         verify(workflowService).completeTask(
-                eq(requestTask.getProcessTaskId()),
-                eq(Map.of(
+                requestTask.getProcessTaskId(),
+                Map.of(
                         BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
                         BpmnProcessConstants.AER_OUTCOME, AerOutcome.VERIFICATION_REQUESTED,
                         BpmnProcessConstants.REQUEST_TYPE_DYNAMIC_TASK_PREFIX, RequestCustomContext.AER_AMEND.getCode()
-                ))
-        );
+                ));
     }
 
     @Test

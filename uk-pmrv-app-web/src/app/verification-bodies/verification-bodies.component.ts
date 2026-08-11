@@ -36,7 +36,7 @@ export class VerificationBodiesComponent implements OnInit {
   editableCols: GovukTableColumn<TableData>[] = [
     { field: 'name', header: 'Verification body name' },
     { field: 'status', header: 'Account status' },
-    { field: 'deleteBtn', header: undefined },
+    { field: 'deleteBtn', header: 'Actions', hiddenHeader: true },
   ];
 
   nonEditableCols: GovukTableColumn<TableData>[] = [

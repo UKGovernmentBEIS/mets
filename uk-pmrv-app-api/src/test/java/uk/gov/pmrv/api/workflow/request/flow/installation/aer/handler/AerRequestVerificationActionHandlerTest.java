@@ -12,7 +12,6 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
@@ -47,8 +46,7 @@ class AerRequestVerificationActionHandlerTest {
     void process() {
         final long taskId = 1L;
         final AppUser user = AppUser.builder().build();
-        final AerApplicationRequestVerificationRequestTaskActionPayload payload = AerApplicationRequestVerificationRequestTaskActionPayload.builder()
-                .payloadType(RequestTaskActionPayloadType.AER_REQUEST_VERIFICATION_PAYLOAD).build();
+        final AerApplicationRequestVerificationRequestTaskActionPayload payload = AerApplicationRequestVerificationRequestTaskActionPayload.builder().build();
         final String processId = "processId";
         final String requestId = "requestId";
         final LocalDate dueDate = LocalDate.now();
@@ -65,7 +63,7 @@ class AerRequestVerificationActionHandlerTest {
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(taskId);
-        verify(requestAerSubmitService, times(1)).sendToVerifier(payload, task, user);
+        verify(requestAerSubmitService, times(1)).sendToVerifier(task, user);
         verify(workflowService, times(1)).completeTask(processId,
                 Map.of(BpmnProcessConstants.REQUEST_ID, requestId,
                         BpmnProcessConstants.AER_OUTCOME, AerOutcome.VERIFICATION_REQUESTED));

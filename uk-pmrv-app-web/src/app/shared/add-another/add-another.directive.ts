@@ -35,7 +35,7 @@ export class AddAnotherDirective implements AfterViewInit, OnChanges {
 
   ngAfterViewInit(): void {
     this.nativeElement.parentElement.classList.add('moj-add-another__item');
-    this.nativeElement.parentElement.querySelector('legend').classList.add('moj-add-another__title');
+    this.nativeElement.parentElement.querySelector('legend')?.classList.add('moj-add-another__title');
   }
 
   @HostListener('click')

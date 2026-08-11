@@ -8,9 +8,11 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.kafka.correlation.KafkaCorrelationContext;
+import uk.gov.netz.api.kafka.correlation.KafkaCorrelationContextHolder;
+import uk.gov.netz.api.kafka.correlation.KafkaCorrelationContextScope;
 import uk.gov.netz.api.kafka.utils.KafkaConstants;
 import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
-import uk.gov.pmrv.api.integration.common.KafkaCorrelationContext;
 
 @Component
 @RequiredArgsConstructor
@@ -20,19 +22,20 @@ import uk.gov.pmrv.api.integration.common.KafkaCorrelationContext;
 public class InstallationSetOperatorIdEventListener {
 
     private final InstallationSetOperatorIdResponseHandler handler;
-    private final KafkaCorrelationContext kafkaCorrelationContext;
 
     @KafkaHandler
     @Transactional
-    public void handler(@Payload OperatorUpdateEvent event, @Header(KafkaConstants.CORRELATION_ID_HEADER) String correlationId) {
-        kafkaCorrelationContext.set(correlationId);
-        try {
-            handler.handleResponse(event);
-        }
-        finally {
-            kafkaCorrelationContext.clear();
+    public void handler(@Payload OperatorUpdateEvent event,
+                        @Header(KafkaConstants.CORRELATION_ID_HEADER) String correlationId,
+                        @Header(value = KafkaConstants.CORRELATION_PARENT_ID_HEADER, required = false) String parentCorrelationId) {
+        // Only parentCorrelationId goes into the context — fan-out messages (Account Updated, Contacts, Exempt Flags)
+        // inherit it from there and get a fresh correlationId each.
+        // The response correlationId (B) is passed explicitly so it cannot be affected by context mutations.
+        try (KafkaCorrelationContextScope scope = KafkaCorrelationContextHolder.open(
+                KafkaCorrelationContext.builder()
+                        .parentCorrelationId(parentCorrelationId)
+                        .build())) {
+            handler.handleResponse(event, correlationId, parentCorrelationId);
         }
     }
-
-
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { map, Observable } from 'rxjs';
 
@@ -16,6 +16,7 @@ import { GovukSelectOption } from 'govuk-components';
   viewProviders: [existingControlContainer],
 })
 export class LocationStateFormComponent {
+  readonly idSuffix = input<string>('');
   countriesOptions$: Observable<GovukSelectOption<string>[]> = this.countryService
     .getUkCountries()
     .pipe(

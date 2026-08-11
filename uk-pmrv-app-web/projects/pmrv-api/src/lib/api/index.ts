@@ -60,6 +60,7 @@ export * from './requestItems.service';
 export * from './requestNotes.service';
 export * from './requests.service';
 export * from './requestTaskAttachmentsHandling.service';
+export * from './settings.service';
 export * from './sourceStreams.service';
 export * from './subInstallationTypes.service';
 export * from './tasks.service';

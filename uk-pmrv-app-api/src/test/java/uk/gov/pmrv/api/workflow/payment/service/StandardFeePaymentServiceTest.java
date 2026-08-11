@@ -25,6 +25,7 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.permit.domain.PermitType;
+import uk.gov.pmrv.api.workflow.payment.domain.PaymentFee;
 import uk.gov.pmrv.api.workflow.payment.domain.PaymentFeeMethod;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeMethodType;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeType;
@@ -56,8 +57,8 @@ class StandardFeePaymentServiceTest {
             .build();
         FeeMethodType feeMethodType = FeeMethodType.STANDARD;
         BigDecimal fixedFee = BigDecimal.valueOf(2500.55);
-        Map<FeeType, BigDecimal> fees = new EnumMap<>(FeeType.class);
-        fees.put(FIXED, fixedFee);
+        Map<FeeType, PaymentFee> fees = new EnumMap<>(FeeType.class);
+        fees.put(FIXED, PaymentFee.builder().amount(fixedFee).build());
         PaymentFeeMethod paymentFeeMethod = PaymentFeeMethod.builder()
             .competentAuthority(competentAuthority)
             .requestType(requestType)

@@ -26446,6 +26446,65 @@
             </sql>
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_mi_report_user_defined_manage_rules" author="mitzelose@unisystems.gr">
+        <sql>
+            insert into au_rule(id,resource_type,resource_sub_type,handler,role_type,scope)
+            values (nextval('au_rule_seq'), 'CA', null, 'caAccessHandler', 'REGULATOR', 'MANAGE_MI_REPORT_USER_DEFINED');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),'CA', null, 'MANAGE_MI_REPORT_USER_DEFINED',
+                        'PERM_MI_REPORTS_MANAGE_CUSTOM_REPORTS_EXECUTE_TASK', 'REGULATOR');
+
+            insert into au_service(id,name)
+            values (nextval('au_service_seq'),'createCustomReport'),
+                   (nextval('au_service_seq'),'deleteCustomReport'),
+                   (nextval('au_service_seq'),'updateCustomReport');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('createCustomReport', 'deleteCustomReport', 'updateCustomReport')
+              and r.resource_type = 'CA'
+              and r.resource_sub_type is null
+              and r.handler = 'caAccessHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope = 'MANAGE_MI_REPORT_USER_DEFINED';
+
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name in ('createCustomReport', 'deleteCustomReport', 'updateCustomReport')
+                and r.resource_type = 'CA'
+                and r.resource_sub_type is null
+                and r.handler = 'caAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'MANAGE_MI_REPORT_USER_DEFINED';
+
+                delete from au_service
+                where name in ('createCustomReport', 'deleteCustomReport', 'updateCustomReport');
+
+                delete from au_resource_scope_permission
+                where resource_type = 'CA'
+                and resource_sub_type is null
+                and scope = 'MANAGE_MI_REPORT_USER_DEFINED'
+                and permission = 'PERM_MI_REPORTS_MANAGE_CUSTOM_REPORTS_EXECUTE_TASK'
+                and role_type = 'REGULATOR';
+
+                delete from au_rule
+                where resource_type = 'CA'
+                and resource_sub_type is null
+                and handler = 'caAccessHandler'
+                and role_type = 'REGULATOR'
+                and scope = 'MANAGE_MI_REPORT_USER_DEFINED';
+
+            </sql>
+        </rollback>
+    </changeSet>
     <changeSet id="0_2_0_create_au_service_rule_revert_getDocumentPreview_emp_issuance_operator" author="dridakisc@unisystems.gr">
         <sql>
             delete from au_service_rule sr

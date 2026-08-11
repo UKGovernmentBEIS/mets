@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { EMPTY, of, throwError } from 'rxjs';
 
+import { AuthStore } from '@core/store/auth';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage } from '@testing';
@@ -12,6 +13,7 @@ import { ActivatedRouteStub, BasePage } from '@testing';
 import { MiReportsUserDefinedService } from 'pmrv-api';
 
 import { buildCustomReportError } from '../errors/business-error';
+import { CustomReportPreviewComponent } from '../shared/custom-report-preview/custom-report-preview.component';
 import { AddCustomReportComponent } from './add-custom-report.component';
 
 describe('AddCustomReportComponent', () => {
@@ -32,8 +34,29 @@ describe('AddCustomReportComponent', () => {
       return this.query('govuk-error-summary');
     }
 
+    get previewButton(): HTMLButtonElement {
+      return this.queryAll<HTMLButtonElement>('button').find((b) => b.textContent.trim() === 'Preview results');
+    }
+
+    get previewHeaders(): string[] {
+      return this.queryAll<HTMLElement>('.govuk-table__head th').map((th) => th.textContent.trim());
+    }
+
+    get previewCells(): string[] {
+      return this.queryAll<HTMLElement>('.govuk-table__body td').map((td) => td.textContent.trim());
+    }
+
+    get previewEmptyMessage(): HTMLElement {
+      return this.query('app-custom-report-preview p.govuk-body');
+    }
+
     submitForm(): void {
       this.query('form').dispatchEvent(new Event('submit'));
+      this.fixture.detectChanges();
+    }
+
+    clickPreview(): void {
+      this.previewButton.click();
       this.fixture.detectChanges();
     }
   }
@@ -44,6 +67,7 @@ describe('AddCustomReportComponent', () => {
     miReportsService = {
       getCategories: jest.fn().mockReturnValue(of(categories)),
       createCustomReport: jest.fn().mockReturnValue(of({})),
+      previewCustomReport: jest.fn().mockReturnValue(of({ columnNames: [], results: [] })),
     };
 
     businessErrorService = {
@@ -57,11 +81,14 @@ describe('AddCustomReportComponent', () => {
         { provide: MiReportsUserDefinedService, useValue: miReportsService },
         { provide: BusinessErrorService, useValue: businessErrorService },
       ],
-      declarations: [AddCustomReportComponent],
+      declarations: [AddCustomReportComponent, CustomReportPreviewComponent],
     }).compileComponents();
 
     router = TestBed.inject(Router);
     jest.spyOn(router, 'navigate').mockResolvedValue(true);
+
+    const authStore = TestBed.inject(AuthStore);
+    authStore.setCurrentDomain('INSTALLATION');
   });
 
   beforeEach(() => {
@@ -93,7 +120,7 @@ describe('AddCustomReportComponent', () => {
 
     page.submitForm();
 
-    expect(miReportsService.createCustomReport).toHaveBeenCalledWith({
+    expect(miReportsService.createCustomReport).toHaveBeenCalledWith('INSTALLATION', {
       reportName: 'Active installations',
       description: 'A useful report',
       queryDefinition: 'SELECT * FROM accounts',
@@ -101,12 +128,33 @@ describe('AddCustomReportComponent', () => {
     });
     expect(router.navigate).toHaveBeenCalledWith(['../'], {
       relativeTo: routeStub,
-      state: { notification: true },
+      state: { notification: 'Report saved' },
     });
   });
 
-  it('should broadcast the response message as a business error and not navigate when the report name already exists', () => {
-    const message = 'A report with this name already exists';
+  it('should show a specific form error on the SQL query field when the query is invalid', () => {
+    const message = 'Only SELECT statements are allowed';
+    miReportsService.createCustomReport.mockReturnValue(
+      throwError(() => new HttpErrorResponse({ status: 400, error: { code: 'FORM1001', message } })),
+    );
+
+    component.form.patchValue({
+      reportName: 'Active installations',
+      categories: ['2', '4'],
+      description: 'A useful report',
+      queryDefinition: 'DROP TABLE accounts',
+    });
+
+    page.submitForm();
+
+    expect(component.form.get('queryDefinition').errors).toEqual({ invalidSqlQuery: 'Enter a valid SQL query' });
+    expect(page.errorSummary).toBeTruthy();
+    expect(businessErrorService.showError).not.toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
+
+  it('should show a specific form error on the report name field when the report name already exists', () => {
+    const message = 'The provided MI Report name already exists';
     miReportsService.createCustomReport.mockReturnValue(
       throwError(() => new HttpErrorResponse({ status: 409, error: { code: 'MIREPORT1001', message } })),
     );
@@ -120,7 +168,11 @@ describe('AddCustomReportComponent', () => {
 
     page.submitForm();
 
-    expect(businessErrorService.showError).toHaveBeenCalledWith(buildCustomReportError(message));
+    expect(component.form.get('reportName').errors).toEqual({
+      reportNameExists: 'The report name already exists. Enter a different report name.',
+    });
+    expect(page.errorSummary).toBeTruthy();
+    expect(businessErrorService.showError).not.toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
@@ -140,6 +192,60 @@ describe('AddCustomReportComponent', () => {
     page.submitForm();
 
     expect(businessErrorService.showError).toHaveBeenCalledWith(buildCustomReportError(message));
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
+
+  it('should show the error summary and not preview when the query is empty', () => {
+    page.clickPreview();
+
+    expect(page.errorSummary).toBeTruthy();
+    expect(miReportsService.previewCustomReport).not.toHaveBeenCalled();
+  });
+
+  it('should preview the first results as a table with dynamic columns', () => {
+    miReportsService.previewCustomReport.mockReturnValue(
+      of({
+        columnNames: ['account_id', 'installation_name'],
+        results: [
+          { account_id: 'UK-E-IN-00001', installation_name: 'Wentworth Energy Ltd' },
+          { account_id: 'UK-E-IN-00002', installation_name: 'Agric Limited - Test' },
+        ],
+      }),
+    );
+
+    component.form.get('queryDefinition').setValue('SELECT * FROM accounts');
+    page.clickPreview();
+
+    expect(miReportsService.previewCustomReport).toHaveBeenCalledWith({ sqlQuery: 'SELECT * FROM accounts' });
+    expect(page.previewHeaders).toEqual(['account_id', 'installation_name']);
+    expect(page.previewCells).toEqual([
+      'UK-E-IN-00001',
+      'Wentworth Energy Ltd',
+      'UK-E-IN-00002',
+      'Agric Limited - Test',
+    ]);
+  });
+
+  it('should show a message when the previewed query returns no results', () => {
+    component.form.get('queryDefinition').setValue('SELECT * FROM accounts WHERE 1 = 0');
+    page.clickPreview();
+
+    expect(page.previewEmptyMessage).toBeTruthy();
+    expect(page.previewEmptyMessage.textContent.trim()).toBe('The query returned no results.');
+  });
+
+  it('should show the error on the query field and not display a preview when the previewed query is invalid', () => {
+    const message = 'Custom query could not be executed';
+    miReportsService.previewCustomReport.mockReturnValue(
+      throwError(() => new HttpErrorResponse({ status: 400, error: { code: 'REPORT1001', message } })),
+    );
+
+    component.form.get('queryDefinition').setValue('SELEKT * FROM accounts');
+    page.clickPreview();
+
+    expect(component.form.get('queryDefinition').errors).toEqual({ invalidSqlQuery: message });
+    expect(page.errorSummary).toBeTruthy();
+    expect(page.previewHeaders).toEqual([]);
     expect(router.navigate).not.toHaveBeenCalled();
   });
 });

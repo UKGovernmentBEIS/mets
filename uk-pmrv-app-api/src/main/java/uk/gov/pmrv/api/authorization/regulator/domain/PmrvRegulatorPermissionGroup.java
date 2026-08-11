@@ -119,4 +119,7 @@ public class PmrvRegulatorPermissionGroup {
 
     public static final String AVIATION_AER_3YEAR_PERIOD_OFFSETTING = "AVIATION_AER_3YEAR_PERIOD_OFFSETTING";
     public static final String PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING = "PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING";
+
+    //Mi Reports Custom
+    public static final String MI_REPORTS_MANAGE_CUSTOM = "MI_REPORTS_MANAGE_CUSTOM";
 }

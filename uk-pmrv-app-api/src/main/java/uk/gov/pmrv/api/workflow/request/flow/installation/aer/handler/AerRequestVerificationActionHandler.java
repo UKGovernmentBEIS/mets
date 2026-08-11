@@ -31,7 +31,7 @@ public class AerRequestVerificationActionHandler implements RequestTaskActionHan
                         AppUser appUser,
                         AerApplicationRequestVerificationRequestTaskActionPayload payload) {
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
-        requestAerSubmitService.sendToVerifier(payload, requestTask, appUser);
+        requestAerSubmitService.sendToVerifier(requestTask, appUser);
 
         // Complete task
         workflowService.completeTask(requestTask.getProcessTaskId(),

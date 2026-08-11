@@ -4,34 +4,32 @@
       ? [
           {
             text: 'CALCULATION_CO2' | monitoringApproachDescription,
-            link: ['calculation']
+            link: ['calculation'],
           },
           {
             text:
               sourceStream$ | async | findSourceStream | async | tierSourceStreamName: (sourceStreamCategory$ | async),
-            link: ['calculation', 'category-tier', index$ | async]
-          }
+            link: ['calculation', 'category-tier', index$ | async],
+          },
         ]
       : [
           {
             text: 'CALCULATION_CO2' | monitoringApproachDescription,
-            link: ['calculation']
+            link: ['calculation'],
           },
           {
             text: 'Add a source stream category',
-            link: ['calculation', 'category-tier', index$ | async]
-          }
+            link: ['calculation', 'category-tier', index$ | async],
+          },
         ]
-  "
->
+  ">
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
     [caption]="'CALCULATION_CO2' | monitoringApproachDescription"
     heading="Source stream category"
     submitText="Save and Continue"
-    [hideSubmit]="(store.isEditable$ | async) === false"
-  >
+    [hideSubmit]="(store.isEditable$ | async) === false">
     <p class="govuk-body">Define a source stream category by linking a source stream with its emission source.</p>
 
     <div formControlName="sourceStream" govuk-select label="Source stream" widthClass="govuk-!-width-full">
@@ -45,8 +43,7 @@
         [itemValue]="emissionSource.id"
         [label]="emissionSource.reference + ' ' + emissionSource.description"
         app-multi-select-item
-        itemName="emissionSources"
-      ></div>
+        itemName="emissionSources"></div>
     </div>
     <div
       formControlName="annualEmittedCO2Tonnes"
@@ -56,53 +53,43 @@
       hint="Include carbon dioxide equivalent (CO2e)"
       suffix="Tonnes"
       widthClass="govuk-input--width-10"
-    ></div>
+      autoComplete="off"></div>
     <div
       formControlName="calculationMethod"
       govuk-radio
-      legend="What calculation method will be used to determine CO2 emissions?"
-    >
+      legend="What calculation method will be used to determine CO2 emissions?">
       <govuk-radio-option
         *ngFor="let option of calculationMethodOptions"
         [hint]="option.hint"
         [label]="option.label"
-        [value]="option.value"
-      >
-      </govuk-radio-option>
+        [value]="option.value"></govuk-radio-option>
     </div>
     <div formControlName="categoryType" govuk-radio legend="What category does this source stream fit in?">
       <govuk-radio-option
         *ngFor="let option of categoryTypeOptions"
         [label]="option | categoryTypeName"
-        [value]="option"
-      >
-      </govuk-radio-option>
+        [value]="option"></govuk-radio-option>
     </div>
     <div
       *ngIf="hasTransfer$ | async"
       formControlName="entryAccountingForTransfer"
       govuk-radio
-      legend="Are the emissions from this source stream exported to, or received from another installation?"
-    >
+      legend="Are the emissions from this source stream exported to, or received from another installation?">
       <govuk-radio-option [value]="true" label="Yes">
         <ng-container govukConditionalContent>
           <div
             formControlName="transferDirection"
             govuk-radio
-            legend="What direction is the transferred CO2 travelling?"
-          >
+            legend="What direction is the transferred CO2 travelling?">
             <govuk-radio-option
               value="EXPORTED_TO_LONG_TERM_FACILITY"
-              label="Exported to a long-term geological storage related facility"
-            ></govuk-radio-option>
+              label="Exported to a long-term geological storage related facility"></govuk-radio-option>
             <govuk-radio-option
               value="EXPORTED_FOR_PRECIPITATED_CALCIUM"
-              label="Exported out of our installation and used to produce precipitated calcium carbonate, in which the used CO2 is chemically bound"
-            ></govuk-radio-option>
+              label="Exported out of our installation and used to produce precipitated calcium carbonate, in which the used CO2 is chemically bound"></govuk-radio-option>
             <govuk-radio-option
               value="RECEIVED_FROM_ANOTHER_INSTALLATION"
-              label="Received from another installation"
-            ></govuk-radio-option>
+              label="Received from another installation"></govuk-radio-option>
           </div>
         </ng-container>
       </govuk-radio-option>
@@ -110,7 +97,5 @@
     </div>
   </app-wizard-step>
 
-  <a govukLink routerLink="..">
-    Return to: {{ index$ | async | sourceStreamCategoryName: 'CALCULATION_CO2' | async }}
-  </a>
+  <a govukLink routerLink="..">Return to: {{ index$ | async | sourceStreamCategoryName: 'CALCULATION_CO2' | async }}</a>
 </app-permit-task>

@@ -4,14 +4,12 @@
     (formSubmit)="onSubmit()"
     [formGroup]="form"
     submitText="Submit"
-    heading="Enter the code shown in the authenticator app"
-  >
+    heading="Enter the code shown in the authenticator app">
     <div
       formControlName="otp"
       govuk-text-input
       label="Enter the 6-digit code"
-      widthClass="govuk-!-width-one-third"
-    ></div>
+      widthClass="govuk-!-width-one-third"></div>
   </app-wizard-step>
 </ng-container>
 
@@ -25,7 +23,7 @@
       <h2 class="govuk-heading-m">What happens next</h2>
       <p class="govuk-body">
         You can
-        <a govukLink [routerLink]="[]" (click)="onSignInAgain()">sign in to the UK ETS reporting service</a>
+        <a govukLink [href]="loginUrl()">sign in to the UK ETS reporting service</a>
         with your new password.
       </p>
       <app-back-to-top></app-back-to-top>

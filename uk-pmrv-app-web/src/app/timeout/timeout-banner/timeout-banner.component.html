@@ -3,9 +3,8 @@
   role="dialog"
   class="govuk-timeout-warning dialog fixed"
   aria-live="polite"
-  aria-labelledby="dialog-title"
-  aria-describedby="at-timer"
->
+  aria-label="Your session will end soon"
+  aria-describedby="at-timer">
   <app-page-heading size="l" id="dialog-title">Your session will end soon</app-page-heading>
   <div class="govuk-body">
     <ng-container *ngIf="timeoutBannerService.timeExtensionAllowed$ | async; else noMoreTimeExtension">

@@ -26,6 +26,10 @@
     position: absolute;
     right: 0;
     top: 0;
+
+    & + .govuk-form-group {
+      clear: left;
+    }
   }
 
   &__add-button {

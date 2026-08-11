@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { BehaviorSubject, of } from 'rxjs';
 
+import { ConfigStore } from '@core/config/config.store';
 import { mockKeycloak, mockKeycloakEventSignal } from '@core/guards/mocks';
 import { BREADCRUMB_ITEMS, BreadcrumbItem } from '@core/navigation/breadcrumbs';
 import { AuthStore, LoginStatus } from '@core/store/auth';
@@ -23,6 +24,7 @@ describe('AppComponent', () => {
   let page: Page;
   let breadcrumbItem$: BehaviorSubject<BreadcrumbItem[]>;
   let authStore: AuthStore;
+  let configStore: ConfigStore;
 
   const setUser: (roleType: UserStateDTO['roleType'], loginStatus?: LoginStatus) => void = (roleType, loginStatus?) => {
     authStore.setUserState({
@@ -71,6 +73,10 @@ describe('AppComponent', () => {
       return this.query<HTMLAnchorElement>('a[href="/bulk-downloads"]');
     }
 
+    get settingsLink() {
+      return this.query<HTMLAnchorElement>('a[href="/settings"]');
+    }
+
     get navList() {
       return this.query<HTMLElement>('govuk-header-nav-list-legacy');
     }
@@ -97,6 +103,9 @@ describe('AppComponent', () => {
     authStore.setIsLoggedIn(true);
     authStore.setCurrentDomain('INSTALLATION');
     authStore.setUserState({ roleType: 'OPERATOR', domainsLoginStatuses: { INSTALLATION: 'NO_AUTHORITY' } });
+
+    configStore = TestBed.inject(ConfigStore);
+    configStore.setState({ ...configStore.getState(), features: { settings: true } });
 
     bulkDownloadService.hasAccessBulkDownload.mockReturnValue(of(false));
   });
@@ -276,6 +285,22 @@ describe('AppComponent', () => {
 
     setUser('REGULATOR');
     expect(page.bulkDownloadsLink).toBeTruthy();
+  });
+
+  it('should render the settings link only if the user is a regulator and the settings feature is enabled', () => {
+    setUser('OPERATOR');
+    expect(page.settingsLink).toBeFalsy();
+
+    setUser('VERIFIER');
+    expect(page.settingsLink).toBeFalsy();
+
+    setUser('REGULATOR');
+    expect(page.settingsLink).toBeTruthy();
+
+    configStore.setState({ ...configStore.getState(), features: { settings: false } });
+    fixture.detectChanges();
+
+    expect(page.settingsLink).toBeFalsy();
   });
 
   it('should not render the bulk downloads link if aviation', () => {

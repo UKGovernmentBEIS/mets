@@ -1,4 +1,39 @@
+import { MiReportUserDefinedHistoryResults, MiReportUserDefinedResults } from 'pmrv-api';
+
 import { ExtendedMiReportResult } from '../core/mi-interfaces';
+
+export const mockStandardReports = [
+  { id: 1, miReportType: 'LIST_OF_ACCOUNTS_USERS_CONTACTS' },
+  { id: 2, miReportType: 'COMPLETED_WORK' },
+  { id: 3, miReportType: 'REGULATOR_OUTSTANDING_REQUEST_TASKS' },
+];
+
+export const mockMiReportUserDefinedResults = {
+  queries: [
+    {
+      id: 1,
+      reportName: 'Test report 1',
+      description: 'This is a dummy report 1',
+      categories: [
+        { id: 2, name: 'Cat 2' },
+        { id: 4, name: 'Cat 4' },
+        { id: 8, name: 'Cat 8' },
+      ],
+    },
+    {
+      id: 2,
+      reportName: 'Test report 2',
+      description: 'This is a dummy report 2',
+      categories: [{ id: 3, name: 'Cat 3' }],
+    },
+  ],
+  total: 2,
+} as MiReportUserDefinedResults;
+
+export const mockMiReportCategories = [
+  { id: 2, name: 'Cat 2' },
+  { id: 3, name: 'Cat 3' },
+];
 
 export const mockAccountsUsersContactsMiReportResult = {
   reportType: 'LIST_OF_ACCOUNTS_USERS_CONTACTS',
@@ -139,6 +174,31 @@ export const mockVerificationBodiesUsersMiReportResult = {
       telephone: '222222',
       'User status': 'PENDING',
       'Last logon': '07 Νοεμβρίου 2022 09:23:26',
+    },
+  ],
+};
+
+export const mockMiReportUserDefinedHistoryResults: MiReportUserDefinedHistoryResults = {
+  total: 12,
+  results: [
+    {
+      submissionDate: '2026-04-09T09:22:00Z',
+      submittedBy: 'Regulator England',
+      reasonForChange: 'Added region_name join and updated ORDER BY clause.',
+      reportName: 'Active installations by permit type and region',
+      categories: 'Workflow Submission Status, Management, Financial',
+      description: 'Returns all active installation accounts grouped by permit type and region.',
+      queryDefinition: 'SELECT\n  a.account_id,\n  r.region_name\nFROM accounts a',
+      changeType: 'UPDATE',
+    },
+    {
+      submissionDate: '2026-03-04T10:20:00Z',
+      submittedBy: 'Regulator England',
+      reportName: 'Active installations by permit type and region',
+      categories: 'Workflow Submission Status, Management',
+      description: 'Returns all active installation accounts grouped by permit type and region.',
+      queryDefinition: 'SELECT * FROM accounts',
+      changeType: 'CREATE',
     },
   ],
 };

@@ -4,8 +4,8 @@
   [isInline]="isInline"
   [legend]="legend"
   legendSize="medium"
-  govuk-radio
->
+  govuk-radio>
+  <ng-content select="[govukLegend]" ngProjectAs="[govukLegend]"></ng-content>
   <govuk-radio-option [value]="true" [label]="yesLabel"></govuk-radio-option>
   <govuk-radio-option [value]="false" [label]="noLabel"></govuk-radio-option>
 </div>

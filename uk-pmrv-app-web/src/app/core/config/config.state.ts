@@ -1,6 +1,7 @@
 export const FEATURES = [
   'aviation',
   'terms',
+  'settings',
   'serviceGatewayEnabled',
   'inspectionsWfAccountsTabEnabled',
   'corsia3yearOffsettingEnabled',

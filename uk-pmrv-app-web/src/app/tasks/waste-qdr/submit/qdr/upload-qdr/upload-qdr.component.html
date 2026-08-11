@@ -8,7 +8,7 @@
     [showBackLink]="false">
     <div class="govuk-!-width-three-quarters">
       <div class="govuk-!-margin-bottom-5">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Download the template</h3>
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-1">Download the template</h2>
         <div class="govuk-hint">Fill it in as best you can before uploading.</div>
         <a
           govukLink
@@ -35,12 +35,12 @@
         formControlName="supportingFiles"
         [customHintTemplate]="hintTemplate"></app-multiple-file-input>
 
-      <h2 class="govuk-heading-s">Notes (optional)</h2>
-
       <div
         govuk-textarea
         formControlName="notes"
         [maxLength]="10000"
+        labelSize="small"
+        label="Notes (optional)"
         hint="Add any information you think will help regulators review your report or supporting data."></div>
     </div>
   </app-wizard-step>

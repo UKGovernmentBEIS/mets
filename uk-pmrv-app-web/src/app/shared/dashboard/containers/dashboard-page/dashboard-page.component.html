@@ -3,14 +3,14 @@
     <app-page-heading size="xl">Tasks</app-page-heading>
 
     <govuk-tabs (selectedTab)="selectTab($event)">
-      <ng-template govukTab id="assigned-to-me" label="Assigned to me">
+      <ng-template govukTabLazy id="assigned-to-me" label="Assigned to me">
         <ng-container
           *ngTemplateOutlet="
             tabTemplate;
             context: { unassigned: 'Regulator', tab: 'assigned-to-me', header: 'Assigned to me' }
           "></ng-container>
       </ng-template>
-      <ng-template govukTab id="assigned-to-others" label="Assigned to others">
+      <ng-template govukTabLazy id="assigned-to-others" label="Assigned to others">
         <ng-container
           *ngTemplateOutlet="
             tabTemplate;
@@ -18,7 +18,7 @@
           "></ng-container>
       </ng-template>
       @if (vm.role !== 'OPERATOR') {
-        <ng-template govukTab id="unassigned" label="Unassigned">
+        <ng-template govukTabLazy id="unassigned" label="Unassigned">
           <ng-container
             *ngTemplateOutlet="
               tabTemplate;
@@ -63,12 +63,10 @@
 
       @if (vm.total > vm.pageSize) {
         <ng-container>
-          @if (vm.activeTab === tab) {
-            <app-pagination
-              (currentPageChange)="changePage($event)"
-              [count]="vm.total"
-              [pageSize]="vm.pageSize"></app-pagination>
-          }
+          <app-pagination
+            (currentPageChange)="changePage($event)"
+            [count]="vm.total"
+            [pageSize]="vm.pageSize"></app-pagination>
         </ng-container>
       }
     </ng-template>

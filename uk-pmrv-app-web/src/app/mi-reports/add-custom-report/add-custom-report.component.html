@@ -12,6 +12,7 @@
         govuk-text-input
         label="Report name"
         labelSize="small"
+        [maxLength]="255"
         hint="Use a clear, specific name - for example 'Active installations by permit type and region'"></div>
 
       <div
@@ -41,6 +42,8 @@
         rows="10"
         [maxLength]="10000"
         hint="Enter a valid read-only SELECT query. INSERT, UPDATE, DELETE and DROP statements are not permitted"></div>
+
+      <button appPendingButton type="button" govukSecondaryButton (click)="onPreview()">Preview results</button>
     </div>
 
     <div class="govuk-grid-column-one-third">
@@ -52,6 +55,8 @@
       </ul>
     </div>
   </div>
+
+  <app-custom-report-preview [preview]="previewResult$ | async"></app-custom-report-preview>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

@@ -11,6 +11,7 @@ import uk.gov.pmrv.api.reporting.domain.AerContainer;
 import uk.gov.pmrv.api.reporting.domain.AerSubmitParams;
 import uk.gov.pmrv.api.reporting.service.AerService;
 import uk.gov.pmrv.api.reporting.validation.AerValidatorService;
+import uk.gov.pmrv.api.verificationbody.domain.verificationreport.VerificationReport;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -20,7 +21,6 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerReviewDataType;
 import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerReviewDecision;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationAmendsSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationRequestVerificationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationVerificationSubmitRequestTaskPayload;
@@ -32,6 +32,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerSubmitAp
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.mapper.AerMapper;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -108,8 +109,7 @@ public class RequestAerSubmitService {
         updateRequestMetadata(request, taskPayload, aerRequestPayload);
     }
 
-    public void sendToVerifier(AerApplicationRequestVerificationRequestTaskActionPayload actionPayload,
-                               RequestTask requestTask, AppUser appUser) {
+    public void sendToVerifier(RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         AerRequestPayload aerRequestPayload = (AerRequestPayload) request.getPayload();
         AerApplicationSubmitRequestTaskPayload taskPayload = (AerApplicationSubmitRequestTaskPayload) requestTask.getPayload();
@@ -119,13 +119,12 @@ public class RequestAerSubmitService {
         AerContainer container = aerMapper.toAerContainer(taskPayload);
         aerValidatorService.validateAer(container);
 
-        aerRequestPayload.setVerificationSectionsCompleted(actionPayload.getVerificationSectionsCompleted());
+        resetVerificationStateIfVerificationBodyChanged(aerRequestPayload, request.getVerificationBodyId());
 
         submitAer(aerRequestPayload, requestTask, appUser, RequestActionType.AER_APPLICATION_SENT_TO_VERIFIER, requestActionPayload, taskPayload.getAerSectionsCompleted());
     }
 
-    public void sendAmendsToVerifier(AerApplicationRequestVerificationRequestTaskActionPayload actionPayload,
-                                     RequestTask requestTask, AppUser appUser) {
+    public void sendAmendsToVerifier(RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         AerRequestPayload aerRequestPayload = (AerRequestPayload) request.getPayload();
         AerApplicationAmendsSubmitRequestTaskPayload taskPayload = (AerApplicationAmendsSubmitRequestTaskPayload) requestTask.getPayload();
@@ -141,7 +140,7 @@ public class RequestAerSubmitService {
         AerContainer container = aerMapper.toAerContainer(taskPayload);
         aerValidatorService.validateAer(container);
 
-        aerRequestPayload.setVerificationSectionsCompleted(actionPayload.getVerificationSectionsCompleted());
+        resetVerificationStateIfVerificationBodyChanged(aerRequestPayload, request.getVerificationBodyId());
 
         submitAer(aerRequestPayload, requestTask, appUser, RequestActionType.AER_APPLICATION_AMENDS_SENT_TO_VERIFIER, requestActionPayload, taskPayload.getAerSectionsCompleted());
     }
@@ -230,6 +229,17 @@ public class RequestAerSubmitService {
         Optional.ofNullable(aerContainer.getVerificationReport()).ifPresent(report ->
                 metadata.setOverallAssessmentType(report.getVerificationData().getOverallAssessment().getType()));
         metadata.setEmissions(totalEmissions);
+    }
+
+    private void resetVerificationStateIfVerificationBodyChanged(AerRequestPayload aerRequestPayload, Long currentVerificationBodyId) {
+        Long existingReportVerificationBodyId = Optional.ofNullable(aerRequestPayload.getVerificationReport())
+            .map(VerificationReport::getVerificationBodyId)
+            .orElse(null);
+        if (currentVerificationBodyId == null || !currentVerificationBodyId.equals(existingReportVerificationBodyId)) {
+            aerRequestPayload.setVerificationReport(null);
+            aerRequestPayload.setVerificationSectionsCompleted(new HashMap<>());
+            aerRequestPayload.setVerificationAttachments(new HashMap<>());
+        }
     }
 
     private void removeReviewGroupDecisionsForRemovedMonitoringApproaches(AerRequestPayload aerRequestPayload, Set<MonitoringApproachType> newMonitoringApproaches) {
