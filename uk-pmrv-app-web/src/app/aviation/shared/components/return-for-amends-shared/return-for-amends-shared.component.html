@@ -1,16 +1,21 @@
 <ng-container *ngIf="(isSubmitted$ | async) === false; else completed">
-  <app-request-action-heading [headerText]="pageHeader" [timelineCreationDate]="creationDate ? creationDate : ''">
-  </app-request-action-heading>
+  <app-request-action-heading
+    [headerText]="pageHeader"
+    [timelineCreationDate]="creationDate ? creationDate : ''"></app-request-action-heading>
 
   <div *ngFor="let decision of decisionAmends">
-    <h2 app-summary-header class="govuk-heading-m" *ngIf="!isAer">
+    <app-summary-header class="govuk-heading-m" *ngIf="!isAer">
       {{ decision.groupKey | i18nSelect: empHeaderTaskMap }}
-    </h2>
+    </app-summary-header>
 
-    <h2 app-summary-header class="govuk-heading-m" *ngIf="isAer">
-      <ng-container *ngIf="!isCorsia else corsiaReviewDecisions" >{{ decision.groupKey | i18nSelect: aerHeaderTaskMap }}</ng-container>
-      <ng-template #corsiaReviewDecisions>{{ decision.groupKey | i18nSelect: aerReviewCorsiaHeaderTaskMap }}</ng-template>
-    </h2>
+    <app-summary-header class="govuk-heading-m" *ngIf="isAer">
+      <ng-container *ngIf="!isCorsia; else corsiaReviewDecisions">
+        {{ decision.groupKey | i18nSelect: aerHeaderTaskMap }}
+      </ng-container>
+      <ng-template #corsiaReviewDecisions>
+        {{ decision.groupKey | i18nSelect: aerReviewCorsiaHeaderTaskMap }}
+      </ng-template>
+    </app-summary-header>
 
     <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
       <div govukSummaryListRow>
@@ -21,15 +26,15 @@
               let requiredChange of $any(decision).data.details?.requiredChanges;
               let i = index;
               let isLast = last
-            "
-          >
+            ">
             <div class="pre-wrap">
-              {{ i + 1 }}. {{ requiredChange.reason }} <br />
+              {{ i + 1 }}. {{ requiredChange.reason }}
+              <br />
               <ng-container *ngIf="requiredChange?.files?.length > 0">
                 <app-summary-download-files
-                  [files]="getDownloadUrlFiles(requiredChange?.files, reviewAttachments, downloadBaseUrl)"
-                >
-                </app-summary-download-files>
+                  [files]="
+                    getDownloadUrlFiles(requiredChange?.files, reviewAttachments, downloadBaseUrl)
+                  "></app-summary-download-files>
               </ng-container>
             </div>
 
@@ -53,8 +58,8 @@
   <div class="govuk-grid-row">
     <govuk-panel title="Returned to operator for changes"></govuk-panel>
 
-    <span class="govuk-body"
-      >The {{ !isAer ? 'application' : 'report' }} has been returned to the operator so they can make the necessary
+    <span class="govuk-body">
+      The {{ !isAer ? 'application' : 'report' }} has been returned to the operator so they can make the necessary
       changes.
     </span>
 
@@ -64,6 +69,6 @@
       They will return the {{ !isAer ? 'application' : 'report' }} to you when the changes have been made.
     </p>
 
-    <a govukLink routerLink="/aviation/dashboard"> Return to dashboard </a>
+    <a govukLink routerLink="/aviation/dashboard">Return to dashboard</a>
   </div>
 </ng-template>

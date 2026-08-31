@@ -13,10 +13,10 @@
   <ng-template #approaches>
     <p class="govuk-body">List the monitoring approaches that have been used during the reporting year.</p>
     <p class="govuk-body">The table is pre-populated with approaches currently in the approved permit.</p>
-    <h2 app-summary-header class="govuk-heading-m">
+    <app-summary-header class="govuk-heading-m">
       You have added {{ (monitoringApproaches$ | async).length }} monitoring
       {{ (monitoringApproaches$ | async).length > 1 ? 'approaches' : 'approach' }}
-    </h2>
+    </app-summary-header>
     <ng-container *ngIf="monitoringApproaches$ | async as monitoringApproach">
       <dl govuk-summary-list [hasBorders]="false">
         <div govukSummaryListRow>

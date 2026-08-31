@@ -1,7 +1,7 @@
 <ng-container *ngIf="vm() as vm">
   <div class="govuk-!-width-two-thirds">
     <app-action-task [header]="vm.header" [breadcrumb]="true">
-      <h2 app-summary-header class="govuk-heading-m">Quarterly data report</h2>
+      <app-summary-header class="govuk-heading-m">Quarterly data report</app-summary-header>
       <app-waste-qdr-summary-template
         [reportProvided]="vm.reportProvided"
         [quartelyTitle]="vm.quartelyTitle"

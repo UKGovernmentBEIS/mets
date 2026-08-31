@@ -2,9 +2,9 @@
   <app-request-action-heading headerText="Check your answers" [timelineCreationDate]=""></app-request-action-heading>
 
   <div *ngFor="let decision of decisionAmends$ | async">
-    <h2 app-summary-header class="govuk-heading-m">
+    <app-summary-header class="govuk-heading-m">
       {{ decision.groupKey | aerTaskDescription }}
-    </h2>
+    </app-summary-header>
 
     <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
       <div govukSummaryListRow>

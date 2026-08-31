@@ -37,7 +37,7 @@ describe('DecisionSummaryComponent', () => {
     }
 
     get changeLink() {
-      return this.query<HTMLAnchorElement>('h2 a');
+      return this.query<HTMLAnchorElement>('app-summary-header a');
     }
   }
 

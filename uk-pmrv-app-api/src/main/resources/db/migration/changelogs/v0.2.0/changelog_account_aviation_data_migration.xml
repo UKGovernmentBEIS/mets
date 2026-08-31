@@ -148,5 +148,26 @@
         ]]>;
     </sql>
     </changeSet>
+    <changeSet id="0_2_0_fix_emp_issuance_registry_integration_first_year_of_reporting_obligation" author="mitzelose@unisystems.gr">
+        <comment>Rename operatorDetails.firstKnownAviationActivity to firstYearOfReportingObligation and store it as an integer year</comment>
+        <sql>
+        <![CDATA[
+            UPDATE request_action
+            SET payload = jsonb_set(
+                    payload #- ARRAY['operatorDetails','firstKnownAviationActivity']::text[],
+                    ARRAY['operatorDetails','firstYearOfReportingObligation']::text[],
+                    to_jsonb(
+                            EXTRACT(
+                                    YEAR FROM (payload #>> ARRAY['operatorDetails','firstKnownAviationActivity']::text[])::date
+                            )::int
+                    ),
+                    true
+                          )
+            WHERE type = 'EMP_ISSUANCE_UKETS_ACCOUNT_CREATED_SENT_TO_REGISTRY'
+              AND payload ->> 'payloadType' = 'EMP_ISSUANCE_UKETS_REGISTRY_INTEGRATION_ACCOUNT_CREATED_PAYLOAD'
+              AND payload #>> ARRAY['operatorDetails','firstKnownAviationActivity']::text[] IS NOT NULL;
+            ]]>
+    </sql>
+    </changeSet>
 
 </databaseChangeLog>

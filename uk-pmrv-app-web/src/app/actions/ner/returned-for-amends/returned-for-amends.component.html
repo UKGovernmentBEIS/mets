@@ -5,7 +5,7 @@
     [expectedActionType]="['NER_APPLICATION_RETURNED_FOR_AMENDS']"></app-base-action-container-component>
 
   <ng-template #customContentTemplate>
-    <h2 app-summary-header class="govuk-heading-m">New entrance reserve details</h2>
+    <app-summary-header class="govuk-heading-m">New entrance reserve details</app-summary-header>
 
     <app-changes-requested-template
       [requiredChanges]="$any(vm.decisionDetails)?.requiredChanges"

@@ -8,8 +8,7 @@
     Based on the information you gave, this installation can apply for a Hospital and Small Emitter (HSE) permit, a full
     Greenhouse Gas Emissions (GHGE) permit or a waste voluntary monitoring plan.
   </p>
-  <h2
-    app-summary-header
+  <app-summary-header
     [changeRoute]="
       (store.isEditable$ | async) === true &&
       !['PERMIT_VARIATION_APPLICATION_SUBMIT', 'PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT'].includes(
@@ -20,7 +19,7 @@
     "
     class="govuk-heading-m">
     Permit type
-  </h2>
+  </app-summary-header>
   <app-permit-type-summary-template [permitType]="permitType"></app-permit-type-summary-template>
   <app-list-return-link reviewGroupTitle="Permit type" reviewGroupUrl="permit-type"></app-list-return-link>
 </app-permit-task>

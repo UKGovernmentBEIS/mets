@@ -33,9 +33,9 @@ describe('PermitTaskComponent', () => {
     template: `
       <app-permit-task>
         <app-page-heading caption="Additional information">Additional documents and information</app-page-heading>
-        <h2 app-summary-header changeRoute=".." class="govuk-heading-m">
+        <app-summary-header changeRoute=".." class="govuk-heading-m">
           Uploaded additional documents and information
-        </h2>
+        </app-summary-header>
         <app-list-return-link></app-list-return-link>
       </app-permit-task>
     `,
@@ -91,7 +91,7 @@ describe('PermitTaskComponent', () => {
       const pageHeadings = page.headings;
 
       expect(page.headings).toHaveLength(1);
-      expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded additional documents and information  Change');
+      expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded additional documents and information');
     });
   });
 
@@ -119,7 +119,7 @@ describe('PermitTaskComponent', () => {
       const pageHeadings = page.headings;
 
       expect(page.headings).toHaveLength(1);
-      expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded additional documents and information  Change');
+      expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded additional documents and information');
     });
   });
 });

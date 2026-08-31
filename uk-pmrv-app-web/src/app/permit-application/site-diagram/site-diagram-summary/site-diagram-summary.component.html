@@ -2,8 +2,7 @@
   [notification]="notification"
   [breadcrumb]="true"
   reviewGroupTitle="Fuels and equipment inventory"
-  reviewGroupUrl="fuels"
->
+  reviewGroupUrl="fuels">
   <app-page-heading caption="Fuels and equipment inventory">Site diagram</app-page-heading>
 
   <p class="govuk-body">Upload a diagram of the installation site.</p>
@@ -26,13 +25,9 @@
     If the installation uses or supplies power, heat, fuel or materials to another installation, the diagram must show
     all the boundaries and technical connections.
   </p>
-  <h2
-    app-summary-header
-    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-    class="govuk-heading-m"
-  >
+  <app-summary-header [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined" class="govuk-heading-m">
     Uploaded Site diagram
-  </h2>
+  </app-summary-header>
 
   <app-site-diagram-summary-template></app-site-diagram-summary-template>
 

@@ -1,8 +1,9 @@
 <ng-container *ngIf="store | async as state">
-  <app-request-action-heading [headerText]="header$ | async" [timelineCreationDate]="state.requestActionCreationDate">
-  </app-request-action-heading>
+  <app-request-action-heading
+    [headerText]="header$ | async"
+    [timelineCreationDate]="state.requestActionCreationDate"></app-request-action-heading>
 
-  <h2 app-summary-header class="govuk-heading-m">Decision details</h2>
+  <app-summary-header class="govuk-heading-m">Decision details</app-summary-header>
   <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
     <div govukSummaryListRow *ngIf="permitDocument$ | async as permitDocument">
       <dt govukSummaryListRowKey>Permit</dt>
@@ -15,11 +16,10 @@
             actionId$ | async,
             'file-download',
             'document',
-            permitDocument.uuid
+            permitDocument.uuid,
           ]"
           govukLink
-          target="_blank"
-        >
+          target="_blank">
           {{ permitDocument.name }}
         </a>
       </dd>
@@ -56,7 +56,7 @@
     </ng-container>
   </dl>
 
-  <h2 app-summary-header class="govuk-heading-m">Recipients</h2>
+  <app-summary-header class="govuk-heading-m">Recipients</app-summary-header>
   <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Users</dt>
@@ -83,11 +83,10 @@
             actionId$ | async,
             'file-download',
             'document',
-            officialNotice.uuid
+            officialNotice.uuid,
           ]"
           govukLink
-          target="_blank"
-        >
+          target="_blank">
           {{ officialNotice.name }}
         </a>
       </dd>

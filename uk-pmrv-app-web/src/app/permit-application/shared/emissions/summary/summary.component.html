@@ -1,6 +1,5 @@
 <ng-container
-  *ngIf="(taskKey$ | async | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async] as tier"
->
+  *ngIf="(taskKey$ | async | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async] as tier">
   <app-permit-task
     [notification]="notification"
     [breadcrumb]="[
@@ -9,42 +8,38 @@
           (taskKey$ | async) === 'MEASUREMENT_CO2'
             ? ('MEASUREMENT_CO2' | monitoringApproachDescription)
             : ('MEASUREMENT_N2O' | monitoringApproachDescription),
-        link: [(taskKey$ | async) === 'MEASUREMENT_CO2' ? 'measurement' : 'nitrous-oxide']
+        link: [(taskKey$ | async) === 'MEASUREMENT_CO2' ? 'measurement' : 'nitrous-oxide'],
       },
       {
         text: tier | sourceStreamCategoryName | async,
         link: [
           (taskKey$ | async) === 'MEASUREMENT_CO2' ? 'measurement' : 'nitrous-oxide',
           'category-tier',
-          index$ | async
-        ]
-      }
-    ]"
-  >
+          index$ | async,
+        ],
+      },
+    ]">
     <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
     <app-page-heading
       caption="{{
         (taskKey$ | async) === 'MEASUREMENT_CO2'
           ? ('MEASUREMENT_CO2' | monitoringApproachDescription)
           : ('MEASUREMENT_N2O' | monitoringApproachDescription)
-      }}, {{ tier | sourceStreamCategoryName | async }}"
-      >Measured emissions</app-page-heading
-    >
-    <h2
-      app-summary-header
+      }}, {{ tier | sourceStreamCategoryName | async }}">
+      Measured emissions
+    </app-page-heading>
+    <app-summary-header
       (changeClick)="changeClick('')"
       [changeRoute]="(store.isEditable$ | async) === true ? '.' : undefined"
-      class="govuk-heading-m"
-    >
+      class="govuk-heading-m">
       <span class="govuk-visually-hidden">Measured emissions</span>
-    </h2>
+    </app-summary-header>
 
     <ng-container
       *ngIf="
         (taskKey$ | async | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async]
           .measuredEmissions as measuredEmissions
-      "
-    >
+      ">
       <dl appGroupedSummaryList govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-6">
         <div govukSummaryListRow>
           <ng-container *ngIf="!form.errors?.validMeasurementDevicesOrMethods; else invalidMeasurementDevice">
@@ -81,8 +76,7 @@
           *ngIf="
             ((taskKey$ | async) === 'MEASUREMENT_N2O' && measuredEmissions.tier !== 'TIER_3') ||
             ((taskKey$ | async) === 'MEASUREMENT_CO2' && !['TIER_4', 'NO_TIER'].includes(measuredEmissions.tier))
-          "
-        >
+          ">
           <div govukSummaryListRow>
             <dt govukSummaryListRowKey>Highest tier</dt>
             <dd govukSummaryListRowValue>{{ measuredEmissions.isHighestRequiredTier ? 'Yes' : 'No' }}</dd>
@@ -96,21 +90,20 @@
         </ng-container>
       </dl>
       <ng-container *ngIf="measuredEmissions?.isHighestRequiredTier === false">
-        <h2
-          app-summary-header
+        <app-summary-header
           (changeClick)="changeClick('justification')"
           [changeRoute]="(store.isEditable$ | async) === true ? '.' : undefined"
-          class="govuk-heading-m"
-        >
+          class="govuk-heading-m">
           <span class="govuk-visually-hidden">Applied standard</span>
-        </h2>
+        </app-summary-header>
 
         <dl appGroupedSummaryList govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-6">
           <div govukSummaryListRow>
             <dt govukSummaryListRowKey>Reasons for not applying the highest required tier</dt>
             <dd govukSummaryListRowValue>
               <ng-container *ngIf="measuredEmissions?.noHighestRequiredTierJustification?.isCostUnreasonable">
-                Unreasonable cost <br />
+                Unreasonable cost
+                <br />
               </ng-container>
               <ng-container *ngIf="measuredEmissions?.noHighestRequiredTierJustification?.isTechnicallyInfeasible">
                 Technical infeasibility
@@ -119,8 +112,7 @@
           </div>
           <div
             govukSummaryListRow
-            *ngIf="measuredEmissions?.noHighestRequiredTierJustification?.technicalInfeasibilityExplanation"
-          >
+            *ngIf="measuredEmissions?.noHighestRequiredTierJustification?.technicalInfeasibilityExplanation">
             <dt govukSummaryListRowKey>Explanation of technical infeasibility</dt>
             <dd class="pre-wrap" govukSummaryListRowValue>
               {{ measuredEmissions.noHighestRequiredTierJustification.technicalInfeasibilityExplanation }}
@@ -129,14 +121,14 @@
           <div govukSummaryListRow *ngIf="(files$ | async).length">
             <dt govukSummaryListRowKey>Supporting files</dt>
             <dd govukSummaryListRowValue>
-              <app-summary-download-files [files]="store.getDownloadUrlFiles(files$ | async)">
-              </app-summary-download-files>
+              <app-summary-download-files
+                [files]="store.getDownloadUrlFiles(files$ | async)"></app-summary-download-files>
             </dd>
           </div>
         </dl>
       </ng-container>
     </ng-container>
 
-    <a govukLink routerLink="../.."> Return to: {{ tier | sourceStreamCategoryName | async }}</a>
+    <a govukLink routerLink="../..">Return to: {{ tier | sourceStreamCategoryName | async }}</a>
   </app-permit-task>
 </ng-container>

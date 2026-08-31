@@ -2,19 +2,20 @@
   <app-base-action-container-component
     [header]="'Notification ' + (decision.type === 'ACCEPTED' ? 'approved' : 'rejected')"
     [customContentTemplate]="customContentTemplate"
-    [expectedActionType]="['PERMIT_NOTIFICATION_APPLICATION_GRANTED', 'PERMIT_NOTIFICATION_APPLICATION_REJECTED']"
-  >
-  </app-base-action-container-component>
+    [expectedActionType]="[
+      'PERMIT_NOTIFICATION_APPLICATION_GRANTED',
+      'PERMIT_NOTIFICATION_APPLICATION_REJECTED',
+    ]"></app-base-action-container-component>
   <ng-template #customContentTemplate>
     <h2 class="govuk-heading-m">Decision details</h2>
     <app-permit-notification-review-decision-summary-details
       [reviewDecision]="decision"
-      [notesVisible]="(userRoleType$ | async) === 'REGULATOR'"
-    >
-    </app-permit-notification-review-decision-summary-details>
+      [notesVisible]="
+        (userRoleType$ | async) === 'REGULATOR'
+      "></app-permit-notification-review-decision-summary-details>
     <ng-container *ngIf="reviewDecisionNotification$ | async as reviewDecisionNotification">
       <ng-container *ngIf="usersInfo$ | async as usersInfo">
-        <h2 app-summary-header class="govuk-heading-m">Official notice recipients</h2>
+        <app-summary-header class="govuk-heading-m">Official notice recipients</app-summary-header>
         <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
           <div govukSummaryListRow>
             <dt govukSummaryListRowKey>Users</dt>
@@ -36,9 +37,9 @@
               <a
                 [routerLink]="['/actions', actionId$ | async, 'file-download', 'document', officialNotice.uuid]"
                 govukLink
-                target="_blank"
-                >{{ officialNotice.name }}</a
-              >
+                target="_blank">
+                {{ officialNotice.name }}
+              </a>
             </dd>
           </div>
         </dl>

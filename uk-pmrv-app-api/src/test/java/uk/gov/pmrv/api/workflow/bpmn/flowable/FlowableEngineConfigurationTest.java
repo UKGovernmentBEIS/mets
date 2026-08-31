@@ -30,7 +30,7 @@ class FlowableEngineConfigurationTest {
 
         assertEquals("sch_flowable.", engineConfiguration.getDatabaseTablePrefix());
         assertTrue(engineConfiguration.isTablePrefixIsSchema());
-        assertNull(engineConfiguration.getDatabaseSchema());
+        assertEquals("sch_flowable", engineConfiguration.getDatabaseSchema());
         TransactionAwareDataSourceProxy configuredDataSource =
                 (TransactionAwareDataSourceProxy) engineConfiguration.getDataSource();
         assertSame(dataSource, configuredDataSource.getTargetDataSource());
@@ -40,15 +40,15 @@ class FlowableEngineConfigurationTest {
     @Test
     void configure_with_blank_database_schema() {
         FlowableEngineConfiguration configuration =
-                new FlowableEngineConfiguration(dataSource, transactionManager, "   ");
+                new FlowableEngineConfiguration(dataSource, transactionManager, "");
         SpringProcessEngineConfiguration engineConfiguration = new SpringProcessEngineConfiguration();
-        engineConfiguration.setDatabaseSchema("   ");
+        engineConfiguration.setDatabaseSchema("");
 
         configuration.configure(engineConfiguration);
 
         assertEquals("", engineConfiguration.getDatabaseTablePrefix());
         assertFalse(engineConfiguration.isTablePrefixIsSchema());
-        assertNull(engineConfiguration.getDatabaseSchema());
+        assertEquals("", engineConfiguration.getDatabaseSchema());
     }
 
     @Test

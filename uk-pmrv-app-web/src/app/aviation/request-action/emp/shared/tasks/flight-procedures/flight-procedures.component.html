@@ -2,42 +2,39 @@
   *ngIf="vm$ | async as vm"
   [header]="vm.pageHeader"
   [requestActionType]="vm.requestActionType"
-  [breadcrumb]="true"
->
+  [breadcrumb]="true">
   <ng-template #contentTpl let-showOriginal>
     <app-procedure-form-summary
       *ngIf="vm.data.aircraftUsedDetails || vm.originalData?.aircraftUsedDetails"
       header="Aircraft in use"
-      [procedureFormData]="showOriginal ? vm.originalData?.aircraftUsedDetails : vm.data.aircraftUsedDetails"
-    ></app-procedure-form-summary>
+      [procedureFormData]="
+        showOriginal ? vm.originalData?.aircraftUsedDetails : vm.data.aircraftUsedDetails
+      "></app-procedure-form-summary>
 
     <app-procedure-form-summary
       *ngIf="vm.data.flightListCompletenessDetails || vm.originalData?.flightListCompletenessDetails"
       header="Completeness of the list of flights"
       [procedureFormData]="
         showOriginal ? vm.originalData?.flightListCompletenessDetails : vm.data.flightListCompletenessDetails
-      "
-    ></app-procedure-form-summary>
+      "></app-procedure-form-summary>
 
     <app-procedure-form-summary
       *ngIf="vm.data.ukEtsFlightsCoveredDetails || vm.originalData?.ukEtsFlightsCoveredDetails"
       header="Flights Covered by the UK ETS"
       [procedureFormData]="
         showOriginal ? vm.originalData?.ukEtsFlightsCoveredDetails : vm.data.ukEtsFlightsCoveredDetails
-      "
-    ></app-procedure-form-summary>
+      "></app-procedure-form-summary>
 
     <!-- State pairs that you operate -->
     <ng-container *ngIf="vm.data.operatingStatePairs">
-      <h2 app-summary-header class="govuk-heading-m">State pairs that you operate</h2>
+      <app-summary-header class="govuk-heading-m">State pairs that you operate</app-summary-header>
 
       <app-flight-procedures-data-table
         [operatingStatePairsCorsiaDetails]="
           showOriginal
             ? vm.originalData.operatingStatePairsCorsiaDetails
             : vm.data.operatingStatePairs.operatingStatePairsCorsiaDetails
-        "
-      ></app-flight-procedures-data-table>
+        "></app-flight-procedures-data-table>
     </ng-container>
 
     <!-- Determination of international flights -->
@@ -47,8 +44,7 @@
       [procedureFormData]="
         showOriginal ? vm.originalData.internationalFlightsDetermination : vm.data.internationalFlightsDetermination
       "
-      formRouterLink="../determination-international-flights"
-    ></app-procedure-form-summary>
+      formRouterLink="../determination-international-flights"></app-procedure-form-summary>
 
     <!-- Determination of international flights with offsetting requirements -->
     <app-procedure-form-summary
@@ -59,8 +55,7 @@
           ? vm.originalData.internationalFlightsDeterminationOffset
           : vm.data.internationalFlightsDeterminationOffset
       "
-      formRouterLink="../determination-international-flights-offset"
-    ></app-procedure-form-summary>
+      formRouterLink="../determination-international-flights-offset"></app-procedure-form-summary>
 
     <!-- Determination of flights with no monitoring requirements -->
     <app-procedure-form-summary
@@ -71,8 +66,7 @@
           ? vm.originalData.internationalFlightsDeterminationNoMonitoring
           : vm.data.internationalFlightsDeterminationNoMonitoring
       "
-      formRouterLink="../determination-international-flights-no-monitoring"
-    ></app-procedure-form-summary>
+      formRouterLink="../determination-international-flights-no-monitoring"></app-procedure-form-summary>
   </ng-template>
 
   <app-highlight-diff *ngIf="vm.showDiff">
@@ -83,27 +77,23 @@
   <ng-container
     *ngIf="vm.showDiff === false"
     [ngTemplateOutlet]="contentTpl"
-    [ngTemplateOutletContext]="{ $implicit: false }"
-  ></ng-container>
+    [ngTemplateOutletContext]="{ $implicit: false }"></ng-container>
 
   <app-emp-review-decision-group-summary
     *ngIf="vm.showDecision"
     [data]="vm.reviewDecision"
     [attachments]="vm.reviewAttachments"
-    [downloadBaseUrl]="vm.downloadBaseUrl"
-  ></app-emp-review-decision-group-summary>
+    [downloadBaseUrl]="vm.downloadBaseUrl"></app-emp-review-decision-group-summary>
 
   <app-emp-variation-review-decision-group-summary
     *ngIf="vm.showVariationDecision"
     [data]="vm.variationDecision"
     [attachments]="vm.reviewAttachments"
-    [downloadBaseUrl]="vm.downloadBaseUrl"
-  ></app-emp-variation-review-decision-group-summary>
+    [downloadBaseUrl]="vm.downloadBaseUrl"></app-emp-variation-review-decision-group-summary>
 
   <ng-container *ngIf="vm.showVariationRegLedDecision">
     <h2 class="govuk-heading-m">List changes to include in the variation schedule</h2>
     <app-emp-variation-regulator-led-decision-group-summary
-      [data]="vm.variationRegLedDecision"
-    ></app-emp-variation-regulator-led-decision-group-summary>
+      [data]="vm.variationRegLedDecision"></app-emp-variation-regulator-led-decision-group-summary>
   </ng-container>
 </app-request-action-task>

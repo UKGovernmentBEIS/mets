@@ -38,7 +38,7 @@ describe('AlrTaskComponent', () => {
         <app-page-heading caption="Provide the activity level report">
           Upload the activity level report file
         </app-page-heading>
-        <h2 app-summary-header changeRoute=".." class="govuk-heading-m">Uploaded activity level report</h2>
+        <app-summary-header changeRoute=".." class="govuk-heading-m">Uploaded activity level report</app-summary-header>
       </app-alr-task>
     `,
   })
@@ -88,7 +88,7 @@ describe('AlrTaskComponent', () => {
       const pageHeadings = page.headings;
 
       expect(page.headings).toHaveLength(1);
-      expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded activity level report Change');
+      expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded activity level report');
     });
   });
 });

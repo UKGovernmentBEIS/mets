@@ -15,11 +15,11 @@ import { AerApplicationSubmitRequestTaskPayload } from 'pmrv-api';
   template: `
     <app-aer-task [breadcrumb]="true">
       <app-page-heading>Check your answers</app-page-heading>
-      <h2 app-summary-header class="govuk-heading-m">
+      <app-summary-header class="govuk-heading-m">
         <span [class.govuk-visually-hidden]="(additionalDocumentFiles$ | async).length === 0">
           Uploaded additional documents and information
         </span>
-      </h2>
+      </app-summary-header>
       <app-documents-summary-template
         [isEditable]="isEditable$ | async"
         [data]="additionalDocuments$ | async"

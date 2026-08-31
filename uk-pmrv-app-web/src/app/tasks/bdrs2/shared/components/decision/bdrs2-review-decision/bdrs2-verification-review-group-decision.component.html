@@ -20,13 +20,12 @@
     <button appPendingButton govukButton type="submit">Confirm</button>
   </form>
 } @else {
-  <h2
-    app-summary-header
+  <app-summary-header
     class="govuk-heading-m"
     (changeClick)="isOnEditState = true"
     [changeRoute]="(isEditable$ | async) ? '.' : null">
     Decision Summary
-  </h2>
+  </app-summary-header>
   @if (decisionData$ | async; as decisionData) {
     <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
       <div govukSummaryListRow>

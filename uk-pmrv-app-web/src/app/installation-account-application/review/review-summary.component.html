@@ -17,12 +17,11 @@
   </div>
 </dl>
 
-<h2
-  app-summary-header
+<app-summary-header
   class="govuk-heading-m"
   [changeRoute]="taskId ? ['/installation-account', taskId, 'application', 'legal-entity'] : null">
   Details of the organisation operating the permit
-</h2>
+</app-summary-header>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
   <div govukSummaryListRow *ngIf="showCompaniesHouse()">
     <dt govukSummaryListRowKey>Details</dt>
@@ -138,14 +137,13 @@
   </div>
 </dl>
 
-<h2
-  app-summary-header
+<app-summary-header
   class="govuk-heading-m"
   [changeRoute]="
     taskId ? ['/installation-account', taskId, 'application', 'installation', item.location.type | lowercase] : null
   ">
   Installation details for {{ item.location.type | titlecase }}
-</h2>
+</app-summary-header>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
   <ng-container *ngIf="item.location.type === 'ONSHORE'; else offshoreDetails">
     <div govukSummaryListRow>
@@ -195,12 +193,11 @@
   </dl>
 </ng-container>
 
-<h2
-  app-summary-header
+<app-summary-header
   class="govuk-heading-m"
   [changeRoute]="taskId ? ['/installation-account', taskId, 'application', 'ets-scheme'] : null">
   ETS scheme
-</h2>
+</app-summary-header>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Emissions trading scheme which the installation will be part of</dt>
@@ -216,12 +213,11 @@
   </div>
 </dl>
 
-<h2
-  app-summary-header
+<app-summary-header
   class="govuk-heading-m"
   [changeRoute]="taskId ? ['/installation-account', taskId, 'application', 'type'] : null">
   Application type
-</h2>
+</app-summary-header>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
   <div govukSummaryListRow class="govuk-summary-list__row--no-border">
     <dt govukSummaryListRowKey>Application type</dt>

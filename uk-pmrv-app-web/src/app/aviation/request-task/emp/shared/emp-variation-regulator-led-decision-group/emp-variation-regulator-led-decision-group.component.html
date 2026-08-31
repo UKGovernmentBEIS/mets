@@ -7,15 +7,12 @@
 </ng-container>
 
 <ng-template #viewDecision>
-  <h2
-    app-summary-header
+  <app-summary-header
     class="govuk-heading-m"
     (changeClick)="isOnEditState = true"
-    [changeRoute]="(isEditable$ | async) ? '.' : null"
-  >
+    [changeRoute]="(isEditable$ | async) ? '.' : null">
     List changes to include in the variation schedule
-  </h2>
+  </app-summary-header>
   <app-emp-variation-regulator-led-decision-group-summary
-    [data]="decisionData$ | async"
-  ></app-emp-variation-regulator-led-decision-group-summary>
+    [data]="decisionData$ | async"></app-emp-variation-regulator-led-decision-group-summary>
 </ng-template>

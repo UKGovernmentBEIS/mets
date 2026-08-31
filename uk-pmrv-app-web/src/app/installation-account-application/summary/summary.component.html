@@ -5,9 +5,7 @@
         ? 'Installation application approved'
         : 'Original application'
     "
-    [timelineCreationDate]="creationDate$ | async"
-  >
-  </app-request-action-heading>
+    [timelineCreationDate]="creationDate$ | async"></app-request-action-heading>
 </div>
 <ng-template #submit>
   <app-page-heading caption="Apply for an installation account" size="xl">
@@ -15,13 +13,11 @@
   </app-page-heading>
 </ng-template>
 
-<h2
-  app-summary-header
+<app-summary-header
   class="govuk-heading-m"
-  [changeRoute]="(actionType$ | async) ? undefined : ['..', 'responsibility']"
->
+  [changeRoute]="(actionType$ | async) ? undefined : ['..', 'responsibility']">
   Operator confirmation of responsibility
-</h2>
+</app-summary-header>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>
@@ -41,13 +37,11 @@
 </dl>
 
 <ng-container *ngIf="legalEntity$ | async as legalEntity">
-  <h2
-    app-summary-header
+  <app-summary-header
     class="govuk-heading-m"
-    [changeRoute]="(actionType$ | async) ? undefined : ['..', 'legal-entity-op']"
-  >
+    [changeRoute]="(actionType$ | async) ? undefined : ['..', 'legal-entity-op']">
     Details of the organisation operating the permit
-  </h2>
+  </app-summary-header>
   <dl govuk-summary-list class="govuk-!-margin-bottom-9">
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>New or existing organisation</dt>
@@ -70,7 +64,7 @@
     <ng-container
       [ngTemplateOutlet]="address"
       [ngTemplateOutletContext]="{ $implicit: legalEntity.detailsGroup.address }"
-    ></ng-container>
+      ></ng-container>
 
     <ng-container *ngIf="legalEntity.detailsGroup.holdingCompanyGroup as hc">
       <div govukSummaryListRow id="hc-name">
@@ -88,7 +82,8 @@
         <dd govukSummaryListRowValue>
           <div *ngIf="hc.address.line1">
             {{ hc.address.line1 }}
-            <span *ngIf="hc.address.line2">,</span> {{ hc.address.line2 }}
+            <span *ngIf="hc.address.line2">,</span>
+            {{ hc.address.line2 }}
           </div>
           <div *ngIf="hc.address.city">{{ hc.address.city }}</div>
           <div *ngIf="hc.address.postcode">{{ hc.address.postcode }}</div>
@@ -98,13 +93,9 @@
   </dl>
 </ng-container>
 
-<h2
-  app-summary-header
-  class="govuk-heading-m"
-  [changeRoute]="(actionType$ | async) ? undefined : ['..', 'installation']"
->
+<app-summary-header class="govuk-heading-m" [changeRoute]="(actionType$ | async) ? undefined : ['..', 'installation']">
   Installation details type
-</h2>
+</app-summary-header>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Installation type</dt>
@@ -112,13 +103,11 @@
   </div>
 </dl>
 
-<h2
-  app-summary-header
+<app-summary-header
   class="govuk-heading-m"
-  [changeRoute]="(actionType$ | async) ? undefined : ['..', 'installation', installationType$ | async | lowercase]"
->
+  [changeRoute]="(actionType$ | async) ? undefined : ['..', 'installation', installationType$ | async | lowercase]">
   Installation details for {{ installationType$ | async | lowercase }}
-</h2>
+</app-summary-header>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
   <ng-container *ngIf="(installationType$ | async) === 'ONSHORE'; else offshoreDetails">
     <ng-container *ngIf="onshoreInstallation$ | async as onshoreInstallation">
@@ -136,8 +125,7 @@
       </div>
       <ng-container
         [ngTemplateOutlet]="address"
-        [ngTemplateOutletContext]="{ $implicit: onshoreInstallation.address }"
-      ></ng-container>
+        [ngTemplateOutletContext]="{ $implicit: onshoreInstallation.address }"></ng-container>
     </ng-container>
   </ng-container>
   <ng-template #offshoreDetails>
@@ -163,13 +151,11 @@
 </dl>
 
 <ng-container *ngIf="(installationType$ | async) === 'ONSHORE'">
-  <h2
-    app-summary-header
+  <app-summary-header
     class="govuk-heading-m"
-    [changeRoute]="(actionType$ | async) ? undefined : ['..', 'installation', 'emissions']"
-  >
+    [changeRoute]="(actionType$ | async) ? undefined : ['..', 'installation', 'emissions']">
     Installation details location
-  </h2>
+  </app-summary-header>
   <dl govuk-summary-list class="govuk-!-margin-bottom-9">
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Location of the installation</dt>
@@ -178,9 +164,9 @@
   </dl>
 </ng-container>
 
-<h2 app-summary-header class="govuk-heading-m" [changeRoute]="(actionType$ | async) ? undefined : ['..', 'ets-scheme']">
+<app-summary-header class="govuk-heading-m" [changeRoute]="(actionType$ | async) ? undefined : ['..', 'ets-scheme']">
   ETS scheme
-</h2>
+</app-summary-header>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Emissions trading scheme which the installation will be part of</dt>
@@ -188,13 +174,9 @@
   </div>
 </dl>
 
-<h2
-  app-summary-header
-  class="govuk-heading-m"
-  [changeRoute]="(actionType$ | async) ? undefined : ['..', 'commencement']"
->
+<app-summary-header class="govuk-heading-m" [changeRoute]="(actionType$ | async) ? undefined : ['..', 'commencement']">
   Estimated start date of regulated activities
-</h2>
+</app-summary-header>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>What is the date of commencement of Annex 1 activities?</dt>
@@ -202,9 +184,9 @@
   </div>
 </dl>
 
-<h2 app-summary-header class="govuk-heading-m" [changeRoute]="(actionType$ | async) ? undefined : ['..', 'type']">
+<app-summary-header class="govuk-heading-m" [changeRoute]="(actionType$ | async) ? undefined : ['..', 'type']">
   Application type
-</h2>
+</app-summary-header>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Application type</dt>
@@ -223,8 +205,7 @@
     [disabled]="isSubmitDisabled"
     govukButton
     title="Submit the application"
-    type="button"
-  >
+    type="button">
     Confirm and submit
   </button>
 </ng-container>

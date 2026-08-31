@@ -4,7 +4,7 @@
   <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
 
   <div *ngFor="let data of vm.data; let i = index">
-    <h2 app-summary-header class="govuk-heading-m">{{ data.sectionName }}</h2>
+    <app-summary-header class="govuk-heading-m">{{ data.sectionName }}</app-summary-header>
 
     <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
       <div govukSummaryListRow>
@@ -15,13 +15,13 @@
               let requiredChange of $any(data).sectionData.details.requiredChanges;
               let i = index;
               let isLast = last
-            "
-          >
+            ">
             <div class="pre-wrap">
-              {{ i + 1 }}. {{ requiredChange.reason }} <br />
+              {{ i + 1 }}. {{ requiredChange.reason }}
+              <br />
               <ng-container *ngIf="requiredChange?.files?.length > 0">
-                <app-summary-download-files [files]="getDownloadUrlFiles(requiredChange?.files)">
-                </app-summary-download-files>
+                <app-summary-download-files
+                  [files]="getDownloadUrlFiles(requiredChange?.files)"></app-summary-download-files>
               </ng-container>
             </div>
             <br *ngIf="!isLast" />
@@ -35,8 +35,7 @@
     <div formControlName="changes" govuk-checkboxes>
       <govuk-checkbox
         [value]="true"
-        label="I have made changes and want to mark this task as complete"
-      ></govuk-checkbox>
+        label="I have made changes and want to mark this task as complete"></govuk-checkbox>
     </div>
 
     <div *ngIf="vm.isEditable" class="govuk-button-group">

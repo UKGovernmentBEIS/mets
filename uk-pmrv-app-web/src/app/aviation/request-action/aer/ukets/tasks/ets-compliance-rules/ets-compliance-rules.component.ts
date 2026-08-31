@@ -32,7 +32,7 @@ interface ViewModel {
       <app-ets-compliance-rules-group [etsComplianceRules]="vm.etsComplianceRules"></app-ets-compliance-rules-group>
 
       <ng-container *ngIf="vm.showDecision">
-        <h2 app-summary-header class="govuk-heading-m">Decision Summary</h2>
+        <app-summary-header class="govuk-heading-m">Decision Summary</app-summary-header>
         <app-aer-verification-review-decision-group-summary
           [data]="vm.reviewVerifyDecision"></app-aer-verification-review-decision-group-summary>
       </ng-container>

@@ -22,8 +22,7 @@
   [class.govuk-select--error]="shouldDisplayErrors"
   [formControl]="control"
   [id]="identifier"
-  class="govuk-select {{ widthClass() }}"
-  govukFormError>
+  class="govuk-select {{ widthClass() }}">
   @for (option of options(); track $index) {
     <option [attr.disabled]="option.disabled || null" [ngValue]="option.value">
       {{ option.text }}

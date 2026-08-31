@@ -2,31 +2,26 @@
   *ngIf="
     ('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async]
       .activityData as activityData
-  "
->
-  <h2
+  ">
+  <app-summary-header
     *ngIf="isChangeLinkAvailable"
-    app-summary-header
     (changeClick)="changeClick('')"
     [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-    class="govuk-heading-m"
-  >
+    class="govuk-heading-m">
     <span class="govuk-visually-hidden">Activity Data</span>
-  </h2>
+  </app-summary-header>
   <dl
     govuk-summary-list
     class="govuk-summary-list--no-border"
     [class.govuk-!-margin-bottom-0]="!isChangeLinkAvailable"
-    [class.summary-list--edge-border]="activityDataSectionHasBottomBorder"
-  >
+    [class.summary-list--edge-border]="activityDataSectionHasBottomBorder">
     <div govukSummaryListRow>
       <ng-container *ngIf="!validMeasurementDevicesOrMethodsError; else invalidMeasurementDevice">
         <dt govukSummaryListRowKey>Measurement Devices Or Methods</dt>
         <dd govukSummaryListRowValue class="pre-line">
           <ng-container *ngFor="let deviceId of activityData.measurementDevicesOrMethods; let isLast = last">
             <ng-container
-              *ngIf="'measurementDevicesOrMethods' | task | async | measurementDeviceOrMethod: deviceId as device"
-            >
+              *ngIf="'measurementDevicesOrMethods' | task | async | measurementDeviceOrMethod: deviceId as device">
               {{ device | measurementDeviceOrMethodName }} {{ !isLast ? '\n' : '' }}
             </ng-container>
           </ng-container>
@@ -56,30 +51,28 @@
   </dl>
 
   <ng-container *ngIf="activityData.isHighestRequiredTier === false">
-    <h2
+    <app-summary-header
       *ngIf="isChangeLinkAvailable"
-      app-summary-header
       (changeClick)="changeClick('justification')"
       [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-      class="govuk-heading-m"
-    >
+      class="govuk-heading-m">
       <span class="govuk-visually-hidden">Activity Data Justification</span>
-    </h2>
+    </app-summary-header>
     <dl
       govuk-summary-list
       class="govuk-summary-list--no-border"
       [class.govuk-!-margin-bottom-0]="!isChangeLinkAvailable"
-      [class.summary-list--edge-border]="justificationSectionHasBottomBorder"
-    >
+      [class.summary-list--edge-border]="justificationSectionHasBottomBorder">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Reasons for not applying the highest required tier</dt>
         <dd govukSummaryListRowValue>
-          <ng-container *ngIf="activityData?.noHighestRequiredTierJustification?.isCostUnreasonable"
-            >Unreasonable cost<br
-          /></ng-container>
-          <ng-container *ngIf="activityData?.noHighestRequiredTierJustification?.isTechnicallyInfeasible"
-            >Technical infeasibility</ng-container
-          >
+          <ng-container *ngIf="activityData?.noHighestRequiredTierJustification?.isCostUnreasonable">
+            Unreasonable cost
+            <br />
+          </ng-container>
+          <ng-container *ngIf="activityData?.noHighestRequiredTierJustification?.isTechnicallyInfeasible">
+            Technical infeasibility
+          </ng-container>
         </dd>
       </div>
       <div govukSummaryListRow *ngIf="activityData?.noHighestRequiredTierJustification?.isTechnicallyInfeasible">
@@ -91,7 +84,7 @@
       <div govukSummaryListRow *ngIf="(files$ | async)?.length">
         <dt govukSummaryListRowKey>Supporting files</dt>
         <dd govukSummaryListRowValue>
-          <app-summary-download-files [files]="store.getDownloadUrlFiles(files$ | async)"> </app-summary-download-files>
+          <app-summary-download-files [files]="store.getDownloadUrlFiles(files$ | async)"></app-summary-download-files>
         </dd>
       </div>
     </dl>

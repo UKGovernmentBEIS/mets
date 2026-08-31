@@ -31,7 +31,7 @@ describe('WasteQdrTaskComponent', () => {
     standalone: false,
     template: `
       <app-waste-qdr-task heading="Check your answers" caption="Quarterly data report">
-        <h2 app-summary-header changeRoute=".." class="govuk-heading-m">Check your answers</h2>
+        <app-summary-header changeRoute=".." class="govuk-heading-m">Check your answers</app-summary-header>
       </app-waste-qdr-task>
     `,
   })
@@ -68,6 +68,6 @@ describe('WasteQdrTaskComponent', () => {
     const pageHeadings = page.headings;
 
     expect(page.headings).toHaveLength(1);
-    expect(pageHeadings[0].textContent.trim()).toEqual('Check your answers Change');
+    expect(pageHeadings[0].textContent.trim()).toEqual('Check your answers');
   });
 });

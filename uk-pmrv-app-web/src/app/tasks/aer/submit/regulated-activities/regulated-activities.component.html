@@ -1,6 +1,6 @@
 <app-aer-task [breadcrumb]="true">
   <govuk-error-summary *ngIf="displayErrorSummary$ | async" [form]="form"></govuk-error-summary>
-  <app-page-heading> Regulated activities</app-page-heading>
+  <app-page-heading>Regulated activities</app-page-heading>
   <p class="govuk-body">
     You must list all regulated activities that take place at your installation and add Common Reporting Format (CRF)
     codes for each one.
@@ -13,20 +13,19 @@
           [activity]="activity"
           [errors]="form.errors"
           [isEditable]="aerService.isEditable$ | async"
-          [hasError]="displayErrorSummary$ | async"
-        >
-          <h2 class="govuk-heading-m">
+          [hasError]="displayErrorSummary$ | async">
+          <div class="activity-heading">
+            <h2 class="govuk-heading-m">{{ activity.type | regulatedActivityType }}</h2>
             <a
               *ngIf="(aerService.isEditable$ | async) === true"
               (click)="delete(activity.id)"
               [routerLink]=""
               govukLink
-              class="govuk-!-font-size-19 govuk-!-font-weight-regular float-right"
-            >
+              class="govuk-!-font-size-19 govuk-!-font-weight-regular">
               Delete
+              <span class="govuk-visually-hidden">{{ activity.type | regulatedActivityType }}</span>
             </a>
-            <span>{{ activity.type | regulatedActivityType }}</span>
-          </h2>
+          </div>
         </app-aer-regulated-activities-summary-template>
       </ng-container>
       <ng-container *ngIf="(aerService.isEditable$ | async) === true">

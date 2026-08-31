@@ -19,10 +19,10 @@
     <p class="govuk-body">Create emissions summaries to show all the emissions connections at your installation</p>
     <ng-container *ngIf="'emissionSummaries' | task | async as emissionSummaries">
       <ng-container *ngIf="emissionSummaries.length > 0; else startAdding">
-        <h2 app-summary-header class="govuk-heading-m">
+        <app-summary-header class="govuk-heading-m">
           You have added {{ emissionSummaries.length }} emission
           {{ emissionSummaries.length > 1 ? 'summaries' : 'summary' }}
-        </h2>
+        </app-summary-header>
 
         <govuk-table [columns]="emissionSummariesColumns" [data]="emissionSummaries" [class.no-bottom-border]="false">
           <ng-template let-column="column" let-row="row" let-i="index">

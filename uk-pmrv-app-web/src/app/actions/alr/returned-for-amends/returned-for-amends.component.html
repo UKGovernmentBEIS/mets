@@ -5,7 +5,7 @@
     [expectedActionType]="vm.expectedActionType"></app-base-action-container-component>
   <ng-template #customContentTemplate>
     <div *ngFor="let decision of vm.decisionAmends">
-      <h2 app-summary-header class="govuk-heading-m">Activity level report details</h2>
+      <app-summary-header class="govuk-heading-m">Activity level report details</app-summary-header>
 
       <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
         <div

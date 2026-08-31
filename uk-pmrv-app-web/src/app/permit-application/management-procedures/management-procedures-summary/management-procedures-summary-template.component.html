@@ -46,13 +46,13 @@
   <ng-container *ngIf="(task | isDataFlowActivities: taskKey) && task.diagramAttachmentId">
     <ng-container *ngIf="permitAttachments$ | async as attachments">
       <ng-container *ngIf="attachments[task.diagramAttachmentId] as attachment">
-        <h2 app-summary-header class="govuk-heading-m govuk-!-margin-top-6">Uploaded file</h2>
+        <app-summary-header class="govuk-heading-m govuk-!-margin-top-6">Uploaded file</app-summary-header>
         <dl appGroupedSummaryList govuk-summary-list [hasBottomBorder]="hasBottomBorder">
           <div govukSummaryListRow>
             <dt govukSummaryListRowKey>Diagram</dt>
             <dd govukSummaryListRowValue>
-              <a [routerLink]="getAttachmentUrl(task.diagramAttachmentId)" govukLink target="_blank">{{
-                attachment
+              <a [routerLink]="getAttachmentUrl(task.diagramAttachmentId)" govukLink target="_blank">{{ 
+                attachment 
               }}</a>
             </dd>
           </div>
@@ -69,9 +69,7 @@
           <app-summary-download-files
             [files]="
               this.store.getDownloadUrlFiles(task?.riskAssessmentAttachments, 'permitAttachments', this.showOriginal)
-            "
-          >
-          </app-summary-download-files>
+            "></app-summary-download-files>
         </dd>
       </div>
     </dl>

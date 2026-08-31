@@ -1,6 +1,6 @@
 <!-- eslint-disable @angular-eslint/template/prefer-built-in-pipes -->
 <ng-container *ngIf="vm() as vm">
-  <h2 app-summary-header class="govuk-heading-m">{{ header }}</h2>
+  <app-summary-header class="govuk-heading-m">{{ header }}</app-summary-header>
 
   <dl govuk-summary-list [hasBorders]="hasBorders">
     <div govukSummaryListRow>

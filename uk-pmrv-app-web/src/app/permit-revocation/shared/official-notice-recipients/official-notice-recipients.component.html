@@ -1,5 +1,5 @@
 <ng-container *ngIf="noticeRecipientsData">
-  <h2 app-summary-header class="govuk-heading-m govuk-!-margin-top-9">Official notice recipients</h2>
+  <app-summary-header class="govuk-heading-m govuk-!-margin-top-9">Official notice recipients</app-summary-header>
   <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Users</dt>
@@ -24,12 +24,12 @@
             noticeRecipientsData.requestActionId,
             'file-download',
             'document',
-            officialNotice.uuid
+            officialNotice.uuid,
           ]"
           govukLink
-          target="_blank"
-          >{{ officialNotice.name }}</a
-        >
+          target="_blank">
+          {{ officialNotice.name }}
+        </a>
       </dd>
     </div>
     <div govukSummaryListRow *ngIf="noticeRecipientsData.withdrawnOfficialNotice as withdrawnOfficialNotice">
@@ -41,12 +41,12 @@
             noticeRecipientsData.requestActionId,
             'file-download',
             'document',
-            withdrawnOfficialNotice.uuid
+            withdrawnOfficialNotice.uuid,
           ]"
           govukLink
-          target="_blank"
-          >{{ withdrawnOfficialNotice.name }}</a
-        >
+          target="_blank">
+          {{ withdrawnOfficialNotice.name }}
+        </a>
       </dd>
     </div>
   </dl>

@@ -35,7 +35,7 @@ describe('AnswersComponent', () => {
       return this.queryAll('dd').map((row) => row.textContent.trim());
     }
     get changeLinks() {
-      return this.queryAll<HTMLLinkElement>('h2 > a');
+      return this.queryAll<HTMLLinkElement>('h2 + a');
     }
   }
 

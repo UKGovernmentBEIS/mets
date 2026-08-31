@@ -36,9 +36,9 @@ describe('AerTaskComponent', () => {
     template: `
       <app-aer-task [breadcrumb]="true">
         <app-page-heading caption="Additional information">Abbreviations and definitions</app-page-heading>
-        <h2 app-summary-header changeRoute=".." class="govuk-heading-m">
+        <app-summary-header changeRoute=".." class="govuk-heading-m">
           Uploaded additional documents and information
-        </h2>
+        </app-summary-header>
       </app-aer-task>
     `,
   })
@@ -84,7 +84,7 @@ describe('AerTaskComponent', () => {
       const pageHeadings = page.headings;
 
       expect(page.headings).toHaveLength(1);
-      expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded additional documents and information  Change');
+      expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded additional documents and information');
     });
   });
 });

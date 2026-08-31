@@ -14,9 +14,10 @@ import { regulatedActivitiesFormFactory } from '@tasks/aer/submit/regulated-acti
   standalone: false,
   templateUrl: './regulated-activities.component.html',
   styles: `
-    .float-right {
-      float: right;
-      cursor: pointer;
+    .activity-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
     }
   `,
   providers: [regulatedActivitiesFormFactory],

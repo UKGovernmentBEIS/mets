@@ -1,14 +1,12 @@
 <app-permit-task>
   <app-request-action-heading
     [headerText]="(store.isEditable$ | async) === true ? 'Check your answers' : header"
-    [timelineCreationDate]="store.select('requestActionCreationDate') | async"
-  >
-  </app-request-action-heading>
+    [timelineCreationDate]="store.select('requestActionCreationDate') | async"></app-request-action-heading>
 
   <div *ngFor="let decision of decisionAmends$ | async">
-    <h2 app-summary-header class="govuk-heading-m">
+    <app-summary-header class="govuk-heading-m">
       {{ decision.groupKey | i18nSelect: reviewGroupHeadings }}
-    </h2>
+    </app-summary-header>
     <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Changes required</dt>
@@ -18,15 +16,15 @@
               let requiredChange of $any(decision).data.details?.requiredChanges;
               let i = index;
               let isLast = last
-            "
-          >
+            ">
             <div class="pre-wrap">
-              {{ i + 1 }}. {{ requiredChange.reason }} <br />
+              {{ i + 1 }}. {{ requiredChange.reason }}
+              <br />
               <ng-container *ngIf="requiredChange?.files?.length > 0">
                 <app-summary-download-files
-                  [files]="store.getDownloadUrlFiles(requiredChange?.files, 'reviewAttachments')"
-                >
-                </app-summary-download-files>
+                  [files]="
+                    store.getDownloadUrlFiles(requiredChange?.files, 'reviewAttachments')
+                  "></app-summary-download-files>
               </ng-container>
             </div>
             <br *ngIf="!isLast" />

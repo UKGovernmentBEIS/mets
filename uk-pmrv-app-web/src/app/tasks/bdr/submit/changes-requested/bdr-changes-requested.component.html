@@ -3,7 +3,7 @@
 
   <govuk-error-summary *ngIf="displayErrorSummary$ | async" [form]="form"></govuk-error-summary>
 
-  <h2 app-summary-header class="govuk-heading-m">Baseline data report details</h2>
+  <app-summary-header class="govuk-heading-m">Baseline data report details</app-summary-header>
 
   <ng-container *ngIf="payload() as payload">
     <app-changes-requested-template

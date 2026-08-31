@@ -62,7 +62,7 @@ describe('DesicionComponent', () => {
     }
 
     get changeLink() {
-      return this.query<HTMLLinkElement>('.govuk-heading-m a');
+      return this.query<HTMLLinkElement>('.govuk-heading-m + a');
     }
 
     get acceptDecisionOption() {

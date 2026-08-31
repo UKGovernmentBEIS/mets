@@ -9,18 +9,15 @@
 </ng-container>
 
 <ng-template #viewDecision>
-  <h2
-    app-summary-header
+  <app-summary-header
     class="govuk-heading-m"
     (changeClick)="isOnEditState = true"
-    [changeRoute]="(isEditable$ | async) ? '.' : null"
-  >
+    [changeRoute]="(isEditable$ | async) ? '.' : null">
     Decision Summary
-  </h2>
+  </app-summary-header>
 
   <app-aer-review-decision-group-summary
     [data]="decisionData$ | async"
     [attachments]="attachments$ | async"
-    [downloadBaseUrl]="store.aerDelegate.baseFileAttachmentDownloadUrl"
-  ></app-aer-review-decision-group-summary>
+    [downloadBaseUrl]="store.aerDelegate.baseFileAttachmentDownloadUrl"></app-aer-review-decision-group-summary>
 </ng-template>

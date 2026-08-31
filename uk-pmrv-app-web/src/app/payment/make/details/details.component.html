@@ -5,18 +5,16 @@
         {{ requestTaskType$ | async | i18nSelect: (headingMap$ | async) }}
         <app-task-header-info
           [assignee]="requestTaskItem.requestTask.assigneeFullName"
-          [daysRemaining]="requestTaskItem.requestTask.daysRemaining"
-        ></app-task-header-info>
+          [daysRemaining]="requestTaskItem.requestTask.daysRemaining"></app-task-header-info>
       </app-page-heading>
 
       <app-make-payment-help
         [competentAuthority$]="competentAuthority$"
         [requestType$]="requestType$"
         [requestTaskType$]="requestTaskType$"
-        [defaultHelp]="requestTaskType$ | async | i18nSelect: paymentHintInfo"
-      ></app-make-payment-help>
+        [defaultHelp]="requestTaskType$ | async | i18nSelect: paymentHintInfo"></app-make-payment-help>
 
-      <h2 app-summary-header class="govuk-heading-m">Payment Details</h2>
+      <app-summary-header class="govuk-heading-m">Payment Details</app-summary-header>
       <ng-container *ngIf="paymentDetails$ | async as paymentDetails">
         <dl govuk-summary-list>
           <div govukSummaryListRow>
@@ -51,8 +49,7 @@
           <app-timeline-item
             *ngFor="let action of actions$ | async"
             [action]="action"
-            [link]="action | timelineItemLink: false:(isAviation$ | async)"
-          ></app-timeline-item>
+            [link]="action | timelineItemLink: false : (isAviation$ | async)"></app-timeline-item>
         </app-timeline>
       </div>
     </ng-container>
@@ -61,7 +58,6 @@
     <app-related-actions
       [isAssignable$]="isAssignableAndCapableToAssign$"
       [taskId$]="taskId$"
-      [allowedActions$]="allowedRequestTaskActions$"
-    ></app-related-actions>
+      [allowedActions$]="allowedRequestTaskActions$"></app-related-actions>
   </div>
 </div>

@@ -93,13 +93,12 @@
 } @else {
   @let decisionData = this.decisionData();
 
-  <h2
-    app-summary-header
+  <app-summary-header
     class="govuk-heading-m"
     (changeClick)="changeEditState(true)"
     [changeRoute]="isEditable ? '.' : null">
     Decision Summary
-  </h2>
+  </app-summary-header>
   <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
     @if (decisionData?.type === 'OPERATOR_AMENDS_NEEDED' && !hasNoVerification()) {
       <div govukSummaryListRow>

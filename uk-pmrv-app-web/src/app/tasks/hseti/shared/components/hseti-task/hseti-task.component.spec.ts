@@ -41,7 +41,9 @@ describe('HseTiTaskComponent', () => {
         <app-page-heading caption="Provide the HSE details">
           Upload the 2021-2025 HSE target increase file
         </app-page-heading>
-        <h2 app-summary-header changeRoute=".." class="govuk-heading-m">Upload HSE target increase file added</h2>
+        <app-summary-header changeRoute=".." class="govuk-heading-m">
+          Upload HSE target increase file added
+        </app-summary-header>
       </app-hseti-task>
     `,
   })
@@ -92,7 +94,7 @@ describe('HseTiTaskComponent', () => {
       const pageHeadings = page.headings;
 
       expect(page.headings).toHaveLength(1);
-      expect(pageHeadings[0].textContent.trim()).toEqual('Upload HSE target increase file added Change');
+      expect(pageHeadings[0].textContent.trim()).toEqual('Upload HSE target increase file added');
     });
   });
 });

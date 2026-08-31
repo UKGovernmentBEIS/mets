@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/c
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
 import { PermanentCessationDetailsSummaryTemplateComponent } from '@shared/components/permanent-cessation/permanent-cessation-details-summary-template/permanent-cessation-details-summary-template.component';
 import { UserInfoResolverPipe } from '@shared/pipes/user-info-resolver.pipe';
+import { SummaryHeaderComponent } from '@shared/summary-header/summary-header.component';
 import { AttachedFile } from '@shared/types/attached-file.type';
 
 import { PermanentCessation } from 'pmrv-api';
@@ -17,7 +18,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-permanent-cessation-action-submitted',
-  imports: [ActionSharedModule, NgIf, PermanentCessationDetailsSummaryTemplateComponent],
+  imports: [ActionSharedModule, NgIf, PermanentCessationDetailsSummaryTemplateComponent, SummaryHeaderComponent],
   template: `
     <app-base-action-container-component
       header="Notice sent to operator"
@@ -25,7 +26,7 @@ interface ViewModel {
       [expectedActionType]="['PERMANENT_CESSATION_APPLICATION_SUBMITTED']"></app-base-action-container-component>
 
     <ng-template #customContentTemplate>
-      <h2 app-summary-header class="govuk-heading-m">Details</h2>
+      <app-summary-header class="govuk-heading-m">Details</app-summary-header>
 
       <app-permanent-cessation-details-summary-template
         *ngIf="vm() as vm"

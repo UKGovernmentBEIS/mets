@@ -41,7 +41,7 @@ interface ViewModel {
         [isCorsia]="vm.isCorsia"></app-flight-data-table>
 
       <ng-container *ngIf="vm.showDecision">
-        <h2 app-summary-header class="govuk-heading-m">Decision Summary</h2>
+        <app-summary-header class="govuk-heading-m">Decision Summary</app-summary-header>
         <app-aer-review-decision-group-summary
           [data]="vm.reviewDecision"
           [attachments]="vm.reviewAttachments"

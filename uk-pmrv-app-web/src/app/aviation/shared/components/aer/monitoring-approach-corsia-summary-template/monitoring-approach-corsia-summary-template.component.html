@@ -71,13 +71,12 @@
 </ng-container>
 
 <ng-container *ngIf="data?.fuelUseMonitoringDetails?.aircraftTypeDetails">
-  <h2
-    app-summary-header
+  <app-summary-header
     class="govuk-heading-m"
     [changeRoute]="isEditable ? '../fuel-allocation-block-hour' : null"
     [queryParams]="{ change: true }">
     Fuel allocation by block hour
-  </h2>
+  </app-summary-header>
   <app-aircraft-fuel-burn-ratio-table
     [aviationAerCorsiaAircraftTypeDetails]="
       data?.fuelUseMonitoringDetails?.aircraftTypeDetails

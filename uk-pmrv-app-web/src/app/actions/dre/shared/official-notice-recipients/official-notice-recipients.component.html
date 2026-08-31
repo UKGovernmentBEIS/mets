@@ -1,4 +1,4 @@
-<h2 app-summary-header class="govuk-heading-m govuk-!-margin-top-9">Official notice recipients</h2>
+<app-summary-header class="govuk-heading-m govuk-!-margin-top-9">Official notice recipients</app-summary-header>
 <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Users</dt>
@@ -20,9 +20,9 @@
       <a
         [routerLink]="['/actions', action.id, 'file-download', 'document', officialNotice.uuid]"
         govukLink
-        target="_blank"
-        >{{ officialNotice.name }}</a
-      >
+        target="_blank">
+        {{ officialNotice.name }}
+      </a>
     </dd>
   </div>
 </dl>

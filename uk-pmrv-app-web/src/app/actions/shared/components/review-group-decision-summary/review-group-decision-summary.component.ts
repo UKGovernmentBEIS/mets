@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'app-review-group-decision-summary',
   standalone: false,
   template: `
-    <h2 app-summary-header class="govuk-heading-m">Decision Summary</h2>
+    <app-summary-header class="govuk-heading-m">Decision Summary</app-summary-header>
     <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Decision status</dt>

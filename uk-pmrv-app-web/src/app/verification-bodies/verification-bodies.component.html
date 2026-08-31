@@ -20,8 +20,9 @@
                   [options]="accountStatuses"
                   formControlName="status"
                   govuk-select
-                  widthClass="govuk-!-width-full"
-                ></div>
+                  label="Account status for {{ row.name }}"
+                  [isLabelHidden]="true"
+                  widthClass="govuk-!-width-full"></div>
               </ng-container>
             </ng-container>
           </ng-container>

@@ -27,9 +27,9 @@ interface ViewModel {
     <ng-container *ngIf="vm$ | async as vm">
       <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
 
-      <h2 app-summary-header class="govuk-heading-m">
+      <app-summary-header class="govuk-heading-m">
         <span [class.govuk-visually-hidden]="!vm.hasDocuments">Uploaded files</span>
-      </h2>
+      </app-summary-header>
 
       <app-documents-summary-template
         [data]="vm.additionalDocuments"

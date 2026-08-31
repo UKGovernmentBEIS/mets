@@ -157,7 +157,7 @@ describe('AerReviewGroupDecisionComponent', () => {
         requestTaskId: 1,
       });
 
-      expect(page.header).toEqual('Decision Summary  Change');
+      expect(page.header).toEqual('Decision Summary');
       expect(page.summaryListValues).toEqual([
         ['Decision status', 'Accepted'],
         ['Notes', 'My notes'],
@@ -177,7 +177,7 @@ describe('AerReviewGroupDecisionComponent', () => {
     });
 
     it('should show summary', () => {
-      expect(page.header).toEqual('Decision Summary  Change');
+      expect(page.header).toEqual('Decision Summary');
       expect(page.summaryListValues).toEqual([
         ['Decision status', 'Accepted'],
         ['Notes', 'Notes'],
@@ -221,7 +221,7 @@ describe('AerReviewGroupDecisionComponent', () => {
         requestTaskId: 1,
       });
 
-      expect(page.header).toEqual('Decision Summary  Change');
+      expect(page.header).toEqual('Decision Summary');
       expect(page.summaryListValues).toEqual([
         ['Decision status', 'Operator amends needed'],
         ['Changes required by operator', '1. Changes required'],

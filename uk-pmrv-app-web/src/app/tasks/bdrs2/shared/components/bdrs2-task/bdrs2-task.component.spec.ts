@@ -38,7 +38,9 @@ describe('BdrS2TaskComponent', () => {
         <app-page-heading caption="Provide the baseline data report and details">
           Free allocation and emitter status
         </app-page-heading>
-        <h2 app-summary-header changeRoute=".." class="govuk-heading-m">Are you applying for HSE or USE status?</h2>
+        <app-summary-header changeRoute=".." class="govuk-heading-m">
+          Are you applying for HSE or USE status?
+        </app-summary-header>
       </app-bdrs2-task>
     `,
   })
@@ -88,7 +90,7 @@ describe('BdrS2TaskComponent', () => {
       const pageHeadings = page.headings;
 
       expect(page.headings).toHaveLength(1);
-      expect(pageHeadings[0].textContent.trim()).toEqual('Are you applying for HSE or USE status? Change');
+      expect(pageHeadings[0].textContent.trim()).toEqual('Are you applying for HSE or USE status?');
     });
   });
 });

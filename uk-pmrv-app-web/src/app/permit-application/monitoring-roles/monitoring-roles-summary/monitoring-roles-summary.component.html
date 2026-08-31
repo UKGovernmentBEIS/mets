@@ -2,8 +2,7 @@
   [notification]="notification"
   [breadcrumb]="true"
   reviewGroupTitle="Management procedures"
-  reviewGroupUrl="management-procedures"
->
+  reviewGroupUrl="management-procedures">
   <app-page-heading caption="Management procedures">Monitoring and reporting roles</app-page-heading>
 
   <p class="govuk-body">
@@ -11,16 +10,11 @@
     the holders of these roles carry out.
   </p>
 
-  <h2
-    app-summary-header
-    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-    class="govuk-heading-m"
-  >
+  <app-summary-header [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined" class="govuk-heading-m">
     Roles
-  </h2>
+  </app-summary-header>
   <app-monitoring-roles-summary-template></app-monitoring-roles-summary-template>
   <app-list-return-link
     reviewGroupTitle="Management procedures"
-    reviewGroupUrl="management-procedures"
-  ></app-list-return-link>
+    reviewGroupUrl="management-procedures"></app-list-return-link>
 </app-permit-task>

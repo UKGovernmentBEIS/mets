@@ -1,12 +1,10 @@
 <ng-container *ngIf="deemWithdrawDetermination$ | async as determination">
-  <h2
-    app-summary-header
+  <app-summary-header
     (changeClick)="changeClick('')"
     [changeRoute]="(isEditable$ | async) ? '.' : undefined"
-    class="govuk-heading-m"
-  >
+    class="govuk-heading-m">
     <span class="govuk-visually-hidden">Decision</span>
-  </h2>
+  </app-summary-header>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Decision</dt>
@@ -16,14 +14,12 @@
     </div>
   </dl>
 
-  <h2
-    app-summary-header
+  <app-summary-header
     (changeClick)="changeClick('reason')"
     [changeRoute]="(isEditable$ | async) ? '.' : undefined"
-    class="govuk-heading-m"
-  >
+    class="govuk-heading-m">
     <span class="govuk-visually-hidden">Reason for decision</span>
-  </h2>
+  </app-summary-header>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Reason for decision</dt>

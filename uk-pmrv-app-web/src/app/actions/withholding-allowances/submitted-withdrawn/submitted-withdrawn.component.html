@@ -1,21 +1,20 @@
 <app-base-action-container-component
   [header]="(route.data | async)?.pageTitle"
   [customContentTemplate]="customContentTemplate"
-  [expectedActionType]="[actionType]"
->
-</app-base-action-container-component>
+  [expectedActionType]="[actionType]"></app-base-action-container-component>
 
 <ng-template #customContentTemplate>
   <ng-container *ngIf="actionType === 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_SUBMITTED'">
-    <app-wa-summary-template [payload]="payload$ | async" [isEditable]="false"> </app-wa-summary-template>
+    <app-wa-summary-template [payload]="payload$ | async" [isEditable]="false"></app-wa-summary-template>
   </ng-container>
   <ng-container *ngIf="actionType === 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_WITHDRAWN'">
-    <app-wa-withdraw-summary-template [payload]="payload$ | async" [isEditable]="false">
-    </app-wa-withdraw-summary-template>
+    <app-wa-withdraw-summary-template
+      [payload]="payload$ | async"
+      [isEditable]="false"></app-wa-withdraw-summary-template>
   </ng-container>
 </ng-template>
 
-<h2 app-summary-header class="govuk-heading-m">Official notice recipients</h2>
+<app-summary-header class="govuk-heading-m">Official notice recipients</app-summary-header>
 <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
   <div govukSummaryListRow *ngIf="notificationUsers$ | async as notificationUsers">
     <dt govukSummaryListRowKey>Users</dt>

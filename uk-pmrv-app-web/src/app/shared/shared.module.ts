@@ -218,6 +218,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     MarkdownModule.forChild(),
     ReactiveFormsModule,
     RouterModule,
+    SummaryHeaderComponent,
   ],
   declarations: [
     AbbreviationsSummaryTemplateComponent,
@@ -384,7 +385,6 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     SourceStreamsSummaryTableComponent,
     SubmitComponent,
     SummaryDownloadFilesComponent,
-    SummaryHeaderComponent,
     SummaryOfConditionsGroupComponent,
     SummaryOfConditionsListComponent,
     TaskHeaderInfoComponent,

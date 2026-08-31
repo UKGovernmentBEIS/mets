@@ -7,23 +7,19 @@
 </div>
 
 <ng-template #answers>
-  <app-page-heading *ngIf="(store.isEditable$ | async) === true; else action"> Check your answers </app-page-heading>
+  <app-page-heading *ngIf="(store.isEditable$ | async) === true; else action">Check your answers</app-page-heading>
   <ng-template #action>
     <app-request-action-heading
       headerText="Request for information"
-      [timelineCreationDate]="store.select('requestActionCreationDate') | async"
-    >
-    </app-request-action-heading>
+      [timelineCreationDate]="store.select('requestActionCreationDate') | async"></app-request-action-heading>
   </ng-template>
 
-  <h2
-    app-summary-header
+  <app-summary-header
     (changeClick)="changeClick('questions')"
     [changeRoute]="(store.isEditable$ | async) === true ? '..' : null"
-    class="govuk-heading-m"
-  >
+    class="govuk-heading-m">
     <span>Request details</span>
-  </h2>
+  </app-summary-header>
   <dl govuk-summary-list>
     <ng-container *ngFor="let question of questions$ | async; index as i">
       <div govukSummaryListRow>
@@ -36,8 +32,8 @@
     <div govukSummaryListRow *ngIf="(store | async).rfiSubmitPayload?.files.length">
       <dt govukSummaryListRowKey>Uploaded files</dt>
       <dd govukSummaryListRowValue>
-        <app-summary-download-files [files]="store.getDownloadUrlFiles((store | async).rfiSubmitPayload?.files)">
-        </app-summary-download-files>
+        <app-summary-download-files
+          [files]="store.getDownloadUrlFiles((store | async).rfiSubmitPayload?.files)"></app-summary-download-files>
       </dd>
     </div>
     <div govukSummaryListRow>
@@ -48,14 +44,12 @@
     </div>
   </dl>
 
-  <h2
-    app-summary-header
+  <app-summary-header
     (changeClick)="changeClick('notify')"
     [changeRoute]="(store.isEditable$ | async) === true ? '..' : null"
-    class="govuk-heading-m"
-  >
+    class="govuk-heading-m">
     <span>Recipients</span>
-  </h2>
+  </app-summary-header>
 
   <dl govuk-summary-list>
     <div govukSummaryListRow>
@@ -83,12 +77,12 @@
             store.select('actionId') | async,
             'file-download',
             'document',
-            (store | async)?.officialDocument?.uuid
+            (store | async)?.officialDocument?.uuid,
           ]"
           govukLink
-          target="_blank"
-          >{{ (store | async)?.officialDocument?.name }}</a
-        >
+          target="_blank">
+          {{ (store | async)?.officialDocument?.name }}
+        </a>
       </dd>
     </div>
   </dl>

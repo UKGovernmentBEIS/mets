@@ -21,7 +21,7 @@ interface ViewModel {
       *ngIf="vm$ | async as vm"
       [headerText]="vm.pageHeader"
       [timelineCreationDate]="vm.creationDate">
-      <h2 app-summary-header class="govuk-heading-m">Details</h2>
+      <app-summary-header class="govuk-heading-m">Details</app-summary-header>
       <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Emissions report</dt>

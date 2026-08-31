@@ -1,7 +1,6 @@
 import { Component, computed, contentChild, input, model } from '@angular/core';
 import { ControlValueAccessor, ReactiveFormsModule } from '@angular/forms';
 
-import { FormErrorDirective } from '../directives/form-error/form-error.directive';
 import { LabelDirective } from '../directives/label/label.directive';
 import { ErrorMessageComponent } from '../error-message';
 import { FormInput } from '../form/form-input';
@@ -16,7 +15,7 @@ import { GovukSelectWidthClass } from './select.type';
 */
 @Component({
   selector: 'div[govuk-select]',
-  imports: [ReactiveFormsModule, FormErrorDirective, ErrorMessageComponent],
+  imports: [ReactiveFormsModule, ErrorMessageComponent],
   templateUrl: './select.component.html',
 })
 export class SelectComponent extends FormInput implements ControlValueAccessor {

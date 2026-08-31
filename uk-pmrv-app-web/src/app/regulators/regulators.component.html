@@ -10,8 +10,7 @@
         [columns]="(isEditable$ | async) ? editableCols : nonEditableCols"
         [form]="regulatorsForm"
         [users]="regulators$"
-        appUsersTable
-      >
+        appUsersTable>
         <ng-template let-column="column" let-index="index" let-row="row">
           <ng-container formArrayName="regulatorsArray">
             <div [formGroupName]="index" [ngSwitch]="column.field" class="cell-container">
@@ -27,8 +26,9 @@
                       [options]="authorityStatus === 'ACCEPTED' ? authorityStatusesAccepted : authorityStatuses"
                       formControlName="authorityStatus"
                       govuk-select
-                      widthClass="govuk-!-width-full"
-                    ></div>
+                      label="Account status for {{ row | userFullName }}"
+                      [isLabelHidden]="true"
+                      widthClass="govuk-!-width-full"></div>
                   </ng-container>
                 </ng-container>
               </ng-container>

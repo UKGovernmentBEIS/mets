@@ -3,7 +3,7 @@
     <p class="govuk-body">Check your information before sending</p>
     <ng-container *ngIf="payload()">
       <div *ngFor="let decision of decisionAmends()">
-        <h2 app-summary-header class="govuk-heading-m">Details</h2>
+        <app-summary-header class="govuk-heading-m">Details</app-summary-header>
 
         <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
           <div govukSummaryListRow>

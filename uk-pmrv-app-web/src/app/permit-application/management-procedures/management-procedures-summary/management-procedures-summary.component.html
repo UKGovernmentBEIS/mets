@@ -3,8 +3,7 @@
   [notification]="notification"
   [breadcrumb]="true"
   reviewGroupTitle="Management procedures"
-  reviewGroupUrl="management-procedures"
->
+  reviewGroupUrl="management-procedures">
   <app-page-heading caption="Management procedures">
     {{ permitTask | managementProceduresHeading }}
   </app-page-heading>
@@ -15,16 +14,11 @@
     activities and attach a diagram showing how the data management procedures link together.
   </p>
 
-  <h2
-    app-summary-header
-    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-    class="govuk-heading-m"
-  >
+  <app-summary-header [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined" class="govuk-heading-m">
     <span class="govuk-visually-hidden">{{ permitTask | managementProceduresHeading }}</span>
-  </h2>
+  </app-summary-header>
   <app-management-procedures-summary-template [taskKey]="permitTask"></app-management-procedures-summary-template>
   <app-list-return-link
     reviewGroupTitle="Management procedures"
-    reviewGroupUrl="management-procedures"
-  ></app-list-return-link>
+    reviewGroupUrl="management-procedures"></app-list-return-link>
 </app-permit-task>

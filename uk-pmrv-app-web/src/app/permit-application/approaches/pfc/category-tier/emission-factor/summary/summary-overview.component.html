@@ -2,22 +2,18 @@
   *ngIf="
     ('CALCULATION_PFC' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async]
       .emissionFactor as emissionFactor
-  "
->
-  <h2
+  ">
+  <app-summary-header
     *ngIf="!preview"
-    app-summary-header
     (changeClick)="changeClick('')"
     [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-    class="govuk-heading-m"
-  >
+    class="govuk-heading-m">
     <span class="govuk-visually-hidden">Emission factor</span>
-  </h2>
+  </app-summary-header>
   <dl
     govuk-summary-list
     [hasBorders]="false"
-    [class.summary-list--edge-border]="emissionFactor.isHighestRequiredTier === false"
-  >
+    [class.summary-list--edge-border]="emissionFactor.isHighestRequiredTier === false">
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Tier applied</dt>
       <dd govukSummaryListRowValue>{{ emissionFactor.tier | appliedTier }}</dd>
@@ -31,25 +27,24 @@
   </dl>
 
   <ng-container *ngIf="emissionFactor.isHighestRequiredTier === false">
-    <h2
+    <app-summary-header
       *ngIf="!preview"
-      app-summary-header
       (changeClick)="changeClick('justification')"
       [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-      class="govuk-heading-m"
-    >
+      class="govuk-heading-m">
       <span class="govuk-visually-hidden">Emission factor justification</span>
-    </h2>
+    </app-summary-header>
     <dl govuk-summary-list [hasBorders]="false" [class.summary-list--edge-border]="false">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Reasons for not applying the highest required tier</dt>
         <dd govukSummaryListRowValue>
-          <ng-container *ngIf="emissionFactor?.noHighestRequiredTierJustification?.isCostUnreasonable"
-            >Unreasonable cost<br
-          /></ng-container>
-          <ng-container *ngIf="emissionFactor?.noHighestRequiredTierJustification?.isTechnicallyInfeasible"
-            >Technical infeasibility</ng-container
-          >
+          <ng-container *ngIf="emissionFactor?.noHighestRequiredTierJustification?.isCostUnreasonable">
+            Unreasonable cost
+            <br />
+          </ng-container>
+          <ng-container *ngIf="emissionFactor?.noHighestRequiredTierJustification?.isTechnicallyInfeasible">
+            Technical infeasibility
+          </ng-container>
         </dd>
       </div>
       <div govukSummaryListRow *ngIf="emissionFactor?.noHighestRequiredTierJustification?.isTechnicallyInfeasible">
@@ -61,7 +56,7 @@
       <div govukSummaryListRow *ngIf="(files$ | async)?.length">
         <dt govukSummaryListRowKey>Supporting files</dt>
         <dd govukSummaryListRowValue>
-          <app-summary-download-files [files]="store.getDownloadUrlFiles(files$ | async)"> </app-summary-download-files>
+          <app-summary-download-files [files]="store.getDownloadUrlFiles(files$ | async)"></app-summary-download-files>
         </dd>
       </div>
     </dl>

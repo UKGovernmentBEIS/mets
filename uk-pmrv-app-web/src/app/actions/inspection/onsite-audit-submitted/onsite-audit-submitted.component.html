@@ -156,7 +156,7 @@
     </app-follow-up-item>
 
     <ng-container *ngIf="notificationUsers$ | async as notificationUsers">
-      <h2 app-summary-header class="govuk-heading-m">Official notification letter</h2>
+      <app-summary-header class="govuk-heading-m">Official notification letter</app-summary-header>
       <dl govuk-summary-list [hasBorders]="true">
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Users</dt>

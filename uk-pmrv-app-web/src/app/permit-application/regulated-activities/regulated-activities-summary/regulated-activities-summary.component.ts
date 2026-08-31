@@ -16,12 +16,11 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
       <app-page-heading caption="Installation details">
         Regulated activities carried out at the installation
       </app-page-heading>
-      <h2
+      <app-summary-header
         [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-        app-summary-header
         class="govuk-heading-m">
         <span class="govuk-visually-hidden">List of installation categories</span>
-      </h2>
+      </app-summary-header>
       <app-regulated-activities-summary-template></app-regulated-activities-summary-template>
       <app-list-return-link reviewGroupTitle="Installation details" reviewGroupUrl="details"></app-list-return-link>
     </app-permit-task>

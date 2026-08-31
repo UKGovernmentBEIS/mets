@@ -8,7 +8,7 @@
   </app-page-heading>
 
   <div class="govuk-!-margin-bottom-8 govuk-!-display-block summaryDetails">
-    <h2 app-summary-header class="govuk-heading-m">Response details</h2>
+    <app-summary-header class="govuk-heading-m">Response details</app-summary-header>
     <dl govuk-summary-list class="summary-list--edge-border" [hasBorders]="false">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Request from the regulator</dt>
@@ -132,13 +132,12 @@
   </ng-container>
 
   <ng-template id="summary-review-decision" #summaryDecision>
-    <h2
-      app-summary-header
+    <app-summary-header
       class="govuk-heading-m"
       (changeClick)="changeDecisionClick()"
       [changeRoute]="(isEditable$ | async) ? '.' : undefined">
       Decision details
-    </h2>
+    </app-summary-header>
 
     <app-decision-summary [reviewDecision]="summaryData$ | async"></app-decision-summary>
   </ng-template>

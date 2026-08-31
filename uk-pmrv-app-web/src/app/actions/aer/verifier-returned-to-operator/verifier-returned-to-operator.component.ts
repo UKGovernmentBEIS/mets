@@ -21,7 +21,7 @@ import { AerService } from '../core/aer.service';
       Return to: {{ this.router.url.includes('workflows') ? 'Emissions report' : 'Dashboard' }}
     </a>
     <ng-template #customContentTemplate>
-      <h2 app-summary-header class="govuk-heading-m">Verifier comments</h2>
+      <app-summary-header class="govuk-heading-m">Verifier comments</app-summary-header>
 
       <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6" *ngIf="payload() as payload">
         <div govukSummaryListRow>

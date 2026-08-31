@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/c
 import { getActionTitle } from '@actions/request-action.util';
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
 import { ChangesRequestedTemplateComponent } from '@shared/components/changes-requested-template/changes-requested-template.component';
+import { SummaryHeaderComponent } from '@shared/summary-header/summary-header.component';
 
 import {
   RequestActionDTO,
@@ -23,7 +24,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-waste-qdr-action-returned-for-amends',
-  imports: [ActionSharedModule, NgIf, ChangesRequestedTemplateComponent],
+  imports: [ActionSharedModule, NgIf, ChangesRequestedTemplateComponent, SummaryHeaderComponent],
   template: `
     <ng-container *ngIf="vm() as vm">
       <app-base-action-container-component
@@ -32,7 +33,7 @@ interface ViewModel {
         [expectedActionType]="vm.expectedActionType"></app-base-action-container-component>
 
       <ng-template #customContentTemplate>
-        <h2 app-summary-header class="govuk-heading-m">Quarterly data report</h2>
+        <app-summary-header class="govuk-heading-m">Quarterly data report</app-summary-header>
 
         <app-changes-requested-template
           [requiredChanges]="$any(vm.decisionDetails)?.requiredChanges"

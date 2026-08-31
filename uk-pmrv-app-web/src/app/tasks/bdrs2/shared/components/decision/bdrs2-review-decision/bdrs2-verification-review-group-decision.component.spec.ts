@@ -161,7 +161,7 @@ describe('BdrS2VerificationReviewGroupDecisionComponent', () => {
         requestTaskId: 1,
       });
 
-      expect(page.header.replace(/\s+/g, ' ')).toEqual('Decision Summary Change');
+      expect(page.header.replace(/\s+/g, ' ')).toEqual('Decision Summary');
       expect(page.summaryListValues).toEqual([
         ['Decision status', 'Accepted'],
         ['Notes', 'My notes'],

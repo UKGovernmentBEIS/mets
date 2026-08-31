@@ -150,7 +150,7 @@ describe('VerificationReviewGroupDecisionComponent', () => {
         requestTaskId: 1,
       });
 
-      expect(page.header).toEqual('Decision Summary  Change');
+      expect(page.header).toEqual('Decision Summary');
       expect(page.summaryListValues).toEqual([
         ['Decision status', 'Accepted'],
         ['Notes', 'My notes'],
@@ -170,7 +170,7 @@ describe('VerificationReviewGroupDecisionComponent', () => {
     });
 
     it('should show summary', () => {
-      expect(page.header).toEqual('Decision Summary  Change');
+      expect(page.header).toEqual('Decision Summary');
       expect(page.summaryListValues).toEqual([
         ['Decision status', 'Accepted'],
         ['Notes', 'Notes'],
@@ -206,7 +206,7 @@ describe('VerificationReviewGroupDecisionComponent', () => {
         requestTaskId: 1,
       });
 
-      expect(page.header).toEqual('Decision Summary  Change');
+      expect(page.header).toEqual('Decision Summary');
       expect(page.summaryListValues).toEqual([
         ['Decision status', 'Accepted'],
         ['Notes', 'My notes 2'],

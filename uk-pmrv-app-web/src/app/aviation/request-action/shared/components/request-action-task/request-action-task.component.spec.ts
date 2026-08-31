@@ -38,9 +38,9 @@ describe('RequestActionTaskComponent', () => {
         [breadcrumb]="true"
         header="Abbreviations and definitions"
         requestActionType="EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED">
-        <h2 app-summary-header changeRoute=".." class="govuk-heading-m">
+        <app-summary-header changeRoute=".." class="govuk-heading-m">
           Uploaded additional documents and information
-        </h2>
+        </app-summary-header>
       </app-request-action-task>
     `,
   })
@@ -89,6 +89,6 @@ describe('RequestActionTaskComponent', () => {
     const pageHeadings = page.headings;
 
     expect(page.headings).toHaveLength(1);
-    expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded additional documents and information  Change');
+    expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded additional documents and information');
   });
 });

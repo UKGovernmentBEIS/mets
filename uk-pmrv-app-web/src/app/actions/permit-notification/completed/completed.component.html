@@ -13,7 +13,7 @@
       [data]="followUpResponseDetailsData$ | async"
       [files]="followUpResponseDetailsFiles$ | async"></app-follow-up-summary>
 
-    <h2 app-summary-header class="govuk-heading-m">Decision Details</h2>
+    <app-summary-header class="govuk-heading-m">Decision Details</app-summary-header>
     <dl govuk-summary-list *ngIf="decisionDetails$ | async as reviewDecision">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Decision status</dt>
@@ -22,7 +22,7 @@
     </dl>
 
     <ng-container *ngIf="usersInfo$ | async as usersInfo">
-      <h2 app-summary-header class="govuk-heading-m">Official notice recipients</h2>
+      <app-summary-header class="govuk-heading-m">Official notice recipients</app-summary-header>
       <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Users</dt>

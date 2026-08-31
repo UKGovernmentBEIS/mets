@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/c
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
 import { SummaryTemplateComponent } from '@shared/components/waste-qdr/summary-template/summary-template.component';
 import { QuarterNamePipe } from '@shared/pipes/quarter-name.pipe';
+import { SummaryHeaderComponent } from '@shared/summary-header/summary-header.component';
 import { AttachedFile } from '@shared/types/attached-file.type';
 
 import { WasteQDRApplicationSubmittedRequestActionPayload, WasteQDRRequestMetaData } from 'pmrv-api';
@@ -22,7 +23,7 @@ interface ViewModel {
 
 @Component({
   selector: 'app-waste-qdr-action-submitted',
-  imports: [ActionSharedModule, NgIf, SummaryTemplateComponent],
+  imports: [ActionSharedModule, NgIf, SummaryTemplateComponent, SummaryHeaderComponent],
   templateUrl: './submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

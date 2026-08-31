@@ -1,18 +1,16 @@
 <app-request-action-heading
   *ngIf="vm$ | async as vm"
   [headerText]="vm.pageHeader"
-  [timelineCreationDate]="vm.creationDate"
->
+  [timelineCreationDate]="vm.creationDate">
   <ng-container *ngIf="vm.data">
     <app-aviation-emissions-summary-template
       [data]="vm.data"
       [files]="vm.files"
       [isEditable]="false"
-      [changeUrlQueryParams]="{ change: true }"
-    ></app-aviation-emissions-summary-template>
+      [changeUrlQueryParams]="{ change: true }"></app-aviation-emissions-summary-template>
   </ng-container>
 
-  <h2 app-summary-header class="govuk-heading-m">Recipients</h2>
+  <app-summary-header class="govuk-heading-m">Recipients</app-summary-header>
 
   <dl govuk-summary-list class="govuk-!-margin-bottom-6">
     <div govukSummaryListRow>

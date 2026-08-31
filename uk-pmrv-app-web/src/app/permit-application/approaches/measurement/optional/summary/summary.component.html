@@ -1,7 +1,6 @@
 <app-permit-task
   [notification]="notification"
-  [breadcrumb]="[{ text: 'MEASUREMENT_CO2' | monitoringApproachDescription, link: ['measurement'] }]"
->
+  [breadcrumb]="[{ text: 'MEASUREMENT_CO2' | monitoringApproachDescription, link: ['measurement'] }]">
   <app-page-heading [caption]="'MEASUREMENT_CO2' | monitoringApproachDescription">
     {{ taskKey$ | async | i18nSelect: headingMap }}
   </app-page-heading>
@@ -24,22 +23,16 @@
     </ng-container>
   </ng-container>
 
-  <h2
-    app-summary-header
-    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-    class="govuk-heading-m"
-  >
+  <app-summary-header [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined" class="govuk-heading-m">
     <span class="govuk-visually-hidden">{{ taskKey$ | async | i18nSelect: headingMap }}</span>
-  </h2>
+  </app-summary-header>
 
   <app-measurement-optional-summary-template
     [procedureOptionalForm]="procedure$ | async"
     [taskKey]="taskKey$ | async"
-    cssClass="govuk-!-margin-bottom-0"
-  ></app-measurement-optional-summary-template>
+    cssClass="govuk-!-margin-bottom-0"></app-measurement-optional-summary-template>
 
   <app-approach-return-link
     [parentTitle]="'MEASUREMENT_CO2' | monitoringApproachDescription"
-    reviewGroupUrl="measurement"
-  ></app-approach-return-link>
+    reviewGroupUrl="measurement"></app-approach-return-link>
 </app-permit-task>

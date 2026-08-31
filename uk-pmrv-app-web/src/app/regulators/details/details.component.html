@@ -52,7 +52,7 @@
     <div class="govuk-grid-column-full">
       <fieldset govukFieldset>
         <legend govukLegend>
-          <h2 class="govuk-heading-s">Files uploaded</h2>
+          <h2 class="govuk-heading-s">Upload a signature</h2>
         </legend>
         <span class="govuk-hint">
           The file must be:
@@ -65,8 +65,7 @@
         <app-file-input
           [downloadUrl]="(isLoggedUser$ | async) === true ? getCurrentUserDownloadUrl : getDownloadUrl"
           formControlName="signature"
-          hint="Upload a file"
-          label="Signature"
+          label="Upload a signature file"
           [showFilesizeHint]="false"></app-file-input>
       </fieldset>
     </div>

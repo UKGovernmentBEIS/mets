@@ -3,7 +3,7 @@
 
   <govuk-error-summary *ngIf="displayErrorSummary$ | async" [form]="form"></govuk-error-summary>
 
-  <h2 app-summary-header class="govuk-heading-m">{{ subTitle() }}</h2>
+  <app-summary-header class="govuk-heading-m">{{ subTitle() }}</app-summary-header>
 
   <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
     <div govukSummaryListRow>

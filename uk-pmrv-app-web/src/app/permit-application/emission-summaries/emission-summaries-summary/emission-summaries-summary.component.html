@@ -2,25 +2,19 @@
   [notification]="notification"
   [breadcrumb]="true"
   reviewGroupTitle="Fuels and equipment inventory"
-  reviewGroupUrl="fuels"
->
+  reviewGroupUrl="fuels">
   <app-page-heading caption="Fuels and equipment inventory">
     Emissions summaries and regulated activities
   </app-page-heading>
 
-  <h2
-    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-    app-summary-header
-    class="govuk-heading-m"
-  >
+  <app-summary-header [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined" class="govuk-heading-m">
     <span class="govuk-visually-hidden">List of emission summaries</span>
-  </h2>
+  </app-summary-header>
 
   <govuk-table
     [columns]="emissionSummariesColumns"
     [data]="'emissionSummaries' | task | async"
-    [class.no-bottom-border]="false"
-  >
+    [class.no-bottom-border]="false">
     <ng-template let-column="column" let-row="row" let-i="index">
       @switch (column.field) {
         @case ('sourceStream') {

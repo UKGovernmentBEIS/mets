@@ -47,7 +47,7 @@
           </div>
         </dl>
 
-        <h2 app-summary-header class="govuk-heading-m">Recipients</h2>
+        <app-summary-header class="govuk-heading-m">Recipients</app-summary-header>
         <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
           <div govukSummaryListRow>
             <dt govukSummaryListRowKey>Users</dt>
@@ -69,8 +69,7 @@
               <a
                 [routerLink]="['/', 'actions', actionId$ | async, 'file-download', 'document', officialNotice.uuid]"
                 govukLink
-                target="_blank"
-              >
+                target="_blank">
                 {{ officialNotice.name }}
               </a>
             </dd>

@@ -32,12 +32,9 @@
   </div>
 </dl>
 <ng-container *ngIf="data.type !== 'INVALID'">
-  <h2
-    app-summary-header
-    class="govuk-heading-m"
-    [changeRoute]="editable === true ? ['../preliminary-allocations'] : null">
+  <app-summary-header class="govuk-heading-m" [changeRoute]="editable === true ? ['../preliminary-allocations'] : null">
     Authority approved allocation for each sub-installation
-  </h2>
+  </app-summary-header>
   <app-alr-allocation-list-template
     [data]="data.preliminaryAllocations"
     [editable]="false"></app-alr-allocation-list-template>

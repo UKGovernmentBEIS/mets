@@ -5,8 +5,7 @@
         {{ type$ | async | i18nSelect: (headingMap$ | async) }}
         <app-task-header-info
           [assignee]="requestTaskItem.requestTask.assigneeFullName"
-          [daysRemaining]="requestTaskItem.requestTask.daysRemaining"
-        ></app-task-header-info>
+          [daysRemaining]="requestTaskItem.requestTask.daysRemaining"></app-task-header-info>
       </app-page-heading>
 
       <ng-container *ngIf="type$ | async | i18nSelect: paymentHintInfo; let val">
@@ -14,7 +13,7 @@
       </ng-container>
 
       <app-payment-summary [details]="details$ | async" [shouldDisplayAmount]="shouldDisplayAmount$ | async">
-        <h2 app-summary-header class="govuk-heading-m">Payment Details</h2>
+        <app-summary-header class="govuk-heading-m">Payment Details</app-summary-header>
       </app-payment-summary>
 
       <ng-container *ngIf="(store | async).requestTaskItem.allowedRequestTaskActions as actions">
@@ -27,8 +26,7 @@
             *ngIf="actions.includes('PAYMENT_CANCEL')"
             govukButton
             govukSecondaryButton
-            (click)="cancel()"
-          >
+            (click)="cancel()">
             Cancel payment task
           </button>
         </div>
@@ -42,9 +40,8 @@
         <app-timeline-item
           *ngFor="let action of actions$ | async"
           [action]="action"
-          [link]="action | timelineItemLink: false:(isAviation$ | async)"
-          [state]="navigationState"
-        ></app-timeline-item>
+          [link]="action | timelineItemLink: false : (isAviation$ | async)"
+          [state]="navigationState"></app-timeline-item>
       </app-timeline>
     </ng-container>
   </div>
@@ -52,7 +49,6 @@
     <app-related-actions
       [isAssignable$]="isAssignableAndCapableToAssign$"
       [taskId$]="taskId$"
-      [allowedActions$]="allowedRequestTaskActions$"
-    ></app-related-actions>
+      [allowedActions$]="allowedRequestTaskActions$"></app-related-actions>
   </div>
 </div>

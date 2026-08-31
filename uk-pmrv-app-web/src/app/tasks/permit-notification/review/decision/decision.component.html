@@ -119,13 +119,12 @@
 </ng-container>
 
 <ng-template #summaryReviewDecision>
-  <h2
-    app-summary-header
+  <app-summary-header
     class="govuk-heading-m"
     (changeClick)="changeDecisionClick()"
     [changeRoute]="(isEditable$ | async) ? '.' : null">
     Decision details
-  </h2>
+  </app-summary-header>
   <app-permit-notification-review-decision-summary-details
     *ngIf="reviewDecision$ | async as reviewDecision"
     [reviewDecision]="reviewDecision"></app-permit-notification-review-decision-summary-details>

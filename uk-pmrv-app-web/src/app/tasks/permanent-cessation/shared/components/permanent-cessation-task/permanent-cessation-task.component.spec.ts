@@ -35,9 +35,9 @@ describe('PermanentCessationTaskComponent', () => {
     template: `
       <app-permanent-cessation-task [breadcrumb]="true">
         <app-page-heading caption="Permanent cessation details">Permanent cessation details</app-page-heading>
-        <h2 app-summary-header changeRoute=".." class="govuk-heading-m">
+        <app-summary-header changeRoute=".." class="govuk-heading-m">
           Describe the cessation of regulated activities
-        </h2>
+        </app-summary-header>
       </app-permanent-cessation-task>
     `,
   })
@@ -86,7 +86,7 @@ describe('PermanentCessationTaskComponent', () => {
       const pageHeadings = page.headings;
 
       expect(page.headings).toHaveLength(1);
-      expect(pageHeadings[0].textContent.trim()).toEqual('Describe the cessation of regulated activities  Change');
+      expect(pageHeadings[0].textContent.trim()).toEqual('Describe the cessation of regulated activities');
     });
   });
 });

@@ -9,14 +9,13 @@
 
   <ng-container *ngIf="'emissionSources' | task | async as emissionSources; else startAdding">
     <ng-container *ngIf="emissionSources.length > 0; else startAdding">
-      <h2 app-summary-header class="govuk-heading-m">
+      <app-summary-header class="govuk-heading-m">
         You have added {{ emissionSources.length }} emission {{ emissionSources.length > 1 ? 'sources' : 'source' }}
-      </h2>
+      </app-summary-header>
 
       <app-emission-source-table
         [data]="'emissionSources' | task | async"
-        [isEditable]="aerService.isEditable$ | async"
-      ></app-emission-source-table>
+        [isEditable]="aerService.isEditable$ | async"></app-emission-source-table>
 
       <ng-container *ngIf="(aerService.isEditable$ | async) === true">
         <button govukSecondaryButton routerLink="add" type="button">Add another emission source</button>

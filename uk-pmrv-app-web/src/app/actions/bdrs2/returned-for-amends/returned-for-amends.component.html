@@ -7,7 +7,7 @@
   <ng-template #customContentTemplate>
     @for (decision of decisionAmends(); track decision) {
       <div>
-        <h2 app-summary-header class="govuk-heading-m">Stage 2 baseline data report details</h2>
+        <app-summary-header class="govuk-heading-m">Stage 2 baseline data report details</app-summary-header>
         <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
           @if (
             decision?.data?.details?.verificationRequired !== null &&

@@ -5,23 +5,22 @@
       [formGroup]="form"
       heading="Deadline extension request"
       submitText="Confirm and complete"
-      [hideSubmit]="(store.isEditable$ | async) === false"
-    >
+      [hideSubmit]="(store.isEditable$ | async) === false">
       <app-page-heading size="xl">
         <app-task-header-info
           [assignee]="(store | async).assignee.assigneeFullName"
-          [daysRemaining]="(store | async).daysRemaining"
-        ></app-task-header-info>
+          [daysRemaining]="(store | async).daysRemaining"></app-task-header-info>
       </app-page-heading>
 
       <p class="govuk-body">
         The regulator has requested more time to complete their review of your permit or emissions monitoring plan
-        application. <br />
+        application.
+        <br />
         The consequence of not approving an extension is that the regulator may not have enough time to complete their
         review and make their decision.
       </p>
 
-      <h2 app-summary-header class="govuk-heading-m">Request details</h2>
+      <app-summary-header class="govuk-heading-m">Request details</app-summary-header>
       <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Current due date</dt>
@@ -36,7 +35,7 @@
       <div class="govuk-!-margin-top-6" *ngIf="(store.isEditable$ | async) === true">
         <h2 class="govuk-heading-m">What is your decision?</h2>
         <div formControlName="decision" govuk-radio>
-          <govuk-radio-option value="ACCEPTED" label="Accept new due date"> </govuk-radio-option>
+          <govuk-radio-option value="ACCEPTED" label="Accept new due date"></govuk-radio-option>
           <govuk-radio-option value="REJECTED" label="Reject new due date">
             <div govukConditionalContent>
               <div govuk-textarea [maxLength]="10000" formControlName="reason" label="Provide a reason"></div>
@@ -55,9 +54,8 @@
         <app-timeline-item
           *ngFor="let action of actions$ | async"
           [action]="action"
-          [link]="action | timelineItemLink: false:isAviation"
-          [state]="navigationState"
-        ></app-timeline-item>
+          [link]="action | timelineItemLink: false : isAviation"
+          [state]="navigationState"></app-timeline-item>
       </app-timeline>
     </div>
   </div>
@@ -67,7 +65,6 @@
       [isAssignable$]="store.isAssignableAndCapable$"
       [taskId$]="taskId$"
       [allowedActions$]="allowedRequestTaskActions$"
-      [baseUrl]="isAviation ? '/aviation' : ''"
-    ></app-related-actions>
+      [baseUrl]="isAviation ? '/aviation' : ''"></app-related-actions>
   </div>
 </div>

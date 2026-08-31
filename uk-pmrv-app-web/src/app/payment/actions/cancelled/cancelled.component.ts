@@ -15,7 +15,7 @@ import { PaymentStore } from '../../store/payment.store';
         headerText="Payment task cancelled"
         [timelineCreationDate]="creationDate$ | async"></app-request-action-heading>
 
-      <h2 app-summary-header class="govuk-heading-m">Details</h2>
+      <app-summary-header class="govuk-heading-m">Details</app-summary-header>
       <dl govuk-summary-list>
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Payment status</dt>

@@ -15,13 +15,13 @@
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Uploaded document</dt>
           <dd govukSummaryListRowValue>
-            <app-summary-download-files [files]="documentFiles$ | async"> </app-summary-download-files>
+            <app-summary-download-files [files]="documentFiles$ | async"></app-summary-download-files>
           </dd>
         </div>
       </dl>
     </ng-container>
     <ng-container *ngIf="notificationUsers$ | async as notificationUsers">
-      <h2 app-summary-header class="govuk-heading-m">Recipients</h2>
+      <app-summary-header class="govuk-heading-m">Recipients</app-summary-header>
       <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Users</dt>

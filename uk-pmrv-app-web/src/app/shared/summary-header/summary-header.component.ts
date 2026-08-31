@@ -1,19 +1,21 @@
-import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
-import { Params } from '@angular/router';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import { Params, RouterLink } from '@angular/router';
+
+import { LinkDirective } from 'govuk-components';
 
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
-  selector: 'h2[app-summary-header]',
-  standalone: false,
+  selector: 'app-summary-header',
+  imports: [RouterLink, LinkDirective],
   template: `
-    <ng-content></ng-content>
+    <h2 [class]="class"><ng-content></ng-content></h2>
     @if (changeRoute) {
       <a
         [routerLink]="changeRoute"
         [queryParams]="queryParams"
         (click)="changeClick.emit($event)"
         govukLink
-        class="govuk-!-font-size-19 govuk-!-font-weight-regular float-right">
+        class="govuk-!-font-size-19 govuk-!-font-weight-regular">
         Change
         @if (changeHiddenText) {
           <span class="govuk-visually-hidden">{{ changeHiddenText }}</span>
@@ -22,19 +24,24 @@ import { Params } from '@angular/router';
     }
   `,
   styles: `
-    .float-right {
-      float: right;
+    :host {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
     }
   `,
 })
-export class SummaryHeaderComponent {
-  @Input() changeRoute: string | any[];
+export class SummaryHeaderComponent implements OnInit {
+  @Input() class = '';
+  @Input() changeRoute?: string | any[] | null;
   @Input() queryParams?: Params | null;
-  @Input() changeHiddenText: string | null;
+  @Input() changeHiddenText?: string | null;
   @Output() readonly changeClick = new EventEmitter<Event>();
 
-  // eslint-disable-next-line @angular-eslint/prefer-host-metadata-property
-  @HostBinding('class.govuk-clearfix') get clearfix() {
-    return true;
+  private readonly renderer = inject(Renderer2);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
+
+  ngOnInit(): void {
+    this.renderer.removeAttribute(this.elementRef.nativeElement, 'class');
   }
 }

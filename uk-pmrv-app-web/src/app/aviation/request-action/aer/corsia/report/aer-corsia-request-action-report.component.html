@@ -296,11 +296,11 @@
 
           <div [ngSwitch]="task.name">
             <div *ngSwitchCase="'additionalDocuments'">
-              <h2 app-summary-header class="govuk-heading-m">
+              <app-summary-header class="govuk-heading-m">
                 <span [class.govuk-visually-hidden]="!$any(vm.payload)?.aer.additionalDocuments.exist">
                   Uploaded files
                 </span>
-              </h2>
+              </app-summary-header>
               <app-documents-summary-template
                 [data]="$any(vm.payload)?.aer.additionalDocuments"
                 [files]="vm.additionalDocumentsFiles"

@@ -192,7 +192,7 @@ describe('HsetiReviewGroupDecisionComponent', () => {
         requestTaskId: 1,
       });
 
-      expect(page.header).toEqual('Decision Summary  Change decision');
+      expect(page.header).toEqual('Decision Summary');
       expect(page.summaryListValues).toEqual([
         [
           'Describe the capacity increase that has been put into operation at the installation',

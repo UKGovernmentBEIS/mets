@@ -31,7 +31,7 @@ export interface PaymentDetailsItem {
         <div class="govuk-grid-column-two-thirds">
           <govuk-panel title="Payment complete">Your payment reference is {{ details.paymentRefNum }}</govuk-panel>
           <app-payment-summary [shouldDisplayAmount]="shouldDisplayAmount$ | async" [details]="details">
-            <h2 app-summary-header class="govuk-heading-m">Payment summary</h2>
+            <app-summary-header class="govuk-heading-m">Payment summary</app-summary-header>
           </app-payment-summary>
         </div>
       </div>

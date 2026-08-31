@@ -100,7 +100,7 @@ describe('ReviewGroupDecisionComponent', () => {
         .map((pair) => pair.map((element) => element.textContent.trim()));
     }
     get changeDecisionLink() {
-      return this.query<HTMLAnchorElement>('h2[app-summary-header] a');
+      return this.query<HTMLAnchorElement>('app-summary-header a');
     }
   }
 

@@ -1,11 +1,9 @@
-<h2
-  app-summary-header
+<app-summary-header
   [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
   class="govuk-heading-m"
-  (changeClick)="changeDetailsClick()"
->
+  (changeClick)="changeDetailsClick()">
   Request details
-</h2>
+</app-summary-header>
 
 <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border govuk-!-margin-bottom-3">
   <div govukSummaryListRow>
@@ -18,14 +16,12 @@
   </div>
 </dl>
 
-<h2
-  app-summary-header
+<app-summary-header
   [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
   class="govuk-heading-m"
-  (changeClick)="changeRecipientsClick()"
->
+  (changeClick)="changeRecipientsClick()">
   Recipients
-</h2>
+</app-summary-header>
 
 <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
   <div govukSummaryListRow>

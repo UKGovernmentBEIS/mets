@@ -12,8 +12,7 @@
   <app-return-link
     [requestTaskType]="(store | async).requestTaskItem.requestTask.type"
     [requestMetadata]="(store | async).requestTaskItem.requestInfo.requestMetadata"
-    returnLink=".."
-  ></app-return-link>
+    returnLink=".."></app-return-link>
 </ng-container>
 
 <ng-template #paymentConfirmed>
@@ -27,7 +26,7 @@
       </ng-container>
 
       <app-payment-summary [details]="details$ | async" [shouldDisplayAmount]="shouldDisplayAmount$ | async">
-        <h2 app-summary-header class="govuk-heading-m">Payment Summary</h2>
+        <app-summary-header class="govuk-heading-m">Payment Summary</app-summary-header>
       </app-payment-summary>
 
       <app-return-link [requestType]="(store | async).requestType" [home]="true"></app-return-link>

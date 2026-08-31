@@ -1,21 +1,20 @@
 <app-permit-task [breadcrumb]="true" reviewGroupTitle="Fuels and equipment inventory" reviewGroupUrl="fuels">
   <app-page-heading caption="Fuels and equipment inventory">Emission sources</app-page-heading>
   <p class="govuk-body">Add all the emission sources that relate to regulated activities at the installation.</p>
-  <govuk-details summary="What is an emission source"
-    >An emission source is a part of an installation, or a process within the installation, that generates greenhouse
-    gases. For example a boiler or diesel generator.</govuk-details
-  >
+  <govuk-details summary="What is an emission source">
+    An emission source is a part of an installation, or a process within the installation, that generates greenhouse
+    gases. For example a boiler or diesel generator.
+  </govuk-details>
 
   <ng-container *ngIf="'emissionSources' | task | async as emissionSources; else startAdding">
     <ng-container *ngIf="emissionSources.length > 0; else startAdding">
-      <h2 app-summary-header class="govuk-heading-m">
+      <app-summary-header class="govuk-heading-m">
         You have added {{ emissionSources.length }} emission {{ emissionSources.length > 1 ? 'sources' : 'source' }}
-      </h2>
+      </app-summary-header>
 
       <app-emission-source-table
         [data]="'emissionSources' | task | async"
-        [isEditable]="store.isEditable$ | async"
-      ></app-emission-source-table>
+        [isEditable]="store.isEditable$ | async"></app-emission-source-table>
 
       <ng-container *ngIf="(store.isEditable$ | async) === true">
         <button govukSecondaryButton routerLink="add" type="button">Add another emission source</button>

@@ -30,7 +30,7 @@ describe('NerTaskComponent', () => {
     standalone: false,
     template: `
       <app-ner-task heading="Check your answers" caption="New entrant reserve" taskType="NER_APPLICATION_SUBMIT">
-        <h2 app-summary-header changeRoute=".." class="govuk-heading-m">Check your answers</h2>
+        <app-summary-header changeRoute=".." class="govuk-heading-m">Check your answers</app-summary-header>
       </app-ner-task>
     `,
   })
@@ -67,6 +67,6 @@ describe('NerTaskComponent', () => {
     const pageHeadings = page.headings;
 
     expect(page.headings).toHaveLength(1);
-    expect(pageHeadings[0].textContent.trim()).toEqual('Check your answers Change');
+    expect(pageHeadings[0].textContent.trim()).toEqual('Check your answers');
   });
 });

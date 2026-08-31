@@ -40,7 +40,7 @@
         label="SQL Query"
         labelSize="small"
         rows="10"
-        [maxLength]="10000"
+        [maxLength]="50000"
         hint="Enter a valid read-only SELECT query. INSERT, UPDATE, DELETE and DROP statements are not permitted"></div>
 
       <button appPendingButton type="button" govukSecondaryButton (click)="onPreview()">Preview results</button>

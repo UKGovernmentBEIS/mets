@@ -5,7 +5,7 @@
     [expectedActionType]="['BDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS']"></app-base-action-container-component>
   <ng-template #customContentTemplate>
     <div *ngFor="let decision of decisionAmends()">
-      <h2 app-summary-header class="govuk-heading-m">Baseline data report details</h2>
+      <app-summary-header class="govuk-heading-m">Baseline data report details</app-summary-header>
 
       <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
         <div

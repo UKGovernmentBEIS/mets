@@ -1,9 +1,8 @@
 <app-request-action-heading
   *ngIf="vm$ | async as vm"
   [headerText]="vm.pageHeader"
-  [timelineCreationDate]="vm.creationDate"
->
-  <h2 app-summary-header class="govuk-heading-m">Decision details</h2>
+  [timelineCreationDate]="vm.creationDate">
+  <app-summary-header class="govuk-heading-m">Decision details</app-summary-header>
 
   <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-0" *ngIf="vm.showApprovedSummary">
     <div govukSummaryListRow *ngIf="vm.empDocument">
@@ -26,10 +25,9 @@
   <app-overall-decision-summary-template
     class="govuk-!-margin-bottom-6"
     [data]="vm.determination"
-    [variationScheduleItems]="vm.variationScheduleItems"
-  ></app-overall-decision-summary-template>
+    [variationScheduleItems]="vm.variationScheduleItems"></app-overall-decision-summary-template>
 
-  <h2 app-summary-header class="govuk-heading-m">Recipients</h2>
+  <app-summary-header class="govuk-heading-m">Recipients</app-summary-header>
 
   <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
     <div govukSummaryListRow>

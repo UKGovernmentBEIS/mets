@@ -15,7 +15,7 @@ import { PaymentStore } from '../../store/payment.store';
         [timelineCreationDate]="state.requestActionCreationDate"></app-request-action-heading>
 
       <app-payment-summary [details]="details$ | async" [shouldDisplayAmount]="shouldDisplayAmount$ | async">
-        <h2 app-summary-header class="govuk-heading-m">Details</h2>
+        <app-summary-header class="govuk-heading-m">Details</app-summary-header>
       </app-payment-summary>
     </ng-container>
   `,

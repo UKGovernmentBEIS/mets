@@ -2,23 +2,17 @@
   [notification]="notification"
   [breadcrumb]="true"
   reviewGroupTitle="Fuels and equipment inventory"
-  reviewGroupUrl="fuels"
->
+  reviewGroupUrl="fuels">
   <app-page-heading caption="Fuels and equipment inventory">Measurement devices or methods</app-page-heading>
 
-  <h2
-    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-    app-summary-header
-    class="govuk-heading-m"
-  >
+  <app-summary-header [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined" class="govuk-heading-m">
     <span class="govuk-visually-hidden">List of measurement devices</span>
-  </h2>
+  </app-summary-header>
 
   <app-measurement-devices-table
     [data]="'measurementDevicesOrMethods' | task | async"
     [isEditable]="false"
-    [noBottomBorder]="false"
-  ></app-measurement-devices-table>
+    [noBottomBorder]="false"></app-measurement-devices-table>
 
   <app-list-return-link reviewGroupTitle="Fuels and equipment inventory" reviewGroupUrl="fuels"></app-list-return-link>
 </app-permit-task>

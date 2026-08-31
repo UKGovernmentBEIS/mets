@@ -13,25 +13,24 @@
   </p>
 
   <p class="govuk-body">
-    For gas flow meters where p/T compensation is integral to the instrument, use Nm<sup class="govuk-!-font-size-14"
-      >3</sup
-    >
-    /h. Use m<sup class="govuk-!-font-size-14">3</sup> measurement units if the p/T compensation is done by a separate
-    instrument, and list those separate instruments
+    For gas flow meters where p/T compensation is integral to the instrument, use Nm
+    <sup class="govuk-!-font-size-14">3</sup>
+    /h. Use m
+    <sup class="govuk-!-font-size-14">3</sup>
+    measurement units if the p/T compensation is done by a separate instrument, and list those separate instruments
   </p>
 
   <ng-container *ngIf="'measurementDevicesOrMethods' | task | async as measurementDevices; else startAdding">
     <ng-container *ngIf="measurementDevices.length > 0; else startAdding">
-      <h2 app-summary-header class="govuk-heading-m">
+      <app-summary-header class="govuk-heading-m">
         You have added {{ measurementDevices.length }} measurement
         {{ measurementDevices.length > 1 ? 'devices' : 'device' }}
-      </h2>
+      </app-summary-header>
 
       <app-measurement-devices-table
         [data]="measurementDevices"
         [isEditable]="(store.isEditable$ | async) === true"
-        [noBottomBorder]="false"
-      ></app-measurement-devices-table>
+        [noBottomBorder]="false"></app-measurement-devices-table>
 
       <ng-container *ngIf="(store.isEditable$ | async) === true">
         <button govukSecondaryButton routerLink="add" type="button">Add another measurement device</button>

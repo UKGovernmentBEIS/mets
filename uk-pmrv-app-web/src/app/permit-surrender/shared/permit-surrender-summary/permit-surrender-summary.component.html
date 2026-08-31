@@ -1,5 +1,5 @@
 <ng-container *ngIf="permitSurrender$ | async as permitSurrender">
-  <h2 app-summary-header class="govuk-heading-m">Details</h2>
+  <app-summary-header class="govuk-heading-m">Details</app-summary-header>
   <dl govuk-summary-list appGroupedSummaryList>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Date the regulated activities ended</dt>
@@ -17,8 +17,8 @@
       <dt govukSummaryListRowKey>Supporting documents</dt>
       <dd govukSummaryListRowValue>
         <ng-container *ngIf="permitSurrender.documentsExist; else noDocuments">
-          <app-summary-download-files [files]="store.getDownloadUrlFiles(permitSurrender.documents)">
-          </app-summary-download-files>
+          <app-summary-download-files
+            [files]="store.getDownloadUrlFiles(permitSurrender.documents)"></app-summary-download-files>
         </ng-container>
         <ng-template #noDocuments>No</ng-template>
       </dd>

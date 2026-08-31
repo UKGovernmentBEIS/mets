@@ -42,9 +42,9 @@ describe('ActionTaskComponent', () => {
     standalone: false,
     template: `
       <app-action-task [breadcrumb]="breadcrumb" header="Abbreviations and definitions">
-        <h2 app-summary-header changeRoute=".." class="govuk-heading-m">
+        <app-summary-header changeRoute=".." class="govuk-heading-m">
           Uploaded additional documents and information
-        </h2>
+        </app-summary-header>
       </app-action-task>
     `,
   })
@@ -95,7 +95,7 @@ describe('ActionTaskComponent', () => {
       const pageHeadings = page.headings;
 
       expect(page.headings).toHaveLength(1);
-      expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded additional documents and information  Change');
+      expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded additional documents and information');
     });
   });
 });

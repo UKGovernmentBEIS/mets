@@ -1,22 +1,16 @@
 <app-permit-task
   [notification]="notification"
-  [breadcrumb]="[{ text: 'FALLBACK' | monitoringApproachDescription, link: ['fall-back'] }]"
->
+  [breadcrumb]="[{ text: 'FALLBACK' | monitoringApproachDescription, link: ['fall-back'] }]">
   <app-page-heading [caption]="'FALLBACK' | monitoringApproachDescription">
-    Approach description and justification</app-page-heading
-  >
+    Approach description and justification
+  </app-page-heading>
 
-  <h2
-    app-summary-header
-    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-    class="govuk-heading-m"
-  >
+  <app-summary-header [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined" class="govuk-heading-m">
     <span class="govuk-visually-hidden">Approach description and justification</span>
-  </h2>
+  </app-summary-header>
 
   <app-fallback-description-summary-template></app-fallback-description-summary-template>
   <app-approach-return-link
     [parentTitle]="'FALLBACK' | monitoringApproachDescription"
-    reviewGroupUrl="fall-back"
-  ></app-approach-return-link>
+    reviewGroupUrl="fall-back"></app-approach-return-link>
 </app-permit-task>

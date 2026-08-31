@@ -34,9 +34,9 @@ describe('ActionTaskComponent', () => {
     standalone: false,
     template: `
       <app-doal-action-task [header]="header" [actionType]="actionType">
-        <h2 app-summary-header changeRoute=".." class="govuk-heading-m">
+        <app-summary-header changeRoute=".." class="govuk-heading-m">
           Uploaded additional documents and information
-        </h2>
+        </app-summary-header>
       </app-doal-action-task>
     `,
   })
@@ -79,6 +79,6 @@ describe('ActionTaskComponent', () => {
     const pageHeadings = page.headings;
 
     expect(page.headings).toHaveLength(1);
-    expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded additional documents and information  Change');
+    expect(pageHeadings[0].textContent.trim()).toEqual('Uploaded additional documents and information');
   });
 });

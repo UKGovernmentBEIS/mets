@@ -8,12 +8,9 @@
     Examples include the ‘Environmental Protection Regulations’ and ‘Discharges to surface water and groundwater
     environmental’ permits.
   </p>
-  <h2
-    app-summary-header
-    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-    class="govuk-heading-m">
+  <app-summary-header [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined" class="govuk-heading-m">
     Environmental permits and licenses
-  </h2>
+  </app-summary-header>
   <app-permits-summary-template
     [environmentalPermitsAndLicences]="environmentalPermitsAndLicences$ | async"></app-permits-summary-template>
   <app-list-return-link reviewGroupTitle="Installation details" reviewGroupUrl="details"></app-list-return-link>

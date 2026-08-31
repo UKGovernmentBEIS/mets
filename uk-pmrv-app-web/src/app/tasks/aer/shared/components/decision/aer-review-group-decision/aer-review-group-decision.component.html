@@ -64,13 +64,12 @@
 </ng-container>
 
 <ng-template #viewDecision>
-  <h2
-    app-summary-header
+  <app-summary-header
     class="govuk-heading-m"
     (changeClick)="isOnEditState = true"
     [changeRoute]="(isEditable$ | async) ? '.' : null">
     Decision Summary
-  </h2>
+  </app-summary-header>
   <dl
     *ngIf="decisionData$ | async as decisionData"
     govuk-summary-list

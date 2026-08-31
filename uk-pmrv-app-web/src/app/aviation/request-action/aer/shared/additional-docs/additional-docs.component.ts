@@ -31,16 +31,16 @@ interface ViewModel {
       [header]="vm.pageHeader"
       [requestActionType]="vm.requestActionType"
       [breadcrumb]="true">
-      <h2 app-summary-header class="govuk-heading-m">
+      <app-summary-header class="govuk-heading-m">
         <span [class.govuk-visually-hidden]="!vm.hasDocuments">Uploaded files</span>
-      </h2>
+      </app-summary-header>
       <app-documents-summary-template
         [data]="vm.additionalDocuments"
         [files]="vm.files"
         [isEditable]="false"></app-documents-summary-template>
 
       <ng-container *ngIf="vm.showDecision">
-        <h2 app-summary-header class="govuk-heading-m">Decision Summary</h2>
+        <app-summary-header class="govuk-heading-m">Decision Summary</app-summary-header>
         <app-aer-review-decision-group-summary
           [data]="vm.reviewDecision"
           [attachments]="vm.reviewAttachments"

@@ -2,25 +2,18 @@
   [notification]="notification"
   [breadcrumb]="true"
   reviewGroupTitle="Additional information"
-  reviewGroupUrl="additional-info"
->
+  reviewGroupUrl="additional-info">
   <app-page-heading caption="Additional information">
     Definitions of abbreviations, acronyms and terminology
   </app-page-heading>
 
-  <h2
-    app-summary-header
-    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
-    class="govuk-heading-m"
-  >
+  <app-summary-header [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined" class="govuk-heading-m">
     <span [class.govuk-visually-hidden]="(hasAbbreviations$ | async) === false">Items that need definition</span>
-  </h2>
+  </app-summary-header>
 
   <app-abbreviations-summary-template
-    [data]="store.getTask('abbreviations') | async"
-  ></app-abbreviations-summary-template>
+    [data]="store.getTask('abbreviations') | async"></app-abbreviations-summary-template>
   <app-list-return-link
     reviewGroupTitle="Additional information"
-    reviewGroupUrl="additional-info"
-  ></app-list-return-link>
+    reviewGroupUrl="additional-info"></app-list-return-link>
 </app-permit-task>

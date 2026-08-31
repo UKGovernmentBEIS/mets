@@ -5,8 +5,9 @@
     [competentAuthority$]="competentAuthority$"
     [requestType$]="requestType$"
     [requestTaskType$]="requestTaskType$"
-    defaultHelp="Use the {{ ca | competentAuthority }}'s bank details to make a payment by bank transfer"
-  ></app-make-payment-help>
+    defaultHelp="Use the {{
+      ca | competentAuthority
+    }}'s bank details to make a payment by bank transfer"></app-make-payment-help>
 
   <govuk-details summary="How long does it take">
     <p>Faster Payments are usually received on the same day they are sent, including weekends and bank holidays.</p>
@@ -20,7 +21,7 @@
   <govuk-warning-text>You must include your payment reference when paying</govuk-warning-text>
 
   <ng-container *ngIf="makePaymentDetails$ | async as makePaymentDetails">
-    <h2 app-summary-header class="govuk-heading-m">{{ ca | competentAuthority }}’s bank details</h2>
+    <app-summary-header class="govuk-heading-m">{{ ca | competentAuthority }}’s bank details</app-summary-header>
     <dl govuk-summary-list>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Sort code</dt>
@@ -50,8 +51,7 @@
 
     <govuk-details
       *ngIf="makePaymentDetails.bankAccountDetails.swiftCode || makePaymentDetails.bankAccountDetails.iban"
-      summary="International payments"
-    >
+      summary="International payments">
       <p>Use the following details if you are making an international payment:</p>
       <dl govuk-summary-list>
         <div govukSummaryListRow>
@@ -78,5 +78,4 @@
 <app-return-link
   [requestTaskType]="(store | async).requestTaskItem.requestTask.type"
   [requestMetadata]="(store | async).requestTaskItem.requestInfo.requestMetadata"
-  returnLink=".."
-></app-return-link>
+  returnLink=".."></app-return-link>

@@ -5,10 +5,11 @@
 
   html,
   body {
-    height: 100vh;
+    height: auto !important;
+    min-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
-    overflow: hidden;
+    overflow: visible !important;
   }
 
   a[href]:after {

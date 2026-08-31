@@ -1,6 +1,5 @@
 <ng-container
-  *ngIf="(isEditable$ | async) && canEdit && (isOnEditState || (isOnEditByDefaultState$ | async)); else viewDecision"
->
+  *ngIf="(isEditable$ | async) && canEdit && (isOnEditState || (isOnEditByDefaultState$ | async)); else viewDecision">
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     <govuk-error-summary *ngIf="isErrorSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
 
@@ -15,8 +14,7 @@
         [formGroupName]="i"
         [disabled]="(store.isEditable$ | async) === false"
         govukFieldset
-        id="variation-schedule-items-{{ i }}"
-      >
+        id="variation-schedule-items-{{ i }}">
         <legend class="govuk-heading-s">Item {{ i + 1 }}</legend>
         <button
           (click)="variationScheduleItems.removeAt(i)"
@@ -26,8 +24,7 @@
           appAddAnother
           govukSecondaryButton
           type="button"
-          #removeButton
-        >
+          #removeButton>
           Remove
         </button>
         <div govuk-textarea [maxLength]="10000" formControlName="item"></div>
@@ -37,9 +34,10 @@
         (click)="addOtherVariationScheduleItem()"
         [disabled]="(store.isEditable$ | async) === false"
         govukSecondaryButton
-        type="button"
-      >
-        Add <ng-container *ngIf="variationScheduleItems.length > 0"> <span>another</span> </ng-container> item
+        type="button">
+        Add
+        <ng-container *ngIf="variationScheduleItems.length > 0"><span>another</span></ng-container>
+        item
       </button>
     </div>
 
@@ -48,26 +46,22 @@
       [maxLength]="10000"
       formControlName="notes"
       label="Notes"
-      hint="The operator cannot view this"
-    ></div>
+      hint="The operator cannot view this"></div>
     <button appPendingButton govukButton type="submit">Confirm</button>
   </form>
 </ng-container>
 
 <ng-template #viewDecision>
-  <h2
-    app-summary-header
+  <app-summary-header
     class="govuk-heading-m"
     (changeClick)="isOnEditState = true"
-    [changeRoute]="(isEditable$ | async) && canEdit ? '.' : null"
-  >
+    [changeRoute]="(isEditable$ | async) && canEdit ? '.' : null">
     Decision Summary
-  </h2>
+  </app-summary-header>
   <dl
     govuk-summary-list
     class="govuk-summary-list--no-border summary-list--edge-border"
-    *ngIf="groupKey | reviewGroupVariation | async as reviewDecision"
-  >
+    *ngIf="groupKey | reviewGroupVariation | async as reviewDecision">
     <ng-container *ngIf="$any(reviewDecision)?.variationScheduleItems?.length > 0">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
@@ -77,9 +71,11 @@
               let variationScheduleItem of $any(reviewDecision).variationScheduleItems;
               let i = index;
               let isLast = last
-            "
-          >
-            <div>{{ i + 1 }}. {{ variationScheduleItem }} <br /></div>
+            ">
+            <div>
+              {{ i + 1 }}. {{ variationScheduleItem }}
+              <br />
+            </div>
             <br *ngIf="!isLast" />
           </ng-container>
         </dd>

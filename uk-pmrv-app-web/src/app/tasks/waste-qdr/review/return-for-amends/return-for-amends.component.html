@@ -3,7 +3,7 @@
     <app-waste-qdr-task returnLink="../" heading="Return for amendments" returnLinkTitle="Review quarterly data report">
       <p class="govuk-body">Check your information before sending</p>
 
-      <h2 app-summary-header class="govuk-heading-m">Quarterly data report</h2>
+      <app-summary-header class="govuk-heading-m">Quarterly data report</app-summary-header>
 
       <app-changes-requested-template
         [requiredChanges]="$any(vm.decisionDetails)?.requiredChanges"
