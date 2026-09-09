@@ -335,4 +335,82 @@ public class AccountFileAttachmentServiceTest {
         assertThat(result.isEmpty()).isTrue();
         verify(mapper, never()).toDto(any());
     }
+
+    @Test
+    void updateAccountFileAttachmentStatus_updatesStatusAndSaves() {
+        // given
+        Long accountId = 1L;
+        String period = "2026-2030";
+        AccountFileAttachmentWorkflow workflow = AccountFileAttachmentWorkflow.BDRS2;
+        AccountFileAttachmentWorkflowSubType workflowSubtype =
+                AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT;
+
+        AccountFileAttachment attachment = new AccountFileAttachment();
+        attachment.setStatus(AccountFileAttachmentStatus.IN_PROGRESS);
+
+        when(repository.findByAccountIdAndWorkflowAndWorkflowSubtypeAndPeriod(
+                accountId,
+                workflow,
+                workflowSubtype,
+                period
+        )).thenReturn(Optional.of(attachment));
+
+        // when
+        service.updateAccountFileAttachmentStatus(
+                workflow,
+                workflowSubtype,
+                period,
+                AccountFileAttachmentStatus.FINALIZED,
+                accountId
+        );
+
+        // then
+        assertThat(attachment.getStatus())
+                .isEqualTo(AccountFileAttachmentStatus.FINALIZED);
+
+        verify(repository).findByAccountIdAndWorkflowAndWorkflowSubtypeAndPeriod(
+                accountId,
+                workflow,
+                workflowSubtype,
+                period
+        );
+
+        verify(repository).save(attachment);
+    }
+
+    @Test
+    void updateAccountFileAttachmentStatus_doesNotSaveWhenAttachmentDoesNotExist() {
+        // given
+        Long accountId = 1L;
+        String period = "2026-2030";
+        AccountFileAttachmentWorkflow workflow = AccountFileAttachmentWorkflow.BDRS2;
+        AccountFileAttachmentWorkflowSubType workflowSubtype =
+                AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT;
+
+        when(repository.findByAccountIdAndWorkflowAndWorkflowSubtypeAndPeriod(
+                accountId,
+                workflow,
+                workflowSubtype,
+                period
+        )).thenReturn(Optional.empty());
+
+        // when
+        service.updateAccountFileAttachmentStatus(
+                workflow,
+                workflowSubtype,
+                period,
+                AccountFileAttachmentStatus.FINALIZED,
+                accountId
+        );
+
+        // then
+        verify(repository).findByAccountIdAndWorkflowAndWorkflowSubtypeAndPeriod(
+                accountId,
+                workflow,
+                workflowSubtype,
+                period
+        );
+
+        verify(repository, never()).save(any());
+    }
 }

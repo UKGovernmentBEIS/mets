@@ -48,4 +48,48 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="0_2_0_fix_regulator_latest_files" author="alekopoulosd@unisystems.gr">
+        <sql>
+            <![CDATA[
+            WITH latest_completed_action AS (
+                SELECT DISTINCT ON (ra.request_id)
+                ra.request_id,
+                ra.id AS request_action_id,
+                ra.creation_date,
+                ra.payload -> 'regulatorReviewOutcome' ->> 'file' AS regulator_file_uuid
+            FROM request_action ra
+            WHERE ra.type = 'BDRS2_APPLICATION_COMPLETED'
+            ORDER BY ra.request_id, ra.creation_date DESC, ra.id DESC
+                )
+            UPDATE account_file_attachment afa
+            SET file_uuid = lca.regulator_file_uuid
+                FROM request r
+JOIN latest_completed_action lca
+            ON lca.request_id = r.id
+            WHERE r.type = 'BDRS2'
+              AND afa.originated_request_id = r.id
+              AND afa.account_id = r.account_id
+              AND afa.workflow = 'BDRS2'
+              AND afa.workflow_subtype = 'BDR_ATTACHMENT'
+              AND afa.period = '2026-2030'
+              AND lca.regulator_file_uuid IS NOT NULL
+              AND afa.file_uuid <> lca.regulator_file_uuid
+              AND NOT EXISTS (
+                SELECT 1
+                FROM request_action ra_after
+                WHERE ra_after.request_id = r.id
+              AND ra_after.type = 'BDRS2_APPLICATION_SENT_TO_REGULATOR'
+              AND (
+                ra_after.creation_date > lca.creation_date
+               OR (
+                ra_after.creation_date = lca.creation_date
+              AND ra_after.id > lca.request_action_id
+                )
+                )
+                );
+            ]]>
+        </sql>
+    </changeSet>
+
+
 </databaseChangeLog>

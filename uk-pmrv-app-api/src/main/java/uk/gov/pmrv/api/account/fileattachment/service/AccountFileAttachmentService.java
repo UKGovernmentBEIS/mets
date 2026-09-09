@@ -74,4 +74,25 @@ public class AccountFileAttachmentService {
         }
 
     }
+
+    @Transactional
+    public void updateAccountFileAttachmentStatus(
+            AccountFileAttachmentWorkflow workflow,
+            AccountFileAttachmentWorkflowSubType workflowSubtype,
+            String period,
+            AccountFileAttachmentStatus status,
+            Long accountId) {
+
+        repository
+                .findByAccountIdAndWorkflowAndWorkflowSubtypeAndPeriod(
+                        accountId,
+                        workflow,
+                        workflowSubtype,
+                        period
+                )
+                .ifPresent(fileAttachment -> {
+                    fileAttachment.setStatus(status);
+                    repository.save(fileAttachment);
+                });
+    }
 }

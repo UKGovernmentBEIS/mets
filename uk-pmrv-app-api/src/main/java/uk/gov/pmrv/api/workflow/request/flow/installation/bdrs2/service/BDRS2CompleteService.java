@@ -70,7 +70,7 @@ public class BDRS2CompleteService {
         BDRS2RequestPayload requestPayload = (BDRS2RequestPayload) request.getPayload();
         final String period = "2026-2030";
 
-        UUID bdrs2File = requestPayload.getBdrs2().getBdrs2Files().getFile();
+        UUID bdrs2File = requestPayload.getRegulatorReviewOutcome().getFile();
 
         if (bdrs2File != null) {
             accountFileAttachmentService.updateOrInsertAccountFileAttachment(AccountFileAttachmentDTO.builder()
@@ -83,6 +83,15 @@ public class BDRS2CompleteService {
                     .fileUuid(bdrs2File.toString())
                     .competentAuthority(request.getCompetentAuthority())
                     .build());
+        }
+        else {
+            accountFileAttachmentService.updateAccountFileAttachmentStatus(
+                    AccountFileAttachmentWorkflow.BDRS2,
+                    AccountFileAttachmentWorkflowSubType.BDR_ATTACHMENT,
+                    period,
+                    AccountFileAttachmentStatus.FINALIZED,
+                    request.getAccountId()
+            );
         }
 
         if (requestPayload.getBdrs2().getMmpFiles() != null) {
