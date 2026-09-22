@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -65,6 +66,8 @@ public class VbSiteContactController {
     public ResponseEntity<AccountContactVbInfoResponse> getVbSiteContacts(
             @Parameter(hidden = true) AppUser user,
             @PathVariable("accountType") @Parameter(name = "accountType", description = "The account type") AccountType accountType,
+            @RequestParam(value = "term", required = false) @Size(min = 3, max = 256)
+            @Parameter(description = "Optional vb site contact search term") String term,
             @RequestParam("page") @Parameter(name = "page", description = "The page number starting from zero")
             @Min(value = 0, message = "{parameter.page.typeMismatch}")
             @NotNull(message = "{parameter.page.typeMismatch}") Integer page,
@@ -72,7 +75,7 @@ public class VbSiteContactController {
             @Min(value = 1, message = "{parameter.pageSize.typeMismatch}")
             @NotNull(message = "{parameter.pageSize.typeMismatch}") Integer pageSize) {
 
-        return new ResponseEntity<>(accountVbSiteContactService.getAccountsAndVbSiteContacts(user, accountType, page, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(accountVbSiteContactService.getAccountsAndVbSiteContacts(user, accountType, term, page, pageSize), HttpStatus.OK);
     }
 
     /**

@@ -288,4 +288,26 @@
 
     </changeSet>
 
+    <changeSet id="0_2_0_POPULATE_AVIATION_RPT_COUNTRIES_TABLE_2026" author="dimitrios.mavroforakis@keyes.eu">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT count(*) FROM aviation_rpt_countries WHERE YEAR = 2026;</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO aviation_rpt_countries (id, year, is_chapter_3, state, country)
+            SELECT nextval('aviation_rpt_countries_seq'), 2026, is_chapter_3, state, country FROM aviation_rpt_countries WHERE year = 2025;
+
+            UPDATE aviation_rpt_countries
+            SET is_chapter_3 = true WHERE year = 2026 AND state IN ('Dominica','Viet Nam');
+
+            DELETE FROM aviation_rpt_countries WHERE year = 2026 AND state = 'Mauritius';
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM aviation_rpt_countries WHERE YEAR = 2026;
+            </sql>
+        </rollback>
+
+    </changeSet>
+
 </databaseChangeLog>

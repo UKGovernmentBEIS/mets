@@ -230,11 +230,24 @@ class EmpVariationUkEtsReviewMapperTest {
             .operators(Set.of("operatorUserId"))
             .signatory("regulatorUserId")
             .build();
+        EmissionsMonitoringPlanUkEts emp = EmissionsMonitoringPlanUkEts.builder()
+                .operatorDetails(EmpOperatorDetails.builder().build())
+                .build();
+
+        ServiceContactDetails serviceContactDetails = ServiceContactDetails.builder().name("name").email("email").build();
+        String operatorName = "operatorName";
+        String crcoCode = "crcoCode";
+        RequestAviationAccountInfo aviationAccountInfo = RequestAviationAccountInfo.builder()
+                .operatorName(operatorName)
+                .crcoCode(crcoCode)
+                .serviceContactDetails(serviceContactDetails)
+                .build();
 
         EmpVariationUkEtsRequestPayload requestPayload = EmpVariationUkEtsRequestPayload.builder()
             .payloadType(RequestPayloadType.EMP_VARIATION_UKETS_REQUEST_PAYLOAD)
             .determination(determination)
             .decisionNotification(decisionNotification)
+            .emissionsMonitoringPlan(emp)
             .build();
 
         Map<String, RequestActionUserInfo> usersInfo = Map.of(
@@ -243,7 +256,7 @@ class EmpVariationUkEtsReviewMapperTest {
         );
 
         EmpVariationUkEtsApplicationDeemedWithdrawnRequestActionPayload deemedWithdrawnRequestActionPayload =
-        		empVariationUkEtsReviewMapper.toEmpVariationUkEtsApplicationDeemedWithdrawnRequestActionPayload(requestPayload, usersInfo,
+        		empVariationUkEtsReviewMapper.toEmpVariationUkEtsApplicationDeemedWithdrawnRequestActionPayload(requestPayload, aviationAccountInfo,usersInfo,
                 RequestActionPayloadType.EMP_VARIATION_UKETS_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD);
 
         assertEquals(RequestActionPayloadType.EMP_VARIATION_UKETS_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD,
@@ -263,11 +276,25 @@ class EmpVariationUkEtsReviewMapperTest {
             .operators(Set.of("operatorUserId"))
             .signatory("regulatorUserId")
             .build();
+        EmissionsMonitoringPlanUkEts emp = EmissionsMonitoringPlanUkEts.builder()
+                .operatorDetails(EmpOperatorDetails.builder().build())
+                .build();
+
+        ServiceContactDetails serviceContactDetails = ServiceContactDetails.builder().name("name").email("email").build();
+        String operatorName = "operatorName";
+        String crcoCode = "crcoCode";
+        RequestAviationAccountInfo aviationAccountInfo = RequestAviationAccountInfo.builder()
+                .operatorName(operatorName)
+                .crcoCode(crcoCode)
+                .serviceContactDetails(serviceContactDetails)
+                .build();
+
 
         EmpVariationUkEtsRequestPayload requestPayload = EmpVariationUkEtsRequestPayload.builder()
             .payloadType(RequestPayloadType.EMP_VARIATION_UKETS_REQUEST_PAYLOAD)
             .determination(determination)
             .decisionNotification(decisionNotification)
+            .emissionsMonitoringPlan(emp)
             .build();
 
         Map<String, RequestActionUserInfo> usersInfo = Map.of(
@@ -276,7 +303,7 @@ class EmpVariationUkEtsReviewMapperTest {
         );
 
         EmpVariationUkEtsApplicationRejectedRequestActionPayload rejectedRequestActionPayload =
-        		empVariationUkEtsReviewMapper.toEmpVariationUkEtsApplicationRejectedRequestActionPayload(requestPayload, usersInfo,
+        		empVariationUkEtsReviewMapper.toEmpVariationUkEtsApplicationRejectedRequestActionPayload(requestPayload,aviationAccountInfo, usersInfo,
                 RequestActionPayloadType.EMP_VARIATION_UKETS_APPLICATION_REJECTED_PAYLOAD);
 
         assertEquals(RequestActionPayloadType.EMP_VARIATION_UKETS_APPLICATION_REJECTED_PAYLOAD,

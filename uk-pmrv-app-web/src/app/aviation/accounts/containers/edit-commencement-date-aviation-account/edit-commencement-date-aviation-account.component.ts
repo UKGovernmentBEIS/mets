@@ -6,6 +6,7 @@ import { first, switchMap, tap } from 'rxjs';
 
 import { AviationAccountFormProvider } from '@aviation/accounts/services';
 import { AviationAccountsStore, selectAccountInfo } from '@aviation/accounts/store';
+import { getFyroLabel } from '@aviation/accounts/utils/fyro.util';
 
 import { GovukValidators } from 'govuk-components';
 
@@ -15,8 +16,8 @@ import { AviationAccountReportingStatusService } from 'pmrv-api';
   selector: 'app-edit-commencement-date-aviation-account',
   standalone: false,
   template: `
-    <app-wizard-step (formSubmit)="onContinue()" [formGroup]="form" heading="Edit first year of reporting obligation">
-      <p class="govuk-body">First year of reporting obligation</p>
+    <app-wizard-step (formSubmit)="onContinue()" [formGroup]="form" [heading]="'Edit ' + (fyroLabel | lowercase)">
+      <p class="govuk-body">{{ fyroLabel }}</p>
       <div formControlName="commencementDate" govuk-date-input></div>
       <div govuk-textarea label="Reason" formControlName="reason"></div>
     </app-wizard-step>
@@ -27,6 +28,10 @@ import { AviationAccountReportingStatusService } from 'pmrv-api';
 export class EditCommencementDateAviationAccountComponent implements OnInit, OnDestroy {
   private readonly accountInfo$ = this.store.pipe(selectAccountInfo, first());
   public readonly upsertStatus = this.store.getState().currentAccount?.upsertFirstYearOfReportingObligation;
+
+  readonly fyroLabel = getFyroLabel(
+    this.store.getState().currentAccount.account?.aviationAccount?.emissionTradingScheme,
+  );
 
   maxReasonLength = 2000;
   form = new FormGroup({

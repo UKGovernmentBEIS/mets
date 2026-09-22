@@ -1,18 +1,14 @@
 @if (currentState(); as currentState) {
-  <app-page-heading caption="Update first year of reporting obligation">Check your answers</app-page-heading>
+  <app-page-heading [caption]="'Update ' + (fyroLabel | lowercase)">Check your answers</app-page-heading>
 
   <dl govuk-summary-list>
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>First year of reporting obligation</dt>
+      <dt govukSummaryListRowKey>{{ fyroLabel }}</dt>
       <dd govukSummaryListRowValue>
         {{ currentState?.commencementDate | govukDate }}
       </dd>
       <dd govukSummaryListRowActions>
-        <a
-          govukLink
-          hidden-text="first year of reporting obligation"
-          [routerLink]="['../']"
-          [state]="{ changing: true }">
+        <a govukLink [hidden-text]="fyroLabel | lowercase" [routerLink]="['../']" [state]="{ changing: true }">
           Change
         </a>
       </dd>

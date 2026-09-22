@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.2.0/changelog_request_payment_fee_changeable_migration.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_0_update_changeable_flag_request_payment_fee" author="vasileios.vitzilaios@keyes.eu">
+        <sql>
+            UPDATE request_payment_fee pf
+            SET changeable = data.changeable
+            FROM request_payment_fee_method pfm,
+            (VALUES
+                ('ENGLAND',          'PERMIT_ISSUANCE',      'CAT_A',  true),
+                ('ENGLAND',          'PERMIT_ISSUANCE',      'CAT_B',  true),
+                ('ENGLAND',          'PERMIT_ISSUANCE',      'CAT_C',  true),
+                ('ENGLAND',          'PERMIT_ISSUANCE',      'HSE',    true),
+                ('ENGLAND',          'PERMIT_ISSUANCE',      'WASTE',  false),
+                ('ENGLAND',          'PERMIT_SURRENDER',     'FIXED',  true),
+                ('ENGLAND',          'PERMIT_SURRENDER',     'WASTE',  false),
+                ('ENGLAND',          'PERMIT_REVOCATION',    'FIXED',  true),
+                ('ENGLAND',          'PERMIT_REVOCATION',    'WASTE',  false),
+                ('ENGLAND',          'PERMIT_TRANSFER_A',    'FIXED',  true),
+                ('ENGLAND',          'PERMIT_TRANSFER_A',    'WASTE',  false),
+                ('ENGLAND',          'PERMIT_TRANSFER_B',    'FIXED',  true),
+                ('ENGLAND',          'PERMIT_TRANSFER_B',    'WASTE',  false),
+                ('ENGLAND',          'NER',                  'FIXED',  true),
+                ('ENGLAND',          'EMP_ISSUANCE_UKETS',   'FIXED',  true),
+                ('ENGLAND',          'EMP_ISSUANCE_CORSIA',  'FIXED',  true),
+                ('ENGLAND',          'EMP_VARIATION_UKETS',  'FIXED',  false),
+                ('ENGLAND',          'EMP_VARIATION_CORSIA', 'FIXED',  false),
+                ('ENGLAND',          'HSE_TI',               'FIXED',  true),
+                ('NORTHERN_IRELAND', 'PERMIT_ISSUANCE',      'CAT_A',  true),
+                ('NORTHERN_IRELAND', 'PERMIT_ISSUANCE',      'CAT_B',  true),
+                ('NORTHERN_IRELAND', 'PERMIT_ISSUANCE',      'CAT_C',  true),
+                ('NORTHERN_IRELAND', 'PERMIT_ISSUANCE',      'HSE',    true),
+                ('NORTHERN_IRELAND', 'PERMIT_ISSUANCE',      'WASTE',  false),
+                ('NORTHERN_IRELAND', 'PERMIT_SURRENDER',     'FIXED',  true),
+                ('NORTHERN_IRELAND', 'PERMIT_SURRENDER',     'WASTE',  false),
+                ('NORTHERN_IRELAND', 'PERMIT_REVOCATION',    'FIXED',  true),
+                ('NORTHERN_IRELAND', 'PERMIT_REVOCATION',    'WASTE',  false),
+                ('NORTHERN_IRELAND', 'PERMIT_VARIATION',     'FIXED',  true),
+                ('NORTHERN_IRELAND', 'PERMIT_VARIATION',     'WASTE',  false),
+                ('NORTHERN_IRELAND', 'PERMIT_TRANSFER_A',    'FIXED',  true),
+                ('NORTHERN_IRELAND', 'PERMIT_TRANSFER_A',    'WASTE',  false),
+                ('NORTHERN_IRELAND', 'PERMIT_TRANSFER_B',    'FIXED',  true),
+                ('NORTHERN_IRELAND', 'PERMIT_TRANSFER_B',    'WASTE',  false),
+                ('NORTHERN_IRELAND', 'NER',                  'FIXED',  true),
+                ('NORTHERN_IRELAND', 'EMP_ISSUANCE_UKETS',   'FIXED',  true),
+                ('NORTHERN_IRELAND', 'EMP_ISSUANCE_CORSIA',  'FIXED',  true),
+                ('NORTHERN_IRELAND', 'EMP_VARIATION_UKETS',  'FIXED',  true),
+                ('NORTHERN_IRELAND', 'EMP_VARIATION_CORSIA', 'FIXED',  false),
+                ('NORTHERN_IRELAND', 'HSE_TI',               'FIXED',  true),
+                ('OPRED',            'PERMIT_ISSUANCE',      'FIXED',  false),
+                ('OPRED',            'PERMIT_ISSUANCE',      'WASTE',  false),
+                ('OPRED',            'PERMIT_SURRENDER',     'FIXED',  false),
+                ('OPRED',            'PERMIT_SURRENDER',     'WASTE',  false),
+                ('OPRED',            'PERMIT_REVOCATION',    'FIXED',  false),
+                ('OPRED',            'PERMIT_REVOCATION',    'WASTE',  false),
+                ('OPRED',            'PERMIT_TRANSFER_A',    'FIXED',  false),
+                ('OPRED',            'PERMIT_TRANSFER_A',    'WASTE',  false),
+                ('OPRED',            'PERMIT_TRANSFER_B',    'FIXED',  false),
+                ('OPRED',            'PERMIT_TRANSFER_B',    'WASTE',  false),
+                ('OPRED',            'NER',                  'FIXED',  false),
+                ('OPRED',            'EMP_ISSUANCE_UKETS',   'FIXED',  false),
+                ('OPRED',            'EMP_ISSUANCE_CORSIA',  'FIXED',  false),
+                ('OPRED',            'EMP_VARIATION_UKETS',  'FIXED',  false),
+                ('OPRED',            'HSE_TI',               'FIXED',  false),
+                ('SCOTLAND',         'PERMIT_ISSUANCE',      'CAT_A',  true),
+                ('SCOTLAND',         'PERMIT_ISSUANCE',      'CAT_B',  true),
+                ('SCOTLAND',         'PERMIT_ISSUANCE',      'CAT_C',  true),
+                ('SCOTLAND',         'PERMIT_ISSUANCE',      'HSE',    true),
+                ('SCOTLAND',         'PERMIT_ISSUANCE',      'WASTE',  false),
+                ('SCOTLAND',         'PERMIT_SURRENDER',     'FIXED',  true),
+                ('SCOTLAND',         'PERMIT_SURRENDER',     'WASTE',  false),
+                ('SCOTLAND',         'PERMIT_REVOCATION',    'FIXED',  true),
+                ('SCOTLAND',         'PERMIT_REVOCATION',    'WASTE',  false),
+                ('SCOTLAND',         'PERMIT_VARIATION',     'FIXED',  true),
+                ('SCOTLAND',         'PERMIT_VARIATION',     'WASTE',  false),
+                ('SCOTLAND',         'PERMIT_TRANSFER_A',    'FIXED',  true),
+                ('SCOTLAND',         'PERMIT_TRANSFER_A',    'WASTE',  false),
+                ('SCOTLAND',         'PERMIT_TRANSFER_B',    'FIXED',  true),
+                ('SCOTLAND',         'PERMIT_TRANSFER_B',    'WASTE',  false),
+                ('SCOTLAND',         'NER',                  'FIXED',  true),
+                ('SCOTLAND',         'EMP_ISSUANCE_UKETS',   'FIXED',  true),
+                ('SCOTLAND',         'EMP_ISSUANCE_CORSIA',  'FIXED',  true),
+                ('SCOTLAND',         'EMP_VARIATION_UKETS',  'FIXED',  true),
+                ('SCOTLAND',         'EMP_VARIATION_CORSIA', 'FIXED',  true),
+                ('SCOTLAND',         'HSE_TI',               'FIXED',  true),
+                ('WALES',            'PERMIT_ISSUANCE',      'CAT_A',  true),
+                ('WALES',            'PERMIT_ISSUANCE',      'CAT_B',  true),
+                ('WALES',            'PERMIT_ISSUANCE',      'CAT_C',  true),
+                ('WALES',            'PERMIT_ISSUANCE',      'HSE',    true),
+                ('WALES',            'PERMIT_ISSUANCE',      'WASTE',  false),
+                ('WALES',            'PERMIT_SURRENDER',     'FIXED',  true),
+                ('WALES',            'PERMIT_SURRENDER',     'WASTE',  false),
+                ('WALES',            'PERMIT_REVOCATION',    'FIXED',  true),
+                ('WALES',            'PERMIT_REVOCATION',    'WASTE',  false),
+                ('WALES',            'PERMIT_VARIATION',     'FIXED',  true),
+                ('WALES',            'PERMIT_VARIATION',     'WASTE',  false),
+                ('WALES',            'PERMIT_TRANSFER_A',    'FIXED',  true),
+                ('WALES',            'PERMIT_TRANSFER_A',    'WASTE',  false),
+                ('WALES',            'PERMIT_TRANSFER_B',    'FIXED',  true),
+                ('WALES',            'PERMIT_TRANSFER_B',    'WASTE',  false),
+                ('WALES',            'NER',                  'FIXED',  false),
+                ('WALES',            'EMP_ISSUANCE_UKETS',   'FIXED',  true),
+                ('WALES',            'EMP_ISSUANCE_CORSIA',  'FIXED',  true),
+                ('WALES',            'EMP_VARIATION_UKETS',  'FIXED',  true),
+                ('WALES',            'EMP_VARIATION_CORSIA', 'FIXED',  true),
+                ('WALES',            'HSE_TI',               'FIXED',  true)
+            ) AS data(ca, request_type, fee_type, changeable)
+            WHERE pf.fee_method_id = pfm.id
+            AND pfm.competent_authority::text = data.ca
+            AND pfm.request_type::text        = data.request_type
+            AND pf.type::text                 = data.fee_type;
+        </sql>
+        <rollback/>
+    </changeSet>
+
+
+    <changeSet id="0_2_0_update_changeable_flag_wales_permit_variation" author="vasileios.vitzilaios@keyes.eu">
+        <sql>
+            UPDATE request_payment_fee pf
+            SET changeable = false
+            FROM request_payment_fee_method pfm
+            WHERE pf.fee_method_id = pfm.id
+              AND pfm.competent_authority = 'WALES'
+              AND pfm.request_type = 'PERMIT_VARIATION'
+              AND pf.type = 'FIXED';
+        </sql>
+        <rollback>
+            UPDATE request_payment_fee pf
+            SET changeable = true
+            FROM request_payment_fee_method pfm
+            WHERE pf.fee_method_id = pfm.id
+              AND pfm.competent_authority = 'WALES'
+              AND pfm.request_type = 'PERMIT_VARIATION'
+              AND pf.type = 'FIXED';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_changeable_flag_wales_ner" author="vasileios.vitzilaios@keyes.eu">
+        <sql>
+            UPDATE request_payment_fee pf
+            SET changeable = true
+            FROM request_payment_fee_method pfm
+            WHERE pf.fee_method_id = pfm.id
+              AND pfm.competent_authority = 'WALES'
+              AND pfm.request_type = 'NER'
+              AND pf.type = 'FIXED';
+        </sql>
+        <rollback>
+            UPDATE request_payment_fee pf
+            SET changeable = false
+            FROM request_payment_fee_method pfm
+            WHERE pf.fee_method_id = pfm.id
+              AND pfm.competent_authority = 'WALES'
+              AND pfm.request_type = 'NER'
+              AND pf.type = 'FIXED';
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -4,6 +4,7 @@
       (blur)="onBlur()"
       (change)="onChange(value())"
       [attr.aria-controls]="conditional() ? `${identifier}-conditional` : null"
+      [attr.aria-label]="label() || null"
       [attr.aria-describedby]="hint() ? `${identifier}-item-hint` : null"
       [attr.name]="groupIdentifier"
       [checked]="isChecked"

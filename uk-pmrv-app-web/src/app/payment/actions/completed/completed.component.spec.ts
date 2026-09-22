@@ -131,7 +131,7 @@ describe('CompletedComponent', () => {
         ['Paid by', 'First Last'],
         ['Payment method', 'Debit card or credit card'],
         ['Reference number', 'AEM-323-1'],
-        ['Amount', ''],
+        ['Amount', '£2,500.20'],
       ]);
     });
   });

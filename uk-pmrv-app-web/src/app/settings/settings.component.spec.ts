@@ -8,6 +8,7 @@ import { BasePage } from '@testing';
 
 import { SettingsService } from 'pmrv-api';
 
+import { SettingsFeesPermissionService } from './core/settings-fees-permission.service';
 import { SettingsComponent } from './settings.component';
 
 describe('SettingsComponent', () => {
@@ -18,6 +19,9 @@ describe('SettingsComponent', () => {
 
   const settingsService = {
     getAccessibleSections: jest.fn().mockReturnValue(of(['EMISSION_FACTORS', 'FEES', 'GLOBAL_WARMING_POTENTIALS'])),
+  };
+  const settingsFeesPermissionService = {
+    canView: jest.fn().mockReturnValue(of(true)),
   };
 
   class Page extends BasePage<SettingsComponent> {
@@ -36,10 +40,15 @@ describe('SettingsComponent', () => {
     settingsService.getAccessibleSections.mockReturnValue(
       of(['EMISSION_FACTORS', 'FEES', 'GLOBAL_WARMING_POTENTIALS']),
     );
+    settingsFeesPermissionService.canView.mockReturnValue(of(true));
 
     await TestBed.configureTestingModule({
       imports: [SettingsComponent],
-      providers: [provideRouter([]), { provide: SettingsService, useValue: settingsService }],
+      providers: [
+        provideRouter([]),
+        { provide: SettingsService, useValue: settingsService },
+        { provide: SettingsFeesPermissionService, useValue: settingsFeesPermissionService },
+      ],
     }).compileComponents();
 
     authStore = TestBed.inject(AuthStore);
@@ -106,6 +115,15 @@ describe('SettingsComponent', () => {
     fixture.detectChanges();
 
     expect(page.feesLink.getAttribute('href')).toEqual('/fees');
+  });
+
+  it('hides the Fees link when the user has no fees permission, even if the section is accessible', () => {
+    settingsFeesPermissionService.canView.mockReturnValue(of(false));
+    authStore.setCurrentDomain('INSTALLATION');
+    createComponent();
+    fixture.detectChanges();
+
+    expect(page.feesLink).toBeFalsy();
   });
 
   it('links the Fees item to the fees page for Aviation', () => {

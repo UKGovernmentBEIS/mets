@@ -214,6 +214,9 @@ describe('TimelineItemLinkPipe', () => {
 
     requestAction.type = 'NOTIFICATION_SENT_TO_REGISTRY';
     expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'registry', 'information-sent']);
+
+    requestAction.type = 'RETURN_OF_ALLOWANCES_NOTIFICATION_SENT_TO_REGISTRY';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'registry', 'information-sent']);
   });
 
   it('should return link for payment', () => {
@@ -288,6 +291,16 @@ describe('TimelineItemLinkPipe', () => {
       requestAction.id,
       'review',
       'decision-summary',
+    ]);
+  });
+  it('should return link for a permit variation payment request', () => {
+    requestAction.type = 'PERMIT_VARIATION_REQUEST_PAYMENT';
+    expect(pipe.transform(requestAction)).toEqual([
+      '/permit-variation',
+      'action',
+      requestAction.id,
+      'review',
+      'request-payment',
     ]);
   });
 

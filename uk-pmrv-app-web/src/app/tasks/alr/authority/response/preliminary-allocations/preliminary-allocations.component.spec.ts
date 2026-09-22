@@ -41,7 +41,7 @@ describe('ALRPreliminaryAllocationsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [provideRouter([])],
+      providers: [provideRouter([{ path: '**', component: ALRPreliminaryAllocationsComponent }])],
       imports: [SharedModule, TaskSharedModule],
     }).compileComponents();
   });

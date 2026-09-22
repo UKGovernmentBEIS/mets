@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountStatusService;
-import uk.gov.pmrv.api.integration.registry.notification.installation.request.NotificationRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.notification.common.NotificationRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;

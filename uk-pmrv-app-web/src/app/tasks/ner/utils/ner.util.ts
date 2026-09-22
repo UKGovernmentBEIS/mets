@@ -75,7 +75,10 @@ export const nerOverallDecisionHeading = (requestTaskType: RequestTaskDTO['type'
   }
 };
 
-export const nerReturnLinkLevelsUp = (requestTaskType: RequestTaskDTO['type'], section?: 'NER' | 'OUTCOME'): number => {
+export const nerReturnLinkLevelsUp = (
+  requestTaskType: RequestTaskDTO['type'],
+  section?: 'NER' | 'OUTCOME' | 'OUTCOME_FORM',
+): number => {
   switch (requestTaskType) {
     case 'NER_APPLICATION_SUBMIT':
     case 'NER_APPLICATION_AMENDS_SUBMIT':
@@ -85,8 +88,7 @@ export const nerReturnLinkLevelsUp = (requestTaskType: RequestTaskDTO['type'], s
       return section === 'NER' ? 1 : 2;
     case 'NER_APPLICATION_REVIEW':
     case 'NER_APPLICATION_PEER_REVIEW':
-      return section === 'OUTCOME' ? 2 : 1;
-
+      return section === 'OUTCOME_FORM' ? 1 : section === 'OUTCOME' ? 2 : 1;
     default:
       return 1;
   }

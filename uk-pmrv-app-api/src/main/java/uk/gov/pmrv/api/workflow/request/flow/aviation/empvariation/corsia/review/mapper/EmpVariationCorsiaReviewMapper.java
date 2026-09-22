@@ -49,18 +49,34 @@ public interface EmpVariationCorsiaReviewMapper extends EmpVariationCorsiaOperat
     EmpVariationCorsiaApplicationApprovedRequestActionPayload toEmpVariationCorsiaApplicationApprovedRequestActionPayload(
         EmpVariationCorsiaRequestPayload requestPayload, RequestAviationAccountInfo accountInfo, 
         Map<String, RequestActionUserInfo> usersInfo, RequestActionPayloadType payloadType);
-	
-	@Mapping(target = "payloadType", source = "payloadType")
-    @Mapping(target = "attachments", ignore = true)
-    @Mapping(target = "fileDocuments", ignore = true)
-    EmpVariationCorsiaApplicationDeemedWithdrawnRequestActionPayload toEmpVariationCorsiaApplicationDeemedWithdrawnRequestActionPayload(
-    		EmpVariationCorsiaRequestPayload requestPayload, Map<String, RequestActionUserInfo> usersInfo, RequestActionPayloadType payloadType);
-    
+
     @Mapping(target = "payloadType", source = "payloadType")
+    @Mapping(target = "serviceContactDetails", source = "accountInfo.serviceContactDetails")
     @Mapping(target = "attachments", ignore = true)
     @Mapping(target = "fileDocuments", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.operatorDetails.attachmentIds", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.notEmptyDynamicSections", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.empSectionAttachmentIds", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.managementProcedures.attachmentIds", ignore = true)
+    EmpVariationCorsiaApplicationDeemedWithdrawnRequestActionPayload toEmpVariationCorsiaApplicationDeemedWithdrawnRequestActionPayload(
+            EmpVariationCorsiaRequestPayload requestPayload,
+            RequestAviationAccountInfo accountInfo,
+            Map<String, RequestActionUserInfo> usersInfo,
+            RequestActionPayloadType payloadType);
+
+    @Mapping(target = "payloadType", source = "payloadType")
+    @Mapping(target = "serviceContactDetails", source = "accountInfo.serviceContactDetails")
+    @Mapping(target = "attachments", ignore = true)
+    @Mapping(target = "fileDocuments", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.operatorDetails.attachmentIds", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.notEmptyDynamicSections", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.empSectionAttachmentIds", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.managementProcedures.attachmentIds", ignore = true)
     EmpVariationCorsiaApplicationRejectedRequestActionPayload toEmpVariationCorsiaApplicationRejectedRequestActionPayload(
-    		EmpVariationCorsiaRequestPayload requestPayload, Map<String, RequestActionUserInfo> usersInfo, RequestActionPayloadType payloadType);
+            EmpVariationCorsiaRequestPayload requestPayload,
+            RequestAviationAccountInfo accountInfo,
+            Map<String, RequestActionUserInfo> usersInfo,
+            RequestActionPayloadType payloadType);
 
     @Mapping(target = "payloadType", expression = "java(uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType.EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMITTED_PAYLOAD)")
     @Mapping(target = "serviceContactDetails", source = "accountInfo.serviceContactDetails")

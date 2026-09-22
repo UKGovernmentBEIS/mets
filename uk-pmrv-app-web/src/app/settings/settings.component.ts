@@ -9,6 +9,8 @@ import { LinkDirective } from 'govuk-components';
 
 import { SettingsService } from 'pmrv-api';
 
+import { SettingsFeesPermissionService } from './core/settings-fees-permission.service';
+
 interface ViewModel {
   isAviation: boolean;
   showEmissionFactors: boolean;
@@ -26,11 +28,13 @@ interface ViewModel {
 export class SettingsComponent {
   private readonly authStore = inject(AuthStore);
   private readonly settingsService = inject(SettingsService);
+  private readonly settingsFeesPermissionService = inject(SettingsFeesPermissionService);
 
   private readonly accessibleSections = toSignal(
     this.settingsService.getAccessibleSections(this.authStore.currentDomain()),
     { initialValue: [] },
   );
+  private readonly canViewFees = toSignal(this.settingsFeesPermissionService.canView(), { initialValue: false });
 
   readonly vm: Signal<ViewModel> = computed(() => {
     const accessibleSections = this.accessibleSections();
@@ -38,7 +42,7 @@ export class SettingsComponent {
     return {
       isAviation: this.authStore.currentDomain() === 'AVIATION',
       showEmissionFactors: accessibleSections.includes('EMISSION_FACTORS'),
-      showFees: accessibleSections.includes('FEES'),
+      showFees: accessibleSections.includes('FEES') && this.canViewFees(),
       showGlobalWarmingPotentials: accessibleSections.includes('GLOBAL_WARMING_POTENTIALS'),
     };
   });

@@ -8,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.integration.registry.notification.common.RegistryNotificationType;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.InstallationNotificationRegistryEvent;
 import uk.gov.pmrv.api.integration.registry.withholdflag.installation.request.WithholdFlagRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -101,5 +103,12 @@ class WithholdingOfAllowancesWithdrawnServiceTest {
         assert !event.getWithholdFlag();
         assert event.getYear().equals(year);
         assert event.getAccountId().equals(accountId);
+
+        ArgumentCaptor<InstallationNotificationRegistryEvent> notificationEventCaptor = ArgumentCaptor.forClass(InstallationNotificationRegistryEvent.class);
+        verify(eventPublisher).publishEvent(notificationEventCaptor.capture());
+        InstallationNotificationRegistryEvent notificationRegistryEvent = notificationEventCaptor.getValue();
+        assert notificationRegistryEvent.getRequestId().equals(requestId);
+        assert notificationRegistryEvent.getRegistryNotificationType().equals(RegistryNotificationType.WITHHOLDING_OF_ALLOWANCES_WITHDRAWN_NOTIFICATION);
+        assert notificationRegistryEvent.getAccountId().equals(accountId);
     }
 }

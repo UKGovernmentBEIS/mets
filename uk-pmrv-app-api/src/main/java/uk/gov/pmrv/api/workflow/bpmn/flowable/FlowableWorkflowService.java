@@ -80,17 +80,17 @@ public class FlowableWorkflowService implements WorkflowService, InitializingBea
     @Override
     public boolean hasMessageEventSubscriptionWithName(final String requestId, final String messageName) {
         return runtimeService
-            .createExecutionQuery()
-            .processInstanceBusinessKey(WorkflowService.constructBusinessKey(requestId))
-            .list()
-            .stream()
-            .findFirst()
-            .map(execution -> runtimeService.createEventSubscriptionQuery()
-                .processInstanceId(execution.getProcessInstanceId())
-                .eventType("message")
-                .eventName(messageName)
-                .count() > 0)
-            .orElse(false);
+                .createExecutionQuery()
+                .processInstanceBusinessKey(WorkflowService.constructBusinessKey(requestId))
+                .list()
+                .stream()
+                .anyMatch(execution ->
+                        runtimeService.createEventSubscriptionQuery()
+                                .processInstanceId(execution.getProcessInstanceId())
+                                .eventType("message")
+                                .eventName(messageName)
+                                .count() > 0
+                );
     }
 
     @Override

@@ -14,6 +14,7 @@
         <dt govukSummaryListRowKey>Installation address</dt>
         <dd govukSummaryListRowValue>
           <div>{{ installationLocation?.gridReference }}</div>
+          <!-- prettier-ignore -->
           <div>
             {{ installationLocation.address.line1
             }}<ng-container *ngIf="installationLocation.address.line2"
@@ -53,8 +54,7 @@
       <dd
         govukSummaryListRowValue
         *ngIf="showCompaniesHouse()"
-        [ngClass]="{ 'govuk-error-message': !companiesHouse?.registrationNumber }"
-      >
+        [class.govuk-error-message]="!companiesHouse?.registrationNumber">
         {{ companiesHouse?.registrationNumber || companiesHouseErrorMessage }}
       </dd>
     </div>
@@ -78,6 +78,7 @@
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Operator address</dt>
       <dd govukSummaryListRowValue>
+        <!-- prettier-ignore -->
         <div>
           {{ details.operatorDetailsAddress.line1
           }}<ng-container *ngIf="details.operatorDetailsAddress.line2"
@@ -90,6 +91,7 @@
       </dd>
 
       <dd govukSummaryListRowValue *ngIf="showCompaniesHouse()">
+        <!-- prettier-ignore -->
         <div>
           {{ companiesHouse?.address?.line1 }}
           <ng-container *ngIf="companiesHouse?.address?.line2">, {{ companiesHouse?.address?.line2 }} </ng-container>

@@ -54,7 +54,7 @@
   <dl govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Effective date of notice</dt>
-      <dd govukSummaryListRowValue [ngClass]="{ error: (invalidNoticeDate$ | async) }">
+      <dd govukSummaryListRowValue [class.error]="invalidNoticeDate$ | async">
         <span>{{ grantDetermination.noticeDate | govukDate }}</span>
       </dd>
     </div>

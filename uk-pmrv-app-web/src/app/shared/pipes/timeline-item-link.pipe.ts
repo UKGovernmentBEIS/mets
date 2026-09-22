@@ -19,8 +19,12 @@ export class TimelineItemLinkPipe implements PipeTransform {
 
       case 'INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY':
       case 'WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY':
-      case 'NOTIFICATION_SENT_TO_REGISTRY':
+      case 'RETURN_OF_ALLOWANCES_NOTIFICATION_SENT_TO_REGISTRY':
         return [routerLooks + 'actions', value.id, 'registry', 'information-sent'];
+      case 'NOTIFICATION_SENT_TO_REGISTRY':
+        return isAviation && !isWorkflow
+          ? [routerLooks + 'aviation/actions', value.id, 'registry', 'information-sent']
+          : [routerLooks + 'actions', value.id, 'registry', 'information-sent'];
       case 'AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY':
         return isWorkflow
           ? [routerLooks + 'actions', value.id, 'registry', 'information-sent']
@@ -116,6 +120,8 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'PERMIT_VARIATION_APPLICATION_AMENDS_SUBMITTED':
       case 'PERMIT_VARIATION_RECALLED_FROM_AMENDS':
         return null;
+      case 'PERMIT_VARIATION_REQUEST_PAYMENT':
+        return [routerLooks + 'permit-variation', 'action', value.id, 'review', 'request-payment'];
 
       case 'PERMIT_TRANSFER_B_RECALLED_FROM_AMENDS':
       case 'PERMIT_TRANSFER_APPLICATION_CANCELLED':

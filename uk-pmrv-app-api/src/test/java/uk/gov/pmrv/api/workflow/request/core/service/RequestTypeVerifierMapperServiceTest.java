@@ -38,6 +38,7 @@ public class RequestTypeVerifierMapperServiceTest {
         Set<RequestType> expectedRequestTypes = Arrays.stream(RequestType.values())
                 .filter(type->( AccountType.INSTALLATION.equals(type.getAccountType()) || type.getAccountType() == null)
                         && type.getRoleTypes().contains(RoleTypeConstants.VERIFIER))
+                .filter(RequestType::isDisplayedInWorkflowFiltering)
                 .collect(Collectors.toSet());
 
         assertThat(requestTypes).isEqualTo(expectedRequestTypes);
@@ -54,6 +55,7 @@ public class RequestTypeVerifierMapperServiceTest {
         Set<RequestType> expectedRequestTypes = Arrays.stream(RequestType.values())
                 .filter(type->( AccountType.AVIATION.equals(type.getAccountType()) || type.getAccountType() == null)
                         && type.getRoleTypes().contains(RoleTypeConstants.VERIFIER))
+                .filter(RequestType::isDisplayedInWorkflowFiltering)
                 .collect(Collectors.toSet());
 
         assertThat(requestTypes).isEqualTo(expectedRequestTypes);

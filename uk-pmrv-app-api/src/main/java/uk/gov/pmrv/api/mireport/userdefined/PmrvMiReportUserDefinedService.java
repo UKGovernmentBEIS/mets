@@ -47,10 +47,10 @@ public class PmrvMiReportUserDefinedService {
     }
 
     @Transactional(readOnly = true)
-    public MiReportUserDefinedResults findAllByCA(AppUser appUser, AccountType accountType,
+    public MiReportUserDefinedResults findAll(AppUser appUser, AccountType accountType,
                                                   int page, int size, Long categoryId, String term, boolean favourites) {
-        Page<MiReportUserDefinedEntity> result = pmrvMiReportUserDefinedRepository.findAllByCompetentAuthorityAndFilters(
-                appUser.getCompetentAuthority(), accountType, categoryId, QuerySearchUtils.toSearchPattern(term),
+        Page<MiReportUserDefinedEntity> result = pmrvMiReportUserDefinedRepository.findAllByAccountTypeAndFilters(
+                accountType, categoryId, QuerySearchUtils.toSearchPattern(term),
                 favourites ? appUser.getUserId() : null,
                 PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "lastUpdatedOn")));
 

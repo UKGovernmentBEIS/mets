@@ -5,11 +5,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.common.domain.RequestAviationAccountInfo;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.common.service.RequestAviationAccountQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.common.domain.EmpIssuanceDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.common.domain.EmpIssuanceDeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload;
@@ -37,6 +40,9 @@ class EmpIssuanceUkEtsDeemedWithdrawnAddRequestActionServiceTest {
     @Mock
     private RequestActionUserInfoResolver requestActionUserInfoResolver;
 
+    @Mock
+    private RequestAviationAccountQueryService requestAviationAccountQueryService;
+
     @Test
     void addRequestAction() {
         String requestId = "1L";
@@ -59,6 +65,19 @@ class EmpIssuanceUkEtsDeemedWithdrawnAddRequestActionServiceTest {
             "regulatorUser", RequestActionUserInfo.builder().name("regulatorUserName").build()
         );
 
+        ServiceContactDetails serviceContactDetails = ServiceContactDetails.builder()
+                .name("name")
+                .email("email")
+                .build();
+
+        RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder()
+                .operatorName("operatorName")
+                .crcoCode("crcoCode")
+                .serviceContactDetails(serviceContactDetails)
+                .build();
+
+        when(requestAviationAccountQueryService.getAccountInfo(request.getAccountId())).thenReturn(accountInfo);
+
         when(requestService.findRequestById(requestId)).thenReturn(request);
         when(requestActionUserInfoResolver.getUsersInfo(operatorsNotified, regulatorUser, request)).thenReturn(usersInfo);
 
@@ -68,12 +87,14 @@ class EmpIssuanceUkEtsDeemedWithdrawnAddRequestActionServiceTest {
         verify(requestService, times(1)).findRequestById(requestId);
         verify(requestActionUserInfoResolver, times(1)).getUsersInfo(operatorsNotified, regulatorUser, request);
 
-        EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload requestActionPayload = EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload.builder()
-            .payloadType(RequestActionPayloadType.EMP_ISSUANCE_UKETS_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD)
-            .decisionNotification(decisionNotification)
-            .determination(determination)
-            .usersInfo(usersInfo)
-            .build();
+        EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload requestActionPayload =
+                EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload.builder()
+                        .payloadType(RequestActionPayloadType.EMP_ISSUANCE_UKETS_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD)
+                        .decisionNotification(decisionNotification)
+                        .determination(determination)
+                        .usersInfo(usersInfo)
+                        .serviceContactDetails(serviceContactDetails)
+                        .build();
 
         verify(requestService, times(1))
             .addActionToRequest(request, requestActionPayload,  RequestActionType.EMP_ISSUANCE_UKETS_APPLICATION_DEEMED_WITHDRAWN, regulatorUser);

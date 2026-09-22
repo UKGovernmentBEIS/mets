@@ -15,16 +15,16 @@ import uk.gov.netz.api.authorization.rules.domain.Scope;
 import uk.gov.netz.api.authorization.rules.services.resource.VerificationBodyAuthorizationResourceService;
 import uk.gov.netz.api.authorization.rules.services.resource.VerifierAuthorityResourceService;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactVbInfoDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactVbInfoResponse;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -71,18 +71,18 @@ class AccountVbSiteContactServiceTest {
         when(verificationBodyAuthorizationResourceService.hasUserScopeToVerificationBody(user, vbId, Scope.EDIT_USER))
                 .thenReturn(true);
         when(accountRepository
-            .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), accountType, vbId, AccountContactType.VB_SITE))
+            .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), accountType, null, vbId, AccountContactType.VB_SITE))
             .thenReturn(pagedAccounts);
 
         // Invoke
-        AccountContactVbInfoResponse actual = service.getAccountsAndVbSiteContacts(user, accountType, 0, 1);
+        AccountContactVbInfoResponse actual = service.getAccountsAndVbSiteContacts(user, accountType, null, 0, 1);
 
         // Assert
         assertEquals(expected, actual);
         verify(verificationBodyAuthorizationResourceService, times(1))
                 .hasUserScopeToVerificationBody(user, vbId, Scope.EDIT_USER);
         verify(accountRepository, times(1))
-                .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), accountType, vbId, AccountContactType.VB_SITE);
+                .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), accountType, null, vbId, AccountContactType.VB_SITE);
     }
 
     @Test
@@ -102,18 +102,18 @@ class AccountVbSiteContactServiceTest {
         when(verificationBodyAuthorizationResourceService.hasUserScopeToVerificationBody(user, vbId, Scope.EDIT_USER))
                 .thenReturn(false);
         when(accountRepository
-            .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), accountType, vbId, AccountContactType.VB_SITE))
+            .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), accountType, null, vbId, AccountContactType.VB_SITE))
             .thenReturn(pagedAccounts);
 
         // Invoke
-        AccountContactVbInfoResponse actual = service.getAccountsAndVbSiteContacts(user, accountType, 0, 1);
+        AccountContactVbInfoResponse actual = service.getAccountsAndVbSiteContacts(user, accountType, null, 0, 1);
 
         // Assert
         assertEquals(expected, actual);
         verify(verificationBodyAuthorizationResourceService, times(1))
                 .hasUserScopeToVerificationBody(user, vbId, Scope.EDIT_USER);
         verify(accountRepository, times(1))
-            .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), accountType, vbId, AccountContactType.VB_SITE);
+            .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), accountType, null, vbId, AccountContactType.VB_SITE);
     }
 
 
@@ -132,18 +132,18 @@ class AccountVbSiteContactServiceTest {
         when(verificationBodyAuthorizationResourceService.hasUserScopeToVerificationBody(user, vbId, Scope.EDIT_USER))
                 .thenReturn(true);
         when(accountRepository
-            .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), accountType, vbId, AccountContactType.VB_SITE))
+            .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), accountType, null, vbId, AccountContactType.VB_SITE))
             .thenReturn(pagedAccounts);
 
         // Invoke
-        AccountContactVbInfoResponse actual = service.getAccountsAndVbSiteContacts(user, accountType, 0, 1);
+        AccountContactVbInfoResponse actual = service.getAccountsAndVbSiteContacts(user, accountType, null, 0, 1);
 
         // Assert
         assertEquals(expected, actual);
         verify(verificationBodyAuthorizationResourceService, times(1))
                 .hasUserScopeToVerificationBody(user, vbId, Scope.EDIT_USER);
         verify(accountRepository, times(1))
-            .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), accountType, vbId, AccountContactType.VB_SITE);
+            .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), accountType, null, vbId, AccountContactType.VB_SITE);
     }
 
     @Test

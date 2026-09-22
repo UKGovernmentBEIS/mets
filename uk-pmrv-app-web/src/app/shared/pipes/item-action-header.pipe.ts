@@ -70,6 +70,7 @@ export class ItemActionHeaderPipe implements PipeTransform {
       case 'PERMIT_VARIATION_APPLICATION_AMENDS_SUBMITTED':
       case 'PERMIT_VARIATION_RECALLED_FROM_AMENDS':
       case 'PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED':
+      case 'PERMIT_VARIATION_REQUEST_PAYMENT':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
       case 'AER_APPLICATION_SUBMITTED':

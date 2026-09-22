@@ -1,0 +1,30 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    @if (feeRow(); as feeRow) {
+      <app-page-heading size="l">Are you sure you want to cancel this scheduled change?</app-page-heading>
+
+      <p class="govuk-body">
+        The payment amount for {{ feeRow.workflow }} is scheduled to change from
+        {{ feeRow.currentAmount | currency: 'GBP' : 'symbol' : '1.2-2' }} to
+        {{ feeRow.scheduledChange?.amount | currency: 'GBP' : 'symbol' : '1.2-2' }} on
+        {{ feeRow.scheduledChange?.date | date: 'd MMMM yyyy' }}.
+      </p>
+
+      <govuk-warning-text>
+        If you cancel this change, the current payment amount of
+        {{ feeRow.currentAmount | currency: 'GBP' : 'symbol' : '1.2-2' }} will continue to apply.
+      </govuk-warning-text>
+
+      @if (saveError()) {
+        <p class="govuk-error-message">{{ saveError() }}</p>
+      }
+
+      <div class="govuk-button-group">
+        <button govukWarnButton type="button" [disabled]="isSubmitting()" (click)="onConfirm()">
+          Yes, cancel scheduled change
+        </button>
+        <a govukLink routerLink="../..">No, keep scheduled change</a>
+      </div>
+    }
+  </div>
+</div>

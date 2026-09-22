@@ -1,0 +1,61 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <app-page-heading size="l">Fees history</app-page-heading>
+
+    @for (record of history().records; track $index) {
+      <h2 class="govuk-heading-m">{{ record.createdAtDisplay }}</h2>
+
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Changed by</dt>
+          <dd govukSummaryListRowValue>{{ record.changedByDisplay }}</dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Change</dt>
+          <dd govukSummaryListRowValue>
+            @switch (record.actionType) {
+              @case ('IMMEDIATE_UPDATE') {
+                {{ record.workflow }} {{ record.oldAmount | currency: 'GBP' : 'symbol' : '1.2-2' }} updated to
+                {{ record.newAmount | currency: 'GBP' : 'symbol' : '1.2-2' }}
+              }
+              @case ('SCHEDULED_UPDATE') {
+                The payment amount for {{ record.workflow }} will change to
+                {{ record.newAmount | currency: 'GBP' : 'symbol' : '1.2-2' }} on
+                {{ record.effectiveDate | date: 'd MMMM yyyy' }}
+              }
+              @case ('CANCEL_SCHEDULED') {
+                Cancelled the scheduled change to the payment amount for {{ record.workflow }}. The amount was due to
+                change from {{ record.oldAmount | currency: 'GBP' : 'symbol' : '1.2-2' }} to
+                {{ record.newAmount | currency: 'GBP' : 'symbol' : '1.2-2' }} on
+                {{ record.effectiveDate | date: 'd MMMM yyyy' }}
+              }
+              @case ('SYSTEM_APPLIED') {
+                Applied the scheduled payment change for {{ record.workflow }} from
+                {{ record.oldAmount | currency: 'GBP' : 'symbol' : '1.2-2' }} to
+                {{ record.newAmount | currency: 'GBP' : 'symbol' : '1.2-2' }}
+              }
+              @default {
+                Change details unavailable
+              }
+            }
+          </dd>
+        </div>
+        @if (record.actionType === 'SCHEDULED_UPDATE') {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Effective from</dt>
+            <dd govukSummaryListRowValue>{{ record.effectiveDate | date: 'd MMMM yyyy' }}</dd>
+          </div>
+        }
+      </dl>
+    } @empty {
+      <p class="govuk-body">There is no fee change history to show.</p>
+    }
+
+    @if (history().total > pageSize) {
+      <app-pagination
+        [count]="history().total"
+        [pageSize]="pageSize"
+        (currentPageChange)="onPageChange($event)"></app-pagination>
+    }
+  </div>
+</div>

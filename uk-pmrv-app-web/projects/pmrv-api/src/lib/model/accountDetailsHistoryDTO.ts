@@ -13,7 +13,7 @@
 export interface AccountDetailsHistoryDTO {
   changedBy?: string;
   creationDate?: string;
-  category?: 'FIRST_YEAR_OF_REPORTING_OBLIGATION';
+  category?: 'FIRST_YEAR_OF_REPORTING_OBLIGATION' | 'FIRST_YEAR_WITHIN_SCOPE_OF_APPLICABILITY';
   previousValue?: object;
   newValue?: object;
   reason?: string;

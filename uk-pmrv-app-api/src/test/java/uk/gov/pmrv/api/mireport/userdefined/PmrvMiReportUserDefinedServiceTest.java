@@ -120,7 +120,7 @@ class PmrvMiReportUserDefinedServiceTest {
     }
 
     @Test
-    void findAllByCA() {
+    void findAll() {
         int page = 0;
         int size = 10;
         Long categoryId = 5L;
@@ -137,19 +137,19 @@ class PmrvMiReportUserDefinedServiceTest {
         Page<MiReportUserDefinedEntity> resultPage = new PageImpl<>(List.of(entity),
                 PageRequest.of(page, size), 1L);
 
-        when(pmrvMiReportUserDefinedRepository.findAllByCompetentAuthorityAndFilters(
-                eq(CA), eq(AccountType.INSTALLATION), eq(categoryId), any(), any(), any(Pageable.class)))
+        when(pmrvMiReportUserDefinedRepository.findAllByAccountTypeAndFilters(
+                eq(AccountType.INSTALLATION), eq(categoryId), any(), any(), any(Pageable.class)))
                 .thenReturn(resultPage);
         when(miReportUserDefinedMapper.toMiReportUserDefinedInfoDTO(entity)).thenReturn(infoDTO);
 
         MiReportUserDefinedResults results =
-                service.findAllByCA(appUser, AccountType.INSTALLATION, page, size, categoryId, "Test", false);
+                service.findAll(appUser, AccountType.INSTALLATION, page, size, categoryId, "Test", false);
 
         assertThat(results.getTotal()).isEqualTo(1L);
         assertThat(results.getQueries()).containsExactly(infoDTO);
 
-        verify(pmrvMiReportUserDefinedRepository, times(1)).findAllByCompetentAuthorityAndFilters(
-                eq(CA), eq(AccountType.INSTALLATION), eq(categoryId), termCaptor.capture(), isNull(), pageableCaptor.capture());
+        verify(pmrvMiReportUserDefinedRepository, times(1)).findAllByAccountTypeAndFilters(
+                eq(AccountType.INSTALLATION), eq(categoryId), termCaptor.capture(), isNull(), pageableCaptor.capture());
         verify(miReportUserDefinedMapper, times(1)).toMiReportUserDefinedInfoDTO(entity);
 
         assertThat(termCaptor.getValue()).isEqualTo("%test%");
@@ -162,18 +162,18 @@ class PmrvMiReportUserDefinedServiceTest {
     }
 
     @Test
-    void findAllByCA_nullTerm() {
+    void findAll_nullTerm() {
         final AppUser appUser = getAppUser();
 
 
         Page<MiReportUserDefinedEntity> emptyPage = new PageImpl<>(List.of());
 
-        when(pmrvMiReportUserDefinedRepository.findAllByCompetentAuthorityAndFilters(
-                eq(CA), eq(AccountType.INSTALLATION), eq(null), termCaptor.capture(), any(), any(Pageable.class)))
+        when(pmrvMiReportUserDefinedRepository.findAllByAccountTypeAndFilters(
+                eq(AccountType.INSTALLATION), eq(null), termCaptor.capture(), any(), any(Pageable.class)))
                 .thenReturn(emptyPage);
 
         MiReportUserDefinedResults results =
-                service.findAllByCA(appUser, AccountType.INSTALLATION, 0, 10, null, null, false);
+                service.findAll(appUser, AccountType.INSTALLATION, 0, 10, null, null, false);
 
         assertThat(results.getTotal()).isZero();
         assertThat(results.getQueries()).isEmpty();
@@ -182,17 +182,17 @@ class PmrvMiReportUserDefinedServiceTest {
     }
 
     @Test
-    void findAllByCA_emptyResult() {
+    void findAll_emptyResult() {
         final AppUser appUser = getAppUser();
 
         Page<MiReportUserDefinedEntity> emptyPage = new PageImpl<>(List.of());
 
-        when(pmrvMiReportUserDefinedRepository.findAllByCompetentAuthorityAndFilters(
-                eq(CA), eq(AccountType.AVIATION), eq(null), any(), isNull(), any(Pageable.class)))
+        when(pmrvMiReportUserDefinedRepository.findAllByAccountTypeAndFilters(
+                eq(AccountType.AVIATION), eq(null), termCaptor.capture(), isNull(), any(Pageable.class)))
                 .thenReturn(emptyPage);
 
         MiReportUserDefinedResults results =
-                service.findAllByCA(appUser, AccountType.AVIATION, 0, 10, null, "term", false);
+                service.findAll(appUser, AccountType.AVIATION, 0, 10, null, "term", false);
 
         assertThat(results.getTotal()).isZero();
         assertThat(results.getQueries()).isEmpty();

@@ -28,7 +28,7 @@
           </ng-container>
 
           <ng-container *ngSwitchCase="'deleteBtn'">
-            <a [routerLink]="[row.id, 'delete']" govukLink>Delete</a>
+            <a [routerLink]="[row.id, 'delete']" govukLink [hidden-text]="row.name">Delete</a>
           </ng-container>
 
           <ng-container *ngSwitchDefault>

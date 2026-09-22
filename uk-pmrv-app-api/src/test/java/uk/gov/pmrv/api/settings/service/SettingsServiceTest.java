@@ -11,6 +11,7 @@ import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.settings.domain.SettingsSection;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SettingsServiceTest {
@@ -19,19 +20,35 @@ class SettingsServiceTest {
     private SettingsService service;
 
     @Mock
+    private SettingsFeeAuthorizationService settingsFeeAuthorizationService;
+
+    @Mock
     private AppUser appUser;
 
     @Test
-    void getAccessibleSections_installation_returnsAllSections() {
+    void getAccessibleSections_installation_withFeeViewPermission_returnsFees() {
+        when(settingsFeeAuthorizationService.canView(appUser)).thenReturn(true);
+
         List<SettingsSection> result = service.getAccessibleSections(appUser, AccountType.INSTALLATION);
 
-        assertThat(result).containsExactlyInAnyOrder(SettingsSection.values());
+        assertThat(result).containsExactly(SettingsSection.FEES);
     }
 
     @Test
-    void getAccessibleSections_aviation_returnsAllSections() {
+    void getAccessibleSections_aviation_withFeeViewPermission_returnsFees() {
+        when(settingsFeeAuthorizationService.canView(appUser)).thenReturn(true);
+
         List<SettingsSection> result = service.getAccessibleSections(appUser, AccountType.AVIATION);
 
-        assertThat(result).containsExactlyInAnyOrder(SettingsSection.values());
+        assertThat(result).containsExactly(SettingsSection.FEES);
+    }
+
+    @Test
+    void getAccessibleSections_withNoPermissions_returnsEmpty() {
+        when(settingsFeeAuthorizationService.canView(appUser)).thenReturn(false);
+
+        List<SettingsSection> result = service.getAccessibleSections(appUser, AccountType.INSTALLATION);
+
+        assertThat(result).isEmpty();
     }
 }

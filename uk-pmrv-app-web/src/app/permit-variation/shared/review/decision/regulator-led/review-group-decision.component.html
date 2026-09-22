@@ -27,7 +27,12 @@
           #removeButton>
           Remove
         </button>
-        <div govuk-textarea [maxLength]="10000" formControlName="item"></div>
+        <div
+          govuk-textarea
+          [maxLength]="10000"
+          formControlName="item"
+          [isLabelHidden]="true"
+          [label]="`Item ${i + 1}`"></div>
       </fieldset>
 
       <button

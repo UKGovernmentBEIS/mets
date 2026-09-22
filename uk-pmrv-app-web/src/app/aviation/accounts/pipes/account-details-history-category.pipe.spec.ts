@@ -10,4 +10,11 @@ describe('AviationAccoundDetailsHistoryCategoryPipe', () => {
     const pipe = new AviationAccoundDetailsHistoryCategoryPipe();
     expect(pipe.transform('FIRST_YEAR_OF_REPORTING_OBLIGATION')).toEqual('First year of reporting obligation');
   });
+
+  it('should return correct value for CORSIA first year within scope of applicability', () => {
+    const pipe = new AviationAccoundDetailsHistoryCategoryPipe();
+    expect(pipe.transform('FIRST_YEAR_WITHIN_SCOPE_OF_APPLICABILITY')).toEqual(
+      'First year within the scope of applicability',
+    );
+  });
 });

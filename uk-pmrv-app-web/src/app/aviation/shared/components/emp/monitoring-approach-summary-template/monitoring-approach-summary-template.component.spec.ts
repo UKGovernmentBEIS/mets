@@ -77,9 +77,9 @@ describe('MonitoringApproachSummaryTemplateComponent', () => {
     fixture.detectChanges();
 
     expect(summaryListValues()).toEqual([
-      ['Monitoring approach', ['Use unmodified Eurocontrol Support Facility data', '', 'Change']],
-      ['Simplified reporting eligibility', ['My explanation', '', 'Change']],
-      ['Supporting evidence', ['test.png', '', 'Change']],
+      ['Monitoring approach', ['Use unmodified Eurocontrol Support Facility data', '', 'Change monitoring approach']],
+      ['Simplified reporting eligibility', ['My explanation', '', 'Change  simplified reporting eligibility']],
+      ['Supporting evidence', ['test.png', '', 'Change  supporting evidence']],
     ]);
 
     hostComponent.data = {
@@ -92,8 +92,11 @@ describe('MonitoringApproachSummaryTemplateComponent', () => {
     fixture.detectChanges();
 
     expect(summaryListValues()).toEqual([
-      ['Monitoring approach', ['Use your own flight data with the Eurocontrol Small Emitters Tool', '', 'Change']],
-      ['Simplified reporting eligibility', ['My explanation', '', 'Change']],
+      [
+        'Monitoring approach',
+        ['Use your own flight data with the Eurocontrol Small Emitters Tool', '', 'Change monitoring approach'],
+      ],
+      ['Simplified reporting eligibility', ['My explanation', '', 'Change  simplified reporting eligibility']],
     ]);
 
     hostComponent.data = {
@@ -104,7 +107,9 @@ describe('MonitoringApproachSummaryTemplateComponent', () => {
     } as EmissionsMonitoringApproachFormValues;
     fixture.detectChanges();
 
-    expect(summaryListValues()).toEqual([['Monitoring approach', ['Use fuel use monitoring', '', 'Change']]]);
+    expect(summaryListValues()).toEqual([
+      ['Monitoring approach', ['Use fuel use monitoring', '', 'Change monitoring approach']],
+    ]);
   });
 
   function summaryListValues() {

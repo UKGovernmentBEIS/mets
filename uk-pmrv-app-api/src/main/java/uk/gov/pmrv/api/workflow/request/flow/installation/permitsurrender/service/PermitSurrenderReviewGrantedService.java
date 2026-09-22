@@ -6,8 +6,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountStatusService;
-import uk.gov.pmrv.api.integration.registry.notification.installation.request.NotificationRegistryEvent;
-import uk.gov.pmrv.api.integration.registry.notification.installation.request.RegistryNotificationType;
+import uk.gov.pmrv.api.integration.registry.notification.common.RegistryNotificationType;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.InstallationNotificationRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -66,7 +66,7 @@ public class PermitSurrenderReviewGrantedService {
         //send official notice
         permitSurrenderOfficialNoticeService.sendReviewDeterminationOfficialNotice(request);
 
-        eventPublisher.publishEvent(NotificationRegistryEvent.builder()
+        eventPublisher.publishEvent(InstallationNotificationRegistryEvent.builder()
                 .requestId(request.getId())
                 .accountId(request.getAccountId())
                 .fileInfoDTO(grantedRequestActionPayload.getOfficialNotice())

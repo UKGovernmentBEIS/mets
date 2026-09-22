@@ -10,7 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.integration.registry.accountupdated.aviation.request.requestaction.EmpVariationRegistryIntegrationRequestActionPayload;
+import uk.gov.pmrv.api.integration.registry.notification.aviation.request.requestaction.NotificationRegistryIntegrationNoFileRequestActionPayload;
 import uk.gov.pmrv.api.integration.registry.notification.installation.request.requestaction.NotificationRegistryIntegrationRequestActionPayload;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.requestaction.ReturnOfAllowancesNotificationRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.request.requestaction.AviationReportableEmissionsRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.integration.registry.withholdflag.installation.request.requestaction.WithholdingOfAllowancesRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -101,11 +103,11 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRRegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRVerificationReturnedToOperatorRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationAmendsSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationVerificationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2RegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2VerificationReturnedToOperatorRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.bdrs2.domain.BDRS2ApplicationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountRegistryIntegrationRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.registryIntegration.InstallationAccountUpdatedRegistryIntegrationRequestActionPayload;
@@ -121,11 +123,11 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIComp
 import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIRegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionOperatorRespondedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationVerificationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERRegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERVerificationReturnedToOperatorRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NERApplicationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permanentcessation.domain.PermanentCessationApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationDeemedWithdrawnRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationGrantedRequestActionPayload;
@@ -152,6 +154,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.amends
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationApplicationDeemedWithdrawnRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationApplicationGrantedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationApplicationRejectedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationRequestPaymentActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submit.domain.PermitVariationApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationApplicationRegulatorLedApprovedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.returnofallowances.domain.ReturnOfAllowancesApplicationSubmittedRequestActionPayload;
@@ -225,6 +228,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = PermitVariationApplicationReturnedForAmendsRequestActionPayload.class, value = "PERMIT_VARIATION_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermitVariationApplicationRegulatorLedApprovedRequestActionPayload.class, value = "PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD"),
                 @DiscriminatorMapping(schema = InstallationAccountUpdatedRegistryIntegrationRequestActionPayload.class, value = "PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD"),
+                @DiscriminatorMapping(schema = PermitVariationRequestPaymentActionPayload.class, value = "PERMIT_VARIATION_REQUEST_PAYMENT_PAYLOAD"),
 
 
 
@@ -435,7 +439,11 @@ import java.util.UUID;
 
                 @DiscriminatorMapping(schema = AviationDoECorsiaSubmittedRequestActionPayload.class, value = "AVIATION_DOE_CORSIA_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "AVIATION_DOE_CORSIA_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
-                @DiscriminatorMapping(schema = NotificationRegistryIntegrationRequestActionPayload.class, value = "NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD")
+                @DiscriminatorMapping(schema = NotificationRegistryIntegrationRequestActionPayload.class, value = "NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD"),
+                @DiscriminatorMapping(schema = NotificationRegistryIntegrationNoFileRequestActionPayload.class, value = "NOTIFICATION_REGISTRY_INTEGRATION_NO_FILE_PAYLOAD"),
+                @DiscriminatorMapping(schema = ReturnOfAllowancesNotificationRegistryIntegrationRequestActionPayload.class, value = "RETURN_OF_ALLOWANCES_NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD")
+
+
         },
         discriminatorProperty = "payloadType")
 
@@ -486,6 +494,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = PermitVariationApplicationReturnedForAmendsRequestActionPayload.class, name = "PERMIT_VARIATION_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD"),
         @JsonSubTypes.Type(value = PermitVariationApplicationRegulatorLedApprovedRequestActionPayload.class, name = "PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD"),
         @JsonSubTypes.Type(value = InstallationAccountUpdatedRegistryIntegrationRequestActionPayload.class, name = "PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD"),
+        @JsonSubTypes.Type(value = PermitVariationRequestPaymentActionPayload.class, name = "PERMIT_VARIATION_REQUEST_PAYMENT_PAYLOAD"),
 
 
         @JsonSubTypes.Type(value = PermitTransferAApplicationSubmittedRequestActionPayload.class, name = "PERMIT_TRANSFER_A_APPLICATION_SUBMITTED_PAYLOAD"),
@@ -697,7 +706,10 @@ import java.util.UUID;
 
         @JsonSubTypes.Type(value = AviationDoECorsiaSubmittedRequestActionPayload.class, name = "AVIATION_DOE_CORSIA_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "AVIATION_DOE_CORSIA_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
-        @JsonSubTypes.Type(value = NotificationRegistryIntegrationRequestActionPayload.class, name = "NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD")
+        @JsonSubTypes.Type(value = NotificationRegistryIntegrationRequestActionPayload.class, name = "NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD"),
+        @JsonSubTypes.Type(value = NotificationRegistryIntegrationNoFileRequestActionPayload.class, name = "NOTIFICATION_REGISTRY_INTEGRATION_NO_FILE_PAYLOAD"),
+        @JsonSubTypes.Type(value = ReturnOfAllowancesNotificationRegistryIntegrationRequestActionPayload.class, name = "RETURN_OF_ALLOWANCES_NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD")
+
 
 
 })

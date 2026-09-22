@@ -16,7 +16,6 @@ import {
 } from 'pmrv-api';
 
 import { getHeadingMap, paymentHintInfo } from '../../core/payment.map';
-import { shouldHidePaymentAmount } from '../../core/utils';
 import { PaymentStore } from '../../store/payment.store';
 
 @Component({
@@ -43,8 +42,6 @@ export class DetailsComponent {
     switchMap((state) => this.requestActionsService.getRequestActionsByRequestId(state.requestId)),
     map((res) => this.sortTimeline(res)),
   );
-
-  readonly shouldDisplayAmount$ = this.store.pipe(map((state) => !shouldHidePaymentAmount(state)));
 
   readonly headingMap$ = this.store.pipe(
     map((state) =>
@@ -83,10 +80,6 @@ export class DetailsComponent {
     filter((state) => !!state.requestTaskItem),
     map((state) => state.requestTaskItem.requestTask.id),
   );
-
-  requestType$ = this.store.pipe(map((state) => state.requestType));
-
-  competentAuthority$ = this.store.pipe(map((state) => state.competentAuthority));
 
   requestTaskType$ = this.store.pipe(
     filter((state) => !!state.requestTaskItem),

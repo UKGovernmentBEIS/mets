@@ -5,10 +5,12 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.settings.domain.dto.FeeRowDTO;
 import uk.gov.pmrv.api.settings.domain.dto.FeeUpdateDTO;
+import uk.gov.pmrv.api.settings.domain.enumeration.FeeHistoryActionType;
 import uk.gov.pmrv.api.settings.repository.SettingsFeeRepository;
 import uk.gov.pmrv.api.workflow.payment.domain.PaymentFee;
 import uk.gov.pmrv.api.workflow.payment.domain.PaymentFeeMethod;
@@ -20,6 +22,7 @@ public class SettingsFeeService {
 
     private final SettingsFeeRepository settingsFeeRepository;
     private final SettingsFeeValidationService validationService;
+    private final FeeHistoryService feeHistoryService;
 
     public List<FeeRowDTO> getFees(CompetentAuthorityEnum competentAuthority, AccountType accountType) {
         return settingsFeeRepository.findChangeableFeesByCompetentAuthority(competentAuthority)
@@ -29,7 +32,8 @@ public class SettingsFeeService {
     }
 
     @Transactional
-    public void updateFee(CompetentAuthorityEnum competentAuthority, AccountType accountType, Long id, FeeType feeType, FeeUpdateDTO dto) {
+    public void updateFee(CompetentAuthorityEnum competentAuthority, AccountType accountType, Long id,
+                          FeeType feeType, FeeUpdateDTO dto, AppUser appUser) {
         LocalDate today = LocalDate.now();
         validationService.validateEffectiveDate(dto.getEffectiveDate(), today);
 
@@ -37,14 +41,23 @@ public class SettingsFeeService {
         PaymentFee existing = validationService.validateAndGetFee(feeMethod, feeType);
         validationService.validateNoConflictingScheduledUpdate(existing, dto.getEffectiveDate(), today);
 
+        boolean isImmediate = !dto.getEffectiveDate().isAfter(today);
         feeMethod.getFees().put(feeType, buildUpdatedFee(existing, dto, today));
+
+        FeeHistoryActionType actionType = isImmediate ? FeeHistoryActionType.IMMEDIATE_UPDATE : FeeHistoryActionType.SCHEDULED_UPDATE;
+        LocalDate effectiveDate = isImmediate ? null : dto.getEffectiveDate();
+        feeHistoryService.logFeeChange(feeMethod, feeType, actionType, existing.getAmount(), dto.getAmount(), effectiveDate, appUser);
     }
 
     @Transactional
-    public void cancelScheduledFeeUpdate(CompetentAuthorityEnum competentAuthority, AccountType accountType, Long id, FeeType feeType) {
+    public void cancelScheduledFeeUpdate(CompetentAuthorityEnum competentAuthority, AccountType accountType,
+                                         Long id, FeeType feeType, AppUser appUser) {
         PaymentFeeMethod feeMethod = validationService.validateAndGetFeeMethod(competentAuthority, accountType, id);
         PaymentFee existing = validationService.validateAndGetFee(feeMethod, feeType);
         validationService.validateScheduledChangeExists(existing);
+
+        feeHistoryService.logFeeChange(feeMethod, feeType, FeeHistoryActionType.CANCEL_SCHEDULED,
+                existing.getAmount(), existing.getScheduledAmount(), existing.getScheduledDate(), appUser);
 
         feeMethod.getFees().put(feeType, PaymentFee.builder()
                 .amount(existing.getAmount())
@@ -59,6 +72,8 @@ public class SettingsFeeService {
                 .forEach(feeMethod -> feeMethod.getFees().replaceAll((feeType, fee) -> {
                     if (fee.getScheduledDate() != null && !fee.getScheduledDate().isAfter(today)
                             && fee.getScheduledAmount() != null) {
+                        feeHistoryService.logFeeChange(feeMethod, feeType, FeeHistoryActionType.SYSTEM_APPLIED,
+                                fee.getAmount(), fee.getScheduledAmount(), null, null);
                         return PaymentFee.builder()
                                 .amount(fee.getScheduledAmount())
                                 .changeable(fee.isChangeable())

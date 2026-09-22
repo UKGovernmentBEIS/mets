@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import {
@@ -24,7 +24,7 @@ import { BusinessErrorService } from '@error/business-error/business-error.servi
 import { catchBadRequest, ErrorCodes } from '@error/business-errors';
 import { UserFullNamePipe } from '@shared/pipes/user-full-name.pipe';
 
-import { GovukSelectOption, GovukTableColumn } from 'govuk-components';
+import { GovukSelectOption, GovukTableColumn, GovukValidators } from 'govuk-components';
 
 import {
   AccountContactInfoDTO,
@@ -35,7 +35,7 @@ import {
 
 import { savePartiallyNotFoundSiteContactError } from '../errors/business-error';
 
-type TableData = AccountContactInfoDTO & { user: RegulatorUserAuthorityInfoDTO; type: string };
+type TableData = AccountContactInfoDTO & { user: RegulatorUserAuthorityInfoDTO };
 
 @Component({
   selector: 'app-site-contacts',
@@ -51,7 +51,6 @@ export class SiteContactsComponent implements OnInit {
   count$: Observable<number>;
   columns: GovukTableColumn<TableData>[] = [
     { field: 'accountName', header: this.isAviation ? 'Account' : 'Permit holding account', isHeader: true },
-    { field: 'type', header: 'Type' },
     { field: 'user', header: 'Assigned to' },
   ];
   tableData$: Observable<TableData[]>;
@@ -60,7 +59,23 @@ export class SiteContactsComponent implements OnInit {
   form = this.fb.group({ siteContacts: this.fb.array([]) });
   assigneeOptions$: Observable<GovukSelectOption<string>[]>;
   refresh$ = new Subject<void>();
+  searchForm = this.fb.group({
+    term: [
+      null,
+      {
+        validators: [
+          GovukValidators.minLength(3, 'Enter at least 3 characters'),
+          GovukValidators.maxLength(256, 'Enter up to 256 characters'),
+        ],
+      },
+    ],
+  });
   private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain);
+  private readonly term$ = this.route.queryParamMap.pipe(
+    map((params) => params.get('term')?.trim() || null),
+    distinctUntilChanged(),
+    shareReplay({ bufferSize: 1, refCount: false }),
+  );
 
   constructor(
     private readonly fb: UntypedFormBuilder,
@@ -83,13 +98,18 @@ export class SiteContactsComponent implements OnInit {
       shareReplay({ bufferSize: 1, refCount: false }),
     );
 
+    this.term$.pipe(takeUntil(this.destroy$)).subscribe((term) => this.termCtrl.setValue(term, { emitEvent: false }));
+
     const contacts$ = combineLatest([
       merge(this.refresh$.pipe(switchMap(() => this.page$)), this.page$.pipe(distinctUntilChanged())),
+      this.term$,
       activatedTab$,
     ]).pipe(
       takeUntil(this.destroy$),
       withLatestFrom(this.currentDomain$),
-      switchMap(([[page], domain]) => this.siteContactsService.getCaSiteContacts(domain, page - 1, this.pageSize)),
+      switchMap(([[page, term], domain]) =>
+        this.siteContactsService.getCaSiteContacts(domain, page - 1, this.pageSize, term),
+      ),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
@@ -111,14 +131,12 @@ export class SiteContactsComponent implements OnInit {
         map((response) => response.contacts.slice().sort((a, b) => a.accountName.localeCompare(b.accountName))),
       ),
       regulators$,
-      this.currentDomain$,
     ]).pipe(
-      map(([contacts, users, domain]) =>
+      map(([contacts, users]) =>
         contacts.map(
           (contact): TableData => ({
             ...contact,
             user: users.find((user) => user.userId === contact.userId),
-            type: domain[0] + domain.slice(1).toLocaleLowerCase(),
           }),
         ),
       ),
@@ -129,6 +147,21 @@ export class SiteContactsComponent implements OnInit {
         ),
       ),
     );
+  }
+
+  onSearch(): void {
+    if (this.searchForm.valid) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        preserveFragment: true,
+        queryParams: { term: this.termCtrl.value?.trim() || null, page: null },
+        queryParamsHandling: 'merge',
+      });
+    }
+  }
+
+  private get termCtrl(): AbstractControl {
+    return this.searchForm.get('term');
   }
 
   onSave(): void {

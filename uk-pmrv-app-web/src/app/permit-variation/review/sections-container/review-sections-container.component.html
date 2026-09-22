@@ -1,3 +1,12 @@
+<div class="govuk-grid-row" *ngIf="paymentRequestSent">
+  <div class="govuk-grid-column-full">
+    <govuk-notification-banner type="success">
+      <h1 class="govuk-notification-banner__heading">
+        The permit variation payment request has been sent successfully.
+      </h1>
+    </govuk-notification-banner>
+  </div>
+</div>
 <div class="govuk-grid-row">
   <div [class]="(isRelatedActionsSectionVisible$ | async) ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
     <app-page-heading size="xl">
@@ -105,7 +114,11 @@
     <app-related-actions
       [isAssignable$]="store.isAssignableAndCapable$"
       [taskId$]="taskId$"
-      [allowedActions$]="store.select('allowedRequestTaskActions')"></app-related-actions>
+      [allowedActions$]="store.select('allowedRequestTaskActions')">
+      <li *ngIf="hasAccessRequestPayment$ | async">
+        <a routerLink="request-payment" govukLink>Request payment for permit variation</a>
+      </li>
+    </app-related-actions>
 
     <app-preview-documents
       *ngIf="previewDocumentsViewModel$ | async as vm"

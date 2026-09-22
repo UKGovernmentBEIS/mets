@@ -26583,4 +26583,274 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_2_0_settings_page_fees_authorization_rules" author="vasileios.vitzilaios@keyes.eu">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'CA', null, 'caAccessHandler', 'REGULATOR', 'SETTINGS_PAGE_FEES_VIEW');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'CA', null, 'caAccessHandler', 'REGULATOR', 'SETTINGS_PAGE_FEES_EXECUTE');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+            (select nextval('au_resource_scope_permission_seq'), 'CA', null,
+                    'SETTINGS_PAGE_FEES_VIEW', 'PERM_SETTINGS_PAGE_FEES_VIEW_TASK', 'REGULATOR');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+            (select nextval('au_resource_scope_permission_seq'), 'CA', null,
+                    'SETTINGS_PAGE_FEES_EXECUTE', 'PERM_SETTINGS_PAGE_FEES_EXECUTE_TASK', 'REGULATOR');
+
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'getFees'),
+                   (nextval('au_service_seq'), 'getFeeHistory'),
+                   (nextval('au_service_seq'), 'updateFee'),
+                   (nextval('au_service_seq'), 'cancelScheduledFeeUpdate');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getFees', 'getFeeHistory')
+              and r.resource_type = 'CA'
+              and r.resource_sub_type is null
+              and r.handler = 'caAccessHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope = 'SETTINGS_PAGE_FEES_VIEW';
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('updateFee', 'cancelScheduledFeeUpdate')
+              and r.resource_type = 'CA'
+              and r.resource_sub_type is null
+              and r.handler = 'caAccessHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope = 'SETTINGS_PAGE_FEES_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                  and s.id = sr.service_id
+                  and s.name in ('getFees', 'getFeeHistory')
+                  and r.resource_type = 'CA'
+                  and r.resource_sub_type is null
+                  and r.handler = 'caAccessHandler'
+                  and r.role_type = 'REGULATOR'
+                  and r.scope = 'SETTINGS_PAGE_FEES_VIEW';
+
+                delete from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                  and s.id = sr.service_id
+                  and s.name in ('updateFee', 'cancelScheduledFeeUpdate')
+                  and r.resource_type = 'CA'
+                  and r.resource_sub_type is null
+                  and r.handler = 'caAccessHandler'
+                  and r.role_type = 'REGULATOR'
+                  and r.scope = 'SETTINGS_PAGE_FEES_EXECUTE';
+
+                delete from au_service
+                where name in ('getFees', 'getFeeHistory', 'updateFee', 'cancelScheduledFeeUpdate');
+
+                delete from au_resource_scope_permission
+                where resource_type = 'CA'
+                  and resource_sub_type is null
+                  and scope in ('SETTINGS_PAGE_FEES_VIEW', 'SETTINGS_PAGE_FEES_EXECUTE')
+                  and role_type = 'REGULATOR';
+
+                delete from au_rule
+                where resource_type = 'CA'
+                  and resource_sub_type is null
+                  and handler = 'caAccessHandler'
+                  and role_type = 'REGULATOR'
+                  and scope in ('SETTINGS_PAGE_FEES_VIEW', 'SETTINGS_PAGE_FEES_EXECUTE');
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_create_au_service_rule_getDocumentPreview_permit_revocation_cessation_notify_operator" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'getDocumentPreview'
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'PERMIT_REVOCATION_CESSATION_SUBMIT'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'PERMIT_REVOCATION_CESSATION_SUBMIT'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_create_rule_return_of_allowances_notification_registry_integration_timeline_regulator_access" author="mitzelose@unisystems.gr">
+        <sql>
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'RETURN_OF_ALLOWANCES_NOTIFICATION_SENT_TO_REGISTRY', 'requestActionViewHandler', 'REGULATOR');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in('getRequestActionById', 'generateRequestActionGetFileAttachmentToken', 'generateRequestActionGetFileDocumentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'RETURN_OF_ALLOWANCES_NOTIFICATION_SENT_TO_REGISTRY'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type= 'REGULATOR'
+              and r.scope is null;
+
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule
+                where rule_id in (
+                select r.id
+                from au_rule r
+                where r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'RETURN_OF_ALLOWANCES_NOTIFICATION_SENT_TO_REGISTRY'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope is null);
+
+                delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'RETURN_OF_ALLOWANCES_NOTIFICATION_SENT_TO_REGISTRY'
+                and handler = 'requestActionViewHandler'
+                and role_type = 'REGULATOR'
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_permit_varioation_payment_request_action_access" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values
+                (nextval('au_rule_seq'), 'REQUEST_ACTION', 'PERMIT_VARIATION_REQUEST_PAYMENT', 'requestActionViewHandler', 'REGULATOR', null),
+                (nextval('au_rule_seq'), 'REQUEST_ACTION', 'PERMIT_VARIATION_REQUEST_PAYMENT', 'requestActionViewHandler', 'OPERATOR', null),
+                (nextval('au_rule_seq'), 'REQUEST_ACTION', 'PERMIT_VARIATION_REQUEST_PAYMENT', 'requestActionAccountBasedViewHandler', 'VERIFIER', null);
+
+            insert into au_service_rule (service_id, rule_id)
+            select s.id, r.id
+            from (select id from au_service where name = 'getRequestActionById') s
+                     cross join (
+                select id
+                from au_rule
+                where handler = 'requestActionViewHandler'
+                  and resource_sub_type = 'PERMIT_VARIATION_REQUEST_PAYMENT'
+                  and resource_type = 'REQUEST_ACTION'
+                  and role_type = 'REGULATOR'
+
+                union all
+
+                select id
+                from au_rule
+                where handler = 'requestActionViewHandler'
+                  and resource_sub_type = 'PERMIT_VARIATION_REQUEST_PAYMENT'
+                  and resource_type = 'REQUEST_ACTION'
+                  and role_type = 'OPERATOR'
+
+                union all
+
+                select id
+                from au_rule
+                where handler = 'requestActionAccountBasedViewHandler'
+                  and resource_sub_type = 'PERMIT_VARIATION_REQUEST_PAYMENT'
+                  and resource_type = 'REQUEST_ACTION'
+                  and role_type = 'VERIFIER'
+            ) r;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from au_service_rule
+                where service_id = (
+                select id
+                from au_service
+                where name = 'getRequestActionById'
+                )
+                and rule_id in (
+                select id
+                from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'PERMIT_VARIATION_REQUEST_PAYMENT'
+                and scope is null
+                and (
+                (handler = 'requestActionViewHandler' and role_type in ('REGULATOR', 'OPERATOR'))
+                or
+                (handler = 'requestActionAccountBasedViewHandler' and role_type = 'VERIFIER')
+                )
+                );
+
+                delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'PERMIT_VARIATION_REQUEST_PAYMENT'
+                and scope is null
+                and (
+                (handler = 'requestActionViewHandler' and role_type in ('REGULATOR', 'OPERATOR'))
+                or
+                (handler = 'requestActionAccountBasedViewHandler' and role_type = 'VERIFIER')
+                );
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_au_services_and_rules_insert_for_permit_variation_request_payment"
+               author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'requestPayment');
+
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'hasAccessRequestPayment');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_rule aur
+                     cross join public.au_service aus
+            where aus.name in ('requestPayment', 'hasAccessRequestPayment')
+              and aur.resource_type = 'REQUEST'
+              and aur.handler = 'requestAccessHandler'
+              and aur.scope is null
+              and aur.role_type = 'REGULATOR';
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                where service_id in (
+                select id
+                from au_service
+                where name in ('requestPayment', 'hasAccessRequestPayment')
+                )
+                and sr.rule_id in (
+                select id
+                from au_rule r
+                where r.resource_type = 'REQUEST'
+                and r.handler = 'requestAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope is null
+                );
+
+                delete from au_service
+                where name in ('requestPayment', 'hasAccessRequestPayment');
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

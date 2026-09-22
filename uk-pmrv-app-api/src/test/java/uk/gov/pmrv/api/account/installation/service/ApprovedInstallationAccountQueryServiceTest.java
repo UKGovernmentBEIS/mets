@@ -8,15 +8,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountInfoDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.repository.InstallationAccountRepository;
 import uk.gov.pmrv.api.account.installation.transform.InstallationAccountMapper;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 
 import java.util.List;
 import java.util.Optional;
@@ -120,12 +120,12 @@ class ApprovedInstallationAccountQueryServiceTest {
         Page<AccountContactInfoDTO> pagedAccountContacts = new PageImpl<>(expectedContacts);
 
         when(installationAccountRepository
-            .findAccountContactsByCaAndContactTypeAndStatusNotIn(PageRequest.of(page, pageSize), competentAuthority,
+            .findAccountContactsByCaAndContactTypeAndStatusNotIn(PageRequest.of(page, pageSize), null, competentAuthority,
                 caSiteContactType, List.of(InstallationAccountStatus.UNAPPROVED, InstallationAccountStatus.DENIED)))
             .thenReturn(pagedAccountContacts);
 
         Page<AccountContactInfoDTO> resultPage =
-            approvedInstallationAccountService.getApprovedAccountsAndCaSiteContactsByCa(competentAuthority, page, pageSize);
+            approvedInstallationAccountService.getApprovedAccountsAndCaSiteContactsByCa(competentAuthority, null, page, pageSize);
 
         assertThat(resultPage).containsExactlyInAnyOrderElementsOf(expectedContacts);
 

@@ -76,7 +76,7 @@ describe('PaidComponent', () => {
         ['Paid by', 'First Last'],
         ['Payment method', 'Bank Transfer (BACS)'],
         ['Reference number', 'AEM-323-1'],
-        ['Amount', ''],
+        ['Amount', '£2,500.20'],
       ]);
     });
   });

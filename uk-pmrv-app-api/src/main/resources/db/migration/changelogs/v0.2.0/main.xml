@@ -49,5 +49,6 @@
     <include file="changelog_request_task_wait_for_review_permit_emp_migration.xml" relativeToChangelogFile="true" />
 	<include file="changelog_custom_mi_reports_categories.xml" relativeToChangelogFile="true" />
 	<include file="changelog_permit_notification_metadata_migration.xml" relativeToChangelogFile="true" />
+	<include file="changelog_request_payment_fee_changeable_migration.xml" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

@@ -254,7 +254,7 @@
             <dd
               govukSummaryListRowValue
               class="govuk-!-padding-left-3"
-              [ngClass]="{ 'govuk-error-message': !companiesHouse?.registrationNumber }"
+              [class.govuk-error-message]="!companiesHouse?.registrationNumber"
               *ngIf="roleType === 'REGULATOR' && showCompaniesHouse()">
               {{ companiesHouse?.registrationNumber ?? (this.errorMessage$ | async) }}
             </dd>

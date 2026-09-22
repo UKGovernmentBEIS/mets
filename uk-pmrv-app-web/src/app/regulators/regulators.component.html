@@ -33,7 +33,7 @@
                 </ng-container>
               </ng-container>
               <ng-container *ngSwitchCase="'deleteBtn'">
-                <a [routerLink]="[row.userId, 'delete']" govukLink>Delete</a>
+                <a [routerLink]="[row.userId, 'delete']" govukLink [hidden-text]="row | userFullName">Delete</a>
               </ng-container>
               <ng-container *ngSwitchDefault>
                 {{ row[column.field] }}

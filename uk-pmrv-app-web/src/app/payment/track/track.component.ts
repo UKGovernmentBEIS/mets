@@ -12,7 +12,6 @@ import { hasRequestTaskAllowedActions } from '@shared/components/related-actions
 import { RequestActionInfoDTO, RequestActionsService, RequestItemsService } from 'pmrv-api';
 
 import { getHeadingMap, mapTrackPaymentToPaymentDetails, paymentHintInfo } from '../core/payment.map';
-import { shouldHidePaymentAmount } from '../core/utils';
 import { PaymentStore } from '../store/payment.store';
 
 @Component({
@@ -22,8 +21,6 @@ import { PaymentStore } from '../store/payment.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrackComponent {
-  readonly shouldDisplayAmount$ = this.store.pipe(map((state) => !shouldHidePaymentAmount(state)));
-
   readonly requestTaskItem$ = this.store.pipe(map((state) => state?.requestTaskItem));
 
   readonly relatedTasks$ = this.store.pipe(

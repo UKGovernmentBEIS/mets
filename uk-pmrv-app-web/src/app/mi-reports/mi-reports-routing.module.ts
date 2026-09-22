@@ -7,6 +7,7 @@ import { PendingRequestGuard } from '@core/guards/pending-request.guard';
 import { AccountsRegulatorsSiteContactsComponent } from './accounts-regulators-site-contacts/accounts-regulators-site-contacts.component';
 import { AccountsUsersContactsComponent } from './accounts-users-contacts/accounts-users-contacts.component';
 import { AddCustomReportComponent } from './add-custom-report/add-custom-report.component';
+import { CategoryDefinitionsComponent } from './category-definitions/category-definitions.component';
 import { CompletedWorkComponent } from './completed-work/completed-work.component';
 import { MiReportsListGuard } from './core/mi-reports-list.guard';
 import { canManageCustomReports } from './core/mi-reports-permission.guard';
@@ -36,6 +37,12 @@ const routes: Routes = [
     component: AddCustomReportComponent,
   },
   {
+    path: 'add-custom-report/category-definitions',
+    data: { hideBreadcrumb: true, backlink: '../' },
+    canMatch: [isFeatureEnabled('reportingImprovementsEnabled'), canManageCustomReports()],
+    component: CategoryDefinitionsComponent,
+  },
+  {
     path: 'edit-custom-report/:id',
     data: { hideBreadcrumb: true, backlink: ({ backlinkUrl }: { backlinkUrl: string }) => backlinkUrl },
     canMatch: [isFeatureEnabled('reportingImprovementsEnabled'), canManageCustomReports()],
@@ -45,6 +52,12 @@ const routes: Routes = [
       backlinkUrl: (route: ActivatedRouteSnapshot) => `../../view-custom-report/${route.paramMap.get('id')}`,
     },
     component: EditCustomReportComponent,
+  },
+  {
+    path: 'edit-custom-report/:id/category-definitions',
+    data: { hideBreadcrumb: true, backlink: '../' },
+    canMatch: [isFeatureEnabled('reportingImprovementsEnabled'), canManageCustomReports()],
+    component: CategoryDefinitionsComponent,
   },
   {
     path: 'view-custom-report/:id',

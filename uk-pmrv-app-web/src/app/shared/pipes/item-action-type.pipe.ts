@@ -20,6 +20,7 @@ export class ItemActionTypePipe implements PipeTransform {
 
       case 'INSTALLATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY':
       case 'AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY':
+      case 'RETURN_OF_ALLOWANCES_NOTIFICATION_SENT_TO_REGISTRY':
       case 'WITHHOLDING_OF_ALLOWANCES_SENT_TO_REGISTRY':
       case 'NOTIFICATION_SENT_TO_REGISTRY':
         return 'Information sent to Registry by system';
@@ -139,6 +140,8 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'Amended variation application submitted';
       case 'PERMIT_VARIATION_RECALLED_FROM_AMENDS':
         return 'Variation application recalled';
+      case 'PERMIT_VARIATION_REQUEST_PAYMENT':
+        return 'Request payment for permit variation sent';
 
       case 'AER_APPLICATION_SUBMITTED':
         return 'Emissions report submitted to regulator';

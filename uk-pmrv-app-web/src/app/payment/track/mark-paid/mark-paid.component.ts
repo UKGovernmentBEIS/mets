@@ -9,7 +9,6 @@ import { DestroySubject } from '@core/services/destroy-subject.service';
 import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { mapTrackPaymentToPaymentDetails, trackShouldDisplayMarkPaidConfirmationInfo } from '../../core/payment.map';
-import { shouldHidePaymentAmount } from '../../core/utils';
 import { PaymentStore } from '../../store/payment.store';
 
 @Component({
@@ -20,7 +19,6 @@ import { PaymentStore } from '../../store/payment.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MarkPaidComponent implements OnInit {
-  readonly shouldDisplayAmount$ = this.store.pipe(map((state) => !shouldHidePaymentAmount(state)));
   readonly shouldDisplayConfirmationInfo$ = this.store.pipe(
     map((state) => trackShouldDisplayMarkPaidConfirmationInfo(state.requestTaskItem?.requestInfo?.type)),
   );

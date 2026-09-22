@@ -1,0 +1,21 @@
+@if (paymentDetails$ | async; as paymentDetails) {
+  <app-request-action-heading
+    headerText="Request payment for permit variation"
+    [timelineCreationDate]="creationDate$ | async"></app-request-action-heading>
+
+  <app-summary-header class="govuk-heading-m">Response details</app-summary-header>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Payment amount in pounds</dt>
+      <dd govukSummaryListRowValue>{{ paymentDetails.amount | currency: 'GBP' : 'symbol' : '1.2-2' }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Due date for the payment</dt>
+      <dd govukSummaryListRowValue>{{ paymentDetails.dueDate | date: 'd MMM y' }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Notes</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ paymentDetails.notes }}</dd>
+    </div>
+  </dl>
+}

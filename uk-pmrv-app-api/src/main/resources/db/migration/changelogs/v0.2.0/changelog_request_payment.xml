@@ -350,4 +350,92 @@
         </rollback>
     </changeSet>
 
+
+    <changeSet id="0_2_0_create_request_payment_fee_history_table" author="vasileios.vitzilaios@keyes.eu">
+        <createSequence sequenceName="request_payment_fee_history_seq" startValue="1" incrementBy="1"/>
+        <createTable tableName="request_payment_fee_history">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fee_method_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_request_payment_fee_history_fee_method" references="request_payment_fee_method(id)"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="action_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fee_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(255)"/>
+            <column name="changed_by" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="old_amount" type="numeric(19,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="new_amount" type="numeric(19,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="effective_date" type="date"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="request_payment_fee_history"/>
+            <dropSequence sequenceName="request_payment_fee_history_seq"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_request_payment_fee_nrw_fa_categories" author="vasileios.vitzilaios@keyes.eu">
+        <sql>
+            INSERT INTO request_payment_fee (fee_method_id, type, amount, changeable)
+            SELECT id, 'NRW_CAT_FA_1_TO_2', 1, true
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'WALES'
+              AND request_type = 'PERMIT_ISSUANCE';
+
+            INSERT INTO request_payment_fee (fee_method_id, type, amount, changeable)
+            SELECT id, 'NRW_CAT_FA_3_PLUS', 1, true
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'WALES'
+              AND request_type = 'PERMIT_ISSUANCE';
+        </sql>
+        <rollback>
+            DELETE FROM request_payment_fee
+            WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'WALES'
+                  AND request_type = 'PERMIT_ISSUANCE'
+            )
+            AND type IN ('NRW_CAT_FA_1_TO_2', 'NRW_CAT_FA_3_PLUS');
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_update_wales_permit_variation_payment_fee" author="alekopoulosd@unisystems.gr">
+        <sql>
+            update request_payment_fee rpf
+            set amount = 0
+            where rpf.fee_method_id = (
+                select fm.id
+                from request_payment_fee_method fm
+                where fm.competent_authority = 'WALES'
+                  and fm.request_type = 'PERMIT_VARIATION'
+            )
+              and rpf.type = 'FIXED'
+              and rpf.amount = 1;
+        </sql>
+
+        <rollback>
+            update request_payment_fee rpf
+            set amount = 1
+            where rpf.fee_method_id = (
+            select fm.id
+            from request_payment_fee_method fm
+            where fm.competent_authority = 'WALES'
+            and fm.request_type = 'PERMIT_VARIATION'
+            )
+            and rpf.type = 'FIXED'
+            and rpf.amount = 0;
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

@@ -5,14 +5,12 @@
     govuk-summary-list
     [hasBorders]="false"
     [class.summary-list--edge-border]="true"
-    [class.govuk-!-margin-bottom-0]="true"
-  >
+    [class.govuk-!-margin-bottom-0]="true">
     <div govukSummaryListRow>
       <dt
         govukSummaryListRowKey
-        [ngClass]="{ 'govuk-list-error-key': getError(errors, permitRevocationMapper[item?.key]?.error) }"
-        [id]="item?.key"
-      >
+        [class.govuk-list-error-key]="getError(errors, permitRevocationMapper[item?.key]?.error)"
+        [id]="item?.key">
         {{ permitRevocationMapper[item?.key]?.label }}
       </dt>
       <dd govukSummaryListRowValue>
@@ -23,10 +21,9 @@
           <ng-container *ngFor="let val of item?.value">
             <div
               class="govuk-!-margin-bottom-2"
-              [ngClass]="{ 'govuk-error-message': getError(errors, permitRevocationMapper[item?.key]?.error, val) }"
+              [class.govuk-error-message]="getError(errors, permitRevocationMapper[item?.key]?.error, val)"
               *ngIf="getValue(val)"
-              [attr.aria-labelledby]="item?.key"
-            >
+              [attr.aria-labelledby]="item?.key">
               <span *ngIf="val" class="pre-wrap">{{ permitRevocationMapper[item?.key]?.prefix }}</span>
               <span class="pre-wrap">{{ getValue(val) }}</span>
             </div>

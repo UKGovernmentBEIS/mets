@@ -8,8 +8,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
-import uk.gov.pmrv.api.integration.registry.notification.installation.request.NotificationRegistryEvent;
-import uk.gov.pmrv.api.integration.registry.notification.installation.request.RegistryNotificationType;
+import uk.gov.pmrv.api.integration.registry.notification.common.RegistryNotificationType;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.InstallationNotificationRegistryEvent;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
@@ -112,7 +112,7 @@ class PermitTransferAOfficialNoticeServiceTest {
         verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
             DocumentTemplateType.PERMIT_TRANSFER_ACCEPTED, templateParams, fileName);
         verify(applicationEventPublisher, times(1)).publishEvent(
-                NotificationRegistryEvent.builder()
+                InstallationNotificationRegistryEvent.builder()
                         .registryNotificationType(RegistryNotificationType.TRANSFER_NOTIFICATION)
                         .accountId(transfererRequest.getAccountId()).fileInfoDTO(officialDocFileInfoDTO)
             .requestId(requestId).build());

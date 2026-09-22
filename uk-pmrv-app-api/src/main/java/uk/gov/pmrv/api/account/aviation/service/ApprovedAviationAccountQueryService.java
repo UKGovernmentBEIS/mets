@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
@@ -14,7 +15,6 @@ import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.service.ApprovedAccountTypeQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,9 +38,10 @@ public class ApprovedAviationAccountQueryService implements ApprovedAccountTypeQ
 
     @Override
     public Page<AccountContactInfoDTO> getApprovedAccountsAndCaSiteContactsByCa(CompetentAuthorityEnum competentAuthority,
-                                                                                Integer page, Integer pageSize) {
+                                                                                String searchTerm, Integer page, Integer pageSize) {
         return aviationAccountRepository.findAccountContactsByCaAndContactTypeAndStatusNotIn(
             PageRequest.of(page, pageSize),
+            searchTerm,
             competentAuthority,
             AccountContactType.CA_SITE,
             getStatusesConsideredNotApproved()

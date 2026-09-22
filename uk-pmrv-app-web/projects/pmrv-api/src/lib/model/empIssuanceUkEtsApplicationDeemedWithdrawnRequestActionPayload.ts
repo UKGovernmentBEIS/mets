@@ -10,14 +10,23 @@
  * Do not edit the class manually.
  */
 import { DecisionNotification } from './decisionNotification';
+import { EmissionsMonitoringPlanUkEts } from './emissionsMonitoringPlanUkEts';
 import { EmpIssuanceDetermination } from './empIssuanceDetermination';
+import { EmpIssuanceReviewDecision } from './empIssuanceReviewDecision';
 import { FileInfoDTO } from './fileInfoDTO';
 import { RequestActionPayload } from './requestActionPayload';
 import { RequestActionUserInfo } from './requestActionUserInfo';
+import { ServiceContactDetails } from './serviceContactDetails';
 
 export interface EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload extends RequestActionPayload {
+  emissionsMonitoringPlan: EmissionsMonitoringPlanUkEts;
+  serviceContactDetails: ServiceContactDetails;
+  empSectionsCompleted?: { [key: string]: Array<boolean> };
+  empAttachments?: { [key: string]: string };
   decisionNotification: DecisionNotification;
   determination: EmpIssuanceDetermination;
   usersInfo?: { [key: string]: RequestActionUserInfo };
   officialNotice: FileInfoDTO;
+  reviewGroupDecisions?: { [key: string]: EmpIssuanceReviewDecision };
+  reviewAttachments?: { [key: string]: string };
 }

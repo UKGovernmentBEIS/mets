@@ -10,11 +10,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.common.domain.EmpIssuanceDetermination;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.common.domain.EmpIssuanceReviewDecision;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.common.domain.EmpUkEtsReviewGroup;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.submit.domain.EmpIssuanceUkEtsApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -26,7 +29,7 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload extends RequestActionPayload {
+public class EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload extends EmpIssuanceUkEtsApplicationSubmittedRequestActionPayload {
 
     @Valid
     @NotNull
@@ -43,6 +46,12 @@ public class EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload exte
 
     @NotNull
     private FileInfoDTO officialNotice;
+
+    @Builder.Default
+    private Map<EmpUkEtsReviewGroup, EmpIssuanceReviewDecision> reviewGroupDecisions = new EnumMap<>(EmpUkEtsReviewGroup.class);
+
+    @Builder.Default
+    private Map<UUID, String> reviewAttachments = new HashMap<>();
 
     @Override
     public Map<UUID, String> getFileDocuments() {

@@ -3,10 +3,10 @@ package uk.gov.pmrv.api.account.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,10 +25,10 @@ public class ApprovedAccountQueryService {
     }
 
     public Page<AccountContactInfoDTO> getApprovedAccountsAndCaSiteContactsByCa(CompetentAuthorityEnum competentAuthority,
-                                                                                AccountType accountType,
+                                                                                AccountType accountType, String searchTerm,
                                                                                 Integer page, Integer pageSize) {
         return getAccountTypeService(accountType)
-            .map(service -> service.getApprovedAccountsAndCaSiteContactsByCa(competentAuthority, page, pageSize))
+            .map(service -> service.getApprovedAccountsAndCaSiteContactsByCa(competentAuthority, searchTerm, page, pageSize))
             .orElse(Page.empty());
     }
 

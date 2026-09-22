@@ -176,7 +176,6 @@ const routes: Routes = [
             path: '',
             data: { pageTitle: 'Send for peer review', breadcrumb: true },
             component: PeerReviewComponent,
-            canActivate: [PaymentCompletedGuard],
             canDeactivate: [PendingRequestGuard],
           },
         ],

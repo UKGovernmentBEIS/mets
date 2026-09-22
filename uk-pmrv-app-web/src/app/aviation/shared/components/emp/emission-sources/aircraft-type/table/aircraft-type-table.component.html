@@ -5,8 +5,7 @@
         <ng-container *ngSwitchCase="'aircraftTypeInfo'">
           <div
             data-testid=" at-description"
-            [ngClass]="{ 'missing-method': (row | aircraftTypeMethodTypes: isFUMM) === 'Missing' }"
-          >
+            [class.missing-method]="(row | aircraftTypeMethodTypes: isFUMM) === 'Missing'">
             {{ row.aircraftTypeInfo | aircraftTypeDescription }}
           </div>
         </ng-container>
@@ -18,12 +17,13 @@
         <ng-container *ngSwitchCase="'fuelTypes'">
           <div data-testid="at-fuel-types">
             <span *ngFor="let fuelType of row | aircraftTypeFuelTypes: isCorsia; let i = index">
-              {{ i < (row | aircraftTypeFuelTypes: isCorsia).length - 1 ? fuelType + ',' : fuelType }} <br />
+              {{ i < (row | aircraftTypeFuelTypes: isCorsia).length - 1 ? fuelType + ',' : fuelType }}
+              <br />
             </span>
           </div>
         </ng-container>
         <ng-container *ngSwitchCase="'fuelConsumptionMeasuringMethod'">
-          <div data-testid="at-methods" [ngClass]="{ error: (row | aircraftTypeMethodTypes: isFUMM) === 'Missing' }">
+          <div data-testid="at-methods" [class.error]="(row | aircraftTypeMethodTypes: isFUMM) === 'Missing'">
             {{ row | aircraftTypeMethodTypes: isFUMM }}
           </div>
         </ng-container>
@@ -35,13 +35,18 @@
               [queryParams]="{
                 isCurrentlyUsed: row.isCurrentlyUsed ? 1 : 0,
                 aircraftTypeIndex: row.idx,
-                change: 'true'
+                change: 'true',
               }"
-              >Change</a
-            >
-            <a govukLink [routerLink]="removeUrl" [queryParams]="{ aircraftTypeIndex: row.idx, change: 'true' }"
-              >Remove</a
-            >
+              [hidden-text]="row.aircraftTypeInfo | aircraftTypeDescription">
+              Change
+            </a>
+            <a
+              govukLink
+              [routerLink]="removeUrl"
+              [queryParams]="{ aircraftTypeIndex: row.idx, change: 'true' }"
+              [hidden-text]="row.aircraftTypeInfo | aircraftTypeDescription">
+              Remove
+            </a>
           </div>
         </ng-container>
         <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>

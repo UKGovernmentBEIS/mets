@@ -58,22 +58,24 @@
       @if (permissions.hasAccessBulkDownload) {
         <a [routerLink]="[(domainUrlPrefix$ | async) + '/bulk-downloads']" govukLink="header">Bulk downloads</a>
       }
-      @if (permissions.showRegulators && (isSettingsEnabled$ | async)) {
+      @if (permissions.showRegulators && permissions.showSettings && (isSettingsEnabled$ | async)) {
         <a [routerLink]="[(domainUrlPrefix$ | async) + '/settings']" govukLink="header">Settings</a>
       }
     </govuk-header-nav-list-legacy>
   }
 </govuk-header-legacy>
 
-<section class="govuk-width-container">
-  <app-phase-bar></app-phase-bar>
-  <app-incorporate-header></app-incorporate-header>
-  <app-breadcrumbs></app-breadcrumbs>
-  <app-back-link></app-back-link>
+<div class="govuk-width-container">
+  <section role="region" aria-label="Service information and page navigation">
+    <app-phase-bar></app-phase-bar>
+    <app-incorporate-header></app-incorporate-header>
+    <app-breadcrumbs></app-breadcrumbs>
+    <app-back-link></app-back-link>
+  </section>
   <main class="govuk-main-wrapper" id="main-content" role="main" tabindex="-1">
     <router-outlet></router-outlet>
   </main>
-</section>
+</div>
 <govuk-footer>
   <govuk-footer-meta-info>
     <a govukLink="meta" href="/privacy-notice">Privacy Notice</a>

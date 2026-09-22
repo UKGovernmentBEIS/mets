@@ -23,7 +23,7 @@
     <ng-template #capacity>
       <dt govukSummaryListRowKey>Capacity</dt>
       <dd govukSummaryListRowValue>
-        {{ activity.capacity | number: '1.0-1000' }} {{ activity.capacityUnit | capacityUnit }}
+        {{ activity.capacity | number: '1.0-100' }} {{ activity.capacityUnit | capacityUnit }}
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a govukLink [routerLink]="[activity.id, 'capacity']" [state]="{ changing: true }">Change</a>

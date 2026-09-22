@@ -49,7 +49,7 @@ describe('EmpVariationRegulatorLedDecisionGroupFormComponent', () => {
     await user.click(addButton);
     fixture.detectChanges();
 
-    expect(screen.getByText(/Item 1/)).toBeInTheDocument();
+    expect(screen.getByText(/Item 1/, { ignore: 'label' })).toBeInTheDocument();
     expect(addButton).not.toBeInTheDocument();
 
     const addAnotherButton = screen.getByRole('button', { name: 'Add another item' });
@@ -58,7 +58,7 @@ describe('EmpVariationRegulatorLedDecisionGroupFormComponent', () => {
     await user.click(addAnotherButton);
     fixture.detectChanges();
 
-    expect(screen.getByText(/Item 2/)).toBeInTheDocument();
+    expect(screen.getByText(/Item 2/, { ignore: 'label' })).toBeInTheDocument();
   });
 
   it('should give user option to remove any item', async () => {

@@ -16,6 +16,7 @@ import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryServ
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.integration.registry.common.NotifyRegistryUtils;
 import uk.gov.pmrv.api.integration.registry.common.RegistryIdEmailNotifierService;
+import uk.gov.pmrv.api.integration.registry.notification.common.RegistryNotificationType;
 import uk.gov.pmrv.api.integration.registry.notification.installation.request.requestaction.NotificationRegistryIntegrationAddRequestActionService;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 
@@ -61,7 +62,7 @@ class InstallationNotificationNotifyRegistryServiceTest {
                 .name(fileName)
                 .build();
 
-        NotificationRegistryEvent event = NotificationRegistryEvent.builder()
+        InstallationNotificationRegistryEvent event = InstallationNotificationRegistryEvent.builder()
                 .accountId(accountId)
                 .requestId(requestId)
                 .fileInfoDTO(fileInfoDTO)
@@ -109,7 +110,7 @@ class InstallationNotificationNotifyRegistryServiceTest {
                 .name(fileName)
                 .build();
 
-        NotificationRegistryEvent event = NotificationRegistryEvent.builder()
+        InstallationNotificationRegistryEvent event = InstallationNotificationRegistryEvent.builder()
                 .accountId(accountId)
                 .requestId(requestId)
                 .fileInfoDTO(fileInfoDTO)
@@ -148,7 +149,7 @@ class InstallationNotificationNotifyRegistryServiceTest {
                 .name(fileName)
                 .build();
 
-        NotificationRegistryEvent event = NotificationRegistryEvent.builder()
+        InstallationNotificationRegistryEvent event = InstallationNotificationRegistryEvent.builder()
                 .accountId(accountId)
                 .requestId(requestId)
                 .fileInfoDTO(fileInfoDTO)
@@ -184,7 +185,7 @@ class InstallationNotificationNotifyRegistryServiceTest {
                 .name(fileName)
                 .build();
 
-        NotificationRegistryEvent event = NotificationRegistryEvent.builder()
+        InstallationNotificationRegistryEvent event = InstallationNotificationRegistryEvent.builder()
                 .accountId(accountId)
                 .requestId(requestId)
                 .fileInfoDTO(fileInfoDTO)

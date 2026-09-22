@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
 import { CommonActionsStore } from '@actions/store/common-actions.store';
@@ -20,7 +21,10 @@ import {
   LocationOffShoreDTO,
   LocationOnShoreDTO,
   LocationOnShoreStateDTO,
+  NotificationRegistryIntegrationNoFileRequestActionPayload,
+  NotificationRegistryIntegrationRequestActionPayload,
   RequestActionDTO,
+  RequestActionPayload,
 } from 'pmrv-api';
 
 import { OperatorDetailsLegalStatusTypePipe } from '../../../shared/pipes/operator-details-legal-status-type.pipe';
@@ -40,11 +44,21 @@ interface ViewModel {
       AviationPartnershipDetails
   >;
   address: LocationDTO | LocationOffShoreDTO | LocationOnShoreDTO | LocationOnShoreStateDTO;
+  registryId: number;
+  notificationType: string;
+  payload:
+    | EmpIssuanceRegistryIntegrationRequestActionPayload
+    | EmpVariationRegistryIntegrationRequestActionPayload
+    | AviationReportableEmissionsRegistryIntegrationRequestActionPayload
+    | NotificationRegistryIntegrationNoFileRequestActionPayload
+    | NotificationRegistryIntegrationRequestActionPayload;
+  payloadType: RequestActionPayload['payloadType'];
+  actionId: number;
 }
 
 @Component({
   selector: 'app-information-sent',
-  imports: [ActionSharedModule, PipesModule, SharedModule, OperatorDetailsLegalStatusTypePipe],
+  imports: [ActionSharedModule, PipesModule, SharedModule, OperatorDetailsLegalStatusTypePipe, RouterLink],
   templateUrl: './information-sent.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -53,29 +67,43 @@ export class InformationSentToRegistryComponent {
     | EmpIssuanceRegistryIntegrationRequestActionPayload
     | EmpVariationRegistryIntegrationRequestActionPayload
     | AviationReportableEmissionsRegistryIntegrationRequestActionPayload
+    | NotificationRegistryIntegrationNoFileRequestActionPayload
+    | NotificationRegistryIntegrationRequestActionPayload
   >;
   private readonly requestActionType = this.registryActionService.requestActionType;
-
+  actionId = this.registryActionService.requestAction;
   vm: Signal<ViewModel> = computed(() => {
     const payload = this.payload();
     const expectedActionType = this.requestActionType();
     const operatorDetails =
       expectedActionType === 'AVIATION_REPORTABLE_EMISSIONS_SENT_TO_REGISTRY'
         ? (payload as AviationReportableEmissionsRegistryIntegrationRequestActionPayload)
-        : (
-            payload as
-              | EmpIssuanceRegistryIntegrationRequestActionPayload
-              | EmpVariationRegistryIntegrationRequestActionPayload
-          ).operatorDetails;
+        : expectedActionType === 'NOTIFICATION_SENT_TO_REGISTRY'
+          ? (payload as NotificationRegistryIntegrationNoFileRequestActionPayload)
+          : (
+              payload as
+                | EmpIssuanceRegistryIntegrationRequestActionPayload
+                | EmpVariationRegistryIntegrationRequestActionPayload
+            ).operatorDetails;
     const organizationDetails = (payload as EmpIssuanceRegistryIntegrationRequestActionPayload).organisationDetails;
+    const actionId = this.actionId().id;
 
     return {
       expectedActionType: [expectedActionType],
+      payloadType: payload?.payloadType,
+      payload,
       operatorDetails,
       organizationDetails,
       address:
         (organizationDetails as AviationLimitedCompanyDetails)?.registeredAddress ??
         (organizationDetails as AviationIndividualCompanyDetails)?.address,
+      registryId: (payload as NotificationRegistryIntegrationNoFileRequestActionPayload)?.registryId,
+      notificationType: (
+        payload as
+          | NotificationRegistryIntegrationNoFileRequestActionPayload
+          | NotificationRegistryIntegrationRequestActionPayload
+      )?.notificationType,
+      actionId,
     };
   });
 

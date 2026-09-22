@@ -16,6 +16,7 @@ import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplate
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationDeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.domain.EmpVariationUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
@@ -131,7 +132,10 @@ public class EmpVariationUkEtsOfficialNoticeService {
                 List.of(requestPayload.getOfficialNotice(), requestPayload.getEmpDocument()) :
                 List.of(requestPayload.getOfficialNotice());
 
-        sendAviationAccountUpdateNotification(request.getAccountId(),requestId);
+        if (requestPayload.getReasonRegulatorLed() != null || (requestPayload.getDetermination() != null
+                && EmpVariationDeterminationType.APPROVED.equals(requestPayload.getDetermination().getType()))) {
+            sendAviationAccountUpdateNotification(request.getAccountId(), requestId);
+        }
 
         officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails);
     }

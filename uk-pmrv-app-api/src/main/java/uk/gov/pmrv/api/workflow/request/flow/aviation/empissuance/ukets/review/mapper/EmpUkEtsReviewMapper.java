@@ -103,8 +103,12 @@ public interface EmpUkEtsReviewMapper {
         Map<String, RequestActionUserInfo> usersInfo, RequestActionPayloadType payloadType);
 
     @Mapping(target = "payloadType", source = "payloadType")
+    @Mapping(target = "serviceContactDetails", source = "accountInfo.serviceContactDetails")
     EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload toEmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload(
-        EmpIssuanceUkEtsRequestPayload requestPayload, Map<String, RequestActionUserInfo> usersInfo, RequestActionPayloadType payloadType);
+            EmpIssuanceUkEtsRequestPayload requestPayload,
+            RequestAviationAccountInfo accountInfo,
+            Map<String, RequestActionUserInfo> usersInfo,
+            RequestActionPayloadType payloadType);
 
     @AfterMapping
     default void setOperatorDetailsCrcoCode(@MappingTarget EmpIssuanceUkEtsApplicationApprovedRequestActionPayload approvedRequestActionPayload,

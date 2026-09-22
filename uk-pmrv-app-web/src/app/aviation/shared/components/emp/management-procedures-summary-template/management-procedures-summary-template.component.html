@@ -6,7 +6,7 @@
         <dt govukSummaryListRowKey>{{ role.jobTitle }}</dt>
         <dd govukSummaryListRowValue>{{ role.mainDuties }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink=".." [queryParams]="{ change: true }">Change</a>
+          <a govukLink routerLink=".." [queryParams]="{ change: true }" [hidden-text]="role.jobTitle">Change</a>
         </dd>
       </div>
     </dl>
@@ -16,22 +16,19 @@
     header="Record keeping and documentation"
     [isEditable]="isEditable"
     [procedureFormData]="data.recordKeepingAndDocumentation"
-    formRouterLink="../documentation"
-  ></app-procedure-form-summary>
+    formRouterLink="../documentation"></app-procedure-form-summary>
   <app-procedure-form-summary
     *ngIf="data.assignmentOfResponsibilities"
     header="Assignment of responsibilities"
     [isEditable]="isEditable"
     [procedureFormData]="data.assignmentOfResponsibilities"
-    formRouterLink="../responsibilities"
-  ></app-procedure-form-summary>
+    formRouterLink="../responsibilities"></app-procedure-form-summary>
   <app-procedure-form-summary
     *ngIf="data.monitoringPlanAppropriateness"
     header="Monitoring plan appropriateness"
     [isEditable]="isEditable"
     [procedureFormData]="data.monitoringPlanAppropriateness"
-    formRouterLink="../appropriateness"
-  ></app-procedure-form-summary>
+    formRouterLink="../appropriateness"></app-procedure-form-summary>
   <ng-container *ngIf="data.dataFlowActivities">
     <h2 class="govuk-heading-m">Data flow activities</h2>
     <dl govuk-summary-list>
@@ -39,70 +36,106 @@
         <dt govukSummaryListRowKey>Procedure description</dt>
         <dd class="pre-wrap" govukSummaryListRowValue>{{ data.dataFlowActivities.procedureDescription }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }">Change</a>
+          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }" hidden-text="procedure description">
+            Change
+          </a>
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Name of the procedure document</dt>
         <dd govukSummaryListRowValue>{{ data.dataFlowActivities.procedureDocumentName }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }">Change</a>
+          <a
+            govukLink
+            routerLink="../data-flow"
+            [queryParams]="{ change: true }"
+            hidden-text="name of the procedure document">
+            Change
+          </a>
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Procedure reference</dt>
         <dd govukSummaryListRowValue>{{ data.dataFlowActivities.procedureReference }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }">Change</a>
+          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }" hidden-text="procedure reference">
+            Change
+          </a>
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Department or role responsible for data maintenance</dt>
         <dd govukSummaryListRowValue>{{ data.dataFlowActivities.responsibleDepartmentOrRole }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }">Change</a>
+          <a
+            govukLink
+            routerLink="../data-flow"
+            [queryParams]="{ change: true }"
+            hidden-text="department or role responsible for data maintenance">
+            Change
+          </a>
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Location of records</dt>
         <dd govukSummaryListRowValue>{{ data.dataFlowActivities.locationOfRecords }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }">Change</a>
+          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }" hidden-text="location of records">
+            Change
+          </a>
         </dd>
       </div>
       <div *ngIf="data.dataFlowActivities.itSystemUsed" govukSummaryListRow>
         <dt govukSummaryListRowKey>IT system used</dt>
         <dd govukSummaryListRowValue>{{ data.dataFlowActivities.itSystemUsed }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }">Change</a>
+          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }" hidden-text="IT system used">
+            Change
+          </a>
         </dd>
       </div>
       <div *ngIf="data.dataFlowActivities.diagramReference" govukSummaryListRow>
         <dt govukSummaryListRowKey>Diagram reference</dt>
         <dd govukSummaryListRowValue>{{ data.dataFlowActivities.diagramReference }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }">Change</a>
+          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }" hidden-text="diagram reference">
+            Change
+          </a>
         </dd>
       </div>
       <div *ngIf="data.dataFlowActivities.otherStandardsApplied" govukSummaryListRow>
         <dt govukSummaryListRowKey>List of EN or other standards applied</dt>
         <dd govukSummaryListRowValue>{{ data.dataFlowActivities.otherStandardsApplied }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }">Change</a>
+          <a
+            govukLink
+            routerLink="../data-flow"
+            [queryParams]="{ change: true }"
+            hidden-text="list of EN or other standards applied">
+            Change
+          </a>
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Primary data sources</dt>
         <dd govukSummaryListRowValue>{{ data.dataFlowActivities.primaryDataSources }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }">Change</a>
+          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }" hidden-text="primary data sources">
+            Change
+          </a>
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Processing steps for each data flow activity</dt>
         <dd class="pre-wrap" govukSummaryListRowValue>{{ data.dataFlowActivities.processingSteps }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }">Change</a>
+          <a
+            govukLink
+            routerLink="../data-flow"
+            [queryParams]="{ change: true }"
+            hidden-text="processing steps for each data flow activity">
+            Change
+          </a>
         </dd>
       </div>
     </dl>
@@ -111,10 +144,16 @@
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Representation of the data flow for the calculation of emissions</dt>
           <dd govukSummaryListRowValue>
-            <app-summary-download-files [files]="diagramAttachmentFiles"> </app-summary-download-files>
+            <app-summary-download-files [files]="diagramAttachmentFiles"></app-summary-download-files>
           </dd>
           <dd govukSummaryListRowActions *ngIf="isEditable">
-            <a govukLink routerLink="../data-flow" [queryParams]="{ change: true }">Change</a>
+            <a
+              govukLink
+              routerLink="../data-flow"
+              [queryParams]="{ change: true }"
+              hidden-text="representation of the data flow for the calculation of emissions">
+              Change
+            </a>
           </dd>
         </div>
       </dl>
@@ -125,45 +164,46 @@
     header="Quality assurance of metering and measuring equipment"
     [isEditable]="isEditable"
     [procedureFormData]="data.qaMeteringAndMeasuringEquipment"
-    formRouterLink="../quality-assurance"
-  ></app-procedure-form-summary>
+    formRouterLink="../quality-assurance"></app-procedure-form-summary>
   <app-procedure-form-summary
     *ngIf="data.dataValidation"
     header="Data validation"
     [isEditable]="isEditable"
     [procedureFormData]="data.dataValidation"
-    formRouterLink="../data-validation"
-  ></app-procedure-form-summary>
+    formRouterLink="../data-validation"></app-procedure-form-summary>
   <app-procedure-form-summary
     *ngIf="data.correctionsAndCorrectiveActions"
     header="Corrections and corrective actions"
     [isEditable]="isEditable"
     [procedureFormData]="data.correctionsAndCorrectiveActions"
-    formRouterLink="../corrections"
-  ></app-procedure-form-summary>
+    formRouterLink="../corrections"></app-procedure-form-summary>
   <app-procedure-form-summary
     *ngIf="data.controlOfOutsourcedActivities"
     header="Control of outsourced activities"
     [isEditable]="isEditable"
     [procedureFormData]="data.controlOfOutsourcedActivities"
-    formRouterLink="../outsourced-activities"
-  ></app-procedure-form-summary>
+    formRouterLink="../outsourced-activities"></app-procedure-form-summary>
   <app-procedure-form-summary
     *ngIf="data.assessAndControlRisks"
     header="Assessing and controlling risks"
     [isEditable]="isEditable"
     [procedureFormData]="data.assessAndControlRisks"
-    formRouterLink="../risks"
-  ></app-procedure-form-summary>
+    formRouterLink="../risks"></app-procedure-form-summary>
   <ng-container *ngIf="riskAssessmentFiles.length > 0">
     <dl govuk-summary-list>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Risk assessment document</dt>
         <dd govukSummaryListRowValue>
-          <app-summary-download-files [files]="riskAssessmentFiles"> </app-summary-download-files>
+          <app-summary-download-files [files]="riskAssessmentFiles"></app-summary-download-files>
         </dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../risk-assessment" [queryParams]="{ change: true }">Change</a>
+          <a
+            govukLink
+            routerLink="../risk-assessment"
+            [queryParams]="{ change: true }"
+            hidden-text="risk assessment document">
+            Change
+          </a>
         </dd>
       </div>
     </dl>
@@ -173,8 +213,7 @@
     header="Uplift Quantity"
     [isEditable]="isEditable"
     [procedureFormData]="data.upliftQuantityCrossChecks"
-    formRouterLink="../uplift-quantity"
-  ></app-procedure-form-summary>
+    formRouterLink="../uplift-quantity"></app-procedure-form-summary>
   <ng-container *ngIf="data.environmentalManagementSystem">
     <h2 class="govuk-heading-m">Environmental management system</h2>
     <dl govuk-summary-list>
@@ -182,24 +221,41 @@
         <dt govukSummaryListRowKey>Does the organisation have a documented environmental management system?</dt>
         <dd govukSummaryListRowValue>{{ data.environmentalManagementSystem.exist ? 'Yes' : 'No' }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../environmental-management" [queryParams]="{ change: true }">Change</a>
+          <a
+            govukLink
+            routerLink="../environmental-management"
+            [queryParams]="{ change: true }"
+            hidden-text="does the organisation have a documented environmental management system?">
+            Change
+          </a>
         </dd>
       </div>
       <div *ngIf="data.environmentalManagementSystem.exist" govukSummaryListRow>
         <dt govukSummaryListRowKey>Is the system externally certified?</dt>
         <dd govukSummaryListRowValue>{{ data.environmentalManagementSystem.certified ? 'Yes' : 'No' }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../environmental-management" [queryParams]="{ change: true }">Change</a>
+          <a
+            govukLink
+            routerLink="../environmental-management"
+            [queryParams]="{ change: true }"
+            hidden-text="is the system externally certified?">
+            Change
+          </a>
         </dd>
       </div>
       <div
         *ngIf="data.environmentalManagementSystem.exist && data.environmentalManagementSystem.certified"
-        govukSummaryListRow
-      >
+        govukSummaryListRow>
         <dt govukSummaryListRowKey>Standard to which the system is certified</dt>
         <dd govukSummaryListRowValue>{{ data.environmentalManagementSystem.certificationStandard }}</dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
-          <a govukLink routerLink="../environmental-management" [queryParams]="{ change: true }">Change</a>
+          <a
+            govukLink
+            routerLink="../environmental-management"
+            [queryParams]="{ change: true }"
+            hidden-text="standard to which the system is certified">
+            Change
+          </a>
         </dd>
       </div>
     </dl>

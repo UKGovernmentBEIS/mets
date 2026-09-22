@@ -10,6 +10,7 @@ import uk.gov.netz.api.authorization.rules.services.resource.CompAuthAuthorizati
 import uk.gov.netz.api.authorization.rules.services.resource.RegulatorAuthorityResourceService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
@@ -17,7 +18,7 @@ import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoResponse;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.utils.SearchTermUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -39,10 +40,12 @@ public class AccountCaSiteContactService {
        return accountContactQueryService.findContactByAccountAndContactType(accountId, AccountContactType.CA_SITE);
     }
 
-    public AccountContactInfoResponse getAccountsAndCaSiteContacts(AppUser appUser, AccountType accountType,
+    public AccountContactInfoResponse getAccountsAndCaSiteContacts(AppUser appUser, AccountType accountType, String term,
                                                                    Integer page, Integer pageSize) {
+
         Page<AccountContactInfoDTO> contacts =
-            approvedAccountQueryService.getApprovedAccountsAndCaSiteContactsByCa(appUser.getCompetentAuthority(), accountType, page, pageSize);
+            approvedAccountQueryService.getApprovedAccountsAndCaSiteContactsByCa(appUser.getCompetentAuthority(), accountType,
+                    SearchTermUtils.toSearchPattern(term), page, pageSize);
 
         // Check if user has the permission of editing account contacts assignees
         boolean isEditable = compAuthAuthorizationResourceService.hasUserScopeToCompAuth(appUser, Scope.EDIT_USER);

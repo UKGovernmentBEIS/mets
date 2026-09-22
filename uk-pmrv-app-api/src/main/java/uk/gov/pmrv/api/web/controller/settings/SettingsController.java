@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -20,13 +22,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.Authorized;
 import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.settings.domain.SettingsSection;
+import uk.gov.pmrv.api.settings.domain.dto.FeeHistoryResponseDTO;
 import uk.gov.pmrv.api.settings.domain.dto.FeeRowDTO;
 import uk.gov.pmrv.api.settings.domain.dto.FeeUpdateDTO;
+import uk.gov.pmrv.api.settings.service.FeeHistoryService;
 import uk.gov.pmrv.api.settings.service.SettingsFeeService;
 import uk.gov.pmrv.api.settings.service.SettingsService;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
@@ -47,6 +53,7 @@ public class SettingsController {
 
     private final SettingsService settingsService;
     private final SettingsFeeService settingsFeeService;
+    private final FeeHistoryService feeHistoryService;
 
     @GetMapping
     @Operation(summary = "Retrieves the settings sections accessible to the current regulator user")
@@ -66,12 +73,27 @@ public class SettingsController {
     @ApiResponse(responseCode = "200", description = OK, content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = FeeRowDTO.class))))
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @AuthorizedRole(roleType = REGULATOR)
+    @Authorized
     public ResponseEntity<List<FeeRowDTO>> getFees(
             @Parameter(hidden = true) AppUser appUser,
             @PathVariable @Parameter(description = "The account type") AccountType accountType) {
 
         return ResponseEntity.ok(settingsFeeService.getFees(appUser.getCompetentAuthority(), accountType));
+    }
+
+    @GetMapping("/fees/history")
+    @Operation(summary = "Retrieves the paginated fee change history for the current regulator's CA")
+    @ApiResponse(responseCode = "200", description = OK, content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = FeeHistoryResponseDTO.class)))
+    @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @Authorized
+    public ResponseEntity<FeeHistoryResponseDTO> getFeeHistory(
+            @Parameter(hidden = true) AppUser appUser,
+            @PathVariable @Parameter(description = "The account type") AccountType accountType,
+            @RequestParam(value = "page") @NotNull @Min(value = 0, message = "{parameter.page.typeMismatch}") @Parameter(description = "The page number starting from zero") Integer page,
+            @RequestParam(value = "size") @NotNull @Min(value = 1, message = "{parameter.pageSize.typeMismatch}") @Parameter(description = "The page size") Integer pageSize) {
+
+        return ResponseEntity.ok(feeHistoryService.getHistory(appUser.getCompetentAuthority(), accountType, page, pageSize));
     }
 
     @PutMapping("/fees/{id}/{feeType}")
@@ -81,7 +103,7 @@ public class SettingsController {
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "404", description = "Not found", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @AuthorizedRole(roleType = REGULATOR)
+    @Authorized
     public ResponseEntity<Void> updateFee(
             @Parameter(hidden = true) AppUser appUser,
             @PathVariable @Parameter(description = "The account type") AccountType accountType,
@@ -89,7 +111,7 @@ public class SettingsController {
             @PathVariable @Parameter(description = "The fee type") FeeType feeType,
             @RequestBody @Valid FeeUpdateDTO dto) {
 
-        settingsFeeService.updateFee(appUser.getCompetentAuthority(), accountType, id, feeType, dto);
+        settingsFeeService.updateFee(appUser.getCompetentAuthority(), accountType, id, feeType, dto, appUser);
         return ResponseEntity.ok().build();
     }
 
@@ -99,14 +121,14 @@ public class SettingsController {
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "404", description = "Not found", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @AuthorizedRole(roleType = REGULATOR)
+    @Authorized
     public ResponseEntity<Void> cancelScheduledFeeUpdate(
             @Parameter(hidden = true) AppUser appUser,
             @PathVariable @Parameter(description = "The account type") AccountType accountType,
             @PathVariable @Parameter(description = "The fee method id") Long id,
             @PathVariable @Parameter(description = "The fee type") FeeType feeType) {
 
-        settingsFeeService.cancelScheduledFeeUpdate(appUser.getCompetentAuthority(), accountType, id, feeType);
+        settingsFeeService.cancelScheduledFeeUpdate(appUser.getCompetentAuthority(), accountType, id, feeType, appUser);
         return ResponseEntity.ok().build();
     }
 }

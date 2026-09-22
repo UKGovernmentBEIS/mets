@@ -87,6 +87,7 @@ export class VBSiteContactsService {
    * @param accountType The account type
    * @param page The page number starting from zero
    * @param size The page size
+   * @param term Optional vb site contact search term
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
@@ -94,11 +95,13 @@ export class VBSiteContactsService {
     accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
+    term?: string,
   ): Observable<AccountContactVbInfoResponse>;
   public getVbSiteContacts(
     accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
+    term: string,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
@@ -107,6 +110,7 @@ export class VBSiteContactsService {
     accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
+    term: string,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
@@ -115,6 +119,7 @@ export class VBSiteContactsService {
     accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
+    term: string,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
@@ -123,6 +128,7 @@ export class VBSiteContactsService {
     accountType: 'INSTALLATION' | 'AVIATION',
     page: number,
     size: number,
+    term?: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
@@ -138,6 +144,9 @@ export class VBSiteContactsService {
     }
 
     let queryParameters = new HttpParams({ encoder: this.encoder });
+    if (term !== undefined && term !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>term, 'term');
+    }
     if (page !== undefined && page !== null) {
       queryParameters = this.addToHttpParams(queryParameters, <any>page, 'page');
     }

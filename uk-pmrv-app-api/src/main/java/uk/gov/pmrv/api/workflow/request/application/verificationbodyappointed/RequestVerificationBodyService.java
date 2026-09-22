@@ -15,6 +15,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
+import uk.gov.pmrv.api.workflow.request.flow.notificationsystemmessage.service.SystemMessageNotificationRequestService;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ class RequestVerificationBodyService {
     private final RequestRepository requestRepository;
     private final WorkflowService workflowService;
     private final RequestService requestService;
+    private final SystemMessageNotificationRequestService systemMessageNotificationRequestService;
 
     @Transactional
     public void appointVerificationBodyToRequestsOfAccount(Long verificationBodyId, Long accountId) {
@@ -46,6 +48,8 @@ class RequestVerificationBodyService {
         }
 
         updateRequestsVbAndRemoveVerifierAssignee(requests, verificationBodyId);
+
+        systemMessageNotificationRequestService.completeOpenVerifierSystemMessageNotificationRequests(Set.of(accountId), verificationBodyId);
     }
 
     @Transactional
@@ -66,6 +70,8 @@ class RequestVerificationBodyService {
             });
         });
         updateRequestsVbAndRemoveVerifierAssignee(requests, null);
+
+        systemMessageNotificationRequestService.completeOpenVerifierSystemMessageNotificationRequests(accountIds, null);
     }
 
     private void updateRequestsVbAndRemoveVerifierAssignee(List<Request> requests, Long newVerificationBodyId) {

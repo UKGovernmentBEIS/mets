@@ -85,9 +85,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -394,7 +395,7 @@ class DocumentTemplatePermitParamsProviderTest {
                 .sourceStream("ss ref1")
                 .emissionSources(Set.of("source ref 1", "source ref 2"))
                 .parameter(DocumentTemplatePermitParamsProvider.Parameter.EF)
-                .type("British Ceramic Confederation (BCC) Methodology (latest version)")
+                .type("Ceramics UK Methodology (latest version) (formerly BCC)")
                 .defaultValue("ef value")
                 .build(),
             DocumentTemplatePermitParamsProvider.ReferenceSource.builder()

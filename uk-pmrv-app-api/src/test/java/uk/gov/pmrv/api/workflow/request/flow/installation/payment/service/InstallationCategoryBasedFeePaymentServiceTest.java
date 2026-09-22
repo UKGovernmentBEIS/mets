@@ -24,8 +24,13 @@ import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
 
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.DigitizedPlan;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.MonitoringMethodologyPlans;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.SubInstallation;
+
 import java.math.BigDecimal;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,6 +43,8 @@ import static org.mockito.Mockito.when;
 import static uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeType.CAT_A;
 import static uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeType.CAT_B;
 import static uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeType.HSE;
+import static uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeType.NRW_CAT_FA_1_TO_2;
+import static uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeType.NRW_CAT_FA_3_PLUS;
 
 @ExtendWith(MockitoExtension.class)
 class InstallationCategoryBasedFeePaymentServiceTest {
@@ -181,6 +188,125 @@ class InstallationCategoryBasedFeePaymentServiceTest {
         assertEquals(CAT_B, installationCategoryBasedFeePaymentService.resolveFeeType(request));
 
         verifyNoInteractions(installationAccountQueryService);
+    }
+
+    @Test
+    void resolveFeeType_nrw_ghge_fa_true_1_to_2_subInstallations() {
+        RequestType requestType = RequestType.PERMIT_ISSUANCE;
+        PermitIssuanceRequestPayload requestPayload = PermitIssuanceRequestPayload.builder()
+            .permitType(PermitType.GHGE)
+            .permit(Permit.builder()
+                .estimatedAnnualEmissions(EstimatedAnnualEmissions.builder().quantity(BigDecimal.valueOf(60000)).build())
+                .monitoringMethodologyPlans(MonitoringMethodologyPlans.builder()
+                    .digitizedPlan(DigitizedPlan.builder()
+                        .subInstallations(List.of(
+                            SubInstallation.builder().build(),
+                            SubInstallation.builder().build()))
+                        .build())
+                    .build())
+                .build())
+            .build();
+        Request request = Request.builder()
+            .competentAuthority(CompetentAuthorityEnum.WALES)
+            .type(requestType)
+            .accountId(1L)
+            .payload(requestPayload)
+            .build();
+        InstallationAccountInfoDTO accountInfo = InstallationAccountInfoDTO.builder()
+            .faStatus(true)
+            .build();
+
+        when(installationAccountQueryService.getInstallationAccountInfoDTOById(request.getAccountId())).thenReturn(accountInfo);
+
+        assertEquals(NRW_CAT_FA_1_TO_2, installationCategoryBasedFeePaymentService.resolveFeeType(request));
+
+        verify(installationAccountQueryService, times(1)).getInstallationAccountInfoDTOById(request.getAccountId());
+    }
+
+    @Test
+    void resolveFeeType_nrw_ghge_fa_true_3_plus_subInstallations() {
+        RequestType requestType = RequestType.PERMIT_ISSUANCE;
+        PermitIssuanceRequestPayload requestPayload = PermitIssuanceRequestPayload.builder()
+            .permitType(PermitType.GHGE)
+            .permit(Permit.builder()
+                .estimatedAnnualEmissions(EstimatedAnnualEmissions.builder().quantity(BigDecimal.valueOf(60000)).build())
+                .monitoringMethodologyPlans(MonitoringMethodologyPlans.builder()
+                    .digitizedPlan(DigitizedPlan.builder()
+                        .subInstallations(List.of(
+                            SubInstallation.builder().build(),
+                            SubInstallation.builder().build(),
+                            SubInstallation.builder().build()))
+                        .build())
+                    .build())
+                .build())
+            .build();
+        Request request = Request.builder()
+            .competentAuthority(CompetentAuthorityEnum.WALES)
+            .type(requestType)
+            .accountId(1L)
+            .payload(requestPayload)
+            .build();
+        InstallationAccountInfoDTO accountInfo = InstallationAccountInfoDTO.builder()
+            .faStatus(true)
+            .build();
+
+        when(installationAccountQueryService.getInstallationAccountInfoDTOById(request.getAccountId())).thenReturn(accountInfo);
+
+        assertEquals(NRW_CAT_FA_3_PLUS, installationCategoryBasedFeePaymentService.resolveFeeType(request));
+
+        verify(installationAccountQueryService, times(1)).getInstallationAccountInfoDTOById(request.getAccountId());
+    }
+
+    @Test
+    void resolveFeeType_nrw_ghge_fa_false_fallsBackToStandardCategory() {
+        RequestType requestType = RequestType.PERMIT_ISSUANCE;
+        PermitIssuanceRequestPayload requestPayload = PermitIssuanceRequestPayload.builder()
+            .permitType(PermitType.GHGE)
+            .permit(Permit.builder()
+                .estimatedAnnualEmissions(EstimatedAnnualEmissions.builder().quantity(BigDecimal.valueOf(60000)).build())
+                .build())
+            .build();
+        Request request = Request.builder()
+            .competentAuthority(CompetentAuthorityEnum.WALES)
+            .type(requestType)
+            .accountId(1L)
+            .payload(requestPayload)
+            .build();
+        InstallationAccountInfoDTO accountInfo = InstallationAccountInfoDTO.builder()
+            .faStatus(false)
+            .build();
+
+        when(installationAccountQueryService.getInstallationAccountInfoDTOById(request.getAccountId())).thenReturn(accountInfo);
+
+        assertEquals(CAT_B, installationCategoryBasedFeePaymentService.resolveFeeType(request));
+
+        verify(installationAccountQueryService, times(1)).getInstallationAccountInfoDTOById(request.getAccountId());
+    }
+
+    @Test
+    void resolveFeeType_nrw_ghge_fa_true_no_subInstallations_fallsBackToStandardCategory() {
+        RequestType requestType = RequestType.PERMIT_ISSUANCE;
+        PermitIssuanceRequestPayload requestPayload = PermitIssuanceRequestPayload.builder()
+            .permitType(PermitType.GHGE)
+            .permit(Permit.builder()
+                .estimatedAnnualEmissions(EstimatedAnnualEmissions.builder().quantity(BigDecimal.valueOf(60000)).build())
+                .build())
+            .build();
+        Request request = Request.builder()
+            .competentAuthority(CompetentAuthorityEnum.WALES)
+            .type(requestType)
+            .accountId(1L)
+            .payload(requestPayload)
+            .build();
+        InstallationAccountInfoDTO accountInfo = InstallationAccountInfoDTO.builder()
+            .faStatus(true)
+            .build();
+
+        when(installationAccountQueryService.getInstallationAccountInfoDTOById(request.getAccountId())).thenReturn(accountInfo);
+
+        assertEquals(CAT_B, installationCategoryBasedFeePaymentService.resolveFeeType(request));
+
+        verify(installationAccountQueryService, times(1)).getInstallationAccountInfoDTOById(request.getAccountId());
     }
 
     @Test

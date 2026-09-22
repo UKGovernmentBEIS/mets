@@ -1,43 +1,59 @@
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <app-page-heading size="xl">Fees</app-page-heading>
+@if (notification) {
+  <govuk-notification-banner type="success">
+    <h1 class="govuk-notification-banner__heading">{{ notification }}</h1>
+  </govuk-notification-banner>
+}
 
-    <p class="govuk-body">
-      You can change a payment amount immediately, or schedule a date for the new amount to be applied. The new payment
-      amount will only apply to payment tasks created after the scheduled date.
-    </p>
-  </div>
+@if (vm(); as vm) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <app-page-heading size="xl">Fees</app-page-heading>
 
-  <div class="govuk-grid-column-full">
-    <div class="overflow-auto overflow-auto-table">
-      <govuk-table [columns]="columns" [data]="fees()">
-        <ng-template let-column="column" let-row="row">
-          @switch (column.field) {
-            @case ('workflow') {
-              {{ row.workflow }}
-            }
-            @case ('currentAmount') {
-              {{ row.currentAmount | currency: 'GBP' : 'symbol' : '1.2-2' }}
-            }
-            @case ('scheduledChange') {
-              @if (row.scheduledChange) {
-                {{ row.scheduledChange.amount | currency: 'GBP' : 'symbol' : '1.2-2' }}
-                <br />
-                Scheduled for {{ row.scheduledChange.date | date: 'd MMMM yyyy' }}
-              } @else {
-                None
-              }
-            }
-            @default {
-              <a govukLink href="#">{{ row.scheduledChange ? 'Cancel scheduled change' : 'Change' }}</a>
-            }
-          }
-        </ng-template>
-      </govuk-table>
+      <p class="govuk-body">
+        You can change a payment amount immediately, or schedule a date for the new amount to be applied. The new
+        payment amount will only apply to payment tasks created after the scheduled date.
+      </p>
     </div>
 
-    <p class="govuk-body">
-      <a govukLink href="#">View history</a>
-    </p>
+    <div class="govuk-grid-column-full">
+      <div class="overflow-auto overflow-auto-table">
+        <govuk-table [columns]="vm.columns" [data]="vm.fees">
+          <ng-template let-column="column" let-row="row">
+            @switch (column.field) {
+              @case ('workflow') {
+                {{ row.workflow }}
+              }
+              @case ('currentAmount') {
+                {{ row.currentAmount | currency: 'GBP' : 'symbol' : '1.2-2' }}
+              }
+              @case ('scheduledChange') {
+                @if (row.scheduledChange) {
+                  {{ row.scheduledChange.amount | currency: 'GBP' : 'symbol' : '1.2-2' }}
+                  <br />
+                  Scheduled for {{ row.scheduledChange.date | date: 'd MMMM yyyy' }}
+                } @else {
+                  None
+                }
+              }
+              @default {
+                @if (vm.canExecute && row.scheduledChange) {
+                  <a govukLink [hidden-text]="'for ' + row.workflow" [routerLink]="[row.key, 'cancel-change']">
+                    Cancel scheduled change
+                  </a>
+                } @else if (vm.canExecute && row.feeType) {
+                  <a govukLink [hidden-text]="'payment amount for ' + row.workflow" [routerLink]="[row.key, 'change']">
+                    Change
+                  </a>
+                }
+              }
+            }
+          </ng-template>
+        </govuk-table>
+      </div>
+
+      <p class="govuk-body">
+        <a govukLink routerLink="history">View history</a>
+      </p>
+    </div>
   </div>
-</div>
+}

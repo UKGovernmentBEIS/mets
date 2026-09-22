@@ -22,6 +22,7 @@ import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.common.utils.SearchTermUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -94,10 +95,53 @@ class AviationAccountRepositoryIT extends AbstractContainerBaseTest {
 
         flushAndClear();
 
-        Page<AccountContactInfoDTO> result = repository.findAccountContactsByCaAndContactTypeAndStatusNotIn(PageRequest.of(0, 5), competentAuthority,
+        Page<AccountContactInfoDTO> result = repository.findAccountContactsByCaAndContactTypeAndStatusNotIn(PageRequest.of(0, 5), null, competentAuthority,
             serviceContactType, List.of(AviationAccountStatus.CLOSED));
 
         assertThat(result.getNumberOfElements()).isEqualTo(2);
+        assertThat(result).containsExactlyInAnyOrderElementsOf(expectedAccountContactInfos);
+    }
+
+    @Test
+    void searchAccountContactsByCaAndContactTypeAndStatusNotIn() {
+        CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.WALES;
+        AccountContactType serviceContactType = AccountContactType.SERVICE;
+
+        String searchTerm = SearchTermUtils.toSearchPattern("nt4");
+
+        AviationAccount account1 = createAccount(1L, "account1", AviationAccountStatus.LIVE,
+                competentAuthority, 1L, EmissionTradingScheme.UK_ETS_AVIATION);
+        account1.getContacts().put(AccountContactType.PRIMARY, "primary1");
+        account1.getContacts().put(AccountContactType.SERVICE, "service1");
+        repository.save(account1);
+
+        AviationAccount account2 = createAccount(2L, "account2", AviationAccountStatus.CLOSED,
+                competentAuthority, 2L, EmissionTradingScheme.CORSIA);
+        account2.getContacts().put(AccountContactType.PRIMARY, "primary2");
+        account2.getContacts().put(AccountContactType.SERVICE, "service2");
+        repository.save(account2);
+
+        AviationAccount account3 = createAccount(3L, "account3", AviationAccountStatus.LIVE,
+                CompetentAuthorityEnum.ENGLAND, 1L, EmissionTradingScheme.CORSIA);
+        account3.getContacts().put(AccountContactType.PRIMARY, "primary3");
+        account3.getContacts().put(AccountContactType.SERVICE, "service3");
+        repository.save(account3);
+
+        AviationAccount account4 = createAccount(4L, "account4", AviationAccountStatus.NEW,
+                competentAuthority, 2L, EmissionTradingScheme.CORSIA);
+        account4.getContacts().put(AccountContactType.PRIMARY, "primary4");
+        repository.save(account4);
+
+        List<AccountContactInfoDTO> expectedAccountContactInfos = List.of(
+                AccountContactInfoDTO.builder().accountId(4L).accountName("account4").build()
+        );
+
+        flushAndClear();
+
+        Page<AccountContactInfoDTO> result = repository.findAccountContactsByCaAndContactTypeAndStatusNotIn(PageRequest.of(0, 5), searchTerm, competentAuthority,
+                serviceContactType, List.of(AviationAccountStatus.CLOSED));
+
+        assertThat(result.getNumberOfElements()).isEqualTo(1);
         assertThat(result).containsExactlyInAnyOrderElementsOf(expectedAccountContactInfos);
     }
 

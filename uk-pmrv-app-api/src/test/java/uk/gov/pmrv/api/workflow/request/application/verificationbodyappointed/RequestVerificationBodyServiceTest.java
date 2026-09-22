@@ -20,6 +20,7 @@ import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.notificationsystemmessage.service.SystemMessageNotificationRequestService;
 
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,9 @@ class RequestVerificationBodyServiceTest {
     @Mock
     private RequestService requestService;
 
+    @Mock
+    private SystemMessageNotificationRequestService systemMessageNotificationRequestService;
+
     @Test
     void appointVerificationBodyToRequestsOfAccount() {
         Long accountId = 1L;
@@ -81,6 +85,8 @@ class RequestVerificationBodyServiceTest {
         assertEquals(request2.getVerificationBodyId(), vbIdNew);
         assertNull(request2.getPayload().getVerifierAssignee());
         verifyNoInteractions(workflowService);
+        verify(systemMessageNotificationRequestService, times(1))
+            .completeOpenVerifierSystemMessageNotificationRequests(Set.of(accountId), vbIdNew);
     }
 
     @Test
@@ -121,6 +127,7 @@ class RequestVerificationBodyServiceTest {
         assertThat(businessException.getData()).containsOnly(3L);
         verify(requestRepository, never()).saveAll(anyCollection());
         verifyNoInteractions(workflowService);
+        verifyNoInteractions(systemMessageNotificationRequestService);
     }
 
     @Test
@@ -152,6 +159,8 @@ class RequestVerificationBodyServiceTest {
         assertNull(request2.getPayload().getVerifierAssignee());
         verifyNoInteractions(workflowService);
         verifyNoInteractions(requestService);
+        verify(systemMessageNotificationRequestService, times(1))
+            .completeOpenVerifierSystemMessageNotificationRequests(Set.of(accountId), null);
     }
 
     @Test
@@ -195,5 +204,7 @@ class RequestVerificationBodyServiceTest {
         verify(requestService, times(1))
                 .addActionToRequest(request1, null, RequestActionType.VERIFICATION_STATEMENT_CANCELLED, null);
         verifyNoMoreInteractions(workflowService);
+        verify(systemMessageNotificationRequestService, times(1))
+                .completeOpenVerifierSystemMessageNotificationRequests(Set.of(accountId), null);
     }
 }

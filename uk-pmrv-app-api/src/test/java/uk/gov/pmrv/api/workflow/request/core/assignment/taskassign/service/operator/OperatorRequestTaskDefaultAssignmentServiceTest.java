@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.dto.UserRoleTypeDTO;
 import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessCheckedException;
@@ -54,12 +55,14 @@ class OperatorRequestTaskDefaultAssignmentServiceTest {
             .build();
         RequestTask requestTask = RequestTask.builder().request(request).build();
 
-        when(userRoleTypeService.isUserOperator(operatorAssignee)).thenReturn(true);
+        when(userRoleTypeService.getUserRoleTypeByUserIdOpt(operatorAssignee))
+            .thenReturn(Optional.of(UserRoleTypeDTO.builder().roleType(RoleTypeConstants.OPERATOR).build()));
         doNothing().when(requestTaskAssignmentService).assignToUser(requestTask, operatorAssignee, RoleTypeConstants.OPERATOR);
 
         operatorRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
 
-        verify(userRoleTypeService, times(1)).isUserOperator(operatorAssignee);
+        verify(userRoleTypeService, times(1)).getUserRoleTypeByUserIdOpt(operatorAssignee);
+        verifyNoMoreInteractions(userRoleTypeService);
         verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, operatorAssignee, RoleTypeConstants.OPERATOR);
         verifyNoMoreInteractions(requestTaskAssignmentService);
         verifyNoInteractions(accountContactQueryService, requestReleaseService);
@@ -96,13 +99,40 @@ class OperatorRequestTaskDefaultAssignmentServiceTest {
             .build();
         RequestTask requestTask = RequestTask.builder().request(request).build();
 
-        when(userRoleTypeService.isUserOperator(operatorAssignee)).thenReturn(false);
+        when(userRoleTypeService.getUserRoleTypeByUserIdOpt(operatorAssignee))
+            .thenReturn(Optional.of(UserRoleTypeDTO.builder().roleType(RoleTypeConstants.REGULATOR).build()));
         when(accountContactQueryService.findPrimaryContactByAccount(request.getAccountId())).
             thenReturn(Optional.of(primaryContact));
 
         operatorRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
 
-        verify(userRoleTypeService, times(1)).isUserOperator(operatorAssignee);
+        verify(userRoleTypeService, times(1)).getUserRoleTypeByUserIdOpt(operatorAssignee);
+        verifyNoMoreInteractions(userRoleTypeService);
+        verify(accountContactQueryService, times(1)).findPrimaryContactByAccount(request.getAccountId());
+        verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, primaryContact, RoleTypeConstants.OPERATOR);
+        verifyNoMoreInteractions(requestTaskAssignmentService);
+        verifyNoInteractions(requestReleaseService);
+    }
+
+    @Test
+    void assignDefaultAssigneeToTask_request_assignee_does_not_exist_any_more() throws BusinessCheckedException {
+        String operatorAssignee = "operatorAssignee";
+        String primaryContact = "primaryContact";
+        Request request = Request.builder()
+            .payload(PermitIssuanceRequestPayload.builder().operatorAssignee(operatorAssignee).build())
+            .accountId(1L)
+            .status(RequestStatus.IN_PROGRESS)
+            .build();
+        RequestTask requestTask = RequestTask.builder().request(request).build();
+
+        when(userRoleTypeService.getUserRoleTypeByUserIdOpt(operatorAssignee)).thenReturn(Optional.empty());
+        when(accountContactQueryService.findPrimaryContactByAccount(request.getAccountId())).
+            thenReturn(Optional.of(primaryContact));
+
+        operatorRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
+
+        verify(userRoleTypeService, times(1)).getUserRoleTypeByUserIdOpt(operatorAssignee);
+        verifyNoMoreInteractions(userRoleTypeService);
         verify(accountContactQueryService, times(1)).findPrimaryContactByAccount(request.getAccountId());
         verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, primaryContact, RoleTypeConstants.OPERATOR);
         verifyNoMoreInteractions(requestTaskAssignmentService);
@@ -120,14 +150,16 @@ class OperatorRequestTaskDefaultAssignmentServiceTest {
             .build();
         RequestTask requestTask = RequestTask.builder().request(request).build();
 
-        when(userRoleTypeService.isUserOperator(operatorAssignee)).thenReturn(true);
+        when(userRoleTypeService.getUserRoleTypeByUserIdOpt(operatorAssignee))
+            .thenReturn(Optional.of(UserRoleTypeDTO.builder().roleType(RoleTypeConstants.OPERATOR).build()));
         doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, operatorAssignee, RoleTypeConstants.OPERATOR);
         when(accountContactQueryService.findPrimaryContactByAccount(request.getAccountId()))
             .thenReturn(Optional.of(primaryContact));
 
         operatorRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
 
-        verify(userRoleTypeService, times(1)).isUserOperator(operatorAssignee);
+        verify(userRoleTypeService, times(1)).getUserRoleTypeByUserIdOpt(operatorAssignee);
+        verifyNoMoreInteractions(userRoleTypeService);
         verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, operatorAssignee, RoleTypeConstants.OPERATOR);
         verify(accountContactQueryService, times(1)).findPrimaryContactByAccount(request.getAccountId());
         verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, primaryContact, RoleTypeConstants.OPERATOR);
@@ -145,7 +177,8 @@ class OperatorRequestTaskDefaultAssignmentServiceTest {
             .build();
         RequestTask requestTask = RequestTask.builder().request(request).build();
 
-        when(userRoleTypeService.isUserOperator(operatorAssignee)).thenReturn(true);
+        when(userRoleTypeService.getUserRoleTypeByUserIdOpt(operatorAssignee))
+            .thenReturn(Optional.of(UserRoleTypeDTO.builder().roleType(RoleTypeConstants.OPERATOR).build()));
         doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, operatorAssignee, RoleTypeConstants.OPERATOR);
         when(accountContactQueryService.findPrimaryContactByAccount(request.getAccountId()))
             .thenReturn(Optional.of(primaryContact));
@@ -153,7 +186,8 @@ class OperatorRequestTaskDefaultAssignmentServiceTest {
 
         operatorRequestTaskDefaultAssignmentService.assignDefaultAssigneeToTask(requestTask);
 
-        verify(userRoleTypeService, times(1)).isUserOperator(operatorAssignee);
+        verify(userRoleTypeService, times(1)).getUserRoleTypeByUserIdOpt(operatorAssignee);
+        verifyNoMoreInteractions(userRoleTypeService);
         verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, operatorAssignee, RoleTypeConstants.OPERATOR);
         verify(accountContactQueryService, times(1)).findPrimaryContactByAccount(request.getAccountId());
         verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, primaryContact, RoleTypeConstants.OPERATOR);

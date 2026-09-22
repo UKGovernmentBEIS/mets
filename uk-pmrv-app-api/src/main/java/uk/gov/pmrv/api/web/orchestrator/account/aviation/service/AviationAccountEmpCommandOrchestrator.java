@@ -50,6 +50,10 @@ public class AviationAccountEmpCommandOrchestrator {
     private final AccountDetailsHistoryService accountDetailsHistoryService;
     private final AviationAerCreationService aviationAerCreationService;
 
+    private static final int FYRO_CORSIA_MIN_YEAR = 2019;
+    private static final int FYRO_UK_ETS_MIN_YEAR = 2021;
+
+
 
     @Transactional
     public void updateAccountFirstYearOfReportingObligation(Long accountId ,
@@ -67,25 +71,43 @@ public class AviationAccountEmpCommandOrchestrator {
 
         updateReportingStatusRows(reportingObligationFirstYearDTO.getCommencementDate(),currentReportingDate,accountId,aviationAccountDTO.getEmissionTradingScheme());
 
-        accountDetailsHistoryService.createAccountDetailsHistory(accountId,
-                AccountDetailsHistoryCategory.FIRST_YEAR_OF_REPORTING_OBLIGATION,currentReportingDate,
-                reportingObligationFirstYearDTO.getCommencementDate(), reportingObligationFirstYearDTO.getReason(),
-                user);
+        createAccountDetailsHistoryEntry(aviationAccountDTO,reportingObligationFirstYearDTO,user);
     }
 
 
-    private void validateCommencementDateDTO(AviationAccountDTO account, AviationAccountReportingObligationFirstYearDTO commencementDateDTO) {
-        int year = commencementDateDTO.getCommencementDate().getYear();
-        int currentYear = LocalDate.now().getYear();
+    private void validateCommencementDateDTO(AviationAccountDTO account,
+                                             AviationAccountReportingObligationFirstYearDTO dto) {
+        int year = dto.getCommencementDate().getYear();
+        int currentYear = Year.now().getValue();
 
-        if (year < 2021 || year > currentYear) {
+        boolean isCorsia = EmissionTradingScheme.CORSIA.equals(account.getEmissionTradingScheme());
+        int minimumYear = isCorsia ? FYRO_CORSIA_MIN_YEAR : FYRO_UK_ETS_MIN_YEAR;
+        MetsErrorCode metsErrorCode = isCorsia
+                ? MetsErrorCode.AVIATION_FIRST_YEAR_WITHIN_SCOPE_OF_APPLICABILITY_OUT_OF_SCOPE
+                : MetsErrorCode.AVIATION_FIRST_YEAR_OF_REPORTING_OBLIGATION_OUT_OF_SCOPE;
+
+        if (year < minimumYear || year > currentYear) {
             throw new BusinessException(
-                    MetsErrorCode.AVIATION_COMMENCEMENT_DATE_NOT_BEFORE_2021_NOT_AFTER_CURRENT_YEAR,
-                    commencementDateDTO,
+                    metsErrorCode,
+                    dto,
                     account.getCompetentAuthority(),
                     account.getEmissionTradingScheme()
             );
         }
+    }
+
+    private void createAccountDetailsHistoryEntry(AviationAccountDTO aviationAccountDTO,
+                                                  AviationAccountReportingObligationFirstYearDTO reportingObligationFirstYearDTO,
+                                                  AppUser user) {
+        AccountDetailsHistoryCategory category =
+                EmissionTradingScheme.UK_ETS_AVIATION.equals(aviationAccountDTO.getEmissionTradingScheme()) ?
+                        AccountDetailsHistoryCategory.FIRST_YEAR_OF_REPORTING_OBLIGATION :
+                        AccountDetailsHistoryCategory.FIRST_YEAR_WITHIN_SCOPE_OF_APPLICABILITY;
+
+        accountDetailsHistoryService.createAccountDetailsHistory(aviationAccountDTO.getId(),
+                category,aviationAccountDTO.getCommencementDate(),
+                reportingObligationFirstYearDTO.getCommencementDate(), reportingObligationFirstYearDTO.getReason(),
+                user);
     }
 
     private void sendAccountUpdateToRegistry(AviationAccountDTO aviationAccountDTO) {

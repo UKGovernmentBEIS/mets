@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap, take, tap } from 'rxjs';
 
 import { AviationAccountsStore, selectAccount, selectUpsertFyro } from '@aviation/accounts/store';
+import { getFyroLabel } from '@aviation/accounts/utils/fyro.util';
 import produce from 'immer';
 
 @Component({
@@ -19,6 +20,9 @@ export class EditFyroSummaryComponent {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
 
   readonly currentState = toSignal(this.aviationAccountsStore.pipe(selectUpsertFyro));
+  readonly fyroLabel = getFyroLabel(
+    this.aviationAccountsStore.getState().currentAccount.account?.aviationAccount?.emissionTradingScheme,
+  );
 
   onContinue(): void {
     this.aviationAccountsStore

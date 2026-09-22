@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.review.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,6 +22,8 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPay
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.common.domain.RequestAviationAccountInfo;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.common.service.RequestAviationAccountQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationDeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.common.domain.EmpVariationCorsiaDetails;
@@ -32,59 +36,147 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInf
 @ExtendWith(MockitoExtension.class)
 class EmpVariationCorsiaDeemedWithdrawnAddRequestActionServiceTest {
 
-	@InjectMocks
+    @InjectMocks
     private EmpVariationCorsiaDeemedWithdrawnAddRequestActionService addRequestActionService;
 
     @Mock
     private RequestService requestService;
-    
+
     @Mock
     private RequestActionUserInfoResolver requestActionUserInfoResolver;
 
+    @Mock
+    private RequestAviationAccountQueryService requestAviationAccountQueryService;
+
     @Test
     void addRequestAction() {
+
+        // given
         String requestId = "1L";
         Long accountId = 1L;
         String regulatorUser = "regulatorUser";
+
         Set<String> operatorsNotified = Set.of("operatorUser");
-        
+
         DecisionNotification decisionNotification = DecisionNotification.builder()
                 .operators(operatorsNotified)
                 .signatory(regulatorUser)
                 .build();
-        EmissionsMonitoringPlanCorsia emp = EmissionsMonitoringPlanCorsia.builder()
-            .operatorDetails(EmpCorsiaOperatorDetails.builder().build())
-            .build();
-        EmpVariationDetermination determination = EmpVariationDetermination.builder().type(EmpVariationDeterminationType.REJECTED).build();
-        EmpVariationCorsiaRequestPayload requestPayload = EmpVariationCorsiaRequestPayload.builder()
-            .payloadType(RequestPayloadType.EMP_VARIATION_CORSIA_REQUEST_PAYLOAD)
-            .emissionsMonitoringPlan(emp)
-            .empVariationDetails(EmpVariationCorsiaDetails.builder().reason("test reason").build())
-            .determination(determination)
-            .regulatorReviewer(regulatorUser)
-            .decisionNotification(decisionNotification)
-            .build();
-        Request request = Request.builder().id(requestId).accountId(accountId).payload(requestPayload).build();
 
-        Map<String, RequestActionUserInfo> usersInfo = Map.of(
-                "operatorUser", RequestActionUserInfo.builder().name("operatorUserName").build(),
-                "regulatorUser", RequestActionUserInfo.builder().name("regulatorUserName").build()
-            );
-        EmpVariationCorsiaApplicationDeemedWithdrawnRequestActionPayload requestActionPayload = EmpVariationCorsiaApplicationDeemedWithdrawnRequestActionPayload.builder()
-                .payloadType(RequestActionPayloadType.EMP_VARIATION_CORSIA_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD)
-                .determination(determination)
-                .decisionNotification(decisionNotification)
-                .usersInfo(usersInfo)
+        EmissionsMonitoringPlanCorsia emp = EmissionsMonitoringPlanCorsia.builder()
+                .operatorDetails(
+                        EmpCorsiaOperatorDetails.builder()
+                                .build()
+                )
                 .build();
 
-        when(requestService.findRequestById(requestId)).thenReturn(request);
-        when(requestActionUserInfoResolver.getUsersInfo(operatorsNotified, regulatorUser, request)).thenReturn(usersInfo);
+        EmpVariationDetermination determination = EmpVariationDetermination.builder()
+                .type(EmpVariationDeterminationType.REJECTED)
+                .build();
 
-        //invoke
+        EmpVariationCorsiaDetails empVariationDetails =
+                EmpVariationCorsiaDetails.builder()
+                        .reason("test reason")
+                        .build();
+
+        EmpVariationCorsiaRequestPayload requestPayload =
+                EmpVariationCorsiaRequestPayload.builder()
+                        .payloadType(RequestPayloadType.EMP_VARIATION_CORSIA_REQUEST_PAYLOAD)
+                        .emissionsMonitoringPlan(emp)
+                        .empVariationDetails(empVariationDetails)
+                        .determination(determination)
+                        .regulatorReviewer(regulatorUser)
+                        .decisionNotification(decisionNotification)
+                        .build();
+
+        Request request = Request.builder()
+                .id(requestId)
+                .accountId(accountId)
+                .payload(requestPayload)
+                .build();
+
+        Map<String, RequestActionUserInfo> usersInfo = Map.of(
+                "operatorUser",
+                RequestActionUserInfo.builder()
+                        .name("operatorUserName")
+                        .build(),
+                "regulatorUser",
+                RequestActionUserInfo.builder()
+                        .name("regulatorUserName")
+                        .build()
+        );
+
+        RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder()
+                .build();
+
+        when(requestService.findRequestById(requestId))
+                .thenReturn(request);
+
+        when(requestAviationAccountQueryService.getAccountInfo(accountId))
+                .thenReturn(accountInfo);
+
+        when(requestActionUserInfoResolver.getUsersInfo(
+                operatorsNotified,
+                regulatorUser,
+                request
+        )).thenReturn(usersInfo);
+
+
+        // when
         addRequestActionService.addRequestAction(requestId);
 
-        verify(requestService, times(1)).findRequestById(requestId);
+
+        // then
         verify(requestService, times(1))
-            .addActionToRequest(request, requestActionPayload,  RequestActionType.EMP_VARIATION_CORSIA_APPLICATION_DEEMED_WITHDRAWN, regulatorUser);
+                .findRequestById(requestId);
+
+        verify(requestAviationAccountQueryService, times(1))
+                .getAccountInfo(accountId);
+
+        verify(requestActionUserInfoResolver, times(1))
+                .getUsersInfo(
+                        operatorsNotified,
+                        regulatorUser,
+                        request
+                );
+
+        ArgumentCaptor<EmpVariationCorsiaApplicationDeemedWithdrawnRequestActionPayload>
+                payloadCaptor =
+                ArgumentCaptor.forClass(
+                        EmpVariationCorsiaApplicationDeemedWithdrawnRequestActionPayload.class
+                );
+
+        verify(requestService, times(1))
+                .addActionToRequest(
+                        org.mockito.ArgumentMatchers.eq(request),
+                        payloadCaptor.capture(),
+                        org.mockito.ArgumentMatchers.eq(
+                                RequestActionType.EMP_VARIATION_CORSIA_APPLICATION_DEEMED_WITHDRAWN
+                        ),
+                        org.mockito.ArgumentMatchers.eq(regulatorUser)
+                );
+
+        EmpVariationCorsiaApplicationDeemedWithdrawnRequestActionPayload actualPayload =
+                payloadCaptor.getValue();
+
+        assertEquals(
+                RequestActionPayloadType.EMP_VARIATION_CORSIA_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD,
+                actualPayload.getPayloadType()
+        );
+
+        assertEquals(
+                determination,
+                actualPayload.getDetermination()
+        );
+
+        assertEquals(
+                decisionNotification,
+                actualPayload.getDecisionNotification()
+        );
+
+        assertEquals(
+                usersInfo,
+                actualPayload.getUsersInfo()
+        );
     }
 }

@@ -1,12 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.aviationaccountclosure.handler;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.pmrv.api.integration.registry.notification.aviation.request.AviationNotificationRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.notification.common.RegistryNotificationType;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -20,6 +19,9 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.aviationaccountclosure.ser
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestTaskActionEmptyPayload;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class AviationAccountClosureSubmitActionHandler implements RequestTaskActionHandler<RequestTaskActionEmptyPayload> {
@@ -31,7 +33,9 @@ public class AviationAccountClosureSubmitActionHandler implements RequestTaskAct
     private final WorkflowService workflowService;
     private final RequestTaskService requestTaskService;
     private final RequestQueryService requestQueryService;
-    
+    private final ApplicationEventPublisher eventPublisher;
+
+
 
     @Override
     public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType,
@@ -48,6 +52,12 @@ public class AviationAccountClosureSubmitActionHandler implements RequestTaskAct
         
         // terminate all remaining workflows for this aviation account
         terminateAviationAccountWorkflows(accountId);
+
+        eventPublisher.publishEvent(AviationNotificationRegistryEvent.builder()
+                .accountId(accountId)
+                .requestId(requestTask.getRequest().getId())
+                .registryNotificationType(RegistryNotificationType.AVIATION_ACCOUNT_CLOSED)
+                .build());
     }
     
     private void terminateAviationAccountWorkflows(Long accountId) {

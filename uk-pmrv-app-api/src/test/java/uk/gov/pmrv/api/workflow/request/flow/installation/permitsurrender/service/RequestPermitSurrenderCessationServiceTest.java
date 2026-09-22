@@ -9,8 +9,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountStatusService;
-import uk.gov.pmrv.api.integration.registry.notification.installation.request.NotificationRegistryEvent;
-import uk.gov.pmrv.api.integration.registry.notification.installation.request.RegistryNotificationType;
+import uk.gov.pmrv.api.integration.registry.notification.common.RegistryNotificationType;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.InstallationNotificationRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -168,7 +168,7 @@ class RequestPermitSurrenderCessationServiceTest {
         verify(permitSurrenderOfficialNoticeService, times(1))
             .sendOfficialNoticeForDecisionNotification(request, cessationOfficialNotice, taskActionPayload.getDecisionNotification());
         verify(applicationEventPublisher, times(1)).publishEvent(
-                NotificationRegistryEvent.builder()
+                InstallationNotificationRegistryEvent.builder()
                         .accountId(request.getAccountId())
                         .requestId(request.getId())
                         .fileInfoDTO(cessationOfficialNotice)

@@ -39,7 +39,16 @@
 
             DROP SEQUENCE IF EXISTS account_details_history_seq;
         </rollback>
-
+    </changeSet>
+    <changeSet id="0_2_0_migrate_corsia_account_details_history_category" author="mitzelose@unisystems.gr">
+        <sql>
+            UPDATE account_details_history adh
+            SET category = 'FIRST_YEAR_WITHIN_SCOPE_OF_APPLICABILITY'
+                FROM account a
+            WHERE adh.account_id = a.id
+              AND a.emission_trading_scheme = 'CORSIA'
+              AND adh.category = 'FIRST_YEAR_OF_REPORTING_OBLIGATION';
+        </sql>
     </changeSet>
 
 </databaseChangeLog>

@@ -6,7 +6,7 @@
     </dd>
     <dd></dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="../" [queryParams]="changeUrlQueryParams">Change</a>
+      <a govukLink routerLink="../" [queryParams]="changeUrlQueryParams" hidden-text="monitoring approach">Change</a>
     </dd>
   </div>
 </dl>
@@ -19,7 +19,13 @@
     <dd class="pre-wrap" govukSummaryListRowValue>{{ data.simplifiedApproach.explanation }}</dd>
     <dd></dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="../simplified-approach" [queryParams]="changeUrlQueryParams">Change</a>
+      <a
+        govukLink
+        routerLink="../simplified-approach"
+        [queryParams]="changeUrlQueryParams"
+        hidden-text="simplified reporting eligibility">
+        Change
+      </a>
     </dd>
   </div>
 </dl>
@@ -31,7 +37,13 @@
     </dd>
     <dd></dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
-      <a govukLink routerLink="../simplified-approach" [queryParams]="changeUrlQueryParams">Change</a>
+      <a
+        govukLink
+        routerLink="../simplified-approach"
+        [queryParams]="changeUrlQueryParams"
+        hidden-text="supporting evidence">
+        Change
+      </a>
     </dd>
   </div>
 </dl>

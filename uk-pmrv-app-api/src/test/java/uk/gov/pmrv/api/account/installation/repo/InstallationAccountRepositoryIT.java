@@ -1,6 +1,7 @@
 package uk.gov.pmrv.api.account.installation.repo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -10,11 +11,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityStatus;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
@@ -25,10 +26,10 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccou
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
 import uk.gov.pmrv.api.account.installation.repository.InstallationAccountRepository;
 import uk.gov.pmrv.api.common.domain.Address;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.common.utils.SearchTermUtils;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -117,10 +118,52 @@ class InstallationAccountRepositoryIT extends AbstractContainerBaseTest {
 
         flushAndClear();
 
-        Page<AccountContactInfoDTO> result = repository.findAccountContactsByCaAndContactTypeAndStatusNotIn(PageRequest.of(0, 5), competentAuthority,
+        Page<AccountContactInfoDTO> result = repository.findAccountContactsByCaAndContactTypeAndStatusNotIn(PageRequest.of(0, 5), null, competentAuthority,
             serviceContactType, List.of(InstallationAccountStatus.UNAPPROVED));
 
         assertThat(result.getNumberOfElements()).isEqualTo(2);
+        assertThat(result).containsExactlyInAnyOrderElementsOf(expectedAccountContactInfos);
+    }
+
+    @Test
+    void searchAccountContactsByCaAndContactTypeAndStatusNotIn() {
+        CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.WALES;
+        AccountContactType serviceContactType = AccountContactType.SERVICE;
+
+        String searchTerm = SearchTermUtils.toSearchPattern("unt1");
+
+        InstallationAccount account1 = createAccount(1L, "account1", InstallationAccountStatus.LIVE,
+                competentAuthority, 1L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName1", LegalEntityStatus.ACTIVE);
+        account1.getContacts().put(AccountContactType.PRIMARY, "primary1");
+        account1.getContacts().put(AccountContactType.SERVICE, "service1");
+        repository.save(account1);
+
+        InstallationAccount account2 = createAccount(2L, "account2", InstallationAccountStatus.UNAPPROVED,
+                competentAuthority, 2L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName2", LegalEntityStatus.ACTIVE);
+        account2.getContacts().put(AccountContactType.PRIMARY, "primary2");
+        account2.getContacts().put(AccountContactType.SERVICE, "service2");
+        repository.save(account2);
+
+        InstallationAccount account3 = createAccount(3L, "account3", InstallationAccountStatus.LIVE,
+                CompetentAuthorityEnum.ENGLAND, 1L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName3", LegalEntityStatus.ACTIVE);
+        account3.getContacts().put(AccountContactType.PRIMARY, "primary3");
+        account3.getContacts().put(AccountContactType.SERVICE, "service3");
+        repository.save(account3);
+
+        InstallationAccount account4 = createAccount(4L, "account4", InstallationAccountStatus.AWAITING_SURRENDER,
+                competentAuthority, 2L, EmissionTradingScheme.EU_ETS_INSTALLATIONS, "leName4", LegalEntityStatus.ACTIVE);
+        account4.getContacts().put(AccountContactType.PRIMARY, "primary4");
+        repository.save(account4);
+
+        List<AccountContactInfoDTO> expectedAccountContactInfos = List.of(
+                AccountContactInfoDTO.builder().accountId(1L).accountName("account1").userId("service1").build());
+
+        flushAndClear();
+
+        Page<AccountContactInfoDTO> result = repository.findAccountContactsByCaAndContactTypeAndStatusNotIn(PageRequest.of(0, 5), searchTerm, competentAuthority,
+                serviceContactType, List.of(InstallationAccountStatus.UNAPPROVED));
+
+        assertThat(result.getNumberOfElements()).isEqualTo(1);
         assertThat(result).containsExactlyInAnyOrderElementsOf(expectedAccountContactInfos);
     }
 

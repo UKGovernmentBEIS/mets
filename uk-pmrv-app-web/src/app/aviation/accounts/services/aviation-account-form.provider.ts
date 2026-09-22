@@ -4,9 +4,9 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  UntypedFormGroup,
   ValidationErrors,
   ValidatorFn,
+  Validators,
 } from '@angular/forms';
 
 import { distinctUntilChanged, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
@@ -19,6 +19,7 @@ import { GovukValidators } from 'govuk-components';
 import { AviationAccountCreationDTO, AviationAccountsService, LocationOnShoreStateDTO } from 'pmrv-api';
 
 import { AviationAccountsStore } from '../store';
+import { FYRO_MIN_YEAR, getFyroLabel, getFyroRangeErrorMessage } from '../utils/fyro.util';
 
 export interface AviationAccountFormModel {
   name: FormControl<string | null>;
@@ -72,12 +73,9 @@ export class AviationAccountFormProvider {
     this._form.removeControl('commencementDate', { emitEvent: false });
   }
 
-  getCommencementDateFormControl(editModeEnabled?: boolean) {
+  getCommencementDateFormControl(editModeEnabled: boolean) {
     return new FormControl<string | null>(null, {
-      validators: [
-        GovukValidators.required('Enter the first year of reporting obligation'),
-        this.commencementDateValidator(editModeEnabled),
-      ],
+      validators: [this.requiredValidator(editModeEnabled), this.commencementDateValidator(editModeEnabled)],
     });
   }
 
@@ -99,12 +97,16 @@ export class AviationAccountFormProvider {
         crcoCode: new FormControl<string | null>(null, {
           validators: GovukValidators.required('Enter the Central Route Charges Office number'),
         }),
-        commencementDate: this.getCommencementDateFormControl(),
+        commencementDate: this.getCommencementDateFormControl(false),
       },
       {
         updateOn: 'change',
       },
     );
+
+    this._form.controls.emissionTradingScheme.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.form.controls.commencementDate.updateValueAndValidity();
+    });
 
     const nameCrcoEts$ = this._form.valueChanges.pipe(
       map(({ name, crcoCode, emissionTradingScheme, id }) => {
@@ -155,10 +157,14 @@ export class AviationAccountFormProvider {
   }
 
   private commencementDateValidator(editModeEnabled = false): ValidatorFn {
-    return (group: UntypedFormGroup): ValidationErrors => {
-      const stateCommencementDate = this.store.getState().currentAccount.account?.aviationAccount?.commencementDate;
+    return (group: AbstractControl): ValidationErrors | null => {
+      const account = this.store.getState().currentAccount.account?.aviationAccount;
+      const scheme: AviationAccountCreationDTO['emissionTradingScheme'] = editModeEnabled
+        ? account?.emissionTradingScheme
+        : group.parent?.get('emissionTradingScheme')?.value;
+      const stateCommencementDate = account?.commencementDate;
       const commencementDate = new Date(group.value);
-      const minDate = startOfDay(new Date('2021'));
+      const minDate = startOfDay(new Date((FYRO_MIN_YEAR[scheme] ?? FYRO_MIN_YEAR.UK_ETS_AVIATION).toString()));
       const maxDate = endOfYear(
         new Date(
           editModeEnabled
@@ -170,8 +176,21 @@ export class AviationAccountFormProvider {
       return isWithinInterval(commencementDate, { start: minDate, end: maxDate })
         ? null
         : {
-            invalidCommencementDate: `The year must be after or equal to 2021 and it cannot be later than ${editModeEnabled ? 'previously set' : 'current year'}`,
+            invalidCommencementDate: getFyroRangeErrorMessage(scheme, editModeEnabled),
           };
+    };
+  }
+
+  private requiredValidator(editModeEnabled = false): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const account = this.store.getState().currentAccount.account?.aviationAccount;
+      const scheme: AviationAccountCreationDTO['emissionTradingScheme'] = editModeEnabled
+        ? account?.emissionTradingScheme
+        : group.parent?.get('emissionTradingScheme')?.value;
+
+      return Validators.required(group)
+        ? { required: `Enter the ${getFyroLabel(scheme ?? 'UK_ETS_AVIATION')?.toLowerCase()}` }
+        : null;
     };
   }
 

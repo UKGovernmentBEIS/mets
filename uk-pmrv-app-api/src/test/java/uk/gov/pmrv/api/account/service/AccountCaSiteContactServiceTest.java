@@ -70,18 +70,18 @@ class AccountCaSiteContactServiceTest {
 
         when(compAuthAuthorizationResourceService.hasUserScopeToCompAuth(user, Scope.EDIT_USER))
             .thenReturn(true);
-        when(approvedAccountQueryService.getApprovedAccountsAndCaSiteContactsByCa(ca, accountType, 0, 1))
+        when(approvedAccountQueryService.getApprovedAccountsAndCaSiteContactsByCa(ca, accountType, null, 0, 1))
             .thenReturn(pagedAccounts);
 
         // Invoke
-        AccountContactInfoResponse actual = service.getAccountsAndCaSiteContacts(user, accountType, 0, 1);
+        AccountContactInfoResponse actual = service.getAccountsAndCaSiteContacts(user, accountType, null, 0, 1);
 
         // Assert
         assertEquals(expected, actual);
         verify(compAuthAuthorizationResourceService, times(1))
             .hasUserScopeToCompAuth(user, Scope.EDIT_USER);
         verify(approvedAccountQueryService, times(1))
-            .getApprovedAccountsAndCaSiteContactsByCa(ca, accountType, 0, 1);
+            .getApprovedAccountsAndCaSiteContactsByCa(ca, accountType, null, 0, 1);
     }
 
     @Test
@@ -99,18 +99,18 @@ class AccountCaSiteContactServiceTest {
 
         when(compAuthAuthorizationResourceService.hasUserScopeToCompAuth(user, Scope.EDIT_USER))
             .thenReturn(false);
-        when(approvedAccountQueryService.getApprovedAccountsAndCaSiteContactsByCa(ca, accountType, 0, 1))
+        when(approvedAccountQueryService.getApprovedAccountsAndCaSiteContactsByCa(ca, accountType, null, 0, 1))
             .thenReturn(pagedAccounts);
 
         // Invoke
-        AccountContactInfoResponse actual = service.getAccountsAndCaSiteContacts(user, accountType, 0, 1);
+        AccountContactInfoResponse actual = service.getAccountsAndCaSiteContacts(user, accountType, null, 0, 1);
 
         // Assert
         assertEquals(expected, actual);
         verify(compAuthAuthorizationResourceService, times(1))
             .hasUserScopeToCompAuth(user, Scope.EDIT_USER);
         verify(approvedAccountQueryService, times(1))
-            .getApprovedAccountsAndCaSiteContactsByCa(ca, accountType, 0, 1);
+            .getApprovedAccountsAndCaSiteContactsByCa(ca, accountType, null, 0, 1);
     }
 
 
@@ -126,18 +126,18 @@ class AccountCaSiteContactServiceTest {
             .contacts(List.of()).editable(true).totalItems(0L).build();
 
         when(compAuthAuthorizationResourceService.hasUserScopeToCompAuth(user, Scope.EDIT_USER)).thenReturn(true);
-        when(approvedAccountQueryService.getApprovedAccountsAndCaSiteContactsByCa(ca, accountType, 0, 1))
+        when(approvedAccountQueryService.getApprovedAccountsAndCaSiteContactsByCa(ca, accountType, null, 0, 1))
             .thenReturn(pagedAccounts);
 
         // Invoke
-        AccountContactInfoResponse actual = service.getAccountsAndCaSiteContacts(user, accountType, 0, 1);
+        AccountContactInfoResponse actual = service.getAccountsAndCaSiteContacts(user, accountType, null, 0, 1);
 
         // Assert
         assertEquals(expected, actual);
         verify(compAuthAuthorizationResourceService, times(1))
             .hasUserScopeToCompAuth(user, Scope.EDIT_USER);
         verify(approvedAccountQueryService, times(1))
-            .getApprovedAccountsAndCaSiteContactsByCa(ca, accountType, 0, 1);
+            .getApprovedAccountsAndCaSiteContactsByCa(ca, accountType, null, 0, 1);
     }
 
     @Test

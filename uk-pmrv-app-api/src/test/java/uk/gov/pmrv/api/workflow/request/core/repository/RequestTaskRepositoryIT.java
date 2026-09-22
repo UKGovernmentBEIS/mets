@@ -10,6 +10,7 @@ import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTy
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import jakarta.persistence.EntityManager;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -157,7 +158,42 @@ class RequestTaskRepositoryIT extends AbstractContainerBaseTest {
 
         assertThat(requestTasksFound).containsExactly(request1Task1, request1Task2);
     }
-    
+
+    @Test
+    void findByTypeInAndRequestAccountIdIn() {
+        final String assignee = "assignee";
+        final Long accountId1 = 1L;
+        final Long accountId2 = 2L;
+        final Long accountId3 = 3L;
+
+        Request request1 = createRequest(accountId1, CompetentAuthorityEnum.ENGLAND, RequestType.SYSTEM_MESSAGE_NOTIFICATION);
+        RequestTask requestTask1 = createRequestTask(request1, assignee, ACCOUNT_USERS_SETUP);
+
+        Request request2 = createRequest(accountId2, CompetentAuthorityEnum.ENGLAND, INSTALLATION_ACCOUNT_OPENING);
+        RequestTask requestTask2 = createRequestTask(request2, assignee, INSTALLATION_ACCOUNT_OPENING_ARCHIVE);
+
+        // different task type
+        Request request3 = createRequest(accountId1, CompetentAuthorityEnum.ENGLAND, RequestType.PERMIT_ISSUANCE);
+        createRequestTask(request3, assignee, PERMIT_ISSUANCE_APPLICATION_REVIEW);
+
+        // account not requested
+        Request request4 = createRequest(accountId3, CompetentAuthorityEnum.ENGLAND, RequestType.SYSTEM_MESSAGE_NOTIFICATION);
+        createRequestTask(request4, assignee, ACCOUNT_USERS_SETUP);
+
+        // request without account
+        Request request5 = createRequest(CompetentAuthorityEnum.ENGLAND, RequestType.SYSTEM_MESSAGE_NOTIFICATION);
+        createRequestTask(request5, assignee, ACCOUNT_USERS_SETUP);
+
+        flushAndClear();
+
+        //invoke
+        List<RequestTask> tasksFound = repository.findByTypeInAndRequestAccountIdIn(
+            Set.of(ACCOUNT_USERS_SETUP, INSTALLATION_ACCOUNT_OPENING_ARCHIVE), Set.of(accountId1, accountId2));
+
+        //assert
+        assertThat(tasksFound).containsExactlyInAnyOrder(requestTask1, requestTask2);
+    }
+
     private Request createRequest(
     		CompetentAuthorityEnum ca,
     		RequestType type) {

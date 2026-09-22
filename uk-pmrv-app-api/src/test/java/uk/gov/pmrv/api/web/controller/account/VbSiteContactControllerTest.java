@@ -112,7 +112,7 @@ class VbSiteContactControllerTest {
                 .editable(false).build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-        when(service.getAccountsAndVbSiteContacts(user, accountType, 0, 2)).thenReturn(accountVbSiteContactInfoResponse);
+        when(service.getAccountsAndVbSiteContacts(user, accountType, null, 0, 2)).thenReturn(accountVbSiteContactInfoResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.get(VB_SITE_CONTACT_CONTROLLER_PATH + "?page=0&size=2")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -128,7 +128,7 @@ class VbSiteContactControllerTest {
                 .andExpect(jsonPath("contacts[1].userId").value("userId2"));
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(service, times(1)).getAccountsAndVbSiteContacts(user, accountType,0, 2);
+        verify(service, times(1)).getAccountsAndVbSiteContacts(user, accountType, null, 0, 2);
     }
 
     @Test
@@ -145,7 +145,7 @@ class VbSiteContactControllerTest {
                 .andExpect(status().isForbidden());
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(service, never()).getAccountsAndVbSiteContacts(any(), any(), anyInt(), anyInt());
+        verify(service, never()).getAccountsAndVbSiteContacts(any(), any(), any(), anyInt(), anyInt());
     }
 
     @Test

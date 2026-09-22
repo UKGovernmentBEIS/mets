@@ -15,6 +15,7 @@ public interface EmpIssuanceCorsiaReviewRequestActionMapper {
         EmpIssuanceCorsiaApplicationApprovedRequestActionPayload payload);
 
     @Mapping(target = "determination.reason", ignore = true)
+    @Mapping(target = "reviewGroupDecisions", ignore = true)
     EmpIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayload cloneDeemedWithdrawnPayloadIgnoreReason(
         EmpIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayload payload);
 }

@@ -54,6 +54,10 @@ export class SelectOtherComponent implements ControlValueAccessor, AfterContentI
       this.currentValue = (event.target as HTMLInputElement).value;
       this.toggleChildControls();
       onChange(this.currentValue);
+      // The inner native <select> also binds [formControl]="control" (needed for govukFormError's
+      // NgControl self-injection), so this control ends up with two competing NgControl directives.
+      // That leaves the pending-value chain from `onChange` above ineffective, so the value is set explicitly.
+      this.control.setValue(this.currentValue);
     };
   }
 

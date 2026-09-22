@@ -23,7 +23,7 @@
   widthClass="govuk-!-width-two-thirds"></div>
 
 <ng-container *ngIf="!editModeEnabled">
-  <p class="govuk-body">First year of reporting obligation</p>
+  <p class="govuk-body">{{ fyroLabel }}</p>
   <div formControlName="commencementDate" govuk-date-input></div>
 </ng-container>
 

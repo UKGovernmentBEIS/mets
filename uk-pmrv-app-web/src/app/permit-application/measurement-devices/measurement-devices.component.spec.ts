@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -58,8 +57,9 @@ describe('MeasurementDevicesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MeasurementDevicesComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule, MeasurementDevicesTableComponent],
+      imports: [SharedModule, SharedPermitModule, MeasurementDevicesTableComponent],
       providers: [
+        provideRouter([{ path: '**', component: MeasurementDevicesComponent }]),
         { provide: TasksService, useValue: tasksService },
         {
           provide: PermitApplicationStore,

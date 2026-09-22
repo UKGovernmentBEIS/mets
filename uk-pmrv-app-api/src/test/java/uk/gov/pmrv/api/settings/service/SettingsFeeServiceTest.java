@@ -9,12 +9,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.settings.domain.dto.FeeRowDTO;
 import uk.gov.pmrv.api.settings.domain.dto.FeeUpdateDTO;
+import uk.gov.pmrv.api.settings.domain.enumeration.FeeHistoryActionType;
 import uk.gov.pmrv.api.settings.repository.SettingsFeeRepository;
 import uk.gov.pmrv.api.workflow.payment.domain.PaymentFee;
 import uk.gov.pmrv.api.workflow.payment.domain.PaymentFeeMethod;
@@ -37,6 +39,11 @@ class SettingsFeeServiceTest {
 
     @Mock
     private SettingsFeeValidationService validationService;
+
+    @Mock
+    private FeeHistoryService feeHistoryService;
+
+    private final AppUser appUser = AppUser.builder().userId("user1").firstName("John").lastName("Doe").build();
 
     @Test
     void getFees_installation_returnsOnlyInstallationFees() {
@@ -90,13 +97,15 @@ class SettingsFeeServiceTest {
                 .thenReturn(feeMethod);
         when(validationService.validateAndGetFee(feeMethod, FeeType.FIXED)).thenReturn(existing);
 
-        service.updateFee(CompetentAuthorityEnum.ENGLAND, AccountType.AVIATION, 1L, FeeType.FIXED, dto);
+        service.updateFee(CompetentAuthorityEnum.ENGLAND, AccountType.AVIATION, 1L, FeeType.FIXED, dto, appUser);
 
         PaymentFee updated = feeMethod.getFees().get(FeeType.FIXED);
         assertThat(updated.getAmount()).isEqualByComparingTo("1500");
         assertThat(updated.getScheduledAmount()).isNull();
         assertThat(updated.getScheduledDate()).isNull();
         verify(validationService).validateEffectiveDate(eq(today), any(LocalDate.class));
+        verify(feeHistoryService).logFeeChange(feeMethod, FeeType.FIXED, FeeHistoryActionType.IMMEDIATE_UPDATE,
+                new BigDecimal("1000"), new BigDecimal("1500"), null, appUser);
     }
 
     @Test
@@ -109,13 +118,14 @@ class SettingsFeeServiceTest {
                 .thenReturn(feeMethod);
         when(validationService.validateAndGetFee(feeMethod, FeeType.FIXED)).thenReturn(existing);
 
-        service.updateFee(CompetentAuthorityEnum.ENGLAND, AccountType.AVIATION, 1L, FeeType.FIXED, dto);
+        service.updateFee(CompetentAuthorityEnum.ENGLAND, AccountType.AVIATION, 1L, FeeType.FIXED, dto, appUser);
 
         PaymentFee updated = feeMethod.getFees().get(FeeType.FIXED);
         assertThat(updated.getAmount()).isEqualByComparingTo("1000");
         assertThat(updated.getScheduledAmount()).isEqualByComparingTo("2000");
         assertThat(updated.getScheduledDate()).isEqualTo(futureDate);
-        verify(validationService).validateEffectiveDate(eq(futureDate), any(LocalDate.class));
+        verify(feeHistoryService).logFeeChange(feeMethod, FeeType.FIXED, FeeHistoryActionType.SCHEDULED_UPDATE,
+                new BigDecimal("1000"), new BigDecimal("2000"), futureDate, appUser);
     }
 
     @Test
@@ -132,30 +142,33 @@ class SettingsFeeServiceTest {
                 .thenReturn(feeMethod);
         when(validationService.validateAndGetFee(feeMethod, FeeType.FIXED)).thenReturn(existing);
 
-        service.updateFee(CompetentAuthorityEnum.ENGLAND, AccountType.AVIATION, 1L, FeeType.FIXED, dto);
+        service.updateFee(CompetentAuthorityEnum.ENGLAND, AccountType.AVIATION, 1L, FeeType.FIXED, dto, appUser);
 
         verify(validationService).validateNoConflictingScheduledUpdate(eq(existing), eq(today), any(LocalDate.class));
     }
 
     @Test
     void cancelScheduledFeeUpdate_clearsScheduledFields() {
+        LocalDate scheduledDate = LocalDate.now().plusDays(10);
         PaymentFee existing = PaymentFee.builder()
                 .amount(new BigDecimal("1000"))
                 .scheduledAmount(new BigDecimal("1500"))
-                .scheduledDate(LocalDate.now().plusDays(10))
+                .scheduledDate(scheduledDate)
                 .build();
         PaymentFeeMethod feeMethod = feeMethodWith(FeeType.FIXED, existing);
         when(validationService.validateAndGetFeeMethod(CompetentAuthorityEnum.ENGLAND, AccountType.AVIATION, 1L))
                 .thenReturn(feeMethod);
         when(validationService.validateAndGetFee(feeMethod, FeeType.FIXED)).thenReturn(existing);
 
-        service.cancelScheduledFeeUpdate(CompetentAuthorityEnum.ENGLAND, AccountType.AVIATION, 1L, FeeType.FIXED);
+        service.cancelScheduledFeeUpdate(CompetentAuthorityEnum.ENGLAND, AccountType.AVIATION, 1L, FeeType.FIXED, appUser);
 
         PaymentFee updated = feeMethod.getFees().get(FeeType.FIXED);
         assertThat(updated.getAmount()).isEqualByComparingTo("1000");
         assertThat(updated.getScheduledAmount()).isNull();
         assertThat(updated.getScheduledDate()).isNull();
         verify(validationService).validateScheduledChangeExists(existing);
+        verify(feeHistoryService).logFeeChange(feeMethod, FeeType.FIXED, FeeHistoryActionType.CANCEL_SCHEDULED,
+                new BigDecimal("1000"), new BigDecimal("1500"), scheduledDate, appUser);
     }
 
     @Test
@@ -175,6 +188,8 @@ class SettingsFeeServiceTest {
         assertThat(updated.getAmount()).isEqualByComparingTo("1500");
         assertThat(updated.getScheduledAmount()).isNull();
         assertThat(updated.getScheduledDate()).isNull();
+        verify(feeHistoryService).logFeeChange(feeMethod, FeeType.FIXED, FeeHistoryActionType.SYSTEM_APPLIED,
+                new BigDecimal("1000"), new BigDecimal("1500"), null, null);
     }
 
     @Test

@@ -54,9 +54,9 @@ describe('EditFyroSummaryComponent', () => {
 
   it('should display all HTML elements', () => {
     expect(page.summariesContents).toEqual([
-      'First year of reporting obligation',
+      'First year within the scope of applicability',
       '1 Jan 2023',
-      'Change  first year of reporting obligation',
+      'Change  first year within the scope of applicability',
       'Reason',
       'reason',
       'Change reason',

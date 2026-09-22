@@ -10,14 +10,28 @@
  * Do not edit the class manually.
  */
 import { DecisionNotification } from './decisionNotification';
+import { EmissionsMonitoringPlanUkEts } from './emissionsMonitoringPlanUkEts';
+import { EmissionsMonitoringPlanUkEtsContainer } from './emissionsMonitoringPlanUkEtsContainer';
 import { EmpVariationDetermination } from './empVariationDetermination';
+import { EmpVariationReviewDecision } from './empVariationReviewDecision';
+import { EmpVariationUkEtsDetails } from './empVariationUkEtsDetails';
 import { FileInfoDTO } from './fileInfoDTO';
 import { RequestActionPayload } from './requestActionPayload';
 import { RequestActionUserInfo } from './requestActionUserInfo';
+import { ServiceContactDetails } from './serviceContactDetails';
 
 export interface EmpVariationUkEtsApplicationDeemedWithdrawnRequestActionPayload extends RequestActionPayload {
+  emissionsMonitoringPlan: EmissionsMonitoringPlanUkEts;
+  serviceContactDetails: ServiceContactDetails;
+  empVariationDetails: EmpVariationUkEtsDetails;
+  empSectionsCompleted?: { [key: string]: Array<boolean> };
+  empAttachments?: { [key: string]: string };
   determination: EmpVariationDetermination;
   decisionNotification: DecisionNotification;
   usersInfo?: { [key: string]: RequestActionUserInfo };
   officialNotice: FileInfoDTO;
+  originalEmpContainer: EmissionsMonitoringPlanUkEtsContainer;
+  empVariationDetailsReviewDecision?: EmpVariationReviewDecision;
+  reviewGroupDecisions?: { [key: string]: EmpVariationReviewDecision };
+  reviewAttachments?: { [key: string]: string };
 }

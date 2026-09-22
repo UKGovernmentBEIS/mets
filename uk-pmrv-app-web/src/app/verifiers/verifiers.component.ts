@@ -88,15 +88,21 @@ export class VerifiersComponent implements OnInit {
     this.verifiers$ = this.verifiersAuthorities$.pipe(map((state) => state.authorities));
     this.isEditable$ = this.verifiersAuthorities$.pipe(map((state) => state.editable));
 
+    const siteContactsTerm$ = this.route.queryParamMap.pipe(
+      map((params) => params.get('term')?.trim() || null),
+      distinctUntilChanged(),
+    );
+
     this.siteContact$ = combineLatest([
       this.currentDomain$,
       merge(
         this.refresh$.pipe(switchMap(() => this.siteContactsPage$)),
         this.siteContactsPage$.pipe(distinctUntilChanged()),
       ),
+      siteContactsTerm$,
     ]).pipe(
-      switchMap(([currentDomain, page]) =>
-        this.vbSiteContactsService.getVbSiteContacts(currentDomain, page - 1, this.siteContactsPageSize),
+      switchMap(([currentDomain, page, term]) =>
+        this.vbSiteContactsService.getVbSiteContacts(currentDomain, page - 1, this.siteContactsPageSize, term),
       ),
       shareReplay({ bufferSize: 1, refCount: true }),
     );

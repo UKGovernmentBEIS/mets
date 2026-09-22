@@ -654,7 +654,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_VARIATION_MAKE_PAYMENT(true, RequestType.PERMIT_VARIATION, SupportingTaskType.DEFAULT) {
+    PERMIT_VARIATION_MAKE_PAYMENT(true, RequestType.PERMIT_VARIATION, RequestExpirationType.PAYMENT,  SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
@@ -3413,6 +3413,10 @@ public enum RequestTaskType {
             VERIFIER_NO_LONGER_AVAILABLE,
                 NEW_VERIFICATION_BODY_EMITTER
         );
+    }
+
+    public static Set<RequestTaskType> getVerifierSystemMessageNotificationTypes() {
+        return Set.of(NEW_VERIFICATION_BODY_EMITTER);
     }
 
     public static Set<RequestTaskType> getMakePaymentTypes() {

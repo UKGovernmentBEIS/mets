@@ -18,7 +18,7 @@ describe('PaymentSummaryComponent', () => {
   @Component({
     standalone: false,
     template: `
-      <app-payment-summary [details]="details" [shouldDisplayAmount]="shouldDisplayAmount"></app-payment-summary>
+      <app-payment-summary [details]="details"></app-payment-summary>
     `,
   })
   class TestComponent {
@@ -31,7 +31,6 @@ describe('PaymentSummaryComponent', () => {
       receivedDate: '2022-05-06',
       status: 'MARK_AS_RECEIVED',
     } as PaymentDetails;
-    shouldDisplayAmount: boolean;
   }
 
   class Page extends BasePage<TestComponent> {
@@ -60,9 +59,7 @@ describe('PaymentSummaryComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display the payment summary when input is true', () => {
-    component.shouldDisplayAmount = true;
-    fixture.detectChanges();
+  it('should display the payment summary', () => {
     expect(page.summaryListValues).toEqual([
       ['Payment status', 'Marked as received'],
       ['Date paid', '5 May 2022'],
@@ -71,20 +68,6 @@ describe('PaymentSummaryComponent', () => {
       ['Payment method', 'Debit card or credit card'],
       ['Reference number', 'AEM-323-1'],
       ['Amount', '£2,500.20'],
-    ]);
-  });
-
-  it('should hinde the payment amount when input is false', () => {
-    component.shouldDisplayAmount = false;
-    fixture.detectChanges();
-    expect(page.summaryListValues).toEqual([
-      ['Payment status', 'Marked as received'],
-      ['Date paid', '5 May 2022'],
-      ['Date received', '6 May 2022'],
-      ['Paid by', 'First Last'],
-      ['Payment method', 'Debit card or credit card'],
-      ['Reference number', 'AEM-323-1'],
-      ['Amount', ''],
     ]);
   });
 });

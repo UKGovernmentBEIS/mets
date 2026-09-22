@@ -18,6 +18,8 @@ import { AboutVariationComponent as ReviewAboutVariation } from './review/about-
 import { DecisionSummaryComponent } from './review/decision-summary/decision-summary.component';
 import { LogChangesComponent } from './review/determination/log-changes/log-changes.component';
 import { ReasonTemplateComponent } from './review/determination/reason-template/reason-template.component';
+import { DetailsComponent as RequestPaymentDetailsComponent } from './review/request-payment/details/details.component';
+import { RequestPaymentComponent } from './review/request-payment/request-payment.component';
 import { ReviewGroupStatusPermitVariationPipe } from './review/review-group-status-permit-variation.pipe';
 import { ReviewGroupStatusPermitVariationRegulatorLedPipe } from './review/review-group-status-permit-variation-regulator-led.pipe';
 import { ReviewSectionsContainerComponent } from './review/sections-container/review-sections-container.component';
@@ -35,6 +37,8 @@ import { SummaryComponent } from './summary/summary.component';
     DecisionSummaryComponent,
     LogChangesComponent,
     ReasonTemplateComponent,
+    RequestPaymentComponent,
+    RequestPaymentDetailsComponent,
     ReviewAboutVariation,
     ReviewGroupStatusPermitVariationPipe,
     ReviewGroupStatusPermitVariationRegulatorLedPipe,

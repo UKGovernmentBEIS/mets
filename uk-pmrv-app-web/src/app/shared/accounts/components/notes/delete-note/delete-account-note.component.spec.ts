@@ -32,7 +32,7 @@ describe('DeleteNoteComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DeleteAccountNoteComponent],
-      imports: [RouterTestingModule, SharedModule],
+      imports: [RouterTestingModule.withRoutes([{ path: '**', component: DeleteAccountNoteComponent }]), SharedModule],
       providers: [
         DestroySubject,
         { provide: AccountNotesService, useValue: accountNotesService },

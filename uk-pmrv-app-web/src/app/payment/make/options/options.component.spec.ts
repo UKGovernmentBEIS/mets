@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
+import 'jest-location-mock';
 import { SharedModule } from '@shared/shared.module';
 
 import { PaymentsService } from 'pmrv-api';
@@ -109,11 +110,6 @@ describe('OptionsComponent', () => {
   });
 
   it('should navigate to govuk page when payment not exist', () => {
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { assign: jest.fn() },
-    });
-
     const navigateSpy = jest.spyOn(router, 'navigate');
     paymentsService.createCardPayment.mockReturnValueOnce(
       of({
@@ -129,6 +125,6 @@ describe('OptionsComponent', () => {
     expect(page.errorSummary).toBeFalsy();
 
     expect(navigateSpy).not.toHaveBeenCalled();
-    expect(window.location.assign).toBeCalledWith('http://govuk');
+    expect(window.location.assign).toHaveBeenCalledWith('http://govuk');
   });
 });

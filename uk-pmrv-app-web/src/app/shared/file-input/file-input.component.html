@@ -7,7 +7,7 @@
     [headerSize]="headerSize"></app-file-upload-list>
   <div aria-live="assertive" class="govuk-visually-hidden" role="alert">{{ uploadErrorText$ | async }}</div>
 
-  <label [for]="id" class="govuk-label" id="{{ 'l.' + id }}" [ngClass]="headerSize ? 'govuk-label--' + headerSize : ''">
+  <label [for]="id" id="{{ 'l.' + id }}" [class]="'govuk-label' + (headerSize ? ' govuk-label--' + headerSize : '')">
     {{ label }}
   </label>
   <span *ngIf="text" class="govuk-body">{{ text }}</span>

@@ -1,0 +1,51 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <app-page-heading caption="Fees" size="l">Check your answers</app-page-heading>
+
+    @if (feeRow(); as feeRow) {
+      @if (draft) {
+        <h2 class="govuk-heading-m">Current payment details</h2>
+        <dl govuk-summary-list>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Workflow</dt>
+            <dd govukSummaryListRowValue>{{ feeRow.workflow }}</dd>
+          </div>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Current payment amount</dt>
+            <dd govukSummaryListRowValue>{{ feeRow.currentAmount | currency: 'GBP' : 'symbol' : '1.2-2' }}</dd>
+          </div>
+        </dl>
+
+        <h2 class="govuk-heading-m">New payment details</h2>
+        <dl govuk-summary-list>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>New payment amount</dt>
+            <dd govukSummaryListRowValue>{{ draft.amount | currency: 'GBP' : 'symbol' : '1.2-2' }}</dd>
+            <dd govukSummaryListRowActions>
+              <a govukLink hidden-text="new payment amount" routerLink=".." [state]="draft">Change</a>
+            </dd>
+          </div>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Date the payment amount will change</dt>
+            <dd govukSummaryListRowValue>{{ draft.effectiveDate | date: 'd MMMM yyyy' }}</dd>
+            <dd govukSummaryListRowActions>
+              <a govukLink hidden-text="date the payment amount will change" routerLink=".." [state]="draft">Change</a>
+            </dd>
+          </div>
+        </dl>
+
+        @if (saveError()) {
+          <p class="govuk-error-message">{{ saveError() }}</p>
+        }
+
+        <div class="govuk-button-group">
+          <button govukButton type="button" [disabled]="isSubmitting()" (click)="onConfirm()">
+            Confirm and complete
+          </button>
+        </div>
+      }
+    }
+
+    <p class="govuk-body"><a govukLink routerLink="../../..">Return to: Fees</a></p>
+  </div>
+</div>

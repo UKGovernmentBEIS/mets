@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.integration.model.regulatornotice.RegulatorNoticeEvent;
+import uk.gov.netz.integration.model.regulatornotice.ReturnOfAllowancesRegulatorNoticeEvent;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -23,17 +24,32 @@ public class NotificationRegistryIntegrationAddRequestActionService
 
         Request request = requestService.findRequestById(requestId);
 
-        NotificationRegistryIntegrationRequestActionPayload actionPayload =
-                NotificationRegistryIntegrationRequestActionPayload.builder()
-                        .notificationType(regulatorNoticeEvent.getType())
-                        .registryId(Integer.valueOf(regulatorNoticeEvent.getRegistryId()))
-                        .sentFile(fileInfoDTO)
-                        .payloadType(RequestActionPayloadType.NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD)
-                        .build();
-
         requestService.addSystemActionToRequest(request,
-                actionPayload,
-                RequestActionType.NOTIFICATION_SENT_TO_REGISTRY);
+                buildActionPayload(regulatorNoticeEvent, fileInfoDTO),
+                regulatorNoticeEvent instanceof ReturnOfAllowancesRegulatorNoticeEvent ?
+                        RequestActionType.RETURN_OF_ALLOWANCES_NOTIFICATION_SENT_TO_REGISTRY :
+                        RequestActionType.NOTIFICATION_SENT_TO_REGISTRY);
+
+    }
+
+    private NotificationRegistryIntegrationRequestActionPayload buildActionPayload(RegulatorNoticeEvent regulatorNoticeEvent, FileInfoDTO fileInfoDTO) {
+
+        if(regulatorNoticeEvent instanceof ReturnOfAllowancesRegulatorNoticeEvent roaEvent) {
+            return ReturnOfAllowancesNotificationRegistryIntegrationRequestActionPayload.builder()
+                    .notificationType(roaEvent.getType())
+                    .registryId(Integer.valueOf(roaEvent.getRegistryId()))
+                    .sentFile(fileInfoDTO)
+                    .returnOfAllowancesDate(roaEvent.getReturnDate())
+                    .payloadType(RequestActionPayloadType.RETURN_OF_ALLOWANCES_NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD)
+                    .build();
+        }
+
+        return NotificationRegistryIntegrationRequestActionPayload.builder()
+                .notificationType(regulatorNoticeEvent.getType())
+                .registryId(Integer.valueOf(regulatorNoticeEvent.getRegistryId()))
+                .sentFile(fileInfoDTO)
+                .payloadType(RequestActionPayloadType.NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD)
+                .build();
 
     }
 }

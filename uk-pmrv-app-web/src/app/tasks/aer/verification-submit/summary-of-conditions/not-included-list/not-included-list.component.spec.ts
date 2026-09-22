@@ -33,7 +33,7 @@ describe('NotIncludedListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
+      imports: [AerModule, RouterTestingModule.withRoutes([{ path: '**', component: NotIncludedListComponent }])],
       providers: [KeycloakService],
     }).compileComponents();
   });

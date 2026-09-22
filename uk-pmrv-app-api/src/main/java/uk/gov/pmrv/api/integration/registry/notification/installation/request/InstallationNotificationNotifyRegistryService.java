@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.netz.api.files.documents.service.FileDocumentService;
 import uk.gov.netz.integration.model.regulatornotice.RegulatorNoticeEvent;
+import uk.gov.netz.integration.model.regulatornotice.RegulatorNoticeEventType;
+import uk.gov.netz.integration.model.regulatornotice.ReturnOfAllowancesRegulatorNoticeEvent;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
@@ -34,7 +36,7 @@ public class InstallationNotificationNotifyRegistryService {
 
 
     @Transactional
-    public void notifyRegistry(NotificationRegistryEvent notificationRegistryEvent) {
+    public void notifyRegistry(InstallationNotificationRegistryEvent notificationRegistryEvent) {
 
         InstallationAccountDTO accountDTO = accountQueryService.getAccountDTOById(notificationRegistryEvent.getAccountId());
 
@@ -44,13 +46,7 @@ public class InstallationNotificationNotifyRegistryService {
 
         FileDTO fileDTO = fileDocumentService.getFileDTO(notificationRegistryEvent.getFileInfoDTO().getUuid());
 
-        RegulatorNoticeEvent regulatorNoticeEvent =
-                RegulatorNoticeEvent.builder()
-                        .registryId(String.valueOf(accountDTO.getRegistryId()))
-                        .fileName(notificationRegistryEvent.getFileInfoDTO().getName())
-                        .fileData(fileDTO.getFileContent())
-                        .type(notificationRegistryEvent.getRegistryNotificationType().getName())
-                        .build();
+        RegulatorNoticeEvent regulatorNoticeEvent = buildRegulatorNoticeEvent(notificationRegistryEvent, accountDTO, fileDTO);
 
         registryProducer.produce(regulatorNoticeEvent);
 
@@ -65,6 +61,11 @@ public class InstallationNotificationNotifyRegistryService {
 
     private boolean validateAccount(InstallationAccountDTO accountDTO) {
 
+        if (!(EmitterType.GHGE.equals(accountDTO.getEmitterType())
+                && EmissionTradingScheme.UK_ETS_INSTALLATIONS.equals(accountDTO.getEmissionTradingScheme()))) {
+            return false;
+        }
+
         if(accountDTO.getRegistryId()==null) {
             log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.INSTALLATION_SERVICE_KEY, accountDTO.getId(),
                     NotifyRegistryUtils.ACCOUNT_INSTALLATION_NOTIFICATION_INTEGRATION_POINT_KEY,
@@ -75,8 +76,33 @@ public class InstallationNotificationNotifyRegistryService {
             return false;
         }
 
-        return EmitterType.GHGE.equals(accountDTO.getEmitterType())
-                && EmissionTradingScheme.UK_ETS_INSTALLATIONS.equals(accountDTO.getEmissionTradingScheme());
+        return true;
+    }
+
+    private RegulatorNoticeEvent buildRegulatorNoticeEvent(InstallationNotificationRegistryEvent notificationRegistryEvent,
+                                                            InstallationAccountDTO accountDTO, FileDTO fileDTO) {
+        String registryId = String.valueOf(accountDTO.getRegistryId());
+        String fileName = notificationRegistryEvent.getFileInfoDTO().getName();
+        byte[] fileData = fileDTO.getFileContent();
+
+
+        if (notificationRegistryEvent instanceof ReturnOfAllowancesInstallationNotificationRegistryEvent roaEvent) {
+            return ReturnOfAllowancesRegulatorNoticeEvent.builder()
+                    .registryId(registryId)
+                    .fileName(fileName)
+                    .fileData(fileData)
+                    .type(roaEvent.getRegistryNotificationType().getName())
+                    .returnDate(roaEvent.getReturnOfAllowancesDate())
+                    .regulatorNoticeEventType(RegulatorNoticeEventType.RETURN_OF_ALLOWANCES)
+                    .build();
+        }
+
+        return RegulatorNoticeEvent.builder()
+                .registryId(registryId)
+                .fileName(fileName)
+                .fileData(fileData)
+                .type(notificationRegistryEvent.getRegistryNotificationType().getName())
+                .build();
     }
 
 }

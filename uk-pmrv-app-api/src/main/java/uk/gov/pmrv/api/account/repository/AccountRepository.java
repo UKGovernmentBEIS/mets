@@ -50,9 +50,15 @@ public interface AccountRepository extends JpaRepository<Account, Long>, Account
             + "left join acc.contacts contacts on KEY(contacts) = :contactType "
             + "where acc.verificationBodyId = :vbId "
             + "and acc.accountType = :accountType "
+            + "and (:searchTerm is null "
+            + "     or lower(acc.name) like :searchTerm escape '\\' "
+            + "     or lower(acc.emitterId) like :searchTerm escape '\\' "
+            + "     or exists (select 1 from AccountSearchAdditionalKeyword ak "
+            + "                where ak.accountId = acc.id "
+            + "                and lower(ak.value) like :searchTerm escape '\\')) "
             + "order by acc.name")
     Page<AccountContactVbInfoDTO> findAccountContactsByAccountTypeAndVbAndContactType(
-            Pageable pageable, AccountType accountType, Long vbId, AccountContactType contactType);
+            Pageable pageable, AccountType accountType, String searchTerm, Long vbId, AccountContactType contactType);
 
     @Transactional(readOnly = true)
     @Query(name = Account.NAMED_QUERY_FIND_ACCOUNT_CONTACTS_BY_ACCOUNT_IDS_AND_CONTACT_TYPE)

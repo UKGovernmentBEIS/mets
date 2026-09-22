@@ -16,7 +16,8 @@ import java.util.Map;
                 "'${registry.integration.set.operator.id.enabled:false}' == 'true' or " +
                "'${registry.integration.account.creation.enabled:false}' == 'true'  or " +
                "'${registry.integration.account.aviation.exempt.update.enabled:false}' == 'true'  or " +
-               "'${registry.integration.account.update.enabled:false}' == 'true'")
+               "'${registry.integration.account.update.enabled:false}' == 'true' or" +
+                "'${registry.integration.notification.enabled:false}' == 'true'")
 public class AviationRegistryIntegrationEmailProperties {
 
     @NotNull

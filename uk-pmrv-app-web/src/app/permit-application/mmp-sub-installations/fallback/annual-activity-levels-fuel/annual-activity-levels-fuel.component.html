@@ -37,20 +37,16 @@
           </button>
 
           <div
-            [ngClass]="{
-              'govuk-form-group--error':
-                fuelDataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject
-                | async,
-            }">
+            [class.govuk-form-group--error]="
+              fuelDataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async
+            ">
             <div
               *ngIf="
                 fuelDataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async
               "
-              [ngClass]="{
-                'govuk-error-message':
-                  fuelDataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject
-                  | async,
-              }">
+              [class.govuk-error-message]="
+                fuelDataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async
+              ">
               {{ fuelDataSource?.errors?.atLeastOneRequired }}
             </div>
 

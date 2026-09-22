@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.api.mireport.userdefined.MiReportUserDefinedEntity;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 
@@ -19,8 +18,7 @@ public interface PmrvMiReportUserDefinedRepository extends JpaRepository<MiRepor
             select distinct r from MiReportUserDefinedEntity r
             join MiReportUserDefinedAccountType a on a.miReportId = r.id
             left join r.categories c
-            where r.competentAuthority = :competentAuthority
-              and a.accountType = :accountType
+            where  a.accountType = :accountType
               and (:categoryId is null or c.id = :categoryId)
               and (:term is null
                    or lower(r.reportName) like :term escape '\\'
@@ -32,8 +30,7 @@ public interface PmrvMiReportUserDefinedRepository extends JpaRepository<MiRepor
             select count(distinct r) from MiReportUserDefinedEntity r
             join MiReportUserDefinedAccountType a on a.miReportId = r.id
             left join r.categories c
-            where r.competentAuthority = :competentAuthority
-              and a.accountType = :accountType
+            where  a.accountType = :accountType
               and (:categoryId is null or c.id = :categoryId)
               and (:term is null
                    or lower(r.reportName) like :term escape '\\'
@@ -41,8 +38,7 @@ public interface PmrvMiReportUserDefinedRepository extends JpaRepository<MiRepor
               and (:userId is null
                     or exists (select 1 from MiReportUserDefinedFavouriteEntity f
                            where f.miReportId = r.id and f.userId = :userId))""")
-    Page<MiReportUserDefinedEntity> findAllByCompetentAuthorityAndFilters(
-            @Param("competentAuthority") CompetentAuthorityEnum competentAuthority,
+    Page<MiReportUserDefinedEntity> findAllByAccountTypeAndFilters(
             @Param("accountType") AccountType accountType,
             @Param("categoryId") Long categoryId,
             @Param("term") String term,

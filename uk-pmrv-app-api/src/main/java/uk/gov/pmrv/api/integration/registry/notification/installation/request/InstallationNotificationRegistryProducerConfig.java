@@ -18,7 +18,7 @@ public class InstallationNotificationRegistryProducerConfig {
     private final InstallationProducerConfigProperties installationProducerConfigProperties;
 
     @Bean
-    KafkaTemplate<String, RegulatorNoticeEvent> noticeKafkaTemplate() {
+    KafkaTemplate<String, RegulatorNoticeEvent> installationNoticeKafkaTemplate() {
         return netzKafkaProducerFactory.createKafkaTemplate(installationProducerConfigProperties);
     }
 

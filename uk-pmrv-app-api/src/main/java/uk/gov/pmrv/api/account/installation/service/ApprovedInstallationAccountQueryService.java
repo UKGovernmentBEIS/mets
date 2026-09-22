@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
@@ -14,7 +15,6 @@ import uk.gov.pmrv.api.account.installation.repository.InstallationAccountReposi
 import uk.gov.pmrv.api.account.installation.transform.InstallationAccountMapper;
 import uk.gov.pmrv.api.account.service.ApprovedAccountTypeQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,9 +38,10 @@ public class ApprovedInstallationAccountQueryService implements ApprovedAccountT
 
     @Override
     public Page<AccountContactInfoDTO> getApprovedAccountsAndCaSiteContactsByCa(CompetentAuthorityEnum competentAuthority,
-                                                                                Integer page, Integer pageSize) {
+                                                                                String searchTerm, Integer page, Integer pageSize) {
         return installationAccountRepository.findAccountContactsByCaAndContactTypeAndStatusNotIn(
             PageRequest.of(page, pageSize),
+            searchTerm,
             competentAuthority,
             AccountContactType.CA_SITE,
             getStatusesConsideredNotApproved()

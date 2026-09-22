@@ -3,6 +3,7 @@ package uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.authorization.core.domain.dto.UserRoleTypeDTO;
 import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.authorization.rules.services.resource.RequestTaskAuthorizationResourceService;
@@ -13,7 +14,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
 
@@ -58,7 +59,14 @@ public class RequestTaskAssignmentValidationService {
     }
 
     public boolean hasUserPermissionsToBeAssignedToTask(RequestTask requestTask, String userId) {
-        String userRoleType = userRoleTypeService.getUserRoleTypeByUserId(userId).getRoleType();
+        // a deleted user has no role type any more and can no longer be assigned to a task
+        Optional<UserRoleTypeDTO> userRoleTypeOpt = userRoleTypeService.getUserRoleTypeByUserIdOpt(userId);
+        if (userRoleTypeOpt.isEmpty()) {
+            log.warn("User '{}' no longer exists and cannot be assigned to task '{}'", () -> userId, requestTask::getId);
+
+            return false;
+        }
+        String userRoleType = userRoleTypeOpt.get().getRoleType();
 
         ResourceCriteria resourceCriteria =
                 ResourceCriteria.builder()

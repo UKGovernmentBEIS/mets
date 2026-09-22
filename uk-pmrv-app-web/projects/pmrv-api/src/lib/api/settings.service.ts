@@ -16,7 +16,9 @@ import { Observable } from 'rxjs';
 
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
+import { FeeHistoryResponseDTO } from '../model/feeHistoryResponseDTO';
 import { FeeRowDTO } from '../model/feeRowDTO';
+import { FeeUpdateDTO } from '../model/feeUpdateDTO';
 import { BASE_PATH } from '../variables';
 
 @Injectable({
@@ -79,6 +81,96 @@ export class SettingsService {
       throw Error('key may not be null if value is not object or array');
     }
     return httpParams;
+  }
+
+  /**
+   * Cancels the scheduled fee change for a given fee method and fee type
+   * @param accountType The account type
+   * @param id The fee method id
+   * @param feeType The fee type
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public cancelScheduledFeeUpdate(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    id: number,
+    feeType: 'FIXED' | 'WASTE' | 'HSE' | 'CAT_A' | 'CAT_B' | 'CAT_C' | 'NRW_CAT_FA_1_TO_2' | 'NRW_CAT_FA_3_PLUS',
+  ): Observable<any>;
+  public cancelScheduledFeeUpdate(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    id: number,
+    feeType: 'FIXED' | 'WASTE' | 'HSE' | 'CAT_A' | 'CAT_B' | 'CAT_C' | 'NRW_CAT_FA_1_TO_2' | 'NRW_CAT_FA_3_PLUS',
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<any>>;
+  public cancelScheduledFeeUpdate(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    id: number,
+    feeType: 'FIXED' | 'WASTE' | 'HSE' | 'CAT_A' | 'CAT_B' | 'CAT_C' | 'NRW_CAT_FA_1_TO_2' | 'NRW_CAT_FA_3_PLUS',
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<any>>;
+  public cancelScheduledFeeUpdate(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    id: number,
+    feeType: 'FIXED' | 'WASTE' | 'HSE' | 'CAT_A' | 'CAT_B' | 'CAT_C' | 'NRW_CAT_FA_1_TO_2' | 'NRW_CAT_FA_3_PLUS',
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any>;
+  public cancelScheduledFeeUpdate(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    id: number,
+    feeType: 'FIXED' | 'WASTE' | 'HSE' | 'CAT_A' | 'CAT_B' | 'CAT_C' | 'NRW_CAT_FA_1_TO_2' | 'NRW_CAT_FA_3_PLUS',
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (accountType === null || accountType === undefined) {
+      throw new Error('Required parameter accountType was null or undefined when calling cancelScheduledFeeUpdate.');
+    }
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling cancelScheduledFeeUpdate.');
+    }
+    if (feeType === null || feeType === undefined) {
+      throw new Error('Required parameter feeType was null or undefined when calling cancelScheduledFeeUpdate.');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.delete<any>(
+      `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/settings/fees/${encodeURIComponent(String(id))}/${encodeURIComponent(String(feeType))}/scheduled-change`,
+      {
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
   }
 
   /**
@@ -152,6 +244,105 @@ export class SettingsService {
   }
 
   /**
+   * Retrieves the paginated fee change history for the current regulator\&#39;s CA
+   * @param accountType The account type
+   * @param page The page number starting from zero
+   * @param size The page size
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getFeeHistory(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    page: number,
+    size: number,
+  ): Observable<FeeHistoryResponseDTO>;
+  public getFeeHistory(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    page: number,
+    size: number,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<FeeHistoryResponseDTO>>;
+  public getFeeHistory(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    page: number,
+    size: number,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<FeeHistoryResponseDTO>>;
+  public getFeeHistory(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    page: number,
+    size: number,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<FeeHistoryResponseDTO>;
+  public getFeeHistory(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    page: number,
+    size: number,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (accountType === null || accountType === undefined) {
+      throw new Error('Required parameter accountType was null or undefined when calling getFeeHistory.');
+    }
+    if (page === null || page === undefined) {
+      throw new Error('Required parameter page was null or undefined when calling getFeeHistory.');
+    }
+    if (size === null || size === undefined) {
+      throw new Error('Required parameter size was null or undefined when calling getFeeHistory.');
+    }
+
+    let queryParameters = new HttpParams({ encoder: this.encoder });
+    if (page !== undefined && page !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>page, 'page');
+    }
+    if (size !== undefined && size !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>size, 'size');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.get<FeeHistoryResponseDTO>(
+      `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/settings/fees/history`,
+      {
+        params: queryParameters,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
    * Retrieves the changeable fee rows on the Settings Fees page for the current regulator\&#39;s CA
    * @param accountType The account type
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -211,6 +402,113 @@ export class SettingsService {
 
     return this.httpClient.get<Array<FeeRowDTO>>(
       `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/settings/fees`,
+      {
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Updates the fee amount for a given fee method and fee type
+   * @param accountType The account type
+   * @param id The fee method id
+   * @param feeType The fee type
+   * @param feeUpdateDTO
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public updateFee(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    id: number,
+    feeType: 'FIXED' | 'WASTE' | 'HSE' | 'CAT_A' | 'CAT_B' | 'CAT_C' | 'NRW_CAT_FA_1_TO_2' | 'NRW_CAT_FA_3_PLUS',
+    feeUpdateDTO: FeeUpdateDTO,
+  ): Observable<any>;
+  public updateFee(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    id: number,
+    feeType: 'FIXED' | 'WASTE' | 'HSE' | 'CAT_A' | 'CAT_B' | 'CAT_C' | 'NRW_CAT_FA_1_TO_2' | 'NRW_CAT_FA_3_PLUS',
+    feeUpdateDTO: FeeUpdateDTO,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<any>>;
+  public updateFee(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    id: number,
+    feeType: 'FIXED' | 'WASTE' | 'HSE' | 'CAT_A' | 'CAT_B' | 'CAT_C' | 'NRW_CAT_FA_1_TO_2' | 'NRW_CAT_FA_3_PLUS',
+    feeUpdateDTO: FeeUpdateDTO,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<any>>;
+  public updateFee(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    id: number,
+    feeType: 'FIXED' | 'WASTE' | 'HSE' | 'CAT_A' | 'CAT_B' | 'CAT_C' | 'NRW_CAT_FA_1_TO_2' | 'NRW_CAT_FA_3_PLUS',
+    feeUpdateDTO: FeeUpdateDTO,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any>;
+  public updateFee(
+    accountType: 'INSTALLATION' | 'AVIATION',
+    id: number,
+    feeType: 'FIXED' | 'WASTE' | 'HSE' | 'CAT_A' | 'CAT_B' | 'CAT_C' | 'NRW_CAT_FA_1_TO_2' | 'NRW_CAT_FA_3_PLUS',
+    feeUpdateDTO: FeeUpdateDTO,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (accountType === null || accountType === undefined) {
+      throw new Error('Required parameter accountType was null or undefined when calling updateFee.');
+    }
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling updateFee.');
+    }
+    if (feeType === null || feeType === undefined) {
+      throw new Error('Required parameter feeType was null or undefined when calling updateFee.');
+    }
+    if (feeUpdateDTO === null || feeUpdateDTO === undefined) {
+      throw new Error('Required parameter feeUpdateDTO was null or undefined when calling updateFee.');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      headers = headers.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.put<any>(
+      `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/settings/fees/${encodeURIComponent(String(id))}/${encodeURIComponent(String(feeType))}`,
+      feeUpdateDTO,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

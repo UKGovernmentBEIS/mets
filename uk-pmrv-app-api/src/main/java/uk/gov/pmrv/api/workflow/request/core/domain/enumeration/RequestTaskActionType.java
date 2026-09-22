@@ -547,8 +547,7 @@ public enum RequestTaskActionType {
                 EMP_ISSUANCE_UKETS_REQUEST_PEER_REVIEW,
                 EMP_VARIATION_UKETS_REQUEST_PEER_REVIEW,
                 EMP_ISSUANCE_CORSIA_REQUEST_PEER_REVIEW,
-                EMP_VARIATION_CORSIA_REQUEST_PEER_REVIEW,
-                HSE_TI_REQUEST_PEER_REVIEW
+                EMP_VARIATION_CORSIA_REQUEST_PEER_REVIEW
         );
     }
 

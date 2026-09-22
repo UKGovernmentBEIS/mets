@@ -23,7 +23,8 @@ public enum MetsErrorCode implements NetzErrorCode {
     AVIATION_ACCOUNT_LOCATION_NOT_EXIST("ACCOUNT1015", HttpStatus.NOT_FOUND, "Aviation Account location doesn't exist"),
     INVALID_ACCOUNT_TYPE("ACCOUNT1016", HttpStatus.BAD_REQUEST, "Invalid account type"),
 
-    AVIATION_COMMENCEMENT_DATE_NOT_BEFORE_2021_NOT_AFTER_CURRENT_YEAR("ACCOUNT1017", HttpStatus.BAD_REQUEST, "Commencement date must be between 2021 and the current year"),
+    AVIATION_FIRST_YEAR_OF_REPORTING_OBLIGATION_OUT_OF_SCOPE("ACCOUNT1017", HttpStatus.BAD_REQUEST, "The year must be the same as or after 2021 and it cannot be later than the current year"),
+    AVIATION_FIRST_YEAR_WITHIN_SCOPE_OF_APPLICABILITY_OUT_OF_SCOPE("ACCOUNT1018", HttpStatus.BAD_REQUEST, "The year must be the same as or after 2019 and it cannot be later than the current year"),
 
     /** Codes for notification errors. */
     INVALID_DOCUMENT_TEMPLATE_FOR_REQUEST_TASK("NOTIF1005", HttpStatus.BAD_REQUEST,"Document template does not match request task type"),

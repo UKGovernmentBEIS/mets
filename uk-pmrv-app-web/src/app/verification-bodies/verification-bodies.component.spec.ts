@@ -103,7 +103,9 @@ describe('VerificationBodiesComponent', () => {
 
       mockVerificationBodies.verificationBodies.map((verificationBody, index) => {
         expect(page.rows[index].querySelectorAll('td a')[0].textContent.trim()).toEqual(verificationBody.name);
-        expect(page.rows[index].querySelectorAll('td a')[1].textContent.trim()).toEqual('Delete');
+        expect(page.rows[index].querySelectorAll('td a')[1].textContent.trim()).toEqual(
+          `Delete ${verificationBody.name}`,
+        );
       });
 
       expect(page.verificationBodyValues).toEqual(['DISABLED', 'ACTIVE']);

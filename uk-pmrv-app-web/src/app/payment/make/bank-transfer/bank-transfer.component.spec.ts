@@ -3,11 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { Observable } from 'rxjs';
-
 import { SharedModule } from '@shared/shared.module';
-
-import { RequestInfoDTO, RequestTaskDTO } from 'pmrv-api';
 
 import { BasePage } from '../../../../testing';
 import { ReturnLinkComponent } from '../../shared/components/return-link/return-link.component';
@@ -28,17 +24,11 @@ describe('BankTransferComponent', () => {
     standalone: false,
     template: `
       <div class="help">
-        <p class="competentAuthority">{{ competentAuthority$ | async }}</p>
-        <p class="requestType">{{ requestType$ | async }}</p>
-        <p class="requestTaskType">{{ requestTaskType$ | async }}</p>
         <p class="default">{{ default }}</p>
       </div>
     `,
   })
   class MockPaymentHelpComponent {
-    @Input() competentAuthority$: Observable<RequestInfoDTO['competentAuthority']>;
-    @Input() requestType$: Observable<RequestInfoDTO['type']>;
-    @Input() requestTaskType$: Observable<RequestTaskDTO['type']>;
     default: string;
     @Input() set defaultHelp(defaultHelp: string) {
       this.default = defaultHelp;
@@ -124,13 +114,13 @@ describe('BankTransferComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should hide amount value', () => {
+    it('should display amount value', () => {
       expect(page.summaryListValues).toEqual([
         ['Sort code', 'sortCode'],
         ['Account number', 'accountNumber'],
         ['Account name', 'accountName'],
         ['Your payment reference', 'AEM-323-1'],
-        ['Amount to pay', ''],
+        ['Amount to pay', '£2,500.20'],
 
         ['Bank identifier code (BIC)', 'swiftCode'],
         ['Account number (IBAN)', 'iban'],

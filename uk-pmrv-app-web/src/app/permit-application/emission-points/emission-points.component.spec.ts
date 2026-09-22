@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -61,8 +60,9 @@ describe('EmissionPointsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [EmissionPointsComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule, EmissionPointsTableComponent],
+      imports: [SharedModule, SharedPermitModule, EmissionPointsTableComponent],
       providers: [
+        provideRouter([{ path: '**', component: EmissionPointsComponent }]),
         { provide: TasksService, useValue: tasksService },
         {
           provide: PermitApplicationStore,

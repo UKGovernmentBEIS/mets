@@ -6,6 +6,9 @@
     heading="Cell and anode types"
     submitText="Confirm and complete"
     [hideSubmit]="(store.isEditable$ | async) === false">
+    <p class="govuk-body">
+      Enter the name of the anode technology and electrolysis cell type used, like Søderberg or prebake.
+    </p>
     <div formArrayName="cellAndAnodeTypes">
       <fieldset
         *ngFor="let cellAnodeType of cellAndAnodeTypesFormArray.controls; index as i"

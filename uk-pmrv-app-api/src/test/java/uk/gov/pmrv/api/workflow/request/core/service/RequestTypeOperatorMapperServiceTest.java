@@ -39,10 +39,12 @@ public class RequestTypeOperatorMapperServiceTest {
         Set<RequestType> expectedRequestTypes = Arrays.stream(RequestType.values())
                 .filter(type->( AccountType.INSTALLATION.equals(type.getAccountType()) || type.getAccountType() == null)
                         && type.getRoleTypes().contains(RoleTypeConstants.OPERATOR))
+                .filter(RequestType::isDisplayedInWorkflowFiltering)
                 .collect(Collectors.toSet());
 
         assertThat(requestTypes).isEqualTo(expectedRequestTypes);
     }
+
 
 
     @Test

@@ -2,10 +2,13 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.returnofallowances.se
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.InstallationNotificationRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -22,6 +25,7 @@ import java.util.Map;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,6 +40,9 @@ class ReturnOfAllowancesSubmittedServiceTest {
 
     @Mock
     private RequestActionUserInfoResolver requestActionUserInfoResolver;
+
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @InjectMocks
     private ReturnOfAllowancesSubmittedService service;
@@ -69,11 +76,14 @@ class ReturnOfAllowancesSubmittedServiceTest {
         when(requestActionUserInfoResolver
             .getUsersInfo(decisionNotification.getOperators(), decisionNotification.getSignatory(), request))
             .thenReturn(userInfo);
+        ArgumentCaptor<InstallationNotificationRegistryEvent> eventCaptor =
+                ArgumentCaptor.forClass(InstallationNotificationRegistryEvent.class);
 
         service.submit(requestId);
 
         verify(requestService).addActionToRequest(eq(request), eq(expectedPayload),
             eq(RequestActionType.RETURN_OF_ALLOWANCES_APPLICATION_SUBMITTED), any());
         verify(officialNoticeService).sendOfficialNotice(request, officialNotice, decisionNotification);
+        verify(applicationEventPublisher, times(1)).publishEvent(eventCaptor.capture());
     }
 }

@@ -22,6 +22,8 @@ import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermission
 import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel.NONE;
 import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel.VIEW_ONLY;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_MI_REPORTS_MANAGE_CUSTOM_REPORTS_EXECUTE_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_SETTINGS_PAGE_FEES_EXECUTE_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_SETTINGS_PAGE_FEES_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AER_APPLICATION_MARK_NOT_REQUIRED_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AER_APPLICATION_REVIEW_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_AER_APPLICATION_REVIEW_VIEW_TASK;
@@ -159,6 +161,7 @@ import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermis
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_AER;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.MARK_NOT_REQUIRED_ALR;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.MI_REPORTS_MANAGE_CUSTOM;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SETTINGS_PAGE_FEES;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_ALR;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_AER_ANNUAL_OFFSETTING;
@@ -918,6 +921,17 @@ public class PmrvRegulatorPermissionsAdapter extends AbstarctRegulatorPermission
         permissionGroupLevelsConfig.put(
                 new RegulatorPermissionGroupLevel(MI_REPORTS_MANAGE_CUSTOM, EXECUTE),
                 List.of(PERM_MI_REPORTS_MANAGE_CUSTOM_REPORTS_EXECUTE_TASK));
+
+        // SETTINGS PAGE FEES
+        permissionGroupLevelsConfig.put(
+                new RegulatorPermissionGroupLevel(SETTINGS_PAGE_FEES, NONE),
+                List.of());
+        permissionGroupLevelsConfig.put(
+                new RegulatorPermissionGroupLevel(SETTINGS_PAGE_FEES, VIEW_ONLY),
+                List.of(PERM_SETTINGS_PAGE_FEES_VIEW_TASK));
+        permissionGroupLevelsConfig.put(
+                new RegulatorPermissionGroupLevel(SETTINGS_PAGE_FEES, EXECUTE),
+                List.of(PERM_SETTINGS_PAGE_FEES_VIEW_TASK, PERM_SETTINGS_PAGE_FEES_EXECUTE_TASK));
 
     }
 

@@ -9,14 +9,20 @@
           <span class="govuk-heading-s">{{ row[column.field] | accountDetailsHistoryCategory }}</span>
         }
         @case ('previousValue') {
-          @if (row['category'] === 'FIRST_YEAR_OF_REPORTING_OBLIGATION') {
+          @if (
+            row['category'] === 'FIRST_YEAR_OF_REPORTING_OBLIGATION' ||
+            row['category'] === 'FIRST_YEAR_WITHIN_SCOPE_OF_APPLICABILITY'
+          ) {
             {{ row[column.field] | govukDate }}
           } @else {
             {{ row[column.field] }}
           }
         }
         @case ('newValue') {
-          @if (row['category'] === 'FIRST_YEAR_OF_REPORTING_OBLIGATION') {
+          @if (
+            row['category'] === 'FIRST_YEAR_OF_REPORTING_OBLIGATION' ||
+            row['category'] === 'FIRST_YEAR_WITHIN_SCOPE_OF_APPLICABILITY'
+          ) {
             {{ row[column.field] | govukDate }}
           } @else {
             {{ row[column.field] }}

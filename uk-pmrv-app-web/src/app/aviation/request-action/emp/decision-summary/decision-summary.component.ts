@@ -5,15 +5,18 @@ import { combineLatest, map, Observable } from 'rxjs';
 
 import { empQuery } from '@aviation/request-action/emp/emp.selectors';
 import { requestActionQuery, RequestActionStore } from '@aviation/request-action/store';
-import { variationRegulatorLedaApprovedRequestActionTypes } from '@aviation/request-action/util';
-import { OverallDecisionSummaryTemplateComponent } from '@aviation/shared/components/emp/overall-decision-summary-template/overall-decision-summary-template.component';
+import {
+  empRejectedOrWithdrawnDecisionSummaryRequestActionTypes,
+  variationRegulatorLedaApprovedRequestActionTypes,
+} from '@aviation/request-action/util';
+import { EmpDetermination } from '@aviation/request-task/emp/shared/util/emp.util';
+import { EmpReviewDeterminationTypePipe } from '@aviation/shared/pipes/review-determination-type.pipe';
 import { BackLinkService } from '@shared/back-link/back-link.service';
 import { SharedModule } from '@shared/shared.module';
 
 import {
   EmpAcceptedVariationDecisionDetails,
   EmpIssuanceCorsiaApplicationApprovedRequestActionPayload,
-  EmpIssuanceDetermination,
   EmpIssuanceUkEtsApplicationApprovedRequestActionPayload,
   EmpVariationDetermination,
   EmpVariationReviewDecision,
@@ -25,20 +28,20 @@ interface ViewModel {
   requestActionType: RequestActionDTO['type'];
   pageHeader: string;
   creationDate: string;
-  determination: EmpIssuanceDetermination;
+  determination: EmpDetermination;
   usersInfo:
     | EmpIssuanceUkEtsApplicationApprovedRequestActionPayload['usersInfo']
     | EmpIssuanceCorsiaApplicationApprovedRequestActionPayload['usersInfo'];
   empDocument: FileInfoDTO;
   officialNotice: FileInfoDTO;
   downloadUrl: string;
-  showApprovedSummary: boolean;
+  showEmpApplicationSummary: boolean;
   variationScheduleItems: string[];
 }
 
 @Component({
   selector: 'app-decision-summary',
-  imports: [SharedModule, RouterModule, OverallDecisionSummaryTemplateComponent],
+  imports: [SharedModule, RouterModule, EmpReviewDeterminationTypePipe],
   templateUrl: './decision-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -58,16 +61,22 @@ export class DecisionSummaryComponent implements OnInit {
             ? {
                 type: 'APPROVED',
               }
-            : payload.determination,
-          usersInfo: payload.usersInfo,
-          empDocument: payload.empDocument,
-          officialNotice: payload.officialNotice,
+            : payload?.determination,
+          usersInfo: payload?.usersInfo,
+          empDocument: payload?.empDocument,
+          officialNotice: payload?.officialNotice,
           downloadUrl: this.store.empDelegate.baseFileDocumentDownloadUrl + '/',
-          showApprovedSummary: variationRegulatorLedaApprovedRequestActionTypes.includes(requestActionType)
+          // Older Withdrawn/Rejected decisions predate the payload snapshot: their request action type/decision
+          // status is unreliable (aviation never emitted these timeline statuses, installation just recorded
+          // "completed"). Only offer the "Emissions plan application" link when the snapshot is actually present,
+          // otherwise the linked page has nothing to render.
+          showEmpApplicationSummary: variationRegulatorLedaApprovedRequestActionTypes.includes(requestActionType)
             ? true
-            : payload.determination.type === 'APPROVED',
+            : payload?.determination?.type === 'APPROVED' ||
+              (empRejectedOrWithdrawnDecisionSummaryRequestActionTypes.includes(requestActionType) &&
+                !!payload?.emissionsMonitoringPlan),
           variationScheduleItems: this.getVariationDecisionDetails(
-            payload.reviewGroupDecisions,
+            payload?.reviewGroupDecisions,
             payload?.empVariationDetailsReviewDecision,
           ),
         }) as ViewModel,
@@ -76,12 +85,12 @@ export class DecisionSummaryComponent implements OnInit {
 
   signatory$ = this.store.pipe(
     empQuery.selectRequestActionPayload,
-    map((payload) => payload.decisionNotification.signatory),
+    map((payload) => payload?.decisionNotification?.signatory),
   );
   operators$ = this.store.pipe(
     empQuery.selectRequestActionPayload,
     map((payload) =>
-      Object.keys(payload.usersInfo).filter((userId) => userId !== payload.decisionNotification.signatory),
+      Object.keys(payload?.usersInfo ?? {}).filter((userId) => userId !== payload?.decisionNotification?.signatory),
     ),
   );
 
@@ -96,7 +105,7 @@ export class DecisionSummaryComponent implements OnInit {
 
   getDeterminationMap(
     requestActionType: RequestActionDTO['type'],
-    determinationType: EmpVariationDetermination['type'],
+    determinationType: EmpVariationDetermination['type'] | undefined,
   ): string {
     if (variationRegulatorLedaApprovedRequestActionTypes.includes(requestActionType)) {
       return 'Approved';
@@ -111,11 +120,23 @@ export class DecisionSummaryComponent implements OnInit {
 
       case 'DEEMED_WITHDRAWN':
         return 'Deemed withdrawn';
+
+      default:
+        // Older Withdrawn/Rejected decisions may carry no determination on the payload - fall back to
+        // the request action type so the heading still resolves.
+        if (requestActionType?.endsWith('_REJECTED')) {
+          return 'Rejected';
+        }
+        if (requestActionType?.endsWith('_DEEMED_WITHDRAWN')) {
+          return 'Deemed withdrawn';
+        }
+
+        return '';
     }
   }
 
   getVariationDecisionDetails(
-    reviewGroupDecisions: { [key: string]: EmpVariationReviewDecision | EmpAcceptedVariationDecisionDetails },
+    reviewGroupDecisions?: { [key: string]: EmpVariationReviewDecision | EmpAcceptedVariationDecisionDetails },
     variationReviewDecision?: EmpVariationReviewDecision,
   ): string[] {
     const variationScheduleItems = reviewGroupDecisions

@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.integration.registry.notification.common.RegistryNotificationType;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.InstallationNotificationRegistryEvent;
 import uk.gov.pmrv.api.integration.registry.withholdflag.installation.request.WithholdFlagRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -61,7 +63,7 @@ public class WithholdingOfAllowancesWithdrawnService {
         LocalDateTime now = LocalDateTime.now();
         request.setSubmissionDate(now);
 
-        // Publish event to registry
+        // Publish withholding event to registry
         WithholdFlagRegistryEvent event = WithholdFlagRegistryEvent.builder()
                 .requestId(request.getId())
                 .withholdFlag(false)
@@ -76,5 +78,15 @@ public class WithholdingOfAllowancesWithdrawnService {
             officialNotice,
             decisionNotification
         );
+
+        //publish withdraw withholding event
+        InstallationNotificationRegistryEvent installationNotificationRegistryEvent =
+                InstallationNotificationRegistryEvent.builder()
+                        .registryNotificationType(RegistryNotificationType.WITHHOLDING_OF_ALLOWANCES_WITHDRAWN_NOTIFICATION)
+                        .accountId(request.getAccountId())
+                        .requestId(request.getId())
+                        .fileInfoDTO(officialNotice)
+                        .build();
+        eventPublisher.publishEvent(installationNotificationRegistryEvent);
     }
 }

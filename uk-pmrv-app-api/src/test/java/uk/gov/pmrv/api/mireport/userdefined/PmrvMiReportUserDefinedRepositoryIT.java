@@ -45,28 +45,14 @@ class PmrvMiReportUserDefinedRepositoryIT extends AbstractContainerBaseTest {
     private final Sort sort = Sort.by(Sort.Direction.DESC, "lastUpdatedOn");
 
     @Test
-    void findAllByCompetentAuthorityAndFilters_filtersByCompetentAuthority() {
-        Long inScope = persistReport("Emissions report", "desc", CA, AccountType.INSTALLATION, NOW);
-        persistReport("Other CA report", "desc", OTHER_CA, AccountType.INSTALLATION, NOW);
-        flushAndClear();
-
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
-
-        assertThat(result.getTotalElements()).isEqualTo(1);
-        assertThat(result.getContent()).extracting(MiReportUserDefinedEntity::getId)
-                .containsExactly(inScope);
-    }
-
-    @Test
     void findAllByCompetentAuthorityAndFilters_filtersByAccountType() {
         Long installation =
                 persistReport("Installation report", "desc", CA, AccountType.INSTALLATION, NOW);
         persistReport("Aviation report", "desc", CA, AccountType.AVIATION, NOW);
         flushAndClear();
 
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
+        Page<MiReportUserDefinedEntity> result = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
 
         assertThat(result.getContent()).extracting(MiReportUserDefinedEntity::getId)
                 .containsExactly(installation);
@@ -77,8 +63,8 @@ class PmrvMiReportUserDefinedRepositoryIT extends AbstractContainerBaseTest {
         Long report = persistReportWithoutAccountType("No account type", "desc", CA, NOW, Set.of());
         flushAndClear();
 
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
+        Page<MiReportUserDefinedEntity> result = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
 
         assertThat(result.getContent()).extracting(MiReportUserDefinedEntity::getId)
                 .doesNotContain(report);
@@ -94,8 +80,8 @@ class PmrvMiReportUserDefinedRepositoryIT extends AbstractContainerBaseTest {
                 persistReport("Without category", "desc", CA, AccountType.INSTALLATION, NOW);
         flushAndClear();
 
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
+        Page<MiReportUserDefinedEntity> result = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
 
         assertThat(result.getContent()).extracting(MiReportUserDefinedEntity::getId)
                 .containsExactlyInAnyOrder(withCategory, withoutCategory);
@@ -111,24 +97,23 @@ class PmrvMiReportUserDefinedRepositoryIT extends AbstractContainerBaseTest {
                 Set.of(compliance));
         flushAndClear();
 
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, financial.getId(), null, null,
-                PageRequest.of(0, 10, sort));
+        Page<MiReportUserDefinedEntity> result = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, financial.getId(), null, null, PageRequest.of(0, 10, sort));
 
         assertThat(result.getContent()).extracting(MiReportUserDefinedEntity::getId)
                 .containsExactly(financialReport);
     }
 
     @Test
-    void findAllByCompetentAuthorityAndFilters_reportWithMultipleCategories_notDuplicated() {
+    void findAllByAccountTypeAndFilters_reportWithMultipleCategories_notDuplicated() {
         MiReportUserDefinedCategoryEntity financial = persistCategory("Financial");
         MiReportUserDefinedCategoryEntity compliance = persistCategory("Compliance");
         Long report = persistReport("Multi category", "desc", CA, AccountType.INSTALLATION, NOW,
                 Set.of(financial, compliance));
         flushAndClear();
 
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
+        Page<MiReportUserDefinedEntity> result = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
 
         assertThat(result.getTotalElements()).isEqualTo(1);
         assertThat(result.getContent()).extracting(MiReportUserDefinedEntity::getId)
@@ -136,74 +121,74 @@ class PmrvMiReportUserDefinedRepositoryIT extends AbstractContainerBaseTest {
     }
 
     @Test
-    void findAllByCompetentAuthorityAndFilters_nullTerm_ignoresTermFilter() {
+    void findAllByAccountTypeAndFilters_nullTerm_ignoresTermFilter() {
         Long a = persistReport("Alpha", "desc", CA, AccountType.INSTALLATION, NOW);
         Long b = persistReport("Beta", "desc", CA, AccountType.INSTALLATION, NOW);
         flushAndClear();
 
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
+        Page<MiReportUserDefinedEntity> result = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
 
         assertThat(result.getContent()).extracting(MiReportUserDefinedEntity::getId)
                 .containsExactlyInAnyOrder(a, b);
     }
 
     @Test
-    void findAllByCompetentAuthorityAndFilters_termMatchesReportNameCaseInsensitive() {
+    void findAllByAccountTypeAndFilters_termMatchesReportNameCaseInsensitive() {
         Long match =
                 persistReport("Emissions Summary", "some description", CA, AccountType.INSTALLATION, NOW);
         persistReport("Compliance list", "some description", CA, AccountType.INSTALLATION, NOW);
         flushAndClear();
 
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, "%emissions%", null, PageRequest.of(0, 10, sort));
+        Page<MiReportUserDefinedEntity> result = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, "%emissions%", null, PageRequest.of(0, 10, sort));
 
         assertThat(result.getContent()).extracting(MiReportUserDefinedEntity::getId)
                 .containsExactly(match);
     }
 
     @Test
-    void findAllByCompetentAuthorityAndFilters_termMatchesDescription() {
+    void findAllByAccountTypeAndFilters_termMatchesDescription() {
         Long match = persistReport("Report A", "Contains keyword targeted", CA,
                 AccountType.INSTALLATION, NOW);
         persistReport("Report B", "nothing relevant", CA, AccountType.INSTALLATION, NOW);
         flushAndClear();
 
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, "%targeted%", null, PageRequest.of(0, 10, sort));
+        Page<MiReportUserDefinedEntity> result = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, "%targeted%", null, PageRequest.of(0, 10, sort));
 
         assertThat(result.getContent()).extracting(MiReportUserDefinedEntity::getId)
                 .containsExactly(match);
     }
 
     @Test
-    void findAllByCompetentAuthorityAndFilters_termMatchesNothing_returnsEmpty() {
+    void findAllByAccountTypeAndFilters_termMatchesNothing_returnsEmpty() {
         persistReport("Report A", "desc", CA, AccountType.INSTALLATION, NOW);
         flushAndClear();
 
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, "%nomatch%", null, PageRequest.of(0, 10, sort));
+        Page<MiReportUserDefinedEntity> result = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, "%nomatch%", null, PageRequest.of(0, 10, sort));
 
         assertThat(result.getTotalElements()).isZero();
     }
 
     @Test
-    void findAllByCompetentAuthorityAndFilters_nullUserId_ignoresFavourites() {
+    void findAllByAccountTypeAndFilters_nullUserId_ignoresFavourites() {
         Long favourited = persistReport("Favourited", "desc", CA, AccountType.INSTALLATION, NOW);
         Long notFavourited =
                 persistReport("Not favourited", "desc", CA, AccountType.INSTALLATION, NOW);
         persistFavourite(favourited, USER_ID);
         flushAndClear();
 
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
+        Page<MiReportUserDefinedEntity> result = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
 
         assertThat(result.getContent()).extracting(MiReportUserDefinedEntity::getId)
                 .containsExactlyInAnyOrder(favourited, notFavourited);
     }
 
     @Test
-    void findAllByCompetentAuthorityAndFilters_withUserId_returnsOnlyUsersFavourites() {
+    void findAllByAccountTypeAndFilters_withUserId_returnsOnlyUsersFavourites() {
         Long myFavourite = persistReport("Mine", "desc", CA, AccountType.INSTALLATION, NOW);
         Long othersFavourite = persistReport("Theirs", "desc", CA, AccountType.INSTALLATION, NOW);
         persistReport("Nobody's", "desc", CA, AccountType.INSTALLATION, NOW);
@@ -211,15 +196,15 @@ class PmrvMiReportUserDefinedRepositoryIT extends AbstractContainerBaseTest {
         persistFavourite(othersFavourite, OTHER_USER_ID);
         flushAndClear();
 
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, null, USER_ID, PageRequest.of(0, 10, sort));
+        Page<MiReportUserDefinedEntity> result = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, null, USER_ID, PageRequest.of(0, 10, sort));
 
         assertThat(result.getContent()).extracting(MiReportUserDefinedEntity::getId)
                 .containsExactly(myFavourite);
     }
 
     @Test
-    void findAllByCompetentAuthorityAndFilters_pagingAndSortingByLastUpdatedOnDesc() {
+    void findAllByAccountTypeAndFilters_pagingAndSortingByLastUpdatedOnDesc() {
         Long oldest = persistReport("Oldest", "desc", CA, AccountType.INSTALLATION,
                 NOW.minusDays(2));
         Long middle = persistReport("Middle", "desc", CA, AccountType.INSTALLATION,
@@ -227,57 +212,24 @@ class PmrvMiReportUserDefinedRepositoryIT extends AbstractContainerBaseTest {
         Long newest = persistReport("Newest", "desc", CA, AccountType.INSTALLATION, NOW);
         flushAndClear();
 
-        Page<MiReportUserDefinedEntity> page0 = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 2, sort));
+        Page<MiReportUserDefinedEntity> page0 = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 2, sort));
         assertThat(page0.getTotalElements()).isEqualTo(3);
         assertThat(page0.getTotalPages()).isEqualTo(2);
         assertThat(page0.getContent()).extracting(MiReportUserDefinedEntity::getId)
                 .containsExactly(newest, middle);
 
-        Page<MiReportUserDefinedEntity> page1 = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, null, null, PageRequest.of(1, 2, sort));
+        Page<MiReportUserDefinedEntity> page1 = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, null, null, PageRequest.of(1, 2, sort));
         assertThat(page1.getContent()).extracting(MiReportUserDefinedEntity::getId)
                 .containsExactly(oldest);
     }
 
-    @Test
-    void findAllByCompetentAuthorityAndFilters_allFiltersCombined() {
-        MiReportUserDefinedCategoryEntity category = persistCategory("Financial");
-        Long expected = persistReport("Quarterly financial emissions", "detailed", CA,
-                AccountType.INSTALLATION, NOW, Set.of(category));
-        persistFavourite(expected, USER_ID);
-
-        // noise that fails one filter each
-        Long otherCa = persistReport("Quarterly financial emissions", "detailed", OTHER_CA,
-                AccountType.INSTALLATION, NOW, Set.of(category));
-        persistFavourite(otherCa, USER_ID);
-
-        Long otherAccountType = persistReport("Aviation financial", "detailed", CA,
-                AccountType.AVIATION, NOW, Set.of(category));
-        persistFavourite(otherAccountType, USER_ID);
-
-        Long notFavourited = persistReport("Annual financial emissions", "detailed", CA,
-                AccountType.INSTALLATION, NOW, Set.of(category));
-
-        MiReportUserDefinedCategoryEntity otherCategory = persistCategory("Compliance");
-        Long otherCategoryReport = persistReport("Compliance financial", "detailed", CA,
-                AccountType.INSTALLATION, NOW, Set.of(otherCategory));
-        persistFavourite(otherCategoryReport, USER_ID);
-
-        flushAndClear();
-
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, category.getId(), "%financial%", USER_ID,
-                PageRequest.of(0, 10, sort));
-
-        assertThat(result.getContent()).extracting(MiReportUserDefinedEntity::getId)
-                .containsExactly(expected);
-    }
 
     @Test
-    void findAllByCompetentAuthorityAndFilters_noData_returnsEmpty() {
-        Page<MiReportUserDefinedEntity> result = repository.findAllByCompetentAuthorityAndFilters(
-                CA, AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
+    void findAllByAccountTypeAndFilters_noData_returnsEmpty() {
+        Page<MiReportUserDefinedEntity> result = repository.findAllByAccountTypeAndFilters(
+                AccountType.INSTALLATION, null, null, null, PageRequest.of(0, 10, sort));
 
         assertThat(result.getTotalElements()).isZero();
         assertThat(result.getContent()).isEmpty();

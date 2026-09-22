@@ -7,6 +7,8 @@ import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.common.domain.RequestAviationAccountInfo;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.common.service.RequestAviationAccountQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.mapper.EmpUkEtsReviewMapper;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.submit.domain.EmpIssuanceUkEtsRequestPayload;
@@ -22,11 +24,15 @@ public class EmpIssuanceUkEtsDeemedWithdrawnAddRequestActionService {
 
     private final RequestService requestService;
     private final RequestActionUserInfoResolver requestActionUserInfoResolver;
+    private final RequestAviationAccountQueryService requestAviationAccountQueryService;
     private static final EmpUkEtsReviewMapper EMP_UKETS_REVIEW_MAPPER = Mappers.getMapper(EmpUkEtsReviewMapper.class);
 
     public void addRequestAction(final String requestId) {
         Request request = requestService.findRequestById(requestId);
         EmpIssuanceUkEtsRequestPayload requestPayload = (EmpIssuanceUkEtsRequestPayload) request.getPayload();
+
+        RequestAviationAccountInfo accountInfo =
+                requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 
         // get users' information
         DecisionNotification notification = requestPayload.getDecisionNotification();
@@ -35,7 +41,7 @@ public class EmpIssuanceUkEtsDeemedWithdrawnAddRequestActionService {
 
         EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload requestActionPayload =
             EMP_UKETS_REVIEW_MAPPER.toEmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload(
-                requestPayload, usersInfo, RequestActionPayloadType.EMP_ISSUANCE_UKETS_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD);
+                requestPayload, accountInfo, usersInfo, RequestActionPayloadType.EMP_ISSUANCE_UKETS_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD);
 
         requestService.addActionToRequest(request,
             requestActionPayload,

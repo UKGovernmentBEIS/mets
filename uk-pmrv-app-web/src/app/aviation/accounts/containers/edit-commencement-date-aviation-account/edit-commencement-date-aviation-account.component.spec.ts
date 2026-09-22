@@ -40,4 +40,11 @@ describe('EditCommencementDateAviationAccountComponent', () => {
 
     expect(component.form.value).toEqual(expectedFormValue);
   });
+
+  it('should show the CORSIA FYRO label for a CORSIA account', () => {
+    expect(component.fyroLabel).toEqual('First year within the scope of applicability');
+    expect(fixture.nativeElement.querySelector('p.govuk-body').textContent.trim()).toEqual(
+      'First year within the scope of applicability',
+    );
+  });
 });

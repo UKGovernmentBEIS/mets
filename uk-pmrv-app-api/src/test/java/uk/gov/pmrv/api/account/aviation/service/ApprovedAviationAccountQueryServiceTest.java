@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
@@ -16,7 +17,6 @@ import uk.gov.pmrv.api.account.aviation.transform.AviationAccountMapper;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Optional;
@@ -80,12 +80,12 @@ class ApprovedAviationAccountQueryServiceTest {
         Page<AccountContactInfoDTO> pagedAccountContacts = new PageImpl<>(expectedContacts);
 
         when(aviationAccountRepository
-            .findAccountContactsByCaAndContactTypeAndStatusNotIn(PageRequest.of(page, pageSize), competentAuthority,
+            .findAccountContactsByCaAndContactTypeAndStatusNotIn(PageRequest.of(page, pageSize), null, competentAuthority,
                 caSiteContactType, List.of(AviationAccountStatus.CLOSED)))
             .thenReturn(pagedAccountContacts);
 
         Page<AccountContactInfoDTO> resultPage =
-            approvedAviationAccountService.getApprovedAccountsAndCaSiteContactsByCa(competentAuthority, page, pageSize);
+            approvedAviationAccountService.getApprovedAccountsAndCaSiteContactsByCa(competentAuthority, null, page, pageSize);
 
         assertThat(resultPage).containsExactlyInAnyOrderElementsOf(expectedContacts);
 

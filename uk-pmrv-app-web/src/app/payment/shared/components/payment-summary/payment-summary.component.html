@@ -28,10 +28,6 @@
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Amount</dt>
-    <dd govukSummaryListRowValue>
-      <ng-container *ngIf="shouldDisplayAmount">
-        {{ details.amount | currency: 'GBP' }}
-      </ng-container>
-    </dd>
+    <dd govukSummaryListRowValue>{{ details.amount | currency: 'GBP' }}</dd>
   </div>
 </dl>

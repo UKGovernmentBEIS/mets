@@ -20,6 +20,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -27,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.ACCOUNT_USERS_SETUP;
@@ -111,7 +113,7 @@ class RequestTaskAssignmentValidationServiceTest {
                 .build();
 
         // Mock
-        when(userRoleTypeService.getUserRoleTypeByUserId(userId)).thenReturn(userRoleTypeDTO);
+        when(userRoleTypeService.getUserRoleTypeByUserIdOpt(userId)).thenReturn(Optional.of(userRoleTypeDTO));
         when(requestTaskAuthorizationResourceService.findUsersWhoCanExecuteRequestTaskTypeByAccountCriteriaAndRoleType(
                     requestTask.getType().name(), resourceCriteria, OPERATOR))
                 .thenReturn(candidateAssignees);
@@ -141,7 +143,7 @@ class RequestTaskAssignmentValidationServiceTest {
                 .build();
 
         // Mock
-        when(userRoleTypeService.getUserRoleTypeByUserId(userId)).thenReturn(userRoleTypeDTO);
+        when(userRoleTypeService.getUserRoleTypeByUserIdOpt(userId)).thenReturn(Optional.of(userRoleTypeDTO));
         when(requestTaskAuthorizationResourceService.findUsersWhoCanExecuteRequestTaskTypeByAccountCriteriaAndRoleType(
                 requestTask.getType().name(), resourceCriteria, OPERATOR))
                 .thenReturn(candidateAssignees);
@@ -154,6 +156,23 @@ class RequestTaskAssignmentValidationServiceTest {
         verify(requestTaskAuthorizationResourceService, times(1))
                 .findUsersWhoCanExecuteRequestTaskTypeByAccountCriteriaAndRoleType(
                         requestTask.getType().name(), resourceCriteria, OPERATOR);
+    }
+
+    @Test
+    void hasUserPermissionsToBeAssignedToTask_user_does_not_exist_any_more() {
+        final String userId = "userId";
+        Request request = Request.builder().accountId(1L).competentAuthority(CompetentAuthorityEnum.ENGLAND).build();
+        RequestTask requestTask = buildMockRequestTask(request, PERMIT_ISSUANCE_APPLICATION_SUBMIT);
+
+        // Mock
+        when(userRoleTypeService.getUserRoleTypeByUserIdOpt(userId)).thenReturn(Optional.empty());
+
+        // Invoke
+        boolean result = requestTaskAssignmentValidationService.hasUserPermissionsToBeAssignedToTask(requestTask, userId);
+
+        // Assert
+        assertFalse(result);
+        verifyNoInteractions(requestTaskAuthorizationResourceService);
     }
 
     private RequestTask buildMockRequestTask(Request request, RequestTaskType type) {

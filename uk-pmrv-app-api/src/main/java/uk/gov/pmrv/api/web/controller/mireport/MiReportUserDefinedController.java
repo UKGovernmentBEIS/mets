@@ -147,7 +147,7 @@ public class MiReportUserDefinedController {
        @RequestParam(value = "term", required = false) @Size(min = 3, max = 256) @Parameter(description = "Optional report search term") String term,
        @RequestParam(value = "favourites", required = false) @Parameter(description = "Optional filter to fetch the user's favourites") boolean favourites) {
         MiReportUserDefinedResults miReportUserDefinedResults =
-                pmrvMiReportUserDefinedService.findAllByCA(appUser, accountType, page, pageSize, categoryId, term, favourites);
+                pmrvMiReportUserDefinedService.findAll(appUser, accountType, page, pageSize, categoryId, term, favourites);
         return ResponseEntity.ok(miReportUserDefinedResults);
     }
 

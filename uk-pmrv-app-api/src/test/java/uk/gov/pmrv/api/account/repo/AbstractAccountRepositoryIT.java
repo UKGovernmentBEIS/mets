@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.HoldingCompany;
 import uk.gov.pmrv.api.account.domain.HoldingCompanyAddress;
@@ -25,7 +26,6 @@ import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Set;
@@ -98,7 +98,7 @@ public abstract class AbstractAccountRepositoryIT extends AbstractContainerBaseT
         account1.getContacts().put(AccountContactType.VB_SITE, "test3");
         repo.save(account3);
 
-        Page<AccountContactVbInfoDTO> page = repo.findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), getAccounTtype(), vbId, AccountContactType.VB_SITE);
+        Page<AccountContactVbInfoDTO> page = repo.findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(0, 1), getAccounTtype(), null, vbId, AccountContactType.VB_SITE);
         assertThat(page).hasSize(1);
     }
 

@@ -3,14 +3,14 @@
     <dt govukSummaryListRowKey>Operator name</dt>
     <dd govukSummaryListRowValue>{{ summaryInfo.name }}</dd>
     <dd govukSummaryListRowActions *ngIf="editable">
-      <a govukLink [routerLink]="[formRouterLink]">Change</a>
+      <a govukLink [routerLink]="[formRouterLink]" hidden-text="operator name">Change</a>
     </dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Scheme</dt>
     <dd govukSummaryListRowValue>{{ summaryInfo.emissionTradingScheme | etsName }}</dd>
     <dd govukSummaryListRowActions *ngIf="editable">
-      <a govukLink [routerLink]="[formRouterLink]">Change</a>
+      <a govukLink [routerLink]="[formRouterLink]" hidden-text="scheme">Change</a>
     </dd>
   </div>
   <div govukSummaryListRow *ngIf="withRegistryId">
@@ -22,21 +22,26 @@
     <dt govukSummaryListRowKey>SOP ID</dt>
     <dd govukSummaryListRowValue>{{ summaryInfo.sopId }}</dd>
     <dd govukSummaryListRowActions *ngIf="editable">
-      <a govukLink [routerLink]="[formRouterLink]">Change</a>
+      <a govukLink [routerLink]="[formRouterLink]" hidden-text="SOP ID">Change</a>
     </dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>CRCO code</dt>
     <dd govukSummaryListRowValue>{{ summaryInfo.crcoCode }}</dd>
     <dd govukSummaryListRowActions *ngIf="editable">
-      <a govukLink [routerLink]="[formRouterLink]">Change</a>
+      <a govukLink [routerLink]="[formRouterLink]" hidden-text="CRCO code">Change</a>
     </dd>
   </div>
   <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>First year of reporting obligation</dt>
+    <dt govukSummaryListRowKey>{{ summaryInfo.emissionTradingScheme | fyroLabel }}</dt>
     <dd govukSummaryListRowValue>{{ summaryInfo.commencementDate | govukDate }}</dd>
     <dd govukSummaryListRowActions *ngIf="editable">
-      <a govukLink [routerLink]="editModeEnabled ? ['./', 'edit-commencement-date'] : [formRouterLink]">Change</a>
+      <a
+        govukLink
+        [routerLink]="editModeEnabled ? ['./', 'edit-commencement-date'] : [formRouterLink]"
+        [hidden-text]="summaryInfo.emissionTradingScheme | fyroLabel | lowercase">
+        Change
+      </a>
     </dd>
   </div>
   <div govukSummaryListRow>
@@ -54,7 +59,7 @@
       </ng-container>
     </dd>
     <dd govukSummaryListRowActions *ngIf="editable">
-      <a *ngIf="isAddressEditable" govukLink [routerLink]="[formRouterLink]">Change</a>
+      <a *ngIf="isAddressEditable" govukLink [routerLink]="[formRouterLink]" hidden-text="contact address">Change</a>
     </dd>
   </div>
 </dl>

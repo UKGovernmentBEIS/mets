@@ -7,7 +7,6 @@ import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { PaymentMakeRequestTaskPayload } from 'pmrv-api';
 
-import { shouldHidePaymentAmount } from '../../core/utils';
 import { PaymentStore } from '../../store/payment.store';
 
 @Component({
@@ -19,15 +18,10 @@ import { PaymentStore } from '../../store/payment.store';
 export class BankTransferComponent {
   readonly competentAuthority$ = this.store.pipe(map((state) => state.competentAuthority));
 
-  readonly shouldDisplayAmount$ = this.store.pipe(map((state) => !shouldHidePaymentAmount(state)));
-
   readonly makePaymentDetails$ = this.store.pipe(
     first(),
     map((state) => state.paymentDetails as PaymentMakeRequestTaskPayload),
   );
-
-  requestType$ = this.store.pipe(map((state) => state.requestType));
-  requestTaskType$ = this.store.pipe(map((state) => state.requestTaskItem.requestTask.type));
 
   constructor(
     readonly store: PaymentStore,

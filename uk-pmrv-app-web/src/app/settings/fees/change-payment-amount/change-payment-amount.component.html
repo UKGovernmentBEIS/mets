@@ -1,0 +1,54 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    @if (isErrorSummaryDisplayed()) {
+      <govuk-error-summary [form]="form"></govuk-error-summary>
+    }
+
+    <app-page-heading caption="Fees" size="l">Change payment amount</app-page-heading>
+
+    @if (feeRow(); as feeRow) {
+      <h2 class="govuk-heading-m">Current payment details</h2>
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Workflow</dt>
+          <dd govukSummaryListRowValue>{{ feeRow.workflow }}</dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Current payment amount</dt>
+          <dd govukSummaryListRowValue>{{ feeRow.currentAmount | currency: 'GBP' : 'symbol' : '1.2-2' }}</dd>
+        </div>
+      </dl>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div
+          formControlName="amount"
+          govuk-text-input
+          inputType="text"
+          label="New payment amount in pounds"
+          labelSize="medium"
+          hint="For example 1500 or 1500.50"
+          prefix="£"
+          widthClass="govuk-!-width-one-quarter"></div>
+
+        <div formControlName="changeWhen" govuk-radio legend="When should the payment amount change?" legendSize="medium">
+          <govuk-radio-option value="immediately" label="Immediately"></govuk-radio-option>
+          <govuk-radio-option value="future" label="On a future date">
+            <ng-container govukConditionalContent>
+              <div
+                formControlName="effectiveDate"
+                govuk-date-input
+                label="Date the payment amount will change"
+                hint="The new payment amount will only apply to payment tasks created on or after the date you enter. Enter the date using numbers, for example 3 5 2027"
+                [isRequired]="true"
+                emptyMessage="Enter the date the payment amount will change"></div>
+            </ng-container>
+          </govuk-radio-option>
+        </div>
+
+        <button govukButton type="submit">Continue</button>
+      </form>
+    }
+
+    <p class="govuk-body"><a govukLink routerLink="../..">Return to: Fees</a></p>
+  </div>
+</div>

@@ -7,7 +7,7 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+        <a govukLink routerLink="../" [queryParams]="{ change: true }" hidden-text="monitoring approach">Change</a>
       </dd>
     </div>
     <div govukSummaryListRow *ngIf="$any(data)?.emissionsMonitoringApproach?.certEmissionsType">
@@ -17,7 +17,13 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+        <a
+          govukLink
+          routerLink="../"
+          [queryParams]="{ change: true }"
+          hidden-text="CERT input method used to estimate your emissions">
+          Change
+        </a>
       </dd>
     </div>
   </dl>
@@ -28,7 +34,13 @@
       <dd class="pre-wrap" govukSummaryListRowValue>{{ $any(data).simplifiedApproach.explanation }}</dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../simplified-approach" [queryParams]="{ change: true }">Change</a>
+        <a
+          govukLink
+          routerLink="../simplified-approach"
+          [queryParams]="{ change: true }"
+          hidden-text="explain how you are eligible to apply this approach">
+          Change
+        </a>
       </dd>
     </div>
     <div
@@ -40,7 +52,13 @@
       </dd>
       <dd></dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink routerLink="../simplified-approach" [queryParams]="{ change: true }">Change</a>
+        <a
+          govukLink
+          routerLink="../simplified-approach"
+          [queryParams]="{ change: true }"
+          hidden-text="supporting evidence">
+          Change
+        </a>
       </dd>
     </div>
   </dl>

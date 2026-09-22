@@ -1,7 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 
 import { firstValueFrom, of } from 'rxjs';
 
@@ -21,6 +20,7 @@ import Keycloak from 'keycloak-js';
 
 import { AuthoritiesService, TermsAndConditionsService, TermsDTO, UsersService, UserTermsVersionDTO } from 'pmrv-api';
 
+import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
@@ -65,8 +65,8 @@ describe('AuthService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
       providers: [
+        provideRouter([]),
         { provide: Keycloak, useValue: keycloak },
         { provide: UsersService, useValue: usersService },
         { provide: AuthoritiesService, useValue: authoritiesService },
@@ -105,6 +105,30 @@ describe('AuthService', () => {
     await service.logout();
 
     expect(keycloak.logout).toHaveBeenCalled();
+  });
+
+  it('should logout with an absolute redirectUri built from baseRedirectUri when no path is given', async () => {
+    await service.logout();
+
+    expect(keycloak.logout).toHaveBeenCalledWith({ redirectUri: service.baseRedirectUri });
+  });
+
+  it('should logout with an absolute redirectUri when given a relative path', async () => {
+    await service.logout('timed-out?idle=60000');
+
+    expect(keycloak.logout).toHaveBeenCalledWith({
+      redirectUri: service.baseRedirectUri + 'timed-out?idle=60000',
+    });
+  });
+
+  it('should logout to location.origin when no path is given in production', async () => {
+    environment.production = true;
+
+    await service.logout();
+
+    expect(keycloak.logout).toHaveBeenCalledWith({ redirectUri: location.origin });
+
+    environment.production = false;
   });
 
   it('should load and update user status', async () => {

@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.review.domain;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +18,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.common.domain.EmpCorsiaReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationDetermination;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationReviewDecision;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.submit.domain.EmpVariationCorsiaApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
 
@@ -27,7 +31,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUser
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class EmpVariationCorsiaApplicationRejectedRequestActionPayload extends RequestActionPayload {
+public class EmpVariationCorsiaApplicationRejectedRequestActionPayload extends EmpVariationCorsiaApplicationSubmittedRequestActionPayload {
 
 	@Valid
     @NotNull
@@ -44,6 +48,18 @@ public class EmpVariationCorsiaApplicationRejectedRequestActionPayload extends R
 
     @NotNull
     private FileInfoDTO officialNotice;
+
+    @Valid
+    @NotNull
+    private EmissionsMonitoringPlanCorsiaContainer originalEmpContainer;
+
+    private EmpVariationReviewDecision empVariationDetailsReviewDecision;
+
+    @Builder.Default
+    private Map<EmpCorsiaReviewGroup, EmpVariationReviewDecision> reviewGroupDecisions = new EnumMap<>(EmpCorsiaReviewGroup.class);
+
+    @Builder.Default
+    private Map<UUID, String> reviewAttachments = new HashMap<>();
 
     @Override
     public Map<UUID, String> getFileDocuments() {

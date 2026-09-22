@@ -10,5 +10,4 @@ import { PaymentDetails } from '../../../core/payment.map';
 })
 export class PaymentSummaryComponent {
   @Input() details: PaymentDetails;
-  @Input() shouldDisplayAmount: boolean;
 }

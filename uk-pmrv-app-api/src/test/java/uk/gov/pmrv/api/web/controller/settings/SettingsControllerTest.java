@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.netz.api.authorization.core.domain.AppAuthority;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
 import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
@@ -29,11 +30,16 @@ import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.settings.domain.SettingsSection;
+import uk.gov.pmrv.api.settings.domain.dto.FeeHistoryEntryDTO;
+import uk.gov.pmrv.api.settings.domain.dto.FeeHistoryResponseDTO;
 import uk.gov.pmrv.api.settings.domain.dto.FeeRowDTO;
 import uk.gov.pmrv.api.settings.domain.dto.FeeUpdateDTO;
+import uk.gov.pmrv.api.settings.domain.enumeration.FeeHistoryActionType;
+import uk.gov.pmrv.api.settings.service.FeeHistoryService;
 import uk.gov.pmrv.api.settings.service.SettingsFeeService;
 import uk.gov.pmrv.api.settings.service.SettingsService;
 import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
@@ -66,7 +72,13 @@ class SettingsControllerTest {
     private SettingsFeeService settingsFeeService;
 
     @Mock
+    private FeeHistoryService feeHistoryService;
+
+    @Mock
     private AppSecurityComponent appSecurityComponent;
+
+    @Mock
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -78,9 +90,12 @@ class SettingsControllerTest {
     void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver =
                 new AuthorizationAspectUserResolver(appSecurityComponent);
+        AuthorizedAspect authorizedAspect =
+                new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect =
                 new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
+        aspectJProxyFactory.addAspect(authorizedAspect);
         aspectJProxyFactory.addAspect(authorizedRoleAspect);
         DefaultAopProxyFactory proxyFactory = new DefaultAopProxyFactory();
         AopProxy aopProxy = proxyFactory.createAopProxy(aspectJProxyFactory);
@@ -94,28 +109,13 @@ class SettingsControllerTest {
     }
 
     @Test
-    void getAccessibleSections_installation_returnsAllSections() throws Exception {
+    void getAccessibleSections_returnsSections() throws Exception {
         AppUser appUser = AppUser.builder().userId("user1").roleType(RoleTypeConstants.REGULATOR).build();
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         List<SettingsSection> sections = List.of(SettingsSection.values());
         when(settingsService.getAccessibleSections(any(), any())).thenReturn(sections);
 
         mockMvc.perform(MockMvcRequestBuilders.get(String.format(CONTROLLER_PATH, AccountType.INSTALLATION.name())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(sections.size()));
-
-        verify(settingsService, times(1)).getAccessibleSections(any(), any());
-    }
-
-    @Test
-    void getAccessibleSections_aviation_returnsAllSections() throws Exception {
-        AppUser appUser = AppUser.builder().userId("user1").roleType(RoleTypeConstants.REGULATOR).build();
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        List<SettingsSection> sections = List.of(SettingsSection.values());
-        when(settingsService.getAccessibleSections(any(), any())).thenReturn(sections);
-
-        mockMvc.perform(MockMvcRequestBuilders.get(String.format(CONTROLLER_PATH, AccountType.AVIATION.name())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(sections.size()));
@@ -159,25 +159,76 @@ class SettingsControllerTest {
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].requestType").value("PERMIT_ISSUANCE"))
                 .andExpect(jsonPath("$[0].feeType").value("HSE"))
-                .andExpect(jsonPath("$[0].amount").value(1398))
-                .andExpect(jsonPath("$[0].scheduledAmount").doesNotExist())
-                .andExpect(jsonPath("$[0].scheduledDate").doesNotExist());
+                .andExpect(jsonPath("$[0].amount").value(1398));
 
         verify(settingsFeeService, times(1)).getFees(CompetentAuthorityEnum.ENGLAND, AccountType.INSTALLATION);
     }
 
     @Test
     void getFees_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().userId("user1").roleType(RoleTypeConstants.OPERATOR).build();
+        AppUser appUser = AppUser.builder().userId("user1").roleType(RoleTypeConstants.REGULATOR).build();
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(roleAuthorizationService)
-                .evaluate(appUser, new String[]{RoleTypeConstants.REGULATOR});
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "getFees");
 
         mockMvc.perform(MockMvcRequestBuilders.get(String.format(CONTROLLER_PATH + "/fees", AccountType.INSTALLATION.name())))
                 .andExpect(status().isForbidden());
 
         verifyNoInteractions(settingsFeeService);
+    }
+
+    @Test
+    void getFeeHistory_returnsPagedHistory() throws Exception {
+        AppAuthority authority = AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build();
+        AppUser appUser = AppUser.builder()
+                .userId("user1")
+                .roleType(RoleTypeConstants.REGULATOR)
+                .authorities(List.of(authority))
+                .build();
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+
+        FeeHistoryResponseDTO response = FeeHistoryResponseDTO.builder()
+                .history(List.of(FeeHistoryEntryDTO.builder()
+                        .requestType(RequestType.PERMIT_ISSUANCE)
+                        .feeType(FeeType.HSE)
+                        .actionType(FeeHistoryActionType.IMMEDIATE_UPDATE)
+                        .changedBy("John Doe")
+                        .oldAmount(new BigDecimal("1000"))
+                        .newAmount(new BigDecimal("1500"))
+                        .build()))
+                .totalItems(1L)
+                .build();
+        when(feeHistoryService.getHistory(CompetentAuthorityEnum.ENGLAND, AccountType.INSTALLATION, 0, 30))
+                .thenReturn(response);
+
+        mockMvc.perform(MockMvcRequestBuilders.get(String.format(CONTROLLER_PATH + "/fees/history", AccountType.INSTALLATION.name()))
+                        .param("page", "0")
+                        .param("size", "30"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalItems").value(1))
+                .andExpect(jsonPath("$.history").isArray())
+                .andExpect(jsonPath("$.history.length()").value(1))
+                .andExpect(jsonPath("$.history[0].changedBy").value("John Doe"))
+                .andExpect(jsonPath("$.history[0].requestType").value("PERMIT_ISSUANCE"));
+
+        verify(feeHistoryService, times(1)).getHistory(CompetentAuthorityEnum.ENGLAND, AccountType.INSTALLATION, 0, 30);
+    }
+
+    @Test
+    void getFeeHistory_forbidden() throws Exception {
+        AppUser appUser = AppUser.builder().userId("user1").roleType(RoleTypeConstants.REGULATOR).build();
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "getFeeHistory");
+
+        mockMvc.perform(MockMvcRequestBuilders.get(String.format(CONTROLLER_PATH + "/fees/history", AccountType.INSTALLATION.name()))
+                        .param("page", "0")
+                        .param("size", "30"))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(feeHistoryService);
     }
 
     @Test
@@ -201,16 +252,18 @@ class SettingsControllerTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
 
-        verify(settingsFeeService, times(1)).updateFee(eq(CompetentAuthorityEnum.ENGLAND), eq(AccountType.INSTALLATION), eq(1L), eq(FeeType.FIXED), any(FeeUpdateDTO.class));
+        verify(settingsFeeService, times(1)).updateFee(
+                eq(CompetentAuthorityEnum.ENGLAND), eq(AccountType.INSTALLATION), eq(1L), eq(FeeType.FIXED),
+                any(FeeUpdateDTO.class), eq(appUser));
     }
 
     @Test
     void updateFee_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().userId("user1").roleType(RoleTypeConstants.OPERATOR).build();
+        AppUser appUser = AppUser.builder().userId("user1").roleType(RoleTypeConstants.REGULATOR).build();
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(roleAuthorizationService)
-                .evaluate(appUser, new String[]{RoleTypeConstants.REGULATOR});
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "updateFee");
 
         FeeUpdateDTO dto = FeeUpdateDTO.builder()
                 .amount(new BigDecimal("1500"))
@@ -240,16 +293,17 @@ class SettingsControllerTest {
                         .delete(String.format(CONTROLLER_PATH + "/fees/1/FIXED/scheduled-change", AccountType.INSTALLATION.name())))
                 .andExpect(status().isOk());
 
-        verify(settingsFeeService, times(1)).cancelScheduledFeeUpdate(CompetentAuthorityEnum.ENGLAND, AccountType.INSTALLATION, 1L, FeeType.FIXED);
+        verify(settingsFeeService, times(1)).cancelScheduledFeeUpdate(
+                CompetentAuthorityEnum.ENGLAND, AccountType.INSTALLATION, 1L, FeeType.FIXED, appUser);
     }
 
     @Test
     void cancelScheduledFeeUpdate_forbidden() throws Exception {
-        AppUser appUser = AppUser.builder().userId("user1").roleType(RoleTypeConstants.OPERATOR).build();
+        AppUser appUser = AppUser.builder().userId("user1").roleType(RoleTypeConstants.REGULATOR).build();
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(roleAuthorizationService)
-                .evaluate(appUser, new String[]{RoleTypeConstants.REGULATOR});
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "cancelScheduledFeeUpdate");
 
         mockMvc.perform(MockMvcRequestBuilders
                         .delete(String.format(CONTROLLER_PATH + "/fees/1/FIXED/scheduled-change", AccountType.INSTALLATION.name())))

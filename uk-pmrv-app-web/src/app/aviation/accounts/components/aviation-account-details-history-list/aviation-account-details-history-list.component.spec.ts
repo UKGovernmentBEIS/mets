@@ -40,6 +40,14 @@ describe('AviationAccountDetailsListComponent', () => {
         newValue: '2021-11-12' as any,
         reason: 'reason',
       },
+      {
+        changedBy: 'Regulator',
+        creationDate: '2026-04-22T11:07:17.476808"',
+        category: 'FIRST_YEAR_WITHIN_SCOPE_OF_APPLICABILITY',
+        previousValue: '2019-11-12' as any,
+        newValue: '2019-11-12' as any,
+        reason: 'corsia reason',
+      },
     ];
     component.columns = [
       { header: 'Field', field: 'category', widthClass: 'govuk-!-width-one-quarter' },
@@ -57,6 +65,7 @@ describe('AviationAccountDetailsListComponent', () => {
   it('should show table rows', () => {
     expect(page.tierRows.map((row) => Array.from(row.cells).map((col) => col.textContent.trim()))).toEqual([
       ['First year of reporting obligation', '12 Nov 2021', '12 Nov 2021', 'reason'],
+      ['First year within the scope of applicability', '12 Nov 2019', '12 Nov 2019', 'corsia reason'],
     ]);
   });
 });

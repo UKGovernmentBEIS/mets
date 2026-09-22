@@ -4,15 +4,18 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { UntypedFormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { AbstractControl, UntypedFormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, map, ReplaySubject, takeUntil } from 'rxjs';
 
-import { GovukSelectOption, GovukTableColumn } from 'govuk-components';
+import { DestroySubject } from '@core/services/destroy-subject.service';
+
+import { GovukSelectOption, GovukTableColumn, GovukValidators } from 'govuk-components';
 
 import {
   AccountContactDTO,
@@ -29,10 +32,10 @@ type TableData = AccountContactVbInfoDTO & { user: UserAuthorityInfoDTO };
   selector: 'app-verifier-site-contacts',
   standalone: false,
   templateUrl: './site-contacts.component.html',
-  providers: [UserFullNamePipe],
+  providers: [UserFullNamePipe, DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SiteContactsComponent implements OnChanges {
+export class SiteContactsComponent implements OnChanges, OnInit {
   @Input() disabled: boolean;
   @Input() pageSize: number;
   @Input() totalCount: number;
@@ -50,10 +53,20 @@ export class SiteContactsComponent implements OnChanges {
   isSummaryDisplayed$ = new BehaviorSubject<boolean>(false);
   page$ = new ReplaySubject<number>(1);
   form = this.fb.group({ siteContacts: this.fb.array([]) });
+  searchForm = this.fb.group({
+    term: [
+      null,
+      {
+        validators: [
+          GovukValidators.minLength(3, 'Enter at least 3 characters'),
+          GovukValidators.maxLength(256, 'Enter up to 256 characters'),
+        ],
+      },
+    ],
+  });
 
   columns: GovukTableColumn<TableData>[] = [
     { field: 'accountName', header: this.isAviation ? 'Account' : 'Permit holding account', isHeader: true },
-    { field: 'type', header: 'Type' },
     { field: 'user', header: 'Assigned to' },
   ];
 
@@ -61,6 +74,8 @@ export class SiteContactsComponent implements OnChanges {
     private readonly fb: UntypedFormBuilder,
     private readonly fullNamePipe: UserFullNamePipe,
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly destroy$: DestroySubject,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -84,7 +99,32 @@ export class SiteContactsComponent implements OnChanges {
     }
   }
 
+  ngOnInit(): void {
+    this.route.queryParamMap
+      .pipe(
+        map((params) => params.get('term')?.trim() || null),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((term) => this.termCtrl.setValue(term, { emitEvent: false }));
+  }
+
   submit(): void {
     this.siteContactChange.emit(this.form.get('siteContacts').value);
+  }
+
+  onSearch(): void {
+    if (this.searchForm.valid) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        preserveFragment: true,
+        queryParams: { term: this.termCtrl.value?.trim() || null, page: null },
+        queryParamsHandling: 'merge',
+      });
+    }
+  }
+
+  private get termCtrl(): AbstractControl {
+    return this.searchForm.get('term');
   }
 }

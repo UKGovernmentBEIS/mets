@@ -42,7 +42,7 @@
     <dd
       govukSummaryListRowValue
       *ngIf="showCompaniesHouse()"
-      [ngClass]="{ 'govuk-error-message': !companiesHouse?.registrationNumber }">
+      [class.govuk-error-message]="!companiesHouse?.registrationNumber">
       {{ companiesHouse?.registrationNumber || companiesHouseErrorMessage }}
     </dd>
   </div>

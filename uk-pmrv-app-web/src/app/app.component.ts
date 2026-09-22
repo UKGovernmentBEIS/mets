@@ -25,12 +25,14 @@ import { ScrollService } from 'govuk-components';
 import { BulkDownloadService } from 'pmrv-api';
 
 import { CookiesService } from './cookies/cookies.service';
+import { SettingsVisibilityService } from './settings/core/settings-visibility.service';
 
 interface Permissions {
   showRegulators: boolean;
   showVerifiers: boolean;
   showAuthorizedOperators: boolean;
   hasAccessBulkDownload: boolean;
+  showSettings: boolean;
 }
 
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
@@ -79,6 +81,7 @@ export class AppComponent implements OnInit {
     private readonly destroy$: DestroySubject,
     private readonly cookiesService: CookiesService,
     private readonly bulkDownloadService: BulkDownloadService,
+    private readonly settingsVisibilityService: SettingsVisibilityService,
   ) {}
 
   ngOnInit(): void {
@@ -100,6 +103,10 @@ export class AppComponent implements OnInit {
                 const isAviation = currentDomain === 'AVIATION';
 
                 const hasAccessBulkDownloadForRole$ = isRegulator && !isAviation ? hasAccessBulkDownload$ : of(false);
+                const showSettings$ =
+                  isRegulator && currentDomain
+                    ? this.settingsVisibilityService.hasAnyAccessibleSection(currentDomain)
+                    : of(false);
 
                 return combineLatest([
                   this.userState$.pipe(
@@ -126,6 +133,7 @@ export class AppComponent implements OnInit {
                     ),
                   ),
                   hasAccessBulkDownloadForRole$,
+                  showSettings$,
                 ]).pipe(
                   map(
                     ([
@@ -135,6 +143,7 @@ export class AppComponent implements OnInit {
                       showAuthorizedOperators,
                       isUnauthorizedDomain,
                       hasAccessBulkDownload,
+                      showSettings,
                     ]) =>
                       !isDisabled &&
                       !isUnauthorizedDomain &&
@@ -143,6 +152,7 @@ export class AppComponent implements OnInit {
                         showVerifiers,
                         showAuthorizedOperators,
                         hasAccessBulkDownload,
+                        showSettings,
                       },
                   ),
                 );

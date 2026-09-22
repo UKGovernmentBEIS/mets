@@ -11,6 +11,7 @@
  */
 
 export interface FeeRowDTO {
+  id?: number;
   requestType?:
     | 'INSTALLATION_ACCOUNT_OPENING'
     | 'SYSTEM_MESSAGE_NOTIFICATION'
@@ -55,7 +56,7 @@ export interface FeeRowDTO {
     | 'AVIATION_DOE_CORSIA'
     | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'
     | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING';
-  feeType?: 'FIXED' | 'WASTE' | 'HSE' | 'CAT_A' | 'CAT_B' | 'CAT_C';
+  feeType?: 'FIXED' | 'WASTE' | 'HSE' | 'CAT_A' | 'CAT_B' | 'CAT_C' | 'NRW_CAT_FA_1_TO_2' | 'NRW_CAT_FA_3_PLUS';
   amount?: string;
   scheduledAmount?: string;
   scheduledDate?: string;

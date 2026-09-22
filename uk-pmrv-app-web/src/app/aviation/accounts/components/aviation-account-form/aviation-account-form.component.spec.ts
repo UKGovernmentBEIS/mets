@@ -18,6 +18,10 @@ describe('AccountFormComponent', () => {
     get allInputs() {
       return this.queryAll<HTMLInputElement>('input').map((el) => el.name);
     }
+
+    get fyroLabel() {
+      return this.query<HTMLParagraphElement>('p.govuk-body')?.textContent.trim();
+    }
   }
 
   @Component({
@@ -56,5 +60,23 @@ describe('AccountFormComponent', () => {
 
   it('should show all applicable inputs', () => {
     expect(page.allInputs).toHaveLength(8);
+  });
+
+  it('should show the UK ETS FYRO label by default', () => {
+    expect(page.fyroLabel).toEqual('First year of reporting obligation');
+  });
+
+  it('should show the CORSIA FYRO label when CORSIA is selected', () => {
+    hostComponent.formGroup.controls.emissionTradingScheme.setValue('CORSIA');
+    fixture.detectChanges();
+
+    expect(page.fyroLabel).toEqual('First year within the scope of applicability');
+  });
+
+  it('should show the UK ETS FYRO label when UK ETS is selected', () => {
+    hostComponent.formGroup.controls.emissionTradingScheme.setValue('UK_ETS_AVIATION');
+    fixture.detectChanges();
+
+    expect(page.fyroLabel).toEqual('First year of reporting obligation');
   });
 });

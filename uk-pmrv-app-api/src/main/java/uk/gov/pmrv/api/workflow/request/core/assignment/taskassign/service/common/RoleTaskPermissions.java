@@ -34,6 +34,7 @@ public enum RoleTaskPermissions {
                     RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_REVIEW,
                     RequestTaskType.PERMIT_TRANSFER_B_WAIT_FOR_AMENDS,
                     RequestTaskType.PERMIT_TRANSFER_B_WAIT_FOR_RFI_RESPONSE,
+                    RequestTaskType.PERMIT_TRANSFER_B_TRACK_PAYMENT,
                     RequestTaskType.PERMIT_TRANSFER_B_CONFIRM_PAYMENT,
                     RequestTaskType.NER_APPLICATION_REVIEW,
                     RequestTaskType.NER_TRACK_PAYMENT,

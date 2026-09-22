@@ -2,13 +2,9 @@ import { Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
-
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SharedModule } from '@shared/shared.module';
 import { BasePage } from '@testing';
-
-import { RequestInfoDTO, RequestTaskDTO } from 'pmrv-api';
 
 import { PaymentStore } from '../../store/payment.store';
 import { mockPaymentState } from '../../testing/mock-state';
@@ -28,17 +24,11 @@ describe('DetailsComponent', () => {
     standalone: false,
     template: `
       <div class="help">
-        <p class="competentAuthority">{{ competentAuthority$ | async }}</p>
-        <p class="requestType">{{ requestType$ | async }}</p>
-        <p class="requestTaskType">{{ requestTaskType$ | async }}</p>
         <p class="default">{{ default }}</p>
       </div>
     `,
   })
   class MockPaymentHelpComponent {
-    @Input() competentAuthority$: Observable<RequestInfoDTO['competentAuthority']>;
-    @Input() requestType$: Observable<RequestInfoDTO['type']>;
-    @Input() requestTaskType$: Observable<RequestTaskDTO['type']>;
     default: string;
     @Input() set defaultHelp(defaultHelp: string) {
       this.default = defaultHelp;
@@ -104,15 +94,6 @@ describe('DetailsComponent', () => {
     });
 
     it('should display help details', () => {
-      expect(hostElement.querySelector<HTMLParagraphElement>('p.competentAuthority').textContent.trim()).toEqual(
-        'ENGLAND',
-      );
-      expect(hostElement.querySelector<HTMLParagraphElement>('p.requestType').textContent.trim()).toEqual(
-        'PERMIT_ISSUANCE',
-      );
-      expect(hostElement.querySelector<HTMLParagraphElement>('p.requestTaskType').textContent.trim()).toEqual(
-        'PERMIT_ISSUANCE_MAKE_PAYMENT',
-      );
       expect(hostElement.querySelector<HTMLParagraphElement>('p.default').textContent.trim()).toEqual(
         'Your permit application cannot be processed until this payment is received',
       );
@@ -143,11 +124,11 @@ describe('DetailsComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should hide amount', () => {
+    it('should display amount', () => {
       expect(page.paymentDetails).toEqual([
         ['Date created', '5 May 2022'],
         ['Reference number', 'AEM-323-1'],
-        ['Amount to pay', ''],
+        ['Amount to pay', '£2,500.20'],
       ]);
     });
   });

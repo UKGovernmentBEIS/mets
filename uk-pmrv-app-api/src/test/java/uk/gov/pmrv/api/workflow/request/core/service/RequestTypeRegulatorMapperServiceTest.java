@@ -39,6 +39,7 @@ public class RequestTypeRegulatorMapperServiceTest {
         Set<RequestType> expectedRequestTypes = Arrays.stream(RequestType.values())
                 .filter(type->( AccountType.INSTALLATION.equals(type.getAccountType()) || type.getAccountType() == null)
                         && type.getRoleTypes().contains(RoleTypeConstants.REGULATOR))
+                .filter(RequestType::isDisplayedInWorkflowFiltering)
                 .collect(Collectors.toSet());
 
         assertThat(requestTypes).isEqualTo(expectedRequestTypes);
@@ -55,6 +56,7 @@ public class RequestTypeRegulatorMapperServiceTest {
         Set<RequestType> expectedRequestTypes = Arrays.stream(RequestType.values())
                 .filter(type->( AccountType.AVIATION.equals(type.getAccountType()) || type.getAccountType() == null)
                         && type.getRoleTypes().contains(RoleTypeConstants.REGULATOR))
+                .filter(RequestType::isDisplayedInWorkflowFiltering)
                 .collect(Collectors.toSet());
 
         assertThat(requestTypes).isEqualTo(expectedRequestTypes);

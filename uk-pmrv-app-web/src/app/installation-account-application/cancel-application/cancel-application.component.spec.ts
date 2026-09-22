@@ -15,7 +15,10 @@ describe('CancelApplicationComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CancelApplicationComponent],
-      imports: [RouterTestingModule, SharedModule],
+      imports: [
+        RouterTestingModule.withRoutes([{ path: 'landing', component: CancelApplicationComponent }]),
+        SharedModule,
+      ],
       providers: [InstallationAccountApplicationStore, { provide: TasksService, useValue: {} }],
     }).compileComponents();
   });

@@ -37,7 +37,7 @@ describe('SummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FallbackModule, RouterTestingModule],
+      imports: [FallbackModule, RouterTestingModule.withRoutes([{ path: '**', component: SummaryComponent }])],
       providers: [KeycloakService, { provide: TasksService, useValue: tasksService }],
     }).compileComponents();
   });

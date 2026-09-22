@@ -21,6 +21,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.P
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitAcceptedVariationDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitVariationDeterminateable;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitVariationReviewDecision;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationRequestPaymentDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationRegulatorLedGrantDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.payment.domain.RequestPayloadPayable;
 import uk.gov.pmrv.api.workflow.request.flow.payment.domain.RequestPaymentInfo;
@@ -96,6 +97,8 @@ public class PermitVariationRequestPayload extends RequestPayload
 	private Integer permitConsolidationNumber;
 	
     private RequestPaymentInfo requestPaymentInfo;
+
+	private PermitVariationRequestPaymentDetails requestPaymentDetails;
     
     private FileInfoDTO officialNotice;
     

@@ -15,17 +15,15 @@
         requirements
       </div>
       <div
-        [ngClass]="{
-          'govuk-form-group--error':
-            form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async,
-        }"
+        [class.govuk-form-group--error]="
+          form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async
+        "
         class="govuk-!-width-two-thirds">
         <div
           *ngIf="form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async"
-          [ngClass]="{
-            'govuk-error-message':
-              form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async,
-          }">
+          [class.govuk-error-message]="
+            form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async
+          ">
           {{ form?.errors?.lowerThanInternational }}
         </div>
       </div>
@@ -47,17 +45,15 @@
         international flights
       </div>
       <div
-        [ngClass]="{
-          'govuk-form-group--error':
-            form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async,
-        }"
+        [class.govuk-form-group--error]="
+          form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async
+        "
         class="govuk-!-width-two-thirds">
         <div
           *ngIf="form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async"
-          [ngClass]="{
-            'govuk-error-message':
-              form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async,
-          }">
+          [class.govuk-error-message]="
+            form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async
+          ">
           {{ form?.errors?.lowerThanInternational }}
         </div>
       </div>

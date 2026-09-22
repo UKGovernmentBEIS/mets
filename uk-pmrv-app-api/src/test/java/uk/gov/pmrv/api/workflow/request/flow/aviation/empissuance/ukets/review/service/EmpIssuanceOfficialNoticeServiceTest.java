@@ -5,9 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.common.config.RegistryConfig;
+import uk.gov.pmrv.api.integration.registry.notification.aviation.request.AviationNotificationRegistryEvent;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
@@ -32,6 +34,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -65,6 +68,9 @@ class EmpIssuanceOfficialNoticeServiceTest {
 
     @Mock
     private RegistryConfig registryConfig;
+
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Test
     void generateGrantedOfficialNotice() throws InterruptedException, ExecutionException {
@@ -215,6 +221,41 @@ class EmpIssuanceOfficialNoticeServiceTest {
         verify(empIssuanceRegistryEventPublisherService, times(1)).publishRegistryEvent((EmpIssuanceUkEtsRequestPayload) request.getPayload(), requestId, request.getAccountId());
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(officialNoticeSendService, times(1)).sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails, List.of(registryEmail));
+    }
+
+    @Test
+    void sendOfficialNotice_withdrawn() {
+        String requestId = "1";
+        String registryEmail = "registry@pmrv.uk";
+        String decisionNotificationUserEmail = "operator1@email";
+
+        DecisionNotification decisionNotification = DecisionNotification.builder()
+                .operators(Set.of("operatorUser"))
+                .signatory("signatoryUser")
+                .build();
+        FileInfoDTO officialDocFileInfoDTO = buildOfficialFileInfo();
+
+        Request request = Request.builder()
+                .id(requestId)
+                .payload(EmpIssuanceUkEtsRequestPayload.builder()
+                        .decisionNotification(decisionNotification)
+                        .officialNotice(officialDocFileInfoDTO)
+                        .determination(EmpIssuanceDetermination.builder().type(EmpIssuanceDeterminationType.DEEMED_WITHDRAWN).build())
+                        .build())
+                .build();
+
+        List<String> ccRecipientsEmails = List.of(decisionNotificationUserEmail);
+
+        when(requestService.findRequestById(requestId)).thenReturn(request);
+        when(registryConfig.getEmail()).thenReturn(registryEmail);
+        when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(List.of(decisionNotificationUserEmail));
+
+        empIssuanceOfficialNoticeService.sendOfficialNotice(requestId);
+
+        verify(requestService, times(1)).findRequestById(requestId);
+        verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
+        verify(officialNoticeSendService, times(1)).sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails, List.of(registryEmail));
+        verify(applicationEventPublisher, times(1)).publishEvent(any(AviationNotificationRegistryEvent.class));
     }
 
     private FileInfoDTO buildOfficialFileInfo() {

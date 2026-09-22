@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { map } from 'rxjs';
 
-import { shouldHidePaymentAmount } from '../../core/utils';
 import { PaymentStore } from '../../store/payment.store';
 
 @Component({
@@ -14,7 +13,7 @@ import { PaymentStore } from '../../store/payment.store';
         headerText="Payment marked as paid"
         [timelineCreationDate]="state.requestActionCreationDate"></app-request-action-heading>
 
-      <app-payment-summary [details]="details$ | async" [shouldDisplayAmount]="shouldDisplayAmount$ | async">
+      <app-payment-summary [details]="details$ | async">
         <app-summary-header class="govuk-heading-m">Details</app-summary-header>
       </app-payment-summary>
     </ng-container>
@@ -22,8 +21,6 @@ import { PaymentStore } from '../../store/payment.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaidComponent {
-  readonly shouldDisplayAmount$ = this.store.pipe(map((state) => !shouldHidePaymentAmount(state)));
-
   details$ = this.store.pipe(
     map((state: any) => {
       return { ...state.actionPayload, amount: +state.actionPayload?.amount };

@@ -12,6 +12,77 @@ tags:
   - name: Account Details History
     description: Endpoints for account details history
 paths:
+  /v1.0/{accountType}/settings/fees/{id}/{feeType}:
+    put:
+      tags:
+        - Settings
+      summary: Updates the fee amount for a given fee method and fee type
+      operationId: updateFee
+      parameters:
+        - name: accountType
+          in: path
+          description: The account type
+          required: true
+          schema:
+            type: string
+            enum:
+              - INSTALLATION
+              - AVIATION
+        - name: id
+          in: path
+          description: The fee method id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: feeType
+          in: path
+          description: The fee type
+          required: true
+          schema:
+            type: string
+            enum:
+              - FIXED
+              - WASTE
+              - HSE
+              - CAT_A
+              - CAT_B
+              - CAT_C
+              - NRW_CAT_FA_1_TO_2
+              - NRW_CAT_FA_3_PLUS
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeeUpdateDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /v1.0/verifier-users/registration/accept-authority-and-activate-verifier-user-from-invitation:
     put:
       tags:
@@ -840,6 +911,14 @@ paths:
             enum:
               - INSTALLATION
               - AVIATION
+        - name: term
+          in: query
+          description: Optional vb site contact search term
+          required: false
+          schema:
+            maxLength: 256
+            minLength: 3
+            type: string
         - name: page
           in: query
           description: The page number starting from zero
@@ -979,6 +1058,14 @@ paths:
             enum:
               - INSTALLATION
               - AVIATION
+        - name: term
+          in: query
+          description: Optional ca site contact search term
+          required: false
+          schema:
+            maxLength: 256
+            minLength: 3
+            type: string
         - name: page
           in: query
           description: The page number starting from zero
@@ -2130,24 +2217,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  type: string
-                  format: decimal
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  type: string
-                  format: decimal
   /v1.0/regulator-users:
     post:
       tags:
@@ -3000,6 +3075,28 @@ paths:
             '*/*':
               schema:
                 type: string
+  /v1.0/mets/requests/request-payment/{id}:
+    post:
+      tags:
+        - Requests
+      summary: Request payment for the given permit variation
+      operationId: requestPayment
+      parameters:
+        - name: id
+          in: path
+          description: The request id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PermitVariationRequestPaymentDetails'
+        required: true
+      responses:
+        '200':
+          description: OK
   /v1.0/mets/requests/mark-as-not-required/{id}:
     post:
       tags:
@@ -4201,22 +4298,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/AviationReportableEmissionsDTO'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/AviationReportableEmissionsDTO'
   /v1.0/aviation-reporting-data/airports:
     post:
       tags:
@@ -5057,6 +5144,59 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/FeeRowDTO'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1.0/{accountType}/settings/fees/history:
+    get:
+      tags:
+        - Settings
+      summary: >-
+        Retrieves the paginated fee change history for the current regulator's
+        CA
+      operationId: getFeeHistory
+      parameters:
+        - name: accountType
+          in: path
+          description: The account type
+          required: true
+          schema:
+            type: string
+            enum:
+              - INSTALLATION
+              - AVIATION
+        - name: page
+          in: query
+          description: The page number starting from zero
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          description: The page size
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeeHistoryResponseDTO'
         '403':
           description: Forbidden
           content:
@@ -6904,33 +7044,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
   /v1.0/requests/available-workflows/permit/{accountId}:
     get:
       tags:
@@ -6960,33 +7085,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/RequestCreateValidationResult'
   /v1.0/request-notes/{requestId}/files:
     get:
       tags:
@@ -7896,6 +8006,26 @@ paths:
             '*/*':
               schema:
                 type: boolean
+  /v1.0/mets/requests/access-to-request-payment/{id}:
+    get:
+      tags:
+        - Requests
+      summary: Check if the user has access to request payment for permit variation
+      operationId: hasAccessRequestPayment
+      parameters:
+        - name: id
+          in: path
+          description: The request id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
   /v1.0/mets/requests/access-to-mark-as-not-required/{id}:
     get:
       tags:
@@ -8564,13 +8694,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-            '*/*':
-              schema:
-                type: object
-                additionalProperties:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ReferenceDataDTO'
       security: []
   /v1.0/company-information/{registrationNumber}:
     get:
@@ -9432,6 +9555,65 @@ paths:
               schema:
                 $ref: '#/components/schemas/UIPropertiesDTO'
       security: []
+  /v1.0/{accountType}/settings/fees/{id}/{feeType}/scheduled-change:
+    delete:
+      tags:
+        - Settings
+      summary: Cancels the scheduled fee change for a given fee method and fee type
+      operationId: cancelScheduledFeeUpdate
+      parameters:
+        - name: accountType
+          in: path
+          description: The account type
+          required: true
+          schema:
+            type: string
+            enum:
+              - INSTALLATION
+              - AVIATION
+        - name: id
+          in: path
+          description: The fee method id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: feeType
+          in: path
+          description: The fee type
+          required: true
+          schema:
+            type: string
+            enum:
+              - FIXED
+              - WASTE
+              - HSE
+              - CAT_A
+              - CAT_B
+              - CAT_C
+              - NRW_CAT_FA_1_TO_2
+              - NRW_CAT_FA_3_PLUS
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /v1.0/verifier-authorities/{userId}:
     delete:
       tags:
@@ -9619,17 +9801,18 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    InvitedUserCredentialsDTO:
+    FeeUpdateDTO:
       required:
-        - invitationToken
-        - password
+        - amount
+        - effectiveDate
       type: object
       properties:
-        invitationToken:
+        amount:
           type: string
-        password:
+          format: decimal
+        effectiveDate:
           type: string
-      description: The operator user credentials
+          format: date
     ErrorResponse:
       type: object
       properties:
@@ -9641,6 +9824,17 @@ components:
           type: array
           items:
             type: object
+    InvitedUserCredentialsDTO:
+      required:
+        - invitationToken
+        - password
+      type: object
+      properties:
+        invitationToken:
+          type: string
+        password:
+          type: string
+      description: The operator user credentials
     AddressDTO:
       required:
         - city
@@ -9859,7 +10053,7 @@ components:
           minLength: 0
           type: string
         queryDefinition:
-          maxLength: 10000
+          maxLength: 50000
           minLength: 0
           type: string
         categories:
@@ -30516,6 +30710,22 @@ components:
             type: object
             additionalProperties:
               type: object
+    PermitVariationRequestPaymentDetails:
+      required:
+        - amount
+        - dueDate
+      type: object
+      properties:
+        amount:
+          type: string
+          format: decimal
+        dueDate:
+          type: string
+          format: date
+        notes:
+          type: string
+        manualPaymentInitiationPending:
+          type: boolean
     AerMarkNotRequiredDetails:
       required:
         - reason
@@ -31264,6 +31474,9 @@ components:
     FeeRowDTO:
       type: object
       properties:
+        id:
+          type: integer
+          format: int64
         requestType:
           type: string
           enum:
@@ -31319,6 +31532,8 @@ components:
             - CAT_A
             - CAT_B
             - CAT_C
+            - NRW_CAT_FA_1_TO_2
+            - NRW_CAT_FA_3_PLUS
         amount:
           type: string
           format: decimal
@@ -31328,6 +31543,97 @@ components:
         scheduledDate:
           type: string
           format: date
+    FeeHistoryEntryDTO:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        changedBy:
+          type: string
+        actionType:
+          type: string
+          enum:
+            - IMMEDIATE_UPDATE
+            - SCHEDULED_UPDATE
+            - CANCEL_SCHEDULED
+            - SYSTEM_APPLIED
+        requestType:
+          type: string
+          enum:
+            - INSTALLATION_ACCOUNT_OPENING
+            - SYSTEM_MESSAGE_NOTIFICATION
+            - PERMIT_ISSUANCE
+            - PERMIT_SURRENDER
+            - PERMIT_REVOCATION
+            - PERMIT_TRANSFER_A
+            - PERMIT_TRANSFER_B
+            - PERMIT_VARIATION
+            - PERMIT_NOTIFICATION
+            - PERMIT_BATCH_REISSUE
+            - PERMIT_REISSUE
+            - NON_COMPLIANCE
+            - DOAL
+            - AER
+            - VIR
+            - AIR
+            - DRE
+            - WITHHOLDING_OF_ALLOWANCES
+            - RETURN_OF_ALLOWANCES
+            - INSTALLATION_ONSITE_INSPECTION
+            - INSTALLATION_AUDIT
+            - HSE_TI
+            - BDR
+            - BDRS2
+            - PERMANENT_CESSATION
+            - ALR
+            - WASTE_QDR
+            - NER
+            - AVIATION_ACCOUNT_CLOSURE
+            - AVIATION_NON_COMPLIANCE
+            - EMP_BATCH_REISSUE
+            - EMP_REISSUE
+            - AVIATION_VIR
+            - EMP_ISSUANCE_UKETS
+            - EMP_VARIATION_UKETS
+            - AVIATION_AER_UKETS
+            - AVIATION_DRE_UKETS
+            - EMP_ISSUANCE_CORSIA
+            - EMP_VARIATION_CORSIA
+            - AVIATION_AER_CORSIA
+            - AVIATION_DOE_CORSIA
+            - AVIATION_AER_CORSIA_ANNUAL_OFFSETTING
+            - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING
+        feeType:
+          type: string
+          enum:
+            - FIXED
+            - WASTE
+            - HSE
+            - CAT_A
+            - CAT_B
+            - CAT_C
+            - NRW_CAT_FA_1_TO_2
+            - NRW_CAT_FA_3_PLUS
+        oldAmount:
+          type: string
+          format: decimal
+        newAmount:
+          type: string
+          format: decimal
+        effectiveDate:
+          type: string
+          format: date
+    FeeHistoryResponseDTO:
+      type: object
+      properties:
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeHistoryEntryDTO'
+        totalItems:
+          type: integer
+          format: int64
     TemplateInfoDTO:
       type: object
       properties:
@@ -38890,6 +39196,7 @@ components:
             - PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED
             - PERMIT_VARIATION_RECALLED_FROM_AMENDS
             - PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY
+            - PERMIT_VARIATION_REQUEST_PAYMENT
             - PERMIT_TRANSFER_A_APPLICATION_SUBMITTED
             - PERMIT_TRANSFER_A_APPLICATION_GRANTED
             - PERMIT_TRANSFER_A_APPLICATION_REJECTED
@@ -39178,6 +39485,7 @@ components:
               AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED
             - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED
             - NOTIFICATION_SENT_TO_REGISTRY
+            - RETURN_OF_ALLOWANCES_NOTIFICATION_SENT_TO_REGISTRY
         submitter:
           type: string
         submittedTo:
@@ -40998,12 +41306,28 @@ components:
       required:
         - decisionNotification
         - determination
+        - emissionsMonitoringPlan
         - officialNotice
+        - serviceContactDetails
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestActionPayload'
         - type: object
           properties:
+            emissionsMonitoringPlan:
+              $ref: '#/components/schemas/EmissionsMonitoringPlanCorsia'
+            serviceContactDetails:
+              $ref: '#/components/schemas/ServiceContactDetails'
+            empSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+            empAttachments:
+              type: object
+              additionalProperties:
+                type: string
             decisionNotification:
               $ref: '#/components/schemas/DecisionNotification'
             determination:
@@ -41014,6 +41338,14 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             officialNotice:
               $ref: '#/components/schemas/FileInfoDTO'
+            reviewGroupDecisions:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/EmpIssuanceReviewDecision'
+            reviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
     EmpIssuanceCorsiaApplicationReturnedForAmendsRequestActionPayload:
       required:
         - reviewGroupDecisions
@@ -41140,12 +41472,28 @@ components:
       required:
         - decisionNotification
         - determination
+        - emissionsMonitoringPlan
         - officialNotice
+        - serviceContactDetails
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestActionPayload'
         - type: object
           properties:
+            emissionsMonitoringPlan:
+              $ref: '#/components/schemas/EmissionsMonitoringPlanUkEts'
+            serviceContactDetails:
+              $ref: '#/components/schemas/ServiceContactDetails'
+            empSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+            empAttachments:
+              type: object
+              additionalProperties:
+                type: string
             decisionNotification:
               $ref: '#/components/schemas/DecisionNotification'
             determination:
@@ -41156,6 +41504,14 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             officialNotice:
               $ref: '#/components/schemas/FileInfoDTO'
+            reviewGroupDecisions:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/EmpIssuanceReviewDecision'
+            reviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
     EmpIssuanceUkEtsApplicationReturnedForAmendsRequestActionPayload:
       required:
         - reviewGroupDecisions
@@ -41280,12 +41636,32 @@ components:
       required:
         - decisionNotification
         - determination
+        - emissionsMonitoringPlan
+        - empVariationDetails
         - officialNotice
+        - originalEmpContainer
+        - serviceContactDetails
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestActionPayload'
         - type: object
           properties:
+            emissionsMonitoringPlan:
+              $ref: '#/components/schemas/EmissionsMonitoringPlanCorsia'
+            serviceContactDetails:
+              $ref: '#/components/schemas/ServiceContactDetails'
+            empVariationDetails:
+              $ref: '#/components/schemas/EmpVariationCorsiaDetails'
+            empSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+            empAttachments:
+              type: object
+              additionalProperties:
+                type: string
             determination:
               $ref: '#/components/schemas/EmpVariationDetermination'
             decisionNotification:
@@ -41296,6 +41672,18 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             officialNotice:
               $ref: '#/components/schemas/FileInfoDTO'
+            originalEmpContainer:
+              $ref: '#/components/schemas/EmissionsMonitoringPlanCorsiaContainer'
+            empVariationDetailsReviewDecision:
+              $ref: '#/components/schemas/EmpVariationReviewDecision'
+            reviewGroupDecisions:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/EmpVariationReviewDecision'
+            reviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
     EmpVariationCorsiaApplicationRegulatorLedApprovedRequestActionPayload:
       required:
         - decisionNotification
@@ -41349,12 +41737,32 @@ components:
       required:
         - decisionNotification
         - determination
+        - emissionsMonitoringPlan
+        - empVariationDetails
         - officialNotice
+        - originalEmpContainer
+        - serviceContactDetails
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestActionPayload'
         - type: object
           properties:
+            emissionsMonitoringPlan:
+              $ref: '#/components/schemas/EmissionsMonitoringPlanCorsia'
+            serviceContactDetails:
+              $ref: '#/components/schemas/ServiceContactDetails'
+            empVariationDetails:
+              $ref: '#/components/schemas/EmpVariationCorsiaDetails'
+            empSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+            empAttachments:
+              type: object
+              additionalProperties:
+                type: string
             determination:
               $ref: '#/components/schemas/EmpVariationDetermination'
             decisionNotification:
@@ -41365,6 +41773,18 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             officialNotice:
               $ref: '#/components/schemas/FileInfoDTO'
+            originalEmpContainer:
+              $ref: '#/components/schemas/EmissionsMonitoringPlanCorsiaContainer'
+            empVariationDetailsReviewDecision:
+              $ref: '#/components/schemas/EmpVariationReviewDecision'
+            reviewGroupDecisions:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/EmpVariationReviewDecision'
+            reviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
     EmpVariationCorsiaApplicationReturnedForAmendsRequestActionPayload:
       type: object
       allOf:
@@ -41505,12 +41925,32 @@ components:
       required:
         - decisionNotification
         - determination
+        - emissionsMonitoringPlan
+        - empVariationDetails
         - officialNotice
+        - originalEmpContainer
+        - serviceContactDetails
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestActionPayload'
         - type: object
           properties:
+            emissionsMonitoringPlan:
+              $ref: '#/components/schemas/EmissionsMonitoringPlanUkEts'
+            serviceContactDetails:
+              $ref: '#/components/schemas/ServiceContactDetails'
+            empVariationDetails:
+              $ref: '#/components/schemas/EmpVariationUkEtsDetails'
+            empSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+            empAttachments:
+              type: object
+              additionalProperties:
+                type: string
             determination:
               $ref: '#/components/schemas/EmpVariationDetermination'
             decisionNotification:
@@ -41521,6 +41961,18 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             officialNotice:
               $ref: '#/components/schemas/FileInfoDTO'
+            originalEmpContainer:
+              $ref: '#/components/schemas/EmissionsMonitoringPlanUkEtsContainer'
+            empVariationDetailsReviewDecision:
+              $ref: '#/components/schemas/EmpVariationReviewDecision'
+            reviewGroupDecisions:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/EmpVariationReviewDecision'
+            reviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
     EmpVariationUkEtsApplicationRegulatorLedApprovedRequestActionPayload:
       required:
         - decisionNotification
@@ -41574,12 +42026,32 @@ components:
       required:
         - decisionNotification
         - determination
+        - emissionsMonitoringPlan
+        - empVariationDetails
         - officialNotice
+        - originalEmpContainer
+        - serviceContactDetails
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestActionPayload'
         - type: object
           properties:
+            emissionsMonitoringPlan:
+              $ref: '#/components/schemas/EmissionsMonitoringPlanUkEts'
+            serviceContactDetails:
+              $ref: '#/components/schemas/ServiceContactDetails'
+            empVariationDetails:
+              $ref: '#/components/schemas/EmpVariationUkEtsDetails'
+            empSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+            empAttachments:
+              type: object
+              additionalProperties:
+                type: string
             determination:
               $ref: '#/components/schemas/EmpVariationDetermination'
             decisionNotification:
@@ -41590,6 +42062,18 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             officialNotice:
               $ref: '#/components/schemas/FileInfoDTO'
+            originalEmpContainer:
+              $ref: '#/components/schemas/EmissionsMonitoringPlanUkEtsContainer'
+            empVariationDetailsReviewDecision:
+              $ref: '#/components/schemas/EmpVariationReviewDecision'
+            reviewGroupDecisions:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/EmpVariationReviewDecision'
+            reviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
     EmpVariationUkEtsApplicationReturnedForAmendsRequestActionPayload:
       type: object
       allOf:
@@ -42344,6 +42828,17 @@ components:
         - type: object
           properties:
             submittedTo:
+              type: string
+    NotificationRegistryIntegrationNoFileRequestActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            registryId:
+              type: integer
+              format: int32
+            notificationType:
               type: string
     NotificationRegistryIntegrationRequestActionPayload:
       type: object
@@ -43313,6 +43808,16 @@ components:
                 type: array
                 items:
                   type: boolean
+    PermitVariationRequestPaymentActionPayload:
+      required:
+        - paymentDetails
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            paymentDetails:
+              $ref: '#/components/schemas/PermitVariationRequestPaymentDetails'
     RdeDecisionForcedRequestActionPayload:
       required:
         - rdeForceDecisionPayload
@@ -43625,6 +44130,7 @@ components:
             - PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED
             - PERMIT_VARIATION_RECALLED_FROM_AMENDS
             - PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY
+            - PERMIT_VARIATION_REQUEST_PAYMENT
             - PERMIT_TRANSFER_A_APPLICATION_SUBMITTED
             - PERMIT_TRANSFER_A_APPLICATION_GRANTED
             - PERMIT_TRANSFER_A_APPLICATION_REJECTED
@@ -43913,6 +44419,7 @@ components:
               AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED
             - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED
             - NOTIFICATION_SENT_TO_REGISTRY
+            - RETURN_OF_ALLOWANCES_NOTIFICATION_SENT_TO_REGISTRY
         payload:
           oneOf:
             - $ref: '#/components/schemas/ALRApplicationAcceptedRequestActionPayload'
@@ -44119,6 +44626,8 @@ components:
             - $ref: >-
                 #/components/schemas/NonCompliancePeerReviewRequestedRequestActionPayload
             - $ref: >-
+                #/components/schemas/NotificationRegistryIntegrationNoFileRequestActionPayload
+            - $ref: >-
                 #/components/schemas/NotificationRegistryIntegrationRequestActionPayload
             - $ref: '#/components/schemas/PaymentCancelledRequestActionPayload'
             - $ref: '#/components/schemas/PaymentProcessedRequestActionPayload'
@@ -44182,12 +44691,15 @@ components:
                 #/components/schemas/PermitVariationApplicationReturnedForAmendsRequestActionPayload
             - $ref: >-
                 #/components/schemas/PermitVariationApplicationSubmittedRequestActionPayload
+            - $ref: '#/components/schemas/PermitVariationRequestPaymentActionPayload'
             - $ref: '#/components/schemas/RdeDecisionForcedRequestActionPayload'
             - $ref: '#/components/schemas/RdeRejectedRequestActionPayload'
             - $ref: '#/components/schemas/RdeSubmittedRequestActionPayload'
             - $ref: '#/components/schemas/ReissueCompletedRequestActionPayload'
             - $ref: >-
                 #/components/schemas/ReturnOfAllowancesApplicationSubmittedRequestActionPayload
+            - $ref: >-
+                #/components/schemas/ReturnOfAllowancesNotificationRegistryIntegrationRequestActionPayload
             - $ref: >-
                 #/components/schemas/ReturnOfAllowancesReturnedApplicationCompletedRequestActionPayload
             - $ref: '#/components/schemas/RfiResponseSubmittedRequestActionPayload'
@@ -44322,6 +44834,7 @@ components:
             - PERMIT_VARIATION_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD
             - PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD
             - PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD
+            - PERMIT_VARIATION_REQUEST_PAYMENT_PAYLOAD
             - PERMIT_TRANSFER_A_APPLICATION_SUBMITTED_PAYLOAD
             - PERMIT_TRANSFER_A_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD
             - PERMIT_TRANSFER_A_APPLICATION_GRANTED_PAYLOAD
@@ -44502,6 +45015,8 @@ components:
             - >-
               AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED_PAYLOAD
             - NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD
+            - NOTIFICATION_REGISTRY_INTEGRATION_NO_FILE_PAYLOAD
+            - RETURN_OF_ALLOWANCES_NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD
       discriminator:
         propertyName: payloadType
         mapping:
@@ -44575,6 +45090,7 @@ components:
             #/components/schemas/PermitVariationApplicationRegulatorLedApprovedRequestActionPayload
           PERMIT_VARIATION_REGISTRY_INTEGRATION_ACCOUNT_UPDATED_PAYLOAD: >-
             #/components/schemas/InstallationAccountUpdatedRegistryIntegrationRequestActionPayload
+          PERMIT_VARIATION_REQUEST_PAYMENT_PAYLOAD: '#/components/schemas/PermitVariationRequestPaymentActionPayload'
           PERMIT_TRANSFER_A_APPLICATION_SUBMITTED_PAYLOAD: >-
             #/components/schemas/PermitTransferAApplicationSubmittedRequestActionPayload
           PERMIT_TRANSFER_A_APPLICATION_GRANTED_PAYLOAD: >-
@@ -44847,6 +45363,10 @@ components:
           AVIATION_DOE_CORSIA_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
           NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD: >-
             #/components/schemas/NotificationRegistryIntegrationRequestActionPayload
+          NOTIFICATION_REGISTRY_INTEGRATION_NO_FILE_PAYLOAD: >-
+            #/components/schemas/NotificationRegistryIntegrationNoFileRequestActionPayload
+          RETURN_OF_ALLOWANCES_NOTIFICATION_REGISTRY_INTEGRATION_PAYLOAD: >-
+            #/components/schemas/ReturnOfAllowancesNotificationRegistryIntegrationRequestActionPayload
     RequestActionUserInfo:
       required:
         - name
@@ -44888,6 +45408,22 @@ components:
                 $ref: '#/components/schemas/RequestActionUserInfo'
             officialNotice:
               $ref: '#/components/schemas/FileInfoDTO'
+    ReturnOfAllowancesNotificationRegistryIntegrationRequestActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            registryId:
+              type: integer
+              format: int32
+            notificationType:
+              type: string
+            sentFile:
+              $ref: '#/components/schemas/FileInfoDTO'
+            returnOfAllowancesDate:
+              type: string
+              format: date
     ReturnOfAllowancesReturnedApplicationCompletedRequestActionPayload:
       required:
         - returnOfAllowancesReturned
@@ -46097,6 +46633,7 @@ components:
           type: string
           enum:
             - FIRST_YEAR_OF_REPORTING_OBLIGATION
+            - FIRST_YEAR_WITHIN_SCOPE_OF_APPLICABILITY
         previousValue:
           $ref: '#/components/schemas/JsonNode'
         newValue:

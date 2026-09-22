@@ -19,6 +19,7 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { AerMarkNotRequiredDetails } from '../model/aerMarkNotRequiredDetails';
 import { AlrMarkNotRequiredDetails } from '../model/alrMarkNotRequiredDetails';
 import { BatchReissuesResponseDTO } from '../model/batchReissuesResponseDTO';
+import { PermitVariationRequestPaymentDetails } from '../model/permitVariationRequestPaymentDetails';
 import { RequestCreateActionProcessDTO } from '../model/requestCreateActionProcessDTO';
 import { RequestCreateActionProcessResponseDTO } from '../model/requestCreateActionProcessResponseDTO';
 import { RequestCreateValidationResult } from '../model/requestCreateValidationResult';
@@ -679,6 +680,76 @@ export class RequestsService {
   }
 
   /**
+   * Check if the user has access to request payment for permit variation
+   * @param id The request id
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public hasAccessRequestPayment(id: string): Observable<boolean>;
+  public hasAccessRequestPayment(
+    id: string,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<HttpResponse<boolean>>;
+  public hasAccessRequestPayment(
+    id: string,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<HttpEvent<boolean>>;
+  public hasAccessRequestPayment(
+    id: string,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<boolean>;
+  public hasAccessRequestPayment(
+    id: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling hasAccessRequestPayment.');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['*/*'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.get<boolean>(
+      `${this.configuration.basePath}/v1.0/mets/requests/access-to-request-payment/${encodeURIComponent(String(id))}`,
+      {
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
    * Mark as not required the given request and terminate Aer workflow
    * @param id The request id
    * @param aerMarkNotRequiredDetails
@@ -939,6 +1010,97 @@ export class RequestsService {
       requestCreateActionProcessDTO,
       {
         params: queryParameters,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Request payment for the given permit variation
+   * @param id The request id
+   * @param permitVariationRequestPaymentDetails
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public requestPayment(
+    id: string,
+    permitVariationRequestPaymentDetails: PermitVariationRequestPaymentDetails,
+  ): Observable<any>;
+  public requestPayment(
+    id: string,
+    permitVariationRequestPaymentDetails: PermitVariationRequestPaymentDetails,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: undefined },
+  ): Observable<HttpResponse<any>>;
+  public requestPayment(
+    id: string,
+    permitVariationRequestPaymentDetails: PermitVariationRequestPaymentDetails,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: undefined },
+  ): Observable<HttpEvent<any>>;
+  public requestPayment(
+    id: string,
+    permitVariationRequestPaymentDetails: PermitVariationRequestPaymentDetails,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: undefined },
+  ): Observable<any>;
+  public requestPayment(
+    id: string,
+    permitVariationRequestPaymentDetails: PermitVariationRequestPaymentDetails,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: undefined },
+  ): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling requestPayment.');
+    }
+    if (permitVariationRequestPaymentDetails === null || permitVariationRequestPaymentDetails === undefined) {
+      throw new Error(
+        'Required parameter permitVariationRequestPaymentDetails was null or undefined when calling requestPayment.',
+      );
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = [];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      headers = headers.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.post<any>(
+      `${this.configuration.basePath}/v1.0/mets/requests/request-payment/${encodeURIComponent(String(id))}`,
+      permitVariationRequestPaymentDetails,
+      {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: headers,

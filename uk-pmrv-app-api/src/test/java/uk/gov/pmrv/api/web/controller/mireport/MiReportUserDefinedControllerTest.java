@@ -292,7 +292,7 @@ class MiReportUserDefinedControllerTest {
         MiReportUserDefinedResults results = org.mockito.Mockito.mock(MiReportUserDefinedResults.class);
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(pmrvMiReportUserDefinedService.findAllByCA(appUser, AccountType.INSTALLATION, page, pageSize,null,null, false)).thenReturn(results);
+        when(pmrvMiReportUserDefinedService.findAll(appUser, AccountType.INSTALLATION, page, pageSize,null,null, false)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/reports/" + AccountType.INSTALLATION)
                         .param("page", String.valueOf(page))
@@ -302,7 +302,7 @@ class MiReportUserDefinedControllerTest {
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(pmrvMiReportUserDefinedService, times(1))
-                .findAllByCA(appUser, AccountType.INSTALLATION, page, pageSize,null,null, false);
+                .findAll(appUser, AccountType.INSTALLATION, page, pageSize,null,null, false);
     }
 
     @Test
@@ -313,7 +313,7 @@ class MiReportUserDefinedControllerTest {
         MiReportUserDefinedResults results = org.mockito.Mockito.mock(MiReportUserDefinedResults.class);
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(pmrvMiReportUserDefinedService.findAllByCA(appUser, AccountType.INSTALLATION, page, pageSize,1L,"test", true)).thenReturn(results);
+        when(pmrvMiReportUserDefinedService.findAll(appUser, AccountType.INSTALLATION, page, pageSize,1L,"test", true)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/reports/" + AccountType.INSTALLATION)
                         .param("page", String.valueOf(page))
@@ -326,7 +326,7 @@ class MiReportUserDefinedControllerTest {
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(pmrvMiReportUserDefinedService, times(1))
-                .findAllByCA(appUser, AccountType.INSTALLATION, page, pageSize,1L,"test", true);
+                .findAll(appUser, AccountType.INSTALLATION, page, pageSize,1L,"test", true);
     }
 
     @Test

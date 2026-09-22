@@ -8,8 +8,7 @@
       [formGroupName]="i"
       [disabled]="(isEditable$ | async) === false"
       govukFieldset
-      id="variation-schedule-items-{{ i }}"
-    >
+      id="variation-schedule-items-{{ i }}">
       <legend class="govuk-heading-s">Item {{ i + 1 }}</legend>
       <button
         (click)="removeVariationScheduleItems(i)"
@@ -19,19 +18,22 @@
         appAddAnother
         govukSecondaryButton
         type="button"
-        #removeButton
-      >
+        #removeButton>
         Remove
       </button>
-      <div govuk-textarea [maxLength]="10000" formControlName="item"></div>
+      <div
+        govuk-textarea
+        [maxLength]="10000"
+        formControlName="item"
+        [isLabelHidden]="true"
+        [label]="`Item ${i + 1}`"></div>
     </fieldset>
 
     <button
       (click)="addOtherVariationScheduleItem()"
       [disabled]="(isEditable$ | async) === false"
       govukSecondaryButton
-      type="button"
-    >
+      type="button">
       Add another item
     </button>
   </div>
@@ -41,8 +43,7 @@
       (click)="addVariationScheduleItem()"
       [disabled]="(isEditable$ | async) === false"
       govukSecondaryButton
-      type="button"
-    >
+      type="button">
       Add item
     </button>
   </ng-template>
@@ -53,5 +54,4 @@
   [maxLength]="10000"
   formControlName="notes"
   label="Notes"
-  hint="The operator cannot view this"
-></div>
+  hint="The operator cannot view this"></div>

@@ -25,6 +25,9 @@ import { LogChangesComponent } from './review/determination/log-changes/log-chan
 import { LogChangesGuard } from './review/determination/log-changes/log-changes.guard';
 import { ReasonTemplateComponent } from './review/determination/reason-template/reason-template.component';
 import { ReasonTemplateGuard } from './review/determination/reason-template/reason-template.guard';
+import { DetailsComponent as RequestPaymentDetailsComponent } from './review/request-payment/details/details.component';
+import { RequestPaymentComponent } from './review/request-payment/request-payment.component';
+import { RequestPaymentGuard } from './review/request-payment/request-payment.guard';
 import { ReviewSectionsContainerComponent } from './review/sections-container/review-sections-container.component';
 import { SectionsContainerComponent } from './sections-container/sections-container.component';
 import { PermitVariationStore } from './store/permit-variation.store';
@@ -83,6 +86,13 @@ const routes: PermitRoute[] = [
           {
             path: 'cancel',
             loadChildren: () => import('../cancel-task/cancel-task.module').then((m) => m.CancelTaskModule),
+          },
+          {
+            path: 'request-payment',
+            data: { pageTitle: 'Request payment for permit variation', backlink: '..', hideBreadcrumb: true },
+            component: RequestPaymentComponent,
+            canActivate: [RequestPaymentGuard],
+            canDeactivate: [PendingRequestGuard],
           },
         ],
       },
@@ -194,6 +204,11 @@ const routes: PermitRoute[] = [
             path: 'decision-summary',
             data: { pageTitle: 'Permit Variation Decision Summary' },
             component: DecisionSummaryComponent,
+          },
+          {
+            path: 'request-payment',
+            data: { pageTitle: 'Request payment for permit variation', breadcrumb: 'Review permit variation' },
+            component: RequestPaymentDetailsComponent,
           },
         ],
       },

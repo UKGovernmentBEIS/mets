@@ -36,7 +36,7 @@ import {
 import { AviationAccountDetailsHistoryGuard } from './guards/account-details-history-category.guard';
 import { AviationAccountGuard } from './guards/aviation-account.guard';
 import { AviationAccountReportingStatusHistoryGuard } from './guards/aviation-account-reporting-status-history.guard';
-import { EtsNamePipe } from './pipes';
+import { EtsNamePipe, FyroLabelPipe } from './pipes';
 import { AviationAccoundDetailsHistoryCategoryPipe } from './pipes/account-details-history-category.pipe';
 import { AccountReportingStatusPipe } from './pipes/account-reporting-status.pipe';
 import { AviationAccountFormProvider } from './services';
@@ -70,6 +70,7 @@ import { AviationAccountsStore } from './store';
     EditReportingStatusSummaryComponent,
     EditFyroSummaryComponent,
     EtsNamePipe,
+    FyroLabelPipe,
     ViewAviationAccountComponent,
   ],
   providers: [

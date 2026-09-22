@@ -301,4 +301,13 @@ describe('VerifiersComponent', () => {
 
     expectBusinessErrorToBe(savePartiallyNotFoundSiteContactsError);
   });
+
+  it('should fetch site contacts using the term from the URL', () => {
+    activatedRouteStub.setQueryParamMap({ term: 'account' });
+    fixture.detectChanges();
+
+    expect(vbSiteContactsService.getVbSiteContacts).toHaveBeenLastCalledWith('INSTALLATION', 0, 50, 'account');
+
+    activatedRouteStub.setQueryParamMap({});
+  });
 });

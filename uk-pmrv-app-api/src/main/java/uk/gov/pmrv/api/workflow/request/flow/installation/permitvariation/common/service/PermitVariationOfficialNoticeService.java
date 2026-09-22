@@ -18,6 +18,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateOfficialNoticeParamsProvider;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.DeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.InstallationAccountRegistryEventPublisherService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
 
@@ -115,7 +116,11 @@ public class PermitVariationOfficialNoticeService {
                 List.of(requestPayload.getOfficialNotice(), requestPayload.getPermitDocument()) :
                 List.of(requestPayload.getOfficialNotice());
 
-        installationAccountRegistryEventPublisherService.publishVariationRegistryEvent(requestPayload,requestId,request.getAccountId());
+        if (requestPayload.isRegulatorLed() || (requestPayload.getDetermination() != null
+                && (DeterminationType.GRANTED.equals(requestPayload.getDetermination().getType())
+                || DeterminationType.COMPLETED.equals(requestPayload.getDetermination().getType())))){
+            installationAccountRegistryEventPublisherService.publishVariationRegistryEvent(requestPayload,requestId,request.getAccountId());
+        }
 
         officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails);
     }

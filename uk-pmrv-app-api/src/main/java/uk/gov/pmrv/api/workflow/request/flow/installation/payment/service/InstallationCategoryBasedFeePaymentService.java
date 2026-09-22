@@ -1,12 +1,16 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.payment.service;
 
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountInfoDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.account.installation.transform.InstallationCategoryMapper;
+import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitType;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.DigitizedPlan;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.MonitoringMethodologyPlans;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeMethodType;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeType;
 import uk.gov.pmrv.api.workflow.payment.repository.PaymentFeeMethodRepository;
@@ -15,7 +19,11 @@ import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
 
+import org.apache.commons.lang3.Range;
+
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class InstallationCategoryBasedFeePaymentService extends PaymentService {
@@ -45,6 +53,10 @@ public class InstallationCategoryBasedFeePaymentService extends PaymentService {
                 emitterType = EmitterType.HSE;
             } else if (permitType.equals(PermitType.GHGE)) {
                 emitterType = EmitterType.GHGE;
+                FeeType nrwFeeType = resolveNrwFeeType(request, requestPayload.getPermit());
+                if (nrwFeeType != null) {
+                    return nrwFeeType;
+                }
             } else {
                 emitterType = EmitterType.WASTE;
             }
@@ -60,22 +72,47 @@ public class InstallationCategoryBasedFeePaymentService extends PaymentService {
         return resolveFeeType(emitterType, installationCategory);
     }
 
+    private FeeType resolveNrwFeeType(Request request, Permit permit) {
+        if (request.getCompetentAuthority() != CompetentAuthorityEnum.WALES) {
+            return null;
+        }
+        InstallationAccountInfoDTO accountInfo = installationAccountQueryService
+                .getInstallationAccountInfoDTOById(request.getAccountId());
+        if (!Boolean.TRUE.equals(accountInfo.getFaStatus())) {
+            return null;
+        }
+        int subInstallationCount = countSubInstallations(permit);
+        if (Range.of(1, 2).contains(subInstallationCount)) {
+            return FeeType.NRW_CAT_FA_1_TO_2;
+        }
+        if (Range.of(3, Integer.MAX_VALUE).contains(subInstallationCount)) {
+            return FeeType.NRW_CAT_FA_3_PLUS;
+        }
+        return null;
+    }
+
+    private int countSubInstallations(Permit permit) {
+        return Optional.ofNullable(permit.getMonitoringMethodologyPlans())
+                .map(MonitoringMethodologyPlans::getDigitizedPlan)
+                .map(DigitizedPlan::getSubInstallations)
+                .map(Collection::size)
+                .orElse(0);
+    }
+
     private FeeType resolveFeeType(EmitterType emitterType, InstallationCategory installationCategory) {
         if(emitterType == null || installationCategory == null) {
             return null;
         }
 
-        if(emitterType == EmitterType.HSE) {
-            return FeeType.HSE;
-        } else if (emitterType == EmitterType.GHGE) {
-            return switch (installationCategory) {
+        return switch (emitterType) {
+            case EmitterType.HSE -> FeeType.HSE;
+            case EmitterType.GHGE -> switch (installationCategory) {
                 case A_LOW_EMITTER, A -> FeeType.CAT_A;
                 case B -> FeeType.CAT_B;
                 case C -> FeeType.CAT_C;
                 default -> null;
             };
-        } else {
-            return FeeType.WASTE;
-        }
+            default -> FeeType.WASTE;
+        };
     }
 }

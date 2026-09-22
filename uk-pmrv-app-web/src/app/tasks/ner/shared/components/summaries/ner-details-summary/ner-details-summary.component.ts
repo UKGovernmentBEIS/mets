@@ -77,13 +77,21 @@ export class NerDetailsSummaryComponent implements OnInit {
     const isEditable = this.isEditable() && nerDetailsDataIsEditable(requestTaskType, this.isEditable());
     const hideSubmit = !isEditable || payload.nerSectionsCompleted['NER'];
     const isOutcomeSubtask = this.router.url.split('/').includes('outcome');
+    const isOutcomeSummary = this.route.snapshot.data?.['isSummary'];
     const isReviewTask = nerReviewTasks.includes(requestTaskType);
 
     return {
       heading: nerDetailsHeading(requestTaskType, isOutcomeSubtask),
       caption: nerDetailsCaption(requestTaskType, isOutcomeSubtask),
       isReviewTask,
-      returnLinkLevelsUp: nerReturnLinkLevelsUp(requestTaskType, isOutcomeSubtask ? 'OUTCOME' : 'NER'),
+      returnLinkLevelsUp: nerReturnLinkLevelsUp(
+        requestTaskType,
+        isOutcomeSubtask && isOutcomeSummary
+          ? 'OUTCOME'
+          : isOutcomeSubtask && !isOutcomeSummary
+            ? 'OUTCOME_FORM'
+            : 'NER',
+      ),
       isEditable,
       isDecisionEditable: this.nerService.isDecisionComponentEditable(),
       showDecision: !isOutcomeSubtask && isReviewTask,

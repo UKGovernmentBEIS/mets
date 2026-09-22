@@ -31,6 +31,9 @@ describe('ItemActionTypePipe', () => {
       'Information sent to Registry by system',
     );
     expect(pipe.transform('NOTIFICATION_SENT_TO_REGISTRY')).toEqual('Information sent to Registry by system');
+    expect(pipe.transform('RETURN_OF_ALLOWANCES_NOTIFICATION_SENT_TO_REGISTRY')).toEqual(
+      'Information sent to Registry by system',
+    );
 
     expect(pipe.transform('PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMITTED')).toEqual(
       'Amended permit application submitted',
@@ -121,6 +124,7 @@ describe('ItemActionTypePipe', () => {
     expect(pipe.transform('PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED')).toEqual(
       'Variation application approved',
     );
+    expect(pipe.transform('PERMIT_VARIATION_REQUEST_PAYMENT')).toEqual('Request payment for permit variation sent');
 
     expect(pipe.transform('AER_APPLICATION_SUBMITTED')).toEqual('Emissions report submitted to regulator');
     expect(pipe.transform('AER_APPLICATION_SENT_TO_VERIFIER')).toEqual('Emissions report submitted to verifier');

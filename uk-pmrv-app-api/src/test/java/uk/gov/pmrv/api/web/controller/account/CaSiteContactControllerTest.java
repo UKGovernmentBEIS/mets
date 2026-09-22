@@ -110,7 +110,7 @@ class CaSiteContactControllerTest {
                 .editable(false).build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-        when(accountCaSiteContactService.getAccountsAndCaSiteContacts(user, accountType, 0, 2))
+        when(accountCaSiteContactService.getAccountsAndCaSiteContacts(user, accountType, null, 0, 2))
             .thenReturn(accountCASiteContactInfoResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.get(CA_SITE_CONTACT_CONTROLLER_PATH + "?page=0&size=2")
@@ -126,7 +126,7 @@ class CaSiteContactControllerTest {
 
         verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
         verify(accountCaSiteContactService, times(1))
-            .getAccountsAndCaSiteContacts(user, accountType,0, 2);
+            .getAccountsAndCaSiteContacts(user, accountType,null, 0, 2);
     }
 
     @Test
@@ -143,7 +143,7 @@ class CaSiteContactControllerTest {
                 .andExpect(status().isForbidden());
 
         verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(accountCaSiteContactService, never()).getAccountsAndCaSiteContacts(any(), any(), anyInt(), anyInt());
+        verify(accountCaSiteContactService, never()).getAccountsAndCaSiteContacts(any(), any(), any(), anyInt(), anyInt());
     }
 
     @Test

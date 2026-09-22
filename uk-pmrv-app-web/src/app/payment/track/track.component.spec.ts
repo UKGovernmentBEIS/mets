@@ -128,7 +128,7 @@ describe('TrackComponent', () => {
       expect(page.summaryListValues).toEqual([
         ['Payment status', 'Not paid'],
         ['Reference number', 'AEM-323-1'],
-        ['Amount', ''],
+        ['Amount', '£2,500.20'],
       ]);
     });
   });

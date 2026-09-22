@@ -1,8 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.returnofallowances.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.integration.registry.notification.common.RegistryNotificationType;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.ReturnOfAllowancesInstallationNotificationRegistryEvent;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -22,6 +25,7 @@ public class ReturnOfAllowancesSubmittedService {
     private final RequestService requestService;
     private final ReturnOfAllowancesOfficialNoticeService returnOfAllowancesOfficialNoticeService;
     private final RequestActionUserInfoResolver requestActionUserInfoResolver;
+    private final ApplicationEventPublisher eventPublisher;
 
     public void submit(final String requestId) {
 
@@ -58,5 +62,14 @@ public class ReturnOfAllowancesSubmittedService {
             officialNotice,
             decisionNotification
         );
+
+        //send notification to registry
+        eventPublisher.publishEvent(ReturnOfAllowancesInstallationNotificationRegistryEvent.builder()
+                .requestId(requestId)
+                .accountId(request.getAccountId())
+                .registryNotificationType(RegistryNotificationType.RETURN_OF_ALLOWANCES_NOTIFICATION)
+                .fileInfoDTO(officialNotice)
+                .returnOfAllowancesDate(requestPayload.getReturnOfAllowances().getDateToBeReturned())
+                .build());
     }
 }

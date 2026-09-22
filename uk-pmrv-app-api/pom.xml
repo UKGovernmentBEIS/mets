@@ -33,7 +33,7 @@
         <netz.notificationapi.version>1.3.0</netz.notificationapi.version>
         <netz.feedback.version>1.3.0</netz.feedback.version>
         <netz.third-party-data-provider.version>1.3.0</netz.third-party-data-provider.version>
-        <netz.common.integration.model.version>1.11.0</netz.common.integration.model.version>
+        <netz.common.integration.model.version>1.12.0</netz.common.integration.model.version>
 
         <flowable.version>7.2.0</flowable.version>
         <apt-maven-plugin.version>1.1.3</apt-maven-plugin.version>
@@ -44,6 +44,8 @@
 
         <maven.jacoco.plugin>0.8.12</maven.jacoco.plugin>
         <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco-merged/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <!-- Default so that @{argLine} resolves when jacoco:prepare-agent does not run -->
+        <argLine></argLine>
     </properties>
 
     <artifactId>uk-pmrv-app-api</artifactId>
@@ -490,6 +492,15 @@
                         <id>enhance</id>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkCount>1</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <!-- Default so that @{argLine} resolves when jacoco:prepare-agent does not run -->
+                    <argLine>-Xms256m -Xmx2g -XX:MaxMetaspaceSize=768m -XX:+HeapDumpOnOutOfMemoryError -XX:ErrorFile=${project.build.directory}/hs_err_%p.log</argLine>                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -9,9 +9,6 @@
       </app-page-heading>
 
       <app-make-payment-help
-        [competentAuthority$]="competentAuthority$"
-        [requestType$]="requestType$"
-        [requestTaskType$]="requestTaskType$"
         [defaultHelp]="requestTaskType$ | async | i18nSelect: paymentHintInfo"></app-make-payment-help>
 
       <app-summary-header class="govuk-heading-m">Payment Details</app-summary-header>
@@ -27,11 +24,7 @@
           </div>
           <div govukSummaryListRow>
             <dt govukSummaryListRowKey>Amount to pay</dt>
-            <dd govukSummaryListRowValue>
-              <ng-container *ngIf="shouldDisplayAmount$ | async">
-                {{ paymentDetails.amount | currency: 'GBP' }}
-              </ng-container>
-            </dd>
+            <dd govukSummaryListRowValue>{{ paymentDetails.amount | currency: 'GBP' }}</dd>
           </div>
         </dl>
       </ng-container>

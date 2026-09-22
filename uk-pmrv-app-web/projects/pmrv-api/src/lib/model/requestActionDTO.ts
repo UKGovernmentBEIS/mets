@@ -120,6 +120,7 @@ import { NonComplianceDetailsAmendedRequestActionPayload } from './nonCompliance
 import { NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload } from './nonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload';
 import { NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload } from './nonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload';
 import { NonCompliancePeerReviewRequestedRequestActionPayload } from './nonCompliancePeerReviewRequestedRequestActionPayload';
+import { NotificationRegistryIntegrationNoFileRequestActionPayload } from './notificationRegistryIntegrationNoFileRequestActionPayload';
 import { NotificationRegistryIntegrationRequestActionPayload } from './notificationRegistryIntegrationRequestActionPayload';
 import { PaymentCancelledRequestActionPayload } from './paymentCancelledRequestActionPayload';
 import { PaymentProcessedRequestActionPayload } from './paymentProcessedRequestActionPayload';
@@ -153,11 +154,13 @@ import { PermitVariationApplicationRegulatorLedApprovedRequestActionPayload } fr
 import { PermitVariationApplicationRejectedRequestActionPayload } from './permitVariationApplicationRejectedRequestActionPayload';
 import { PermitVariationApplicationReturnedForAmendsRequestActionPayload } from './permitVariationApplicationReturnedForAmendsRequestActionPayload';
 import { PermitVariationApplicationSubmittedRequestActionPayload } from './permitVariationApplicationSubmittedRequestActionPayload';
+import { PermitVariationRequestPaymentActionPayload } from './permitVariationRequestPaymentActionPayload';
 import { RdeDecisionForcedRequestActionPayload } from './rdeDecisionForcedRequestActionPayload';
 import { RdeRejectedRequestActionPayload } from './rdeRejectedRequestActionPayload';
 import { RdeSubmittedRequestActionPayload } from './rdeSubmittedRequestActionPayload';
 import { ReissueCompletedRequestActionPayload } from './reissueCompletedRequestActionPayload';
 import { ReturnOfAllowancesApplicationSubmittedRequestActionPayload } from './returnOfAllowancesApplicationSubmittedRequestActionPayload';
+import { ReturnOfAllowancesNotificationRegistryIntegrationRequestActionPayload } from './returnOfAllowancesNotificationRegistryIntegrationRequestActionPayload';
 import { ReturnOfAllowancesReturnedApplicationCompletedRequestActionPayload } from './returnOfAllowancesReturnedApplicationCompletedRequestActionPayload';
 import { RfiResponseSubmittedRequestActionPayload } from './rfiResponseSubmittedRequestActionPayload';
 import { RfiSubmittedRequestActionPayload } from './rfiSubmittedRequestActionPayload';
@@ -236,6 +239,7 @@ export interface RequestActionDTO {
     | 'PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED'
     | 'PERMIT_VARIATION_RECALLED_FROM_AMENDS'
     | 'PERMIT_VARIATION_ACCOUNT_UPDATED_SENT_TO_REGISTRY'
+    | 'PERMIT_VARIATION_REQUEST_PAYMENT'
     | 'PERMIT_TRANSFER_A_APPLICATION_SUBMITTED'
     | 'PERMIT_TRANSFER_A_APPLICATION_GRANTED'
     | 'PERMIT_TRANSFER_A_APPLICATION_REJECTED'
@@ -517,7 +521,8 @@ export interface RequestActionDTO {
     | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_ACCEPTED'
     | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED'
     | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED'
-    | 'NOTIFICATION_SENT_TO_REGISTRY';
+    | 'NOTIFICATION_SENT_TO_REGISTRY'
+    | 'RETURN_OF_ALLOWANCES_NOTIFICATION_SENT_TO_REGISTRY';
   payload?:
     | ALRApplicationAcceptedRequestActionPayload
     | ALRApplicationAcceptedWithCorrectionsRequestActionPayload
@@ -630,6 +635,7 @@ export interface RequestActionDTO {
     | NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload
     | NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload
     | NonCompliancePeerReviewRequestedRequestActionPayload
+    | NotificationRegistryIntegrationNoFileRequestActionPayload
     | NotificationRegistryIntegrationRequestActionPayload
     | PaymentCancelledRequestActionPayload
     | PaymentProcessedRequestActionPayload
@@ -663,11 +669,13 @@ export interface RequestActionDTO {
     | PermitVariationApplicationRejectedRequestActionPayload
     | PermitVariationApplicationReturnedForAmendsRequestActionPayload
     | PermitVariationApplicationSubmittedRequestActionPayload
+    | PermitVariationRequestPaymentActionPayload
     | RdeDecisionForcedRequestActionPayload
     | RdeRejectedRequestActionPayload
     | RdeSubmittedRequestActionPayload
     | ReissueCompletedRequestActionPayload
     | ReturnOfAllowancesApplicationSubmittedRequestActionPayload
+    | ReturnOfAllowancesNotificationRegistryIntegrationRequestActionPayload
     | ReturnOfAllowancesReturnedApplicationCompletedRequestActionPayload
     | RfiResponseSubmittedRequestActionPayload
     | RfiSubmittedRequestActionPayload

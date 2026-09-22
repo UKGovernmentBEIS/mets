@@ -16,6 +16,7 @@ import Keycloak from 'keycloak-js';
 import { BulkDownloadService, UserStateDTO } from 'pmrv-api';
 
 import { AppComponent } from './app.component';
+import { SettingsVisibilityService } from './settings/core/settings-visibility.service';
 import { TimeoutModule } from './timeout/timeout.module';
 
 describe('AppComponent', () => {
@@ -87,6 +88,7 @@ describe('AppComponent', () => {
   }
 
   const bulkDownloadService = mockClass(BulkDownloadService);
+  const settingsVisibilityService = mockClass(SettingsVisibilityService);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -97,6 +99,7 @@ describe('AppComponent', () => {
         { provide: KEYCLOAK_EVENT_SIGNAL, useValue: mockKeycloakEventSignal },
         { provide: APP_BASE_HREF, useValue: '/installation-aviation/' },
         { provide: BulkDownloadService, useValue: bulkDownloadService },
+        { provide: SettingsVisibilityService, useValue: settingsVisibilityService },
       ],
     }).compileComponents();
     authStore = TestBed.inject(AuthStore);
@@ -108,6 +111,7 @@ describe('AppComponent', () => {
     configStore.setState({ ...configStore.getState(), features: { settings: true } });
 
     bulkDownloadService.hasAccessBulkDownload.mockReturnValue(of(false));
+    settingsVisibilityService.hasAnyAccessibleSection.mockReturnValue(of(true));
   });
 
   beforeEach(() => {
@@ -288,6 +292,26 @@ describe('AppComponent', () => {
   });
 
   it('should render the settings link only if the user is a regulator and the settings feature is enabled', () => {
+    configStore.setState({ ...configStore.getState(), features: { settings: false } });
+    fixture.detectChanges();
+
+    expect(page.settingsLink).toBeFalsy();
+  });
+
+  it('should not render the settings link if the user has no accessible settings sections', () => {
+    settingsVisibilityService.hasAnyAccessibleSection.mockReturnValue(of(false));
+
+    createComponent();
+
+    setUser('REGULATOR');
+    expect(page.settingsLink).toBeFalsy();
+  });
+
+  it('should render the settings link only if the user is a regulator with an accessible settings section', () => {
+    settingsVisibilityService.hasAnyAccessibleSection.mockReturnValue(of(true));
+
+    createComponent();
+
     setUser('OPERATOR');
     expect(page.settingsLink).toBeFalsy();
 
@@ -296,11 +320,6 @@ describe('AppComponent', () => {
 
     setUser('REGULATOR');
     expect(page.settingsLink).toBeTruthy();
-
-    configStore.setState({ ...configStore.getState(), features: { settings: false } });
-    fixture.detectChanges();
-
-    expect(page.settingsLink).toBeFalsy();
   });
 
   it('should not render the bulk downloads link if aviation', () => {

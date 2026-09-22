@@ -309,5 +309,9 @@ public class PmrvPermission {
 
     // Custom Mi Reports
     public static final String PERM_MI_REPORTS_MANAGE_CUSTOM_REPORTS_EXECUTE_TASK = "PERM_MI_REPORTS_MANAGE_CUSTOM_REPORTS_EXECUTE_TASK";
-    
+
+    // Settings Page Fees
+    public static final String PERM_SETTINGS_PAGE_FEES_VIEW_TASK = "PERM_SETTINGS_PAGE_FEES_VIEW_TASK";
+    public static final String PERM_SETTINGS_PAGE_FEES_EXECUTE_TASK = "PERM_SETTINGS_PAGE_FEES_EXECUTE_TASK";
+
 }

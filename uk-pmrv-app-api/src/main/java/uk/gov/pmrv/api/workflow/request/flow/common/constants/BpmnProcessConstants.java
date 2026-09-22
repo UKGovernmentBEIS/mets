@@ -73,6 +73,8 @@ public class BpmnProcessConstants {
     
     // permit variation
     public static final String PERMIT_VARIATION_SUBMIT_OUTCOME = "permitVariationSubmitOutcome";
+    public static final String PERMIT_VARIATION_INITIATE_PAYMENT = "permitVariationInitiatePayment";
+
     
     // permit transfer
     public static final String PERMIT_TRANSFER_TRANSFERRING_BUSINESS_KEY = "permitTransferTransferringBusinessKey";

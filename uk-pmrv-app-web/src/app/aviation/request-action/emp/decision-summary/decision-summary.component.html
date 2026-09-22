@@ -4,8 +4,12 @@
   [timelineCreationDate]="vm.creationDate">
   <app-summary-header class="govuk-heading-m">Decision details</app-summary-header>
 
-  <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-0" *ngIf="vm.showApprovedSummary">
-    <div govukSummaryListRow *ngIf="vm.empDocument">
+  <dl
+    govuk-summary-list
+    appGroupedSummaryList
+    class="govuk-!-margin-bottom-6"
+    *ngIf="vm.showEmpApplicationSummary || vm.determination">
+    <div govukSummaryListRow *ngIf="vm.showEmpApplicationSummary && vm.empDocument">
       <dt govukSummaryListRowKey>Emissions plan</dt>
       <dd govukSummaryListRowValue>
         <a [routerLink]="[vm.downloadUrl, vm.empDocument.uuid]" govukLink target="_blank">
@@ -14,18 +18,38 @@
       </dd>
     </div>
 
-    <div govukSummaryListRow>
+    <div govukSummaryListRow *ngIf="vm.showEmpApplicationSummary">
       <dt govukSummaryListRowKey>Emissions plan application</dt>
       <dd govukSummaryListRowValue>
         <a govukLink [routerLink]="['../']">Emissions plan application</a>
       </dd>
     </div>
-  </dl>
 
-  <app-overall-decision-summary-template
-    class="govuk-!-margin-bottom-6"
-    [data]="vm.determination"
-    [variationScheduleItems]="vm.variationScheduleItems"></app-overall-decision-summary-template>
+    <div govukSummaryListRow *ngIf="vm.determination">
+      <dt govukSummaryListRowKey>Decision</dt>
+      <dd govukSummaryListRowValue>{{ vm.determination.type | empReviewDeterminationType }}</dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="vm.determination?.reason">
+      <dt govukSummaryListRowKey>
+        @if (vm.determination.type === 'REJECTED') {
+          Text to be included in the refusal notice
+        } @else {
+          Reason for decision
+        }
+      </dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ vm.determination.reason }}</dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="vm.determination?.type === 'APPROVED' && vm.variationScheduleItems?.length > 0">
+      <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <ng-container *ngFor="let variationScheduleItem of vm.variationScheduleItems; let i = index">
+          <div>{{ i + 1 }}. {{ variationScheduleItem }}<br /></div>
+        </ng-container>
+      </dd>
+    </div>
+  </dl>
 
   <app-summary-header class="govuk-heading-m">Recipients</app-summary-header>
 

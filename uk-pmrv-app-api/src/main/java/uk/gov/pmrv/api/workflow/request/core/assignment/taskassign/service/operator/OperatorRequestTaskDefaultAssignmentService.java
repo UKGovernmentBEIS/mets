@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import uk.gov.netz.api.authorization.core.domain.dto.UserRoleTypeDTO;
 import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessCheckedException;
@@ -33,7 +34,7 @@ public class OperatorRequestTaskDefaultAssignmentService implements UserRoleRequ
     public void assignDefaultAssigneeToTask(RequestTask requestTask) {
         String requestAssignee = requestTask.getRequest().getPayload().getOperatorAssignee();
 
-        if(!ObjectUtils.isEmpty(requestAssignee) && userRoleTypeService.isUserOperator(requestAssignee)){
+        if (isExistingUserOfRoleType(requestAssignee)) {
             try {
                 requestTaskAssignmentService.assignToUser(requestTask, requestAssignee, getRoleType());
             } catch (BusinessCheckedException e) {
@@ -42,6 +43,19 @@ public class OperatorRequestTaskDefaultAssignmentService implements UserRoleRequ
         } else {
             assignTaskToAccountPrimaryContactOrReleaseRequest(requestTask);
         }
+    }
+
+    /**
+     * The request payload holds the assignee of the last time the request was open, so by the time a closed request
+     * is re-opened that user may have been deleted. A deleted user has no role type any more, in which case the task
+     * falls back to the account primary contact instead of failing.
+     */
+    private boolean isExistingUserOfRoleType(String userId) {
+        return !ObjectUtils.isEmpty(userId)
+                && userRoleTypeService.getUserRoleTypeByUserIdOpt(userId)
+                .map(UserRoleTypeDTO::getRoleType)
+                .filter(getRoleType()::equals)
+                .isPresent();
     }
 
     private void assignTaskToAccountPrimaryContactOrReleaseRequest(RequestTask requestTask) {

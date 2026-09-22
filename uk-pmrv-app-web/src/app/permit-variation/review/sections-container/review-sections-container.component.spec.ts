@@ -3,7 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { RequestActionsService, RequestItemsService } from 'pmrv-api';
+import { of } from 'rxjs';
+
+import { RequestActionsService, RequestItemsService, RequestsService } from 'pmrv-api';
 
 import { mockClass } from '../../../../testing';
 import { ReviewGroupStatusWrapperPipe } from '../../../permit-application/shared/pipes/review-group-status-wrapper.pipe';
@@ -33,6 +35,7 @@ describe('ReviewSectionsContainerComponent', () => {
 
   const requestActionsService = mockClass(RequestActionsService);
   const requestItemsService = mockClass(RequestItemsService);
+  const requestsService = mockClass(RequestsService);
 
   @Component({
     selector: 'app-review-sections',
@@ -70,10 +73,12 @@ describe('ReviewSectionsContainerComponent', () => {
       providers: [
         { provide: RequestItemsService, useValue: requestItemsService },
         { provide: RequestActionsService, useValue: requestActionsService },
+        { provide: RequestsService, useValue: requestsService },
       ],
     }).compileComponents();
     router = TestBed.inject(Router);
     route = TestBed.inject(ActivatedRoute);
+    requestsService.hasAccessRequestPayment.mockReturnValue(of(false));
   });
 
   describe('completed permit variation operator led with no determination', () => {
@@ -133,6 +138,53 @@ describe('ReviewSectionsContainerComponent', () => {
       expect(hostElement.querySelector('button[title="Notify Operator for decision"]')).toBeNull();
       expect(hostElement.querySelector('button[title="Send for peer review"]')).toBeNull();
       expect(hostElement.querySelector('button[title="Return for amends"]')).toBeNull();
+    });
+  });
+
+  describe('request payment for permit variation', () => {
+    beforeEach(() => {
+      store = TestBed.inject(PermitVariationStore);
+      store.setState({
+        ...mockPermitVariationReviewOperatorLedPayload,
+        reviewGroupDecisions: mockPermitCompletedAcceptedReviewGroupDecisions,
+        allowedRequestTaskActions: [],
+      });
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('does not display the related action link when the user has no access', () => {
+      requestsService.hasAccessRequestPayment.mockReturnValue(of(false));
+      createComponent();
+
+      expect(hostElement.querySelector('a[routerlink="request-payment"]')).toBeNull();
+    });
+
+    it('displays the related action link when the user has access', () => {
+      requestsService.hasAccessRequestPayment.mockReturnValue(of(true));
+      createComponent();
+
+      expect(hostElement.querySelector('a[routerlink="request-payment"]')).toBeTruthy();
+    });
+
+    it('does not display the success banner by default', () => {
+      createComponent();
+
+      expect(hostElement.querySelector('govuk-notification-banner')).toBeNull();
+    });
+
+    it('displays the success banner after a payment request has just been sent', () => {
+      jest
+        .spyOn(router, 'currentNavigation')
+        .mockReturnValue({ extras: { state: { paymentRequestSent: true } } } as any);
+
+      createComponent();
+
+      expect(hostElement.querySelector('govuk-notification-banner').textContent).toContain(
+        'The permit variation payment request has been sent successfully.',
+      );
     });
   });
 

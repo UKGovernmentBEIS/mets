@@ -20,12 +20,12 @@ public class InstallationNotificationRegistryProducer {
     @Value("${kafka.installation.notification-request.topic}")
     private String topicName;
 
-    private final KafkaTemplate<String, RegulatorNoticeEvent> noticeKafkaTemplate;
+    private final KafkaTemplate<String, RegulatorNoticeEvent> installationNoticeKafkaTemplate;
 
     @Transactional
     public void produce(RegulatorNoticeEvent regulatorNoticeEvent) {
         try {
-            noticeKafkaTemplate.send(topicName, regulatorNoticeEvent.getRegistryId(),regulatorNoticeEvent);
+            installationNoticeKafkaTemplate.send(topicName, regulatorNoticeEvent.getRegistryId(),regulatorNoticeEvent);
         } catch (Exception e) {
             log.error("Error when kafka producing: {}", e.getMessage());
             throw new BusinessException(MetsErrorCode.INTEGRATION_REGISTRY_ACCOUNT_KAFKA_QUEUE_CONNECTION_ISSUE,

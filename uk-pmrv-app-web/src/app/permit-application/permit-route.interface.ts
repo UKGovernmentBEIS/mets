@@ -21,4 +21,5 @@ export interface PermitRouteData {
   groupKey?: PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload['group'] | AboutVariationGroupKey;
   breadcrumb?: RouteBreadcrumb;
   backlink?: RouteBacklink;
+  hideBreadcrumb?: boolean;
 }

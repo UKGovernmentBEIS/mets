@@ -7464,4 +7464,68 @@ This is an automatic email – please do not reply to this address.'
             <param name="fileDocumentName" value="DOAL Preliminary Allocation Letter Final v02 25062026-OPRED.docx" />
         </customChange>
     </changeSet>
+    <changeSet id="0_2_0_update_notification_info_template_for_aviation" author="mitzelose@unisystems.gr">
+        <sql>
+            INSERT INTO notification_template (
+                id, name, subject, competent_authority, event_trigger, account_type,
+                workflow, role_type, is_managed, last_updated_date, text
+            )
+            SELECT
+                nextval('notification_template_seq'),
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                'AVIATION',
+                workflow,
+                role_type,
+                is_managed,
+                CURRENT_TIMESTAMP,
+                text
+            FROM notification_template
+            WHERE name = 'Registry integration email template consume notification registry info error template'
+              AND account_type = 'INSTALLATION'
+              AND competent_authority IN ('ENGLAND', 'SCOTLAND', 'WALES', 'NORTHERN_IRELAND', 'OPRED');
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM notification_template
+                WHERE name = 'Registry integration email template consume notification registry info error template'
+                AND account_type = 'AVIATION'
+                AND competent_authority IN ('ENGLAND', 'SCOTLAND', 'WALES', 'NORTHERN_IRELAND', 'OPRED');
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_update_notification_action_template_for_aviation" author="mitzelose@unisystems.gr">
+        <sql>
+            INSERT INTO notification_template (
+                id, name, subject, competent_authority, event_trigger, account_type,
+                workflow, role_type, is_managed, last_updated_date, text
+            )
+            SELECT
+                nextval('notification_template_seq'),
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                'AVIATION',
+                workflow,
+                role_type,
+                is_managed,
+                CURRENT_TIMESTAMP,
+                text
+            FROM notification_template
+            WHERE name = 'Registry integration email template consume notification registry error template'
+              AND account_type = 'INSTALLATION'
+              AND competent_authority IN ('ENGLAND', 'SCOTLAND', 'WALES', 'NORTHERN_IRELAND', 'OPRED');
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM notification_template
+                WHERE name = 'Registry integration email template consume notification registry error template'
+                AND account_type = 'AVIATION'
+                AND competent_authority IN ('ENGLAND', 'SCOTLAND', 'WALES', 'NORTHERN_IRELAND', 'OPRED');
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

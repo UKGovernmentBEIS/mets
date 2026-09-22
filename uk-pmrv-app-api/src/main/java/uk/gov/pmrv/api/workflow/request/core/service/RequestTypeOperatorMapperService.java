@@ -25,6 +25,7 @@ public class RequestTypeOperatorMapperService implements RequestTypeToRoleMapper
         return Arrays.stream(RequestType.values())
                 .filter(type-> (accountType.equals(type.getAccountType()) || type.getAccountType()==null)
                         && type.getRoleTypes().contains(RoleTypeConstants.OPERATOR))
+                .filter(RequestType::isDisplayedInWorkflowFiltering)
                 .collect(Collectors.toSet());
     }
 

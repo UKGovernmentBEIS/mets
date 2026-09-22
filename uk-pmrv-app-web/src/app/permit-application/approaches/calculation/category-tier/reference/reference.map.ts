@@ -38,7 +38,7 @@ export const referenceMap = {
     MONITORING_REPORTING_REGULATION_ANNEX_VI_SECTION_2_TABLE_5:
       'Monitoring and Reporting Regulation, Annex VI, Section 2, Table 5',
     JEP_GUIDANCE: 'JEP Guidance for the Monitoring and Reporting of CO2 Emissions from Power Stations',
-    BRITISH_CERAMIC_CONFEDERATION: 'British Ceramic Confederation (BCC) Methodology (latest version)',
+    BRITISH_CERAMIC_CONFEDERATION: 'Ceramics UK Methodology (latest version) (formerly BCC)',
     LABORATORY_ANALYSIS: 'Laboratory analysis',
     PAST_ANALYSIS: 'Past analysis',
     SUPPLIER_ANALYSIS: 'Supplier analysis/data',

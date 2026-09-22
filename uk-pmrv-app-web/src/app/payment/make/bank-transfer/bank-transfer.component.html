@@ -2,9 +2,6 @@
 
 <ng-container *ngIf="competentAuthority$ | async as ca">
   <app-make-payment-help
-    [competentAuthority$]="competentAuthority$"
-    [requestType$]="requestType$"
-    [requestTaskType$]="requestTaskType$"
     defaultHelp="Use the {{
       ca | competentAuthority
     }}'s bank details to make a payment by bank transfer"></app-make-payment-help>
@@ -41,11 +38,7 @@
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Amount to pay</dt>
-        <dd govukSummaryListRowValue>
-          <ng-container *ngIf="shouldDisplayAmount$ | async">
-            {{ makePaymentDetails.amount | currency: 'GBP' }}
-          </ng-container>
-        </dd>
+        <dd govukSummaryListRowValue>{{ makePaymentDetails.amount | currency: 'GBP' }}</dd>
       </div>
     </dl>
 

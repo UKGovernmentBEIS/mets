@@ -122,4 +122,7 @@ public class PmrvRegulatorPermissionGroup {
 
     //Mi Reports Custom
     public static final String MI_REPORTS_MANAGE_CUSTOM = "MI_REPORTS_MANAGE_CUSTOM";
+
+    // Settings Page Fees
+    public static final String SETTINGS_PAGE_FEES = "SETTINGS_PAGE_FEES";
 }

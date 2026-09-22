@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -65,6 +66,8 @@ public class CaSiteContactController {
     public ResponseEntity<AccountContactInfoResponse> getCaSiteContacts(
             @Parameter(hidden = true) AppUser user,
             @PathVariable("accountType") @Parameter(description = "The account type") AccountType accountType,
+            @RequestParam(value = "term", required = false) @Size(min = 3, max = 256)
+            @Parameter(description = "Optional ca site contact search term") String term,
             @RequestParam("page") @Parameter(name = "page", description = "The page number starting from zero")
             @Min(value = 0, message = "{parameter.page.typeMismatch}")
             @NotNull(message = "{parameter.page.typeMismatch}") Integer page,
@@ -73,7 +76,7 @@ public class CaSiteContactController {
             @NotNull(message = "{parameter.pageSize.typeMismatch}") Integer pageSize) {
 
         return new ResponseEntity<>(
-            accountCaSiteContactService.getAccountsAndCaSiteContacts(user, accountType, page, pageSize),
+            accountCaSiteContactService.getAccountsAndCaSiteContacts(user, accountType, term, page, pageSize),
             HttpStatus.OK
         );
     }

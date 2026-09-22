@@ -1,6 +1,9 @@
 <app-page-heading caption="Create user account" size="xl">Check your answers</app-page-heading>
 
-<app-summary-header [changeRoute]="['/registration', 'user', 'contact-details']" class="govuk-heading-m">
+<app-summary-header
+  [changeRoute]="['/registration', 'user', 'contact-details']"
+  class="govuk-heading-m"
+  changeHiddenText="your details">
   Your details
 </app-summary-header>
 <dl *ngIf="userInfo$ | async as userInfo" govuk-summary-list>
@@ -27,7 +30,10 @@
 </dl>
 
 <ng-container *ngIf="(invitationStatus$ | async) !== 'PENDING_TO_REGISTERED_SET_REGISTER_FORM_NO_PASSWORD'">
-  <app-summary-header [changeRoute]="['/registration', 'user', 'choose-password']" class="govuk-heading-m">
+  <app-summary-header
+    [changeRoute]="['/registration', 'user', 'choose-password']"
+    class="govuk-heading-m"
+    changeHiddenText="password">
     Password
   </app-summary-header>
 </ng-container>

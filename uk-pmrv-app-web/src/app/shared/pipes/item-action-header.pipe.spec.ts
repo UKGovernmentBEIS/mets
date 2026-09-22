@@ -218,6 +218,13 @@ describe('ItemActionHeaderPipe', () => {
     expect(
       pipe.transform({
         ...baseRequestAction,
+        type: 'PERMIT_VARIATION_REQUEST_PAYMENT',
+      }),
+    ).toEqual('Request payment for permit variation sent by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
         type: 'PERMIT_VARIATION_PEER_REVIEW_REQUESTED',
       }),
     ).toEqual('Peer review requested by John Bolt');

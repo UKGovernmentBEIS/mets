@@ -18,6 +18,7 @@ import uk.gov.pmrv.api.account.domain.dto.AccountContactVbInfoResponse;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.pmrv.api.common.utils.SearchTermUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -35,11 +36,13 @@ public class AccountVbSiteContactService {
     private final VerificationBodyAuthorizationResourceService verificationBodyAuthorizationResourceService;
     private final AccountContactQueryService accountContactQueryService;
 
-    public AccountContactVbInfoResponse getAccountsAndVbSiteContacts(AppUser appUser, AccountType accountType, Integer page, Integer pageSize) {
+    public AccountContactVbInfoResponse getAccountsAndVbSiteContacts(AppUser appUser, AccountType accountType, String term, Integer page, Integer pageSize) {
         Long vbId = appUser.getVerificationBodyId();
 
+        String searchTerm = SearchTermUtils.toSearchPattern(term);
+
         Page<AccountContactVbInfoDTO> contacts = accountRepository
-            .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(page, pageSize), accountType, vbId, AccountContactType.VB_SITE);
+            .findAccountContactsByAccountTypeAndVbAndContactType(PageRequest.of(page, pageSize), accountType, searchTerm, vbId, AccountContactType.VB_SITE);
 
         // Check if user has the permission of editing account contacts assignees
         boolean isEditable = verificationBodyAuthorizationResourceService.hasUserScopeToVerificationBody(appUser, vbId, Scope.EDIT_USER);

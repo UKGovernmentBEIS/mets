@@ -12,14 +12,14 @@
   [hasBorders]="true"
   [class.govuk-!-margin-bottom-0]="true">
   <div govukSummaryListRow *ngIf="hasValue(item?.key, item?.value)">
-    <dt govukSummaryListRowKey [id]="item?.key" [ngClass]="summaryListMapper[item?.key]?.styleClassLabel">
+    <dt govukSummaryListRowKey [id]="item?.key" [class]="summaryListMapper[item?.key]?.styleClassLabel">
       {{ summaryListMapper[item?.key]?.label }}
     </dt>
     <dd class="pre-wrap" govukSummaryListRowValue>
       <div
         [attr.aria-labelledby]="item?.key"
         [ngSwitch]="summaryListMapper[item?.key]?.type"
-        [ngClass]="summaryListMapper[item?.key]?.styleClass">
+        [class]="summaryListMapper[item?.key]?.styleClass">
         <ng-container *ngSwitchCase="'string'">
           <div>{{ item?.value }}</div>
         </ng-container>

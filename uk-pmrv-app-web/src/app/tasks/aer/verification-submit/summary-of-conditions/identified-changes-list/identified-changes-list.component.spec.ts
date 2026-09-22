@@ -33,7 +33,7 @@ describe('IdentifiedChangesListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
+      imports: [AerModule, RouterTestingModule.withRoutes([{ path: '**', component: IdentifiedChangesListComponent }])],
       providers: [KeycloakService],
     }).compileComponents();
   });

@@ -1,0 +1,46 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    @if (form) {
+      @if (isSummaryDisplayed$ | async) {
+        <govuk-error-summary [form]="form"></govuk-error-summary>
+      }
+
+      <app-page-heading size="l">Request payment for permit variation</app-page-heading>
+
+      <form (ngSubmit)="submitForm()" [formGroup]="form">
+        <div
+          formControlName="amount"
+          govuk-text-input
+          inputType="text"
+          label="Payment amount in pounds"
+          labelSize="medium"
+          hint="For example 1500 or 1500.50"
+          prefix="£"
+          widthClass="govuk-!-width-one-quarter"></div>
+
+        <div
+          formControlName="dueDate"
+          govuk-date-input
+          label="Set a due date for the payment"
+          labelSize="medium"
+          hint="Enter the date using numbers, for example 3 5 2027"
+          [isRequired]="true"
+          emptyMessage="Enter a date"></div>
+
+        <div
+          formControlName="notes"
+          govuk-textarea
+          label="Notes"
+          labelSize="medium"
+          hint="This can be viewed by the operator"
+          [maxLength]="10000"></div>
+
+        <button appPendingButton govukButton type="submit">Confirm and complete</button>
+      </form>
+
+      <p class="govuk-body">
+        <a govukLink routerLink="..">Return to: {{ returnToText$ | async }}</a>
+      </p>
+    }
+  </div>
+</div>

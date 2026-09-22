@@ -20,8 +20,10 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateOfficialNoticeParamsProvider;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.DeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.InstallationAccountRegistryEventPublisherService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationGrantDetermination;
 
 import java.util.List;
 import java.util.Optional;
@@ -296,10 +298,11 @@ public class PermitVariationOfficialNoticeServiceTest {
         PermitVariationRequestPayload requestPayload = PermitVariationRequestPayload.builder()
             .permitType(PermitType.GHGE)
             .decisionNotification(decisionNotification)
+            .determination(PermitVariationGrantDetermination.builder().type(DeterminationType.GRANTED).build())
             .permitDocument(FileInfoDTO.builder()
-                .name("permitDoc.pdf")
-                .uuid(UUID.randomUUID().toString())
-                .build())
+            .name("permitDoc.pdf")
+            .uuid(UUID.randomUUID().toString())
+            .build())
             .officialNotice(buildOfficialFileInfo())
             .build();
         Request request = Request.builder().payload(requestPayload).build();
@@ -329,6 +332,7 @@ public class PermitVariationOfficialNoticeServiceTest {
         PermitVariationRequestPayload requestPayload = PermitVariationRequestPayload.builder()
             .permitType(PermitType.GHGE)
             .decisionNotification(decisionNotification)
+            .determination(PermitVariationGrantDetermination.builder().type(DeterminationType.GRANTED).build())
             .officialNotice(buildOfficialFileInfo())
             .build();
         Request request = Request.builder().payload(requestPayload).build();

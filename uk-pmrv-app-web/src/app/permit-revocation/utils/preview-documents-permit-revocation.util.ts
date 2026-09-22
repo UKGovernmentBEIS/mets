@@ -16,6 +16,13 @@ export function getPermitRevocationPreviewDocumentsInfo(
           filename: letterPreview,
         },
       ];
+    case 'PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_CESSATION':
+      return [
+        {
+          documentType: 'PERMIT_REVOCATION_CESSATION',
+          filename: letterPreview,
+        },
+      ];
   }
 }
 

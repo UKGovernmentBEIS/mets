@@ -39,6 +39,9 @@ public class AviationAccountCreationService {
     private final ApplicationEventPublisher publisher;
     private final AviationAccountMapper aviationAccountMapper;
 
+    private static final int FYRO_CORSIA_MIN_YEAR = 2019;
+    private static final int FYRO_UK_ETS_MIN_YEAR = 2021;
+
     @Transactional
     public void createAccount(@Valid AviationAccountCreationDTO aviationAccountCreationDTO, AppUser appUser) {
         EmissionTradingScheme emissionTradingScheme = aviationAccountCreationDTO.getEmissionTradingScheme();
@@ -86,11 +89,17 @@ public class AviationAccountCreationService {
     private void validateCommencementDateDTO(LocalDate commencementDate, CompetentAuthorityEnum competentAuthority,
                                             EmissionTradingScheme emissionTradingScheme) {
         int year = commencementDate.getYear();
-        int currentYear = LocalDate.now().getYear();
+        int currentYear = Year.now().getValue();
 
-        if (year < 2021 || year > currentYear) {
+        boolean isCorsia = EmissionTradingScheme.CORSIA.equals(emissionTradingScheme);
+        int minimumYear = isCorsia ? FYRO_CORSIA_MIN_YEAR : FYRO_UK_ETS_MIN_YEAR;
+        MetsErrorCode metsErrorCode = isCorsia
+                ? MetsErrorCode.AVIATION_FIRST_YEAR_WITHIN_SCOPE_OF_APPLICABILITY_OUT_OF_SCOPE
+                : MetsErrorCode.AVIATION_FIRST_YEAR_OF_REPORTING_OBLIGATION_OUT_OF_SCOPE;
+
+        if (year < minimumYear || year > currentYear) {
             throw new BusinessException(
-                    MetsErrorCode.AVIATION_COMMENCEMENT_DATE_NOT_BEFORE_2021_NOT_AFTER_CURRENT_YEAR,
+                    metsErrorCode,
                     commencementDate,
                     competentAuthority,
                     emissionTradingScheme

@@ -11,7 +11,6 @@ import { KeycloakProfile } from 'keycloak-js';
 import { CardPaymentProcessResponseDTO } from 'pmrv-api';
 
 import { mapGOVUKToPaymentDetails, mapMakePaymentToPaymentDetails, PaymentDetails } from '../../core/payment.map';
-import { shouldHidePaymentAmount } from '../../core/utils';
 import { PaymentState } from '../../store/payment.state';
 import { PaymentStore } from '../../store/payment.store';
 
@@ -30,7 +29,7 @@ export interface PaymentDetailsItem {
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
           <govuk-panel title="Payment complete">Your payment reference is {{ details.paymentRefNum }}</govuk-panel>
-          <app-payment-summary [shouldDisplayAmount]="shouldDisplayAmount$ | async" [details]="details">
+          <app-payment-summary [details]="details">
             <app-summary-header class="govuk-heading-m">Payment summary</app-summary-header>
           </app-payment-summary>
         </div>
@@ -42,8 +41,6 @@ export interface PaymentDetailsItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmationComponent implements OnInit {
-  readonly shouldDisplayAmount$ = this.store.pipe(map((state) => !shouldHidePaymentAmount(state)));
-
   userProfile$ = this.authStore.pipe(selectUserProfile);
   details$ = new BehaviorSubject<PaymentDetails>(null);
 

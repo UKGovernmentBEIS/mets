@@ -1,6 +1,7 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.netz.api.common.exception.BusinessException;
@@ -8,6 +9,8 @@ import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.common.config.RegistryConfig;
+import uk.gov.pmrv.api.integration.registry.notification.aviation.request.AviationNotificationRegistryEvent;
+import uk.gov.pmrv.api.integration.registry.notification.common.RegistryNotificationType;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
@@ -44,6 +47,8 @@ public class EmpIssuanceOfficialNoticeService {
     private final RegistryConfig registryConfig;
 
     private final EmpIssuanceRegistryEventPublisherService empIssuanceRegistryEventPublisherService;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
     public CompletableFuture<FileInfoDTO> generateGrantedOfficialNotice(final String requestId) {
@@ -101,6 +106,17 @@ public class EmpIssuanceOfficialNoticeService {
 		officialNoticeSendService.sendOfficialNotice(attachments, request,
 				decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification()),
 				List.of(registryConfig.getEmail()));
+
+        if(EmpIssuanceDeterminationType.DEEMED_WITHDRAWN.equals(requestPayload.getDetermination().getType())) {
+            AviationNotificationRegistryEvent event = AviationNotificationRegistryEvent.builder()
+                    .requestId(requestId)
+                    .accountId(request.getAccountId())
+                    .registryNotificationType(RegistryNotificationType.EMP_ISSUANCE_DEEMED_WITHDRAWN_NOTIFICATION)
+                    .fileInfoDTO(requestPayload.getOfficialNotice())
+                    .build();
+            applicationEventPublisher.publishEvent(event);
+        }
+
     }
 
     private CompletableFuture<FileInfoDTO> generateOfficialNoticeAsync(final Request request,

@@ -1,37 +1,71 @@
-<form (ngSubmit)="submit()" *ngIf="contacts?.editable; else simpleTable" [formGroup]="form">
+<span id="site-contacts-search-hint" class="govuk-hint">Search by account name or ID</span>
+<form (ngSubmit)="onSearch()" [formGroup]="searchForm" id="site-contacts-search-form">
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-three-quarters">
+      <div
+        formControlName="term"
+        [isLabelHidden]="true"
+        label="Search by account name or ID"
+        autoComplete="off"
+        govuk-text-input
+        aria-describedby="site-contacts-search-hint"></div>
+    </div>
+    <div class="govuk-grid-column-one-quarter">
+      <button appPendingButton govukButton type="submit">Search</button>
+    </div>
+  </div>
+</form>
+
+<form (ngSubmit)="submit()" *ngIf="contacts?.editable; else simpleTable" [formGroup]="form" id="site-contacts-form">
   <govuk-error-summary *ngIf="isSummaryDisplayed$" [form]="form"></govuk-error-summary>
-  <govuk-table [columns]="columns" [data]="tableData" formArrayName="siteContacts">
-    <ng-template let-column="column" let-index="index" let-row="row">
-      <ng-container [formGroupName]="index" [ngSwitch]="column.field">
-        <ng-container *ngSwitchCase="'user'">
-          <div govuk-select formControlName="userId" [options]="assigneeOptions" widthClass="govuk-!-width-full"></div>
+  <ng-container *ngIf="tableData?.length; else noResults">
+    <govuk-table [columns]="columns" [data]="tableData" formArrayName="siteContacts">
+      <ng-template let-column="column" let-index="index" let-row="row">
+        <ng-container [formGroupName]="index" [ngSwitch]="column.field">
+          <ng-container *ngSwitchCase="'user'">
+            <div
+              govuk-select
+              formControlName="userId"
+              [options]="assigneeOptions"
+              widthClass="govuk-!-width-full"
+            ></div>
+          </ng-container>
+          <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
         </ng-container>
-        <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
-      </ng-container>
-    </ng-template>
-  </govuk-table>
+      </ng-template>
+    </govuk-table>
+  </ng-container>
 
   <ng-container *ngTemplateOutlet="pagination"></ng-container>
 
-  <div class="govuk-button-group">
+  <div *ngIf="tableData?.length" class="govuk-button-group">
     <button class="govuk-!-margin-top-3" govukButton type="submit">Save</button>
     <button govukSecondaryButton type="button" (click)="cancel.emit()">Discard changes</button>
   </div>
 </form>
 
 <ng-template #simpleTable>
-  <govuk-table [columns]="columns" [data]="tableData">
-    <ng-template let-column="column" let-row="row">
-      <ng-container [ngSwitch]="column.field">
-        <ng-container *ngSwitchCase="'user'">{{
-          row[column.field] ? (row[column.field] | userFullName) : 'Unassigned'
-        }}</ng-container>
-        <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
-      </ng-container>
-    </ng-template>
-  </govuk-table>
+  <ng-container *ngIf="tableData?.length; else noResults">
+    <govuk-table [columns]="columns" [data]="tableData">
+      <ng-template let-column="column" let-row="row">
+        <ng-container [ngSwitch]="column.field">
+          <ng-container *ngSwitchCase="'user'">{{
+            row[column.field] ? (row[column.field] | userFullName) : 'Unassigned'
+          }}</ng-container>
+          <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
+        </ng-container>
+      </ng-template>
+    </govuk-table>
+  </ng-container>
 
   <ng-container *ngTemplateOutlet="pagination"></ng-container>
+</ng-template>
+
+<ng-template #noResults>
+  <p class="govuk-body" tabindex="-1">
+    No matching accounts found. Try searching for a different account name, or clear the search to view all
+    accounts.
+  </p>
 </ng-template>
 
 <ng-template #pagination>

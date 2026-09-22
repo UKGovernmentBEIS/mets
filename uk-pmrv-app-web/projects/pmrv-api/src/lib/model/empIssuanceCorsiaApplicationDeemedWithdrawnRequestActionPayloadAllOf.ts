@@ -10,13 +10,22 @@
  * Do not edit the class manually.
  */
 import { DecisionNotification } from './decisionNotification';
+import { EmissionsMonitoringPlanCorsia } from './emissionsMonitoringPlanCorsia';
 import { EmpIssuanceDetermination } from './empIssuanceDetermination';
+import { EmpIssuanceReviewDecision } from './empIssuanceReviewDecision';
 import { FileInfoDTO } from './fileInfoDTO';
 import { RequestActionUserInfo } from './requestActionUserInfo';
+import { ServiceContactDetails } from './serviceContactDetails';
 
 export interface EmpIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayloadAllOf {
+  emissionsMonitoringPlan?: EmissionsMonitoringPlanCorsia;
+  serviceContactDetails?: ServiceContactDetails;
+  empSectionsCompleted?: { [key: string]: Array<boolean> };
+  empAttachments?: { [key: string]: string };
   decisionNotification?: DecisionNotification;
   determination?: EmpIssuanceDetermination;
   usersInfo?: { [key: string]: RequestActionUserInfo };
   officialNotice?: FileInfoDTO;
+  reviewGroupDecisions?: { [key: string]: EmpIssuanceReviewDecision };
+  reviewAttachments?: { [key: string]: string };
 }

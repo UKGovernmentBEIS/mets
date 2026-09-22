@@ -43,6 +43,10 @@ public interface RequestTaskRepository extends JpaRepository<RequestTask, Long> 
     List<RequestTask> findByTypeInAndRequestAccountId(Set<RequestTaskType> type, Long accountId);
 
     @Transactional(readOnly = true)
+    @EntityGraph(value = NAMED_ENTITY_GRAPH_REQUEST_TASK_REQUEST, type = EntityGraph.EntityGraphType.FETCH)
+    List<RequestTask> findByTypeInAndRequestAccountIdIn(Set<RequestTaskType> type, Set<Long> accountIds);
+
+    @Transactional(readOnly = true)
     @Query("select distinct req.accountId "
         + "from Request req "
         + "join RequestTask task "

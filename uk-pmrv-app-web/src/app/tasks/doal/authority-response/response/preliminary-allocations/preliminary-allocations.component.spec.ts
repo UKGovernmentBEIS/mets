@@ -44,7 +44,11 @@ describe('PreliminaryAllocationsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [PreliminaryAllocationsComponent, DoalTaskComponent],
       providers: [KeycloakService],
-      imports: [SharedModule, RouterTestingModule, TaskSharedModule],
+      imports: [
+        SharedModule,
+        RouterTestingModule.withRoutes([{ path: '**', component: PreliminaryAllocationsComponent }]),
+        TaskSharedModule,
+      ],
     }).compileComponents();
   });
 

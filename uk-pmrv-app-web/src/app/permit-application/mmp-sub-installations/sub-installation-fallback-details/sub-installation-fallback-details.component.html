@@ -31,7 +31,7 @@
         not exposed to carbon leakage.'
             "
             formControlName="parentOption"
-            [ngClass]="{ 'govuk-form-group--error': isInvalid('subInstallationType') }">
+            [class.govuk-form-group--error]="isInvalid('subInstallationType')">
             <govuk-radio-option value="HEAT_BENCHMARK" label="Heat benchmark">
               <ng-container govukConditionalContent>
                 <div formGroupName="HEAT_BENCHMARK">

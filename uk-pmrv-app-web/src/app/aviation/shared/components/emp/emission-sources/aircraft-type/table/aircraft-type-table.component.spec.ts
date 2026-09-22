@@ -55,7 +55,7 @@ describe('AircraftTypeTableComponent', () => {
         'Sub Type',
         '100',
         'Aviation gasoline (AV gas),  Other fuel (not including sustainable aviation fuel)',
-        'ChangeRemove',
+        'Change  Manufacturer Model (Designator Type) Remove  Manufacturer Model (Designator Type)',
       ],
     ]);
   });

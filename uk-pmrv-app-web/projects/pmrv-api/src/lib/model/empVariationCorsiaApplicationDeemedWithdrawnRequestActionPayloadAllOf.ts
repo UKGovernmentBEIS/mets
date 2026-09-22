@@ -10,13 +10,27 @@
  * Do not edit the class manually.
  */
 import { DecisionNotification } from './decisionNotification';
+import { EmissionsMonitoringPlanCorsia } from './emissionsMonitoringPlanCorsia';
+import { EmissionsMonitoringPlanCorsiaContainer } from './emissionsMonitoringPlanCorsiaContainer';
+import { EmpVariationCorsiaDetails } from './empVariationCorsiaDetails';
 import { EmpVariationDetermination } from './empVariationDetermination';
+import { EmpVariationReviewDecision } from './empVariationReviewDecision';
 import { FileInfoDTO } from './fileInfoDTO';
 import { RequestActionUserInfo } from './requestActionUserInfo';
+import { ServiceContactDetails } from './serviceContactDetails';
 
 export interface EmpVariationCorsiaApplicationDeemedWithdrawnRequestActionPayloadAllOf {
+  emissionsMonitoringPlan?: EmissionsMonitoringPlanCorsia;
+  serviceContactDetails?: ServiceContactDetails;
+  empVariationDetails?: EmpVariationCorsiaDetails;
+  empSectionsCompleted?: { [key: string]: Array<boolean> };
+  empAttachments?: { [key: string]: string };
   determination?: EmpVariationDetermination;
   decisionNotification?: DecisionNotification;
   usersInfo?: { [key: string]: RequestActionUserInfo };
   officialNotice?: FileInfoDTO;
+  originalEmpContainer?: EmissionsMonitoringPlanCorsiaContainer;
+  empVariationDetailsReviewDecision?: EmpVariationReviewDecision;
+  reviewGroupDecisions?: { [key: string]: EmpVariationReviewDecision };
+  reviewAttachments?: { [key: string]: string };
 }

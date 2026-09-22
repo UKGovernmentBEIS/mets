@@ -198,6 +198,7 @@ export class DetailsComponent implements OnInit {
       PEER_REVIEW_BDRS2: ['NONE'],
       BULK_DOWNLOAD_BDRS2: ['NONE'],
       MI_REPORTS_MANAGE_CUSTOM: ['NONE'],
+      SETTINGS_PAGE_FEES: ['NONE'],
     }),
   });
 
@@ -544,6 +545,11 @@ export class DetailsComponent implements OnInit {
       permission: 'MI_REPORTS_MANAGE_CUSTOM',
       task: 'Manage custom reports',
       type: 'MI reports',
+    },
+    {
+      permission: 'SETTINGS_PAGE_FEES',
+      task: 'Review/Submit',
+      type: 'Settings page fees',
     },
   ];
 

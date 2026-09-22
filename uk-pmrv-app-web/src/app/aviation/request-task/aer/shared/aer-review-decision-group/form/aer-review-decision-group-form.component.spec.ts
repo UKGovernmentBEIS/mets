@@ -87,8 +87,8 @@ describe('AerReviewDecisionGroupFormComponent', () => {
 
     await user.click(addButton);
     detectChanges();
-    expect(screen.getByText(/Required change 1/)).toBeInTheDocument();
-    expect(screen.getByText(/Required change 2/)).toBeInTheDocument();
+    expect(screen.getByText(/Required change 1/, { ignore: 'label' })).toBeInTheDocument();
+    expect(screen.getByText(/Required change 2/, { ignore: 'label' })).toBeInTheDocument();
   });
 
   it('should give user option to remove any required change if more than one', async () => {
@@ -104,7 +104,7 @@ describe('AerReviewDecisionGroupFormComponent', () => {
     await user.click(screen.getAllByRole('button', { name: /Remove/ })[0]);
     detectChanges();
     expect(screen.queryByRole('button', { name: /Remove/ })).not.toBeInTheDocument();
-    expect(screen.queryAllByText(/Required change \d+/)).toHaveLength(1);
+    expect(screen.queryAllByText(/Required change \d+/, { ignore: 'label' })).toHaveLength(1);
   });
 
   function acceptedOption() {

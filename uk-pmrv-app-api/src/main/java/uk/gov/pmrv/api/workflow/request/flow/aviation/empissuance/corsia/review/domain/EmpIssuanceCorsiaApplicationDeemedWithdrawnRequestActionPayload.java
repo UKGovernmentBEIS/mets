@@ -3,6 +3,8 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.review
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -15,8 +17,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.common.domain.EmpIssuanceDetermination;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.common.domain.EmpIssuanceReviewDecision;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.common.domain.EmpCorsiaReviewGroup;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.submit.domain.EmpIssuanceCorsiaApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
 
@@ -25,7 +29,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUser
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class EmpIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayload extends RequestActionPayload {
+public class EmpIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayload extends EmpIssuanceCorsiaApplicationSubmittedRequestActionPayload {
 
     @Valid
     @NotNull
@@ -42,6 +46,12 @@ public class EmpIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayload ext
 
     @NotNull
     private FileInfoDTO officialNotice;
+
+    @Builder.Default
+    private Map<EmpCorsiaReviewGroup, EmpIssuanceReviewDecision> reviewGroupDecisions = new EnumMap<>(EmpCorsiaReviewGroup.class);
+
+    @Builder.Default
+    private Map<UUID, String> reviewAttachments = new HashMap<>();
 
     @Override
     public Map<UUID, String> getFileDocuments() {

@@ -16,7 +16,7 @@ public class InstallationNotificationRegistryEventListener {
 
     @EventListener
     @Transactional
-    public void handleNotificationRegistryEvent(NotificationRegistryEvent notificationRegistryEvent) {
+    public void handleNotificationRegistryEvent(InstallationNotificationRegistryEvent notificationRegistryEvent) {
         installationNotificationNotifyRegistryService.notifyRegistry(notificationRegistryEvent);
     }
 

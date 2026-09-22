@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, filter, map, Observable, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, first, map, Observable, of, switchMap, takeUntil } from 'rxjs';
 
 import { permitTypeMap, permitTypeMapLowercase } from '@permit-application/shared/utils/permit';
 import { getPreviewDocumentsInfo } from '@permit-application/shared/utils/previewDocuments.utils';
 
-import { RequestActionsService, RequestItemsService } from 'pmrv-api';
+import { DecisionNotification, RequestActionsService, RequestItemsService, RequestsService } from 'pmrv-api';
 
 import { DestroySubject } from '../../../core/services/destroy-subject.service';
 import { ReviewGroupDecisionStatus } from '../../../permit-application/review/types/review.permit.type';
@@ -31,6 +31,9 @@ export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbs
 
   permitTypeMap = permitTypeMap;
   permitTypeMapLowercase = permitTypeMapLowercase;
+
+  paymentRequestSent: boolean;
+  readonly hasAccessRequestPayment$ = new BehaviorSubject<boolean>(false);
   readonly header$ = this.store.pipe(
     map((state) => {
       if (state.isRequestTask) {
@@ -90,14 +93,14 @@ export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbs
             taskId,
             previewDocuments: getPreviewDocumentsInfo(requestTaskType, determinationStatus, state.permitType),
             decision: {
-              operators: [],
+              operators: [''],
               externalContacts: [],
               signatory:
                 requestTaskType === 'PERMIT_VARIATION_APPLICATION_PEER_REVIEW' ||
                 requestTaskType === 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW'
                   ? state.assignee.assigneeUserId
                   : null,
-            },
+            } as DecisionNotification,
           }
         : null;
     }),
@@ -111,9 +114,11 @@ export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbs
     protected readonly requestItemsService: RequestItemsService,
     protected readonly requestActionsService: RequestActionsService,
     protected readonly backLinkService: BackLinkService,
+    private readonly requestsService: RequestsService,
     private title: Title,
   ) {
     super(store, router, route, requestItemsService, requestActionsService, destroy$, backLinkService);
+    this.paymentRequestSent = !!this.router.currentNavigation()?.extras.state?.['paymentRequestSent'];
   }
 
   ngOnInit(): void {
@@ -122,5 +127,16 @@ export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbs
       : new ReviewGroupStatusPermitVariationPipe(this.store);
 
     this.header$.pipe(takeUntil(this.destroy$)).subscribe((header) => this.title.setTitle(header));
+
+    this.store
+      .pipe(
+        first(),
+        switchMap((state) =>
+          state.isRequestTask && state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_REVIEW'
+            ? this.requestsService.hasAccessRequestPayment(state.requestId)
+            : of(false),
+        ),
+      )
+      .subscribe((hasAccess) => this.hasAccessRequestPayment$.next(hasAccess));
   }
 }

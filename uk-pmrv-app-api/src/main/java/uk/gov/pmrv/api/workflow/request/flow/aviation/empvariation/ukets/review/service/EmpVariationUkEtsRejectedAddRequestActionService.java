@@ -10,6 +10,8 @@ import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.common.domain.RequestAviationAccountInfo;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.common.service.RequestAviationAccountQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.domain.EmpVariationUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.review.domain.EmpVariationUkEtsApplicationRejectedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.review.mapper.EmpVariationUkEtsReviewMapper;
@@ -22,12 +24,15 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInf
 public class EmpVariationUkEtsRejectedAddRequestActionService {
 
 	private final RequestService requestService;
-	private final RequestActionUserInfoResolver requestActionUserInfoResolver;
+    private final RequestAviationAccountQueryService requestAviationAccountQueryService;
+    private final RequestActionUserInfoResolver requestActionUserInfoResolver;
     private static final EmpVariationUkEtsReviewMapper EMP_VARIATION_MAPPER = Mappers.getMapper(EmpVariationUkEtsReviewMapper.class);
 
     public void addRequestAction(final String requestId) {
         Request request = requestService.findRequestById(requestId);
         EmpVariationUkEtsRequestPayload requestPayload = (EmpVariationUkEtsRequestPayload) request.getPayload();
+
+        RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 
         // get users' information
         DecisionNotification notification = requestPayload.getDecisionNotification();
@@ -35,7 +40,7 @@ public class EmpVariationUkEtsRejectedAddRequestActionService {
             requestActionUserInfoResolver.getUsersInfo(notification.getOperators(), notification.getSignatory(), request);
         
         EmpVariationUkEtsApplicationRejectedRequestActionPayload requestActionPayload =
-        		EMP_VARIATION_MAPPER.toEmpVariationUkEtsApplicationRejectedRequestActionPayload(requestPayload,
+        		EMP_VARIATION_MAPPER.toEmpVariationUkEtsApplicationRejectedRequestActionPayload(requestPayload,accountInfo,
         				usersInfo, RequestActionPayloadType.EMP_VARIATION_UKETS_APPLICATION_REJECTED_PAYLOAD);
 
         requestService.addActionToRequest(request,

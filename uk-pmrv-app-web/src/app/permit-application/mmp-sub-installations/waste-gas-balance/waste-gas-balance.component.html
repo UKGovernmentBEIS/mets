@@ -68,18 +68,16 @@
           </button>
 
           <div
-            [ngClass]="{
-              'govuk-form-group--error':
-                dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async,
-            }">
+            [class.govuk-form-group--error]="
+              dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async
+            ">
             <div
               *ngIf="
                 dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async
               "
-              [ngClass]="{
-                'govuk-error-message':
-                  dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async,
-              }">
+              [class.govuk-error-message]="
+                dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async
+              ">
               {{ dataSource?.errors?.atLeastOneRequired }}
             </div>
 

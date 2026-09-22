@@ -14,6 +14,8 @@ import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplate
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationDetermination;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationDeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.domain.EmpVariationUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
@@ -310,6 +312,7 @@ class EmpVariationUkEtsOfficialNoticeServiceTest {
                 .id(requestId)
                 .payload(EmpVariationUkEtsRequestPayload.builder()
                         .decisionNotification(decisionNotification)
+                        .determination(EmpVariationDetermination.builder().type(EmpVariationDeterminationType.APPROVED).build())
                         .officialNotice(officialDocFileInfoDTO)
                         .build())
                 .build();

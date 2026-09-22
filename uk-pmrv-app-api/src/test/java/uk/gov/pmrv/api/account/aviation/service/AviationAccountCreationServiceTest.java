@@ -198,7 +198,7 @@ class AviationAccountCreationServiceTest {
     void createAccount_commencementDate_before_2021() {
         Long accountId = 9098L;
         String accountName = "accountName";
-        EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.CORSIA;
+        EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         Long sopId = 9807L;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.of(2020, 12, 11);
@@ -232,7 +232,55 @@ class AviationAccountCreationServiceTest {
         BusinessException be = assertThrows(BusinessException.class,
                 () ->aviationAccountCreationService.createAccount(accountCreationDTO, appUser));
 
-        assertEquals(MetsErrorCode.AVIATION_COMMENCEMENT_DATE_NOT_BEFORE_2021_NOT_AFTER_CURRENT_YEAR, be.getErrorCode());
+        assertEquals(MetsErrorCode.AVIATION_FIRST_YEAR_OF_REPORTING_OBLIGATION_OUT_OF_SCOPE, be.getErrorCode());
+
+        verify(aviationAccountQueryService, times(1))
+                .isExistingAccountName(accountName, competentAuthority, emissionTradingScheme);
+        verify(aviationAccountQueryService, times(1))
+                .isExistingCrcoCode(crcoCode, competentAuthority, emissionTradingScheme);
+        verifyNoInteractions(accountIdentifierService, aviationAccountRepository, aviationAccountMapper, eventPublisher);
+    }
+
+
+    @Test
+    void createAccount_commencementDate_before_2019_corsia() {
+        Long accountId = 9098L;
+        String accountName = "accountName";
+        EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.CORSIA;
+        Long sopId = 9807L;
+        String crcoCode = "crcoCode";
+        LocalDate commencementDate = LocalDate.of(2018, 12, 11);
+        CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.SCOTLAND;
+        String emitterId = "EM09098";
+        AppUser appUser = AppUser.builder()
+                .userId("authUserId")
+                .authorities(List.of(AppAuthority.builder().competentAuthority(competentAuthority).build()))
+                .build();
+
+        AviationAccountCreationDTO accountCreationDTO = AviationAccountCreationDTO.builder()
+                .name(accountName)
+                .emissionTradingScheme(emissionTradingScheme)
+                .crcoCode(crcoCode)
+                .sopId(sopId)
+                .commencementDate(commencementDate)
+                .build();
+
+        AviationAccount aviationAccount = AviationAccount.builder()
+                .id(accountId)
+                .emissionTradingScheme(emissionTradingScheme)
+                .status(AviationAccountStatus.NEW)
+                .emitterId(emitterId)
+                .name(accountName)
+                .commencementDate(commencementDate)
+                .build();
+
+        when(aviationAccountQueryService.isExistingAccountName(accountName, competentAuthority, emissionTradingScheme)).thenReturn(false);
+        when(aviationAccountQueryService.isExistingCrcoCode(crcoCode, competentAuthority, emissionTradingScheme)).thenReturn(false);
+
+        BusinessException be = assertThrows(BusinessException.class,
+                () ->aviationAccountCreationService.createAccount(accountCreationDTO, appUser));
+
+        assertEquals(MetsErrorCode.AVIATION_FIRST_YEAR_WITHIN_SCOPE_OF_APPLICABILITY_OUT_OF_SCOPE, be.getErrorCode());
 
         verify(aviationAccountQueryService, times(1))
                 .isExistingAccountName(accountName, competentAuthority, emissionTradingScheme);

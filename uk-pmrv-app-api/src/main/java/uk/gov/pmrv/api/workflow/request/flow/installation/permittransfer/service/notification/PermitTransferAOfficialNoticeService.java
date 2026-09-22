@@ -8,8 +8,8 @@ import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
-import uk.gov.pmrv.api.integration.registry.notification.installation.request.NotificationRegistryEvent;
-import uk.gov.pmrv.api.integration.registry.notification.installation.request.RegistryNotificationType;
+import uk.gov.pmrv.api.integration.registry.notification.common.RegistryNotificationType;
+import uk.gov.pmrv.api.integration.registry.notification.installation.request.InstallationNotificationRegistryEvent;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
@@ -55,7 +55,7 @@ public class PermitTransferAOfficialNoticeService {
 
         requestPayload.setOfficialNotice(officialNotice);
 
-        applicationEventPublisher.publishEvent(NotificationRegistryEvent.builder()
+        applicationEventPublisher.publishEvent(InstallationNotificationRegistryEvent.builder()
                 .accountId(request.getAccountId()).requestId(requestId)
                 .fileInfoDTO(requestPayload.getOfficialNotice())
                 .registryNotificationType(RegistryNotificationType.TRANSFER_NOTIFICATION).build());

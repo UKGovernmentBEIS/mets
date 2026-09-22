@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 
 import { wizardIsCompleted } from '@tasks/ner/utils';
 
@@ -9,11 +9,12 @@ export const wizardStepGuard: CanActivateFn = (route, state) => {
   const nerService = inject(NerService);
   const payload = nerService.payload();
   const router = inject(Router);
-  const urlSplit = router.currentNavigation().finalUrl.toString().split('/');
-  const isWizardCompleted = wizardIsCompleted(payload, urlSplit[5]);
-  const baseUrl = `tasks/${route.paramMap.get('taskId')}/ner/${urlSplit[4]}`;
-  const summaryUrl = `/${baseUrl}/${urlSplit[5]}/summary`;
-  const wizardFirstStep = `/${baseUrl}/${urlSplit[5]}`;
+
+  const sectionRoute = route.parent ?? route;
+  const wizardFirstStep = getFullPath(sectionRoute);
+  const task = wizardFirstStep?.split('/')?.at(-1);
+  const summaryUrl = `/${wizardFirstStep}/summary`;
+  const isWizardCompleted = wizardIsCompleted(payload, task);
   const isCurrentSummaryPage = state.url.includes(summaryUrl);
 
   return (
@@ -24,3 +25,5 @@ export const wizardStepGuard: CanActivateFn = (route, state) => {
     true
   );
 };
+
+const getFullPath = (route: ActivatedRouteSnapshot): string => route.pathFromRoot.flatMap(({ url }) => url).join('/');

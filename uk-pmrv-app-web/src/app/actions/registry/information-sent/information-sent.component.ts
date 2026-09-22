@@ -19,6 +19,7 @@ import {
   RegistryIntegrationOrganizationDetails,
   RegistryIntegrationReportableEmissionsActivePermit,
   RequestActionDTO,
+  ReturnOfAllowancesNotificationRegistryIntegrationRequestActionPayload,
   WithholdingOfAllowancesRegistryIntegrationRequestActionPayload,
 } from 'pmrv-api';
 
@@ -54,6 +55,7 @@ export class InformationSentToRegistryComponent {
     | InstallationAccountUpdatedRegistryIntegrationRequestActionPayload
     | InstallationReportableEmissionsRegistryIntegrationRequestActionPayload
     | WithholdingOfAllowancesRegistryIntegrationRequestActionPayload
+    | ReturnOfAllowancesNotificationRegistryIntegrationRequestActionPayload
   >;
 
   actionId = this.registryActionService.requestAction;

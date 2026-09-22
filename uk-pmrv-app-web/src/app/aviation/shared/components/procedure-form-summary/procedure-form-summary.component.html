@@ -5,42 +5,66 @@
       <dt govukSummaryListRowKey>Procedure description</dt>
       <dd class="pre-wrap" govukSummaryListRowValue>{{ procedureFormData.procedureDescription }}</dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }">Change</a>
+        <a
+          govukLink
+          [routerLink]="[formRouterLink]"
+          [queryParams]="{ change: true }"
+          hidden-text="procedure description">
+          Change
+        </a>
       </dd>
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Name of the procedure document</dt>
       <dd govukSummaryListRowValue>{{ procedureFormData.procedureDocumentName }}</dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }">Change</a>
+        <a
+          govukLink
+          [routerLink]="[formRouterLink]"
+          [queryParams]="{ change: true }"
+          hidden-text="name of the procedure document">
+          Change
+        </a>
       </dd>
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Procedure reference</dt>
       <dd govukSummaryListRowValue>{{ procedureFormData.procedureReference }}</dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }">Change</a>
+        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }" hidden-text="procedure reference">
+          Change
+        </a>
       </dd>
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Department or role responsible for data maintenance</dt>
       <dd govukSummaryListRowValue>{{ procedureFormData.responsibleDepartmentOrRole }}</dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }">Change</a>
+        <a
+          govukLink
+          [routerLink]="[formRouterLink]"
+          [queryParams]="{ change: true }"
+          hidden-text="department or role responsible for data maintenance">
+          Change
+        </a>
       </dd>
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Location of records</dt>
       <dd govukSummaryListRowValue>{{ procedureFormData.locationOfRecords }}</dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }">Change</a>
+        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }" hidden-text="location of records">
+          Change
+        </a>
       </dd>
     </div>
     <div govukSummaryListRow *ngIf="procedureFormData.itSystemUsed">
       <dt govukSummaryListRowKey>IT system used</dt>
       <dd govukSummaryListRowValue>{{ procedureFormData.itSystemUsed }}</dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }">Change</a>
+        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }" hidden-text="IT system used">
+          Change
+        </a>
       </dd>
     </div>
   </dl>

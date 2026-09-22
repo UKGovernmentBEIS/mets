@@ -5,17 +5,17 @@ import org.mapstruct.factory.Mappers;
 import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
+import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.FlightIdentification;
+import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.FlightIdentificationType;
+import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.FlightType;
+import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OperationScope;
+import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OperatorType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEts;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.applicationtimeframe.EmpApplicationTimeframeInfo;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsmonitoringapproach.FuelMonitoringApproach;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.ActivitiesDescription;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.EmpOperatorDetails;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.FlightIdentification;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.FlightIdentificationType;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.FlightType;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OperationScope;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OperatorType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
@@ -225,33 +225,49 @@ class EmpUkEtsReviewMapperTest {
     @Test
     void toEmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload() {
         EmpIssuanceDetermination determination = EmpIssuanceDetermination.builder()
-            .type(EmpIssuanceDeterminationType.APPROVED)
-            .reason("determination reason")
-            .build();
+                .type(EmpIssuanceDeterminationType.APPROVED)
+                .reason("determination reason")
+                .build();
         DecisionNotification decisionNotification = DecisionNotification.builder()
-            .operators(Set.of("operatorUserId"))
-            .signatory("regulatorUserId")
-            .build();
+                .operators(Set.of("operatorUserId"))
+                .signatory("regulatorUserId")
+                .build();
 
         EmpIssuanceUkEtsRequestPayload empIssuanceUkEtsRequestPayload = EmpIssuanceUkEtsRequestPayload.builder()
-            .payloadType(RequestPayloadType.EMP_ISSUANCE_UKETS_REQUEST_PAYLOAD)
-            .determination(determination)
-            .decisionNotification(decisionNotification)
-            .build();
+                .payloadType(RequestPayloadType.EMP_ISSUANCE_UKETS_REQUEST_PAYLOAD)
+                .determination(determination)
+                .decisionNotification(decisionNotification)
+                .build();
 
         Map<String, RequestActionUserInfo> usersInfo = Map.of(
-            "operatorUserId", RequestActionUserInfo.builder().name("operatorUserName").roleCode("admin").build(),
-            "regulatorUserId", RequestActionUserInfo.builder().name("regulatorUserName").roleCode("admin").build()
+                "operatorUserId", RequestActionUserInfo.builder().name("operatorUserName").roleCode("admin").build(),
+                "regulatorUserId", RequestActionUserInfo.builder().name("regulatorUserName").roleCode("admin").build()
         );
 
+        ServiceContactDetails serviceContactDetails = ServiceContactDetails.builder()
+                .name("service contact name")
+                .email("service@example.com")
+                .build();
+
+        RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder()
+                .operatorName("operatorName")
+                .crcoCode("crcoCode")
+                .serviceContactDetails(serviceContactDetails)
+                .build();
+
         EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload applicationDeemedWithdrawnRequestActionPayload =
-            empUkEtsReviewMapper.toEmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload(empIssuanceUkEtsRequestPayload, usersInfo,
-                RequestActionPayloadType.EMP_ISSUANCE_UKETS_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD);
+                empUkEtsReviewMapper.toEmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload(
+                        empIssuanceUkEtsRequestPayload,
+                        accountInfo,
+                        usersInfo,
+                        RequestActionPayloadType.EMP_ISSUANCE_UKETS_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD
+                );
 
         assertEquals(RequestActionPayloadType.EMP_ISSUANCE_UKETS_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD,
-            applicationDeemedWithdrawnRequestActionPayload.getPayloadType());
+                applicationDeemedWithdrawnRequestActionPayload.getPayloadType());
         assertEquals(determination, applicationDeemedWithdrawnRequestActionPayload.getDetermination());
         assertEquals(decisionNotification, applicationDeemedWithdrawnRequestActionPayload.getDecisionNotification());
+        assertEquals(serviceContactDetails, applicationDeemedWithdrawnRequestActionPayload.getServiceContactDetails());
         assertThat(applicationDeemedWithdrawnRequestActionPayload.getUsersInfo()).containsExactlyInAnyOrderEntriesOf(usersInfo);
     }
 

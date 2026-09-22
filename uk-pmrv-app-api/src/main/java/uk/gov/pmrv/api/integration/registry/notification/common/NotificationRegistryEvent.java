@@ -1,13 +1,13 @@
-package uk.gov.pmrv.api.integration.registry.notification.installation.request;
+package uk.gov.pmrv.api.integration.registry.notification.common;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 public class NotificationRegistryEvent {
