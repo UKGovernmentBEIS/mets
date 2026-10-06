@@ -81,11 +81,11 @@ describe('ExtendDeterminationComponent', () => {
 
     expect(navigateSpy).not.toHaveBeenCalled();
 
-    page.extensionDateYear = '2026';
+    page.extensionDateYear = '2050';
 
     page.deadlineDay = '08';
     page.deadlineMonth = '10';
-    page.deadlineYear = '2026';
+    page.deadlineYear = '2050';
     fixture.detectChanges();
 
     page.submitButton.click();

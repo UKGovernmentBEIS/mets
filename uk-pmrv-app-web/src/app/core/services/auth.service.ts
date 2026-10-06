@@ -47,11 +47,9 @@ export class AuthService {
 
   logout(redirectPath = ''): Promise<void> {
     const isDev = environment.production === false;
-    return this.keycloak
-      .logout({
-        redirectUri: redirectPath || isDev ? this._baseRedirectUri + redirectPath : location.origin,
-      })
-      .then(() => this.authStore.setIsLoggedIn(false));
+    return this.keycloak.logout({
+      redirectUri: redirectPath || isDev ? this._baseRedirectUri + redirectPath : location.origin,
+    });
   }
 
   loadUser(): Observable<UserDTO> {
