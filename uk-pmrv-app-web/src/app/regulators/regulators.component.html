@@ -1,5 +1,5 @@
 <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="regulatorsForm"></govuk-error-summary>
-<app-page-heading size="xl">Regulator users and contacts</app-page-heading>
+<app-page-heading size="xl">Service access</app-page-heading>
 <govuk-tabs>
   <ng-template govukTab id="regulator-users" label="Regulator users">
     <button *ngIf="isEditable$ | async" govukButton id="add-regulator" routerLink="add" type="button">
@@ -55,5 +55,8 @@
   </ng-template>
   <ng-template govukTab id="external-contacts" label="External contacts">
     <app-external-contacts></app-external-contacts>
+  </ng-template>
+  <ng-template govukTab id="verification-bodies" label="Verification bodies">
+    <app-verification-bodies></app-verification-bodies>
   </ng-template>
 </govuk-tabs>

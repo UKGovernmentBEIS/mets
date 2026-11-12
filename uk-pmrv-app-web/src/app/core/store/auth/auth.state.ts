@@ -33,6 +33,12 @@ export const initialState: AuthState = {
   switchingDomain: null,
 };
 
+/** Whether the user has a login (in any status other than `NO_AUTHORITY`) for the given domain. */
+export function hasDomainLogin(userState: UserState, domain: AccountType): boolean {
+  const status = userState?.domainsLoginStatuses?.[domain];
+  return !!status && status !== 'NO_AUTHORITY';
+}
+
 export function onlyAssociatedWithDomain(domain: UserState['lastLoginDomain'], userState: UserState): boolean {
   return (
     userState &&

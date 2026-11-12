@@ -51,7 +51,9 @@ export class BreadcrumbsComponent {
         if (!activeRoute.routeConfig?.data?.hideBreadcrumb) {
           const breadcrumbs: BreadcrumbItem[] = [];
           this.addBreadcrumb(root, [], breadcrumbs);
-          this.breadcrumbs$.next(breadcrumbs);
+          // Top-level pages only ever collect their own (unlinked) crumb, so filtering it out
+          // leaves an empty trail there while deeper pages keep their real ancestor chain.
+          this.breadcrumbs$.next(breadcrumbs.filter((breadcrumb) => breadcrumb.link != null));
         } else {
           this.breadcrumbs$.next([]);
         }
@@ -81,13 +83,17 @@ export class BreadcrumbsComponent {
   private getBreadcrumbText(data: Data, title?: string): string {
     const breadcrumb = data.breadcrumb;
 
-    return this.hasTextResolutionFunction(breadcrumb)
-      ? breadcrumb.resolveText(data)
-      : typeof breadcrumb === 'function'
-        ? breadcrumb(data)
-        : typeof breadcrumb === 'boolean'
-          ? (data.pageTitle ?? title)
-          : breadcrumb;
+    if (this.hasTextResolutionFunction(breadcrumb)) {
+      return breadcrumb.resolveText(data);
+    }
+    if (typeof breadcrumb === 'function') {
+      return breadcrumb(data);
+    }
+    if (typeof breadcrumb === 'boolean') {
+      return data.pageTitle ?? title;
+    }
+
+    return breadcrumb;
   }
 
   private getBreadcrumbLink(route: ActivatedRouteSnapshot, routeUrl: string[]): string[] {

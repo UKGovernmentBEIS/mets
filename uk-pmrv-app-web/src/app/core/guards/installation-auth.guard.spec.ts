@@ -70,6 +70,18 @@ describe('InstallationAuthGuard', () => {
     const result = await lastValueFrom(guard.canActivate());
     expect(result).toEqual(router.parseUrl('landing'));
     expect(mockUsersService.registerUserLastLoginDomain).not.toHaveBeenCalled();
+    expect(authStore.getState().switchingDomain).toBeNull();
+  });
+
+  it('should redirect to landing page and set switching domain when operator has no installation authority', async () => {
+    authStore.setUserState({
+      roleType: 'OPERATOR',
+      domainsLoginStatuses: { INSTALLATION: 'NO_AUTHORITY', AVIATION: 'ENABLED' },
+    });
+    const result = await lastValueFrom(guard.canActivate());
+    expect(result).toEqual(router.parseUrl('landing'));
+    expect(mockUsersService.registerUserLastLoginDomain).not.toHaveBeenCalled();
+    expect(authStore.getState().switchingDomain).toEqual('INSTALLATION');
   });
 
   it(`should allow when role is REGULATOR or VERIFIER and has no permissions`, async () => {

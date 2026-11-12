@@ -94,6 +94,29 @@ describe('ServiceNavigationComponent', () => {
     expect(component.isMenuOpen()).toBe(false);
   });
 
+  it('should show the navigation list on desktop even when the menu is closed', () => {
+    fixture.componentRef.setInput('navigationItems', [{ href: '/page-1', text: 'Page 1' }]);
+    jest.spyOn(component, 'isDesktop').mockReturnValue(true);
+    fixture.detectChanges();
+
+    expect(component.isMenuOpen()).toBe(false);
+    const list = fixture.nativeElement.querySelector('.govuk-service-navigation__list');
+    expect(list.hidden).toBe(false);
+  });
+
+  it('should hide the navigation list on mobile until the menu is opened', () => {
+    fixture.componentRef.setInput('navigationItems', [{ href: '/page-1', text: 'Page 1' }]);
+    jest.spyOn(component, 'isDesktop').mockReturnValue(false);
+    fixture.detectChanges();
+
+    const list = fixture.nativeElement.querySelector('.govuk-service-navigation__list');
+    expect(list.hidden).toBe(true);
+
+    component.toggleMenu();
+    fixture.detectChanges();
+    expect(list.hidden).toBe(false);
+  });
+
   it('should show the menu button on mobile when collapseNavigationOnMobile is true', () => {
     fixture.componentRef.setInput('navigationItems', [{ href: '/page-1', text: 'Page 1' }]);
     fixture.componentRef.setInput('collapseNavigationOnMobile', true);

@@ -28,13 +28,13 @@ import { FieldsetDirective, FieldsetHintDirective, LegendDirective } from './fie
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { FooterComponent, FooterNavListComponent, MetaInfoComponent } from './footer';
 import { FormBuilderService } from './form/form-builder.service';
-import { HeaderActionsListComponent, HeaderComponent, HeaderNavListComponent } from './header';
-import { HeaderLegacyComponent, NavListLegacyComponent } from './header-legacy';
+import { HeaderActionsListComponent, HeaderComponent } from './header';
 import { NotificationBannerComponent } from './notification-banner/notification-banner.component';
 import { PanelComponent } from './panel/panel.component';
 import { PhaseBannerComponent } from './phase-banner/phase-banner.component';
 import { RadioComponent, RadioOptionComponent } from './radio';
 import { SelectComponent } from './select';
+import { ServiceNavigationComponent } from './service-navigation';
 import { SkipLinkComponent } from './skip-link/skip-link.component';
 import {
   SummaryListComponent,
@@ -79,7 +79,6 @@ import { WarningTextComponent } from './warning-text/warning-text.component';
     FormErrorDirective,
     HeaderActionsListComponent,
     HeaderComponent,
-    HeaderNavListComponent,
     InsetTextDirective,
     LabelDirective,
     LegendDirective,
@@ -91,6 +90,7 @@ import { WarningTextComponent } from './warning-text/warning-text.component';
     RadioComponent,
     RadioOptionComponent,
     SelectComponent,
+    ServiceNavigationComponent,
     SkipLinkComponent,
     SummaryListComponent,
     SummaryListRowActionsDirective,
@@ -105,8 +105,6 @@ import { WarningTextComponent } from './warning-text/warning-text.component';
     TextareaComponent,
     TextInputComponent,
     WarningTextComponent,
-    HeaderLegacyComponent,
-    NavListLegacyComponent,
   ],
   providers: [
     { provide: UntypedFormBuilder, useClass: FormBuilderService },
@@ -137,7 +135,6 @@ import { WarningTextComponent } from './warning-text/warning-text.component';
     FormErrorDirective,
     HeaderActionsListComponent,
     HeaderComponent,
-    HeaderNavListComponent,
     InsetTextDirective,
     LabelDirective,
     LegendDirective,
@@ -149,6 +146,7 @@ import { WarningTextComponent } from './warning-text/warning-text.component';
     RadioComponent,
     RadioOptionComponent,
     SelectComponent,
+    ServiceNavigationComponent,
     SkipLinkComponent,
     SummaryListComponent,
     SummaryListRowActionsDirective,
@@ -163,8 +161,6 @@ import { WarningTextComponent } from './warning-text/warning-text.component';
     TextareaComponent,
     TextInputComponent,
     WarningTextComponent,
-    HeaderLegacyComponent,
-    NavListLegacyComponent,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

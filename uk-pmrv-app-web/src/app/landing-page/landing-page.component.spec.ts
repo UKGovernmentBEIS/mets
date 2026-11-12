@@ -137,6 +137,25 @@ describe('LandingPageComponent', () => {
     );
   });
 
+  it('should show disabled message when operator without aviation login switches to aviation domain', () => {
+    authStore.setIsLoggedIn(true);
+    authStore.setSwitchingDomain('AVIATION');
+    setUser('OPERATOR', { INSTALLATION: 'ENABLED', AVIATION: 'NO_AUTHORITY' }, 'INSTALLATION');
+
+    expect(page.pageHeadingContent).toEqual(
+      'Your user account has been disabled. Please contact your admin to gain access to your account.',
+    );
+    expect(page.installationLink).toBeFalsy();
+  });
+
+  it('should show apply for installation account when operator without installation login switches to installation domain', () => {
+    authStore.setIsLoggedIn(true);
+    authStore.setSwitchingDomain('INSTALLATION');
+    setUser('OPERATOR', { INSTALLATION: 'NO_AUTHORITY', AVIATION: 'ENABLED' }, 'AVIATION');
+
+    expect(page.installationLink).toBeTruthy();
+  });
+
   it(`should show disabled message when role='REGULATOR' and INSTALLATION status 'DISABLED' and (last login domain is
   'INSTALLATION' or no AVIATION)`, () => {
     authStore.setIsLoggedIn(true);

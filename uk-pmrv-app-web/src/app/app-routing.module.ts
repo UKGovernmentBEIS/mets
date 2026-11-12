@@ -141,12 +141,12 @@ const routes: Routes = [
             children: [
               {
                 path: 'regulators',
-                data: { breadcrumb: 'Regulator users and contacts' },
+                data: { breadcrumb: 'Service access' },
                 loadChildren: () => import('./regulators/regulators.module').then((m) => m.RegulatorsModule),
               },
               {
                 path: 'verifiers',
-                data: { breadcrumb: 'Manage verifier users' },
+                data: { breadcrumb: 'Service access' },
                 loadChildren: () => import('./verifiers/verifiers.module').then((m) => m.VerifiersModule),
               },
             ],

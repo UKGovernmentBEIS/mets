@@ -23,5 +23,14 @@ import { VerificationBodiesRoutingModule } from './verification-bodies-routing.m
     FormComponent,
     VerificationBodiesComponent,
   ],
+  exports: [
+    AddComponent,
+    ContactsAddComponent,
+    ContactsComponent,
+    DeleteComponent,
+    DetailsComponent,
+    FormComponent,
+    VerificationBodiesComponent,
+  ],
 })
 export class VerificationBodiesModule {}

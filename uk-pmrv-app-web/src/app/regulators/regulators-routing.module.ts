@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PendingRequestGuard } from '../core/guards/pending-request.guard';
+import { VerificationBodiesResolver } from '../verification-bodies/verification-bodies.resolver';
 import { DeleteComponent } from './delete/delete.component';
 import { DeleteResolver } from './delete/delete.resolver';
 import { DetailsComponent } from './details/details.component';
@@ -18,9 +19,9 @@ import { RegulatorsGuard } from './regulators.guard';
 const routes: Routes = [
   {
     path: '',
-    data: { pageTitle: 'Regulator users and contacts' },
+    data: { pageTitle: 'Service access' },
     component: RegulatorsComponent,
-    resolve: { regulators: RegulatorsGuard },
+    resolve: { regulators: RegulatorsGuard, verificationBodies: VerificationBodiesResolver },
     canDeactivate: [PendingRequestGuard],
   },
   {
@@ -101,6 +102,11 @@ const routes: Routes = [
         ],
       },
     ],
+  },
+  {
+    path: 'verification-bodies',
+    loadChildren: () =>
+      import('../verification-bodies/verification-bodies.module').then((m) => m.VerificationBodiesModule),
   },
 ];
 

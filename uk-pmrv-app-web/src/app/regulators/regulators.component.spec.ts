@@ -15,6 +15,7 @@ import { cloneDeep } from 'lodash-es';
 import { RegulatorAuthoritiesService } from 'pmrv-api';
 
 import { SharedUserModule } from '../shared-user/shared-user.module';
+import { VerificationBodiesComponent } from '../verification-bodies/verification-bodies.component';
 import { DeleteComponent } from './delete/delete.component';
 import { savePartiallyNotFoundRegulatorError } from './errors/business-error';
 import { ExternalContactsComponent } from './external-contacts/external-contacts.component';
@@ -99,6 +100,9 @@ describe('RegulatorsComponent', () => {
   @Component({ selector: 'app-site-contacts', standalone: false, template: '' })
   class SiteContactsStubComponent implements Partial<SiteContactsComponent> {}
 
+  @Component({ selector: 'app-verification-bodies', standalone: false, template: '' })
+  class VerificationBodiesStubComponent implements Partial<VerificationBodiesComponent> {}
+
   const createComponent = () => {
     jest.clearAllMocks();
     fixture = TestBed.createComponent(RegulatorsComponent);
@@ -121,6 +125,7 @@ describe('RegulatorsComponent', () => {
         DeleteComponent,
         RouterStubComponent,
         SiteContactsStubComponent,
+        VerificationBodiesStubComponent,
       ],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRouteStub },
@@ -148,7 +153,7 @@ describe('RegulatorsComponent', () => {
     const header = element.querySelector('h1[class="govuk-heading-xl"]');
 
     expect(header).toBeTruthy();
-    expect(header.innerHTML.trim()).toEqual('Regulator users and contacts');
+    expect(header.innerHTML.trim()).toEqual('Service access');
   });
 
   it('should display the add new user button if applicable', () => {

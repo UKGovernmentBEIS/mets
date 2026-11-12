@@ -8,7 +8,7 @@ import {
 const verifierBusinessLink: Pick<BusinessError, 'link' | 'linkText' | 'fragment'> = {
   link: ['/user/verifiers'],
   fragment: 'verifier-users',
-  linkText: 'Return to manage verifier users page',
+  linkText: 'Return to Service access page',
 };
 
 export const savePartiallyNotFoundVerifierError = buildSavePartiallyNotFoundError().withLink(verifierBusinessLink);

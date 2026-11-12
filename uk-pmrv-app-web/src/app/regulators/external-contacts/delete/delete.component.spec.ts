@@ -105,7 +105,7 @@ describe('DeleteComponent', () => {
     fixture.detectChanges();
 
     expect(page.panelTitle.textContent).toEqual('The external contact Bob Squarepants has been deleted');
-    expect(page.panelLink.textContent.trim()).toEqual('Return to the Regulator users and contacts page');
+    expect(page.panelLink.textContent.trim()).toEqual('Return to the Service access page');
     expect(page.panelLink.href).toContain('/user/regulators#external-contacts');
   }));
 

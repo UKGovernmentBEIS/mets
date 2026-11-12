@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { ActivatedRouteSnapshot, convertToParamMap, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { lastValueFrom, of } from 'rxjs';
@@ -24,6 +24,9 @@ describe('LandingPageGuard', () => {
   const authService: MockType<AuthService> = {
     checkUser: jest.fn(() => of(undefined)),
   };
+
+  const routeWithDomain = (domain: string): ActivatedRouteSnapshot =>
+    ({ queryParamMap: convertToParamMap({ domain }) }) as ActivatedRouteSnapshot;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -188,6 +191,46 @@ describe('LandingPageGuard', () => {
     expect(allow).toEqual(true);
   });
 
+  it('should allow when operator has only installation login and switches to aviation domain', async () => {
+    authStore.setUserState({
+      roleType: 'OPERATOR',
+      domainsLoginStatuses: {
+        INSTALLATION: 'ENABLED',
+        AVIATION: 'NO_AUTHORITY',
+      },
+      lastLoginDomain: 'INSTALLATION',
+    });
+    authStore.setSwitchingDomain('AVIATION');
+
+    await expect(lastValueFrom(guard.canActivate())).resolves.toEqual(true);
+  });
+
+  it('should redirect to installation dashboard when operator has only installation login and is not switching domain', async () => {
+    authStore.setUserState({
+      roleType: 'OPERATOR',
+      domainsLoginStatuses: {
+        INSTALLATION: 'ENABLED',
+        AVIATION: 'NO_AUTHORITY',
+      },
+      lastLoginDomain: 'INSTALLATION',
+    });
+
+    await expect(lastValueFrom(guard.canActivate())).resolves.toEqual(router.parseUrl('dashboard'));
+  });
+
+  it('should redirect to aviation dashboard when operator has only aviation login and is not switching domain', async () => {
+    authStore.setUserState({
+      roleType: 'OPERATOR',
+      domainsLoginStatuses: {
+        INSTALLATION: 'NO_AUTHORITY',
+        AVIATION: 'ENABLED',
+      },
+      lastLoginDomain: 'AVIATION',
+    });
+
+    await expect(lastValueFrom(guard.canActivate())).resolves.toEqual(router.parseUrl('aviation/dashboard'));
+  });
+
   it(`should redirect to dashboard when user is REGULATOR or VERIFIER and has NO_AUTHORITY in all domains`, async () => {
     authStore.setUserState({
       roleType: 'REGULATOR',
@@ -224,5 +267,76 @@ describe('LandingPageGuard', () => {
   it('should not redirect to terms if terms feature is disabled', async () => {
     configStore.setState({ features: { terms: false } });
     await expect(lastValueFrom(guard.canActivate())).resolves.toEqual(router.parseUrl('dashboard'));
+  });
+
+  describe('?domain= query param', () => {
+    it('should redirect a dual-domain user to the requested domain, overriding lastLoginDomain', async () => {
+      authStore.setUserState({
+        roleType: 'OPERATOR',
+        lastLoginDomain: 'INSTALLATION',
+        domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'ENABLED' },
+      });
+
+      await expect(lastValueFrom(guard.canActivate(routeWithDomain('AVIATION')))).resolves.toEqual(
+        router.parseUrl('aviation/dashboard'),
+      );
+    });
+
+    it('should redirect a regulator to the requested domain, overriding lastLoginDomain', async () => {
+      authStore.setUserState({
+        roleType: 'REGULATOR',
+        lastLoginDomain: 'AVIATION',
+        domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'ENABLED' },
+      });
+
+      await expect(lastValueFrom(guard.canActivate(routeWithDomain('INSTALLATION')))).resolves.toEqual(
+        router.parseUrl('dashboard'),
+      );
+    });
+
+    it('should set switchingDomain as a side effect of an authorized domain request', async () => {
+      authStore.setUserState({
+        roleType: 'OPERATOR',
+        lastLoginDomain: 'INSTALLATION',
+        domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'ENABLED' },
+      });
+
+      await lastValueFrom(guard.canActivate(routeWithDomain('AVIATION')));
+
+      expect(authStore.getState().switchingDomain).toEqual('AVIATION');
+    });
+
+    it('should allow (and set switchingDomain) when an operator requests a domain they have NO_AUTHORITY for', async () => {
+      authStore.setUserState({
+        roleType: 'OPERATOR',
+        lastLoginDomain: 'INSTALLATION',
+        domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'NO_AUTHORITY' },
+      });
+
+      await expect(lastValueFrom(guard.canActivate(routeWithDomain('AVIATION')))).resolves.toEqual(true);
+      expect(authStore.getState().switchingDomain).toEqual('AVIATION');
+    });
+
+    it('should still ignore a requested domain for a non-operator with NO_AUTHORITY for it', async () => {
+      authStore.setUserState({
+        roleType: 'REGULATOR',
+        lastLoginDomain: 'INSTALLATION',
+        domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'NO_AUTHORITY' },
+      });
+
+      await expect(lastValueFrom(guard.canActivate(routeWithDomain('AVIATION')))).resolves.toEqual(
+        router.parseUrl('dashboard'),
+      );
+    });
+
+    it('should fall back to the normal resolution when no domain is requested', async () => {
+      authStore.setUserState({
+        roleType: 'OPERATOR',
+        lastLoginDomain: 'AVIATION',
+        domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'ENABLED' },
+      });
+
+      await expect(lastValueFrom(guard.canActivate())).resolves.toEqual(router.parseUrl('aviation/dashboard'));
+    });
   });
 });

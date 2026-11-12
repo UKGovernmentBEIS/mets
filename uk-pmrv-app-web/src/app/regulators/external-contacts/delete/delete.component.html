@@ -5,9 +5,9 @@
 
   <div class="govuk-button-group">
     <button (click)="deleteExternalContact()" appPendingButton govukWarnButton type="button">Confirm delete</button>
-    <a govukLink fragment="external-contacts" [routerLink]="[(domainUrlPrefix$ | async) + '/user/regulators']"
-      >Cancel</a
-    >
+    <a govukLink fragment="external-contacts" [routerLink]="[(domainUrlPrefix$ | async) + '/user/regulators']">
+      Cancel
+    </a>
   </div>
 </ng-container>
 
@@ -17,7 +17,7 @@
       <govuk-panel title="The external contact {{ contact.name }} has been deleted"></govuk-panel>
 
       <a fragment="external-contacts" govukLink [routerLink]="[(domainUrlPrefix$ | async) + '/user/regulators']">
-        Return to the Regulator users and contacts page
+        Return to the Service access page
       </a>
     </div>
   </div>

@@ -26,10 +26,12 @@ import { KeycloakProfile } from 'keycloak-js';
     </govuk-phase-banner>
   `,
   styles: `
+    .govuk-phase-banner {
+      border-top: 1px solid var(--govuk-border-colour, #cecece);
+    }
     .govuk-phase-banner__text {
       width: 100%;
     }
-
     .logged-in-user {
       float: right;
     }

@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
   selector: 'govuk-header',
   imports: [RouterLink, NgTemplateOutlet],
   templateUrl: './header.component.html',
+  styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {

@@ -12,7 +12,7 @@ import { VerifiersGuard } from './verifiers.guard';
 const routes: Routes = [
   {
     path: '',
-    data: { pageTitle: 'Manage verifier users' },
+    data: { pageTitle: 'Service access' },
     component: VerifiersComponent,
     resolve: { verifiers: VerifiersGuard },
     canDeactivate: [PendingRequestGuard],

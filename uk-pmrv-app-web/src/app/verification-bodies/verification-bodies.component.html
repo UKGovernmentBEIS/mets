@@ -1,5 +1,9 @@
-<app-page-heading size="xl">Manage verification bodies</app-page-heading>
-<button *ngIf="isEditable$ | async" govukSecondaryButton id="add-verification-body" routerLink="add" type="button">
+<button
+  *ngIf="isEditable$ | async"
+  govukSecondaryButton
+  id="add-verification-body"
+  [routerLink]="[linkPrefix, 'add']"
+  type="button">
   Add a new verification body
 </button>
 <form (ngSubmit)="saveVerificationBodies()" [formGroup]="verificationBodiesForm" id="verification-bodies-form">
@@ -9,7 +13,7 @@
         <ng-container [formGroupName]="index" [ngSwitch]="column.field">
           <ng-container *ngSwitchCase="'name'">
             <ng-container *ngIf="isEditable$ | async; else bareName">
-              <a [routerLink]="row.id" govukLink>{{ row[column.field] }}</a>
+              <a [routerLink]="[linkPrefix, row.id]" govukLink>{{ row[column.field] }}</a>
             </ng-container>
           </ng-container>
 
@@ -28,7 +32,7 @@
           </ng-container>
 
           <ng-container *ngSwitchCase="'deleteBtn'">
-            <a [routerLink]="[row.id, 'delete']" govukLink [hidden-text]="row.name">Delete</a>
+            <a [routerLink]="[linkPrefix, row.id, 'delete']" govukLink [hidden-text]="row.name">Delete</a>
           </ng-container>
 
           <ng-container *ngSwitchDefault>

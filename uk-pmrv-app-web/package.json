@@ -115,7 +115,7 @@
     "fs-extra": "^10.0.0",
     "git-branch": "^2.0.1",
     "git-describe": "^4.1.0",
-    "govuk-frontend": "6.1.0",
+    "govuk-frontend": "6.5.0",
     "husky": "^7.0.0",
     "istanbul-combine": "^0.3.0",
     "jest": "^30.4.2",

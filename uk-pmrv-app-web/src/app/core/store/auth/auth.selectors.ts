@@ -33,11 +33,3 @@ export const selectLoginStatus = (domain: AccountType): OperatorFunction<AuthSta
     selectDomainsLoginStatuses,
     map((statuses) => statuses?.[domain]),
   );
-export const selectCanSwitchDomain: OperatorFunction<AuthState, boolean> = pipe(
-  map(
-    ({ currentDomain, userState }) =>
-      Object.entries(userState.domainsLoginStatuses).filter(([domain, loginStatus]) => {
-        return loginStatus !== 'NO_AUTHORITY' || domain === 'INSTALLATION' || userState.roleType === 'REGULATOR';
-      }).length > 1 && !!currentDomain,
-  ),
-);

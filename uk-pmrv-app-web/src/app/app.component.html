@@ -1,73 +1,39 @@
 @if ((showCookiesBanner$ | async) === true) {
   <app-cookies-container />
 }
-<govuk-header-legacy title="Manage your UK ETS reporting">
-  <govuk-skip-link />
-  <govuk-header-actions-list>
-    @if ((isLoggedIn$ | async) && (canSwitchDomain$ | async)) {
-      <select
-        class="domain-picker"
-        [ngModel]="currentSelection()"
-        (ngModelChange)="onSelectionChangeDomainSwitch($event)"
-        (keydown)="onKeyDownDomainSwitch($event)"
-        (click)="onClickDomainSwitch()"
-        aria-label="Choose a domain">
-        <option title="View related to installation" ngValue="INSTALLATION">Installation view</option>
-        <option title="View related to aviation" ngValue="AVIATION">Aviation view</option>
-      </select>
-    }
-    @if ((isLoggedIn$ | async) && (isGatewayServiceEnabled$ | async)) {
-      <a class="govuk-header-legacy__link" [href]="serviceGatewayUrl">Change service</a>
-    }
-    @if (isLoggedIn$ | async) {
-      <a routerLink class="govuk-header-legacy__link" (click)="logout($event)">Sign out</a>
-    }
-  </govuk-header-actions-list>
-  @if (permissions$ | async; as permissions) {
-    <govuk-header-nav-list-legacy identifier="navigation" ariaLabel="Primary navigation">
-      @if (permissions.showRegulators || permissions.showVerifiers || permissions.showAuthorizedOperators) {
-        <a [routerLink]="[(domainUrlPrefix$ | async) + '/dashboard']" govukLink="header">Tasks</a>
-      }
-      @if (permissions.showRegulators || permissions.showVerifiers || permissions.showAuthorizedOperators) {
-        <a [routerLink]="[(domainUrlPrefix$ | async) + '/accounts']" govukLink="header">Accounts</a>
-      }
-      @if (permissions.showRegulators) {
-        <a [routerLink]="[(domainUrlPrefix$ | async) + '/user/regulators']" govukLink="header">
-          Regulator users and contacts
+<govuk-skip-link />
+<header>
+  <govuk-header>
+    <govuk-header-actions-list>
+      @if ((isLoggedIn$ | async) && (isGatewayServiceEnabled$ | async)) {
+        <a govukLink hidden-text="using the service gateway" class="govuk-link--inverse" [href]="serviceGatewayUrl">
+          Change service
         </a>
       }
-      @if (permissions.showRegulators) {
-        <a [routerLink]="[(domainUrlPrefix$ | async) + '/verification-bodies']" govukLink="header">
-          Verification bodies
-        </a>
+      @if ((isLoggedIn$ | async) && (isGatewayServiceEnabled$ | async) !== true) {
+        @if (domainSwitchTarget$ | async; as domainSwitchTarget) {
+          <a
+            govukLink
+            hidden-text="to the other service"
+            class="govuk-link--inverse"
+            [routerLink]="['/landing']"
+            [queryParams]="{ domain: domainSwitchTarget }">
+            Change service
+          </a>
+        }
       }
-      @if (permissions.showRegulators) {
-        <a [routerLink]="[(domainUrlPrefix$ | async) + '/templates']" govukLink="header">Templates</a>
+      @if (isLoggedIn$ | async) {
+        <a govukLink class="govuk-link--inverse" routerLink (click)="logout($event)">Sign out</a>
       }
-      @if (permissions.showRegulators) {
-        <a [routerLink]="[(domainUrlPrefix$ | async) + '/mi-reports']" govukLink="header">MI Reports</a>
-      }
-      @if (permissions.showVerifiers) {
-        <a [routerLink]="[(domainUrlPrefix$ | async) + '/user/verifiers']" govukLink="header">Manage verifier users</a>
-      }
-      @if (permissions.showRegulators) {
-        <a [routerLink]="[(domainUrlPrefix$ | async) + '/workflows/batch-variations']" govukLink="header">
-          Batch variations
-        </a>
-      }
-      @if (permissions.hasAccessBulkDownload) {
-        <a [routerLink]="[(domainUrlPrefix$ | async) + '/bulk-downloads']" govukLink="header">Bulk downloads</a>
-      }
-      @if (permissions.showRegulators && permissions.showSettings && (isSettingsEnabled$ | async)) {
-        <a [routerLink]="[(domainUrlPrefix$ | async) + '/settings']" govukLink="header">Settings</a>
-      }
-    </govuk-header-nav-list-legacy>
-  }
-</govuk-header-legacy>
+    </govuk-header-actions-list>
+  </govuk-header>
+  <govuk-service-navigation
+    [serviceName]="'Manage your UK ETS reporting - ' + (isAviation() ? 'Aviation' : 'Installations')"
+    [navigationItems]="navigationItems$ | async"></govuk-service-navigation>
+</header>
 
 <div class="govuk-width-container">
-  <section role="region" aria-label="Service information and page navigation">
-    <app-phase-bar></app-phase-bar>
+  <section aria-label="Service information and page navigation">
     <app-incorporate-header></app-incorporate-header>
     <app-breadcrumbs></app-breadcrumbs>
     <app-back-link></app-back-link>
@@ -75,6 +41,7 @@
   <main class="govuk-main-wrapper" id="main-content" role="main" tabindex="-1">
     <router-outlet></router-outlet>
   </main>
+  <app-phase-bar></app-phase-bar>
 </div>
 <govuk-footer>
   <govuk-footer-meta-info>

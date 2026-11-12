@@ -131,6 +131,7 @@
 
   <ng-template #aviation>
     <ng-container [ngSwitch]="vm.aviationLogin">
+      <ng-container *ngSwitchCase="'NO_AUTHORITY'" [ngTemplateOutlet]="userDisabled"></ng-container>
       <ng-container *ngSwitchCase="'DISABLED'" [ngTemplateOutlet]="userDisabled"></ng-container>
       <ng-container *ngSwitchCase="'ACCEPTED'" [ngTemplateOutlet]="userActivation"></ng-container>
       <ng-container *ngSwitchCase="'TEMP_DISABLED'" [ngTemplateOutlet]="userTempDisabled"></ng-container>

@@ -1,4 +1,5 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
@@ -9,18 +10,17 @@ import { ConfigStore } from '@core/config/config.store';
 import { AnalyticsService } from '@core/services/analytics.service';
 import { AuthService } from '@core/services/auth.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
-import { UserState } from '@core/store/auth';
 import {
-  selectCanSwitchDomain,
   selectCurrentDomain,
   selectIsLoggedIn,
   selectSwitchingDomain,
   selectUserState,
 } from '@core/store/auth/auth.selectors';
+import { AccountType, hasDomainLogin } from '@core/store/auth/auth.state';
 import { AuthStore } from '@core/store/auth/auth.store';
 import { DocumentEventService } from '@shared/services/document-event.service';
 
-import { ScrollService } from 'govuk-components';
+import { NavigationItem, ScrollService } from 'govuk-components';
 
 import { BulkDownloadService } from 'pmrv-api';
 
@@ -47,12 +47,10 @@ export class AppComponent implements OnInit {
   rootUrl: string = location.origin;
   serviceGatewayUrl: string = this.rootUrl;
   permissions$: Observable<null | Permissions>;
+  navigationItems$: Observable<null | NavigationItem[]>;
   isLoggedIn$ = this.authStore.pipe(selectIsLoggedIn, takeUntil(this.destroy$));
-  canSwitchDomain$ = combineLatest([
-    this.authStore.pipe(selectCanSwitchDomain, takeUntil(this.destroy$)),
-    this.configStore.pipe(selectIsFeatureEnabled('aviation')),
-  ]).pipe(map(([canSwitchDomain, aviationEnabled]) => canSwitchDomain && aviationEnabled));
   currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));
+  isAviation = toSignal(this.currentDomain$.pipe(map((domain) => domain === 'AVIATION')), { initialValue: false });
   domainUrlPrefix$ = this.currentDomain$.pipe(map((domain) => (domain === 'AVIATION' ? '/aviation' : '')));
   isGatewayServiceEnabled$ = this.configStore.pipe(selectIsFeatureEnabled('serviceGatewayEnabled'));
   isSettingsEnabled$ = this.configStore.pipe(selectIsFeatureEnabled('settings'));
@@ -60,7 +58,6 @@ export class AppComponent implements OnInit {
     map((cookiesAccepted) => !cookiesAccepted),
     take(1),
   );
-  currentSelection: WritableSignal<UserState['lastLoginDomain']> = signal(null);
 
   private readonly userState$ = this.authStore.pipe(selectUserState, takeUntil(this.destroy$));
   private readonly switchingDomain$ = this.authStore.pipe(selectSwitchingDomain, takeUntil(this.destroy$));
@@ -68,7 +65,22 @@ export class AppComponent implements OnInit {
     map((userState) => userState?.roleType),
     takeUntil(this.destroy$),
   );
-  private interactedByKeyboard = false;
+
+  // Without the Gateway there is no "Change service" link to switch domain from, so the header offers
+  // a stand-in that sends the same `?domain=` hint. It is only shown when the user has a login for the
+  // other domain, i.e. when LandingPageGuard would honour the request.
+  readonly domainSwitchTarget$: Observable<AccountType | null> = combineLatest([
+    this.currentDomain$,
+    this.userState$,
+  ]).pipe(
+    map(([currentDomain, userState]) => {
+      if (!currentDomain) {
+        return null;
+      }
+      const target: AccountType = currentDomain === 'AVIATION' ? 'INSTALLATION' : 'AVIATION';
+      return hasDomainLogin(userState, target) ? target : null;
+    }),
+  );
 
   constructor(
     public readonly authStore: AuthStore,
@@ -87,10 +99,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.currentDomain$.subscribe((domain) => {
-      this.currentSelection.set(domain);
-    });
-
     const hasAccessBulkDownload$: Observable<boolean> = this.bulkDownloadService
       .hasAccessBulkDownload()
       .pipe(shareReplay(1));
@@ -129,9 +137,7 @@ export class AppComponent implements OnInit {
                   this.userState$.pipe(
                     map(
                       (userState) =>
-                        isAviation &&
-                        switchingDomain === 'INSTALLATION' &&
-                        userState?.domainsLoginStatuses[switchingDomain] === 'NO_AUTHORITY',
+                        !!switchingDomain && userState?.domainsLoginStatuses?.[switchingDomain] === 'NO_AUTHORITY',
                     ),
                   ),
                   hasAccessBulkDownloadForRole$,
@@ -164,6 +170,40 @@ export class AppComponent implements OnInit {
       ),
     );
 
+    this.navigationItems$ = combineLatest([this.permissions$, this.domainUrlPrefix$, this.isSettingsEnabled$]).pipe(
+      map(([permissions, domainUrlPrefix, isSettingsEnabled]) => {
+        if (!permissions) {
+          return null;
+        }
+
+        const items: NavigationItem[] = [];
+
+        if (permissions.showRegulators || permissions.showVerifiers || permissions.showAuthorizedOperators) {
+          items.push({ href: `${domainUrlPrefix}/dashboard`, text: 'Tasks' });
+          items.push({ href: `${domainUrlPrefix}/accounts`, text: 'Accounts' });
+        }
+        if (permissions.showRegulators) {
+          items.push({ href: `${domainUrlPrefix}/user/regulators`, text: 'Service access' });
+          items.push({ href: `${domainUrlPrefix}/templates`, text: 'Templates' });
+          items.push({ href: `${domainUrlPrefix}/mi-reports`, text: 'MI Reports' });
+        }
+        if (permissions.showVerifiers) {
+          items.push({ href: `${domainUrlPrefix}/user/verifiers`, text: 'Service access' });
+        }
+        if (permissions.showRegulators) {
+          items.push({ href: `${domainUrlPrefix}/workflows/batch-variations`, text: 'Variations' });
+        }
+        if (permissions.hasAccessBulkDownload) {
+          items.push({ href: `${domainUrlPrefix}/bulk-downloads`, text: 'Downloads' });
+        }
+        if (permissions.showRegulators && permissions.showSettings && isSettingsEnabled) {
+          items.push({ href: `${domainUrlPrefix}/settings`, text: 'Settings' });
+        }
+
+        return items;
+      }),
+    );
+
     const appTitle = this.titleService.getTitle();
 
     this.router.events
@@ -192,39 +232,5 @@ export class AppComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     await this.authService.logout();
-  }
-
-  onSelectionChangeDomainSwitch(domain: UserState['lastLoginDomain']) {
-    this.currentSelection.set(domain);
-
-    // Only navigate if interaction was by mouse (click)
-    if (!this.interactedByKeyboard) {
-      this.confirmDomainSwitch();
-    }
-  }
-
-  onKeyDownDomainSwitch(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      this.interactedByKeyboard = true;
-      this.confirmDomainSwitch();
-      this.interactedByKeyboard = false;
-    } else {
-      this.interactedByKeyboard = true;
-    }
-  }
-
-  onClickDomainSwitch() {
-    this.interactedByKeyboard = false;
-  }
-
-  confirmDomainSwitch() {
-    // Now navigate explicitly
-    if (this.currentSelection() === 'INSTALLATION') {
-      this.authStore.setSwitchingDomain('INSTALLATION');
-      this.router.navigate(['dashboard']);
-    } else if (this.currentSelection() === 'AVIATION') {
-      this.authStore.setSwitchingDomain('AVIATION');
-      this.router.navigate(['aviation', 'dashboard']);
-    }
   }
 }

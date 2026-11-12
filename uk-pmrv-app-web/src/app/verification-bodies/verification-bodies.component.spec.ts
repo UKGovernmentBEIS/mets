@@ -1,8 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { By } from '@angular/platform-browser';
+import { ActivatedRoute, provideRouter, Router, RouterLink, RouterModule } from '@angular/router';
+import { RouterTestingHarness, RouterTestingModule } from '@angular/router/testing';
 
 import { of, throwError } from 'rxjs';
 
@@ -174,5 +176,75 @@ describe('VerificationBodiesComponent', () => {
       expect(page.rows[1].querySelectorAll('td')[1].textContent.trim()).toEqual('Active');
       expect(page.rows[2].querySelectorAll('td')[1].textContent.trim()).toEqual('Awaiting confirmation');
     });
+  });
+});
+
+describe('VerificationBodiesComponent links', () => {
+  @Component({
+    selector: 'app-regulators-host',
+    standalone: false,
+    template: '<app-verification-bodies></app-verification-bodies>',
+  })
+  class RegulatorsHostComponent {}
+
+  const resolve = {
+    verificationBodies: () => ({
+      ...mockVerificationBodies,
+      verificationBodies: [...mockVerificationBodies.verificationBodies],
+    }),
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule, GovukComponentsModule, SharedModule, RouterModule, BusinessTestingModule],
+      declarations: [VerificationBodiesComponent, RegulatorsHostComponent],
+      providers: [
+        { provide: VerificationBodiesService, useValue: { getVerificationBodies: jest.fn() } },
+        provideRouter([
+          { path: 'verification-bodies', component: VerificationBodiesComponent, resolve },
+          { path: 'aviation/verification-bodies', component: VerificationBodiesComponent, resolve },
+          { path: 'user/regulators', component: RegulatorsHostComponent, resolve },
+        ]),
+      ],
+    }).compileComponents();
+  });
+
+  async function linksAt(url: string): Promise<string[]> {
+    const harness = await RouterTestingHarness.create(url);
+    harness.detectChanges();
+
+    return harness.fixture.debugElement
+      .query(By.directive(VerificationBodiesComponent))
+      .queryAll(By.directive(RouterLink))
+      .map((el) => el.injector.get(RouterLink).urlTree.toString());
+  }
+
+  it.each(['/verification-bodies', '/aviation/verification-bodies'])(
+    'should resolve links relative to the standalone %s page',
+    async (url) => {
+      expect(await linksAt(url)).toEqual([
+        `${url}/add`,
+        `${url}/4`,
+        `${url}/4/delete`,
+        `${url}/3`,
+        `${url}/3/delete`,
+        `${url}/5`,
+        `${url}/5/delete`,
+      ]);
+    },
+  );
+
+  it('should resolve links through the verification-bodies child route when embedded in regulators', async () => {
+    const base = '/user/regulators/verification-bodies';
+
+    expect(await linksAt('/user/regulators')).toEqual([
+      `${base}/add`,
+      `${base}/4`,
+      `${base}/4/delete`,
+      `${base}/3`,
+      `${base}/3/delete`,
+      `${base}/5`,
+      `${base}/5/delete`,
+    ]);
   });
 });

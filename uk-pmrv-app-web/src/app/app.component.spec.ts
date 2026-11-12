@@ -15,6 +15,7 @@ import Keycloak from 'keycloak-js';
 
 import { BulkDownloadService, UserStateDTO } from 'pmrv-api';
 
+import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { SettingsVisibilityService } from './settings/core/settings-visibility.service';
 import { TimeoutModule } from './timeout/timeout.module';
@@ -79,7 +80,7 @@ describe('AppComponent', () => {
     }
 
     get navList() {
-      return this.query<HTMLElement>('govuk-header-nav-list-legacy');
+      return this.query<HTMLElement>('.govuk-service-navigation__wrapper');
     }
 
     get breadcrumbs() {
@@ -89,6 +90,22 @@ describe('AppComponent', () => {
 
   const bulkDownloadService = mockClass(BulkDownloadService);
   const settingsVisibilityService = mockClass(SettingsVisibilityService);
+
+  beforeAll(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // deprecated
+        removeListener: jest.fn(), // deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
+  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -124,6 +141,89 @@ describe('AppComponent', () => {
 
   it('should render the footer', () => {
     expect(page.footer).toBeTruthy();
+  });
+
+  it.each<UserStateDTO['roleType']>(['OPERATOR', 'REGULATOR', 'VERIFIER'])(
+    'should not render a domain switcher for a %s with access to both domains',
+    (roleType) => {
+      configStore.setState({ ...configStore.getState(), features: { settings: true, aviation: true } });
+      authStore.setUserState({ roleType, domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'ENABLED' } });
+      fixture.detectChanges();
+
+      expect(page.query<HTMLElement>('govuk-header-actions-list')).toBeTruthy();
+      expect(page.query<HTMLSelectElement>('govuk-header select')).toBeFalsy();
+    },
+  );
+
+  it('should render Change service immediately before Sign out', () => {
+    configStore.setState({ ...configStore.getState(), features: { settings: true, serviceGatewayEnabled: true } });
+    fixture.detectChanges();
+
+    const actions = Array.from(page.query<HTMLElement>('govuk-header-actions-list .header-actions').children);
+
+    expect(actions.map((action) => action.textContent.trim().startsWith('Change service'))).toEqual([true, false]);
+    expect(actions.map((action) => action.textContent.trim().startsWith('Sign out'))).toEqual([false, true]);
+  });
+
+  it('should render a local domain switcher labelled Change service when the gateway is not enabled', () => {
+    authStore.setUserState({
+      roleType: 'OPERATOR',
+      domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'ENABLED' },
+    });
+    authStore.setCurrentDomain('INSTALLATION');
+    fixture.detectChanges();
+
+    const actions = Array.from(page.query<HTMLElement>('govuk-header-actions-list .header-actions').children);
+
+    expect(actions.map((action) => action.textContent.trim().startsWith('Change service'))).toEqual([true, false]);
+    expect(actions.map((action) => action.textContent.trim().startsWith('Sign out'))).toEqual([false, true]);
+    expect((actions[0] as HTMLAnchorElement).getAttribute('href')).toContain('domain=AVIATION');
+
+    authStore.setCurrentDomain('AVIATION');
+    fixture.detectChanges();
+
+    const switchedActions = page.query<HTMLElement>('govuk-header-actions-list .header-actions').children;
+
+    expect((switchedActions[0] as HTMLAnchorElement).getAttribute('href')).toContain('domain=INSTALLATION');
+  });
+
+  it('should render the local domain switcher in production builds when the gateway is not enabled', () => {
+    const production = environment.production;
+    environment.production = true;
+    authStore.setUserState({
+      roleType: 'OPERATOR',
+      domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'ENABLED' },
+    });
+    try {
+      createComponent();
+
+      expect(page.query<HTMLAnchorElement>('govuk-header-actions-list a[href*="domain=AVIATION"]')).toBeTruthy();
+    } finally {
+      environment.production = production;
+    }
+  });
+
+  it.each<[string, UserStateDTO['domainsLoginStatuses']]>([
+    ['no login', { INSTALLATION: 'ENABLED' }],
+    ['no authority', { INSTALLATION: 'ENABLED', AVIATION: 'NO_AUTHORITY' }],
+  ])('should not render the local domain switcher when the user has %s for the other domain', (_, statuses) => {
+    authStore.setUserState({ roleType: 'OPERATOR', domainsLoginStatuses: statuses });
+    fixture.detectChanges();
+
+    const actions = Array.from(page.query<HTMLElement>('govuk-header-actions-list .header-actions').children);
+
+    expect(actions.map((action) => action.textContent.trim())).toEqual(['Sign out']);
+  });
+
+  it('should not render the local domain switcher when the gateway is enabled', () => {
+    configStore.setState({ ...configStore.getState(), features: { settings: true, serviceGatewayEnabled: true } });
+    authStore.setUserState({
+      roleType: 'OPERATOR',
+      domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'ENABLED' },
+    });
+    fixture.detectChanges();
+
+    expect(page.query<HTMLAnchorElement>('govuk-header-actions-list a[href*="domain="]')).toBeFalsy();
   });
 
   it('should not render the dashboard link for disabled users or an operator with no authority', () => {
@@ -198,6 +298,32 @@ describe('AppComponent', () => {
     setUser('VERIFIER', 'TEMP_DISABLED');
     fixture.detectChanges();
 
+    expect(page.navList).toBeFalsy();
+  });
+
+  it('should not render the nav list if operator is switching to a domain without authority', () => {
+    authStore.setUserState({
+      roleType: 'OPERATOR',
+      domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'NO_AUTHORITY' },
+    });
+    fixture.detectChanges();
+    expect(page.navList).toBeTruthy();
+
+    authStore.setSwitchingDomain('AVIATION');
+    fixture.detectChanges();
+    expect(page.navList).toBeFalsy();
+
+    authStore.setSwitchingDomain(null);
+    fixture.detectChanges();
+    expect(page.navList).toBeTruthy();
+
+    authStore.setCurrentDomain('AVIATION');
+    authStore.setUserState({
+      roleType: 'OPERATOR',
+      domainsLoginStatuses: { INSTALLATION: 'NO_AUTHORITY', AVIATION: 'ENABLED' },
+    });
+    authStore.setSwitchingDomain('INSTALLATION');
+    fixture.detectChanges();
     expect(page.navList).toBeFalsy();
   });
 

@@ -46,6 +46,13 @@ export class VerificationBodiesComponent implements OnInit {
 
   refresh$ = new Subject<void>();
 
+  /**
+   * Prefix for the relative links. When this component is the routed list page (e.g. /verification-bodies),
+   * links resolve from the current route; when embedded in the regulators page, they go via its
+   * `verification-bodies` child route.
+   */
+  readonly linkPrefix = this.route.component === VerificationBodiesComponent ? '.' : 'verification-bodies';
+
   constructor(
     private readonly fb: UntypedFormBuilder,
     private readonly route: ActivatedRoute,

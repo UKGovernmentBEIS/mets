@@ -63,5 +63,17 @@ describe('AviationAuthGuard', () => {
     const result = await lastValueFrom(guard.canActivate());
     expect(result).toEqual(router.parseUrl('landing'));
     expect(mockUsersService.registerUserLastLoginDomain).not.toHaveBeenCalled();
+    expect(authStore.getState().switchingDomain).toBeNull();
+  });
+
+  it('should redirect to landing page and set switching domain when operator has no aviation authority', async () => {
+    authStore.setUserState({
+      roleType: 'OPERATOR',
+      domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'NO_AUTHORITY' },
+    });
+    const result = await lastValueFrom(guard.canActivate());
+    expect(result).toEqual(router.parseUrl('landing'));
+    expect(mockUsersService.registerUserLastLoginDomain).not.toHaveBeenCalled();
+    expect(authStore.getState().switchingDomain).toEqual('AVIATION');
   });
 });

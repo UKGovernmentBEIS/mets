@@ -36,6 +36,11 @@ export class InstallationAuthGuard {
             : of(true);
         }
 
+        // Remember the requested domain so the landing page can show the no-access message instead of redirecting
+        if (loginStatus === 'NO_AUTHORITY') {
+          this.store.setSwitchingDomain('INSTALLATION');
+        }
+
         return of(this.router.parseUrl('landing'));
       }),
     );

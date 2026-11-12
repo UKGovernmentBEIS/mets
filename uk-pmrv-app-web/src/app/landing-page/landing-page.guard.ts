@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 
@@ -8,6 +8,7 @@ import { ConfigStore } from '@core/config/config.store';
 import { AuthService } from '@core/services/auth.service';
 import {
   AuthStore,
+  hasDomainLogin,
   selectIsLoggedIn,
   selectSwitchingDomain,
   selectUserState,
@@ -36,7 +37,9 @@ export class LandingPageGuard {
     return true;
   }
 
-  canActivate(): Observable<boolean | UrlTree> {
+  canActivate(route?: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
+    const requestedDomain = this.parseRequestedDomain(route);
+
     return this.authService.checkUser().pipe(
       switchMap(() =>
         combineLatest([
@@ -57,7 +60,7 @@ export class LandingPageGuard {
           termsFeatureEnabled,
           serviceGatewayEnabled,
           userTerms,
-          switchingDomain,
+          storedSwitchingDomain,
         ]) => {
           if (!isLoggedIn) {
             if (!environment.production) {
@@ -88,6 +91,29 @@ export class LandingPageGuard {
             return this.router.parseUrl('terms');
           }
 
+          // A `?domain=` query param (from the gateway's per-domain service links) acts
+          // as the replacement for the old header domain-picker: when the user actually
+          // has authority for the requested domain, treat it exactly like a manual switch.
+          // An operator requesting a domain they have NO_AUTHORITY for is also honoured,
+          // so isSwitchingToNoAuthorityDomain below can show the no-account message instead
+          // of the request being silently dropped.
+          const requestedDomainIsOperatorNoAuthority =
+            requestedDomain &&
+            userState.roleType === 'OPERATOR' &&
+            userState.domainsLoginStatuses?.[requestedDomain] === 'NO_AUTHORITY';
+
+          const switchingDomain =
+            requestedDomain && (hasDomainLogin(userState, requestedDomain) || requestedDomainIsOperatorNoAuthority)
+              ? requestedDomain
+              : storedSwitchingDomain;
+
+          // Deferred to a microtask: authStore is itself one of the combineLatest
+          // sources above, so setting it synchronously here would re-enter this
+          // same map() while it's still emitting for the current value.
+          if (requestedDomain && switchingDomain === requestedDomain && storedSwitchingDomain !== requestedDomain) {
+            queueMicrotask(() => this.authStore.setSwitchingDomain(requestedDomain));
+          }
+
           if (['REGULATOR', 'VERIFIER'].includes(userState.roleType) && this.allNoAuthority(userState)) {
             return this.router.parseUrl('dashboard');
           }
@@ -95,6 +121,7 @@ export class LandingPageGuard {
           if (
             this.shouldShowDisabled(userState) ||
             this.allNoAuthority(userState) ||
+            this.isSwitchingToNoAuthorityDomain(userState, switchingDomain) ||
             this.shouldShowAccepted(userState, switchingDomain)
           ) {
             return true;
@@ -105,6 +132,11 @@ export class LandingPageGuard {
       ),
       first(),
     );
+  }
+
+  private parseRequestedDomain(route: ActivatedRouteSnapshot | undefined): 'INSTALLATION' | 'AVIATION' | null {
+    const domain = route?.queryParamMap.get('domain');
+    return domain === 'INSTALLATION' || domain === 'AVIATION' ? domain : null;
   }
 
   private resolveInitialNavigation(
@@ -143,7 +175,10 @@ export class LandingPageGuard {
     }
 
     if (isRegulatorOrVerifier || (hasInstallationLogin && hasAviationLogin)) {
-      return lastLoginDomain === 'INSTALLATION' ? this.installationDashboard : this.aviationDashboard;
+      // A regulator/verifier or dual-domain operator can be pointed at either domain
+      // explicitly (via switchingDomain); otherwise fall back to their last domain.
+      const targetDomain = switchingDomain ?? lastLoginDomain;
+      return targetDomain === 'INSTALLATION' ? this.installationDashboard : this.aviationDashboard;
     }
 
     if (hasAviationLogin && switchingDomain !== 'INSTALLATION') {
@@ -184,16 +219,21 @@ export class LandingPageGuard {
     );
   }
 
+  private isSwitchingToNoAuthorityDomain(userState: UserState, switchingDomain: UserState['lastLoginDomain']): boolean {
+    return (
+      userState.roleType === 'OPERATOR' &&
+      !!switchingDomain &&
+      userState.domainsLoginStatuses?.[switchingDomain] === 'NO_AUTHORITY'
+    );
+  }
+
   private allNoAuthority(userState: UserState): boolean {
     const [hasInstallationLogin, hasAviationLogin] = this.hasLogins(userState);
     return !hasInstallationLogin && !hasAviationLogin;
   }
 
-  private hasLogins({ domainsLoginStatuses }: UserState): [boolean, boolean] {
-    return [
-      !!domainsLoginStatuses.INSTALLATION && domainsLoginStatuses.INSTALLATION !== 'NO_AUTHORITY',
-      !!domainsLoginStatuses.AVIATION && domainsLoginStatuses.AVIATION !== 'NO_AUTHORITY',
-    ];
+  private hasLogins(userState: UserState): [boolean, boolean] {
+    return [hasDomainLogin(userState, 'INSTALLATION'), hasDomainLogin(userState, 'AVIATION')];
   }
 
   private loginsDisabled(userState: UserState): [boolean, boolean] {

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { SharedModule } from '../shared/shared.module';
 import { SharedUserModule } from '../shared-user/shared-user.module';
+import { VerificationBodiesModule } from '../verification-bodies/verification-bodies.module';
 import { DeleteComponent } from './delete/delete.component';
 import { DetailsComponent } from './details/details.component';
 import { DeleteComponent as ExternalContactsDeleteComponent } from './external-contacts/delete/delete.component';
@@ -13,7 +14,7 @@ import { RegulatorRoutingModule } from './regulators-routing.module';
 import { SiteContactsComponent } from './site-contacts/site-contacts.component';
 
 @NgModule({
-  imports: [RegulatorRoutingModule, SharedModule, SharedUserModule],
+  imports: [RegulatorRoutingModule, SharedModule, SharedUserModule, VerificationBodiesModule],
   declarations: [
     DeleteComponent,
     DetailsComponent,

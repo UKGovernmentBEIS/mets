@@ -225,7 +225,7 @@ export class DetailsComponent implements OnInit {
     {
       permission: 'MANAGE_USERS_AND_CONTACTS',
       task: 'Manage users and contacts',
-      type: 'Regulator users and contacts',
+      type: 'Service access',
     },
     {
       permission: 'MANAGE_VERIFICATION_BODIES',

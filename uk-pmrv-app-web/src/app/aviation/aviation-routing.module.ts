@@ -57,7 +57,7 @@ const routes: Routes = [
     children: [
       {
         path: 'regulators',
-        data: { breadcrumb: 'Regulator users and contacts' },
+        data: { breadcrumb: 'Service access' },
         loadChildren: () => import('../regulators/regulators.module').then((m) => m.RegulatorsModule),
       },
       {
